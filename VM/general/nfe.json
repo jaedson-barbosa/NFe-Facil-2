@@ -1,0 +1,2894 @@
+{
+    "$id": "nfe.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "This JSON Schema file was generated from nfe on Wed Feb 03 2021 17:41:39 GMT-0300 (GMT-03:00).  For more information please see http://www.xsd2jsonschema.org",
+    "description": "Schema tag attributes: xmlns='http://www.portalfiscal.inf.br/nfe' xmlns:ds='http://www.w3.org/2000/09/xmldsig#' xmlns:editix='http://www.portalfiscal.inf.br/nfe' xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='http://www.portalfiscal.inf.br/nfe' elementFormDefault='qualified' attributeFormDefault='unqualified'",
+    "properties": {
+        "TNFe": {
+            "$ref": "#/definitions/TNFe"
+        },
+        "TProtNFe": {
+            "$ref": "#/definitions/TProtNFe"
+        },
+        "TEnviNFe": {
+            "$ref": "#/definitions/TEnviNFe"
+        },
+        "TRetEnviNFe": {
+            "$ref": "#/definitions/TRetEnviNFe"
+        },
+        "TConsReciNFe": {
+            "$ref": "#/definitions/TConsReciNFe"
+        },
+        "TRetConsReciNFe": {
+            "$ref": "#/definitions/TRetConsReciNFe"
+        },
+        "TNfeProc": {
+            "$ref": "#/definitions/TNfeProc"
+        },
+        "TEndereco": {
+            "$ref": "#/definitions/TEndereco"
+        },
+        "TEnderEmi": {
+            "$ref": "#/definitions/TEnderEmi"
+        },
+        "TLocal": {
+            "$ref": "#/definitions/TLocal"
+        },
+        "TInfRespTec": {
+            "$ref": "#/definitions/TInfRespTec"
+        },
+        "TVeiculo": {
+            "$ref": "#/definitions/TVeiculo"
+        },
+        "Torig": {
+            "$ref": "#/definitions/Torig"
+        },
+        "TFinNFe": {
+            "$ref": "#/definitions/TFinNFe"
+        },
+        "TProcEmi": {
+            "$ref": "#/definitions/TProcEmi"
+        },
+        "TCListServ": {
+            "$ref": "#/definitions/TCListServ"
+        },
+        "TIdLote": {
+            "$ref": "#/definitions/TIdLote"
+        },
+        "TVerNFe": {
+            "$ref": "#/definitions/TVerNFe"
+        },
+        "TGuid": {
+            "$ref": "#/definitions/TGuid"
+        },
+        "TIpi": {
+            "$ref": "#/definitions/TIpi"
+        }
+    },
+    "type": "object",
+    "anyOf": [
+        {
+            "required": [
+                "TNFe"
+            ]
+        },
+        {
+            "required": [
+                "TProtNFe"
+            ]
+        },
+        {
+            "required": [
+                "TEnviNFe"
+            ]
+        },
+        {
+            "required": [
+                "TRetEnviNFe"
+            ]
+        },
+        {
+            "required": [
+                "TConsReciNFe"
+            ]
+        },
+        {
+            "required": [
+                "TRetConsReciNFe"
+            ]
+        },
+        {
+            "required": [
+                "TNfeProc"
+            ]
+        },
+        {
+            "required": [
+                "TEndereco"
+            ]
+        },
+        {
+            "required": [
+                "TEnderEmi"
+            ]
+        },
+        {
+            "required": [
+                "TLocal"
+            ]
+        },
+        {
+            "required": [
+                "TInfRespTec"
+            ]
+        },
+        {
+            "required": [
+                "TVeiculo"
+            ]
+        },
+        {
+            "required": [
+                "Torig"
+            ]
+        },
+        {
+            "required": [
+                "TFinNFe"
+            ]
+        },
+        {
+            "required": [
+                "TProcEmi"
+            ]
+        },
+        {
+            "required": [
+                "TCListServ"
+            ]
+        },
+        {
+            "required": [
+                "TIdLote"
+            ]
+        },
+        {
+            "required": [
+                "TVerNFe"
+            ]
+        },
+        {
+            "required": [
+                "TGuid"
+            ]
+        },
+        {
+            "required": [
+                "TIpi"
+            ]
+        }
+    ],
+    "definitions": {
+        "TNFe": {
+            "description": "Tipo Nota Fiscal Eletrônica",
+            "required": [
+                "infNFe",
+                "ds:Signature"
+            ],
+            "properties": {
+                "infNFe": {
+                    "description": "Versão do leiaute (v4.00)",
+                    "required": [
+                        "ide",
+                        "emit",
+                        "det",
+                        "total",
+                        "transp",
+                        "pag",
+                        "@versao",
+                        "@Id"
+                    ],
+                    "properties": {
+                        "ide": {
+                            "description": "identificação da NF-e",
+                            "required": [
+                                "cUF",
+                                "cNF",
+                                "natOp",
+                                "mod",
+                                "serie",
+                                "nNF",
+                                "dhEmi",
+                                "tpNF",
+                                "idDest",
+                                "cMunFG",
+                                "tpImp",
+                                "tpEmis",
+                                "cDV",
+                                "tpAmb",
+                                "finNFe",
+                                "indFinal",
+                                "indPres",
+                                "procEmi",
+                                "verProc"
+                            ],
+                            "properties": {
+                                "cUF": {
+                                    "$ref": "basic.json#/definitions/TCodUfIBGE",
+                                    "description": "Código da UF do emitente do Documento Fiscal. Utilizar a Tabela do IBGE."
+                                },
+                                "cNF": {
+                                    "description": "Código numérico que compõe a Chave de Acesso. Número aleatório gerado pelo emitente para cada NF-e.",
+                                    "pattern": "[0-9]{8}",
+                                    "type": "string"
+                                },
+                                "natOp": {
+                                    "description": "Descrição da Natureza da Operação",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "mod": {
+                                    "$ref": "basic.json#/definitions/TMod",
+                                    "description": "Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e."
+                                },
+                                "serie": {
+                                    "$ref": "basic.json#/definitions/TSerie",
+                                    "description": "Série do Documento Fiscal série normal 0-889 Avulsa Fisco 890-899 SCAN 900-999"
+                                },
+                                "nNF": {
+                                    "$ref": "basic.json#/definitions/TNF",
+                                    "description": "Número do Documento Fiscal"
+                                },
+                                "dhEmi": {
+                                    "$ref": "basic.json#/definitions/TDateTimeUTC",
+                                    "description": "Data e Hora de emissão do Documento Fiscal (AAAA-MM-DDThh:mm:ssTZD) ex.: 2012-09-01T13:00:00-03:00"
+                                },
+                                "dhSaiEnt": {
+                                    "$ref": "basic.json#/definitions/TDateTimeUTC",
+                                    "description": "Data e Hora da saída ou de entrada da mercadoria / produto (AAAA-MM-DDTHH:mm:ssTZD)"
+                                },
+                                "tpNF": {
+                                    "description": "Tipo do Documento Fiscal (0 - entrada; 1 - saída)",
+                                    "enum": [
+                                        "0",
+                                        "1"
+                                    ],
+                                    "type": "string"
+                                },
+                                "idDest": {
+                                    "description": "Identificador de Local de destino da operação (1-Interna;2-Interestadual;3-Exterior)",
+                                    "enum": [
+                                        "1",
+                                        "2",
+                                        "3"
+                                    ],
+                                    "type": "string"
+                                },
+                                "cMunFG": {
+                                    "$ref": "basic.json#/definitions/TCodMunIBGE",
+                                    "description": "Código do Município de Ocorrência do Fato Gerador (utilizar a tabela do IBGE)"
+                                },
+                                "tpImp": {
+                                    "description": "Formato de impressão do DANFE (0-sem DANFE;1-DANFe Retrato; 2-DANFe Paisagem;3-DANFe Simplificado; 4-DANFe NFC-e;5-DANFe NFC-e em mensagem eletrônica)",
+                                    "enum": [
+                                        "0",
+                                        "1",
+                                        "2",
+                                        "3",
+                                        "4",
+                                        "5"
+                                    ],
+                                    "type": "string"
+                                },
+                                "tpEmis": {
+                                    "description": "Forma de emissão da NF-e 1 - Normal; 2 - Contingência FS 3 - Contingência SCAN 4 - Contingência DPEC 5 - Contingência FSDA 6 - Contingência SVC - AN 7 - Contingência SVC - RS 9 - Contingência off-line NFC-e",
+                                    "enum": [
+                                        "1",
+                                        "2",
+                                        "3",
+                                        "4",
+                                        "5",
+                                        "6",
+                                        "7",
+                                        "9"
+                                    ],
+                                    "type": "string"
+                                },
+                                "cDV": {
+                                    "description": "Digito Verificador da Chave de Acesso da NF-e",
+                                    "pattern": "[0-9]{1}",
+                                    "type": "string"
+                                },
+                                "tpAmb": {
+                                    "$ref": "basic.json#/definitions/TAmb",
+                                    "description": "Identificação do Ambiente: 1 - Produção 2 - Homologação"
+                                },
+                                "finNFe": {
+                                    "$ref": "#/definitions/TFinNFe",
+                                    "description": "Finalidade da emissão da NF-e: 1 - NFe normal 2 - NFe complementar 3 - NFe de ajuste 4 - Devolução/Retorno"
+                                },
+                                "indFinal": {
+                                    "description": "Indica operação com consumidor final (0-Não;1-Consumidor Final)",
+                                    "enum": [
+                                        "0",
+                                        "1"
+                                    ],
+                                    "type": "string"
+                                },
+                                "indPres": {
+                                    "description": "Indicador de presença do comprador no estabelecimento comercial no momento da oepração (0-Não se aplica (ex.: Nota Fiscal complementar ou de ajuste;1-Operação presencial;2-Não presencial, internet;3-Não presencial, teleatendimento;4-NFC-e entrega em domicílio;5-Operação presencial, fora do estabelecimento;9-Não presencial, outros)",
+                                    "enum": [
+                                        "0",
+                                        "1",
+                                        "2",
+                                        "3",
+                                        "4",
+                                        "5",
+                                        "9"
+                                    ],
+                                    "type": "string"
+                                },
+                                "indIntermed": {
+                                    "description": "Indicador de intermediador/marketplace 0=Operação sem intermediador (em site ou plataforma própria) 1=Operação em site ou plataforma de terceiros (intermediadores/marketplace)",
+                                    "enum": [
+                                        "0",
+                                        "1"
+                                    ],
+                                    "type": "string"
+                                },
+                                "procEmi": {
+                                    "$ref": "#/definitions/TProcEmi",
+                                    "description": "Processo de emissão utilizado com a seguinte codificação: 0 - emissão de NF-e com aplicativo do contribuinte; 1 - emissão de NF-e avulsa pelo Fisco; 2 - emissão de NF-e avulsa, pelo contribuinte com seu certificado digital, através do site do Fisco; 3- emissão de NF-e pelo contribuinte com aplicativo fornecido pelo Fisco."
+                                },
+                                "verProc": {
+                                    "description": "versão do aplicativo utilizado no processo de emissão",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 20,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "NFref": {
+                                    "oneOf": [
+                                        {},
+                                        {
+                                            "items": {},
+                                            "maxItems": 500,
+                                            "type": "array"
+                                        }
+                                    ]
+                                }
+                            },
+                            "anyOf": [
+                                {
+                                    "description": "Informar apenas para tpEmis diferente de 1",
+                                    "required": [
+                                        "dhCont",
+                                        "xJust"
+                                    ],
+                                    "properties": {
+                                        "dhCont": {
+                                            "$ref": "basic.json#/definitions/TDateTimeUTC",
+                                            "description": "Informar a data e hora de entrada em contingência contingência no formato (AAAA-MM-DDThh:mm:ssTZD) ex.: 2012-09-01T13:00:00-03:00."
+                                        },
+                                        "xJust": {
+                                            "description": "Informar a Justificativa da entrada",
+                                            "allOf": [
+                                                {
+                                                    "$ref": "basic.json#/definitions/TString"
+                                                },
+                                                {
+                                                    "maxLength": 256,
+                                                    "minLength": 15
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                {
+                                    "description": "This truthy schema is what makes an optional <sequence> optional."
+                                }
+                            ]
+                        },
+                        "emit": {
+                            "description": "Identificação do emitente",
+                            "required": [
+                                "xNome",
+                                "enderEmit",
+                                "IE",
+                                "CRT"
+                            ],
+                            "properties": {
+                                "xNome": {
+                                    "description": "Razão Social ou Nome do emitente",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 2
+                                        }
+                                    ]
+                                },
+                                "xFant": {
+                                    "description": "Nome fantasia",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "enderEmit": {
+                                    "$ref": "#/definitions/TEnderEmi",
+                                    "description": "Endereço do emitente"
+                                },
+                                "IE": {
+                                    "$ref": "basic.json#/definitions/TIe",
+                                    "description": "Inscrição Estadual do Emitente"
+                                },
+                                "IEST": {
+                                    "$ref": "basic.json#/definitions/TIeST",
+                                    "description": "Inscricao Estadual do Substituto Tributário"
+                                },
+                                "CRT": {
+                                    "description": "Código de Regime Tributário. Este campo será obrigatoriamente preenchido com: 1 – Simples Nacional; 2 – Simples Nacional – excesso de sublimite de receita bruta; 3 – Regime Normal.",
+                                    "enum": [
+                                        "1",
+                                        "2",
+                                        "3"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "anyOf": [
+                                {
+                                    "description": "Grupo de informações de interesse da Prefeitura",
+                                    "required": [
+                                        "IM"
+                                    ],
+                                    "properties": {
+                                        "IM": {
+                                            "description": "Inscrição Municipal",
+                                            "allOf": [
+                                                {
+                                                    "$ref": "basic.json#/definitions/TString"
+                                                },
+                                                {
+                                                    "maxLength": 15,
+                                                    "minLength": 1
+                                                }
+                                            ]
+                                        },
+                                        "CNAE": {
+                                            "description": "CNAE Fiscal",
+                                            "pattern": "[0-9]{7}",
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                {
+                                    "description": "This truthy schema is what makes an optional <sequence> optional."
+                                }
+                            ],
+                            "oneOf": [
+                                {
+                                    "required": [
+                                        "CNPJ"
+                                    ],
+                                    "properties": {
+                                        "CNPJ": {
+                                            "$ref": "basic.json#/definitions/TCnpj",
+                                            "description": "Número do CNPJ do emitente"
+                                        }
+                                    }
+                                },
+                                {
+                                    "required": [
+                                        "CPF"
+                                    ],
+                                    "properties": {
+                                        "CPF": {
+                                            "$ref": "basic.json#/definitions/TCpf",
+                                            "description": "Número do CPF do emitente"
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        "avulsa": {
+                            "description": "Emissão de avulsa, informar os dados do Fisco emitente",
+                            "required": [
+                                "CNPJ",
+                                "xOrgao",
+                                "matr",
+                                "xAgente",
+                                "UF",
+                                "repEmi"
+                            ],
+                            "properties": {
+                                "CNPJ": {
+                                    "$ref": "basic.json#/definitions/TCnpj",
+                                    "description": "CNPJ do Órgão emissor"
+                                },
+                                "xOrgao": {
+                                    "description": "Órgão emitente",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "matr": {
+                                    "description": "Matrícula do agente",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "xAgente": {
+                                    "description": "Nome do agente",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "fone": {
+                                    "description": "Telefone",
+                                    "pattern": "[0-9]{6,14}",
+                                    "type": "string"
+                                },
+                                "UF": {
+                                    "$ref": "basic.json#/definitions/TUfEmi",
+                                    "description": "Sigla da Unidade da Federação"
+                                },
+                                "nDAR": {
+                                    "description": "Número do Documento de Arrecadação de Receita",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "dEmi": {
+                                    "$ref": "basic.json#/definitions/TData",
+                                    "description": "Data de emissão do DAR (AAAA-MM-DD)"
+                                },
+                                "vDAR": {
+                                    "$ref": "basic.json#/definitions/TDec_1302",
+                                    "description": "Valor Total constante no DAR"
+                                },
+                                "repEmi": {
+                                    "description": "Repartição Fiscal emitente",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "dPag": {
+                                    "$ref": "basic.json#/definitions/TData",
+                                    "description": "Data de pagamento do DAR (AAAA-MM-DD)"
+                                }
+                            }
+                        },
+                        "dest": {
+                            "description": "Identificação do Destinatário",
+                            "required": [
+                                "indIEDest"
+                            ],
+                            "properties": {
+                                "xNome": {
+                                    "description": "Razão Social ou nome do destinatário",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 2
+                                        }
+                                    ]
+                                },
+                                "enderDest": {
+                                    "$ref": "#/definitions/TEndereco",
+                                    "description": "Dados do endereço"
+                                },
+                                "indIEDest": {
+                                    "description": "Indicador da IE do destinatário: 1 – Contribuinte ICMSpagamento à vista; 2 – Contribuinte isento de inscrição; 9 – Não Contribuinte",
+                                    "enum": [
+                                        "1",
+                                        "2",
+                                        "9"
+                                    ],
+                                    "type": "string"
+                                },
+                                "IE": {
+                                    "$ref": "basic.json#/definitions/TIeDestNaoIsento",
+                                    "description": "Inscrição Estadual (obrigatório nas operações com contribuintes do ICMS)"
+                                },
+                                "ISUF": {
+                                    "description": "Inscrição na SUFRAMA (Obrigatório nas operações com as áreas com benefícios de incentivos fiscais sob controle da SUFRAMA) PL_005d - 11/08/09 - alterado para aceitar 8 ou 9 dígitos",
+                                    "pattern": "[0-9]{8,9}",
+                                    "type": "string"
+                                },
+                                "IM": {
+                                    "description": "Inscrição Municipal do tomador do serviço",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 15,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "email": {
+                                    "description": "Informar o e-mail do destinatário. O campo pode ser utilizado para informar o e-mail de recepção da NF-e indicada pelo destinatário",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                }
+                            },
+                            "oneOf": [
+                                {
+                                    "required": [
+                                        "CNPJ"
+                                    ],
+                                    "properties": {
+                                        "CNPJ": {
+                                            "$ref": "basic.json#/definitions/TCnpj",
+                                            "description": "Número do CNPJ"
+                                        }
+                                    }
+                                },
+                                {
+                                    "required": [
+                                        "CPF"
+                                    ],
+                                    "properties": {
+                                        "CPF": {
+                                            "$ref": "basic.json#/definitions/TCpf",
+                                            "description": "Número do CPF"
+                                        }
+                                    }
+                                },
+                                {
+                                    "required": [
+                                        "idEstrangeiro"
+                                    ],
+                                    "properties": {
+                                        "idEstrangeiro": {
+                                            "description": "Identificador do destinatário, em caso de comprador estrangeiro",
+                                            "pattern": "([!-ÿ]{0}|[!-ÿ]{5,20})?",
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        "retirada": {
+                            "$ref": "#/definitions/TLocal",
+                            "description": "Identificação do Local de Retirada (informar apenas quando for diferente do endereço do remetente)"
+                        },
+                        "entrega": {
+                            "$ref": "#/definitions/TLocal",
+                            "description": "Identificação do Local de Entrega (informar apenas quando for diferente do endereço do destinatário)"
+                        },
+                        "autXML": {
+                            "oneOf": [
+                                {},
+                                {
+                                    "items": {},
+                                    "maxItems": 10,
+                                    "type": "array"
+                                }
+                            ]
+                        },
+                        "det": {
+                            "oneOf": [
+                                {},
+                                {
+                                    "items": {},
+                                    "maxItems": 990,
+                                    "type": "array"
+                                }
+                            ]
+                        },
+                        "total": {
+                            "description": "Dados dos totais da NF-e",
+                            "required": [
+                                "ICMSTot"
+                            ],
+                            "properties": {
+                                "ICMSTot": {
+                                    "description": "Totais referentes ao ICMS",
+                                    "required": [
+                                        "vBC",
+                                        "vICMS",
+                                        "vICMSDeson",
+                                        "vFCP",
+                                        "vBCST",
+                                        "vST",
+                                        "vFCPST",
+                                        "vFCPSTRet",
+                                        "vProd",
+                                        "vFrete",
+                                        "vSeg",
+                                        "vDesc",
+                                        "vII",
+                                        "vIPI",
+                                        "vIPIDevol",
+                                        "vPIS",
+                                        "vCOFINS",
+                                        "vOutro",
+                                        "vNF"
+                                    ],
+                                    "properties": {
+                                        "vBC": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "BC do ICMS"
+                                        },
+                                        "vICMS": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do ICMS"
+                                        },
+                                        "vICMSDeson": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do ICMS desonerado"
+                                        },
+                                        "vFCPUFDest": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor total do ICMS relativo ao Fundo de Combate à Pobreza (FCP) para a UF de destino."
+                                        },
+                                        "vICMSUFDest": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor total do ICMS de partilha para a UF do destinatário"
+                                        },
+                                        "vICMSUFRemet": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor total do ICMS de partilha para a UF do remetente"
+                                        },
+                                        "vFCP": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do FCP (Fundo de Combate à Pobreza)."
+                                        },
+                                        "vBCST": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "BC do ICMS ST"
+                                        },
+                                        "vST": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do ICMS ST"
+                                        },
+                                        "vFCPST": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do FCP (Fundo de Combate à Pobreza) retido por substituição tributária."
+                                        },
+                                        "vFCPSTRet": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do FCP (Fundo de Combate à Pobreza) retido anteriormente por substituição tributária."
+                                        },
+                                        "vProd": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total dos produtos e serviços"
+                                        },
+                                        "vFrete": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do Frete"
+                                        },
+                                        "vSeg": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do Seguro"
+                                        },
+                                        "vDesc": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do Desconto"
+                                        },
+                                        "vII": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do II"
+                                        },
+                                        "vIPI": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do IPI"
+                                        },
+                                        "vIPIDevol": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total do IPI devolvido. Deve ser informado quando preenchido o Grupo Tributos Devolvidos na emissão de nota finNFe=4 (devolução) nas operações com não contribuintes do IPI. Corresponde ao total da soma dos campos id: UA04."
+                                        },
+                                        "vPIS": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor do PIS"
+                                        },
+                                        "vCOFINS": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor do COFINS"
+                                        },
+                                        "vOutro": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Outras Despesas acessórias"
+                                        },
+                                        "vNF": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor Total da NF-e"
+                                        },
+                                        "vTotTrib": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor estimado total de impostos federais, estaduais e municipais"
+                                        }
+                                    }
+                                },
+                                "ISSQNtot": {
+                                    "description": "Totais referentes ao ISSQN",
+                                    "required": [
+                                        "dCompet"
+                                    ],
+                                    "properties": {
+                                        "vServ": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor Total dos Serviços sob não-incidência ou não tributados pelo ICMS"
+                                        },
+                                        "vBC": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Base de Cálculo do ISS"
+                                        },
+                                        "vISS": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor Total do ISS"
+                                        },
+                                        "vPIS": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor do PIS sobre serviços"
+                                        },
+                                        "vCOFINS": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor do COFINS sobre serviços"
+                                        },
+                                        "dCompet": {
+                                            "$ref": "basic.json#/definitions/TData",
+                                            "description": "Data da prestação do serviço (AAAA-MM-DD)"
+                                        },
+                                        "vDeducao": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor dedução para redução da base de cálculo"
+                                        },
+                                        "vOutro": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor outras retenções"
+                                        },
+                                        "vDescIncond": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor desconto incondicionado"
+                                        },
+                                        "vDescCond": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor desconto condicionado"
+                                        },
+                                        "vISSRet": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor Total Retenção ISS"
+                                        },
+                                        "cRegTrib": {
+                                            "description": "Código do regime especial de tributação",
+                                            "enum": [
+                                                "1",
+                                                "2",
+                                                "3",
+                                                "4",
+                                                "5",
+                                                "6"
+                                            ],
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "retTrib": {
+                                    "description": "Retenção de Tributos Federais",
+                                    "properties": {
+                                        "vRetPIS": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor Retido de PIS"
+                                        },
+                                        "vRetCOFINS": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor Retido de COFINS"
+                                        },
+                                        "vRetCSLL": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor Retido de CSLL"
+                                        },
+                                        "vBCIRRF": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Base de Cálculo do IRRF"
+                                        },
+                                        "vIRRF": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor Retido de IRRF"
+                                        },
+                                        "vBCRetPrev": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Base de Cálculo da Retenção da Previdêncica Social"
+                                        },
+                                        "vRetPrev": {
+                                            "$ref": "basic.json#/definitions/TDec_1302Opc",
+                                            "description": "Valor da Retenção da Previdêncica Social"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "transp": {
+                            "description": "Dados dos transportes da NF-e",
+                            "required": [
+                                "modFrete"
+                            ],
+                            "properties": {
+                                "modFrete": {
+                                    "description": "Modalidade do frete 0- Contratação do Frete por conta do Remetente (CIF); 1- Contratação do Frete por conta do destinatário/remetente (FOB); 2- Contratação do Frete por conta de terceiros; 3- Transporte próprio por conta do remetente; 4- Transporte próprio por conta do destinatário; 9- Sem Ocorrência de transporte.",
+                                    "enum": [
+                                        "0",
+                                        "1",
+                                        "2",
+                                        "3",
+                                        "4",
+                                        "9"
+                                    ],
+                                    "type": "string"
+                                },
+                                "transporta": {
+                                    "description": "Dados do transportador",
+                                    "properties": {
+                                        "xNome": {
+                                            "description": "Razão Social ou nome do transportador",
+                                            "allOf": [
+                                                {
+                                                    "$ref": "basic.json#/definitions/TString"
+                                                },
+                                                {
+                                                    "maxLength": 60,
+                                                    "minLength": 2
+                                                }
+                                            ]
+                                        },
+                                        "IE": {
+                                            "$ref": "basic.json#/definitions/TIeDest",
+                                            "description": "Inscrição Estadual (v2.0)"
+                                        },
+                                        "xEnder": {
+                                            "description": "Endereço completo",
+                                            "allOf": [
+                                                {
+                                                    "$ref": "basic.json#/definitions/TString"
+                                                },
+                                                {
+                                                    "maxLength": 60,
+                                                    "minLength": 1
+                                                }
+                                            ]
+                                        },
+                                        "xMun": {
+                                            "description": "Nome do munícipio",
+                                            "allOf": [
+                                                {
+                                                    "$ref": "basic.json#/definitions/TString"
+                                                },
+                                                {
+                                                    "maxLength": 60,
+                                                    "minLength": 1
+                                                }
+                                            ]
+                                        },
+                                        "UF": {
+                                            "$ref": "basic.json#/definitions/TUf",
+                                            "description": "Sigla da UF"
+                                        }
+                                    },
+                                    "anyOf": [
+                                        {
+                                            "anyOf": [
+                                                {
+                                                    "oneOf": [
+                                                        {
+                                                            "required": [
+                                                                "CNPJ"
+                                                            ],
+                                                            "properties": {
+                                                                "CNPJ": {
+                                                                    "$ref": "basic.json#/definitions/TCnpj",
+                                                                    "description": "CNPJ do transportador"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "required": [
+                                                                "CPF"
+                                                            ],
+                                                            "properties": {
+                                                                "CPF": {
+                                                                    "$ref": "basic.json#/definitions/TCpf",
+                                                                    "description": "CPF do transportador"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "allOf": [
+                                                        {
+                                                            "not": {
+                                                                "required": [
+                                                                    "CNPJ"
+                                                                ],
+                                                                "properties": {
+                                                                    "CNPJ": {
+                                                                        "$ref": "basic.json#/definitions/TCnpj",
+                                                                        "description": "CNPJ do transportador"
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "not": {
+                                                                "required": [
+                                                                    "CPF"
+                                                                ],
+                                                                "properties": {
+                                                                    "CPF": {
+                                                                        "$ref": "basic.json#/definitions/TCpf",
+                                                                        "description": "CPF do transportador"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "retTransp": {
+                                    "description": "Dados da retenção ICMS do Transporte",
+                                    "required": [
+                                        "vServ",
+                                        "vBCRet",
+                                        "pICMSRet",
+                                        "vICMSRet",
+                                        "CFOP",
+                                        "cMunFG"
+                                    ],
+                                    "properties": {
+                                        "vServ": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor do Serviço"
+                                        },
+                                        "vBCRet": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "BC da Retenção do ICMS"
+                                        },
+                                        "pICMSRet": {
+                                            "$ref": "basic.json#/definitions/TDec_0302a04",
+                                            "description": "Alíquota da Retenção"
+                                        },
+                                        "vICMSRet": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor do ICMS Retido"
+                                        },
+                                        "CFOP": {
+                                            "description": "Código Fiscal de Operações e Prestações",
+                                            "pattern": "[1,2,3,5,6,7]{1}[0-9]{3}",
+                                            "type": "string"
+                                        },
+                                        "cMunFG": {
+                                            "$ref": "basic.json#/definitions/TCodMunIBGE",
+                                            "description": "Código do Município de Ocorrência do Fato Gerador (utilizar a tabela do IBGE)"
+                                        }
+                                    }
+                                },
+                                "vol": {
+                                    "oneOf": [
+                                        {},
+                                        {
+                                            "items": {},
+                                            "maxItems": 5000,
+                                            "type": "array"
+                                        }
+                                    ]
+                                }
+                            },
+                            "allOf": [
+                                {
+                                    "anyOf": [
+                                        {
+                                            "anyOf": [
+                                                {
+                                                    "oneOf": [
+                                                        {
+                                                            "properties": {
+                                                                "veicTransp": {
+                                                                    "$ref": "#/definitions/TVeiculo",
+                                                                    "description": "Dados do veículo"
+                                                                },
+                                                                "reboque": {
+                                                                    "oneOf": [
+                                                                        {
+                                                                            "$ref": "#/definitions/TVeiculo"
+                                                                        },
+                                                                        {
+                                                                            "items": {
+                                                                                "$ref": "#/definitions/TVeiculo"
+                                                                            },
+                                                                            "maxItems": 5,
+                                                                            "type": "array"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "properties": {
+                                                                "vagao": {
+                                                                    "description": "Identificação do vagão (v2.0)",
+                                                                    "allOf": [
+                                                                        {
+                                                                            "$ref": "basic.json#/definitions/TString"
+                                                                        },
+                                                                        {
+                                                                            "maxLength": 20,
+                                                                            "minLength": 1
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "properties": {
+                                                                "balsa": {
+                                                                    "description": "Identificação da balsa (v2.0)",
+                                                                    "allOf": [
+                                                                        {
+                                                                            "$ref": "basic.json#/definitions/TString"
+                                                                        },
+                                                                        {
+                                                                            "maxLength": 20,
+                                                                            "minLength": 1
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "allOf": [
+                                                        {
+                                                            "not": {
+                                                                "properties": {
+                                                                    "veicTransp": {
+                                                                        "$ref": "#/definitions/TVeiculo",
+                                                                        "description": "Dados do veículo"
+                                                                    },
+                                                                    "reboque": {
+                                                                        "oneOf": [
+                                                                            {
+                                                                                "$ref": "#/definitions/TVeiculo"
+                                                                            },
+                                                                            {
+                                                                                "items": {
+                                                                                    "$ref": "#/definitions/TVeiculo"
+                                                                                },
+                                                                                "maxItems": 5,
+                                                                                "type": "array"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "not": {
+                                                                "properties": {
+                                                                    "vagao": {
+                                                                        "description": "Identificação do vagão (v2.0)",
+                                                                        "allOf": [
+                                                                            {
+                                                                                "$ref": "basic.json#/definitions/TString"
+                                                                            },
+                                                                            {
+                                                                                "maxLength": 20,
+                                                                                "minLength": 1
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "not": {
+                                                                "properties": {
+                                                                    "balsa": {
+                                                                        "description": "Identificação da balsa (v2.0)",
+                                                                        "allOf": [
+                                                                            {
+                                                                                "$ref": "basic.json#/definitions/TString"
+                                                                            },
+                                                                            {
+                                                                                "maxLength": 20,
+                                                                                "minLength": 1
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "cobr": {
+                            "description": "Dados da cobrança da NF-e",
+                            "properties": {
+                                "fat": {
+                                    "description": "Dados da fatura",
+                                    "properties": {
+                                        "nFat": {
+                                            "description": "Número da fatura",
+                                            "allOf": [
+                                                {
+                                                    "$ref": "basic.json#/definitions/TString"
+                                                },
+                                                {
+                                                    "maxLength": 60,
+                                                    "minLength": 1
+                                                }
+                                            ]
+                                        },
+                                        "vOrig": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor original da fatura"
+                                        },
+                                        "vDesc": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor do desconto da fatura"
+                                        },
+                                        "vLiq": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor líquido da fatura"
+                                        }
+                                    }
+                                },
+                                "dup": {
+                                    "oneOf": [
+                                        {},
+                                        {
+                                            "items": {},
+                                            "maxItems": 120,
+                                            "type": "array"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "pag": {
+                            "description": "Dados de Pagamento. Obrigatório apenas para (NFC-e) NT 2012/004",
+                            "required": [
+                                "detPag"
+                            ],
+                            "properties": {
+                                "detPag": {
+                                    "oneOf": [
+                                        {},
+                                        {
+                                            "items": {},
+                                            "maxItems": 100,
+                                            "type": "array"
+                                        }
+                                    ]
+                                },
+                                "vTroco": {
+                                    "$ref": "basic.json#/definitions/TDec_1302",
+                                    "description": "Valor do Troco."
+                                }
+                            }
+                        },
+                        "infIntermed": {
+                            "description": "Grupo de Informações do Intermediador da Transação",
+                            "required": [
+                                "CNPJ",
+                                "idCadIntTran"
+                            ],
+                            "properties": {
+                                "CNPJ": {
+                                    "$ref": "basic.json#/definitions/TCnpj",
+                                    "description": "CNPJ do Intermediador da Transação (agenciador, plataforma de delivery, marketplace e similar) de serviços e de negócios."
+                                },
+                                "idCadIntTran": {
+                                    "description": "Identificador cadastrado no intermediador",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 2
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "infAdic": {
+                            "description": "Informações adicionais da NF-e",
+                            "properties": {
+                                "infAdFisco": {
+                                    "description": "Informações adicionais de interesse do Fisco (v2.0)",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 2000,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "infCpl": {
+                                    "description": "Informações complementares de interesse do Contribuinte",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 5000,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "obsCont": {
+                                    "oneOf": [
+                                        {},
+                                        {
+                                            "items": {},
+                                            "maxItems": 10,
+                                            "type": "array"
+                                        }
+                                    ]
+                                },
+                                "obsFisco": {
+                                    "oneOf": [
+                                        {},
+                                        {
+                                            "items": {},
+                                            "maxItems": 10,
+                                            "type": "array"
+                                        }
+                                    ]
+                                },
+                                "procRef": {
+                                    "oneOf": [
+                                        {},
+                                        {
+                                            "items": {},
+                                            "maxItems": 100,
+                                            "type": "array"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "exporta": {
+                            "description": "Informações de exportação",
+                            "required": [
+                                "UFSaidaPais",
+                                "xLocExporta"
+                            ],
+                            "properties": {
+                                "UFSaidaPais": {
+                                    "$ref": "basic.json#/definitions/TUfEmi",
+                                    "description": "Sigla da UF de Embarque ou de transposição de fronteira"
+                                },
+                                "xLocExporta": {
+                                    "description": "Local de Embarque ou de transposição de fronteira",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "xLocDespacho": {
+                                    "description": "Descrição do local de despacho",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "compra": {
+                            "description": "Informações de compras (Nota de Empenho, Pedido e Contrato)",
+                            "properties": {
+                                "xNEmp": {
+                                    "description": "Informação da Nota de Empenho de compras públicas (NT2011/004)",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 22,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "xPed": {
+                                    "description": "Informação do pedido",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                },
+                                "xCont": {
+                                    "description": "Informação do contrato",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 60,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "cana": {
+                            "description": "Informações de registro aquisições de cana",
+                            "required": [
+                                "safra",
+                                "ref",
+                                "forDia",
+                                "qTotMes",
+                                "qTotAnt",
+                                "qTotGer",
+                                "vFor",
+                                "vTotDed",
+                                "vLiqFor"
+                            ],
+                            "properties": {
+                                "safra": {
+                                    "description": "Identificação da safra",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 9,
+                                            "minLength": 4
+                                        }
+                                    ]
+                                },
+                                "ref": {
+                                    "description": "Mês e Ano de Referência, formato: MM/AAAA",
+                                    "pattern": "(0[1-9]|1[0-2])([/][2][0-9][0-9][0-9])",
+                                    "type": "string"
+                                },
+                                "forDia": {
+                                    "oneOf": [
+                                        {},
+                                        {
+                                            "items": {},
+                                            "maxItems": 31,
+                                            "type": "array"
+                                        }
+                                    ]
+                                },
+                                "qTotMes": {
+                                    "$ref": "basic.json#/definitions/TDec_1110v",
+                                    "description": "Total do mês"
+                                },
+                                "qTotAnt": {
+                                    "$ref": "basic.json#/definitions/TDec_1110v",
+                                    "description": "Total Anterior"
+                                },
+                                "qTotGer": {
+                                    "$ref": "basic.json#/definitions/TDec_1110v",
+                                    "description": "Total Geral"
+                                },
+                                "deduc": {
+                                    "oneOf": [
+                                        {},
+                                        {
+                                            "items": {},
+                                            "maxItems": 10,
+                                            "type": "array"
+                                        }
+                                    ]
+                                },
+                                "vFor": {
+                                    "$ref": "basic.json#/definitions/TDec_1302",
+                                    "description": "Valor dos fornecimentos"
+                                },
+                                "vTotDed": {
+                                    "$ref": "basic.json#/definitions/TDec_1302",
+                                    "description": "Valor Total das Deduções"
+                                },
+                                "vLiqFor": {
+                                    "$ref": "basic.json#/definitions/TDec_1302",
+                                    "description": "Valor Líquido dos fornecimentos"
+                                }
+                            }
+                        },
+                        "infRespTec": {
+                            "$ref": "#/definitions/TInfRespTec",
+                            "description": "Informações do Responsável Técnico pela emissão do DF-e"
+                        },
+                        "@versao": {
+                            "$ref": "#/definitions/TVerNFe"
+                        },
+                        "@Id": {
+                            "description": "PL_005d - 11/08/09 - validação do Id",
+                            "pattern": "NFe[0-9]{44}",
+                            "type": "string"
+                        }
+                    }
+                },
+                "infNFeSupl": {
+                    "description": "Informações suplementares Nota Fiscal",
+                    "required": [
+                        "qrCode",
+                        "urlChave"
+                    ],
+                    "properties": {
+                        "qrCode": {
+                            "description": "Texto com o QR-Code impresso no DANFE NFC-e",
+                            "maxLength": 600,
+                            "minLength": 100,
+                            "pattern": "(((HTTPS?|https?)://.*\\?chNFe=[0-9]{44}&nVersao=100&tpAmb=[1-2](&cDest=([A-Za-z0-9.:+-/)(]{0}|[A-Za-z0-9.:+-/)(]{5,20})?)?&dhEmi=[A-Fa-f0-9]{50}&vNF=(0|0\\.[0-9]{2}|[1-9]{1}[0-9]{0,12}(\\.[0-9]{2})?)&vICMS=(0|0\\.[0-9]{2}|[1-9]{1}[0-9]{0,12}(\\.[0-9]{2})?)&digVal=[A-Fa-f0-9]{56}&cIdToken=[0-9]{6}&cHashQRCode=[A-Fa-f0-9]{40})|((HTTPS?|https?)://.*\\?p=([0-9]{34}(1|4)[0-9]{9})\\|[2]\\|[1-2]\\|(0|[1-9]{1}([0-9]{1,5})?)\\|[A-Fa-f0-9]{40})|((HTTPS?|https?)://.*\\?p=([0-9]{34}9[0-9]{9})\\|[2]\\|[1-2]\\|([0]{1}[1-9]{1}|[1-2]{1}[0-9]{1}|[3]{1}[0-1]{1})\\|(0|0\\.[0-9]{2}|[1-9]{1}[0-9]{0,12}(\\.[0-9]{2})?)\\|[A-Fa-f0-9]{56}\\|(0|[1-9]{1}([0-9]{1,5})?)\\|[A-Fa-f0-9]{40}))",
+                            "type": "string"
+                        },
+                        "urlChave": {
+                            "description": "Informar a URL da \"Consulta por chave de acesso da NFC-e\". A mesma URL que deve estar informada no DANFE NFC-e para consulta por chave de acesso.",
+                            "maxLength": 85,
+                            "minLength": 21,
+                            "type": "string"
+                        }
+                    }
+                },
+                "ds:Signature": {
+                    "$ref": "FORWARD_REFERENCE#/to/http://www.w3.org/2000/09/xmldsig#/ds:Signature"
+                }
+            },
+            "type": "object"
+        },
+        "TProtNFe": {
+            "description": "Tipo Protocolo de status resultado do processamento da NF-e",
+            "required": [
+                "infProt",
+                "@versao"
+            ],
+            "properties": {
+                "infProt": {
+                    "description": "Dados do protocolo de status",
+                    "required": [
+                        "tpAmb",
+                        "verAplic",
+                        "chNFe",
+                        "dhRecbto",
+                        "cStat",
+                        "xMotivo"
+                    ],
+                    "properties": {
+                        "tpAmb": {
+                            "$ref": "basic.json#/definitions/TAmb",
+                            "description": "Identificação do Ambiente: 1 - Produção 2 - Homologação"
+                        },
+                        "verAplic": {
+                            "$ref": "basic.json#/definitions/TVerAplic",
+                            "description": "Versão do Aplicativo que processou a NF-e"
+                        },
+                        "chNFe": {
+                            "$ref": "basic.json#/definitions/TChNFe",
+                            "description": "Chaves de acesso da NF-e, compostas por: UF do emitente, AAMM da emissão da NFe, CNPJ do emitente, modelo, série e número da NF-e e código numérico+DV."
+                        },
+                        "dhRecbto": {
+                            "$ref": "basic.json#/definitions/TDateTimeUTC",
+                            "description": "Data e hora de processamento, no formato AAAA-MM-DDTHH:MM:SSTZD. Deve ser preenchida com data e hora da gravação no Banco em caso de Confirmação. Em caso de Rejeição, com data e hora do recebimento do Lote de NF-e enviado."
+                        },
+                        "nProt": {
+                            "$ref": "basic.json#/definitions/TProt",
+                            "description": "Número do Protocolo de Status da NF-e. 1 posição (1 – Secretaria de Fazenda Estadual 2 – Receita Federal); 2 - códiga da UF - 2 posições ano; 10 seqüencial no ano."
+                        },
+                        "digVal": {
+                            "$ref": "FORWARD_REFERENCE#/to/http://www.w3.org/2000/09/xmldsig#/ds:DigestValueType",
+                            "description": "Digest Value da NF-e processada. Utilizado para conferir a integridade da NF-e original."
+                        },
+                        "cStat": {
+                            "$ref": "basic.json#/definitions/TStat",
+                            "description": "Código do status da mensagem enviada."
+                        },
+                        "xMotivo": {
+                            "$ref": "basic.json#/definitions/TMotivo",
+                            "description": "Descrição literal do status do serviço solicitado."
+                        },
+                        "@Id": {
+                            "type": "string"
+                        }
+                    },
+                    "anyOf": [
+                        {
+                            "required": [
+                                "cMsg",
+                                "xMsg"
+                            ],
+                            "properties": {
+                                "cMsg": {
+                                    "description": "Código da Mensagem.",
+                                    "pattern": "[0-9]{1,4}",
+                                    "type": "string"
+                                },
+                                "xMsg": {
+                                    "description": "Mensagem da SEFAZ para o emissor.",
+                                    "allOf": [
+                                        {
+                                            "$ref": "basic.json#/definitions/TString"
+                                        },
+                                        {
+                                            "maxLength": 200,
+                                            "minLength": 1
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "description": "This truthy schema is what makes an optional <sequence> optional."
+                        }
+                    ]
+                },
+                "ds:Signature": {
+                    "$ref": "FORWARD_REFERENCE#/to/http://www.w3.org/2000/09/xmldsig#/ds:Signature"
+                },
+                "@versao": {
+                    "$ref": "#/definitions/TVerNFe"
+                }
+            },
+            "type": "object"
+        },
+        "TEnviNFe": {
+            "description": "Tipo Pedido de Concessão de Autorização da Nota Fiscal Eletrônica",
+            "required": [
+                "idLote",
+                "indSinc",
+                "NFe",
+                "@versao"
+            ],
+            "properties": {
+                "idLote": {
+                    "$ref": "#/definitions/TIdLote"
+                },
+                "indSinc": {
+                    "description": "Indicador de processamento síncrono. 0=NÃO; 1=SIM=Síncrono",
+                    "enum": [
+                        "0",
+                        "1"
+                    ],
+                    "type": "string"
+                },
+                "NFe": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/TNFe"
+                        },
+                        {
+                            "items": {
+                                "$ref": "#/definitions/TNFe"
+                            },
+                            "maxItems": 50,
+                            "type": "array"
+                        }
+                    ]
+                },
+                "@versao": {
+                    "$ref": "#/definitions/TVerNFe"
+                }
+            },
+            "type": "object"
+        },
+        "TRetEnviNFe": {
+            "description": "Tipo Retorno do Pedido de Autorização da Nota Fiscal Eletrônica",
+            "required": [
+                "tpAmb",
+                "verAplic",
+                "cStat",
+                "xMotivo",
+                "cUF",
+                "dhRecbto",
+                "@versao"
+            ],
+            "properties": {
+                "tpAmb": {
+                    "$ref": "basic.json#/definitions/TAmb",
+                    "description": "Identificação do Ambiente: 1 - Produção 2 - Homologação"
+                },
+                "verAplic": {
+                    "$ref": "basic.json#/definitions/TVerAplic",
+                    "description": "Versão do Aplicativo que recebeu o Lote."
+                },
+                "cStat": {
+                    "$ref": "basic.json#/definitions/TStat",
+                    "description": "Código do status da mensagem enviada."
+                },
+                "xMotivo": {
+                    "$ref": "basic.json#/definitions/TMotivo",
+                    "description": "Descrição literal do status do serviço solicitado."
+                },
+                "cUF": {
+                    "$ref": "basic.json#/definitions/TCodUfIBGE",
+                    "description": "código da UF de atendimento"
+                },
+                "dhRecbto": {
+                    "$ref": "basic.json#/definitions/TDateTimeUTC",
+                    "description": "Data e hora do recebimento, no formato AAAA-MM-DDTHH:MM:SSTZD"
+                },
+                "@versao": {
+                    "$ref": "#/definitions/TVerNFe"
+                }
+            },
+            "type": "object",
+            "anyOf": [
+                {
+                    "anyOf": [
+                        {
+                            "oneOf": [
+                                {
+                                    "properties": {
+                                        "infRec": {
+                                            "description": "Dados do Recibo do Lote",
+                                            "required": [
+                                                "nRec",
+                                                "tMed"
+                                            ],
+                                            "properties": {
+                                                "nRec": {
+                                                    "$ref": "basic.json#/definitions/TRec",
+                                                    "description": "Número do Recibo"
+                                                },
+                                                "tMed": {
+                                                    "$ref": "basic.json#/definitions/TMed",
+                                                    "description": "Tempo médio de resposta do serviço (em segundos) dos últimos 5 minutos"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "properties": {
+                                        "protNFe": {
+                                            "$ref": "#/definitions/TProtNFe",
+                                            "description": "Protocolo de status resultado do processamento sincrono da NFC-e"
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "not": {
+                                        "properties": {
+                                            "infRec": {
+                                                "description": "Dados do Recibo do Lote",
+                                                "required": [
+                                                    "nRec",
+                                                    "tMed"
+                                                ],
+                                                "properties": {
+                                                    "nRec": {
+                                                        "$ref": "basic.json#/definitions/TRec",
+                                                        "description": "Número do Recibo"
+                                                    },
+                                                    "tMed": {
+                                                        "$ref": "basic.json#/definitions/TMed",
+                                                        "description": "Tempo médio de resposta do serviço (em segundos) dos últimos 5 minutos"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "not": {
+                                        "properties": {
+                                            "protNFe": {
+                                                "$ref": "#/definitions/TProtNFe",
+                                                "description": "Protocolo de status resultado do processamento sincrono da NFC-e"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "TConsReciNFe": {
+            "description": "Tipo Pedido de Consulta do Recido do Lote de Notas Fiscais Eletrônicas",
+            "required": [
+                "tpAmb",
+                "nRec",
+                "@versao"
+            ],
+            "properties": {
+                "tpAmb": {
+                    "$ref": "basic.json#/definitions/TAmb",
+                    "description": "Identificação do Ambiente: 1 - Produção 2 - Homologação"
+                },
+                "nRec": {
+                    "$ref": "basic.json#/definitions/TRec",
+                    "description": "Número do Recibo"
+                },
+                "@versao": {
+                    "$ref": "#/definitions/TVerNFe"
+                }
+            },
+            "type": "object"
+        },
+        "TRetConsReciNFe": {
+            "description": "Tipo Retorno do Pedido de Consulta do Recido do Lote de Notas Fiscais Eletrônicas",
+            "required": [
+                "tpAmb",
+                "verAplic",
+                "nRec",
+                "cStat",
+                "xMotivo",
+                "cUF",
+                "dhRecbto",
+                "@versao"
+            ],
+            "properties": {
+                "tpAmb": {
+                    "$ref": "basic.json#/definitions/TAmb",
+                    "description": "Identificação do Ambiente: 1 - Produção 2 - Homologação"
+                },
+                "verAplic": {
+                    "$ref": "basic.json#/definitions/TVerAplic",
+                    "description": "Versão do Aplicativo que processou a NF-e"
+                },
+                "nRec": {
+                    "$ref": "basic.json#/definitions/TRec",
+                    "description": "Número do Recibo Consultado"
+                },
+                "cStat": {
+                    "$ref": "basic.json#/definitions/TStat",
+                    "description": "Código do status da mensagem enviada."
+                },
+                "xMotivo": {
+                    "$ref": "basic.json#/definitions/TMotivo",
+                    "description": "Descrição literal do status do serviço solicitado."
+                },
+                "cUF": {
+                    "$ref": "basic.json#/definitions/TCodUfIBGE",
+                    "description": "código da UF de atendimento"
+                },
+                "dhRecbto": {
+                    "$ref": "basic.json#/definitions/TDateTimeUTC",
+                    "description": "Data e hora de processamento, no formato AAAA-MM-DDTHH:MM:SSTZD. Em caso de Rejeição, com data e hora do recebimento do Lote de NF-e enviado."
+                },
+                "protNFe": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/TProtNFe"
+                        },
+                        {
+                            "items": {
+                                "$ref": "#/definitions/TProtNFe"
+                            },
+                            "maxItems": 50,
+                            "type": "array"
+                        }
+                    ]
+                },
+                "@versao": {
+                    "$ref": "#/definitions/TVerNFe"
+                }
+            },
+            "type": "object",
+            "anyOf": [
+                {
+                    "required": [
+                        "cMsg",
+                        "xMsg"
+                    ],
+                    "properties": {
+                        "cMsg": {
+                            "description": "Código da Mensagem (v2.0) alterado para tamanho variavel 1-4. (NT2011/004)",
+                            "pattern": "[0-9]{1,4}",
+                            "type": "string"
+                        },
+                        "xMsg": {
+                            "description": "Mensagem da SEFAZ para o emissor. (v2.0)",
+                            "allOf": [
+                                {
+                                    "$ref": "basic.json#/definitions/TString"
+                                },
+                                {
+                                    "maxLength": 200,
+                                    "minLength": 1
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "description": "This truthy schema is what makes an optional <sequence> optional."
+                }
+            ]
+        },
+        "TNfeProc": {
+            "description": "Tipo da NF-e processada",
+            "required": [
+                "NFe",
+                "protNFe",
+                "@versao"
+            ],
+            "properties": {
+                "NFe": {
+                    "$ref": "#/definitions/TNFe"
+                },
+                "protNFe": {
+                    "$ref": "#/definitions/TProtNFe"
+                },
+                "@versao": {
+                    "$ref": "#/definitions/TVerNFe"
+                }
+            },
+            "type": "object"
+        },
+        "TEndereco": {
+            "description": "Tipo Dados do Endereço // 24/10/08 - tamanho mínimo",
+            "required": [
+                "xLgr",
+                "nro",
+                "xBairro",
+                "cMun",
+                "xMun",
+                "UF"
+            ],
+            "properties": {
+                "xLgr": {
+                    "description": "Logradouro",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "nro": {
+                    "description": "Número",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 1
+                        }
+                    ]
+                },
+                "xCpl": {
+                    "description": "Complemento",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 1
+                        }
+                    ]
+                },
+                "xBairro": {
+                    "description": "Bairro",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "cMun": {
+                    "$ref": "basic.json#/definitions/TCodMunIBGE",
+                    "description": "Código do município (utilizar a tabela do IBGE), informar 9999999 para operações com o exterior."
+                },
+                "xMun": {
+                    "description": "Nome do município, informar EXTERIOR para operações com o exterior.",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "UF": {
+                    "$ref": "basic.json#/definitions/TUf",
+                    "description": "Sigla da UF, informar EX para operações com o exterior."
+                },
+                "CEP": {
+                    "description": "CEP",
+                    "pattern": "[0-9]{8}",
+                    "type": "string"
+                },
+                "cPais": {
+                    "description": "Código de Pais",
+                    "pattern": "[0-9]{1,4}",
+                    "type": "string"
+                },
+                "xPais": {
+                    "description": "Nome do país",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "fone": {
+                    "description": "Telefone, preencher com Código DDD + número do telefone , nas operações com exterior é permtido informar o código do país + código da localidade + número do telefone",
+                    "pattern": "[0-9]{6,14}",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "TEnderEmi": {
+            "description": "Tipo Dados do Endereço do Emitente // 24/10/08 - desmembrado / tamanho mínimo",
+            "required": [
+                "xLgr",
+                "nro",
+                "xBairro",
+                "cMun",
+                "xMun",
+                "UF",
+                "CEP"
+            ],
+            "properties": {
+                "xLgr": {
+                    "description": "Logradouro",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "nro": {
+                    "description": "Número",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 1
+                        }
+                    ]
+                },
+                "xCpl": {
+                    "description": "Complemento",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 1
+                        }
+                    ]
+                },
+                "xBairro": {
+                    "description": "Bairro",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "cMun": {
+                    "$ref": "basic.json#/definitions/TCodMunIBGE",
+                    "description": "Código do município"
+                },
+                "xMun": {
+                    "description": "Nome do município",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "UF": {
+                    "$ref": "basic.json#/definitions/TUfEmi",
+                    "description": "Sigla da UF"
+                },
+                "CEP": {
+                    "description": "CEP - NT 2011/004",
+                    "pattern": "[0-9]{8}",
+                    "type": "string"
+                },
+                "cPais": {
+                    "description": "Código do país",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "enum": [
+                                "1058"
+                            ]
+                        }
+                    ]
+                },
+                "xPais": {
+                    "description": "Nome do país",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "enum": [
+                                "Brasil",
+                                "BRASIL"
+                            ]
+                        }
+                    ]
+                },
+                "fone": {
+                    "description": "Preencher com Código DDD + número do telefone (v.2.0)",
+                    "pattern": "[0-9]{6,14}",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "TLocal": {
+            "description": "Tipo Dados do Local de Retirada ou Entrega // 24/10/08 - tamanho mínimo // v2.0",
+            "required": [
+                "xLgr",
+                "nro",
+                "xBairro",
+                "cMun",
+                "xMun",
+                "UF"
+            ],
+            "properties": {
+                "xNome": {
+                    "description": "Razão Social ou Nome do Expedidor/Recebedor",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "xLgr": {
+                    "description": "Logradouro",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "nro": {
+                    "description": "Número",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 1
+                        }
+                    ]
+                },
+                "xCpl": {
+                    "description": "Complemento",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 1
+                        }
+                    ]
+                },
+                "xBairro": {
+                    "description": "Bairro",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "cMun": {
+                    "$ref": "basic.json#/definitions/TCodMunIBGE",
+                    "description": "Código do município (utilizar a tabela do IBGE)"
+                },
+                "xMun": {
+                    "description": "Nome do município",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "UF": {
+                    "$ref": "basic.json#/definitions/TUf",
+                    "description": "Sigla da UF"
+                },
+                "CEP": {
+                    "description": "CEP",
+                    "pattern": "[0-9]{8}",
+                    "type": "string"
+                },
+                "cPais": {
+                    "description": "Código de Pais",
+                    "pattern": "[0-9]{1,4}",
+                    "type": "string"
+                },
+                "xPais": {
+                    "description": "Nome do país",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "fone": {
+                    "description": "Telefone, preencher com Código DDD + número do telefone , nas operações com exterior é permtido informar o código do país + código da localidade + número do telefone",
+                    "pattern": "[0-9]{6,14}",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Informar o e-mail do expedidor/Recebedor. O campo pode ser utilizado para informar o e-mail de recepção da NF-e indicada pelo expedidor",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 1
+                        }
+                    ]
+                },
+                "IE": {
+                    "$ref": "basic.json#/definitions/TIe",
+                    "description": "Inscrição Estadual (v2.0)"
+                }
+            },
+            "type": "object",
+            "oneOf": [
+                {
+                    "required": [
+                        "CNPJ"
+                    ],
+                    "properties": {
+                        "CNPJ": {
+                            "$ref": "basic.json#/definitions/TCnpjOpc",
+                            "description": "CNPJ"
+                        }
+                    }
+                },
+                {
+                    "required": [
+                        "CPF"
+                    ],
+                    "properties": {
+                        "CPF": {
+                            "$ref": "basic.json#/definitions/TCpf",
+                            "description": "CPF (v2.0)"
+                        }
+                    }
+                }
+            ]
+        },
+        "TInfRespTec": {
+            "description": "Grupo de informações do responsável técnico pelo sistema de emissão de DF-e",
+            "required": [
+                "CNPJ",
+                "xContato",
+                "email",
+                "fone"
+            ],
+            "properties": {
+                "CNPJ": {
+                    "$ref": "basic.json#/definitions/TCnpjOpc",
+                    "description": "CNPJ"
+                },
+                "xContato": {
+                    "description": "Informar o nome da pessoa a ser contatada na empresa desenvolvedora do sistema utilizado na emissão do documento fiscal eletrônico.",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 2
+                        }
+                    ]
+                },
+                "email": {
+                    "description": "Informar o e-mail da pessoa a ser contatada na empresa desenvolvedora do sistema.",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 6
+                        }
+                    ]
+                },
+                "fone": {
+                    "description": "Informar o telefone da pessoa a ser contatada na empresa desenvolvedora do sistema. Preencher com o Código DDD + número do telefone.",
+                    "pattern": "[0-9]{6,14}",
+                    "type": "string"
+                }
+            },
+            "type": "object",
+            "anyOf": [
+                {
+                    "required": [
+                        "idCSRT",
+                        "hashCSRT"
+                    ],
+                    "properties": {
+                        "idCSRT": {
+                            "description": "Identificador do CSRT utilizado para montar o hash do CSRT",
+                            "pattern": "[0-9]{2}",
+                            "type": "string"
+                        },
+                        "hashCSRT": {
+                            "description": "O hashCSRT é o resultado da função hash (SHA-1 – Base64) do CSRT fornecido pelo fisco mais a Chave de Acesso da NFe.",
+                            "maxLength": 20,
+                            "minLength": 20,
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "description": "This truthy schema is what makes an optional <sequence> optional."
+                }
+            ]
+        },
+        "TVeiculo": {
+            "description": "Tipo Dados do Veículo",
+            "required": [
+                "UF"
+            ],
+            "properties": {
+                "placa": {
+                    "description": "Placa do veículo (NT2011/004)",
+                    "pattern": "[A-Z]{2,3}[0-9]{4}|[A-Z]{3,4}[0-9]{3}|[A-Z0-9]{7}",
+                    "type": "string"
+                },
+                "UF": {
+                    "$ref": "basic.json#/definitions/TUf",
+                    "description": "Sigla da UF"
+                },
+                "RNTC": {
+                    "description": "Registro Nacional de Transportador de Carga (ANTT)",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 20,
+                            "minLength": 1
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "Torig": {
+            "description": "Tipo Origem da mercadoria CST ICMS origem da mercadoria: 0-Nacional exceto as indicadas nos códigos 3, 4, 5 e 8; 1-Estrangeira - Importação direta; 2-Estrangeira - Adquirida no mercado interno; 3-Nacional, conteudo superior 40% e inferior ou igual a 70%; 4-Nacional, processos produtivos básicos; 5-Nacional, conteudo inferior 40%; 6-Estrangeira - Importação direta, com similar nacional, lista CAMEX; 7-Estrangeira - mercado interno, sem simular,lista CAMEX;8-Nacional, Conteúdo de Importação superior a 70%.",
+            "enum": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8"
+            ],
+            "type": "string"
+        },
+        "TFinNFe": {
+            "description": "Tipo Finalidade da NF-e (1=Normal; 2=Complementar; 3=Ajuste; 4=Devolução/Retorno)",
+            "enum": [
+                "1",
+                "2",
+                "3",
+                "4"
+            ],
+            "type": "string"
+        },
+        "TProcEmi": {
+            "description": "Tipo processo de emissão da NF-e",
+            "enum": [
+                "0",
+                "1",
+                "2",
+                "3"
+            ],
+            "type": "string"
+        },
+        "TCListServ": {
+            "description": "Tipo Código da Lista de Serviços LC 116/2003",
+            "enum": [
+                "01.01",
+                "01.02",
+                "01.03",
+                "01.04",
+                "01.05",
+                "01.06",
+                "01.07",
+                "01.08",
+                "01.09",
+                "02.01",
+                "03.02",
+                "03.03",
+                "03.04",
+                "03.05",
+                "04.01",
+                "04.02",
+                "04.03",
+                "04.04",
+                "04.05",
+                "04.06",
+                "04.07",
+                "04.08",
+                "04.09",
+                "04.10",
+                "04.11",
+                "04.12",
+                "04.13",
+                "04.14",
+                "04.15",
+                "04.16",
+                "04.17",
+                "04.18",
+                "04.19",
+                "04.20",
+                "04.21",
+                "04.22",
+                "04.23",
+                "05.01",
+                "05.02",
+                "05.03",
+                "05.04",
+                "05.05",
+                "05.06",
+                "05.07",
+                "05.08",
+                "05.09",
+                "06.01",
+                "06.02",
+                "06.03",
+                "06.04",
+                "06.05",
+                "06.06",
+                "07.01",
+                "07.02",
+                "07.03",
+                "07.04",
+                "07.05",
+                "07.06",
+                "07.07",
+                "07.08",
+                "07.09",
+                "07.10",
+                "07.11",
+                "07.12",
+                "07.13",
+                "07.16",
+                "07.17",
+                "07.18",
+                "07.19",
+                "07.20",
+                "07.21",
+                "07.22",
+                "08.01",
+                "08.02",
+                "09.01",
+                "09.02",
+                "09.03",
+                "10.01",
+                "10.02",
+                "10.03",
+                "10.04",
+                "10.05",
+                "10.06",
+                "10.07",
+                "10.08",
+                "10.09",
+                "10.10",
+                "11.01",
+                "11.02",
+                "11.03",
+                "11.04",
+                "12.01",
+                "12.02",
+                "12.03",
+                "12.04",
+                "12.05",
+                "12.06",
+                "12.07",
+                "12.08",
+                "12.09",
+                "12.10",
+                "12.11",
+                "12.12",
+                "12.13",
+                "12.14",
+                "12.15",
+                "12.16",
+                "12.17",
+                "13.02",
+                "13.03",
+                "13.04",
+                "13.05",
+                "14.01",
+                "14.02",
+                "14.03",
+                "14.04",
+                "14.05",
+                "14.06",
+                "14.07",
+                "14.08",
+                "14.09",
+                "14.10",
+                "14.11",
+                "14.12",
+                "14.13",
+                "14.14",
+                "15.01",
+                "15.02",
+                "15.03",
+                "15.04",
+                "15.05",
+                "15.06",
+                "15.07",
+                "15.08",
+                "15.09",
+                "15.10",
+                "15.11",
+                "15.12",
+                "15.13",
+                "15.14",
+                "15.15",
+                "15.16",
+                "15.17",
+                "15.18",
+                "16.01",
+                "16.02",
+                "17.01",
+                "17.02",
+                "17.03",
+                "17.04",
+                "17.05",
+                "17.06",
+                "17.08",
+                "17.09",
+                "17.10",
+                "17.11",
+                "17.12",
+                "17.13",
+                "17.14",
+                "17.15",
+                "17.16",
+                "17.17",
+                "17.18",
+                "17.19",
+                "17.20",
+                "17.21",
+                "17.22",
+                "17.23",
+                "17.24",
+                "17.25",
+                "18.01",
+                "19.01",
+                "20.01",
+                "20.02",
+                "20.03",
+                "21.01",
+                "22.01",
+                "23.01",
+                "24.01",
+                "25.01",
+                "25.02",
+                "25.03",
+                "25.04",
+                "25.05",
+                "26.01",
+                "27.01",
+                "28.01",
+                "29.01",
+                "30.01",
+                "31.01",
+                "32.01",
+                "33.01",
+                "34.01",
+                "35.01",
+                "36.01",
+                "37.01",
+                "38.01",
+                "39.01",
+                "40.01"
+            ],
+            "type": "string"
+        },
+        "TIdLote": {
+            "description": "Tipo Identificação de Lote",
+            "pattern": "[0-9]{1,15}",
+            "type": "string"
+        },
+        "TVerNFe": {
+            "description": "Tipo Versão da NF-e - 4.00",
+            "pattern": "4\\.00",
+            "type": "string"
+        },
+        "TGuid": {
+            "description": "Identificador único (Globally Unique Identifier)",
+            "pattern": "[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}",
+            "type": "string"
+        },
+        "TIpi": {
+            "description": "Tipo: Dados do IPI",
+            "required": [
+                "cEnq"
+            ],
+            "properties": {
+                "CNPJProd": {
+                    "$ref": "basic.json#/definitions/TCnpj",
+                    "description": "CNPJ do produtor da mercadoria, quando diferente do emitente. Somente para os casos de exportação direta ou indireta."
+                },
+                "cSelo": {
+                    "description": "Código do selo de controle do IPI",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 60,
+                            "minLength": 1
+                        }
+                    ]
+                },
+                "qSelo": {
+                    "description": "Quantidade de selo de controle do IPI",
+                    "pattern": "[0-9]{1,12}",
+                    "type": "string"
+                },
+                "cEnq": {
+                    "description": "Código de Enquadramento Legal do IPI (tabela a ser criada pela RFB)",
+                    "allOf": [
+                        {
+                            "$ref": "basic.json#/definitions/TString"
+                        },
+                        {
+                            "maxLength": 3,
+                            "minLength": 1
+                        }
+                    ]
+                }
+            },
+            "type": "object",
+            "allOf": [
+                {
+                    "oneOf": [
+                        {
+                            "required": [
+                                "IPITrib"
+                            ],
+                            "properties": {
+                                "IPITrib": {
+                                    "required": [
+                                        "CST",
+                                        "vIPI"
+                                    ],
+                                    "properties": {
+                                        "CST": {
+                                            "description": "Código da Situação Tributária do IPI: 00-Entrada com recuperação de crédito 49 - Outras entradas 50-Saída tributada 99-Outras saídas",
+                                            "enum": [
+                                                "00",
+                                                "49",
+                                                "50",
+                                                "99"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "vIPI": {
+                                            "$ref": "basic.json#/definitions/TDec_1302",
+                                            "description": "Valor do IPI"
+                                        }
+                                    },
+                                    "oneOf": [
+                                        {
+                                            "required": [
+                                                "vBC",
+                                                "pIPI"
+                                            ],
+                                            "properties": {
+                                                "vBC": {
+                                                    "$ref": "basic.json#/definitions/TDec_1302",
+                                                    "description": "Valor da BC do IPI"
+                                                },
+                                                "pIPI": {
+                                                    "$ref": "basic.json#/definitions/TDec_0302a04",
+                                                    "description": "Alíquota do IPI"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "required": [
+                                                "qUnid",
+                                                "vUnid"
+                                            ],
+                                            "properties": {
+                                                "qUnid": {
+                                                    "$ref": "basic.json#/definitions/TDec_1204v",
+                                                    "description": "Quantidade total na unidade padrão para tributação"
+                                                },
+                                                "vUnid": {
+                                                    "$ref": "basic.json#/definitions/TDec_1104",
+                                                    "description": "Valor por Unidade Tributável. Informar o valor do imposto Pauta por unidade de medida."
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "required": [
+                                "IPINT"
+                            ],
+                            "properties": {
+                                "IPINT": {
+                                    "required": [
+                                        "CST"
+                                    ],
+                                    "properties": {
+                                        "CST": {
+                                            "description": "Código da Situação Tributária do IPI: 01-Entrada tributada com alíquota zero 02-Entrada isenta 03-Entrada não-tributada 04-Entrada imune 05-Entrada com suspensão 51-Saída tributada com alíquota zero 52-Saída isenta 53-Saída não-tributada 54-Saída imune 55-Saída com suspensão",
+                                            "enum": [
+                                                "01",
+                                                "02",
+                                                "03",
+                                                "04",
+                                                "05",
+                                                "51",
+                                                "52",
+                                                "53",
+                                                "54",
+                                                "55"
+                                            ],
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -9,7 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "express": "^4.17.1",
-    "https": "^1.0.0"
+    "https": "^1.0.0",
+    "jsonschema": "^1.4.0",
+    "node-forge": "^0.10.0",
+    "xml-crypto": "^2.0.0",
+    "xsd2jsonschema": "^0.3.7"
   }
 }
