@@ -1,6 +1,6 @@
-import * as basicSchema from './basic.json'
-import * as nfeSchema from './nfe.json'
-import { IBGE } from './IBGE.json'
+import * as basicSchema from '../base-data/basic.json'
+import * as nfeSchema from '../base-data/nfe.json'
+import { IBGE } from '../base-data/IBGE.json'
 
 interface IType {
     _attributes: { name: string }
@@ -89,8 +89,8 @@ function createView(parentView: HTMLElement, field: any, tag: string = ''): void
         content.appendChild(legend)
         if (field.element) {
             createView(content, field.element, 'element')
-        } else if (field.complexType) {
-            const fields = field.complexType.sequence
+        } else if (field.complexType || field.sequence) {
+            const fields = field.complexType.sequence ?? field.sequence
             Object.entries(fields).forEach(v => createView(content, v[1], v[0]))
         } else throw new DOMException('Invalid tag')
         parentView.appendChild(content)
@@ -187,8 +187,9 @@ function postProcess(parentView: HTMLElement) {
 }
 
 const complex = nfeSchema.schema.complexType[0].sequence.element[0]['complexType']
+const emit = complex['sequence']['element'][1]
 const mainForm = document.getElementsByTagName('form')[0]
-createView(mainForm, complex['sequence']['element'][1])
+createView(mainForm, emit)
 postProcess(mainForm)
 
 document.querySelectorAll('input[list]').forEach(input =>
