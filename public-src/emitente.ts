@@ -1,6 +1,6 @@
-import * as basicSchema from '../base-data/basic.json'
-import * as nfeSchema from '../base-data/nfe.json'
-import { IBGE } from '../base-data/IBGE.json'
+import * as basicSchema from './base-data/basic.json'
+import * as nfeSchema from './base-data/nfe.json'
+import { IBGE } from './base-data/IBGE.json'
 
 interface IType {
     _attributes: { name: string }

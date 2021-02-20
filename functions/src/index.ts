@@ -1,8 +1,9 @@
 import * as functions from "firebase-functions";
 import * as firebase from 'firebase-admin'
-import * as express from 'express'
 const cors = require('cors')({ origin: true, allowedHeaders: 'Authorization' });
 firebase.initializeApp()
+// const db = firebase.firestore()
+// const FieldValue = firebase.firestore.FieldValue
 
 async function getUser(req: any) {
 	const authorizationHeader = req.headers.authorization || '';
@@ -12,16 +13,12 @@ async function getUser(req: any) {
 		try {
 			const decodedClaims = await firebase.auth().verifyIdToken(idToken)
 			return decodedClaims
-		} catch (error) {
-			return undefined
-		}
+		} catch (error) { }
 	}
 	return undefined
 }
 
-const app = express()
-app.use(cors)
-app.get('/helloWorld', async (req: any, res: any) => {
+export const test = functions.https.onRequest((req, res) => cors(req, res, async () => {
 	const user = await getUser(req);
 	if (!user) {
 		// Usuário não foi encontrado, então apenas se rejeita a requisição.
@@ -29,16 +26,21 @@ app.get('/helloWorld', async (req: any, res: any) => {
 	} else {
 		res.status(200).send(user)
 	}
-})
-
-export const api = functions.https.onRequest(app);
+}))
 
 /*
 ================================	METAS	================================
-*	Inserir todos os botões no painel
-*	Criar páginas de dados base e de nota fiscal
-*	Criar página de boas vindas básica
-*	Criar página de perfil (cadastro de emitente)
+*	Sistemas de gerenciamento
+	*	Notas
+	*	Emitentes
+	*	Clientes
+	*	Produtos
+	*	Transportadores
+	*	Veículos
+*	Toodos os botões no painel
+*	Páginas de dados base e de nota fiscal
+*	Página de boas vindas básica
+*	Página de perfil (cadastro de emitente)
 	*	Emitente único, raros são aqueles com mais de uma empresa
-
+* POR ENQUANTO FAZER TUDO FUNCIONAR LOCALMENTE, SEM SINCRONIZAÇÃO
 */
