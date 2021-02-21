@@ -19,7 +19,7 @@ const customHeaders = [
 ]
 
 function createId() { return Math.random().toString(36).substr(2, 9) }
-function createView(parentView: HTMLElement, field: any, tag: string = ''): void {
+function createView(parentView: HTMLElement, field: any, parentTags: string[], tag: string = ''): void {
     const getDocumentation = (v: any): string => v.annotation.documentation._text
     const updateInput = (v: any, input?: HTMLElement): HTMLElement => {
         const fieldRestriction = v.simpleType?.restriction
@@ -29,7 +29,7 @@ function createView(parentView: HTMLElement, field: any, tag: string = ''): void
         if (hasOtherRestrictions && !simpleTypes.some(findFunc)) {
             const complexType = complexTypes.find(findFunc)
             if (!complexType) throw new DOMException('Invalid field')
-            createView(parentView, { ...v, complexType: { sequence: complexType.sequence } })
+            createView(parentView, { ...v, complexType: { sequence: complexType.sequence } }, parentTags)
         } else {
             const otherRestrictions: any = hasOtherRestrictions ? (simpleTypes.find(findFunc) as any)?.restriction : undefined
             if (hasOtherRestrictions && otherRestrictions._attributes.base != 'string') {
@@ -42,7 +42,8 @@ function createView(parentView: HTMLElement, field: any, tag: string = ''): void
             }
             if (enumeration) {
                 const select = input as HTMLSelectElement
-                select.name = v._attributes.name
+                select.name = [...parentTags, v._attributes.name].join('.')
+                select.required = (v._attributes?.minOccurs ?? 1) > 0
                 const documentation = getDocumentation(v)
                 const lines = documentation.split('\n')
                 if ('length' in enumeration) {
@@ -69,7 +70,8 @@ function createView(parentView: HTMLElement, field: any, tag: string = ''): void
             }
             else {
                 const text = input as HTMLInputElement
-                text.name = v._attributes.name
+                text.name = [...parentTags, v._attributes.name].join('.')
+                text.required = (v._attributes?.minOccurs ?? 1) > 0
                 text.type = 'text'
                 if (text.value) text.value = ''
                 text.title = getDocumentation(v)
@@ -88,10 +90,10 @@ function createView(parentView: HTMLElement, field: any, tag: string = ''): void
         legend.innerText = field.annotation.documentation._text
         content.appendChild(legend)
         if (field.element) {
-            createView(content, field.element, 'element')
+            createView(content, field.element, [...parentTags, field._attributes.name], 'element')
         } else if (field.complexType || field.sequence) {
             const fields = field.complexType.sequence ?? field.sequence
-            Object.entries(fields).forEach(v => createView(content, v[1], v[0]))
+            Object.entries(fields).forEach(v => createView(content, v[1], [...parentTags, field._attributes.name], v[0]))
         } else throw new DOMException('Invalid tag')
         parentView.appendChild(content)
     }
@@ -111,7 +113,7 @@ function createView(parentView: HTMLElement, field: any, tag: string = ''): void
             const label = document.createElement('label')
             label.htmlFor = input.id = createId()
             const documentation = getDocumentation(v)
-            const customHeader = customHeaders.find(v => v.name == (input as any).name)?.header
+            const customHeader = customHeaders.find(v => (input as any).name.includes(v.name))?.header
             label.innerText = customHeader ?? documentation.split('\n')[0].split('.')[0].split('-')[0]
             parentView.appendChild(label)
             parentView.appendChild(input)
@@ -125,7 +127,7 @@ function createView(parentView: HTMLElement, field: any, tag: string = ''): void
         label.innerText = 'Informar ' + field.annotation.documentation._text
         const activeDiv = document.createElement('div')
         check.onclick = () => {
-            if (check.checked) createView(activeDiv, field)
+            if (check.checked) createView(activeDiv, field, parentTags)
             else activeDiv.innerHTML = ''
         }
         parentView.appendChild(check)
@@ -143,9 +145,9 @@ function postProcess(parentView: HTMLElement) {
         const inputs = elements.filter(
             v => v.tagName == 'INPUT' || v.tagName == 'SELECT').map(v => v as any)
         if (inputs.length > 0) {
-            const cMun = inputs.find(v => v.name == 'cMun')
-            const xMun = inputs.find(v => v.name == 'xMun')
-            const UF = inputs.find(v => v.name == 'UF')
+            const cMun = inputs.find(v => v.name.includes('cMun'))
+            const xMun = inputs.find(v => v.name.includes('xMun'))
+            const UF = inputs.find(v => v.name.includes('UF'))
             if (cMun && xMun && UF) {
                 cMun.style.display = 'none'
                 xMun.style.display = 'none'
@@ -189,16 +191,27 @@ function postProcess(parentView: HTMLElement) {
 const complex = nfeSchema.schema.complexType[0].sequence.element[0]['complexType']
 const emit = complex['sequence']['element'][1]
 const mainForm = document.getElementsByTagName('form')[0]
-createView(mainForm, emit)
+createView(mainForm, emit, [])
 postProcess(mainForm)
 
-document.querySelectorAll('input[list]').forEach(input =>
+document.querySelectorAll('input[list]').forEach(input => {
     input.addEventListener('change', function () {
         const options = this.list.options
         const optionFound = [...Array(options.length)].some((_, i) => options[i].value == this.value)
-        this.setCustomValidity(optionFound ? '' : 'Por favor, selecione um município válido.');
-    }))
-mainForm.onsubmit = function() {
+        this.setCustomValidity(optionFound ? '' : 'Por favor, selecione um valor válido.');
+    });
+    (input as any).setCustomValidity('Selecione um valor.')
+})
+mainForm.onsubmit = function(e) {
+    e.preventDefault()
     preSubmit.forEach(v => v())
-    return true
+    var object = {};
+    const formData = new FormData(mainForm)
+    formData.forEach(function(value, key){
+        const path = key.split('.')
+        const test = path.slice(0, path.length - 1).reduce((p,c) => p[c] ?? (p[c] = {}), object)
+        test[path[path.length - 1]] = value;
+    });
+    console.log(object)
+    return false
 }
