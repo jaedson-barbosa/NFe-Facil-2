@@ -7,4 +7,10 @@ https://github.com/JaedsonBarbosa/NFeFacilLegacy/blob/85b52950162a8fdb0777ba7a42
 2. Testar a assinatura e a comunicação com a SEFAZ por meio do uso de functions do firebase.
 3. Este será um emissor fiscal com foco na simplicidade de desenvolvimento e em baixos custos, portanto nada de gerenciamento de estoque ou coisas do tipo (a não ser que a aplicação dê muito certo e se expanda muito, mas de toda forma isso não deve ser falado como algo que será implementado, se for implementado, que venha de surpresa, sempre dizendo "não tenho planos para implementar algo do tipo"), mas coisas como scanner de código de barras podem ser implementados (tanto o USB quanto a câmera do celular).
 4. Usar interface simples, preferencialmente linear, que não exija adaptação para uso no celular, garantindo um uso consistente entre plataformas. Ela deve ser gerada de forma automatizada a partir dos schemas XML da NFe.
-5. Para impressão do DANFE NFC-e pode ser usado a biblioteca .NET Core do ZeusAutomacao/DFe.NET, onde pode ser feito um serviço que roda em background. Essa ideia também pode ser usada para o uso de certificado A3. Pro Android tem alguns apps que permitem essa impressão também. Isso será implementado antes de ser lançado, mas deve permanecer latente até que os testes sejam feitos numa impressora adequada.
+5. Para impressão do DANFE NFC-e pode ser usado a biblioteca .NET Core do ZeusAutomacao/DFe.NET, onde pode ser feito um serviço que roda em background. Essa ideia também pode ser usada para o uso de certificado A3. Pro Android tem alguns apps que permitem essa impressão também. Isso será implementado antes de ser lançado, mas deve permanecer latente até que os testes sejam feitos numa impressora adequada. Usar a biblioteca rodando numa VM para gerar o PDF que pode ser baixado também vale, testar essa impressão numa impressora baratinha (algumas imprimem PDF).
+
+Estrutura do banco de dados:
+empresas:
+-usuarios:
+    ativo
+    
