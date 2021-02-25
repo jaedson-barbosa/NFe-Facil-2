@@ -18,15 +18,16 @@ app.get('/', (req, res) => {
     var keybag = pkeyBags[forge.pki.oids.pkcs8ShroudedKeyBag][0];
     var privateKeyPem = forge.pki.privateKeyToPem(keybag.key);
     var certificate = forge.pki.certificateToPem(certBag.cert);
+    
     const xml = "<library><book><name>Harry Potter</name></book></library>"
     const sig = new xmlCrypto.SignedXml()
-    /*Esse pra assinar
-    sig.addReference("//*[local-name(.)='book']")  
-    sig.signingKey = privateKeyPem
-    sig.computeSignature(xml)
-    const signed = sig.getSignedXml()
-    console.log(signed)
-    res.send(signed)*/
+    // Esse pra assinar
+    // sig.addReference("//*[local-name(.)='book']")  
+    // sig.signingKey = privateKeyPem
+    // sig.computeSignature(xml)
+    // const signed = sig.getSignedXml()
+    // console.log(signed)
+    // res.send(signed)
     //Esse pra enviar
     const httpsAgent = new https.Agent({
         rejectUnauthorized: false,
@@ -68,7 +69,7 @@ app.get('/ok', (req, res) => {
     });
 })
 app.listen(8080, () => console.log('Started'))
-/*
+
 app.get('/sign', (req, res) => {
     if (!('getPeerCertificate' in req.connection)) {
         res.status(401)
@@ -90,7 +91,8 @@ app.get('/sign', (req, res) => {
         res.status(401)
             .send(`Sorry, but you need to provide a client certificate to continue.`)
     }
-})
+})/*
+
 const serverKey = 
 `-----BEGIN PRIVATE KEY-----
 MIIJQgIBADANBgkqhkiG9w0BAQEFAASCCSwwggkoAgEAAoICAQDBzNim5Ek58Xmy

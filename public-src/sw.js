@@ -54,20 +54,35 @@ const getIdToken = () => {
 };
 
 self.addEventListener('fetch', (evt) => {
+    const getBody = async () => {
+        try {
+            return await evt.request.text()
+        } catch (error) {
+            console.error(error)
+            return undefined
+        }
+    }
     evt.respondWith(async function () {
         const idToken = await getIdToken()
         const needLogin = new URL(evt.request.url).pathname.startsWith('/painel.html')
         if (needLogin && !idToken) return Response.redirect('./login.html')
-
-        return fetch(evt.request.url.includes('nfe-facil-980bc') && idToken
-            ? new Request(evt.request,
+        const request = evt.request.url.includes('nfe-facil-980bc') && idToken
+            ? new Request(evt.request.url,
                 {
+                    method: evt.request.method,
                     headers: {
                         ...evt.request.headers,
                         Authorization: 'Bearer ' + idToken
-                    }
+                    },
+                    mode: evt.request.mode,
+                    cache: evt.request.cache,
+                    credentials: evt.request.credentials,
+                    redirect: evt.request.redirect,
+                    referrer: evt.request.referrer,
+                    body: await getBody()
                 })
-            : evt.request)
+            : evt.request
+        return fetch(request)
     }());
 });
 

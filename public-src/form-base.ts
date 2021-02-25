@@ -16,7 +16,21 @@ const simpleTypes: IType[] = basicSchema.schema.simpleType
 
 function createId() { return Math.random().toString(36).substr(2, 9) }
 
-export default function initializeForm(
+export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
+    e.preventDefault()
+    var object = {};
+    const formData = new FormData(e.target as HTMLFormElement)
+    formData.forEach(function (value, key) {
+        const path = key.split('.')
+        path.slice(0, path.length - 1)
+            .reduce((p, c) => p[c] ?? (p[c] = {}), object)
+        [path[path.length - 1]] = value;
+    });
+    onSubmit(object)
+    return false
+}
+
+export function initializeForm(
     target: 'emitente',
     form: HTMLFormElement,
     customHeaders: { name: string; header: string; }[],
@@ -207,17 +221,7 @@ export default function initializeForm(
     })
 
     form.onsubmit = function (e) {
-        e.preventDefault()
         preSubmit.forEach(v => v())
-        var object = {};
-        const formData = new FormData(form)
-        formData.forEach(function (value, key) {
-            const path = key.split('.')
-            path.slice(0, path.length - 1)
-                .reduce((p, c) => p[c] ?? (p[c] = {}), object)
-            [path[path.length - 1]] = value;
-        });
-        onSubmit(object)
-        return false
+        return defaultFormSubmit(e, onSubmit)
     }
 }

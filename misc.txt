@@ -11,6 +11,12 @@ https://github.com/JaedsonBarbosa/NFeFacilLegacy/blob/85b52950162a8fdb0777ba7a42
 
 Estrutura do banco de dados:
 empresas:
+publicCert
+privateCert
+emit (...)
+lastUpdate
 -usuarios:
     ativo
-    
+    nome
+    isAdmin
+    permissoes: visualizar-dados-base, visualizar-notas-emitidas, emitir-notas, cadastrar-dados-base
