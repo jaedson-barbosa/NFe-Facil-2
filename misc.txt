@@ -16,7 +16,6 @@ privateCert
 emit (...)
 lastUpdate
 -usuarios:
-    ativo
+    status //0-Aguardando analise/1-Acesso revogado/2-Acesso liberado/3-Administrador
     nome
-    isAdmin
     permissoes: visualizar-dados-base, visualizar-notas-emitidas, emitir-notas, cadastrar-dados-base
