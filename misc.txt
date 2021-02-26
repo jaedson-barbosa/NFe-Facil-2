@@ -9,7 +9,7 @@ https://github.com/JaedsonBarbosa/NFeFacilLegacy/blob/85b52950162a8fdb0777ba7a42
 4. Usar interface simples, preferencialmente linear, que não exija adaptação para uso no celular, garantindo um uso consistente entre plataformas. Ela deve ser gerada de forma automatizada a partir dos schemas XML da NFe.
 5. Para impressão do DANFE NFC-e pode ser usado a biblioteca .NET Core do ZeusAutomacao/DFe.NET, onde pode ser feito um serviço que roda em background. Essa ideia também pode ser usada para o uso de certificado A3. Pro Android tem alguns apps que permitem essa impressão também. Isso será implementado antes de ser lançado, mas deve permanecer latente até que os testes sejam feitos numa impressora adequada. Usar a biblioteca rodando numa VM para gerar o PDF que pode ser baixado também vale, testar essa impressão numa impressora baratinha (algumas imprimem PDF).
 
-Estrutura do banco de dados:
+BANCO DE DADOS - FIRESTORE
 empresas:
 publicCert
 privateCert
@@ -19,3 +19,13 @@ lastUpdate
     status //0-Aguardando analise/1-Acesso revogado/2-Acesso liberado/3-Administrador
     nome
     permissoes: visualizar-dados-base, visualizar-notas-emitidas, emitir-notas, cadastrar-dados-base
+
+LOCALSTORAGE
+empresas:
+id
+status
+permissoes
+empresa
+
+SESSIONSTORAGE
+idEmpresa

@@ -34,12 +34,12 @@ export const scanUsuario = functions.https.onRequest((req, res) => cors(req, res
 	}
 	const empresas = await db.getAll(...cadastros.docs.map(v => v.ref.parent.parent!))
 	const zip = empresas.map(v => {
-		const cadastro = cadastros.docs.find(k => k.ref.parent.parent == v.ref)!
+		const cadastro = cadastros.docs.find(k => k.ref.parent.parent == v.ref)!.data()
 		return {
 			id: v.id,
-			status: cadastro.data().status,
-			permissoes: cadastro.data().permissoes,
-			empresa: v.data()
+			status: cadastro.status,
+			permissoes: cadastro.permissoes,
+			empresa: v.data()!.emit
 		}
 	})
 	res.status(200).send(zip)
@@ -108,8 +108,8 @@ export const requisitarAcesso = functions.https.onRequest((req, res) => cors(req
 		const p12Der = forge.util.decode64(pfx);
 		const p12Asn1 = forge.asn1.fromDer(p12Der);
 		const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, senha);
-		const certBags = p12.getBags({bagType: forge.pki.oids.certBag});
-		const pkeyBags = p12.getBags({bagType: forge.pki.oids.pkcs8ShroudedKeyBag});
+		const certBags = p12.getBags({ bagType: forge.pki.oids.certBag });
+		const pkeyBags = p12.getBags({ bagType: forge.pki.oids.pkcs8ShroudedKeyBag });
 		const certBag = certBags[forge.pki.oids.certBag]![0];
 		const keybag = pkeyBags[forge.pki.oids.pkcs8ShroudedKeyBag]![0];
 		const privateKeyPem = forge.pki.privateKeyToPem(keybag.key!);
@@ -135,7 +135,11 @@ export const requisitarAcesso = functions.https.onRequest((req, res) => cors(req
 					status: 3,
 					permissoes: null
 				})
-				res.status(200).send('Usuário promovido para administrador')
+				res.status(200).send({
+					idEmpresa: empresa.id,
+					status: 'Usuário promovido para administrador',
+					empresa: empresa.data().emit
+				})
 			} else {
 				res.status(400).send(getRespostaTentativaCadastro(status))
 			}
@@ -144,7 +148,11 @@ export const requisitarAcesso = functions.https.onRequest((req, res) => cors(req
 				status: 3,
 				nome: user.displayName
 			})
-			res.status(200).send('Administrador registrado')
+			res.status(200).send({
+				idEmpresa: empresa.id,
+				status: 'Administrador registrado',
+				empresa: empresa.data().emit
+			})
 		}
 	} else {
 		const empresas = await db.collection('empresas').where('CNPJ', '==', cnpj).select().limit(1).get()
@@ -163,7 +171,11 @@ export const requisitarAcesso = functions.https.onRequest((req, res) => cors(req
 			status: 0,
 			nome: user.displayName
 		})
-		res.status(200).send('Pedido registrado')
+		res.status(200).send({
+			idEmpresa: empresa.id,
+			status: 'Pedido registrado',
+			empresa: empresa.data().emit
+		})
 	}
 }))
 
@@ -196,13 +208,13 @@ export const cadastrarCNPJ = functions.https.onRequest((req, res) => cors(req, r
 	}
 	//Interessante pôr análise de CA (autoridade certificadora)
 	const p12Der = forge.util.decode64(pfx);
-    const p12Asn1 = forge.asn1.fromDer(p12Der);
-    const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, senha);
-    const certBags = p12.getBags({bagType: forge.pki.oids.certBag});
-    const pkeyBags = p12.getBags({bagType: forge.pki.oids.pkcs8ShroudedKeyBag});
-    const certBag = certBags[forge.pki.oids.certBag]![0];
-    const keybag = pkeyBags[forge.pki.oids.pkcs8ShroudedKeyBag]![0];
-    const privateKeyPem = forge.pki.privateKeyToPem(keybag.key!);
+	const p12Asn1 = forge.asn1.fromDer(p12Der);
+	const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, senha);
+	const certBags = p12.getBags({ bagType: forge.pki.oids.certBag });
+	const pkeyBags = p12.getBags({ bagType: forge.pki.oids.pkcs8ShroudedKeyBag });
+	const certBag = certBags[forge.pki.oids.certBag]![0];
+	const keybag = pkeyBags[forge.pki.oids.pkcs8ShroudedKeyBag]![0];
+	const privateKeyPem = forge.pki.privateKeyToPem(keybag.key!);
 	const cert = certBag.cert!
 	const certificatePem = forge.pki.certificateToPem(cert);
 
@@ -218,8 +230,8 @@ export const cadastrarCNPJ = functions.https.onRequest((req, res) => cors(req, r
 		res.status(400).send('CNPJ diferente')
 		return
 	}
-	
-    // const certificatePem = forge.pki.certificateToPem(cert!);
+
+	// const certificatePem = forge.pki.certificateToPem(cert!);
 	const empresas = await db.collection('empresas').where('CNPJ', '==', cnpj).select().limit(1).get()
 	if (!empresas.empty) {
 		res.status(400).send('Empresa já existe')
