@@ -1,12 +1,18 @@
 export default class database {
     private source: IDBDatabase
-    private _clientes?: IDBObjectStore
 
-    public get clientes(): IDBObjectStore {
-        if (this._clientes) return this._clientes
-        const transaction = this.source.transaction('clientes', 'readwrite')
-        return transaction.objectStore('clientes')
+    private defaultGet(name: string) {
+        const path = '_' + name
+        const current = this[path]
+        if (current) return current
+        const transaction = this.source.transaction(name, 'readwrite')
+        const store = transaction.objectStore(name)
+        this[path] = store
+        return store
     }
+
+    private _clientes?: IDBObjectStore
+    public get clientes(): IDBObjectStore { return this.defaultGet('clientes') }
 
     private constructor(source: IDBDatabase, options?: {
         clientes?: IDBObjectStore

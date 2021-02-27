@@ -20,7 +20,8 @@ lastUpdate
     nome
     permissoes: visualizar-dados-base, visualizar-notas-emitidas, emitir-notas, cadastrar-dados-base
 -dados:
-    
+    id
+    lastUpdate
 
 LOCALSTORAGE
 empresas:
