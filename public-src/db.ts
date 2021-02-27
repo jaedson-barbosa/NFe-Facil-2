@@ -1,18 +1,18 @@
 export default class database {
     private source: IDBDatabase
-    private _emitentes?: IDBObjectStore
+    private _clientes?: IDBObjectStore
 
-    public get emitentes(): IDBObjectStore {
-        if (this._emitentes) return this._emitentes
-        const transaction = this.source.transaction('emitentes', 'readwrite')
-        return transaction.objectStore('emitentes')
+    public get clientes(): IDBObjectStore {
+        if (this._clientes) return this._clientes
+        const transaction = this.source.transaction('clientes', 'readwrite')
+        return transaction.objectStore('clientes')
     }
 
     private constructor(source: IDBDatabase, options?: {
-        emitentes?: IDBObjectStore
+        clientes?: IDBObjectStore
     }) {
         this.source = source
-        if (options?.emitentes) this._emitentes = options.emitentes
+        if (options?.clientes) this._clientes = options.clientes
     }
 
     public static get autoId() {
@@ -22,7 +22,8 @@ export default class database {
 
     public static async create(): Promise<database> {
         return new Promise((res, rej) => {
-            const request = window.indexedDB.open("NFeFacil", 1)
+            const empresa = sessionStorage.getItem('idEmpresa')
+            const request = window.indexedDB.open(empresa, 1)
             request.onerror = function (event) {
                 console.error(event);
                 rej('Error while trying to open connection with db.')
@@ -30,8 +31,8 @@ export default class database {
             request.onupgradeneeded = function (event) {
                 console.log("Atualizando...");
                 const db = request.result;
-                const emitentes = db.createObjectStore("emitentes");
-                res(new database(db, { emitentes: emitentes }))
+                const clientes = db.createObjectStore("clientes");
+                res(new database(db, { clientes: clientes }))
             };
             request.onsuccess = function (event) {
                 console.log("Banco de dados aberto com sucesso.");
