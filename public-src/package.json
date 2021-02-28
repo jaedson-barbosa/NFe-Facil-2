@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "firebase": "^8.2.7",
+    "idb-keyval": "^5.0.2",
     "xml-js": "^1.6.11"
   }
 }

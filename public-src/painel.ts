@@ -1,6 +1,6 @@
+import * as db from './db'
 const carregando = document.querySelector('dialog')
 
-async function init() {
-    
-}
-init()
+db.sync().then(() => {
+    carregando.close()
+})
