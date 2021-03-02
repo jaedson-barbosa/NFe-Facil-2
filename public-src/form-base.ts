@@ -2,6 +2,10 @@ import * as basicSchema from './base-data/basic.json'
 import * as nfeSchema from './base-data/nfe.json'
 import { IBGE } from './base-data/IBGE.json'
 
+export function getForm(index: number = 0) {
+    return document.getElementsByTagName('form')[index]
+}
+
 interface IType {
     _attributes: { name: string }
     annotation?: { documentation: { _text: string } }
@@ -31,16 +35,18 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
 }
 
 export function initializeForm(
-    target: 'emitente',
-    form: HTMLFormElement,
-    customHeaders: { name: string; header: string; }[],
+    target: 'emitente' | 'destinatario' | 'destinatario-cadastro',
+    formParent: HTMLElement,
     onSubmit: (data: any) => void): void {
-    if (target != 'emitente') throw new Error("Invalid target!");
     
     const preSubmit: (() => void)[] = []
 
-    function createView(parentView: HTMLElement, field: any, parentTags: string[], tag: string = ''): void {
+    const customHeaders = target == 'emitente' ? [{ name: 'fone', header: 'Telefone' }] : [{ name: 'fone', header: 'Telefone' }]
+    const customRequireds = target == 'destinatario-cadastro' ? ['dest', 'xNome', 'enderDest'] : []
+
+    function createView(parentView: HTMLElement, field: any, parentTags: string[], tag: string = '', ignorarAnaliseOcorrencia: boolean = false): void {
         const getDocumentation = (v: any): string => v.annotation.documentation._text
+        const isRequired = (v : any): boolean => (v._attributes?.minOccurs ?? 1) > 0 || customRequireds.includes(v._attributes.name)
         const updateInput = (v: any, input?: HTMLElement): HTMLElement => {
             const fieldRestriction = v.simpleType?.restriction
             const baseType = v._attributes?.type ?? fieldRestriction?._attributes.base
@@ -49,7 +55,7 @@ export function initializeForm(
             if (hasOtherRestrictions && !simpleTypes.some(findFunc)) {
                 const complexType = complexTypes.find(findFunc)
                 if (!complexType) throw new DOMException('Invalid field')
-                createView(parentView, { ...v, complexType: { sequence: complexType.sequence } }, parentTags)
+                createView(parentView, { ...v, complexType: { sequence: complexType.sequence } }, parentTags, 'sequence')
             } else {
                 const otherRestrictions: any = hasOtherRestrictions ? (simpleTypes.find(findFunc) as any)?.restriction : undefined
                 if (hasOtherRestrictions && otherRestrictions._attributes.base != 'string') {
@@ -63,7 +69,7 @@ export function initializeForm(
                 if (enumeration) {
                     const select = input as HTMLSelectElement
                     select.name = [...parentTags, v._attributes.name].join('.')
-                    select.required = (v._attributes?.minOccurs ?? 1) > 0
+                    select.required = isRequired(v)
                     const documentation = getDocumentation(v)
                     const lines = documentation.split('\n')
                     if ('length' in enumeration) {
@@ -91,7 +97,7 @@ export function initializeForm(
                 else {
                     const text = input as HTMLInputElement
                     text.name = [...parentTags, v._attributes.name].join('.')
-                    text.required = (v._attributes?.minOccurs ?? 1) > 0
+                    text.required = isRequired(v)
                     text.type = 'text'
                     if (text.value) text.value = ''
                     text.title = getDocumentation(v)
@@ -105,6 +111,10 @@ export function initializeForm(
             }
         }
         if (!tag) {
+            if (!ignorarAnaliseOcorrencia && !isRequired(field)) {
+                createView(parentView, field, parentTags, 'sequence', true)
+                return
+            }
             const content = document.createElement('fieldset')
             const legend = document.createElement('legend')
             legend.innerText = field.annotation.documentation._text
@@ -134,25 +144,32 @@ export function initializeForm(
                 label.htmlFor = input.id = createId()
                 const documentation = getDocumentation(v)
                 const customHeader = customHeaders.find(v => (input as any).name.includes(v.name))?.header
-                label.innerText = customHeader ?? documentation.split('\n')[0].split('.')[0].split('-')[0]
+                label.innerText = customHeader ?? documentation.split('\n')[0].split('.')[0].split('(')[0]
                 parentView.appendChild(label)
                 parentView.appendChild(input)
             })
         }
         if (tag == 'sequence') {
+            if (!ignorarAnaliseOcorrencia && isRequired(field)) {
+                createView(parentView, field, parentTags, undefined, true)
+                return
+            }
             const check = document.createElement('input')
             check.type = 'checkbox'
             const label = document.createElement('label')
             label.htmlFor = check.id = createId()
             label.innerText = 'Informar ' + field.annotation.documentation._text
             const activeDiv = document.createElement('div')
-            check.onclick = () => {
-                if (check.checked) createView(activeDiv, field, parentTags)
-                else activeDiv.innerHTML = ''
-            }
             parentView.appendChild(check)
             parentView.appendChild(label)
             parentView.appendChild(activeDiv)
+            check.onclick = () => {
+                if (check.checked) {
+                    createView(activeDiv, field, parentTags, undefined, true)
+                    postProcess(activeDiv)
+                }
+                else activeDiv.innerHTML = ''
+            }
         }
     }
 
@@ -163,9 +180,9 @@ export function initializeForm(
             const inputs = elements.filter(
                 v => v.tagName == 'INPUT' || v.tagName == 'SELECT').map(v => v as any)
             if (inputs.length > 0) {
-                const cMun = inputs.find(v => v.name.includes('cMun'))
-                const xMun = inputs.find(v => v.name.includes('xMun'))
-                const UF = inputs.find(v => v.name.includes('UF'))
+                const cMun = inputs.find(v => v.name.endsWith('.cMun'))
+                const xMun = inputs.find(v => v.name.endsWith('.xMun'))
+                const UF = inputs.find(v => v.name.endsWith('.UF'))
                 if (cMun && xMun && UF) {
                     cMun.style.display = 'none'
                     xMun.style.display = 'none'
@@ -175,31 +192,41 @@ export function initializeForm(
                     munLabel.htmlFor = munSmartSelect.id = createId()
                     munLabel.innerText = 'Município'
                     const datalist = document.createElement('datalist')
-                    const datasource = IBGE.flatMap(
+                    datalist.innerHTML = IBGE.flatMap(
                         v => (v.Municipios as any[]).map(
-                            k => `<option>${k.Nome} (${v.Sigla})</option>`))
-                    datalist.innerHTML = datasource.join('')
+                            k => `<option>${k.Nome} (${v.Sigla})</option>`)).join('')
                     const datalistId = createId()
                     datalist.id = datalistId
                     munSmartSelect.setAttribute('list', datalistId)
-                    preSubmit.push(() => {
-                        const value = munSmartSelect.value
-                        const startUF = value.indexOf('(')
-                        const uf = value.substring(startUF + 1, value.length - 1)
-                        const mun = value.substring(0, startUF - 1)
-                        cMun.value = IBGE.find(v => v.Sigla == uf).Municipios.find(v => v.Nome == mun).Codigo
-                        xMun.value = mun
-                        UF.value = uf
-                    })
+                    munSmartSelect.onchange = () => {
+                        try {
+                            const value = munSmartSelect.value
+                            const startUF = value.indexOf('(')
+                            const uf = value.substring(startUF + 1, value.length - 1)
+                            const mun = value.substring(0, startUF - 1)
+                            cMun.value = IBGE.find(v => v.Sigla == uf).Municipios.find(v => v.Nome == mun).Codigo
+                            xMun.value = mun
+                            UF.value = uf
+                        } catch (error) {
+                            // Não achou e será capturada na validação do campo.
+                        }
+                    }
                     parentView.appendChild(datalist)
                     parentView.insertBefore(munSmartSelect, cMun)
                     parentView.insertBefore(munLabel, munSmartSelect)
                 } else if (cMun || xMun || UF) {
+                    console.log(cMun)
+                    console.log(xMun)
+                    console.log(UF)
                     throw new DOMException('One of the three address fields is present.')
                 }
             }
             elements.filter(v => v.tagName == 'LABEL').map(v => v as HTMLLabelElement).forEach(v => {
                 const referEl = document.getElementById(v.htmlFor)
+                if (!referEl) {
+                    console.log(v.htmlFor)
+                    console.log(referEl)
+                }
                 if (referEl.style.display == 'none') v.remove()
             })
             elements.forEach(v => postProcess(v))
@@ -207,9 +234,15 @@ export function initializeForm(
     }
 
     const complex = nfeSchema.schema.complexType[0].sequence.element[0]['complexType']
-    const targetSource = complex['sequence']['element'][1];
+    const elementosNFe = complex['sequence']['element']
+    const targetSource =  elementosNFe[target == 'emitente' ? 1 : 3];
+    const form = document.createElement('form')
+    formParent.appendChild(form)
     createView(form, targetSource, [])
     postProcess(form)
+    const submit = document.createElement('input')
+    submit.type = 'submit'
+    form.appendChild(submit)
 
     document.querySelectorAll('input[list]').forEach(input => {
         input.addEventListener('change', function () {

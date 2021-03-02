@@ -1,6 +1,4 @@
-import { defaultFormSubmit, initializeForm } from './form-base'
-
-function getForm(index: number = 0) { return document.getElementsByTagName('form')[index] }
+import { defaultFormSubmit, initializeForm, getForm } from './form-base'
 
 async function getCertPostBody(data: any, additionalBody?: (body: any) => void) {
     if (data.cert) {
@@ -43,11 +41,8 @@ if (idEmitente) {
         const text = await scanned.text()
         if (text == 'Empresa não existe') {
             // Nesse caso vamos cadastrar a empresa
-            document.body.innerHTML = '<form></form>'
-            const mainForm = getForm()
             initializeForm(
-                'emitente', mainForm,
-                [{ name: 'fone', header: 'Telefone' }],
+                'emitente', document.body,
                 async data => {
                     const opcoes = await getCertPostBody(data, v => v.emit = data.emit)
                     if (!opcoes) {
@@ -73,7 +68,7 @@ if (idEmitente) {
                     localStorage.setItem('empresas', JSON.stringify(empresas))
                     location.href = './emitentes.html'
                 })
-            mainForm.innerHTML += /*html*/`
+            getForm().innerHTML += /*html*/`
             <label for="cert">Certificado</label>
             <input type="file" id="cert" name="cert" accept=".pfx" required>
             <label for="senha">Senha</label>
