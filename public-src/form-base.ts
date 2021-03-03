@@ -1,6 +1,7 @@
 import * as basicSchema from './base-data/basic.json'
 import * as nfeSchema from './base-data/nfe.json'
 import { IBGE } from './base-data/IBGE.json'
+import { paises } from './base-data/paises.json'
 
 export function getForm(index: number = 0) {
     return document.getElementsByTagName('form')[index]
@@ -25,6 +26,7 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     var object = {};
     const formData = new FormData(e.target as HTMLFormElement)
     formData.forEach(function (value, key) {
+        if (!value) return
         const path = key.split('.')
         path.slice(0, path.length - 1)
             .reduce((p, c) => p[c] ?? (p[c] = {}), object)
@@ -39,8 +41,6 @@ export function initializeForm(
     formParent: HTMLElement,
     onSubmit: (data: any) => void): void {
     
-    const preSubmit: (() => void)[] = []
-
     const customHeaders = target == 'emitente' ? [{ name: 'fone', header: 'Telefone' }] : [{ name: 'fone', header: 'Telefone' }]
     const customRequireds = target == 'destinatario-cadastro' ? ['dest', 'xNome', 'enderDest'] : []
 
@@ -104,8 +104,10 @@ export function initializeForm(
                     text.pattern = fieldRestriction?.pattern?._attributes.value ?? otherRestrictions?.pattern?._attributes.value
                     const minLength = fieldRestriction?.minLength?._attributes.value ?? otherRestrictions?.minLength?._attributes.value
                     const maxLength = fieldRestriction?.maxLength?._attributes.value ?? otherRestrictions?.maxLength?._attributes.value
-                    text.minLength = minLength ? Number(minLength) : 0
-                    text.maxLength = maxLength ? Number(maxLength) : 0
+                    if (minLength) text.minLength = Number(minLength)
+                    else text.removeAttribute('minLength')
+                    if (maxLength) text.maxLength = Number(maxLength)
+                    else text.removeAttribute('maxLength')
                 }
                 return input
             }
@@ -184,9 +186,7 @@ export function initializeForm(
                 const xMun = inputs.find(v => v.name.endsWith('.xMun'))
                 const UF = inputs.find(v => v.name.endsWith('.UF'))
                 if (cMun && xMun && UF) {
-                    cMun.style.display = 'none'
-                    xMun.style.display = 'none'
-                    UF.style.display = 'none'
+                    [UF, xMun, cMun].forEach(v => v.style.display = 'none')
                     const munSmartSelect = document.createElement('input')
                     const munLabel = document.createElement('label')
                     munLabel.htmlFor = munSmartSelect.id = createId()
@@ -195,9 +195,7 @@ export function initializeForm(
                     datalist.innerHTML = IBGE.flatMap(
                         v => (v.Municipios as any[]).map(
                             k => `<option>${k.Nome} (${v.Sigla})</option>`)).join('')
-                    const datalistId = createId()
-                    datalist.id = datalistId
-                    munSmartSelect.setAttribute('list', datalistId)
+                    munSmartSelect.setAttribute('list', datalist.id = createId())
                     munSmartSelect.onchange = () => {
                         try {
                             const value = munSmartSelect.value
@@ -218,7 +216,35 @@ export function initializeForm(
                     console.log(cMun)
                     console.log(xMun)
                     console.log(UF)
-                    throw new DOMException('One of the three address fields is present.')
+                    throw new DOMException('Um dos três campos de endereço está presente.')
+                }
+                const cPais = inputs.find(v => v.name.endsWith('.cPais'))
+                const xPais = inputs.find(v => v.name.endsWith('.xPais'))
+                if (cPais && xPais && cPais.tagName == 'INPUT' && xPais.tagName == 'INPUT') {
+                    [cPais, xPais].forEach(v => v.style.display = 'none')
+                    const paisSmartSelect = document.createElement('input')
+                    const paisLabel = document.createElement('label')
+                    paisLabel.htmlFor = paisSmartSelect.id = createId()
+                    paisLabel.innerText = 'País'
+                    const datalist = document.createElement('datalist')
+                    datalist.innerHTML = paises.map(
+                            k => `<option>${k.nome}</option>`).join('')
+                    paisSmartSelect.setAttribute('list', datalist.id = createId())
+                    paisSmartSelect.onchange = () => {
+                        try {
+                            const value = paisSmartSelect.value
+                            const pais = paises.find(v => v.nome == value)
+                            xPais.value = pais.nome
+                            cPais.value = pais.codigo
+                        } catch (error) {
+                            // Não achou e será capturada na validação do campo.
+                        }
+                    }
+                    parentView.appendChild(datalist)
+                    parentView.insertBefore(paisSmartSelect, cPais)
+                    parentView.insertBefore(paisLabel, paisSmartSelect)
+                } else if ((cPais && cPais.tagName == 'INPUT') || (xPais && xPais.tagName == 'INPUT')) {
+                    console.log('Um dos elementos de nação está presente.')
                 }
             }
             elements.filter(v => v.tagName == 'LABEL').map(v => v as HTMLLabelElement).forEach(v => {
@@ -253,8 +279,5 @@ export function initializeForm(
         (input as any).setCustomValidity('Selecione um valor.')
     })
 
-    form.onsubmit = function (e) {
-        preSubmit.forEach(v => v())
-        return defaultFormSubmit(e, onSubmit)
-    }
+    form.onsubmit = e => defaultFormSubmit(e, onSubmit)
 }
