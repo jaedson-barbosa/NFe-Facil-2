@@ -19,7 +19,7 @@ interface IComplexType extends IType {
 const complexTypes: IComplexType[] = nfeSchema.schema.complexType
 const simpleTypes: IType[] = basicSchema.schema.simpleType
 
-function createId() { return Math.random().toString(36).substr(2, 9) }
+export function createId() { return Math.random().toString(36).substr(2, 9) }
 
 export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     e.preventDefault()
@@ -36,8 +36,10 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     return false
 }
 
+export type formTargets = 'emitente' | 'destinatario' | 'destinatario-cadastro'
+
 export function initializeForm(
-    target: 'emitente' | 'destinatario' | 'destinatario-cadastro',
+    target: formTargets,
     formParent: HTMLElement,
     onSubmit: (data: any) => void): void {
     
@@ -47,7 +49,7 @@ export function initializeForm(
     function createView(parentView: HTMLElement, field: any, parentTags: string[], tag: string = '', ignorarAnaliseOcorrencia: boolean = false): void {
         const getDocumentation = (v: any): string => v.annotation.documentation._text
         const isRequired = (v : any): boolean => (v._attributes?.minOccurs ?? 1) > 0 || customRequireds.includes(v._attributes.name)
-        const updateInput = (v: any, input?: HTMLElement): HTMLElement => {
+        const updateInput = (v: any, input?: HTMLElement): HTMLElement | undefined => {
             const fieldRestriction = v.simpleType?.restriction
             const baseType = v._attributes?.type ?? fieldRestriction?._attributes.base
             const hasOtherRestrictions = baseType != 'string'
@@ -132,14 +134,16 @@ export function initializeForm(
         if (tag == 'choice') {
             const elements = field['element'] as any[]
             const input = updateInput(elements[0])
-            const select = document.createElement('select')
-            select.innerHTML = elements.map((v, i) => `<option>${getDocumentation(v)}</option>`).join('')
-            select.onchange = () => updateInput(elements[select.selectedIndex], input)
-            parentView.appendChild(select)
-            parentView.appendChild(input)
+            if (input) {
+                const select = document.createElement('select')
+                select.innerHTML = elements.map((v, i) => `<option>${getDocumentation(v)}</option>`).join('')
+                select.onchange = () => updateInput(elements[select.selectedIndex], input)
+                parentView.appendChild(select)
+                parentView.appendChild(input)
+            } else console.error('Entrada inválida para um choice.')
         }
         if (tag == 'element') {
-            field.forEach(v => {
+            field.forEach((v: any) => {
                 const input = updateInput(v)
                 if (!input) return
                 const label = document.createElement('label')
@@ -197,16 +201,19 @@ export function initializeForm(
                             k => `<option>${k.Nome} (${v.Sigla})</option>`)).join('')
                     munSmartSelect.setAttribute('list', datalist.id = createId())
                     munSmartSelect.onchange = () => {
-                        try {
-                            const value = munSmartSelect.value
-                            const startUF = value.indexOf('(')
-                            const uf = value.substring(startUF + 1, value.length - 1)
-                            const mun = value.substring(0, startUF - 1)
-                            cMun.value = IBGE.find(v => v.Sigla == uf).Municipios.find(v => v.Nome == mun).Codigo
-                            xMun.value = mun
+                        const value = munSmartSelect.value
+                        const startUF = value.indexOf('(')
+                        const uf = value.substring(startUF + 1, value.length - 1)
+                        const mun = value.substring(0, startUF - 1)
+                        const municipio = IBGE.find(v => v.Sigla == uf)?.Municipios.find(v => v.Nome == mun)
+                        if (municipio) {
+                            cMun.value = municipio.Codigo
+                            xMun.value = municipio.Nome
                             UF.value = uf
-                        } catch (error) {
-                            // Não achou e será capturada na validação do campo.
+                        } else {
+                            cMun.value = undefined
+                            xMun.value = undefined
+                            UF.value = undefined
                         }
                     }
                     parentView.appendChild(datalist)
@@ -234,8 +241,13 @@ export function initializeForm(
                         try {
                             const value = paisSmartSelect.value
                             const pais = paises.find(v => v.nome == value)
-                            xPais.value = pais.nome
-                            cPais.value = pais.codigo
+                            if (pais) {
+                                xPais.value = pais.nome
+                                cPais.value = pais.codigo
+                            } else {
+                                xPais.value = undefined
+                                cPais.value = undefined
+                            }
                         } catch (error) {
                             // Não achou e será capturada na validação do campo.
                         }
@@ -249,11 +261,12 @@ export function initializeForm(
             }
             elements.filter(v => v.tagName == 'LABEL').map(v => v as HTMLLabelElement).forEach(v => {
                 const referEl = document.getElementById(v.htmlFor)
-                if (!referEl) {
+                if (referEl) {
+                    if (referEl.style.display == 'none') v.remove()
+                } else {
                     console.log(v.htmlFor)
                     console.log(referEl)
                 }
-                if (referEl.style.display == 'none') v.remove()
             })
             elements.forEach(v => postProcess(v))
         }
