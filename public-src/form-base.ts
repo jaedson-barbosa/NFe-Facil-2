@@ -36,18 +36,15 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     return false
 }
 
-export type formTargets = 'emitente' | 'destinatario' | 'destinatario-cadastro'
-
 export function initializeForm(
-    target: formTargets,
+    customHeaders: {name: string, header: string}[],
+    customRequireds: string[],
+    sourceGetter: (source: any) => any,
     formParent: HTMLElement,
-    onSubmit: (data: any) => void): void {
+    additionalBody?: HTMLDivElement): HTMLFormElement {
     
-    const customHeaders = target == 'emitente' ? [{ name: 'fone', header: 'Telefone' }] : [{ name: 'fone', header: 'Telefone' }]
-    const customRequireds = target == 'destinatario-cadastro' ? ['dest', 'xNome', 'enderDest'] : []
-
     function createView(parentView: HTMLElement, field: any, parentTags: string[], tag: string = '', ignorarAnaliseOcorrencia: boolean = false): void {
-        const getDocumentation = (v: any): string => v.annotation.documentation._text
+        const getDocumentation = (v: any): string => v.annotation?.documentation?._text ?? 'VAZIO'
         const isRequired = (v : any): boolean => (v._attributes?.minOccurs ?? 1) > 0 || customRequireds.includes(v._attributes.name)
         const updateInput = (v: any, input?: HTMLElement): HTMLElement | undefined => {
             const fieldRestriction = v.simpleType?.restriction
@@ -274,11 +271,12 @@ export function initializeForm(
 
     const complex = nfeSchema.schema.complexType[0].sequence.element[0]['complexType']
     const elementosNFe = complex['sequence']['element']
-    const targetSource =  elementosNFe[target == 'emitente' ? 1 : 3];
+    const targetSource = sourceGetter(elementosNFe);
     const form = document.createElement('form')
     formParent.appendChild(form)
     createView(form, targetSource, [])
     postProcess(form)
+    if (additionalBody) form.appendChild(additionalBody)
     const submit = document.createElement('input')
     submit.type = 'submit'
     form.appendChild(submit)
@@ -291,6 +289,5 @@ export function initializeForm(
         });
         (input as any).setCustomValidity('Selecione um valor.')
     })
-
-    form.onsubmit = e => defaultFormSubmit(e, onSubmit)
+    return form
 }

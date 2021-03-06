@@ -41,39 +41,42 @@ if (idEmitente) {
         const text = await scanned.text()
         if (text == 'Empresa não existe') {
             // Nesse caso vamos cadastrar a empresa
-            initializeForm(
-                'emitente', document.body,
-                async data => {
-                    const opcoes = await getCertPostBody(data, v => v.emit = data.emit)
-                    if (!opcoes) {
-                        alert('Por favor, selecione o certificado e insira a senha.')
-                        return
-                    }
-                    const cadastro = await fetch('http://localhost:5001/nfe-facil-980bc/us-central1/cadastrarCNPJ', opcoes)
-                    if (cadastro.status == 401) {
-                        location.href = './login.html'
-                        return
-                    } else if (cadastro.status != 200) {
-                        alert(await cadastro.text())
-                        return
-                    }
-                    const newId = await cadastro.text()
-                    const empresasString = localStorage.getItem('empresas')
-                    const empresas = empresasString ? JSON.parse(empresasString) as any[] : []
-                    empresas.push({
-                        id: newId,
-                        status: 3,
-                        empresa: data.emit
-                    })
-                    localStorage.setItem('empresas', JSON.stringify(empresas))
-                    location.href = './emitentes.html'
-                })
-            getForm().innerHTML += /*html*/`
+            const additionalBody = document.createElement('div')
+            additionalBody.innerHTML = /*html*/`
             <label for="cert">Certificado</label>
             <input type="file" id="cert" name="cert" accept=".pfx" required>
             <label for="senha">Senha</label>
             <input type="text" id="senha" name="senha" required>
             <input type="submit">`
+            const form = initializeForm(
+                [{ name: 'fone', header: 'Telefone' }],
+                [], v => v[1],
+                document.body, additionalBody)
+            form.onsubmit = e => defaultFormSubmit(e, async data => {
+                const opcoes = await getCertPostBody(data, v => v.emit = data.emit)
+                if (!opcoes) {
+                    alert('Por favor, selecione o certificado e insira a senha.')
+                    return
+                }
+                const cadastro = await fetch('http://localhost:5001/nfe-facil-980bc/us-central1/cadastrarCNPJ', opcoes)
+                if (cadastro.status == 401) {
+                    location.href = './login.html'
+                    return
+                } else if (cadastro.status != 200) {
+                    alert(await cadastro.text())
+                    return
+                }
+                const newId = await cadastro.text()
+                const empresasString = localStorage.getItem('empresas')
+                const empresas = empresasString ? JSON.parse(empresasString) as any[] : []
+                empresas.push({
+                    id: newId,
+                    status: 3,
+                    empresa: data.emit
+                })
+                localStorage.setItem('empresas', JSON.stringify(empresas))
+                location.href = './emitentes.html'
+            })
         } else if (text == 'Usuário não cadastrado') {
             // Requisitar o acesso aqui
             document.body.innerHTML = /*html*/`
