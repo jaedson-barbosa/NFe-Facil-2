@@ -186,8 +186,8 @@ export function initializeForm(
                 const cMun = inputs.find(v => v.name.endsWith('.cMun'))
                 const xMun = inputs.find(v => v.name.endsWith('.xMun'))
                 const UF = inputs.find(v => v.name.endsWith('.UF'))
-                if (cMun && xMun && UF) {
-                    [UF, xMun, cMun].forEach(v => v.style.display = 'none')
+                if (cMun || xMun) {
+                    [UF, xMun, cMun].filter(v => v).forEach(v => v.style.display = 'none')
                     const munSmartSelect = document.createElement('input')
                     const munLabel = document.createElement('label')
                     munLabel.htmlFor = munSmartSelect.id = createId()
@@ -204,13 +204,13 @@ export function initializeForm(
                         const mun = value.substring(0, startUF - 1)
                         const municipio = IBGE.find(v => v.Sigla == uf)?.Municipios.find(v => v.Nome == mun)
                         if (municipio) {
-                            cMun.value = municipio.Codigo
-                            xMun.value = municipio.Nome
-                            UF.value = uf
+                            if (cMun) cMun.value = municipio.Codigo
+                            if (xMun) xMun.value = municipio.Nome
+                            if (UF) UF.value = uf
                         } else {
-                            cMun.value = undefined
-                            xMun.value = undefined
-                            UF.value = undefined
+                            if (cMun) cMun.value = undefined
+                            if (xMun) xMun.value = undefined
+                            if (UF) UF.value = undefined
                         }
                     }
                     parentView.appendChild(datalist)
