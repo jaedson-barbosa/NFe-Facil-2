@@ -4,44 +4,14 @@ import { renderizarCliente } from './dados/clientes'
 import { renderizarProduto } from './dados/produtos'
 import { renderizarMotorista } from './dados/motoristas'
 
-const mainDialog = document.querySelector('dialog')!
-mainDialog.showModal()
-const parametros = new URLSearchParams(location.search)
-const tipo = parametros.get('tipo')
-let tipoDado: 'dest' | 'prod' | 'transporta' = undefined
-let customHeaders: {name: string, header: string}[] = undefined
-let customRequireds: string[] = undefined
-let sourceGetter: (source: any) => any = undefined
-let renderizarItem: (data: any) => HTMLButtonElement = undefined
-switch (tipo) {
-    case 'clientes':
-        tipoDado = 'dest'
-        customHeaders = [{ name: 'fone', header: 'Telefone' }]
-        customRequireds = ['dest', 'xNome', 'enderDest']
-        sourceGetter = v => v[3]
-        renderizarItem = renderizarCliente
-        break
-    case 'produtos':
-        // Este terá que ser personalizado, a área de produtos é caótica demais pra usar apenas a geração automática
-        tipoDado = 'prod'
-        customHeaders = []
-        customRequireds = []
-        sourceGetter = v => v[7]['complexType']['sequence']['element'][0]
-        renderizarItem = renderizarProduto
-        break
-    case 'motoristas':
-        tipoDado = 'transporta'
-        customHeaders = []
-        customRequireds = []
-        sourceGetter = v => v[9]['complexType']['sequence']['element'][1]
-        renderizarItem = renderizarMotorista
-        break
-    default:
-        alert('URL inválido, tipo não aceito.')
-        location.href = './painel.html'
-        break
-}
-if (tipoDado && customHeaders && customRequireds && sourceGetter && renderizarItem) {
+function main(
+    tipoDado: 'dest' | 'prod' | 'transporta',
+    customHeaders: { name: string, header: string }[],
+    customRequireds: string[],
+    sourceGetter: (source: any) => any,
+    renderizarItem: (data: any) => HTMLButtonElement) {
+    const mainDialog = document.querySelector('dialog')
+    mainDialog.showModal()
     const dados = document.getElementById('dados')
 
     async function renderizarItens() {
@@ -77,4 +47,22 @@ if (tipoDado && customHeaders && customRequireds && sourceGetter && renderizarIt
         }
         mainDialog.close()
     }).catch(() => alert('Não foi possível sincronizar.'))
+}
+
+const parametros = new URLSearchParams(location.search)
+switch (parametros.get('tipo')) {
+    case 'clientes':
+        main('dest', [{ name: 'fone', header: 'Telefone' }], ['dest', 'xNome', 'enderDest'], v => v[3], renderizarCliente)
+        break
+    case 'produtos':
+        // Este terá que ser personalizado, a área de produtos é caótica demais pra usar apenas a geração automática
+        main('prod', [], [], v => v[7]['complexType']['sequence']['element'][0], renderizarProduto)
+        break
+    case 'motoristas':
+        main('transporta', [], [], v => v[9]['complexType']['sequence']['element'][1], renderizarMotorista)
+        break
+    default:
+        alert('URL inválido, tipo não aceito.')
+        location.href = './painel.html'
+        break
 }
