@@ -1,12 +1,15 @@
-import { initializeForm, createId, defaultFormSubmit } from './form-base'
-import { entries, set, sync } from './db'
+import { defaultForm, createId, defaultFormSubmit } from './form-base'
+// import { entries, set, sync } from './db'
 import { renderizarCliente } from './dados/clientes'
 import { renderizarProduto } from './dados/produtos'
 import { renderizarMotorista } from './dados/motoristas'
 
+async function sync() {
+    return Promise.resolve()
+}
+
 function main(
     tipoDado: 'dest' | 'prod' | 'transporta',
-    customHeaders: { name: string, header: string }[],
     customRequireds: string[],
     sourceGetter: (source: any) => any,
     renderizarItem: (data: any) => HTMLButtonElement) {
@@ -16,9 +19,9 @@ function main(
 
     async function renderizarItens() {
         dados.innerHTML = ''
-        const totalItens = await entries()
-        const itens = totalItens.filter(v => v[1][tipoDado])
-        itens.forEach(v => renderizarNovoItem(v[1]))
+        // const totalItens = await entries()
+        // const itens = totalItens.filter(v => v[1][tipoDado])
+        // itens.forEach(v => renderizarNovoItem(v[1]))
     }
 
     function renderizarNovoItem(data: any) {
@@ -29,11 +32,14 @@ function main(
         await renderizarItens()
         document.getElementById('cadastrar').onclick = () => {
             mainDialog.showModal()
-            const form = initializeForm(
-                customHeaders, customRequireds,
-                sourceGetter, mainDialog)
-            form.onsubmit = e => defaultFormSubmit(e, async data => {
-                await set(createId(), data)
+            const form = new defaultForm()
+            const element = sourceGetter(defaultForm.elementosNFe)
+            const view = defaultForm.generateView(element, customRequireds)
+            form.elements.push(view)
+            const htmlForm = form.generateForm()
+            mainDialog.appendChild(htmlForm)
+            htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
+                // await set(createId(), data)
                 renderizarNovoItem(data)
                 mainDialog.close()
             })
@@ -52,14 +58,14 @@ function main(
 const parametros = new URLSearchParams(location.search)
 switch (parametros.get('tipo')) {
     case 'clientes':
-        main('dest', [{ name: 'fone', header: 'Telefone' }], ['dest', 'xNome', 'enderDest'], v => v[3], renderizarCliente)
+        main('dest', ['dest', 'xNome', 'enderDest'], v => v[3], renderizarCliente)
         break
     case 'produtos':
         // Este terá que ser personalizado, a área de produtos é caótica demais pra usar apenas a geração automática
-        main('prod', [], [], v => v[7]['complexType']['sequence']['element'][0], renderizarProduto)
+        main('prod', [], v => v[7]['complexType']['sequence']['element'][0], renderizarProduto)
         break
     case 'motoristas':
-        main('transporta', [], [], v => v[9]['complexType']['sequence']['element'][1], renderizarMotorista)
+        main('transporta', [], v => v[9]['complexType']['sequence']['element'][1], renderizarMotorista)
         break
     default:
         alert('URL inválido, tipo não aceito.')

@@ -1,4 +1,4 @@
-import { defaultFormSubmit, initializeForm, getForm } from './form-base'
+import { defaultFormSubmit, getForm, defaultForm, genericFormElement } from './form-base'
 
 async function getCertPostBody(data: any, additionalBody?: (body: any) => void) {
     if (data.cert) {
@@ -46,13 +46,15 @@ if (idEmitente) {
             <label for="cert">Certificado</label>
             <input type="file" id="cert" name="cert" accept=".pfx" required>
             <label for="senha">Senha</label>
-            <input type="text" id="senha" name="senha" required>
-            <input type="submit">`
-            const form = initializeForm(
-                [{ name: 'fone', header: 'Telefone' }],
-                [], v => v[1],
-                document.body, additionalBody)
-            form.onsubmit = e => defaultFormSubmit(e, async data => {
+            <input type="text" id="senha" name="senha" required>`
+            const form = new defaultForm()
+            const emitElement = defaultForm.elementosNFe[1]
+            const emitView = defaultForm.generateView(emitElement, [])
+            form.elements.push(emitView)
+            form.elements.push(new genericFormElement(additionalBody))
+            const htmlForm = form.generateForm()
+            document.body.appendChild(htmlForm)
+            htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
                 const opcoes = await getCertPostBody(data, v => v.emit = data.emit)
                 if (!opcoes) {
                     alert('Por favor, selecione o certificado e insira a senha.')

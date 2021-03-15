@@ -66,23 +66,28 @@ self.addEventListener('fetch', (evt) => {
         const idToken = await getIdToken()
         const needLogin = new URL(evt.request.url).pathname.startsWith('/painel.html')
         if (needLogin && !idToken) return Response.redirect('./login.html')
-        const request = evt.request.url.includes('nfe-facil-980bc') && idToken
-            ? new Request(evt.request.url,
-                {
-                    method: evt.request.method,
-                    headers: {
-                        ...evt.request.headers,
-                        Authorization: 'Bearer ' + idToken
-                    },
-                    mode: evt.request.mode,
-                    cache: evt.request.cache,
-                    credentials: evt.request.credentials,
-                    redirect: evt.request.redirect,
-                    referrer: evt.request.referrer,
-                    body: await getBody()
-                })
-            : evt.request
-        return fetch(request)
+        const modifyRequest = evt.request.url.includes('nfe-facil-980bc') && idToken
+        if (modifyRequest) {
+            const method = evt.request.method
+            const requestInit = {
+                method: method,
+                headers: {
+                    ...evt.request.headers,
+                    Authorization: 'Bearer ' + idToken
+                },
+                mode: evt.request.mode,
+                cache: evt.request.cache,
+                credentials: evt.request.credentials,
+                redirect: evt.request.redirect,
+                referrer: evt.request.referrer
+            }
+            if (method != 'GET' && method != 'HEAD') {
+                requestInit.body = await getBody()
+            }
+            const request = new Request(evt.request.url, requestInit)
+            return fetch(request)
+        }
+        return fetch(evt.request)
     }());
 });
 

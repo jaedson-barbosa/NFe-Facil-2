@@ -36,271 +36,18 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     return false
 }
 
-export function initializeForm(
-    customHeaders: { name: string, header: string }[],
-    customRequireds: string[],
-    sourceGetter: (source: any) => any,
-    formParent: HTMLElement,
-    additionalBody?: HTMLDivElement): HTMLFormElement {
-
-    function createView(parentView: HTMLElement, field: any, parentTags: string[], tag: string = '', ignorarAnaliseOcorrencia: boolean = false): void {
-        const getDocumentation = (v: any): string => v.annotation?.documentation?._text ?? 'VAZIO'
-        const isRequired = (v: any): boolean => (v._attributes?.minOccurs ?? 1) > 0 || customRequireds.includes(v._attributes.name)
-        const updateInput = (v: any, input?: HTMLElement): HTMLElement | undefined => {
-            const fieldRestriction = v.simpleType?.restriction
-            const baseType = v._attributes?.type ?? fieldRestriction?._attributes.base
-            const hasOtherRestrictions = baseType != 'string'
-            const findFunc = k => k._attributes.name == baseType
-            if (hasOtherRestrictions && !simpleTypes.some(findFunc)) {
-                const complexType = complexTypes.find(findFunc)
-                if (!complexType) throw new DOMException('Invalid field')
-                createView(parentView, { ...v, complexType: { sequence: complexType.sequence } }, parentTags, 'sequence')
-            } else {
-                const otherRestrictions: any = hasOtherRestrictions ? (simpleTypes.find(findFunc) as any)?.restriction : undefined
-                if (hasOtherRestrictions && otherRestrictions._attributes.base != 'string') {
-                    console.log(otherRestrictions)
-                    throw new DOMException('The other restrictions have a invalid base.')
-                }
-                const enumeration = fieldRestriction?.enumeration ?? otherRestrictions?.enumeration
-                if (!input) {
-                    input = document.createElement(enumeration ? 'select' : 'input')
-                }
-                if (enumeration) {
-                    const select = input as HTMLSelectElement
-                    select.name = [...parentTags, v._attributes.name].join('.')
-                    select.required = isRequired(v)
-                    const documentation = getDocumentation(v)
-                    const lines = documentation.split('\n')
-                    if ('length' in enumeration) {
-                        if (enumeration.length == 2 && enumeration[0]._attributes.value.toUpperCase() == enumeration[1]._attributes.value.toUpperCase()) {
-                            const onlyOption = document.createElement('option')
-                            onlyOption.innerText = enumeration[0]._attributes.value
-                            select.appendChild(onlyOption)
-                            select.style.display = 'none'
-                        } else if (enumeration.length > 2) {
-                            const values = (enumeration as any[]).map(v => v._attributes.value)
-                            const hasDescriptions = values.every(v => lines.some(l => l.includes(v + ' – ')))
-                            select.innerHTML = values.map(v => `<option value="${v}">${hasDescriptions ? lines.find(l => l.includes(v + ' – ')) : v}</option>`).join('')
-                        } else {
-                            throw new DOMException('Invalid enumeration length')
-                        }
-                    }
-                    else {
-                        const onlyOption = document.createElement('option')
-                        onlyOption.innerText = enumeration._attributes.value
-                        select.appendChild(onlyOption)
-                        select.style.display = 'none'
-                    }
-                    select.title = documentation
-                }
-                else {
-                    const text = input as HTMLInputElement
-                    text.name = [...parentTags, v._attributes.name].join('.')
-                    text.required = isRequired(v)
-                    text.type = 'text'
-                    if (text.value) text.value = ''
-                    text.title = getDocumentation(v)
-                    text.pattern = fieldRestriction?.pattern?._attributes.value ?? otherRestrictions?.pattern?._attributes.value
-                    const minLength = fieldRestriction?.minLength?._attributes.value ?? otherRestrictions?.minLength?._attributes.value
-                    const maxLength = fieldRestriction?.maxLength?._attributes.value ?? otherRestrictions?.maxLength?._attributes.value
-                    if (minLength) text.minLength = Number(minLength)
-                    else text.removeAttribute('minLength')
-                    if (maxLength) text.maxLength = Number(maxLength)
-                    else text.removeAttribute('maxLength')
-                }
-                return input
-            }
-        }
-        if (!tag) {
-            if (!ignorarAnaliseOcorrencia && !isRequired(field)) {
-                createView(parentView, field, parentTags, 'sequence', true)
-                return
-            }
-            const content = document.createElement('fieldset')
-            const legend = document.createElement('legend')
-            legend.innerText = field.annotation.documentation._text
-            content.appendChild(legend)
-            if (field.element) {
-                createView(content, field.element, [...parentTags, field._attributes.name], 'element')
-            } else if (field.complexType || field.sequence) {
-                const fields = field.complexType.sequence ?? field.sequence
-                Object.entries(fields).forEach(v => createView(content, v[1], [...parentTags, field._attributes.name], v[0]))
-            } else throw new DOMException('Invalid tag')
-            parentView.appendChild(content)
-        }
-        if (tag == 'choice') {
-            const elements = field['element'] as any[]
-            const input = updateInput(elements[0])
-            if (input) {
-                const select = document.createElement('select')
-                select.innerHTML = elements.map((v, i) => `<option>${getDocumentation(v)}</option>`).join('')
-                select.onchange = () => updateInput(elements[select.selectedIndex], input)
-                parentView.appendChild(select)
-                parentView.appendChild(input)
-            } else console.error('Entrada inválida para um choice.')
-        }
-        if (tag == 'element') {
-            field.forEach((v: any) => {
-                const input = updateInput(v)
-                if (!input) return
-                const label = document.createElement('label')
-                label.htmlFor = input.id = createId()
-                const documentation = getDocumentation(v)
-                const customHeader = customHeaders.find(v => (input as any).name.includes(v.name))?.header
-                label.innerText = customHeader ?? documentation.split('\n')[0].split('.')[0].split('(')[0]
-                parentView.appendChild(label)
-                parentView.appendChild(input)
-            })
-        }
-        if (tag == 'sequence') {
-            if (!ignorarAnaliseOcorrencia && isRequired(field)) {
-                createView(parentView, field, parentTags, undefined, true)
-                return
-            }
-            const check = document.createElement('input')
-            check.type = 'checkbox'
-            const label = document.createElement('label')
-            label.htmlFor = check.id = createId()
-            label.innerText = 'Informar ' + field.annotation.documentation._text
-            const activeDiv = document.createElement('div')
-            parentView.appendChild(check)
-            parentView.appendChild(label)
-            parentView.appendChild(activeDiv)
-            check.onclick = () => {
-                if (check.checked) {
-                    createView(activeDiv, field, parentTags, undefined, true)
-                    postProcess(activeDiv)
-                }
-                else activeDiv.innerHTML = ''
-            }
-        }
-    }
-
-    function postProcess(parentView: HTMLElement) {
-        const children = parentView.children
-        if (children.length > 0) {
-            const elements = Array(children.length).fill(null).map((_, i) => children.item(i) as HTMLElement)
-            const inputs = elements.filter(
-                v => v.tagName == 'INPUT' || v.tagName == 'SELECT').map(v => v as any)
-            if (inputs.length > 0) {
-                const cMun = inputs.find(v => v.name.endsWith('.cMun'))
-                const xMun = inputs.find(v => v.name.endsWith('.xMun'))
-                const UF = inputs.find(v => v.name.endsWith('.UF'))
-                if (cMun || xMun) {
-                    [UF, xMun, cMun].filter(v => v).forEach(v => v.style.display = 'none')
-                    const munSmartSelect = document.createElement('input')
-                    const munLabel = document.createElement('label')
-                    munLabel.htmlFor = munSmartSelect.id = createId()
-                    munLabel.innerText = 'Município'
-                    const datalist = document.createElement('datalist')
-                    datalist.innerHTML = IBGE.flatMap(
-                        v => (v.Municipios as any[]).map(
-                            k => `<option>${k.Nome} (${v.Sigla})</option>`)).join('')
-                    munSmartSelect.setAttribute('list', datalist.id = createId())
-                    munSmartSelect.onchange = () => {
-                        const value = munSmartSelect.value
-                        const startUF = value.indexOf('(')
-                        const uf = value.substring(startUF + 1, value.length - 1)
-                        const mun = value.substring(0, startUF - 1)
-                        const municipio = IBGE.find(v => v.Sigla == uf)?.Municipios.find(v => v.Nome == mun)
-                        if (municipio) {
-                            if (cMun) cMun.value = municipio.Codigo
-                            if (xMun) xMun.value = municipio.Nome
-                            if (UF) UF.value = uf
-                        } else {
-                            if (cMun) cMun.value = undefined
-                            if (xMun) xMun.value = undefined
-                            if (UF) UF.value = undefined
-                        }
-                    }
-                    parentView.appendChild(datalist)
-                    parentView.insertBefore(munSmartSelect, cMun)
-                    parentView.insertBefore(munLabel, munSmartSelect)
-                } else if (cMun || xMun || UF) {
-                    console.log(cMun)
-                    console.log(xMun)
-                    console.log(UF)
-                    throw new DOMException('Um dos três campos de endereço está presente.')
-                }
-                const cPais = inputs.find(v => v.name.endsWith('.cPais'))
-                const xPais = inputs.find(v => v.name.endsWith('.xPais'))
-                if (cPais && xPais && cPais.tagName == 'INPUT' && xPais.tagName == 'INPUT') {
-                    [cPais, xPais].forEach(v => v.style.display = 'none')
-                    const paisSmartSelect = document.createElement('input')
-                    const paisLabel = document.createElement('label')
-                    paisLabel.htmlFor = paisSmartSelect.id = createId()
-                    paisLabel.innerText = 'País'
-                    const datalist = document.createElement('datalist')
-                    datalist.innerHTML = paises.map(
-                        k => `<option>${k.nome}</option>`).join('')
-                    paisSmartSelect.setAttribute('list', datalist.id = createId())
-                    paisSmartSelect.onchange = () => {
-                        try {
-                            const value = paisSmartSelect.value
-                            const pais = paises.find(v => v.nome == value)
-                            if (pais) {
-                                xPais.value = pais.nome
-                                cPais.value = pais.codigo
-                            } else {
-                                xPais.value = undefined
-                                cPais.value = undefined
-                            }
-                        } catch (error) {
-                            // Não achou e será capturada na validação do campo.
-                        }
-                    }
-                    parentView.appendChild(datalist)
-                    parentView.insertBefore(paisSmartSelect, cPais)
-                    parentView.insertBefore(paisLabel, paisSmartSelect)
-                } else if ((cPais && cPais.tagName == 'INPUT') || (xPais && xPais.tagName == 'INPUT')) {
-                    console.log('Um dos elementos de nação está presente.')
-                }
-            }
-            elements.filter(v => v.tagName == 'LABEL').map(v => v as HTMLLabelElement).forEach(v => {
-                const referEl = document.getElementById(v.htmlFor)
-                if (referEl) {
-                    if (referEl.style.display == 'none') v.remove()
-                } else {
-                    console.log(v.htmlFor)
-                    console.log(referEl)
-                }
-            })
-            elements.forEach(v => postProcess(v))
-        }
-    }
-
-    const elementosNFe = nfeSchema.schema.complexType[0].sequence.element[0]['complexType']['sequence']['element']
-    const targetSource = sourceGetter(elementosNFe);
-    const form = document.createElement('form')
-    formParent.appendChild(form)
-    createView(form, targetSource, [])
-    postProcess(form)
-    if (additionalBody) form.appendChild(additionalBody)
-    const submit = document.createElement('input')
-    submit.type = 'submit'
-    form.appendChild(submit)
-
-    document.querySelectorAll('input[list]').forEach(input => {
-        input.addEventListener('change', function () {
-            const options = this.list.options
-            const optionFound = [...Array(options.length)].some((_, i) => options[i].value == this.value)
-            this.setCustomValidity(optionFound ? '' : 'Por favor, selecione um valor válido.');
-        });
-        (input as any).setCustomValidity('Selecione um valor.')
-    })
-    return form
-}
-
-const customHeaders: { name: string, header: string }[] = []
+const customHeaders: { name: string, header: string }[] = [
+    { name: 'fone', header: 'Telefone' }
+]
 
 interface baseFormElement {
     generate: (parent: HTMLElement) => void
 }
 
-export class divFormElement implements baseFormElement {
-    private element: HTMLDivElement
+export class genericFormElement implements baseFormElement {
+    private element: HTMLElement
 
-    constructor(el: HTMLDivElement) {
+    constructor(el: HTMLElement) {
         this.element = el
     }
 
@@ -310,9 +57,9 @@ export class divFormElement implements baseFormElement {
 }
 
 abstract class inputFormElement implements baseFormElement {
-    private name: string[]
-    private documentation: string
-    private required: boolean
+    protected name: string[]
+    protected documentation: string
+    public required: boolean
 
     constructor(name: string[], documentation: string, required: boolean) {
         this.name = name
@@ -320,7 +67,7 @@ abstract class inputFormElement implements baseFormElement {
         this.required = required
     }
 
-    public abstract generate(parent: HTMLElement);
+    public abstract generate(parent: HTMLElement): void;
 
     protected updateBaseProps(input: HTMLSelectElement | HTMLInputElement) {
         input.name = this.name.join('.')
@@ -391,15 +138,49 @@ export class textFormElement extends inputFormElement {
     }
 }
 
-export class hiddenFormElement extends inputFormElement {
-    private value: string
+export class selectTextFormElement extends inputFormElement {
+    private options: { value: string, helpText?: string }[]
+    private onChange: (value: string) => void
 
     constructor(
         name: string[],
         documentation: string,
         required: boolean,
-        value?: string) {
+        options: { value: string, helpText?: string }[],
+        onChange: (value: string) => void) {
         super(name, documentation, required)
+        this.options = options
+        this.onChange = onChange
+    }
+
+    public generate(parent: HTMLElement) {
+        const munSmartSelect = document.createElement('input')
+        munSmartSelect.title = this.documentation
+        const datalist = document.createElement('datalist')
+        datalist.innerHTML = this.options.map(
+            k => `<option>${k.value}</option>`).join('')
+        munSmartSelect.setAttribute('list', datalist.id = createId())
+        munSmartSelect.onchange = () => this.onChange(munSmartSelect.value)
+        parent.appendChild(datalist)
+        parent.appendChild(munSmartSelect)
+        this.insertLabel(munSmartSelect)
+        munSmartSelect.onchange = () => {
+            const isValid = this.options.some(v => v.value == munSmartSelect.value)
+            const validity = isValid ? '' : 'Por favor, selecione um valor válido.'
+            munSmartSelect.setCustomValidity(validity)
+        }
+        munSmartSelect.setCustomValidity('Selecione um valor.')
+    }
+}
+
+export class hiddenFormElement extends inputFormElement {
+    public value: string
+
+    constructor(
+        name: string[],
+        required: boolean,
+        value?: string) {
+        super(name, '', required)
         this.value = value
     }
 
@@ -460,47 +241,57 @@ export class choiceFormElement implements baseFormElement {
     }
 }
 
+interface ISpecificFormFields {
+    names: string[],
+    addIgnoreFields: string[],
+    getNewFields: (parentTags: string[], getField: (name: string) => any) => baseFormElement[]
+}
+
 export class defaultForm {
     static elementosNFe = nfeSchema.schema.complexType[0].sequence.element[0]['complexType']['sequence']['element']
 
-    private elements: baseFormElement[]
+    public elements: baseFormElement[] = []
 
-    public addElement(el: baseFormElement) {
-        this.elements.push(el)
-    }
-
-    static generateElement(
+    static generateView(
         rootField: any,
         customRequireds: string[]): baseFormElement {
 
         function isRequired(v: any): boolean {
             const fromSchema = (v._attributes?.minOccurs ?? 1) > 0
-            const fromCode = customRequireds.includes(v._attributes.name)
+            const fromCode = customRequireds.includes(getName(v))
             return fromSchema || fromCode
         }
 
-        function getDocumentation(v: any) { 
+        function getDocumentation(v: any): string {
             return v.annotation?.documentation?._text ?? 'VAZIO'
+        }
+
+        function getName(v: any): string {
+            return v._attributes.name
         }
 
         function createInput(field: any, parentTags: string[]): baseFormElement {
             const fieldRestriction = field.simpleType?.restriction
             const baseType = field._attributes?.type ?? fieldRestriction?._attributes.base
-            const findType = (v: any) => v._attributes.name == baseType
+            const findType = (v: any) => getName(v) == baseType
+            const hasOtherRestrictions = baseType != 'string'
             const otherRestrictions: any = (simpleTypes.find(findType) as any)?.restriction
-            if (!otherRestrictions) {
+            if (hasOtherRestrictions && !otherRestrictions) {
                 const complexType = complexTypes.find(findType)
-                if (!complexType) throw new DOMException('Invalid field')
-                const newField = { ...field, sequence: complexType.sequence }
+                if (!complexType) {
+                    console.log(field)
+                    throw new Error('Invalid field')
+                }
+                const newField = { ...field, complexType: { sequence: complexType.sequence } }
                 return createFieldset(newField, parentTags)
             }
-            if (otherRestrictions?._attributes.base != 'string') {
+            if (hasOtherRestrictions && otherRestrictions?._attributes.base != 'string') {
                 console.log(otherRestrictions)
-                throw new DOMException('The other restrictions have a invalid base.')
+                throw new Error('The other restrictions have a invalid base.')
             }
             const enumeration = fieldRestriction?.enumeration ?? otherRestrictions?.enumeration
             if (!enumeration) {
-                const name = [...parentTags, field._attributes.name]
+                const name = [...parentTags, getName(field)]
                 const documentation = getDocumentation(field)
                 const required = isRequired(field)
                 const getProp = (el: string) => {
@@ -514,19 +305,19 @@ export class defaultForm {
                     maxLength: getProp('maxLength')
                 })
             }
-            const name = [...parentTags, field._attributes.name]
+            const name = [...parentTags, getName(field)]
             const required = isRequired(field)
             const documentation = getDocumentation(field)
             if (!('length' in enumeration)) {
                 const val = enumeration._attributes.value
-                return new hiddenFormElement(name, documentation, required, val)
+                return new hiddenFormElement(name, required, val)
             }
             const val0 = enumeration[0]._attributes.value
             const val1 = enumeration[1]._attributes.value.toUpperCase()
             if (enumeration.length == 2 && val0.toUpperCase() == val1)
-                return new hiddenFormElement(name, documentation, required, val0)
+                return new hiddenFormElement(name, required, val0)
             if (enumeration.length <= 2)
-                throw new DOMException('Invalid enumeration length')
+                throw new Error('Invalid enumeration length')
             const values = (enumeration as any[]).map(v => v._attributes.value)
             const isDesc = (v: string, line: string) => line.includes(v + ' – ')
             const lines = documentation.split('\n')
@@ -558,7 +349,68 @@ export class defaultForm {
                 const pureFields = Object.entries(sequence)
                 const fields = pureFields.flatMap(v => analyseTag(v[0], v[1], tags))
                 return new fieldsetFormElement(fields, legend)
-            } else throw new DOMException('Invalid tag for a fieldset')
+            } else throw new Error('Invalid tag for a fieldset')
+        }
+
+        function createCityField(parentTags: string[], getField: (name: string) => any): baseFormElement[] {
+            const genEl = (name: string) => {
+                const field = getField(name)
+                return field
+                    ? new hiddenFormElement(
+                        [...parentTags, name],
+                        isRequired(field))
+                    : undefined
+            }
+            const cMun = genEl('cMun'), xMun = genEl('xMun'), UF = genEl('UF')
+            if (!cMun && !xMun) throw new Error('City field without cMun and xMun.')
+
+            const municipio = new selectTextFormElement(
+                [], 'Município',
+                cMun.required || xMun.required,
+                IBGE.flatMap(
+                    v => (v.Municipios as any[]).map(
+                        k => { return { value: `${k.Nome} (${v.Sigla})` } })),
+                (value) => {
+                    const startUF = value.indexOf('('),
+                        uf = value.substring(startUF + 1, value.length - 1),
+                        mun = value.substring(0, startUF - 1),
+                        ufIBGE = IBGE.find(v => v.Sigla == uf),
+                        munIBGE = ufIBGE?.Municipios.find(v => v.Nome == mun)
+                    if (munIBGE) {
+                        if (cMun) cMun.value = munIBGE.Codigo
+                        if (xMun) xMun.value = munIBGE.Nome
+                        if (UF) UF.value = ufIBGE.Sigla
+                    } else {
+                        if (cMun) cMun.value = undefined
+                        if (xMun) xMun.value = undefined
+                        if (UF) UF.value = undefined
+                    }
+                })
+            return [cMun, xMun, UF, municipio].filter(v => v)
+        }
+
+        function createCountryField(parentTags: string[], getField: (name: string) => any): baseFormElement[] {
+            const genEl = (name: string) => {
+                const field = getField(name)
+                return field
+                    ? new hiddenFormElement(
+                        [...parentTags, name],
+                        isRequired(field))
+                    : undefined
+            }
+            const cPais = genEl('cPais'), xPais = genEl('xPais')
+            if (!cPais && !xPais) throw new Error('Country field without cPais and xPais.')
+
+            const pais = new selectTextFormElement(
+                [], 'País',
+                cPais.required || xPais.required,
+                paises.map(k => { return { value: k.nome } }),
+                (value) => {
+                    const pais = paises.find(v => v.nome == value)
+                    xPais.value = pais?.nome
+                    cPais.value = pais?.codigo
+                })
+            return [cPais, xPais, pais].filter(v => v)
         }
 
         function analyseTag(tag: string, field: any, parentTags: string[]): baseFormElement[] {
@@ -567,18 +419,42 @@ export class defaultForm {
                     return [createChoice(field, parentTags)]
                 case 'element':
                     const elements = field as any[]
-                    return elements.map(v => createInput(v, parentTags))
+                    const specificFields: ISpecificFormFields[] = [
+                        {
+                            names: ['cMun', 'xMun'],
+                            addIgnoreFields: ['UF'],
+                            getNewFields: createCityField
+                        },
+                        {
+                            names: ['cPais', 'xPais'],
+                            addIgnoreFields: [],
+                            getNewFields: createCountryField
+                        }
+                    ]
+                    const ignoreFields: string[] = []
+                    return elements.flatMap(v => {
+                        const name = getName(v)
+                        if (ignoreFields.includes(name)) return undefined
+                        const specific = specificFields.find(k => k.names.includes(name))
+                        if (specific) {
+                            ignoreFields.push(...specific.names, ...specific.addIgnoreFields)
+                            return specific.getNewFields(
+                                parentTags,
+                                name => elements.find(v => getName(v) == name))
+                        }
+                        return createInput(v, parentTags)
+                    }).filter(v => v)
                 default:
                     if (!tag || tag == 'sequence')
                         return [createFieldset(field, parentTags)]
-                    throw new DOMException('Invalid tag')
+                    throw new Error('Invalid tag')
             }
         }
 
         return createFieldset(rootField, [])
     }
 
-    public generateForm() {
+    public generateForm(): HTMLFormElement {
         const form = document.createElement('form')
         this.elements.forEach(v => v.generate(form))
         const submit = document.createElement('input')
