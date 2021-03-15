@@ -1,4 +1,4 @@
-import { defaultForm, createId, defaultFormSubmit } from './form-base'
+import { defaultForm, createId, defaultFormSubmit, IBaseFormElement } from './form-base'
 // import { entries, set, sync } from './db'
 import { renderizarCliente } from './dados/clientes'
 import { renderizarProduto } from './dados/produtos'
@@ -9,8 +9,7 @@ async function sync() {
 }
 
 function main(
-    customRequireds: string[],
-    sourceGetter: (source: any) => any,
+    view: IBaseFormElement[],
     renderizarItem: (data: any) => HTMLButtonElement) {
     const mainDialog = document.querySelector('dialog')
     mainDialog.showModal()
@@ -32,8 +31,6 @@ function main(
         document.getElementById('cadastrar').onclick = () => {
             mainDialog.showModal()
             const form = new defaultForm()
-            const element = sourceGetter(defaultForm.elementosNFe)
-            const view = defaultForm.generateView(element, customRequireds)
             form.elements.push(...view)
             const htmlForm = form.generateForm()
             mainDialog.appendChild(htmlForm)
@@ -54,17 +51,31 @@ function main(
     }).catch(() => alert('Não foi possível sincronizar.'))
 }
 
+function getView(
+    sourceGetter: (source: any) => any,
+    customRequireds?: string[]) {
+    const element = sourceGetter(defaultForm.elementosNFe)
+    const view = defaultForm.generateView(element, customRequireds ?? [])
+    return view
+}
+
 const parametros = new URLSearchParams(location.search)
 switch (parametros.get('tipo')) {
     case 'clientes':
-        main(['dest', 'xNome', 'enderDest'], v => v[3], renderizarCliente)
+        main(
+            getView(v => v[3], ['dest', 'xNome', 'enderDest']),
+            renderizarCliente)
         break
     case 'produtos':
         // Este terá que ser personalizado, a área de produtos é caótica demais pra usar apenas a geração automática
-        main([], v => v[7]['complexType']['sequence']['element'][0], renderizarProduto)
+        main(
+            getView(v => v[7]['complexType']['sequence']['element'][0]),
+            renderizarProduto)
         break
     case 'motoristas':
-        main([], v => v[9]['complexType']['sequence']['element'][1], renderizarMotorista)
+        main(
+            getView(v => v[9]['complexType']['sequence']['element'][1]),
+            renderizarMotorista)
         break
     default:
         alert('URL inválido, tipo não aceito.')

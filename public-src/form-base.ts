@@ -40,11 +40,11 @@ const customHeaders: { name: string, header: string }[] = [
     { name: 'fone', header: 'Telefone' }
 ]
 
-interface baseFormElement {
+export interface IBaseFormElement {
     generate: (parent: HTMLElement) => void
 }
 
-export class genericFormElement implements baseFormElement {
+export class genericFormElement implements IBaseFormElement {
     private element: HTMLElement
 
     constructor(el: HTMLElement) {
@@ -56,7 +56,7 @@ export class genericFormElement implements baseFormElement {
     }
 }
 
-abstract class inputFormElement implements baseFormElement {
+abstract class inputFormElement implements IBaseFormElement {
     protected name: string[]
     protected documentation: string
     public required: boolean
@@ -193,11 +193,11 @@ export class hiddenFormElement extends inputFormElement {
     }
 }
 
-export class fieldsetFormElement implements baseFormElement {
+export class fieldsetFormElement implements IBaseFormElement {
     private legend: string
-    private children: baseFormElement[]
+    private children: IBaseFormElement[]
 
-    constructor(children: baseFormElement[], legend?: string) {
+    constructor(children: IBaseFormElement[], legend?: string) {
         this.children = children
         this.legend = legend
     }
@@ -214,13 +214,13 @@ export class fieldsetFormElement implements baseFormElement {
     }
 }
 
-export class choiceFormElement implements baseFormElement {
+export class choiceFormElement implements IBaseFormElement {
     private options: string[]
-    private contentGetter: (optionIndex: number) => baseFormElement
+    private contentGetter: (optionIndex: number) => IBaseFormElement
 
     constructor(
         options: string[],
-        contentGetter: (optionIndex: number) => baseFormElement) {
+        contentGetter: (optionIndex: number) => IBaseFormElement) {
         this.options = options
         this.contentGetter = contentGetter
     }
@@ -244,18 +244,18 @@ export class choiceFormElement implements baseFormElement {
 interface ISpecificFormFields {
     names: string[],
     addIgnoreFields: string[],
-    getNewFields: (parentTags: string[], getField: (name: string) => any) => baseFormElement[]
+    getNewFields: (parentTags: string[], getField: (name: string) => any) => IBaseFormElement[]
 }
 
 export class defaultForm {
     static elementosNFe = nfeSchema.schema.complexType[0].sequence.element[0]['complexType']['sequence']['element']
 
-    public elements: baseFormElement[] = []
+    public elements: IBaseFormElement[] = []
 
     static generateView(
         rootField: any,
         customRequireds: string[],
-        rootTag?: string): baseFormElement[] {
+        rootTag?: string): IBaseFormElement[] {
 
         function isRequired(v: any): boolean {
             const fromSchema = (v._attributes?.minOccurs ?? 1) > 0
@@ -271,7 +271,7 @@ export class defaultForm {
             return v._attributes.name
         }
 
-        function createInput(field: any, parentTags: string[]): baseFormElement {
+        function createInput(field: any, parentTags: string[]): IBaseFormElement {
             const fieldRestriction = field.simpleType?.restriction
             const baseType = field._attributes?.type ?? fieldRestriction?._attributes.base
             const findType = (v: any) => getName(v) == baseType
@@ -332,13 +332,13 @@ export class defaultForm {
             return new selectFormElement(name, documentation, required, options)
         }
 
-        function createChoice(field: any, parentTags: string[]): baseFormElement {
+        function createChoice(field: any, parentTags: string[]): IBaseFormElement {
             const elements = field['element'] as any[]
             const options = elements.map(v => getDocumentation(v))
             return new choiceFormElement(options, i => createInput(elements[i], parentTags))
         }
 
-        function createFieldset(field: any, parentTags: string[]): baseFormElement {
+        function createFieldset(field: any, parentTags: string[]): IBaseFormElement {
             const legend = getDocumentation(field)
             const tags = [...parentTags, field._attributes.name]
             if (field.element) {
@@ -353,7 +353,7 @@ export class defaultForm {
             } else throw new Error('Invalid tag for a fieldset')
         }
 
-        function createCityField(parentTags: string[], getField: (name: string) => any): baseFormElement[] {
+        function createCityField(parentTags: string[], getField: (name: string) => any): IBaseFormElement[] {
             const genEl = (name: string) => {
                 const field = getField(name)
                 return field
@@ -390,7 +390,7 @@ export class defaultForm {
             return [cMun, xMun, UF, municipio].filter(v => v)
         }
 
-        function createCountryField(parentTags: string[], getField: (name: string) => any): baseFormElement[] {
+        function createCountryField(parentTags: string[], getField: (name: string) => any): IBaseFormElement[] {
             const genEl = (name: string) => {
                 const field = getField(name)
                 return field
@@ -414,7 +414,7 @@ export class defaultForm {
             return [cPais, xPais, pais].filter(v => v)
         }
 
-        function analyseTag(tag: string, field: any, parentTags: string[]): baseFormElement[] {
+        function analyseTag(tag: string, field: any, parentTags: string[]): IBaseFormElement[] {
             switch (tag) {
                 case 'choice':
                     return [createChoice(field, parentTags)]
@@ -451,6 +451,7 @@ export class defaultForm {
                     throw new Error('Invalid tag')
             }
         }
+        
         return analyseTag(rootTag, rootField, [])
     }
 
