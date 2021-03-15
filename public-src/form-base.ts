@@ -247,6 +247,20 @@ interface ISpecificFormFields {
     getNewFields: (parentTags: string[], getField: (name: string) => any) => IBaseFormElement[]
 }
 
+function getDocumentation(v: any): string {
+    return v.annotation?.documentation?._text ?? 'VAZIO'
+}
+
+function getName(v: any): string {
+    return v._attributes?.name
+}
+
+export function findField(rootField: any, name: string) {
+    if (getName(rootField) == name) return rootField
+    return Object.entries(rootField).find(v => findField(v[1], name))
+    //Retorna [tag, field]
+}
+
 export class defaultForm {
     static elementosNFe = nfeSchema.schema.complexType[0].sequence.element[0]['complexType']['sequence']['element']
 
@@ -256,19 +270,11 @@ export class defaultForm {
         rootField: any,
         customRequireds: string[],
         rootTag?: string): IBaseFormElement[] {
-
+        
         function isRequired(v: any): boolean {
             const fromSchema = (v._attributes?.minOccurs ?? 1) > 0
             const fromCode = customRequireds.includes(getName(v))
             return fromSchema || fromCode
-        }
-
-        function getDocumentation(v: any): string {
-            return v.annotation?.documentation?._text ?? 'VAZIO'
-        }
-
-        function getName(v: any): string {
-            return v._attributes.name
         }
 
         function createInput(field: any, parentTags: string[]): IBaseFormElement {
@@ -451,7 +457,7 @@ export class defaultForm {
                     throw new Error('Invalid tag')
             }
         }
-        
+
         return analyseTag(rootTag, rootField, [])
     }
 
