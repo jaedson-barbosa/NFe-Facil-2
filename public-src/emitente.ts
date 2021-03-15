@@ -50,8 +50,9 @@ if (idEmitente) {
             const form = new defaultForm()
             const emitElement = defaultForm.elementosNFe[1]
             const emitView = defaultForm.generateView(emitElement, [])
-            form.elements.push(emitView)
-            form.elements.push(new genericFormElement(additionalBody))
+            form.elements.push(
+                ...emitView,
+                new genericFormElement(additionalBody))
             const htmlForm = form.generateForm()
             document.body.appendChild(htmlForm)
             htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {

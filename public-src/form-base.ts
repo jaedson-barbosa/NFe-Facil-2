@@ -254,7 +254,8 @@ export class defaultForm {
 
     static generateView(
         rootField: any,
-        customRequireds: string[]): baseFormElement {
+        customRequireds: string[],
+        rootTag?: string): baseFormElement[] {
 
         function isRequired(v: any): boolean {
             const fromSchema = (v._attributes?.minOccurs ?? 1) > 0
@@ -450,8 +451,7 @@ export class defaultForm {
                     throw new Error('Invalid tag')
             }
         }
-
-        return createFieldset(rootField, [])
+        return analyseTag(rootTag, rootField, [])
     }
 
     public generateForm(): HTMLFormElement {

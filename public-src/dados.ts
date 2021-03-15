@@ -9,7 +9,6 @@ async function sync() {
 }
 
 function main(
-    tipoDado: 'dest' | 'prod' | 'transporta',
     customRequireds: string[],
     sourceGetter: (source: any) => any,
     renderizarItem: (data: any) => HTMLButtonElement) {
@@ -35,7 +34,7 @@ function main(
             const form = new defaultForm()
             const element = sourceGetter(defaultForm.elementosNFe)
             const view = defaultForm.generateView(element, customRequireds)
-            form.elements.push(view)
+            form.elements.push(...view)
             const htmlForm = form.generateForm()
             mainDialog.appendChild(htmlForm)
             htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
@@ -58,14 +57,14 @@ function main(
 const parametros = new URLSearchParams(location.search)
 switch (parametros.get('tipo')) {
     case 'clientes':
-        main('dest', ['dest', 'xNome', 'enderDest'], v => v[3], renderizarCliente)
+        main(['dest', 'xNome', 'enderDest'], v => v[3], renderizarCliente)
         break
     case 'produtos':
         // Este terá que ser personalizado, a área de produtos é caótica demais pra usar apenas a geração automática
-        main('prod', [], v => v[7]['complexType']['sequence']['element'][0], renderizarProduto)
+        main([], v => v[7]['complexType']['sequence']['element'][0], renderizarProduto)
         break
     case 'motoristas':
-        main('transporta', [], v => v[9]['complexType']['sequence']['element'][1], renderizarMotorista)
+        main([], v => v[9]['complexType']['sequence']['element'][1], renderizarMotorista)
         break
     default:
         alert('URL inválido, tipo não aceito.')
