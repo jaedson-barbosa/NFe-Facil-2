@@ -2,3 +2,4 @@
 *.pfx
 public
 **/.cache
+*.log
