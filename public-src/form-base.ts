@@ -17,7 +17,7 @@ interface IComplexType extends IType {
 }
 
 const complexTypes: IComplexType[] = nfeSchema.schema.complexType
-const simpleTypes: IType[] = basicSchema.schema.simpleType
+const simpleTypes: IType[] = [...basicSchema.schema.simpleType, ...nfeSchema.schema.simpleType]
 
 export function createId() { return Math.random().toString(36).substr(2, 9) }
 
@@ -37,7 +37,8 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
 }
 
 const customHeaders: { name: string, header: string }[] = [
-    { name: 'fone', header: 'Telefone' }
+    { name: 'fone', header: 'Telefone' },
+    { name: 'CFOP', header: 'Código Fiscal de Operações e Prestações - CFOP' }
 ]
 
 export interface IBaseFormElement {
@@ -197,7 +198,7 @@ export class fieldsetFormElement implements IBaseFormElement {
     private legend: string
     private children: IBaseFormElement[]
 
-    constructor(children: IBaseFormElement[], legend?: string) {
+    constructor(legend?: string, ...children: IBaseFormElement[]) {
         this.children = children
         this.legend = legend
     }
@@ -215,12 +216,18 @@ export class fieldsetFormElement implements IBaseFormElement {
 }
 
 export class choiceFormElement implements IBaseFormElement {
+    private documentation: string
+    private isRequired: boolean
     private options: string[]
     private contentGetter: (optionIndex: number) => IBaseFormElement
 
     constructor(
+        documentation: string,
+        isRequired: boolean,
         options: string[],
         contentGetter: (optionIndex: number) => IBaseFormElement) {
+        if (!isRequired) options.unshift('Nenhuma das opções')
+        this.isRequired = isRequired
         this.options = options
         this.contentGetter = contentGetter
     }
@@ -231,9 +238,13 @@ export class choiceFormElement implements IBaseFormElement {
         const options = this.options.map(v => `<option>${v}</option>`)
         select.innerHTML = options.join('')
         select.onchange = () => {
-            const index = select.selectedIndex
-            const content = this.contentGetter(index)
+            let index = select.selectedIndex
             div.innerHTML = ''
+            if (!this.isRequired) {
+                if (index == 0) return
+                index -= 1
+            }
+            const content = this.contentGetter(index)
             content.generate(div)
         }
         parent.appendChild(select)
@@ -255,10 +266,30 @@ function getName(v: any): string {
     return v._attributes?.name
 }
 
-export function findField(rootField: any, name: string) {
-    if (getName(rootField) == name) return rootField
-    return Object.entries(rootField).find(v => findField(v[1], name))
-    //Retorna [tag, field]
+export function findField(
+    rootField: any,
+    name: string,
+    parentNames: string[] = [],
+    parentTag: string = '',
+    lvl = 0): { tag: string, parentNames: string[], field: any } {
+    const rootName = getName(rootField)
+    if (rootName == name) return rootField
+    if (parentNames.length == 0) parentNames.push(rootName)
+    for (const index in rootField) {
+        const field = rootField[index]
+        const fieldName = getName(field)
+        if (fieldName == name) {
+            return {
+                tag: isNaN(+index) ? index : parentTag,
+                parentNames,
+                field
+            }
+        } else if (lvl < 5) {
+            const searchParentNames = fieldName ? [...parentNames, fieldName] : parentNames
+            const search = findField(field, name, searchParentNames, index, lvl + 1)
+            if (search) return search
+        }
+    }
 }
 
 export class defaultForm {
@@ -269,8 +300,8 @@ export class defaultForm {
     static generateView(
         rootField: any,
         customRequireds: string[],
-        rootTag?: string): IBaseFormElement[] {
-        
+        rootTag?: string,
+        parentTags: string[] = []): IBaseFormElement[] {
         function isRequired(v: any): boolean {
             const fromSchema = (v._attributes?.minOccurs ?? 1) > 0
             const fromCode = customRequireds.includes(getName(v))
@@ -284,7 +315,7 @@ export class defaultForm {
             const hasOtherRestrictions = baseType != 'string'
             const otherRestrictions: any = (simpleTypes.find(findType) as any)?.restriction
             if (hasOtherRestrictions && !otherRestrictions) {
-                const complexType = complexTypes.find(findType)
+                const complexType = field.complexType ?? complexTypes.find(findType)
                 if (!complexType) {
                     console.log(field)
                     throw new Error('Invalid field')
@@ -323,8 +354,6 @@ export class defaultForm {
             const val1 = enumeration[1]._attributes.value.toUpperCase()
             if (enumeration.length == 2 && val0.toUpperCase() == val1)
                 return new hiddenFormElement(name, required, val0)
-            if (enumeration.length <= 2)
-                throw new Error('Invalid enumeration length')
             const values = (enumeration as any[]).map(v => v._attributes.value)
             const isDesc = (v: string, line: string) => line.includes(v + ' – ')
             const lines = documentation.split('\n')
@@ -341,7 +370,7 @@ export class defaultForm {
         function createChoice(field: any, parentTags: string[]): IBaseFormElement {
             const elements = field['element'] as any[]
             const options = elements.map(v => getDocumentation(v))
-            return new choiceFormElement(options, i => createInput(elements[i], parentTags))
+            return new choiceFormElement(getDocumentation(field), isRequired(field), options, i => createInput(elements[i], parentTags))
         }
 
         function createFieldset(field: any, parentTags: string[]): IBaseFormElement {
@@ -350,12 +379,12 @@ export class defaultForm {
             if (field.element) {
                 const elements = field.element as any[]
                 const inputs = elements.map(v => createInput(v, tags))
-                return new fieldsetFormElement(inputs, legend)
+                return new fieldsetFormElement(legend, ...inputs)
             } else if (field.complexType || field.sequence) {
                 const sequence = field.complexType.sequence ?? field.sequence
                 const pureFields = Object.entries(sequence)
                 const fields = pureFields.flatMap(v => analyseTag(v[0], v[1], tags))
-                return new fieldsetFormElement(fields, legend)
+                return new fieldsetFormElement(legend, ...fields)
             } else throw new Error('Invalid tag for a fieldset')
         }
 
@@ -425,7 +454,7 @@ export class defaultForm {
                 case 'choice':
                     return [createChoice(field, parentTags)]
                 case 'element':
-                    const elements = field as any[]
+                    const elements = 'length' in field ? field as any[] : [field]
                     const specificFields: ISpecificFormFields[] = [
                         {
                             names: ['cMun', 'xMun'],
@@ -454,11 +483,12 @@ export class defaultForm {
                 default:
                     if (!tag || tag == 'sequence')
                         return [createFieldset(field, parentTags)]
+                    console.log(tag)
                     throw new Error('Invalid tag')
             }
         }
 
-        return analyseTag(rootTag, rootField, [])
+        return analyseTag(rootTag, rootField, parentTags)
     }
 
     public generateForm(): HTMLFormElement {

@@ -1,4 +1,4 @@
-import { defaultForm, createId, defaultFormSubmit, IBaseFormElement } from './form-base'
+import { defaultForm, findField, defaultFormSubmit, IBaseFormElement, fieldsetFormElement } from './form-base'
 // import { entries, set, sync } from './db'
 import { renderizarCliente } from './dados/clientes'
 import { renderizarProduto } from './dados/produtos'
@@ -9,8 +9,8 @@ async function sync() {
 }
 
 function main(
-    view: IBaseFormElement[],
-    renderizarItem: (data: any) => HTMLButtonElement) {
+    renderizarItem: (data: any) => HTMLButtonElement,
+    ...view: IBaseFormElement[]) {
     const mainDialog = document.querySelector('dialog')
     mainDialog.showModal()
     const dados = document.getElementById('dados')
@@ -55,27 +55,47 @@ function getView(
     sourceGetter: (source: any) => any,
     customRequireds?: string[]) {
     const element = sourceGetter(defaultForm.elementosNFe)
-    const view = defaultForm.generateView(element, customRequireds ?? [])
-    return view
+    return defaultForm.generateView(element, customRequireds ?? [])
 }
 
 const parametros = new URLSearchParams(location.search)
 switch (parametros.get('tipo')) {
     case 'clientes':
         main(
-            getView(v => v[3], ['dest', 'xNome', 'enderDest']),
-            renderizarCliente)
+            renderizarCliente,
+            ...getView(v => v[3], ['dest', 'xNome', 'enderDest']))
         break
-    case 'produtos':
+    case 'produtos': {
         // Este terá que ser personalizado, a área de produtos é caótica demais pra usar apenas a geração automática
-        main(
-            getView(v => v[7]['complexType']['sequence']['element'][0]),
-            renderizarProduto)
+        const rootField = defaultForm.elementosNFe[7]['complexType']['sequence']['element'][0]
+        function genView(...names: string[]) {
+            return names.flatMap(name => {
+                const field = findField(rootField, name)
+                return defaultForm.generateView(field.field, [], field.tag, field.parentNames)
+            })
+        }
+        const fieldset = new fieldsetFormElement(
+            'Dados dos produtos e serviços',
+            ...genView(
+                'xProd',
+                'cProd',
+                'cEAN',
+                'EXTIPI',
+                'uCom',
+                'uTrib',
+                'CFOP',
+                'cEANTrib',
+                'NCM',
+                'vUnCom',
+                'vUnTrib',
+                'CEST'))
+        main(renderizarProduto, fieldset)
         break
+    }
     case 'motoristas':
         main(
-            getView(v => v[9]['complexType']['sequence']['element'][1]),
-            renderizarMotorista)
+            renderizarMotorista,
+            ...getView(v => v[9]['complexType']['sequence']['element'][1]))
         break
     default:
         alert('URL inválido, tipo não aceito.')
