@@ -312,7 +312,8 @@ export function findField(
 }
 
 export class defaultForm {
-    static elementosNFe = nfeSchema.schema.complexType[0].sequence.element[0]['complexType']['sequence']['element']
+    static rootNFe = nfeSchema.schema.complexType[0].sequence.element[0]
+    static elementosNFe = defaultForm.rootNFe['complexType']['sequence']['element']
 
     public elements: IBaseFormElement[] = []
 
@@ -331,7 +332,7 @@ export class defaultForm {
             const fieldRestriction = field.simpleType?.restriction
             const baseType = field._attributes?.type ?? fieldRestriction?._attributes.base
             const findType = (v: any) => getName(v) == baseType
-            const hasOtherRestrictions = baseType != 'string'
+            const hasOtherRestrictions = baseType != 'string' && baseType != 'base64Binary'
             const otherRestrictions: any = (simpleTypes.find(findType) as any)?.restriction
             if (hasOtherRestrictions && !otherRestrictions) {
                 const complexType = field.complexType ?? complexTypes.find(findType)
@@ -456,7 +457,7 @@ export class defaultForm {
 
             const municipio = new selectTextFormElement(
                 [], 'Município',
-                cMun.required || xMun.required,
+                cMun?.required || xMun?.required,
                 IBGE.flatMap(
                     v => (v.Municipios as any[]).map(
                         k => { return { value: `${k.Nome} (${v.Sigla})` } })),
@@ -495,12 +496,12 @@ export class defaultForm {
 
             const pais = new selectTextFormElement(
                 [], 'País',
-                cPais.required || xPais.required,
+                cPais?.required || xPais?.required,
                 paises.map(k => { return { value: k.nome } }),
                 (value) => {
                     const pais = paises.find(v => v.nome == value)
-                    xPais.value = pais?.nome
-                    cPais.value = pais?.codigo
+                    if (xPais) xPais.value = pais?.nome
+                    if (cPais) cPais.value = pais?.codigo
                 })
             return [cPais, xPais, pais].filter(v => v)
         }

@@ -2,7 +2,7 @@ import { defaultForm, findField, defaultFormSubmit, IBaseFormElement, fieldsetFo
 
 const main = document.getElementById('main')
 const form = new defaultForm()
-const view = defaultForm.generateView(defaultForm.elementosNFe, ['dest', 'xNome', 'enderDest'])
+const view = defaultForm.generateView(defaultForm.rootNFe, ['dest', 'xNome', 'enderDest'])
 form.elements.push(...view)
 const htmlForm = form.generateForm()
 main.appendChild(htmlForm)
