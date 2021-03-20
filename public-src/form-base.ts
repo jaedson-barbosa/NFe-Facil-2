@@ -64,7 +64,8 @@ abstract class inputFormElement implements IBaseFormElement {
 
     constructor(name: string[], documentation: string, required: boolean) {
         this.name = name
-        this.documentation = documentation
+        const customHeader = customHeaders.find(v => this.name.includes(v.name))?.header
+        this.documentation = customHeader ?? documentation
         this.required = required
     }
 
@@ -79,8 +80,10 @@ abstract class inputFormElement implements IBaseFormElement {
     protected insertLabel(input: HTMLSelectElement | HTMLInputElement) {
         const label = document.createElement('label')
         label.htmlFor = input.id = createId()
-        const customHeader = customHeaders.find(v => (input as any).name.includes(v.name))?.header
-        label.innerText = customHeader ?? this.documentation.split('\n')[0].split('.')[0].split('(')[0]
+        const labelFilters = ['\n', '.', '(', '-']
+        label.innerText = labelFilters.reduce(
+            (p, c) => p.split(c)[0],
+            this.documentation)
         input.parentElement.insertBefore(label, input)
     }
 }
@@ -370,7 +373,11 @@ export class defaultForm {
         function createChoice(field: any, parentTags: string[]): IBaseFormElement {
             const elements = field['element'] as any[]
             const options = elements.map(v => getDocumentation(v))
-            return new choiceFormElement(getDocumentation(field), isRequired(field), options, i => createInput(elements[i], parentTags))
+            return new choiceFormElement(
+                getDocumentation(field),
+                isRequired(field),
+                options,
+                i => createInput(elements[i], parentTags))
         }
 
         function createFieldset(field: any, parentTags: string[]): IBaseFormElement {
@@ -388,7 +395,9 @@ export class defaultForm {
             } else throw new Error('Invalid tag for a fieldset')
         }
 
-        function createCityField(parentTags: string[], getField: (name: string) => any): IBaseFormElement[] {
+        function createCityField(
+            parentTags: string[],
+            getField: (name: string) => any): IBaseFormElement[] {
             const genEl = (name: string) => {
                 const field = getField(name)
                 return field
@@ -425,7 +434,9 @@ export class defaultForm {
             return [cMun, xMun, UF, municipio].filter(v => v)
         }
 
-        function createCountryField(parentTags: string[], getField: (name: string) => any): IBaseFormElement[] {
+        function createCountryField(
+            parentTags: string[],
+            getField: (name: string) => any): IBaseFormElement[] {
             const genEl = (name: string) => {
                 const field = getField(name)
                 return field
