@@ -2,6 +2,7 @@ import * as basicSchema from './base-data/basic.json'
 import * as nfeSchema from './base-data/nfe.json'
 import { IBGE } from './base-data/IBGE.json'
 import { paises } from './base-data/paises.json'
+import { create } from 'domain'
 
 export function getForm(index: number = 0) {
     return document.getElementsByTagName('form')[index]
@@ -36,9 +37,20 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     return false
 }
 
+function insertLabel(input: HTMLSelectElement | HTMLInputElement, documentation: string) {
+    const label = document.createElement('label')
+    label.htmlFor = input.id = createId()
+    const labelFilters = ['\n', '.', '(', '-']
+    label.innerText = labelFilters.reduce(
+        (p, c) => p.split(c)[0],
+        documentation)
+    input.parentElement.insertBefore(label, input)
+}
+
 const customHeaders: { name: string, header: string }[] = [
     { name: 'fone', header: 'Telefone' },
-    { name: 'CFOP', header: 'Código Fiscal de Operações e Prestações - CFOP' }
+    { name: 'CFOP', header: 'Código Fiscal de Operações e Prestações - CFOP' },
+    { name: 'CNPJ|CPF', header: 'Documento usado' }
 ]
 
 export interface IBaseFormElement {
@@ -64,8 +76,7 @@ abstract class inputFormElement implements IBaseFormElement {
 
     constructor(name: string[], documentation: string, required: boolean) {
         this.name = name
-        const customHeader = customHeaders.find(v => this.name.includes(v.name))?.header
-        this.documentation = customHeader ?? documentation
+        this.documentation = documentation
         this.required = required
     }
 
@@ -75,16 +86,6 @@ abstract class inputFormElement implements IBaseFormElement {
         input.name = this.name.join('.')
         input.title = this.documentation
         input.required = this.required
-    }
-
-    protected insertLabel(input: HTMLSelectElement | HTMLInputElement) {
-        const label = document.createElement('label')
-        label.htmlFor = input.id = createId()
-        const labelFilters = ['\n', '.', '(', '-']
-        label.innerText = labelFilters.reduce(
-            (p, c) => p.split(c)[0],
-            this.documentation)
-        input.parentElement.insertBefore(label, input)
     }
 }
 
@@ -106,7 +107,7 @@ export class selectFormElement extends inputFormElement {
         select.innerHTML = options.join('')
         this.updateBaseProps(select)
         parent.appendChild(select)
-        this.insertLabel(select)
+        insertLabel(select, this.documentation)
     }
 }
 
@@ -138,7 +139,7 @@ export class textFormElement extends inputFormElement {
         if (this.options.maxLength) text.maxLength = this.options.maxLength
         this.updateBaseProps(text)
         parent.appendChild(text)
-        this.insertLabel(text)
+        insertLabel(text, this.documentation)
     }
 }
 
@@ -167,7 +168,7 @@ export class selectTextFormElement extends inputFormElement {
         munSmartSelect.onchange = () => this.onChange(munSmartSelect.value)
         parent.appendChild(datalist)
         parent.appendChild(munSmartSelect)
-        this.insertLabel(munSmartSelect)
+        insertLabel(munSmartSelect, this.documentation)
         munSmartSelect.onchange = () => {
             const isValid = this.options.some(v => v.value == munSmartSelect.value)
             const validity = isValid ? '' : 'Por favor, selecione um valor válido.'
@@ -222,13 +223,14 @@ export class choiceFormElement implements IBaseFormElement {
     private documentation: string
     private isRequired: boolean
     private options: string[]
-    private contentGetter: (optionIndex: number) => IBaseFormElement
+    private contentGetter: (optionIndex: number) => IBaseFormElement[]
 
     constructor(
         documentation: string,
         isRequired: boolean,
         options: string[],
-        contentGetter: (optionIndex: number) => IBaseFormElement) {
+        contentGetter: (optionIndex: number) => IBaseFormElement[]) {
+        this.documentation = documentation
         if (!isRequired) options.unshift('Nenhuma das opções')
         this.isRequired = isRequired
         this.options = options
@@ -240,7 +242,7 @@ export class choiceFormElement implements IBaseFormElement {
         const div = document.createElement('div')
         const options = this.options.map(v => `<option>${v}</option>`)
         select.innerHTML = options.join('')
-        select.onchange = () => {
+        const updateView = () => {
             let index = select.selectedIndex
             div.innerHTML = ''
             if (!this.isRequired) {
@@ -248,10 +250,13 @@ export class choiceFormElement implements IBaseFormElement {
                 index -= 1
             }
             const content = this.contentGetter(index)
-            content.generate(div)
+            content.map(v => v.generate(div))
         }
+        select.onchange = () => updateView()
         parent.appendChild(select)
         parent.appendChild(div)
+        insertLabel(select, this.documentation)
+        updateView()
     }
 }
 
@@ -262,11 +267,22 @@ interface ISpecificFormFields {
 }
 
 function getDocumentation(v: any): string {
-    return v.annotation?.documentation?._text ?? 'VAZIO'
+    const name = getName(v)
+    const custom = customHeaders.find(v => name === v.name)?.header
+    return custom ?? v.annotation?.documentation?._text ?? 'VAZIO'
 }
 
 function getName(v: any): string {
-    return v._attributes?.name
+    const name = v._attributes?.name
+    if (!name && typeof v == 'object') {
+        const isRootList = 'length' in v
+        if (isRootList || v.element) {
+            const listParent = isRootList ? v : v.element
+            const childNames = listParent.map(getName).join('|')
+            return childNames
+        }
+    }
+    return name
 }
 
 export function findField(
@@ -323,7 +339,7 @@ export class defaultForm {
                     console.log(field)
                     throw new Error('Invalid field')
                 }
-                const newField = { ...field, complexType: { sequence: complexType.sequence } }
+                const newField = { ...field, complexType: complexType }
                 return createFieldset(newField, parentTags)
             }
             if (hasOtherRestrictions && otherRestrictions?._attributes.base != 'string') {
@@ -371,28 +387,57 @@ export class defaultForm {
         }
 
         function createChoice(field: any, parentTags: string[]): IBaseFormElement {
-            const elements = field['element'] as any[]
-            const options = elements.map(v => getDocumentation(v))
-            return new choiceFormElement(
-                getDocumentation(field),
-                isRequired(field),
-                options,
-                i => createInput(elements[i], parentTags))
+            try {
+                const elements = field.element as any[]
+                const sequences = field.sequence
+                if (elements) {
+                    const options = elements.map(getDocumentation)
+                    return new choiceFormElement(
+                        getDocumentation(field),
+                        isRequired(field),
+                        options,
+                        i => [createInput(elements[i], parentTags)])
+                }
+                else if (sequences) {
+                    const options = sequences.map(getDocumentation)
+                    return new choiceFormElement(
+                        getDocumentation(field),
+                        isRequired(field),
+                        options,
+                        i => [createFieldset(sequences[i], parentTags)]
+                    )
+                }
+            } catch (error) {
+                console.log(field)
+                throw error
+            }
         }
 
         function createFieldset(field: any, parentTags: string[]): IBaseFormElement {
             const legend = getDocumentation(field)
-            const tags = [...parentTags, field._attributes.name]
-            if (field.element) {
-                const elements = field.element as any[]
+            const name = getName(field)
+            const tags = name ? [...parentTags, name] : parentTags
+            const isRootList = 'length' in field
+            if (isRootList || field.element) {
+                const elements = (isRootList ? field : field.element) as any[]
                 const inputs = elements.map(v => createInput(v, tags))
                 return new fieldsetFormElement(legend, ...inputs)
             } else if (field.complexType || field.sequence) {
-                const sequence = field.complexType.sequence ?? field.sequence
-                const pureFields = Object.entries(sequence)
-                const fields = pureFields.flatMap(v => analyseTag(v[0], v[1], tags))
+                const sequence = field.complexType?.sequence ?? field.sequence
+                let fields: IBaseFormElement[]
+                if (sequence) {
+                    const pureFields = Object.entries(sequence)
+                    fields = pureFields.flatMap(v => analyseTag(v[0], v[1], tags))
+                }
+                const choice = field.complexType?.choice
+                if (choice) {
+                    fields = [createChoice(choice, parentTags)]
+                }
                 return new fieldsetFormElement(legend, ...fields)
-            } else throw new Error('Invalid tag for a fieldset')
+            } else {
+                console.log(field)
+                throw new Error('Invalid tag for a fieldset')
+            }
         }
 
         function createCityField(
@@ -460,37 +505,41 @@ export class defaultForm {
             return [cPais, xPais, pais].filter(v => v)
         }
 
+        function createElements(field: any, parentTags: string[]) {
+            const elements = 'length' in field ? field as any[] : [field]
+            const specificFields: ISpecificFormFields[] = [
+                {
+                    names: ['cMun', 'xMun'],
+                    addIgnoreFields: ['UF'],
+                    getNewFields: createCityField
+                },
+                {
+                    names: ['cPais', 'xPais'],
+                    addIgnoreFields: [],
+                    getNewFields: createCountryField
+                }
+            ]
+            const ignoreFields: string[] = []
+            return elements.flatMap(v => {
+                const name = getName(v)
+                if (ignoreFields.includes(name)) return undefined
+                const specific = specificFields.find(k => k.names.includes(name))
+                if (specific) {
+                    ignoreFields.push(...specific.names, ...specific.addIgnoreFields)
+                    return specific.getNewFields(
+                        parentTags,
+                        name => elements.find(v => getName(v) == name))
+                }
+                return createInput(v, parentTags)
+            }).filter(v => v)
+        }
+
         function analyseTag(tag: string, field: any, parentTags: string[]): IBaseFormElement[] {
             switch (tag) {
                 case 'choice':
                     return [createChoice(field, parentTags)]
                 case 'element':
-                    const elements = 'length' in field ? field as any[] : [field]
-                    const specificFields: ISpecificFormFields[] = [
-                        {
-                            names: ['cMun', 'xMun'],
-                            addIgnoreFields: ['UF'],
-                            getNewFields: createCityField
-                        },
-                        {
-                            names: ['cPais', 'xPais'],
-                            addIgnoreFields: [],
-                            getNewFields: createCountryField
-                        }
-                    ]
-                    const ignoreFields: string[] = []
-                    return elements.flatMap(v => {
-                        const name = getName(v)
-                        if (ignoreFields.includes(name)) return undefined
-                        const specific = specificFields.find(k => k.names.includes(name))
-                        if (specific) {
-                            ignoreFields.push(...specific.names, ...specific.addIgnoreFields)
-                            return specific.getNewFields(
-                                parentTags,
-                                name => elements.find(v => getName(v) == name))
-                        }
-                        return createInput(v, parentTags)
-                    }).filter(v => v)
+                    return createElements(field, parentTags)
                 default:
                     if (!tag || tag == 'sequence')
                         return [createFieldset(field, parentTags)]
