@@ -454,14 +454,9 @@
                                                                 "name": "indFinal"
                                                             },
                                                             "annotation": {
-                                                                "documentation": [
-                                                                    {
-                                                                        "_text": "Indica operação com consumidor final (0-Não;1-Consumidor Final)"
-                                                                    },
-                                                                    {
-                                                                        "_text": "Indica operação com consumidor final (0-Não;1-Consumidor Final)"
-                                                                    }
-                                                                ]
+                                                                "documentation": {
+                                                                    "_text": "Indica operação com consumidor final (0-Não;1-Consumidor Final)"
+                                                                }
                                                             },
                                                             "simpleType": {
                                                                 "restriction": {
