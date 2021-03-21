@@ -2,7 +2,6 @@ import * as basicSchema from './base-data/basic.json'
 import * as nfeSchema from './base-data/nfe.json'
 import { IBGE } from './base-data/IBGE.json'
 import { paises } from './base-data/paises.json'
-import { create } from 'domain'
 
 export function getForm(index: number = 0) {
     return document.getElementsByTagName('form')[index]
@@ -50,7 +49,41 @@ function insertLabel(input: HTMLSelectElement | HTMLInputElement, documentation:
 const customHeaders: { name: string, header: string }[] = [
     { name: 'fone', header: 'Telefone' },
     { name: 'CFOP', header: 'Código Fiscal de Operações e Prestações - CFOP' },
-    { name: 'CNPJ|CPF', header: 'Documento usado' }
+    { name: 'CNPJ|CPF', header: 'Documento usado' },
+    { name: 'cRegTrib', header: 'Código do regime especial de tributação\n1=Microempresa Municipal; 2=Estimativa; 3=Sociedade de Profissionais; 4=Cooperativa; 5=Microempresário Individual (MEI); 6=Microempresário e Empresa de Pequeno Porte' },
+    {
+        name: 'tPag',
+        header: `Forma de Pagamento:
+        01=Dinheiro
+        02=Cheque
+        03=Cartão de Crédito
+        04=Cartão de Débito
+        05=Crédito Loja
+        10=Vale Alimentação
+        11=Vale Refeição
+        12=Vale Presente
+        13=Vale Combustível
+        14=Duplicata Mercantil;
+        15=Boleto Bancário
+        16=Depósito Bancário
+        17=Pagamento Instantâneo (PIX)
+        18=Transferência bancária, Carteira Digital
+        19=Programa de fidelidade, Cashback, Crédito Virtual
+        90=Sem pagamento
+        99=Outros`
+    },
+    {
+        name: 'indSomaPISST',
+        header: `Indica se o valor do PISST compõe o valor total da NF-e
+        0=Valor do PISST não compõe o valor total da NF-e
+        1=Valor do PISST compõe o valor total da NF-e`
+    },
+    {
+        name: 'indSomaCOFINSST',
+        header: `Indica se o valor da COFINS ST compõe o valor total da NF-e
+        0=Valor da COFINSST não compõe o valor total da NF-e
+        1=Valor da COFINSST compõe o valor total da NF-e`
+    }
 ]
 
 export interface IBaseFormElement {
@@ -375,15 +408,42 @@ export class defaultForm {
             if (enumeration.length == 2 && val0.toUpperCase() == val1)
                 return new hiddenFormElement(name, required, val0)
             const values = (enumeration as any[]).map(v => v._attributes.value)
-            const isDesc = (v: string, line: string) => line.includes(v + ' – ')
-            const lines = documentation.split('\n')
-            const hasText = values.every(v => lines.some(l => isDesc(v, l)))
-            const options = values.map(v => {
+            const getValueDescription = (v: string) => {
+                if (isNaN(+v)) return v
+                const getIndex = (search: string) => documentation.indexOf(search)
+                const getIndexEnd = (mark: string, pos: number) => documentation.indexOf(mark, pos)
+                const starts = v.includes('.00')
+                    ? [getIndex(v.replace('.00', '%'))]
+                    : ['-', ' -', '  –', ' –', '–', '=', ' ='].map(k => getIndex(v + k)).filter(v => v != -1)
+                if (starts.length == 0) return v
+                const start = Math.min(...starts)
+                const ends = [';', '.', '\n'].map(k => getIndexEnd(k, start)).filter(k => k != -1)
+                if (ends.length == 0) {
+                    return documentation.substring(start)
+                }
+                let end = Math.min(...ends)
+                return documentation.substring(start, end)
+            }
+            const getOption = (v: any, processDescription: boolean = true) => {
                 return {
                     value: v,
-                    text: hasText ? lines.find((l: string) => isDesc(v, l)) : v
+                    text: processDescription ? getValueDescription(v) : v
                 }
-            })
+            }
+            const firstOption = getOption(values[0])
+            const optionsHaveDescriptions = firstOption.text != firstOption.value
+            const otherValues = values.slice(1)
+            let stopValuesMap = false
+            const otherOptions = optionsHaveDescriptions ? otherValues.map(v => {
+                if (stopValuesMap) return undefined
+                const opt = getOption(v, true)
+                if (opt.value == opt.text) {
+                    stopValuesMap = true
+                    return undefined
+                }
+                return opt
+            }).filter(v => v) : otherValues.map(v => getOption(v, false))
+            const options = [firstOption, ...otherOptions]
             return new selectFormElement(name, documentation, required, options)
         }
 
@@ -480,6 +540,32 @@ export class defaultForm {
             return [cMun, xMun, UF, municipio].filter(v => v)
         }
 
+        function createStateField(parentTags: string[],
+            getField: (name: string) => any): IBaseFormElement[] {
+            const genEl = (name: string) => {
+                const field = getField(name)
+                return field
+                    ? new hiddenFormElement(
+                        [...parentTags, name],
+                        isRequired(field))
+                    : undefined
+            }
+            const cUF = genEl('cUF'), UF = genEl('UF')
+            if (!cUF && !UF) throw new Error('State field without cUF and UF.')
+
+            const uf = new selectTextFormElement(
+                [], 'Estado',
+                cUF?.required || UF?.required,
+                IBGE.flatMap(
+                    v => { return { value: v.Nome } }),
+                (value) => {
+                    const uf = IBGE.find(v => v.Nome == value)
+                    if (cUF) cUF.value = uf?.Codigo
+                    if (UF) UF.value = uf?.Sigla
+                })
+            return [cUF, UF, uf].filter(v => v)
+        }
+
         function createCountryField(
             parentTags: string[],
             getField: (name: string) => any): IBaseFormElement[] {
@@ -511,8 +597,13 @@ export class defaultForm {
             const specificFields: ISpecificFormFields[] = [
                 {
                     names: ['cMun', 'xMun'],
-                    addIgnoreFields: ['UF'],
+                    addIgnoreFields: ['cUF', 'UF'],
                     getNewFields: createCityField
+                },
+                {
+                    names: ['cUF', 'UF'],
+                    addIgnoreFields: [],
+                    getNewFields: createStateField
                 },
                 {
                     names: ['cPais', 'xPais'],
