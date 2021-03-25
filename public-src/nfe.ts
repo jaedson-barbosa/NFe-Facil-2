@@ -1,4 +1,4 @@
-import { defaultForm, findField, defaultFormSubmit, IBaseFormElement, fieldsetFormElement } from './form-base'
+import { defaultForm, defaultFormSubmit, IBaseFormElement, fieldsetFormElement } from './form-base'
 
 const main = document.getElementById('main')
 const form = new defaultForm()

@@ -318,7 +318,7 @@ function getName(v: any): string {
     return name
 }
 
-export function findField(
+function findField(
     rootField: any,
     name: string,
     parentNames: string[] = [],
@@ -349,6 +349,13 @@ export class defaultForm {
     static elementosNFe = defaultForm.rootNFe['complexType']['sequence']['element']
 
     public elements: IBaseFormElement[] = []
+
+    static generateViews(rootField: any, ...names: string[]) {
+        return names.flatMap(name => {
+            const field = findField(rootField, name)
+            return defaultForm.generateView(field.field, [], field.tag, field.parentNames)
+        })
+    }
 
     static generateView(
         rootField: any,
