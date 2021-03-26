@@ -13,6 +13,19 @@ function getDescricaoStatus(status: 0 | 1 | 2 | 3) {
     }
 }
 
+export function getEmpresaAtiva() {
+    const id = sessionStorage.idEmpresa
+    if (!id) {
+        alert('Por favor, inicie a sessão a partir da tela de escolha de emitentes.')
+        location.href = './emitentes.html'
+    }
+    return getEmpresa(id)
+}
+
+function getEmpresa(id: string) {
+    return getEmpresas().find(v => v.id === id)
+}
+
 export function getEmpresas(): IEmpresa[] {
     const empresasString = localStorage.getItem('empresas')
     return empresasString ? JSON.parse(empresasString) : []
