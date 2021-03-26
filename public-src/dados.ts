@@ -1,14 +1,11 @@
-import { defaultForm, defaultFormSubmit, IBaseFormElement, fieldsetFormElement } from './form-base'
-// import { entries, set, sync } from './db'
+import { defaultForm, defaultFormSubmit, IBaseFormElement, fieldsetFormElement, createId } from './form-base'
+import { entries, set, sync } from './db'
 import { renderizarCliente } from './dados/clientes'
 import { renderizarProduto } from './dados/produtos'
 import { renderizarMotorista } from './dados/motoristas'
 
-async function sync() {
-    return Promise.resolve()
-}
-
 function main(
+    tipoDado: 'dest' | 'prod' | 'transporta',
     renderizarItem: (data: any) => HTMLButtonElement,
     ...view: IBaseFormElement[]) {
     const mainDialog = document.querySelector('dialog')
@@ -17,9 +14,9 @@ function main(
 
     async function renderizarItens() {
         dados.innerHTML = ''
-        // const totalItens = await entries()
-        // const itens = totalItens.filter(v => v[1][tipoDado])
-        // itens.forEach(v => renderizarNovoItem(v[1]))
+        const totalItens = await entries()
+        const itens = totalItens.filter(v => v[1][tipoDado])
+        itens.forEach(v => renderizarNovoItem(v[1]))
     }
 
     function renderizarNovoItem(data: any) {
@@ -35,7 +32,7 @@ function main(
             const htmlForm = form.generateForm()
             mainDialog.appendChild(htmlForm)
             htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
-                // await set(createId(), data)
+                await set(createId(), data)
                 renderizarNovoItem(data)
                 mainDialog.close()
             })
@@ -55,6 +52,7 @@ const parametros = new URLSearchParams(location.search)
 switch (parametros.get('tipo')) {
     case 'clientes':
         main(
+            'dest',
             renderizarCliente,
             ...defaultForm.generateView(
                 defaultForm.elementosNFe[3],
@@ -62,6 +60,7 @@ switch (parametros.get('tipo')) {
         break
     case 'produtos':
         main(
+            'prod',
             renderizarProduto,
             new fieldsetFormElement(
                 'Dados dos produtos e serviços',
@@ -82,6 +81,7 @@ switch (parametros.get('tipo')) {
         break
     case 'motoristas':
         main(
+            'transporta',
             renderizarMotorista,
             ...defaultForm.generateView(
                 defaultForm.elementosNFe[9]['complexType']['sequence']['element'][1],
