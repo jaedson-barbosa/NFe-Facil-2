@@ -68,7 +68,7 @@ export const scanRegistro = functions.https.onRequest((req, res) => cors(req, re
 	else res.status(400).send('Usuário não cadastrado')
 }))
 
-function getRespostaTentativaCadastro(status: 0 | 1 | 2 | 3) {
+/*function getRespostaTentativaCadastro(status: 0 | 1 | 2 | 3) {
 	switch (status) {
 		case 0:
 			return 'Pedido ainda aguardando análise'
@@ -79,7 +79,7 @@ function getRespostaTentativaCadastro(status: 0 | 1 | 2 | 3) {
 		case 3:
 			return 'Usuário já é um administrador'
 	}
-}
+}*/
 
 export const requisitarAcesso = functions.https.onRequest((req, res) => cors(req, res, async () => {
 	const user = await getUser(req);
@@ -136,12 +136,12 @@ export const requisitarAcesso = functions.https.onRequest((req, res) => cors(req
 					permissoes: null
 				})
 				res.status(200).send({
-					idEmpresa: empresa.id,
-					status: 'Usuário promovido para administrador',
+					id: empresa.id,
+					status: 3,
 					empresa: empresa.data().emit
 				})
 			} else {
-				res.status(400).send(getRespostaTentativaCadastro(status))
+				res.status(400).send(status)
 			}
 		} else {
 			await usuarioRef.set({
@@ -149,8 +149,8 @@ export const requisitarAcesso = functions.https.onRequest((req, res) => cors(req
 				nome: user.displayName
 			})
 			res.status(200).send({
-				idEmpresa: empresa.id,
-				status: 'Administrador registrado',
+				id: empresa.id,
+				status: 3,
 				empresa: empresa.data().emit
 			})
 		}
@@ -164,7 +164,7 @@ export const requisitarAcesso = functions.https.onRequest((req, res) => cors(req
 		const usuarioRef = empresa.ref.collection('usuarios').doc(user.sub)
 		const usuario = await usuarioRef.get()
 		if (usuario.exists) {
-			res.status(400).send(getRespostaTentativaCadastro(usuario.data()!.status))
+			res.status(400).send(usuario.data()!.status)
 			return
 		}
 		await usuarioRef.set({
@@ -172,8 +172,8 @@ export const requisitarAcesso = functions.https.onRequest((req, res) => cors(req
 			nome: user.displayName
 		})
 		res.status(200).send({
-			idEmpresa: empresa.id,
-			status: 'Pedido registrado',
+			id: empresa.id,
+			status: 0,
 			empresa: empresa.data().emit
 		})
 	}

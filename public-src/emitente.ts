@@ -1,4 +1,5 @@
 import { defaultFormSubmit, getForm, defaultForm, genericFormElement } from './form-base'
+import { addEmpresa, IEmpresa } from './dados/emitentes'
 
 async function getCertPostBody(data: any, additionalBody?: (body: any) => void) {
     if (data.cert) {
@@ -13,6 +14,26 @@ async function getCertPostBody(data: any, additionalBody?: (body: any) => void) 
         }
     }
     return {}
+}
+
+async function acessar(cnpj: string, data?: any) {
+    const respAcesso = await fetch(
+        `http://localhost:5001/nfe-facil-980bc/us-central1/requisitarAcesso?cnpj=${cnpj}`,
+        await getCertPostBody(data))
+    if (respAcesso.status == 401) {
+        location.href = './login.html'
+        return
+    }
+    if (respAcesso.status != 200) {
+        alert(await respAcesso.text())
+        return
+    }
+    const contResp = await respAcesso.json() as IEmpresa
+    addEmpresa(contResp)
+    if (contResp.status == 0) {
+        alert('O pedido de registro já foi enviado, aguarde a autorização pela administração.')
+    }
+    location.href = './emitentes.html'
 }
 
 const idEmitente = sessionStorage.getItem('idEmitente')
@@ -48,10 +69,8 @@ if (idEmitente) {
             <label for="senha">Senha</label>
             <input type="text" id="senha" name="senha" required>`
             const form = new defaultForm()
-            const emitElement = defaultForm.elementosNFe[1]
-            const emitView = defaultForm.generateView(emitElement, [])
             form.elements.push(
-                ...emitView,
+                ...defaultForm.generateView(defaultForm.elementosNFe[1], []),
                 new genericFormElement(additionalBody))
             const htmlForm = form.generateForm()
             document.body.appendChild(htmlForm)
@@ -70,14 +89,11 @@ if (idEmitente) {
                     return
                 }
                 const newId = await cadastro.text()
-                const empresasString = localStorage.getItem('empresas')
-                const empresas = empresasString ? JSON.parse(empresasString) as any[] : []
-                empresas.push({
+                addEmpresa({
                     id: newId,
                     status: 3,
                     empresa: data.emit
                 })
-                localStorage.setItem('empresas', JSON.stringify(empresas))
                 location.href = './emitentes.html'
             })
         } else if (text == 'Usuário não cadastrado') {
@@ -101,49 +117,6 @@ if (idEmitente) {
                     <input type="submit">
                 </fieldset>
             </form>`
-            async function acessar(cnpj: string, data?: any) {
-                const opcoes = await getCertPostBody(data)
-                const url = `http://localhost:5001/nfe-facil-980bc/us-central1/requisitarAcesso?cnpj=${cnpj}`
-                const respAcesso = await fetch(url, opcoes)
-                if (respAcesso.status == 401) {
-                    location.href = './login.html'
-                    return
-                }
-                if (respAcesso.status != 200) {
-                    alert(await respAcesso.text())
-                    return
-                }
-                const contResp = await respAcesso.json() as {
-                    idEmpresa: String,
-                    status: 'Pedido registrado' | 'Administrador registrado' | 'Usuário promovido para administrador',
-                    empresa: any
-                }
-                const empresasString = localStorage.getItem('empresas')
-                const empresas = empresasString ? JSON.parse(empresasString) as any[] : []
-                const cadastroAtual = empresas.find(v => v.id == contResp.idEmpresa)
-                if (contResp.status == 'Pedido registrado') {
-                    if (!cadastroAtual) {
-                        empresas.push({
-                            id: contResp.idEmpresa,
-                            status: 0,
-                            empresa: contResp.empresa
-                        })
-                        localStorage.setItem('empresas', JSON.stringify(empresas))
-                    }
-                    alert('O pedido de registro já foi enviado, aguarde a autorização pela administração.')
-                } else {
-                    if (cadastroAtual) {
-                        empresas.splice(empresas.findIndex(v => v.id == contResp.idEmpresa), 1)
-                        empresas.push({
-                            id: contResp.idEmpresa,
-                            status: 3,
-                            empresa: contResp.empresa 
-                        })
-                        localStorage.setItem('empresas', JSON.stringify(empresas))
-                    }
-                }
-                location.href = './emitentes.html'
-            }
             getForm(0).onsubmit = e => defaultFormSubmit(e, data => acessar(data.cnpj))
             getForm(1).onsubmit = e => defaultFormSubmit(e, data => acessar(data.cnpj, data))
         } else {
