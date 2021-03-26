@@ -6,7 +6,7 @@
         }
     },
     "_comment": [
-        " edited with XMLSpy v2008 (http://www.altova.com) by sas-softwares@procergs.rs.gov.br (PROCERGS) ",
+        " edited with XMLSpy v2008 (http://www.altova.com) by softwares@procergs.rs.gov.br (PROCERGS) ",
         " PL_009  alterações de esquema decorrentes da - NT2016.002 v1.20 - 31/05/2017 13:14hs",
         " PL_008g  alterações de esquema decorrentes da - NT2015.002  - 15/07/2015 ",
         " PL_008h  alterações de esquema decorrentes da - NT2015.003 - 17/09/2015 ",
@@ -1957,34 +1957,6 @@
                                                                         },
                                                                         {
                                                                             "_attributes": {
-                                                                                "name": "cBarra",
-                                                                                "minOccurs": "0"
-                                                                            },
-                                                                            "annotation": {
-                                                                                "documentation": {
-                                                                                    "_text": "Codigo de barras diferente do padrão GTIN"
-                                                                                }
-                                                                            },
-                                                                            "simpleType": {
-                                                                                "restriction": {
-                                                                                    "_attributes": {
-                                                                                        "base": "TString"
-                                                                                    },
-                                                                                    "maxLength": {
-                                                                                        "_attributes": {
-                                                                                            "value": "30"
-                                                                                        }
-                                                                                    },
-                                                                                    "minLength": {
-                                                                                        "_attributes": {
-                                                                                            "value": "3"
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        {
-                                                                            "_attributes": {
                                                                                 "name": "xProd"
                                                                             },
                                                                             "annotation": {
@@ -2233,34 +2205,6 @@
                                                                         },
                                                                         {
                                                                             "_attributes": {
-                                                                                "name": "cBarraTrib",
-                                                                                "minOccurs": "0"
-                                                                            },
-                                                                            "annotation": {
-                                                                                "documentation": {
-                                                                                    "_text": "Codigo de barras diferente do padrão GTIN"
-                                                                                }
-                                                                            },
-                                                                            "simpleType": {
-                                                                                "restriction": {
-                                                                                    "_attributes": {
-                                                                                        "base": "TString"
-                                                                                    },
-                                                                                    "maxLength": {
-                                                                                        "_attributes": {
-                                                                                            "value": "30"
-                                                                                        }
-                                                                                    },
-                                                                                    "minLength": {
-                                                                                        "_attributes": {
-                                                                                            "value": "3"
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        {
-                                                                            "_attributes": {
                                                                                 "name": "uTrib"
                                                                             },
                                                                             "annotation": {
@@ -2425,7 +2369,7 @@
                                                                                                     },
                                                                                                     "maxLength": {
                                                                                                         "_attributes": {
-                                                                                                            "value": "15"
+                                                                                                            "value": "12"
                                                                                                         }
                                                                                                     }
                                                                                                 }
@@ -2497,7 +2441,7 @@
                                                                                             },
                                                                                             "annotation": {
                                                                                                 "documentation": {
-                                                                                                    "_text": "Via de transporte internacional informada na DI\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t1-Maritima;2-Fluvial;3-Lacustre;4-Aerea;5-Postal;6-Ferroviaria;7-Rodoviaria;8-Conduto;9-Meios Proprios;10-Entrada/Saida Ficta.\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t11-Courier; 12-Em maos;13-Por reboque"
+                                                                                                    "_text": "Via de transporte internacional informada na DI\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t1-Maritima;2-Fluvial;3-Lacustre;4-Aerea;5-Postal;6-Ferroviaria;7-Rodoviaria;8-Conduto;9-Meios Proprios;10-Entrada/Saida Ficta."
                                                                                                 }
                                                                                             },
                                                                                             "simpleType": {
@@ -2569,11 +2513,6 @@
                                                                                                         {
                                                                                                             "_attributes": {
                                                                                                                 "value": "12"
-                                                                                                            }
-                                                                                                        },
-                                                                                                        {
-                                                                                                            "_attributes": {
-                                                                                                                "value": "13"
                                                                                                             }
                                                                                                         }
                                                                                                     ]
@@ -2685,7 +2624,7 @@
                                                                                         {
                                                                                             "_attributes": {
                                                                                                 "name": "adi",
-                                                                                                "maxOccurs": "999"
+                                                                                                "maxOccurs": "100"
                                                                                             },
                                                                                             "annotation": {
                                                                                                 "documentation": {
@@ -2697,8 +2636,7 @@
                                                                                                     "element": [
                                                                                                         {
                                                                                                             "_attributes": {
-                                                                                                                "name": "nAdicao",
-                                                                                                                "minOccurs": "0"
+                                                                                                                "name": "nAdicao"
                                                                                                             },
                                                                                                             "annotation": {
                                                                                                                 "documentation": {
@@ -2744,7 +2682,7 @@
                                                                                                                     },
                                                                                                                     "pattern": {
                                                                                                                         "_attributes": {
-                                                                                                                            "value": "[1-9]{1}[0-9]{0,4}"
+                                                                                                                            "value": "[1-9]{1}[0-9]{0,2}"
                                                                                                                         }
                                                                                                                     }
                                                                                                                 }
@@ -2802,16 +2740,16 @@
                                                                                                             "simpleType": {
                                                                                                                 "restriction": {
                                                                                                                     "_attributes": {
-                                                                                                                        "base": "TString"
+                                                                                                                        "base": "string"
                                                                                                                     },
-                                                                                                                    "minLength": {
+                                                                                                                    "whiteSpace": {
                                                                                                                         "_attributes": {
-                                                                                                                            "value": "1"
+                                                                                                                            "value": "preserve"
                                                                                                                         }
                                                                                                                     },
-                                                                                                                    "maxLength": {
+                                                                                                                    "pattern": {
                                                                                                                         "_attributes": {
-                                                                                                                            "value": "20"
+                                                                                                                            "value": "[0-9]{0,11}"
                                                                                                                         }
                                                                                                                     }
                                                                                                                 }
@@ -2861,7 +2799,7 @@
                                                                                                     },
                                                                                                     "pattern": {
                                                                                                         "_attributes": {
-                                                                                                            "value": "[0-9]{0,20}"
+                                                                                                            "value": "[0-9]{0,11}"
                                                                                                         }
                                                                                                     }
                                                                                                 }
@@ -5079,54 +5017,17 @@
                                                                                             }
                                                                                         ]
                                                                                     },
-                                                                                    "element": [
-                                                                                        {
-                                                                                            "_attributes": {
-                                                                                                "name": "vPIS",
-                                                                                                "type": "TDec_1302"
-                                                                                            },
-                                                                                            "annotation": {
-                                                                                                "documentation": {
-                                                                                                    "_text": "Valor do PIS ST"
-                                                                                                }
-                                                                                            }
+                                                                                    "element": {
+                                                                                        "_attributes": {
+                                                                                            "name": "vPIS",
+                                                                                            "type": "TDec_1302"
                                                                                         },
-                                                                                        {
-                                                                                            "_attributes": {
-                                                                                                "name": "indSomaPISST",
-                                                                                                "minOccurs": "0"
-                                                                                            },
-                                                                                            "annotation": {
-                                                                                                "documentation": {
-                                                                                                    "_text": "Indica se o valor do PISST compõe o valor total da NF-e;"
-                                                                                                }
-                                                                                            },
-                                                                                            "simpleType": {
-                                                                                                "restriction": {
-                                                                                                    "_attributes": {
-                                                                                                        "base": "string"
-                                                                                                    },
-                                                                                                    "whiteSpace": {
-                                                                                                        "_attributes": {
-                                                                                                            "value": "preserve"
-                                                                                                        }
-                                                                                                    },
-                                                                                                    "enumeration": [
-                                                                                                        {
-                                                                                                            "_attributes": {
-                                                                                                                "value": "0"
-                                                                                                            }
-                                                                                                        },
-                                                                                                        {
-                                                                                                            "_attributes": {
-                                                                                                                "value": "1"
-                                                                                                            }
-                                                                                                        }
-                                                                                                    ]
-                                                                                                }
+                                                                                        "annotation": {
+                                                                                            "documentation": {
+                                                                                                "_text": "Valor do PIS ST"
                                                                                             }
                                                                                         }
-                                                                                    ]
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         },
@@ -5664,54 +5565,17 @@
                                                                                             }
                                                                                         ]
                                                                                     },
-                                                                                    "element": [
-                                                                                        {
-                                                                                            "_attributes": {
-                                                                                                "name": "vCOFINS",
-                                                                                                "type": "TDec_1302"
-                                                                                            },
-                                                                                            "annotation": {
-                                                                                                "documentation": {
-                                                                                                    "_text": "Valor do COFINS ST"
-                                                                                                }
-                                                                                            }
+                                                                                    "element": {
+                                                                                        "_attributes": {
+                                                                                            "name": "vCOFINS",
+                                                                                            "type": "TDec_1302"
                                                                                         },
-                                                                                        {
-                                                                                            "_attributes": {
-                                                                                                "name": "indSomaCOFINSST",
-                                                                                                "minOccurs": "0"
-                                                                                            },
-                                                                                            "annotation": {
-                                                                                                "documentation": {
-                                                                                                    "_text": "Indica se o valor da COFINS ST compõe o valor total da NFe"
-                                                                                                }
-                                                                                            },
-                                                                                            "simpleType": {
-                                                                                                "restriction": {
-                                                                                                    "_attributes": {
-                                                                                                        "base": "string"
-                                                                                                    },
-                                                                                                    "whiteSpace": {
-                                                                                                        "_attributes": {
-                                                                                                            "value": "preserve"
-                                                                                                        }
-                                                                                                    },
-                                                                                                    "enumeration": [
-                                                                                                        {
-                                                                                                            "_attributes": {
-                                                                                                                "value": "0"
-                                                                                                            }
-                                                                                                        },
-                                                                                                        {
-                                                                                                            "_attributes": {
-                                                                                                                "value": "1"
-                                                                                                            }
-                                                                                                        }
-                                                                                                    ]
-                                                                                                }
+                                                                                        "annotation": {
+                                                                                            "documentation": {
+                                                                                                "_text": "Valor do COFINS ST"
                                                                                             }
                                                                                         }
-                                                                                    ]
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         },
@@ -6359,63 +6223,6 @@
                                                                                                                                 "annotation": {
                                                                                                                                     "documentation": {
                                                                                                                                         "_text": "Valor do FCP retido por substituição tributária."
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ]
-                                                                                                                    },
-                                                                                                                    {
-                                                                                                                        "_attributes": {
-                                                                                                                            "minOccurs": "0"
-                                                                                                                        },
-                                                                                                                        "element": [
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "vICMSSTDeson",
-                                                                                                                                    "type": "TDec_1302"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Valor da Base de cálculo do FCP retido por substituicao tributaria."
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "motDesICMSST"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Motivo da desoneração do ICMS:3-Uso na agropecuária;9-Outros;12-Fomento agropecuário"
-                                                                                                                                    }
-                                                                                                                                },
-                                                                                                                                "simpleType": {
-                                                                                                                                    "restriction": {
-                                                                                                                                        "_attributes": {
-                                                                                                                                            "base": "string"
-                                                                                                                                        },
-                                                                                                                                        "whiteSpace": {
-                                                                                                                                            "_attributes": {
-                                                                                                                                                "value": "preserve"
-                                                                                                                                            }
-                                                                                                                                        },
-                                                                                                                                        "enumeration": [
-                                                                                                                                            {
-                                                                                                                                                "_attributes": {
-                                                                                                                                                    "value": "3"
-                                                                                                                                                }
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "_attributes": {
-                                                                                                                                                    "value": "9"
-                                                                                                                                                }
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "_attributes": {
-                                                                                                                                                    "value": "12"
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        ]
                                                                                                                                     }
                                                                                                                                 }
                                                                                                                             }
@@ -7293,91 +7100,46 @@
                                                                                                                         }
                                                                                                                     }
                                                                                                                 ],
-                                                                                                                "sequence": [
-                                                                                                                    {
-                                                                                                                        "_attributes": {
-                                                                                                                            "minOccurs": "0"
-                                                                                                                        },
-                                                                                                                        "element": [
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "vBCFCP",
-                                                                                                                                    "type": "TDec_1302"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Valor da Base de cálculo do FCP."
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "pFCP",
-                                                                                                                                    "type": "TDec_0302a04Opc"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Percentual de ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "vFCP",
-                                                                                                                                    "type": "TDec_1302"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ]
+                                                                                                                "sequence": {
+                                                                                                                    "_attributes": {
+                                                                                                                        "minOccurs": "0"
                                                                                                                     },
-                                                                                                                    {
-                                                                                                                        "_attributes": {
-                                                                                                                            "minOccurs": "0"
-                                                                                                                        },
-                                                                                                                        "element": [
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "pFCPDif",
-                                                                                                                                    "type": "TDec_0302a04Opc",
-                                                                                                                                    "minOccurs": "0"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Percentual do diferimento do ICMS relativo ao Fundo de Combate à Pobreza (FCP)"
-                                                                                                                                    }
-                                                                                                                                }
+                                                                                                                    "element": [
+                                                                                                                        {
+                                                                                                                            "_attributes": {
+                                                                                                                                "name": "vBCFCP",
+                                                                                                                                "type": "TDec_1302"
                                                                                                                             },
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "vFCPDif",
-                                                                                                                                    "type": "TDec_1302",
-                                                                                                                                    "minOccurs": "0"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) diferido"
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "vFCPEfet",
-                                                                                                                                    "type": "TDec_1302",
-                                                                                                                                    "minOccurs": "0"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Valor efetivo do ICMS relativo ao Fundo de Combate à Pobreza (FCP)"
-                                                                                                                                    }
+                                                                                                                            "annotation": {
+                                                                                                                                "documentation": {
+                                                                                                                                    "_text": "Valor da Base de cálculo do FCP."
                                                                                                                                 }
                                                                                                                             }
-                                                                                                                        ]
-                                                                                                                    }
-                                                                                                                ]
+                                                                                                                        },
+                                                                                                                        {
+                                                                                                                            "_attributes": {
+                                                                                                                                "name": "pFCP",
+                                                                                                                                "type": "TDec_0302a04Opc"
+                                                                                                                            },
+                                                                                                                            "annotation": {
+                                                                                                                                "documentation": {
+                                                                                                                                    "_text": "Percentual de ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        },
+                                                                                                                        {
+                                                                                                                            "_attributes": {
+                                                                                                                                "name": "vFCP",
+                                                                                                                                "type": "TDec_1302"
+                                                                                                                            },
+                                                                                                                            "annotation": {
+                                                                                                                                "documentation": {
+                                                                                                                                    "_text": "Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    ]
+                                                                                                                }
                                                                                                             }
                                                                                                         }
                                                                                                     },
@@ -7982,68 +7744,6 @@
                                                                                                                                 }
                                                                                                                             }
                                                                                                                         ]
-                                                                                                                    },
-                                                                                                                    {
-                                                                                                                        "_attributes": {
-                                                                                                                            "minOccurs": "0"
-                                                                                                                        },
-                                                                                                                        "annotation": {
-                                                                                                                            "documentation": {
-                                                                                                                                "_text": "Grupo desoneração ST"
-                                                                                                                            }
-                                                                                                                        },
-                                                                                                                        "element": [
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "vICMSSTDeson",
-                                                                                                                                    "type": "TDec_1302"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Valor do ICMS- ST desonerado"
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "motDesICMSST"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Motivo da desoneração do ICMS- ST"
-                                                                                                                                    }
-                                                                                                                                },
-                                                                                                                                "simpleType": {
-                                                                                                                                    "restriction": {
-                                                                                                                                        "_attributes": {
-                                                                                                                                            "base": "string"
-                                                                                                                                        },
-                                                                                                                                        "whiteSpace": {
-                                                                                                                                            "_attributes": {
-                                                                                                                                                "value": "preserve"
-                                                                                                                                            }
-                                                                                                                                        },
-                                                                                                                                        "enumeration": [
-                                                                                                                                            {
-                                                                                                                                                "_attributes": {
-                                                                                                                                                    "value": "3"
-                                                                                                                                                }
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "_attributes": {
-                                                                                                                                                    "value": "9"
-                                                                                                                                                }
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "_attributes": {
-                                                                                                                                                    "value": "12"
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ]
                                                                                                                     }
                                                                                                                 ]
                                                                                                             }
@@ -8428,68 +8128,6 @@
                                                                                                                                 "annotation": {
                                                                                                                                     "documentation": {
                                                                                                                                         "_text": "Motivo da desoneração do ICMS:3-Uso na agropecuária;9-Outros;12-Fomento agropecuário"
-                                                                                                                                    }
-                                                                                                                                },
-                                                                                                                                "simpleType": {
-                                                                                                                                    "restriction": {
-                                                                                                                                        "_attributes": {
-                                                                                                                                            "base": "string"
-                                                                                                                                        },
-                                                                                                                                        "whiteSpace": {
-                                                                                                                                            "_attributes": {
-                                                                                                                                                "value": "preserve"
-                                                                                                                                            }
-                                                                                                                                        },
-                                                                                                                                        "enumeration": [
-                                                                                                                                            {
-                                                                                                                                                "_attributes": {
-                                                                                                                                                    "value": "3"
-                                                                                                                                                }
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "_attributes": {
-                                                                                                                                                    "value": "9"
-                                                                                                                                                }
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "_attributes": {
-                                                                                                                                                    "value": "12"
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ]
-                                                                                                                    },
-                                                                                                                    {
-                                                                                                                        "_attributes": {
-                                                                                                                            "minOccurs": "0"
-                                                                                                                        },
-                                                                                                                        "annotation": {
-                                                                                                                            "documentation": {
-                                                                                                                                "_text": "Grupo desoneração ST"
-                                                                                                                            }
-                                                                                                                        },
-                                                                                                                        "element": [
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "vICMSSTDeson",
-                                                                                                                                    "type": "TDec_1302"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Valor do ICMS- ST desonerado"
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            {
-                                                                                                                                "_attributes": {
-                                                                                                                                    "name": "motDesICMSST"
-                                                                                                                                },
-                                                                                                                                "annotation": {
-                                                                                                                                    "documentation": {
-                                                                                                                                        "_text": "Motivo da desoneração do ICMS- ST "
                                                                                                                                     }
                                                                                                                                 },
                                                                                                                                 "simpleType": {
@@ -12138,7 +11776,7 @@
                                                                             },
                                                                             "annotation": {
                                                                                 "documentation": {
-                                                                                    "_text": "Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão de Débito;05-Crédito Loja;10-Vale Alimentação;11-Vale Refeição;12-Vale Presente;13-Vale Combustível;14 - Duplicata Mercantil;15 - Boleto Bancario;90 - Sem Pagamento;99 - Outros"
+                                                                                    "_text": "Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão de Débito;05-Crédito Loja;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t10-Vale Alimentação;11-Vale Refeição;12-Vale Presente;13-Vale Combustível;14 - Duplicata Mercantil;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t15 - Boleto Bancario;16\tDepósito Bancário\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t17\tPagamento Instantâneo (PIX)\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t18\tTransferência bancária, Carteira Digital\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t19\tPrograma de fidelidade, Cashback, Crédito Virtual 90 - Sem Pagamento;99 - Outros\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
                                                                                 }
                                                                             },
                                                                             "simpleType": {
@@ -12243,6 +11881,34 @@
                                                                         },
                                                                         {
                                                                             "_attributes": {
+                                                                                "name": "xPag",
+                                                                                "minOccurs": "0"
+                                                                            },
+                                                                            "annotation": {
+                                                                                "documentation": {
+                                                                                    "_text": "Descrição do Meio de Pagamento"
+                                                                                }
+                                                                            },
+                                                                            "simpleType": {
+                                                                                "restriction": {
+                                                                                    "_attributes": {
+                                                                                        "base": "TString"
+                                                                                    },
+                                                                                    "minLength": {
+                                                                                        "_attributes": {
+                                                                                            "value": "2"
+                                                                                        }
+                                                                                    },
+                                                                                    "maxLength": {
+                                                                                        "_attributes": {
+                                                                                            "value": "60"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "_attributes": {
                                                                                 "name": "vPag",
                                                                                 "type": "TDec_1302"
                                                                             },
@@ -12318,7 +11984,7 @@
                                                                                             },
                                                                                             "annotation": {
                                                                                                 "documentation": {
-                                                                                                    "_text": "Bandeira da operadora de cartão de crédito/débito:01–Visa; 02–Mastercard; 03–American Express; 04–Sorocred;05-Diners Club;06-Elo;07-Hipercard;08-Aura;09-Cabal;99–Outros"
+                                                                                                    "_text": "Bandeira da operadora de cartão de crédito/débito:01–Visa; 02–Mastercard; 03–American Express; 04–Sorocred;05-Diners Club;06-Elo;07-Hipercard;08-Aura;09-Cabal\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t10-Alelo; 11-Banes Card; 12-CalCard; 13-Credz; 14-Discover; 15-GoodCard; 16-GreenCard; 17-Hiper; 18-JcB; 19-Mais;20-MaxVan; 21-Policard;22-RedeCompras\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t23-Sodexo; 24-ValeCard; 25-Verocheque; 26-VR; 27-Ticket;99–Outros"
                                                                                                 }
                                                                                             },
                                                                                             "simpleType": {
@@ -12375,6 +12041,96 @@
                                                                                                         {
                                                                                                             "_attributes": {
                                                                                                                 "value": "09"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "10"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "11"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "12"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "13"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "14"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "15"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "16"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "17"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "18"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "19"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "20"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "21"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "22"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "23"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "24"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "25"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "26"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "_attributes": {
+                                                                                                                "value": "27"
                                                                                                             }
                                                                                                         },
                                                                                                         {
@@ -15171,8 +14927,7 @@
                     "element": [
                         {
                             "_attributes": {
-                                "name": "placa",
-                                "minOccurs": "0"
+                                "name": "placa"
                             },
                             "annotation": {
                                 "documentation": {
