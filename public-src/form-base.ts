@@ -21,6 +21,16 @@ const simpleTypes: IType[] = [...basicSchema.schema.simpleType, ...nfeSchema.sch
 
 export function createId() { return Math.random().toString(36).substr(2, 9) }
 
+export function getCodigoEstado(sigla: string) {
+    return IBGE.find(v => v.Sigla == sigla)?.Codigo
+}
+
+export function getRandomNumber(digits: number = 8) {
+    var minm = 10**(digits - 1);
+    var maxm = 10**digits-1;
+    return Math.floor(Math.random() * (maxm - minm + 1)) + minm;
+}
+
 export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     e.preventDefault()
     var object = {};
