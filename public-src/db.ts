@@ -1,10 +1,7 @@
 import * as idb from 'idb-keyval';
+import { getIdEmpresaAtiva } from './sessao';
 
-const id = sessionStorage.idEmpresa
-if (!id) {
-    alert('Por favor, inicie a sessão a partir da tela de escolha de emitentes.')
-    location.href = './emitentes.html'
-}
+const id = getIdEmpresaAtiva()
 const sessionStore = idb.createStore(id, 'geral')
 
 export function del(key: IDBValidKey) { return idb.del(key, sessionStore) }

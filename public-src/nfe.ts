@@ -7,28 +7,13 @@ import {
     getCodigoEstado,
     getRandomNumber
 } from './form-base'
-import { getEmpresaAtiva } from './dados/emitentes'
+import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
 
 const empresa = getEmpresaAtiva()
 const emit = empresa.empresa
 const main = document.getElementById('main')
 const form = new defaultForm()
 const reqs = []//['dest', 'xNome', 'enderDest']
-
-function gerarIdentificacao() {
-    const root = defaultForm.elementosNFe[0]
-    const rootNames = ['infNFe', 'ide']
-    return new fieldsetFormElement(
-        'Informações de identificação da NF-e',
-        new hiddenFormElement([...rootNames, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
-        new hiddenFormElement([...rootNames, 'cNF'], true, getRandomNumber().toString()),
-        ...defaultForm.generateViews(root, 'natOp'),
-        new hiddenFormElement([...rootNames, 'mod'], true, '55'),
-        new hiddenFormElement([...rootNames, 'serie'], true, '%SERIE%'),
-        new hiddenFormElement([...rootNames, 'nNF'], true, '%NUMERO%'),
-
-    )
-}
 
 declare global {
     interface Date {
@@ -51,6 +36,29 @@ Date.prototype.toNFeString = function() {
         ':' + pad(this.getSeconds()) +
         dif + pad(tzo / 60) +
         ':' + pad(tzo % 60);
+}
+
+function gerarIdentificacao() {
+    const root = defaultForm.elementosNFe[0]
+    const rootNames = ['infNFe', 'ide']
+    return new fieldsetFormElement(
+        'Informações de identificação da NF-e',
+        new hiddenFormElement([...rootNames, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
+        new hiddenFormElement([...rootNames, 'cNF'], true, getRandomNumber().toString()),
+        ...defaultForm.generateViews(root, 'natOp'),
+        new hiddenFormElement([...rootNames, 'mod'], true, '55'),
+        new hiddenFormElement([...rootNames, 'serie'], true, '%SERIE%'),
+        new hiddenFormElement([...rootNames, 'nNF'], true, '%NUMERO%'),
+        new hiddenFormElement([...rootNames, 'dhEmi'], true, new Date().toNFeString()),
+        ...defaultForm.generateViews(root, 'tpNF', 'idDest', 'cMunFG'),
+        new hiddenFormElement([...rootNames, 'tpImp'], true, '1'),
+        new hiddenFormElement([...rootNames, 'tpEmis'], true, '1'),
+        new hiddenFormElement([...rootNames, 'cDV'], true, '%CDV%'),
+        new hiddenFormElement([...rootNames, 'tpAmb'], true, getAmbiente()),
+        ...defaultForm.generateViews(root, 'finNFe', 'indFinal', 'indPres', 'indIntermed'),
+        new hiddenFormElement([...rootNames, 'procEmi'], true, '0'),
+        new hiddenFormElement([...rootNames, 'verProc'], true, versaoEmissor())
+    )
 }
 
 const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)

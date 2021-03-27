@@ -113,7 +113,7 @@ export class genericFormElement implements IBaseFormElement {
 }
 
 abstract class inputFormElement implements IBaseFormElement {
-    protected name: string[]
+    private name: string[]
     protected documentation: string
     public required: boolean
 
@@ -126,7 +126,7 @@ abstract class inputFormElement implements IBaseFormElement {
     public abstract generate(parent: HTMLElement): void;
 
     protected updateBaseProps(input: HTMLSelectElement | HTMLInputElement) {
-        input.name = this.name.join('.')
+        input.name = this.name.filter(v => !v.includes('|')).join('.')
         input.title = this.documentation
         input.required = this.required
     }
@@ -529,12 +529,12 @@ export class defaultForm {
                         isRequired(field))
                     : undefined
             }
-            const cMun = genEl('cMun'), xMun = genEl('xMun'), UF = genEl('UF')
-            if (!cMun && !xMun) throw new Error('City field without cMun and xMun.')
+            const cMun = genEl('cMun'), cMunFG = genEl('cMunFG'), xMun = genEl('xMun'), UF = genEl('UF')
+            if (!cMun && !cMunFG && !xMun) throw new Error('City field without cMun and xMun.')
 
             const municipio = new selectTextFormElement(
                 [], 'Município',
-                cMun?.required || xMun?.required,
+                cMun?.required || cMunFG?.required || xMun?.required,
                 IBGE.flatMap(
                     v => (v.Municipios as any[]).map(
                         k => { return { value: `${k.Nome} (${v.Sigla})` } })),
@@ -546,10 +546,12 @@ export class defaultForm {
                         munIBGE = ufIBGE?.Municipios.find(v => v.Nome == mun)
                     if (munIBGE) {
                         if (cMun) cMun.value = munIBGE.Codigo
+                        if (cMunFG) cMunFG.value = munIBGE.Codigo
                         if (xMun) xMun.value = munIBGE.Nome
                         if (UF) UF.value = ufIBGE.Sigla
                     } else {
                         if (cMun) cMun.value = undefined
+                        if (cMunFG) cMunFG.value = undefined
                         if (xMun) xMun.value = undefined
                         if (UF) UF.value = undefined
                     }
@@ -613,7 +615,7 @@ export class defaultForm {
             const elements = 'length' in field ? field as any[] : [field]
             const specificFields: ISpecificFormFields[] = [
                 {
-                    names: ['cMun', 'xMun'],
+                    names: ['cMun', 'xMun', 'cMunFG'],
                     addIgnoreFields: ['cUF', 'UF'],
                     getNewFields: createCityField
                 },
