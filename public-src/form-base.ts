@@ -62,27 +62,6 @@ const customHeaders: { name: string, header: string }[] = [
     { name: 'CNPJ|CPF', header: 'Documento usado' },
     { name: 'cRegTrib', header: 'Código do regime especial de tributação\n1=Microempresa Municipal; 2=Estimativa; 3=Sociedade de Profissionais; 4=Cooperativa; 5=Microempresário Individual (MEI); 6=Microempresário e Empresa de Pequeno Porte' },
     {
-        name: 'tPag',
-        header: `Forma de Pagamento:
-        01=Dinheiro
-        02=Cheque
-        03=Cartão de Crédito
-        04=Cartão de Débito
-        05=Crédito Loja
-        10=Vale Alimentação
-        11=Vale Refeição
-        12=Vale Presente
-        13=Vale Combustível
-        14=Duplicata Mercantil;
-        15=Boleto Bancário
-        16=Depósito Bancário
-        17=Pagamento Instantâneo (PIX)
-        18=Transferência bancária, Carteira Digital
-        19=Programa de fidelidade, Cashback, Crédito Virtual
-        90=Sem pagamento
-        99=Outros`
-    },
-    {
         name: 'indSomaPISST',
         header: `Indica se o valor do PISST compõe o valor total da NF-e
         0=Valor do PISST não compõe o valor total da NF-e
@@ -113,7 +92,7 @@ export class genericFormElement implements IBaseFormElement {
 }
 
 abstract class inputFormElement implements IBaseFormElement {
-    private name: string[]
+    public name: string[]
     protected documentation: string
     public required: boolean
 
@@ -300,6 +279,30 @@ export class choiceFormElement implements IBaseFormElement {
         parent.appendChild(div)
         insertLabel(select, this.documentation)
         updateView()
+    }
+}
+
+export class listFormElement implements IBaseFormElement {
+    private name: string[]
+    private addContent: defaultForm
+
+    constructor(parentNames: string[], root: any, name: string) {
+        this.name = [...parentNames, name]
+        const form = new defaultForm()
+        const els = defaultForm.generateViews(root, name)
+        form.elements.push(...els)
+        this.addContent = form
+    }
+
+    public generate(parent: HTMLElement){
+        const form = this.addContent.generateForm()
+        const details = document.createElement('details')
+        const summary = document.createElement('summary')
+        summary.innerText = 'Novo item'
+        details.appendChild(summary)
+        details.appendChild(form)
+        parent.appendChild(details)
+        //Botar botão de adicionar, cancelar, editar e remover. Usar índice numerico e mexer na geração de dados do form geral e especifico
     }
 }
 

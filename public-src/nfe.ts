@@ -5,7 +5,8 @@ import {
     fieldsetFormElement,
     hiddenFormElement,
     getCodigoEstado,
-    getRandomNumber
+    getRandomNumber,
+    listFormElement
 } from './form-base'
 import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
 
@@ -21,10 +22,10 @@ declare global {
     }
 }
 
-Date.prototype.toNFeString = function() {
+Date.prototype.toNFeString = function () {
     var tzo = -this.getTimezoneOffset(),
         dif = tzo >= 0 ? '+' : '-',
-        pad = function(num) {
+        pad = function (num) {
             var norm = Math.floor(Math.abs(num));
             return (norm < 10 ? '0' : '') + norm;
         };
@@ -57,7 +58,8 @@ function gerarIdentificacao() {
         new hiddenFormElement([...rootNames, 'tpAmb'], true, getAmbiente()),
         ...defaultForm.generateViews(root, 'finNFe', 'indFinal', 'indPres', 'indIntermed'),
         new hiddenFormElement([...rootNames, 'procEmi'], true, '0'),
-        new hiddenFormElement([...rootNames, 'verProc'], true, versaoEmissor())
+        new hiddenFormElement([...rootNames, 'verProc'], true, versaoEmissor()),
+        new listFormElement(rootNames, root, 'NFref')
     )
 }
 
