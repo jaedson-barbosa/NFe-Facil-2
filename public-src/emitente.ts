@@ -48,18 +48,20 @@ if (idEmitente) {
         <input type="submit">
     </form>`
     getForm().onsubmit = e => defaultFormSubmit(e, async data => {
-        const scanned = await fetch(`http://localhost:5001/nfe-facil-980bc/us-central1/scanCNPJ?cnpj=${data.cnpj}`)
+        const scanned = await fetch(`http://localhost:5001/nfe-facil-980bc/us-central1/scanRegistro?cnpj=${data.cnpj}`)
         if (scanned.status == 401) {
             location.href = './login.html'
             return
-        } else if (scanned.status == 400) {
-            alert('CNPJ inválido.')
-            return
-        } else if (scanned.status != 200) {
+        }
+        if (scanned.status != 200 && scanned.status != 400) {
             alert('Erro desconhecido.')
             return
         }
         const text = await scanned.text()
+        if (text == 'CNPJ inválido') {
+            alert('CNPJ inválido.')
+            return
+        }
         if (text == 'Empresa não existe') {
             // Nesse caso vamos cadastrar a empresa
             const additionalBody = document.createElement('div')

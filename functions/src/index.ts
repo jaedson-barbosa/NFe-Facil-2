@@ -225,9 +225,9 @@ export const cadastrarCNPJ = functions.https.onRequest((req, res) => cors(req, r
 		return
 	}
 	const cnpj = certParts[1]
-	if (cnpj != emit.cnpj) {
+	if (cnpj != emit.CNPJ) {
 		//CNPJ do certificado é diferente do CNPJ informado no cadastro
-		res.status(400).send('CNPJ diferente')
+		res.status(400).send(`CNPJ diferente ${certUser}`)
 		return
 	}
 

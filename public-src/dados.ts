@@ -12,6 +12,20 @@ function main(
     mainDialog.showModal()
     const dados = document.getElementById('dados')
 
+    function cadastrar(item?: any) {
+        mainDialog.showModal()
+        const form = new defaultForm()
+        form.elements.push(...view)
+        if (item) form.updateValue(item)
+        const htmlForm = form.generateForm()
+        mainDialog.appendChild(htmlForm)
+        htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
+            await set(createId(), data)
+            renderizarNovoItem(data)
+            mainDialog.close()
+        })
+    }
+
     async function renderizarItens() {
         dados.innerHTML = ''
         const totalItens = await entries()
@@ -20,23 +34,14 @@ function main(
     }
 
     function renderizarNovoItem(data: any) {
-        dados.appendChild(renderizarItem(data))
+        const button = renderizarItem(data)
+        button.onclick = () => cadastrar(data)
+        dados.appendChild(button)
     }
 
     sync().then(async () => {
         await renderizarItens()
-        document.getElementById('cadastrar').onclick = () => {
-            mainDialog.showModal()
-            const form = new defaultForm()
-            form.elements.push(...view)
-            const htmlForm = form.generateForm()
-            mainDialog.appendChild(htmlForm)
-            htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
-                await set(createId(), data)
-                renderizarNovoItem(data)
-                mainDialog.close()
-            })
-        }
+        document.getElementById('cadastrar').onclick = () => cadastrar()
         document.getElementById('atualizar').onclick = async () => {
             mainDialog.innerHTML = 'Carregando'
             mainDialog.showModal()

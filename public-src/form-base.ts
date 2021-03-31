@@ -77,6 +77,7 @@ const customHeaders: { name: string, header: string }[] = [
 
 export interface IBaseFormElement {
     generate: (parent: HTMLElement) => void
+    updateValue: (values: any) => void
 }
 
 export class genericFormElement implements IBaseFormElement {
@@ -89,25 +90,44 @@ export class genericFormElement implements IBaseFormElement {
     public generate(parent: HTMLElement) {
         parent.appendChild(this.element)
     }
+
+    public updateValue(values: any) {}
 }
 
 abstract class inputFormElement implements IBaseFormElement {
     public name: string[]
     protected documentation: string
     public required: boolean
+    public value: string
 
-    constructor(name: string[], documentation: string, required: boolean) {
+    constructor(
+        name: string[],
+        documentation: string,
+        required: boolean,
+        value?: string) {
         this.name = name
         this.documentation = documentation
         this.required = required
+        if (value) this.value = value
     }
 
     public abstract generate(parent: HTMLElement): void;
+
+    public updateValue(values: any) {
+        let value: string;
+        for (const i in this.name) {
+            const name = this.name[i]
+            value = values[name]
+            if (!value) break
+        }
+        if (value) this.value = value
+    }
 
     protected updateBaseProps(input: HTMLSelectElement | HTMLInputElement) {
         input.name = this.name.filter(v => !v.includes('|')).join('.')
         input.title = this.documentation
         input.required = this.required
+        if (this.value) input.value = this.value
     }
 }
 
@@ -201,20 +221,16 @@ export class selectTextFormElement extends inputFormElement {
 }
 
 export class hiddenFormElement extends inputFormElement {
-    public value: string
-
     constructor(
         name: string[],
         required: boolean,
         value?: string) {
-        super(name, '', required)
-        this.value = value
+        super(name, '', required, value)
     }
 
     public generate(parent: HTMLElement) {
         const hidden = document.createElement('input')
         hidden.type = 'hidden'
-        hidden.value = this.value
         this.updateBaseProps(hidden)
         parent.appendChild(hidden)
     }
@@ -238,6 +254,10 @@ export class fieldsetFormElement implements IBaseFormElement {
         }
         this.children.forEach(v => v.generate(content))
         parent.appendChild(content)
+    }
+
+    public updateValue(values: any) {
+        this.children.forEach(v => v.updateValue(values))
     }
 }
 
@@ -280,6 +300,8 @@ export class choiceFormElement implements IBaseFormElement {
         insertLabel(select, this.documentation)
         updateView()
     }
+
+    public updateValue(values: any) {}
 }
 
 export class listFormElement implements IBaseFormElement {
@@ -304,6 +326,8 @@ export class listFormElement implements IBaseFormElement {
         parent.appendChild(details)
         //Botar botão de adicionar, cancelar, editar e remover. Usar índice numerico e mexer na geração de dados do form geral e especifico
     }
+
+    public updateValue(values: any) {}
 }
 
 interface ISpecificFormFields {
@@ -672,5 +696,9 @@ export class defaultForm {
         submit.type = 'submit'
         form.appendChild(submit)
         return form
+    }
+
+    public updateValue(values: any) {
+        this.elements.forEach(v => v.updateValue(values))
     }
 }

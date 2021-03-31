@@ -41,7 +41,7 @@ export function renderizarEmitente(data: IEmpresa): HTMLButtonElement {
     const button = document.createElement('button')
     button.innerHTML = /*html*/`
     <div>
-        ${data.empresa.xFant ?? data.empresa.xNome}
+        ${data.empresa.xFant ?? data.empresa.xNome}<br>
         <i>${getDescricaoStatus(data.status)}</i>
     </div>`
     button.onclick = () => iniciarSessao(data.id)
