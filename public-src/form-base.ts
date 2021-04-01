@@ -46,14 +46,18 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     return false
 }
 
-function insertLabel(input: HTMLSelectElement | HTMLInputElement, documentation: string) {
+function insertLabel(input: HTMLSelectElement | HTMLInputElement, documentation: string, insertBefore = true) {
     const label = document.createElement('label')
     label.htmlFor = input.id = createId()
     const labelFilters = ['\n', '.', '(', '-']
     label.innerText = labelFilters.reduce(
         (p, c) => p.split(c)[0],
         documentation)
-    input.parentElement.insertBefore(label, input)
+    if (insertBefore) {
+        input.before(label)
+    } else {
+        input.after(label)
+    }
 }
 
 const customHeaders: { name: string, header: string }[] = [
@@ -236,24 +240,50 @@ export class hiddenFormElement extends inputFormElement {
     }
 }
 
+interface IFieldsetOptions {
+    legend?: string
+    required?: boolean
+}
+
 export class fieldsetFormElement implements IBaseFormElement {
-    private legend: string
+    private options: IFieldsetOptions
     private children: IBaseFormElement[]
 
-    constructor(legend?: string, ...children: IBaseFormElement[]) {
+    constructor(options: IFieldsetOptions, ...children: IBaseFormElement[]) {
         this.children = children
-        this.legend = legend
+        this.options = options
     }
 
     public generate(parent: HTMLElement) {
-        const content = document.createElement('fieldset')
-        if (this.legend) {
-            const legend = document.createElement('legend')
-            legend.innerText = this.legend
-            content.appendChild(legend)
+        function createFieldset(): HTMLFieldSetElement  {
+            const content = document.createElement('fieldset')
+            if (this.options.legend) {
+                const legend = document.createElement('legend')
+                legend.innerText = this.options.legend
+                content.appendChild(legend)
+            }
+            this.children.forEach(v => v.generate(content))
+            parent.appendChild(content)
+            return content
         }
-        this.children.forEach(v => v.generate(content))
-        parent.appendChild(content)
+        if (this.options.required) {
+            createFieldset()
+        } else {
+            const check = document.createElement('input')
+            check.type = 'checkbox'
+            let fieldset: HTMLFieldSetElement;
+            check.onchange = () => {
+                if (check.value) {
+                    fieldset = createFieldset()
+                } else {
+                    fieldset?.remove()
+                }
+            }
+            insertLabel(check, this.options.legend)
+            if (!this.options.legend) {
+                console.error('Campo opcional sem legenda!')
+            }
+        }
     }
 
     public updateValue(values: any) {
@@ -523,10 +553,11 @@ export class defaultForm {
             const name = getName(field)
             const tags = name ? [...parentTags, name] : parentTags
             const isRootList = 'length' in field
+            const required = isRequired(field)
             if (isRootList || field.element) {
                 const elements = (isRootList ? field : field.element) as any[]
                 const inputs = elements.map(v => createInput(v, tags))
-                return new fieldsetFormElement(legend, ...inputs)
+                return new fieldsetFormElement({ legend, required }, ...inputs)
             } else if (field.complexType || field.sequence) {
                 const sequence = field.complexType?.sequence ?? field.sequence
                 let fields: IBaseFormElement[]
@@ -538,7 +569,7 @@ export class defaultForm {
                 if (choice) {
                     fields = [createChoice(choice, parentTags)]
                 }
-                return new fieldsetFormElement(legend, ...fields)
+                return new fieldsetFormElement({ legend, required }, ...fields)
             } else {
                 console.log(field)
                 throw new Error('Invalid tag for a fieldset')

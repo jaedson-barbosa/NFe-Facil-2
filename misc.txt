@@ -35,3 +35,5 @@ idEmpresa
 
 Primeiro, implementar a edição de dados base e de emitentes
 Após isso, testar o que foi feito até agora na página de nfe
+
+localStore.setItem('empresas', '[{"id":"moemVNqpzdGCmw7dFsp5","status":3,"empresa":{"CNPJ":"12931158000164","xNome":"SEVERINO ALVES SERAFIM ME","xFant":"AREIAL BARRA","enderEmit":{"xLgr":"SÍTIO BARRA","nro":"S/N","xBairro":"ZONA RURAL","CEP":"58208000","fone":"83988962808"},"IE":"161813470","CRT":"1"}}]')
