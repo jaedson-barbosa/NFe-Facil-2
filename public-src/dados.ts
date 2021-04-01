@@ -12,8 +12,9 @@ function main(
     mainDialog.showModal()
     const dados = document.getElementById('dados')
 
-    function cadastrar(item?: any) {
+    const cadastrar = (item?: any) => {
         mainDialog.showModal()
+        mainDialog.innerHTML = ''
         const form = new defaultForm()
         form.elements.push(...view)
         if (item) form.updateValue(item)
@@ -68,7 +69,10 @@ switch (parametros.get('tipo')) {
             'prod',
             renderizarProduto,
             new fieldsetFormElement(
-                'Dados dos produtos e serviços',
+                {
+                    legend: 'Dados dos produtos e serviços',
+                    required: true
+                },
                 ...defaultForm.generateViews(
                     defaultForm.elementosNFe[7]['complexType']['sequence']['element'][0],
                     'xProd',
@@ -90,7 +94,7 @@ switch (parametros.get('tipo')) {
             renderizarMotorista,
             ...defaultForm.generateView(
                 defaultForm.elementosNFe[9]['complexType']['sequence']['element'][1],
-                []))
+                ['transporta']))
         break
     default:
         alert('URL inválido, tipo não aceito.')

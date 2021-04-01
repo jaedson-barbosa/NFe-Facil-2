@@ -43,7 +43,10 @@ function gerarIdentificacao() {
     const root = defaultForm.elementosNFe[0]
     const rootNames = ['infNFe', 'ide']
     return new fieldsetFormElement(
-        'Informações de identificação da NF-e',
+        {
+            legend: 'Informações de identificação da NF-e',
+            required: true
+        },
         new hiddenFormElement([...rootNames, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
         new hiddenFormElement([...rootNames, 'cNF'], true, getRandomNumber().toString()),
         ...defaultForm.generateViews(root, 'natOp'),
@@ -63,8 +66,8 @@ function gerarIdentificacao() {
     )
 }
 
-const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
-form.elements.push(...view)
+// const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
+form.elements.push(gerarIdentificacao())
 const htmlForm = form.generateForm()
 main.appendChild(htmlForm)
 htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {

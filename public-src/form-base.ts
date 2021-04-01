@@ -46,7 +46,10 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     return false
 }
 
-function insertLabel(input: HTMLSelectElement | HTMLInputElement, documentation: string, insertBefore = true) {
+function insertLabel(
+    input: HTMLSelectElement | HTMLInputElement,
+    documentation: string,
+    insertBefore = true) : HTMLLabelElement{
     const label = document.createElement('label')
     label.htmlFor = input.id = createId()
     const labelFilters = ['\n', '.', '(', '-']
@@ -58,6 +61,7 @@ function insertLabel(input: HTMLSelectElement | HTMLInputElement, documentation:
     } else {
         input.after(label)
     }
+    return label
 }
 
 const customHeaders: { name: string, header: string }[] = [
@@ -241,8 +245,8 @@ export class hiddenFormElement extends inputFormElement {
 }
 
 interface IFieldsetOptions {
-    legend?: string
-    required?: boolean
+    legend: string
+    required: boolean
 }
 
 export class fieldsetFormElement implements IBaseFormElement {
@@ -250,12 +254,12 @@ export class fieldsetFormElement implements IBaseFormElement {
     private children: IBaseFormElement[]
 
     constructor(options: IFieldsetOptions, ...children: IBaseFormElement[]) {
-        this.children = children
         this.options = options
+        this.children = children
     }
 
     public generate(parent: HTMLElement) {
-        function createFieldset(): HTMLFieldSetElement  {
+        const createFieldset: () => HTMLFieldSetElement = () => {
             const content = document.createElement('fieldset')
             if (this.options.legend) {
                 const legend = document.createElement('legend')
@@ -263,25 +267,27 @@ export class fieldsetFormElement implements IBaseFormElement {
                 content.appendChild(legend)
             }
             this.children.forEach(v => v.generate(content))
-            parent.appendChild(content)
             return content
         }
         if (this.options.required) {
-            createFieldset()
+            const content = createFieldset()
+            parent.appendChild(content)
         } else {
+            if (!this.options.legend) {
+                console.error('Campo opcional sem legenda!')
+            }
             const check = document.createElement('input')
             check.type = 'checkbox'
+            parent.appendChild(check)
+            const label = insertLabel(check, 'Informar campo: ' + this.options.legend, false)
             let fieldset: HTMLFieldSetElement;
             check.onchange = () => {
-                if (check.value) {
+                if (check.checked) {
                     fieldset = createFieldset()
+                    label.after(fieldset)
                 } else {
                     fieldset?.remove()
                 }
-            }
-            insertLabel(check, this.options.legend)
-            if (!this.options.legend) {
-                console.error('Campo opcional sem legenda!')
             }
         }
     }
