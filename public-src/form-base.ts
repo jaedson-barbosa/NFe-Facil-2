@@ -26,12 +26,13 @@ export function getCodigoEstado(sigla: string) {
 }
 
 export function getRandomNumber(digits: number = 8) {
-    var minm = 10**(digits - 1);
-    var maxm = 10**digits-1;
+    var minm = 10 ** (digits - 1);
+    var maxm = 10 ** digits - 1;
     return Math.floor(Math.random() * (maxm - minm + 1)) + minm;
 }
 
 export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
+    //Colocar analise no .index pra gerar o array (mudar pra numero, melhor)
     e.preventDefault()
     var object = {};
     const formData = new FormData(e.target as HTMLFormElement)
@@ -49,7 +50,7 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
 function insertLabel(
     input: HTMLSelectElement | HTMLInputElement,
     documentation: string,
-    insertBefore = true) : HTMLLabelElement{
+    insertBefore = true): HTMLLabelElement {
     const label = document.createElement('label')
     label.htmlFor = input.id = createId()
     const labelFilters = ['\n', '.', '(', '-']
@@ -84,22 +85,41 @@ const customHeaders: { name: string, header: string }[] = [
 ]
 
 export interface IBaseFormElement {
-    generate: (parent: HTMLElement) => void
+    generate: (parent: HTMLElement) => HTMLElement
     updateValue: (values: any) => void
+}
+
+interface IGenericOptions {
+    valueParent: HTMLElement
+    value: IBaseFormElement
 }
 
 export class genericFormElement implements IBaseFormElement {
     private element: HTMLElement
+    private options: IGenericOptions
 
-    constructor(el: HTMLElement) {
+    constructor(el: HTMLElement, options?: IGenericOptions) {
         this.element = el
+        if (options) this.options = options
     }
 
     public generate(parent: HTMLElement) {
-        parent.appendChild(this.element)
+        if (this.options) {
+            const value = this.options.value
+            const valueParent = this.options.valueParent
+            value.generate(valueParent)
+        }
+        const element = this.element
+        parent.appendChild(element)
+        return element
     }
 
-    public updateValue(values: any) {}
+    public updateValue(values: any) {
+        if (this.options) {
+            const value = this.options.value
+            value.updateValue(values)
+        }
+    }
 }
 
 abstract class inputFormElement implements IBaseFormElement {
@@ -119,7 +139,7 @@ abstract class inputFormElement implements IBaseFormElement {
         if (value) this.value = value
     }
 
-    public abstract generate(parent: HTMLElement): void;
+    public abstract generate(parent: HTMLElement): HTMLElement;
 
     public updateValue(values: any) {
         let value: string;
@@ -158,6 +178,7 @@ export class selectFormElement extends inputFormElement {
         this.updateBaseProps(select)
         parent.appendChild(select)
         insertLabel(select, this.documentation)
+        return select
     }
 }
 
@@ -190,6 +211,7 @@ export class textFormElement extends inputFormElement {
         this.updateBaseProps(text)
         parent.appendChild(text)
         insertLabel(text, this.documentation)
+        return text
     }
 }
 
@@ -209,22 +231,23 @@ export class selectTextFormElement extends inputFormElement {
     }
 
     public generate(parent: HTMLElement) {
-        const munSmartSelect = document.createElement('input')
-        munSmartSelect.title = this.documentation
+        const select = document.createElement('input')
+        select.title = this.documentation
         const datalist = document.createElement('datalist')
         datalist.innerHTML = this.options.map(
             k => `<option>${k.value}</option>`).join('')
-        munSmartSelect.setAttribute('list', datalist.id = createId())
-        munSmartSelect.onchange = () => this.onChange(munSmartSelect.value)
+        select.setAttribute('list', datalist.id = createId())
+        select.onchange = () => this.onChange(select.value)
         parent.appendChild(datalist)
-        parent.appendChild(munSmartSelect)
-        insertLabel(munSmartSelect, this.documentation)
-        munSmartSelect.onchange = () => {
-            const isValid = this.options.some(v => v.value == munSmartSelect.value)
+        parent.appendChild(select)
+        insertLabel(select, this.documentation)
+        select.onchange = () => {
+            const isValid = this.options.some(v => v.value == select.value)
             const validity = isValid ? '' : 'Por favor, selecione um valor válido.'
-            munSmartSelect.setCustomValidity(validity)
+            select.setCustomValidity(validity)
         }
-        munSmartSelect.setCustomValidity('Selecione um valor.')
+        select.setCustomValidity('Selecione um valor.')
+        return select
     }
 }
 
@@ -241,6 +264,7 @@ export class hiddenFormElement extends inputFormElement {
         hidden.type = 'hidden'
         this.updateBaseProps(hidden)
         parent.appendChild(hidden)
+        return hidden
     }
 }
 
@@ -250,8 +274,8 @@ interface IFieldsetOptions {
 }
 
 export class fieldsetFormElement implements IBaseFormElement {
-    private options: IFieldsetOptions
-    private children: IBaseFormElement[]
+    public options: IFieldsetOptions
+    public children: IBaseFormElement[]
 
     constructor(options: IFieldsetOptions, ...children: IBaseFormElement[]) {
         this.options = options
@@ -272,6 +296,7 @@ export class fieldsetFormElement implements IBaseFormElement {
         if (this.options.required) {
             const content = createFieldset()
             parent.appendChild(content)
+            return content
         } else {
             if (!this.options.legend) {
                 console.error('Campo opcional sem legenda!')
@@ -289,6 +314,7 @@ export class fieldsetFormElement implements IBaseFormElement {
                     fieldset?.remove()
                 }
             }
+            return fieldset
         }
     }
 
@@ -335,32 +361,66 @@ export class choiceFormElement implements IBaseFormElement {
         parent.appendChild(div)
         insertLabel(select, this.documentation)
         updateView()
+        return select
     }
 
-    public updateValue(values: any) {}
+    public updateValue(values: any) { }
 }
 
 export class listFormElement implements IBaseFormElement {
     private name: string[]
-    private elements: IBaseFormElement[]
+    private content: IBaseFormElement
+    private container: fieldsetFormElement
 
-    constructor(parentNames: string[], root: any, customRequireds: string[], name: string) {
+    constructor(
+        parentNames: string[],
+        root: any,
+        customRequireds: string[],
+        name: string) {
         this.name = [...parentNames, name]
-        const els = defaultForm.generateViews(root, customRequireds, name)
-        this.elements = els
+        const els = defaultForm.generateViews(
+            root,
+            {
+                customRequireds,
+                customNameChanger: v => {
+                    v.splice(v.indexOf('NFref') + 1, 0, 'index')
+                    return v
+                }
+            },
+            name)
+        if (els.length != 1) throw new Error('Invalid content length')
+        if (els[0] instanceof fieldsetFormElement) {
+            const el = els[0] as fieldsetFormElement
+            this.content = el.children[0]
+            el.children = []
+            this.container = el
+        }
+        else throw new Error('Invalid content type')
     }
 
     public generate(parent: HTMLElement) {
-        const details = document.createElement('details')
-        const summary = document.createElement('summary')
-        summary.innerText = 'Novo item'
-        details.appendChild(summary)
-        this.elements.forEach(v => v.generate(details))
-        parent.appendChild(details)
+        const addHTML = document.createElement('button')
+        addHTML.innerText = 'Adicionar item'
+        const add = new genericFormElement(addHTML)
+        this.container.children.unshift(add)
+        const container = this.container.generate(parent)
+        addHTML.onclick = () => {
+            const details = document.createElement('details')
+            const summary = document.createElement('summary')
+            summary.innerText = 'Item'
+            details.appendChild(summary)
+            this.content.generate(details)
+            const remHTML = document.createElement('button')
+            remHTML.innerText = 'Remover item'
+            details.appendChild(remHTML)
+            container.appendChild(details)
+            remHTML.onclick = () => details.remove()
+        }
+        return container
         //Botar botão de adicionar, cancelar, editar e remover. Usar índice numerico e mexer na geração de dados do form geral e especifico
     }
 
-    public updateValue(values: any) {}
+    public updateValue(values: any) { }
 }
 
 interface ISpecificFormFields {
@@ -414,17 +474,36 @@ function findField(
     }
 }
 
+interface IGenerateViewOptions {
+    customRequireds?: string[],
+    rootTag?: string,
+    parentTags?: string[]
+    customNameChanger?: (names: string[]) => string[]
+}
+
+interface IGenerateViewsOptions {
+    customRequireds?: string[],
+    customNameChanger?: (names: string[]) => string[]
+}
+
 export class defaultForm {
     static rootNFe = nfeSchema.schema.complexType[0].sequence.element[0]
     static elementosNFe = defaultForm.rootNFe['complexType']['sequence']['element']
 
     public elements: IBaseFormElement[] = []
 
-    static generateViews(rootField: any, customRequireds: string[], ...names: string[]) {
+    static generateViews(rootField: any, options: IGenerateViewsOptions, ...names: string[]) {
         return names.flatMap(name => {
             const field = findField(rootField, name)
             console.log(field)
-            const view = defaultForm.generateView(field.field, customRequireds, field.tag, field.parentNames)
+            const view = defaultForm.generateView(
+                field.field,
+                {
+                    customRequireds: options.customRequireds ?? [],
+                    rootTag: field.tag,
+                    parentTags: field.parentNames,
+                    customNameChanger: options.customNameChanger
+                })
             console.log(view)
             return view
         })
@@ -432,9 +511,11 @@ export class defaultForm {
 
     static generateView(
         rootField: any,
-        customRequireds: string[],
-        rootTag?: string,
-        parentTags: string[] = []): IBaseFormElement[] {
+        options?: IGenerateViewOptions): IBaseFormElement[] {
+        const customRequireds = options?.customRequireds ?? []
+        const rootTag = options?.rootTag
+        const parentTags = options?.parentTags ?? []
+
         function isRequired(v: any): boolean {
             const fromSchema = (v._attributes?.minOccurs ?? 1) > 0
             const fromCode = customRequireds.includes(getName(v))
@@ -461,10 +542,11 @@ export class defaultForm {
                 throw new Error('The other restrictions have a invalid base.')
             }
             const enumeration = fieldRestriction?.enumeration ?? otherRestrictions?.enumeration
+            const name = [...parentTags, getName(field)]
+            if (options.customNameChanger) options.customNameChanger(name)
+            const required = isRequired(field)
+            const documentation = getDocumentation(field)
             if (!enumeration) {
-                const name = [...parentTags, getName(field)]
-                const documentation = getDocumentation(field)
-                const required = isRequired(field)
                 const getProp = (el: string) => {
                     const fieldProp = fieldRestriction?.[el]?._attributes.value
                     const otherProp = otherRestrictions?.[el]?._attributes.value
@@ -476,9 +558,6 @@ export class defaultForm {
                     maxLength: getProp('maxLength')
                 })
             }
-            const name = [...parentTags, getName(field)]
-            const required = isRequired(field)
-            const documentation = getDocumentation(field)
             if (!('length' in enumeration)) {
                 const val = enumeration._attributes.value
                 return new hiddenFormElement(name, required, val)
@@ -523,8 +602,11 @@ export class defaultForm {
                 }
                 return opt
             }).filter(v => v) : otherValues.map(v => getOption(v, false))
-            const options = [firstOption, ...otherOptions]
-            return new selectFormElement(name, documentation, required, options)
+            return new selectFormElement(
+                name,
+                documentation,
+                required,
+                [firstOption, ...otherOptions])
         }
 
         function createChoice(field: any, parentTags: string[]): IBaseFormElement {

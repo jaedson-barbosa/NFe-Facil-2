@@ -62,7 +62,7 @@ switch (parametros.get('tipo')) {
             renderizarCliente,
             ...defaultForm.generateView(
                 defaultForm.elementosNFe[3],
-                ['dest', 'xNome', 'enderDest']))
+                { customRequireds: ['dest', 'xNome', 'enderDest'] }))
         break
     case 'produtos':
         main(
@@ -75,7 +75,7 @@ switch (parametros.get('tipo')) {
                 },
                 ...defaultForm.generateViews(
                     defaultForm.elementosNFe[7]['complexType']['sequence']['element'][0],
-                    [],
+                    {},
                     'xProd',
                     'cProd',
                     'cEAN',
@@ -95,7 +95,7 @@ switch (parametros.get('tipo')) {
             renderizarMotorista,
             ...defaultForm.generateView(
                 defaultForm.elementosNFe[9]['complexType']['sequence']['element'][1],
-                ['transporta']))
+                { customRequireds: ['transporta'] }))
         break
     default:
         alert('URL inválido, tipo não aceito.')

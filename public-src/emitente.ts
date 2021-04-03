@@ -72,7 +72,9 @@ if (idEmitente) {
             <input type="text" id="senha" name="senha" required>`
             const form = new defaultForm()
             form.elements.push(
-                ...defaultForm.generateView(defaultForm.elementosNFe[1], []),
+                ...defaultForm.generateView(
+                    defaultForm.elementosNFe[1],
+                    { customRequireds: [] }),
                 new genericFormElement(additionalBody))
             const htmlForm = form.generateForm()
             document.body.appendChild(htmlForm)
