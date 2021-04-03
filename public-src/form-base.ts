@@ -342,23 +342,20 @@ export class choiceFormElement implements IBaseFormElement {
 
 export class listFormElement implements IBaseFormElement {
     private name: string[]
-    private addContent: defaultForm
+    private elements: IBaseFormElement[]
 
-    constructor(parentNames: string[], root: any, name: string) {
+    constructor(parentNames: string[], root: any, customRequireds: string[], name: string) {
         this.name = [...parentNames, name]
-        const form = new defaultForm()
-        const els = defaultForm.generateViews(root, name)
-        form.elements.push(...els)
-        this.addContent = form
+        const els = defaultForm.generateViews(root, customRequireds, name)
+        this.elements = els
     }
 
-    public generate(parent: HTMLElement){
-        const form = this.addContent.generateForm()
+    public generate(parent: HTMLElement) {
         const details = document.createElement('details')
         const summary = document.createElement('summary')
         summary.innerText = 'Novo item'
         details.appendChild(summary)
-        details.appendChild(form)
+        this.elements.forEach(v => v.generate(details))
         parent.appendChild(details)
         //Botar botão de adicionar, cancelar, editar e remover. Usar índice numerico e mexer na geração de dados do form geral e especifico
     }
@@ -375,7 +372,7 @@ interface ISpecificFormFields {
 function getDocumentation(v: any): string {
     const name = getName(v)
     const custom = customHeaders.find(v => name === v.name)?.header
-    return custom ?? v.annotation?.documentation?._text ?? 'VAZIO'
+    return custom ?? v.annotation?.documentation?._text ?? ''//'VAZIO'
 }
 
 function getName(v: any): string {
@@ -423,10 +420,13 @@ export class defaultForm {
 
     public elements: IBaseFormElement[] = []
 
-    static generateViews(rootField: any, ...names: string[]) {
+    static generateViews(rootField: any, customRequireds: string[], ...names: string[]) {
         return names.flatMap(name => {
             const field = findField(rootField, name)
-            return defaultForm.generateView(field.field, [], field.tag, field.parentNames)
+            console.log(field)
+            const view = defaultForm.generateView(field.field, customRequireds, field.tag, field.parentNames)
+            console.log(view)
+            return view
         })
     }
 
@@ -497,7 +497,7 @@ export class defaultForm {
                     : ['-', ' -', '  –', ' –', '–', '=', ' ='].map(k => getIndex(v + k)).filter(v => v != -1)
                 if (starts.length == 0) return v
                 const start = Math.min(...starts)
-                const ends = [';', '.', '\n'].map(k => getIndexEnd(k, start)).filter(k => k != -1)
+                const ends = [';', '.', '\n', '(', ')'].map(k => getIndexEnd(k, start)).filter(k => k != -1)
                 if (ends.length == 0) {
                     return documentation.substring(start)
                 }
@@ -573,7 +573,7 @@ export class defaultForm {
                 }
                 const choice = field.complexType?.choice
                 if (choice) {
-                    fields = [createChoice(choice, parentTags)]
+                    fields = [createChoice(choice, tags)]
                 }
                 return new fieldsetFormElement({ legend, required }, ...fields)
             } else {

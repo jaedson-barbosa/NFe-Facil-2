@@ -75,6 +75,7 @@ switch (parametros.get('tipo')) {
                 },
                 ...defaultForm.generateViews(
                     defaultForm.elementosNFe[7]['complexType']['sequence']['element'][0],
+                    [],
                     'xProd',
                     'cProd',
                     'cEAN',

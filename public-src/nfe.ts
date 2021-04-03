@@ -46,7 +46,7 @@ function gerarIdentificacao() {
         {
             legend: 'Informações de identificação da NF-e',
             required: true
-        },
+        },/*
         new hiddenFormElement([...rootNames, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
         new hiddenFormElement([...rootNames, 'cNF'], true, getRandomNumber().toString()),
         ...defaultForm.generateViews(root, 'natOp'),
@@ -61,8 +61,8 @@ function gerarIdentificacao() {
         new hiddenFormElement([...rootNames, 'tpAmb'], true, getAmbiente()),
         ...defaultForm.generateViews(root, 'finNFe', 'indFinal', 'indPres', 'indIntermed'),
         new hiddenFormElement([...rootNames, 'procEmi'], true, '0'),
-        new hiddenFormElement([...rootNames, 'verProc'], true, versaoEmissor()),
-        new listFormElement(rootNames, root, 'NFref')
+        new hiddenFormElement([...rootNames, 'verProc'], true, versaoEmissor()),*/
+        new listFormElement(rootNames, root, ['NFref'], 'NFref')
     )
 }
 
