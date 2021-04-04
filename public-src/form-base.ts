@@ -152,7 +152,10 @@ abstract class inputFormElement implements IBaseFormElement {
     }
 
     protected updateBaseProps(input: HTMLSelectElement | HTMLInputElement) {
-        input.name = this.name.filter(v => !v.includes('|')).join('.')
+        const name = this.name
+        input.name = name.filter(v => !v.includes('|')).join('.')
+        const index = name.map(v => !isNaN(+v)).lastIndexOf(true)
+        if (index != -1) this.name[index] = (+name[index] + 1).toString()
         input.title = this.documentation
         input.required = this.required
         if (this.value) input.value = this.value
@@ -325,36 +328,32 @@ export class fieldsetFormElement implements IBaseFormElement {
 
 export class choiceFormElement implements IBaseFormElement {
     private documentation: string
-    private isRequired: boolean
-    private options: string[]
-    private contentGetter: (optionIndex: number) => IBaseFormElement[]
+    private options: { text: string, view: IBaseFormElement }[]
 
     constructor(
         documentation: string,
         isRequired: boolean,
-        options: string[],
-        contentGetter: (optionIndex: number) => IBaseFormElement[]) {
+        options: { text: string, view: IBaseFormElement }[]) {
         this.documentation = documentation
-        if (!isRequired) options.unshift('Nenhuma das opções')
-        this.isRequired = isRequired
+        if (!isRequired) {
+            options.unshift({
+                text: 'Nenhuma das opções',
+                view: undefined
+            })
+        }
         this.options = options
-        this.contentGetter = contentGetter
     }
 
     public generate(parent: HTMLElement) {
         const select = document.createElement('select')
         const div = document.createElement('div')
-        const options = this.options.map(v => `<option>${v}</option>`)
+        const options = this.options.map(v => `<option>${v.text}</option>`)
         select.innerHTML = options.join('')
         const updateView = () => {
             let index = select.selectedIndex
             div.innerHTML = ''
-            if (!this.isRequired) {
-                if (index == 0) return
-                index -= 1
-            }
-            const content = this.contentGetter(index)
-            content.map(v => v.generate(div))
+            const view = this.options[index].view
+            view?.generate(div)
         }
         select.onchange = () => updateView()
         parent.appendChild(select)
@@ -383,7 +382,7 @@ export class listFormElement implements IBaseFormElement {
             {
                 customRequireds,
                 customNameChanger: v => {
-                    v.splice(v.indexOf('NFref') + 1, 0, 'index')
+                    v.splice(v.indexOf('NFref') + 1, 0, '0')
                     return v
                 }
             },
@@ -406,6 +405,7 @@ export class listFormElement implements IBaseFormElement {
         const container = this.container.generate(parent)
         addHTML.onclick = () => {
             const details = document.createElement('details')
+            details.open = true
             const summary = document.createElement('summary')
             summary.innerText = 'Item'
             details.appendChild(summary)
@@ -495,7 +495,6 @@ export class defaultForm {
     static generateViews(rootField: any, options: IGenerateViewsOptions, ...names: string[]) {
         return names.flatMap(name => {
             const field = findField(rootField, name)
-            console.log(field)
             const view = defaultForm.generateView(
                 field.field,
                 {
@@ -504,7 +503,6 @@ export class defaultForm {
                     parentTags: field.parentNames,
                     customNameChanger: options.customNameChanger
                 })
-            console.log(view)
             return view
         })
     }
@@ -612,23 +610,26 @@ export class defaultForm {
         function createChoice(field: any, parentTags: string[]): IBaseFormElement {
             try {
                 const elements = field.element as any[]
-                const sequences = field.sequence
+                const sequences = field.sequence as any[]
                 if (elements) {
-                    const options = elements.map(getDocumentation)
+                    const options = elements.map(v => { return {
+                        text: getDocumentation(v),
+                        view: createInput(v, parentTags)
+                    }})
                     return new choiceFormElement(
                         getDocumentation(field),
                         isRequired(field),
-                        options,
-                        i => [createInput(elements[i], parentTags)])
+                        options)
                 }
                 else if (sequences) {
-                    const options = sequences.map(getDocumentation)
+                    const options = sequences.map(v => { return {
+                        text: getDocumentation(v),
+                        view: createFieldset(v, parentTags)
+                    }})
                     return new choiceFormElement(
                         getDocumentation(field),
                         isRequired(field),
-                        options,
-                        i => [createFieldset(sequences[i], parentTags)]
-                    )
+                        options)
                 }
             } catch (error) {
                 console.log(field)
