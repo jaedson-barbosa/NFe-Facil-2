@@ -39,9 +39,21 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     formData.forEach(function (value, key) {
         if (!value) return
         const path = key.split('.')
-        path.slice(0, path.length - 1)
-            .reduce((p, c) => p[c] ?? (p[c] = {}), object)
-        [path[path.length - 1]] = value;
+        let temp = object
+        for (let i = 0; i < path.length; i++) {
+            const p = path[i];
+            const isLast = i === path.length - 1
+            if (isLast && Array.isArray(temp)) {
+                temp.push(value)
+            } else if (isLast) {
+                temp[p] = value
+            } else if (temp[p]) {
+                temp = temp[p]
+            } else {
+                // se nao houver proximo ou se for alfabetico usa {}
+                temp = temp[p] = isNaN(+path[i + 1]) ? {} : []
+            }
+        }
     });
     onSubmit(object)
     return false
