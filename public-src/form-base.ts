@@ -32,7 +32,6 @@ export function getRandomNumber(digits: number = 8) {
 }
 
 export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
-    //Colocar analise no .index pra gerar o array (mudar pra numero, melhor)
     e.preventDefault()
     var object = {};
     const formData = new FormData(e.target as HTMLFormElement)
@@ -393,6 +392,7 @@ export class listFormElement implements IBaseFormElement {
             root,
             {
                 customRequireds,
+                parentNames,
                 customNameChanger: v => {
                     v.splice(v.indexOf('NFref') + 1, 0, '0')
                     return v
@@ -495,6 +495,7 @@ interface IGenerateViewOptions {
 
 interface IGenerateViewsOptions {
     customRequireds?: string[],
+    parentNames?: string[],
     customNameChanger?: (names: string[]) => string[]
 }
 
@@ -512,7 +513,7 @@ export class defaultForm {
                 {
                     customRequireds: options.customRequireds ?? [],
                     rootTag: field.tag,
-                    parentTags: field.parentNames,
+                    parentTags: options.parentNames ? [...options.parentNames, ...field.parentNames] : field.parentNames,
                     customNameChanger: options.customNameChanger
                 })
             return view
