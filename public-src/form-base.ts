@@ -379,7 +379,6 @@ export class choiceFormElement implements IBaseFormElement {
 }
 
 export class listFormElement implements IBaseFormElement {
-    private name: string[]
     private content: IBaseFormElement
     private container: fieldsetFormElement
 
@@ -388,7 +387,6 @@ export class listFormElement implements IBaseFormElement {
         root: any,
         customRequireds: string[],
         name: string) {
-        this.name = [...parentNames, name]
         const els = defaultForm.generateViews(
             root,
             {
@@ -430,7 +428,6 @@ export class listFormElement implements IBaseFormElement {
             remHTML.onclick = () => details.remove()
         }
         return container
-        //Botar botão de adicionar, cancelar, editar e remover. Usar índice numerico e mexer na geração de dados do form geral e especifico
     }
 
     public updateValue(values: any) { }

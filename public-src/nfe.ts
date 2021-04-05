@@ -79,12 +79,20 @@ function gerarAutorizacao() {
     return new listFormElement([], root, ['autXML'], 'autXML')
 }
 
+function gerarTransporte() {
+    const root = defaultForm.elementosNFe[9]
+    return defaultForm.generateView(root, { rootTag: 'element' })
+}
+
+//Produtos ficam pro final, por enquanto vamos continuar em transporte (página 60) 
+
 // const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
 form.elements.push(gerarIdentificacao())
 form.elements.push(...gerarViewCliente())
 form.elements.push(...gerarRetirada())
 form.elements.push(...gerarEntrega())
 form.elements.push(gerarAutorizacao())
+form.elements.push(...gerarTransporte())
 const htmlForm = form.generateForm()
 main.appendChild(htmlForm)
 htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
