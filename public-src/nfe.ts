@@ -7,7 +7,8 @@ import {
     hiddenFormElement,
     getCodigoEstado,
     getRandomNumber,
-    listFormElement
+    listFormElement,
+    getDefaultListNameChanger
 } from './form-base'
 import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
 
@@ -43,6 +44,9 @@ Date.prototype.toNFeString = function () {
 function gerarIdentificacao() {
     const root = defaultForm.elementosNFe[0]
     const rootName = 'ide'
+    const customNameChanger = getDefaultListNameChanger('NFref')
+    const NFrefOptions = { customNameChanger, customRequireds: ['NFref'] }
+    const NFref = defaultForm.generateViews(root, NFrefOptions, 'NFref')[0]
     return new fieldsetFormElement(
         { legend: 'Informações de identificação da NF-e', required: true },
         new hiddenFormElement([rootName, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
@@ -60,7 +64,7 @@ function gerarIdentificacao() {
         ...defaultForm.generateViews(root, {}, 'finNFe', 'indFinal', 'indPres', 'indIntermed'),
         new hiddenFormElement([rootName, 'procEmi'], true, '0'),
         new hiddenFormElement([rootName, 'verProc'], true, versaoEmissor()),
-        new listFormElement([], root, ['NFref'], 'NFref')
+        new listFormElement(NFref as fieldsetFormElement)
     )
 }
 
@@ -76,7 +80,10 @@ function gerarEntrega() {
 
 function gerarAutorizacao() {
     const root = defaultForm.elementosNFe[6]
-    return new listFormElement([], root, ['autXML'], 'autXML')
+    const customNameChanger = getDefaultListNameChanger('autXML')
+    const elOptions = { customNameChanger, customRequireds: ['autXML'] }
+    const el = defaultForm.generateView(root, elOptions)[0]
+    return new listFormElement(el as fieldsetFormElement)
 }
 
 function gerarTransporte() {

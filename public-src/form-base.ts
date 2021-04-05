@@ -378,34 +378,21 @@ export class choiceFormElement implements IBaseFormElement {
     public updateValue(values: any) { }
 }
 
+export function getDefaultListNameChanger(name: string) {
+    return v => {
+        v.splice(v.indexOf(name) + 1, 0, '0')
+        return v
+    }
+}
+
 export class listFormElement implements IBaseFormElement {
     private content: IBaseFormElement
     private container: fieldsetFormElement
 
-    constructor(
-        parentNames: string[],
-        root: any,
-        customRequireds: string[],
-        name: string) {
-        const els = defaultForm.generateViews(
-            root,
-            {
-                customRequireds,
-                parentNames,
-                customNameChanger: v => {
-                    v.splice(v.indexOf(name) + 1, 0, '0')
-                    return v
-                }
-            },
-            name)
-        if (els.length != 1) throw new Error('Invalid content length')
-        if (els[0] instanceof fieldsetFormElement) {
-            const el = els[0] as fieldsetFormElement
-            this.content = el.children[0]
-            el.children = []
-            this.container = el
-        }
-        else throw new Error('Invalid content type')
+    constructor(el: fieldsetFormElement) {
+        this.content = el.children[0]
+        el.children = []
+        this.container = el
     }
 
     public generate(parent: HTMLElement) {
@@ -506,7 +493,7 @@ export class defaultForm {
     static generateViews(rootField: any, options: IGenerateViewsOptions, ...names: string[]) {
         return names.flatMap(name => {
             const field = findField(rootField, name)
-            if (!field.parentNames) {
+            /*if (!field.parentNames) {
                 return defaultForm.generateView(
                     field,
                     {
@@ -515,7 +502,7 @@ export class defaultForm {
                         parentTags: options.parentNames,
                         customNameChanger: options.customNameChanger
                     })
-            }
+            }*/
             return defaultForm.generateView(
                 field.field,
                 {
