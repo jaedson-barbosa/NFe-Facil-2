@@ -42,26 +42,31 @@ Date.prototype.toNFeString = function () {
 
 function gerarIdentificacao() {
     const root = defaultForm.elementosNFe[0]
-    const rootNames = ['infNFe', 'ide']
+    const rootNames = ['ide']
     return new fieldsetFormElement(
         { legend: 'Informações de identificação da NF-e', required: true },
         new hiddenFormElement([...rootNames, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
         new hiddenFormElement([...rootNames, 'cNF'], true, getRandomNumber().toString()),
-        ...defaultForm.generateViews(root, { parentNames: ['infNFe'] }, 'natOp'),
+        ...defaultForm.generateViews(root, {}, 'natOp'),
         new hiddenFormElement([...rootNames, 'mod'], true, '55'),
         new hiddenFormElement([...rootNames, 'serie'], true, '%SERIE%'),
         new hiddenFormElement([...rootNames, 'nNF'], true, '%NUMERO%'),
         new hiddenFormElement([...rootNames, 'dhEmi'], true, new Date().toNFeString()),
-        ...defaultForm.generateViews(root, { parentNames: ['infNFe'] }, 'tpNF', 'idDest', 'cMunFG'),
+        ...defaultForm.generateViews(root, {}, 'tpNF', 'idDest', 'cMunFG'),
         new hiddenFormElement([...rootNames, 'tpImp'], true, '1'),
         new hiddenFormElement([...rootNames, 'tpEmis'], true, '1'),
         new hiddenFormElement([...rootNames, 'cDV'], true, '%CDV%'),
         new hiddenFormElement([...rootNames, 'tpAmb'], true, getAmbiente()),
-        ...defaultForm.generateViews(root, { parentNames: ['infNFe'] }, 'finNFe', 'indFinal', 'indPres', 'indIntermed'),
+        ...defaultForm.generateViews(root, {}, 'finNFe', 'indFinal', 'indPres', 'indIntermed'),
         new hiddenFormElement([...rootNames, 'procEmi'], true, '0'),
         new hiddenFormElement([...rootNames, 'verProc'], true, versaoEmissor()),
-        new listFormElement(['infNFe'], root, ['NFref'], 'NFref')
+        new listFormElement([], root, ['NFref'], 'NFref')
     )
+}
+
+function gerarRetirada() {
+    const root = defaultForm.elementosNFe[4]
+
 }
 
 // const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
@@ -73,6 +78,6 @@ htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
     // Sera necessario fazer mais que isso para garantir a ordem
     // Pode ser gerado um novo objeto com os elementos
     // Ou alterar direto na string do json
-    data.infNFe.emit = emit
+    data.emit = emit
     console.log(data)
 })
