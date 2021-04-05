@@ -1,3 +1,4 @@
+import { gerarViewCliente } from './dados/clientes'
 import {
     defaultForm,
     defaultFormSubmit,
@@ -43,10 +44,7 @@ function gerarIdentificacao() {
     const root = defaultForm.elementosNFe[0]
     const rootNames = ['infNFe', 'ide']
     return new fieldsetFormElement(
-        {
-            legend: 'Informações de identificação da NF-e',
-            required: true
-        },
+        { legend: 'Informações de identificação da NF-e', required: true },
         new hiddenFormElement([...rootNames, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
         new hiddenFormElement([...rootNames, 'cNF'], true, getRandomNumber().toString()),
         ...defaultForm.generateViews(root, { parentNames: ['infNFe'] }, 'natOp'),
@@ -68,8 +66,13 @@ function gerarIdentificacao() {
 
 // const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
 form.elements.push(gerarIdentificacao())
+form.elements.push(...gerarViewCliente())
 const htmlForm = form.generateForm()
 main.appendChild(htmlForm)
 htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
+    // Sera necessario fazer mais que isso para garantir a ordem
+    // Pode ser gerado um novo objeto com os elementos
+    // Ou alterar direto na string do json
+    data.infNFe.emit = emit
     console.log(data)
 })

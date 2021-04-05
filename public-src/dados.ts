@@ -1,8 +1,8 @@
 import { defaultForm, defaultFormSubmit, IBaseFormElement, fieldsetFormElement, createId } from './form-base'
 import { entries, set, sync } from './db'
-import { renderizarCliente } from './dados/clientes'
-import { renderizarProduto } from './dados/produtos'
-import { renderizarMotorista } from './dados/motoristas'
+import { gerarViewCliente, renderizarCliente } from './dados/clientes'
+import { gerarViewProduto, renderizarProduto } from './dados/produtos'
+import { gerarViewMotorista, renderizarMotorista } from './dados/motoristas'
 
 function main(
     tipoDado: 'dest' | 'prod' | 'transporta',
@@ -57,45 +57,13 @@ function main(
 const parametros = new URLSearchParams(location.search)
 switch (parametros.get('tipo')) {
     case 'clientes':
-        main(
-            'dest',
-            renderizarCliente,
-            ...defaultForm.generateView(
-                defaultForm.elementosNFe[3],
-                { customRequireds: ['dest', 'xNome', 'enderDest'] }))
+        main('dest', renderizarCliente, ...gerarViewCliente())
         break
     case 'produtos':
-        main(
-            'prod',
-            renderizarProduto,
-            new fieldsetFormElement(
-                {
-                    legend: 'Dados dos produtos e serviços',
-                    required: true
-                },
-                ...defaultForm.generateViews(
-                    defaultForm.elementosNFe[7]['complexType']['sequence']['element'][0],
-                    {},
-                    'xProd',
-                    'cProd',
-                    'cEAN',
-                    'EXTIPI',
-                    'uCom',
-                    'uTrib',
-                    'CFOP',
-                    'cEANTrib',
-                    'NCM',
-                    'vUnCom',
-                    'vUnTrib',
-                    'CEST')))
+        main('prod', renderizarProduto, gerarViewProduto())
         break
     case 'motoristas':
-        main(
-            'transporta',
-            renderizarMotorista,
-            ...defaultForm.generateView(
-                defaultForm.elementosNFe[9]['complexType']['sequence']['element'][1],
-                { customRequireds: ['transporta'] }))
+        main('transporta', renderizarMotorista, ...gerarViewMotorista())
         break
     default:
         alert('URL inválido, tipo não aceito.')
