@@ -88,17 +88,19 @@ function gerarAutorizacao() {
 
 function gerarTransporte() {
     const root = defaultForm.elementosNFe[9]
-    return defaultForm.generateView(root, { rootTag: 'element' })
+    const customRequireds = ['veicTransp|reboque', 'reboque']
+    const options = { rootTag: 'element', customRequireds }
+    return defaultForm.generateView(root, options)
 }
 
 //Produtos ficam pro final, por enquanto vamos continuar em transporte (página 60) 
 
 // const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
-form.elements.push(gerarIdentificacao())
-form.elements.push(...gerarViewCliente())
-form.elements.push(...gerarRetirada())
-form.elements.push(...gerarEntrega())
-form.elements.push(gerarAutorizacao())
+// form.elements.push(gerarIdentificacao())
+// form.elements.push(...gerarViewCliente())
+// form.elements.push(...gerarRetirada())
+// form.elements.push(...gerarEntrega())
+// form.elements.push(gerarAutorizacao())
 form.elements.push(...gerarTransporte())
 const htmlForm = form.generateForm()
 main.appendChild(htmlForm)

@@ -92,6 +92,10 @@ const customHeaders: { name: string, header: string }[] = [
         header: `Indica se o valor da COFINS ST compõe o valor total da NF-e
         0=Valor da COFINSST não compõe o valor total da NF-e
         1=Valor da COFINSST compõe o valor total da NF-e`
+    },
+    {
+        name: 'veicTransp|reboque',
+        header: 'Veículo'
     }
 ]
 
@@ -314,6 +318,7 @@ export class fieldsetFormElement implements IBaseFormElement {
         } else {
             if (!this.options.legend) {
                 console.error('Campo opcional sem legenda!')
+                this.options.legend = 'SEM LEGENDA'
             }
             const check = document.createElement('input')
             check.type = 'checkbox'
@@ -615,33 +620,36 @@ export class defaultForm {
         }
 
         function createChoice(field: any, parentTags: string[]): IBaseFormElement {
-            try {
-                const elements = field.element as any[]
-                const sequences = field.sequence as any[]
-                if (elements) {
-                    const options = elements.map(v => { return {
+            const elements = field.element as any[]
+            const sequence = field.sequence
+            if (!elements && !sequence) {
+                throw new Error('Choice invalido');
+            }
+            let options: { text: string, view: IBaseFormElement }[] = []
+            if (elements) {
+                options.push(...elements.map(v => {
+                    return {
                         text: getDocumentation(v),
                         view: createInput(v, parentTags)
-                    }})
-                    return new choiceFormElement(
-                        getDocumentation(field),
-                        isRequired(field),
-                        options)
-                }
-                else if (sequences) {
-                    const options = sequences.map(v => { return {
-                        text: getDocumentation(v),
-                        view: createFieldset(v, parentTags)
-                    }})
-                    return new choiceFormElement(
-                        getDocumentation(field),
-                        isRequired(field),
-                        options)
-                }
-            } catch (error) {
-                console.log(field)
-                throw error
+                    }
+                }))
             }
+            if (sequence) {
+                if (options.length > 0) {
+                    options.push({ text: getDocumentation(sequence), view: createFieldset(sequence, parentTags) })
+                } else {
+                    const array = Array.isArray(sequence) ? sequence : sequence.element as any[]
+                    options.push(...array.map(v => {
+                        return {
+                            text: getDocumentation(v),
+                            view: createInput(v, parentTags)
+                        }
+                    }))
+                }
+            }
+            const doc = getDocumentation(field)
+            const req = isRequired(field)
+            return new choiceFormElement(doc, req, options)
         }
 
         function createFieldset(field: any, parentTags: string[]): IBaseFormElement {
@@ -650,10 +658,12 @@ export class defaultForm {
             const tags = name ? [...parentTags, name] : parentTags
             const isRootList = 'length' in field
             const required = isRequired(field)
+            const max = field._attributes?.maxOccurs ?? 1
             if (isRootList || field.element) {
                 const elements = (isRootList ? field : field.element) as any[]
                 const inputs = elements.map(v => createInput(v, tags))
-                return new fieldsetFormElement({ legend, required }, ...inputs)
+                const fieldset = new fieldsetFormElement({ legend, required }, ...inputs)
+                return max > 1 ? new listFormElement(fieldset) : fieldset
             } else if (field.complexType || field.sequence) {
                 const sequence = field.complexType?.sequence ?? field.sequence
                 let fields: IBaseFormElement[]
@@ -665,7 +675,8 @@ export class defaultForm {
                 if (choice) {
                     fields = [createChoice(choice, tags)]
                 }
-                return new fieldsetFormElement({ legend, required }, ...fields)
+                const fieldset = new fieldsetFormElement({ legend, required }, ...fields)
+                return max > 1 ? new listFormElement(fieldset) : fieldset
             } else {
                 console.log(field)
                 throw new Error('Invalid tag for a fieldset')
