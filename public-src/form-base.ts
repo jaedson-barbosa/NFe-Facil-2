@@ -64,7 +64,7 @@ function insertLabel(
     insertBefore = true): HTMLLabelElement {
     const label = document.createElement('label')
     label.htmlFor = input.id = createId()
-    const labelFilters = ['\n', '.', '(', '-']
+    const labelFilters = ['\n', '.', '(']
     label.innerText = labelFilters.reduce(
         (p, c) => p.split(c)[0],
         documentation)
@@ -318,6 +318,7 @@ export class fieldsetFormElement implements IBaseFormElement {
             const check = document.createElement('input')
             check.type = 'checkbox'
             parent.appendChild(check)
+            check.before(document.createElement('br'))
             const label = insertLabel(check, 'Informar campo: ' + this.options.legend, false)
             let fieldset: HTMLFieldSetElement;
             check.onchange = () => {
@@ -394,7 +395,7 @@ export class listFormElement implements IBaseFormElement {
                 customRequireds,
                 parentNames,
                 customNameChanger: v => {
-                    v.splice(v.indexOf('NFref') + 1, 0, '0')
+                    v.splice(v.indexOf(name) + 1, 0, '0')
                     return v
                 }
             },
@@ -508,7 +509,17 @@ export class defaultForm {
     static generateViews(rootField: any, options: IGenerateViewsOptions, ...names: string[]) {
         return names.flatMap(name => {
             const field = findField(rootField, name)
-            const view = defaultForm.generateView(
+            if (!field.parentNames) {
+                return defaultForm.generateView(
+                    field,
+                    {
+                        customRequireds: options.customRequireds ?? [],
+                        rootTag: field.tag,
+                        parentTags: options.parentNames,
+                        customNameChanger: options.customNameChanger
+                    })
+            }
+            return defaultForm.generateView(
                 field.field,
                 {
                     customRequireds: options.customRequireds ?? [],
@@ -516,7 +527,6 @@ export class defaultForm {
                     parentTags: options.parentNames ? [...options.parentNames, ...field.parentNames] : field.parentNames,
                     customNameChanger: options.customNameChanger
                 })
-            return view
         })
     }
 

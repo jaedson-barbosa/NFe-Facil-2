@@ -42,36 +42,49 @@ Date.prototype.toNFeString = function () {
 
 function gerarIdentificacao() {
     const root = defaultForm.elementosNFe[0]
-    const rootNames = ['ide']
+    const rootName = 'ide'
     return new fieldsetFormElement(
         { legend: 'Informações de identificação da NF-e', required: true },
-        new hiddenFormElement([...rootNames, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
-        new hiddenFormElement([...rootNames, 'cNF'], true, getRandomNumber().toString()),
+        new hiddenFormElement([rootName, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
+        new hiddenFormElement([rootName, 'cNF'], true, getRandomNumber().toString()),
         ...defaultForm.generateViews(root, {}, 'natOp'),
-        new hiddenFormElement([...rootNames, 'mod'], true, '55'),
-        new hiddenFormElement([...rootNames, 'serie'], true, '%SERIE%'),
-        new hiddenFormElement([...rootNames, 'nNF'], true, '%NUMERO%'),
-        new hiddenFormElement([...rootNames, 'dhEmi'], true, new Date().toNFeString()),
+        new hiddenFormElement([rootName, 'mod'], true, '55'),
+        new hiddenFormElement([rootName, 'serie'], true, '%SERIE%'),
+        new hiddenFormElement([rootName, 'nNF'], true, '%NUMERO%'),
+        new hiddenFormElement([rootName, 'dhEmi'], true, new Date().toNFeString()),
         ...defaultForm.generateViews(root, {}, 'tpNF', 'idDest', 'cMunFG'),
-        new hiddenFormElement([...rootNames, 'tpImp'], true, '1'),
-        new hiddenFormElement([...rootNames, 'tpEmis'], true, '1'),
-        new hiddenFormElement([...rootNames, 'cDV'], true, '%CDV%'),
-        new hiddenFormElement([...rootNames, 'tpAmb'], true, getAmbiente()),
+        new hiddenFormElement([rootName, 'tpImp'], true, '1'),
+        new hiddenFormElement([rootName, 'tpEmis'], true, '1'),
+        new hiddenFormElement([rootName, 'cDV'], true, '%CDV%'),
+        new hiddenFormElement([rootName, 'tpAmb'], true, getAmbiente()),
         ...defaultForm.generateViews(root, {}, 'finNFe', 'indFinal', 'indPres', 'indIntermed'),
-        new hiddenFormElement([...rootNames, 'procEmi'], true, '0'),
-        new hiddenFormElement([...rootNames, 'verProc'], true, versaoEmissor()),
+        new hiddenFormElement([rootName, 'procEmi'], true, '0'),
+        new hiddenFormElement([rootName, 'verProc'], true, versaoEmissor()),
         new listFormElement([], root, ['NFref'], 'NFref')
     )
 }
 
 function gerarRetirada() {
     const root = defaultForm.elementosNFe[4]
+    return defaultForm.generateView(root, { rootTag: 'element' })
+}
 
+function gerarEntrega() {
+    const root = defaultForm.elementosNFe[5]
+    return defaultForm.generateView(root, { rootTag: 'element' })
+}
+
+function gerarAutorizacao() {
+    const root = defaultForm.elementosNFe[6]
+    return new listFormElement([], root, ['autXML'], 'autXML')
 }
 
 // const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
 form.elements.push(gerarIdentificacao())
 form.elements.push(...gerarViewCliente())
+form.elements.push(...gerarRetirada())
+form.elements.push(...gerarEntrega())
+form.elements.push(gerarAutorizacao())
 const htmlForm = form.generateForm()
 main.appendChild(htmlForm)
 htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
