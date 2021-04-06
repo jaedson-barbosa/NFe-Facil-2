@@ -64,10 +64,9 @@ function insertLabel(
     insertBefore = true): HTMLLabelElement {
     const label = document.createElement('label')
     label.htmlFor = input.id = createId()
-    const labelFilters = ['\n', '.', '(']
-    label.innerText = labelFilters.reduce(
-        (p, c) => p.split(c)[0],
-        documentation)
+    label.innerText = documentation.startsWith('Informar campo')
+        ? documentation
+        : ['\n', '.', '(', ':'].reduce((p, c) => p.split(c)[0], documentation)
     if (insertBefore) {
         input.before(label)
     } else {
@@ -94,7 +93,8 @@ const customHeaders: { name: string, header: string }[] = [
         1=Valor da COFINSST compõe o valor total da NF-e`
     },
     { name: 'veicTransp|reboque', header: 'Veículo' },
-    { name: 'lacres', header: 'Lacres' }
+    { name: 'lacres', header: 'Lacres' },
+    { name: 'pag', header: 'Informações de Pagamento' }
 ]
 
 export interface IBaseFormElement {
@@ -435,7 +435,7 @@ interface ISpecificFormFields {
 function getDocumentation(v: any): string {
     const name = getName(v)
     const custom = customHeaders.find(v => name === v.name)?.header
-    return custom ?? v.annotation?.documentation?._text ?? ''//'VAZIO'
+    return custom ?? v.annotation?.documentation?._text ?? ''
 }
 
 function getName(v: any): string {
@@ -566,7 +566,7 @@ export class defaultForm {
             }
             const enumeration = fieldRestriction?.enumeration ?? otherRestrictions?.enumeration
             const name = [...parentTags, getName(field)]
-            if (options.customNameChanger) options.customNameChanger(name)
+            if (options?.customNameChanger) options.customNameChanger(name)
             const required = isRequired(field)
             const documentation = getDocumentation(field)
             if (!enumeration) {

@@ -44,8 +44,10 @@ Date.prototype.toNFeString = function () {
 function gerarIdentificacao() {
     const root = defaultForm.elementosNFe[0]
     const rootName = 'ide'
-    const customNameChanger = getDefaultListNameChanger('NFref')
-    const NFrefOptions = { customNameChanger, customRequireds: ['NFref'] }
+    const NFrefOptions = {
+        customNameChanger: getDefaultListNameChanger('NFref'),
+        customRequireds: ['NFref']
+    }
     const NFref = defaultForm.generateViews(root, NFrefOptions, 'NFref')[0]
     return new fieldsetFormElement(
         { legend: 'Informações de identificação da NF-e', required: true },
@@ -64,8 +66,7 @@ function gerarIdentificacao() {
         ...defaultForm.generateViews(root, {}, 'finNFe', 'indFinal', 'indPres', 'indIntermed'),
         new hiddenFormElement([rootName, 'procEmi'], true, '0'),
         new hiddenFormElement([rootName, 'verProc'], true, versaoEmissor()),
-        new listFormElement(NFref as fieldsetFormElement)
-    )
+        new listFormElement(NFref as fieldsetFormElement))
 }
 
 function gerarRetirada() {
@@ -93,15 +94,64 @@ function gerarTransporte() {
     return defaultForm.generateView(root, options)
 }
 
-//Produtos ficam pro final, por enquanto vamos continuar em transporte (página 60) 
+function gerarCobranca() {
+    const root = defaultForm.elementosNFe[10]
+    const customRequireds = ['fat', 'dup']
+    const options = { rootTag: 'element', customRequireds }
+    return defaultForm.generateView(root, options)
+}
+
+function gerarPagamento() {
+    const root = defaultForm.elementosNFe[11]
+    const options = { rootTag: 'element' }
+    return defaultForm.generateView(root, options)
+}
+
+function gerarIntermediador() {
+    const root = defaultForm.elementosNFe[12]
+    const options = { rootTag: 'element' }
+    return defaultForm.generateView(root, options)
+}
+
+function gerarInformacoes() {
+    const root = defaultForm.elementosNFe[13]
+    return new fieldsetFormElement(
+        { legend: 'Informações Adicionais', required: false },
+        ...defaultForm.generateViews(root, {}, 'infAdFisco', 'infCpl'))
+}
+
+function gerarExportacao() {
+    const root = defaultForm.elementosNFe[14]
+    return defaultForm.generateView(root)
+}
+
+function gerarCompra() {
+    const root = defaultForm.elementosNFe[15]
+    return defaultForm.generateView(root)
+}
+
+function gerarCana() {
+    const root = defaultForm.elementosNFe[16]
+    const options = { customRequireds: ['deduc'] }
+    return defaultForm.generateView(root, options)
+}
+
+// Continuar do responsavel tecnico, não colocar nada de CSRT (pag. 65)
 
 // const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
-// form.elements.push(gerarIdentificacao())
-// form.elements.push(...gerarViewCliente())
-// form.elements.push(...gerarRetirada())
-// form.elements.push(...gerarEntrega())
-// form.elements.push(gerarAutorizacao())
+form.elements.push(gerarIdentificacao())
+form.elements.push(...gerarViewCliente())
+form.elements.push(...gerarRetirada())
+form.elements.push(...gerarEntrega())
+form.elements.push(gerarAutorizacao())
 form.elements.push(...gerarTransporte())
+form.elements.push(...gerarCobranca())
+form.elements.push(...gerarPagamento())
+form.elements.push(...gerarIntermediador())
+form.elements.push(gerarInformacoes())
+form.elements.push(...gerarExportacao())
+form.elements.push(...gerarCompra())
+form.elements.push(...gerarCana())
 const htmlForm = form.generateForm()
 main.appendChild(htmlForm)
 htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
