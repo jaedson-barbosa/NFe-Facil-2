@@ -155,12 +155,7 @@ abstract class inputFormElement implements IBaseFormElement {
     public abstract generate(parent: HTMLElement): HTMLElement;
 
     public updateValue(values: any) {
-        let value: string;
-        for (const i in this.name) {
-            const name = this.name[i]
-            value = values[name]
-            if (!value) break
-        }
+        const value = this.name.filter(v => !v.includes('|')).reduce((p,c) => p?.[c], values)
         if (value) this.value = value
     }
 
@@ -287,6 +282,7 @@ export class hiddenFormElement extends inputFormElement {
 interface IFieldsetOptions {
     legend: string
     required: boolean
+    hidden?: boolean
 }
 
 export class fieldsetFormElement implements IBaseFormElement {
@@ -301,6 +297,9 @@ export class fieldsetFormElement implements IBaseFormElement {
     public generate(parent: HTMLElement) {
         const createFieldset: () => HTMLFieldSetElement = () => {
             const content = document.createElement('fieldset')
+            if (this.options.hidden) {
+                content.style.display = 'none'
+            }
             if (this.options.legend) {
                 const legend = document.createElement('legend')
                 legend.innerText = this.options.legend
@@ -341,22 +340,34 @@ export class fieldsetFormElement implements IBaseFormElement {
     }
 }
 
+interface IChoiceOption {
+    text: string
+    view: IBaseFormElement
+    name: string
+}
+
 export class choiceFormElement implements IBaseFormElement {
     private documentation: string
-    private options: { text: string, view: IBaseFormElement }[]
+    private options: IChoiceOption[]
+    private parentNames: string[]
+    private startIndex: number
 
     constructor(
         documentation: string,
         isRequired: boolean,
-        options: { text: string, view: IBaseFormElement }[]) {
+        options: IChoiceOption[],
+        parentNames: string[]) {
         this.documentation = documentation
         if (!isRequired) {
             options.unshift({
                 text: 'Nenhuma das opções',
-                view: undefined
+                view: undefined,
+                name: 'none'
             })
         }
         this.options = options
+        this.parentNames = parentNames
+        this.startIndex = 0
     }
 
     public generate(parent: HTMLElement) {
@@ -374,11 +385,19 @@ export class choiceFormElement implements IBaseFormElement {
         parent.appendChild(select)
         parent.appendChild(div)
         insertLabel(select, this.documentation)
+        select.selectedIndex = this.startIndex
         updateView()
         return select
     }
 
-    public updateValue(values: any) { }
+    public updateValue(values: any) {
+        const baseValue = this.parentNames.filter(v => !v.includes('|')).reduce((p,c) => p?.[c], values)
+        const keys = Object.keys(baseValue)
+        const index = this.options.findIndex(v => v.name.split('|').some(k => keys.includes(k)))
+        const option = this.options[index]
+        option.view.updateValue(values)
+        this.startIndex = index
+    }
 }
 
 export function getDefaultListNameChanger(name: string) {
@@ -499,16 +518,6 @@ export class defaultForm {
     static generateViews(rootField: any, options: IGenerateViewsOptions, ...names: string[]) {
         return names.flatMap(name => {
             const field = findField(rootField, name)
-            /*if (!field.parentNames) {
-                return defaultForm.generateView(
-                    field,
-                    {
-                        customRequireds: options.customRequireds ?? [],
-                        rootTag: field.tag,
-                        parentTags: options.parentNames,
-                        customNameChanger: options.customNameChanger
-                    })
-            }*/
             return defaultForm.generateView(
                 field.field,
                 {
@@ -638,31 +647,37 @@ export class defaultForm {
             if (!elements && !sequence) {
                 throw new Error('Choice invalido');
             }
-            let options: { text: string, view: IBaseFormElement }[] = []
+            let options: IChoiceOption[] = []
             if (elements) {
                 options.push(...elements.map(v => {
                     return {
                         text: getDocumentation(v),
-                        view: createInput(v, parentTags)
+                        view: createInput(v, parentTags),
+                        name: getName(v)
                     }
                 }))
             }
             if (sequence) {
                 if (options.length > 0) {
-                    options.push({ text: getDocumentation(sequence), view: createFieldset(sequence, parentTags) })
+                    options.push({
+                        text: getDocumentation(sequence),
+                        view: createFieldset(sequence, parentTags),
+                        name: getName(sequence)
+                    })
                 } else {
                     const array = Array.isArray(sequence) ? sequence : sequence.element as any[]
                     options.push(...array.map(v => {
                         return {
                             text: getDocumentation(v),
-                            view: createInput(v, parentTags)
+                            view: createInput(v, parentTags),
+                            name: getName(v)
                         }
                     }))
                 }
             }
             const doc = getDocumentation(field)
             const req = isRequired(field)
-            return new choiceFormElement(doc, req, options)
+            return new choiceFormElement(doc, req, options, parentTags)
         }
 
         function createFieldset(field: any, parentTags: string[]): IBaseFormElement {

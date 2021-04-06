@@ -69,6 +69,16 @@ function gerarIdentificacao() {
         new listFormElement(NFref as fieldsetFormElement))
 }
 
+function gerarEmitente() {
+    const root = defaultForm.elementosNFe[1]
+    const views = defaultForm.generateView(root, { rootTag: 'element' })
+    const view = views[0] as fieldsetFormElement
+    // view.options.hidden = true
+    const k = {emit: emit}
+    view.updateValue(k)
+    return view
+}
+
 function gerarRetirada() {
     const root = defaultForm.elementosNFe[4]
     return defaultForm.generateView(root, { rootTag: 'element' })
@@ -136,10 +146,22 @@ function gerarCana() {
     return defaultForm.generateView(root, options)
 }
 
+function gerarResponsavelTecnico() {
+    const rootName = 'infRespTec'
+    return new fieldsetFormElement(
+        { legend: 'Responsável técnico', required: true, hidden: true },
+        new hiddenFormElement([rootName, 'CNPJ'], true, '12931158000164'),
+        new hiddenFormElement([rootName, 'xContato'], true, 'Jaedson Barbosa Serafim'),
+        new hiddenFormElement([rootName, 'email'], true, 'jaedson33@gmail.com'),
+        new hiddenFormElement([rootName, 'fone'], true, '83988856440'),
+    )
+}
+
 // Continuar do responsavel tecnico, não colocar nada de CSRT (pag. 65)
 
 // const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
 form.elements.push(gerarIdentificacao())
+form.elements.push(gerarEmitente())
 form.elements.push(...gerarViewCliente())
 form.elements.push(...gerarRetirada())
 form.elements.push(...gerarEntrega())
@@ -152,12 +174,9 @@ form.elements.push(gerarInformacoes())
 form.elements.push(...gerarExportacao())
 form.elements.push(...gerarCompra())
 form.elements.push(...gerarCana())
+form.elements.push(gerarResponsavelTecnico())
 const htmlForm = form.generateForm()
 main.appendChild(htmlForm)
 htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
-    // Sera necessario fazer mais que isso para garantir a ordem
-    // Pode ser gerado um novo objeto com os elementos
-    // Ou alterar direto na string do json
-    data.emit = emit
     console.log(data)
 })
