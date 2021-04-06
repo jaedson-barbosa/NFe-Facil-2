@@ -81,14 +81,14 @@ function gerarEntrega() {
 function gerarAutorizacao() {
     const root = defaultForm.elementosNFe[6]
     const customNameChanger = getDefaultListNameChanger('autXML')
-    const elOptions = { customNameChanger, customRequireds: ['autXML'] }
-    const el = defaultForm.generateView(root, elOptions)[0]
+    const options = { customNameChanger, customRequireds: ['autXML'] }
+    const el = defaultForm.generateView(root, options)[0]
     return new listFormElement(el as fieldsetFormElement)
 }
 
 function gerarTransporte() {
     const root = defaultForm.elementosNFe[9]
-    const customRequireds = ['veicTransp|reboque', 'reboque']
+    const customRequireds = ['vol', 'veicTransp|reboque', 'reboque', 'lacres']
     const options = { rootTag: 'element', customRequireds }
     return defaultForm.generateView(root, options)
 }

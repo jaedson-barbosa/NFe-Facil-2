@@ -93,10 +93,8 @@ const customHeaders: { name: string, header: string }[] = [
         0=Valor da COFINSST não compõe o valor total da NF-e
         1=Valor da COFINSST compõe o valor total da NF-e`
     },
-    {
-        name: 'veicTransp|reboque',
-        header: 'Veículo'
-    }
+    { name: 'veicTransp|reboque', header: 'Veículo' },
+    { name: 'lacres', header: 'Lacres' }
 ]
 
 export interface IBaseFormElement {
@@ -391,29 +389,32 @@ export function getDefaultListNameChanger(name: string) {
 }
 
 export class listFormElement implements IBaseFormElement {
-    private content: IBaseFormElement
+    private content: IBaseFormElement[]
     private container: fieldsetFormElement
+    private addHTML: HTMLButtonElement
 
     constructor(el: fieldsetFormElement) {
-        this.content = el.children[0]
-        el.children = []
+        this.content = el.children
+        const addHTML = document.createElement('button')
+        addHTML.type = 'button'
+        addHTML.innerText = 'Adicionar item'
+        const add = new genericFormElement(addHTML)
+        el.children = [add]
+        this.addHTML = addHTML
         this.container = el
     }
 
     public generate(parent: HTMLElement) {
-        const addHTML = document.createElement('button')
-        addHTML.innerText = 'Adicionar item'
-        const add = new genericFormElement(addHTML)
-        this.container.children.unshift(add)
         const container = this.container.generate(parent)
-        addHTML.onclick = () => {
+        this.addHTML.onclick = () => {
             const details = document.createElement('details')
             details.open = true
             const summary = document.createElement('summary')
             summary.innerText = 'Item'
             details.appendChild(summary)
-            this.content.generate(details)
+            this.content.forEach(v => v.generate(details))
             const remHTML = document.createElement('button')
+            remHTML.type = 'button'
             remHTML.innerText = 'Remover item'
             details.appendChild(remHTML)
             container.appendChild(details)
@@ -527,8 +528,20 @@ export class defaultForm {
         const parentTags = options?.parentTags ?? []
 
         function isRequired(v: any): boolean {
-            const fromSchema = (v._attributes?.minOccurs ?? 1) > 0
+            const minOccurs = v._attributes?.minOccurs
             const fromCode = customRequireds.includes(getName(v))
+            const element = v.element
+            if (element && Array.isArray(element)) {
+                const required = element.every(k => isRequired(k) || customRequireds.includes(getName(k)))
+                if (!required) return false
+            }
+            const seq = v.sequence
+            if (seq) {
+                const sequence = Array.isArray(seq) ? seq : seq.element as any[]
+                const required = sequence.every(k => isRequired(k) || customRequireds.includes(getName(k)))
+                if (!required) return false
+            }
+            const fromSchema = (minOccurs ?? 1) > 0
             return fromSchema || fromCode
         }
 
