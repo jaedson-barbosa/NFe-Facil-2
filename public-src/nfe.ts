@@ -2,7 +2,6 @@ import { gerarViewCliente } from './dados/clientes'
 import {
     defaultForm,
     defaultFormSubmit,
-    IBaseFormElement,
     fieldsetFormElement,
     hiddenFormElement,
     getCodigoEstado,
@@ -154,8 +153,6 @@ function gerarResponsavelTecnico() {
         new hiddenFormElement([rootName, 'email'], true, 'jaedson33@gmail.com'),
         new hiddenFormElement([rootName, 'fone'], true, '83988856440'))
 }
-
-// Agora é implementar a atualizacao no listFormElement
 
 // const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
 form.elements.push(gerarIdentificacao())

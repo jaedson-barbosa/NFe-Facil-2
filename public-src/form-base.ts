@@ -100,6 +100,7 @@ const customHeaders: { name: string, header: string }[] = [
 export interface IBaseFormElement {
     generate: (parent: HTMLElement) => HTMLElement
     updateValue: (values: any) => void
+    resetValue: () => void
 }
 
 interface IGenericOptions {
@@ -127,12 +128,8 @@ export class genericFormElement implements IBaseFormElement {
         return element
     }
 
-    public updateValue(values: any) {
-        if (this.options) {
-            const value = this.options.value
-            value.updateValue(values)
-        }
-    }
+    public updateValue(values: any) { this.options?.value.updateValue(values) }
+    public resetValue() { this.options?.value.resetValue() }
 }
 
 abstract class inputFormElement implements IBaseFormElement {
@@ -158,6 +155,8 @@ abstract class inputFormElement implements IBaseFormElement {
         const value = this.name.filter(v => !v.includes('|')).reduce((p,c) => p?.[c], values)
         if (value) this.value = value
     }
+
+    public resetValue() { this.value = undefined }
 
     protected updateBaseProps(input: HTMLSelectElement | HTMLInputElement) {
         const name = this.name
@@ -275,9 +274,10 @@ export class selectTextFormElement implements IBaseFormElement {
 
     public updateValue(values: any) {
         const option = this.getOption(values)
-        console.log(option)
         this.startValue = option
     }
+
+    public resetValue() { this.startValue = undefined }
 }
 
 export class hiddenFormElement extends inputFormElement {
@@ -356,6 +356,8 @@ export class fieldsetFormElement implements IBaseFormElement {
     public updateValue(values: any) {
         this.children.forEach(v => v.updateValue(values))
     }
+
+    public resetValue() { this.children.forEach(v => v.resetValue()) }
 }
 
 interface IChoiceOption {
@@ -416,6 +418,8 @@ export class choiceFormElement implements IBaseFormElement {
         option.view.updateValue(values)
         this.startIndex = index
     }
+
+    public resetValue() { this.startIndex = 0 }
 }
 
 export function getDefaultListNameChanger(name: string) {
@@ -430,6 +434,7 @@ export class listFormElement implements IBaseFormElement {
     private container: fieldsetFormElement
     private parentNames: string[]
     private addHTML: HTMLButtonElement
+    private startValues: any[]
 
     constructor(el: fieldsetFormElement, parentNames: string[]) {
         this.content = el.children
@@ -440,16 +445,20 @@ export class listFormElement implements IBaseFormElement {
         el.children = [add]
         this.addHTML = addHTML
         this.container = el
+        this.startValues = []
     }
 
     public generate(parent: HTMLElement) {
         const container = this.container.generate(parent)
-        this.addHTML.onclick = () => {
+        const addItem = (content?: any) => {
             const details = document.createElement('details')
             details.open = true
             const summary = document.createElement('summary')
             summary.innerText = 'Item'
             details.appendChild(summary)
+            this.content.forEach(v => content 
+                ? v.updateValue(content)
+                : v.resetValue())
             this.content.forEach(v => v.generate(details))
             const remHTML = document.createElement('button')
             remHTML.type = 'button'
@@ -458,12 +467,19 @@ export class listFormElement implements IBaseFormElement {
             container.appendChild(details)
             remHTML.onclick = () => details.remove()
         }
+        this.addHTML.onclick = () => addItem()
+        this.startValues.forEach(v => addItem(v))
         return container
     }
 
     public updateValue(values: any) {
-        
+        const baseValue = this.parentNames.filter(v => !v.includes('|')).reduce((p,c) => p?.[c], values)
+        if (baseValue && Array.isArray(baseValue)) {
+            this.startValues = baseValue
+        }
     }
+
+    public resetValue() { this.startValues = [] }
 }
 
 interface ISpecificFormFields {
@@ -712,7 +728,7 @@ export class defaultForm {
                 const elements = (isRootList ? field : field.element) as any[]
                 const inputs = elements.map(v => createInput(v, tags))
                 const fieldset = new fieldsetFormElement({ legend, required }, ...inputs)
-                return max > 1 ? new listFormElement(fieldset, parentTags) : fieldset
+                return max > 1 ? new listFormElement(fieldset, tags) : fieldset
             } else if (field.complexType || field.sequence) {
                 const sequence = field.complexType?.sequence ?? field.sequence
                 let fields: IBaseFormElement[]
@@ -725,7 +741,7 @@ export class defaultForm {
                     fields = [createChoice(choice, tags)]
                 }
                 const fieldset = new fieldsetFormElement({ legend, required }, ...fields)
-                return max > 1 ? new listFormElement(fieldset, parentTags) : fieldset
+                return max > 1 ? new listFormElement(fieldset, tags) : fieldset
             } else {
                 console.log(field)
                 throw new Error('Invalid tag for a fieldset')
