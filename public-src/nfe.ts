@@ -66,16 +66,15 @@ function gerarIdentificacao() {
         ...defaultForm.generateViews(root, {}, 'finNFe', 'indFinal', 'indPres', 'indIntermed'),
         new hiddenFormElement([rootName, 'procEmi'], true, '0'),
         new hiddenFormElement([rootName, 'verProc'], true, versaoEmissor()),
-        new listFormElement(NFref as fieldsetFormElement))
+        new listFormElement(NFref as fieldsetFormElement, ['ide', 'NFref']))
 }
 
 function gerarEmitente() {
     const root = defaultForm.elementosNFe[1]
     const views = defaultForm.generateView(root, { rootTag: 'element' })
     const view = views[0] as fieldsetFormElement
-    // view.options.hidden = true
-    const k = {emit: emit}
-    view.updateValue(k)
+    view.options.hidden = true
+    view.updateValue({ emit })
     return view
 }
 
@@ -94,7 +93,7 @@ function gerarAutorizacao() {
     const customNameChanger = getDefaultListNameChanger('autXML')
     const options = { customNameChanger, customRequireds: ['autXML'] }
     const el = defaultForm.generateView(root, options)[0]
-    return new listFormElement(el as fieldsetFormElement)
+    return new listFormElement(el as fieldsetFormElement, ['autXML'])
 }
 
 function gerarTransporte() {
@@ -153,11 +152,10 @@ function gerarResponsavelTecnico() {
         new hiddenFormElement([rootName, 'CNPJ'], true, '12931158000164'),
         new hiddenFormElement([rootName, 'xContato'], true, 'Jaedson Barbosa Serafim'),
         new hiddenFormElement([rootName, 'email'], true, 'jaedson33@gmail.com'),
-        new hiddenFormElement([rootName, 'fone'], true, '83988856440'),
-    )
+        new hiddenFormElement([rootName, 'fone'], true, '83988856440'))
 }
 
-// Continuar do responsavel tecnico, não colocar nada de CSRT (pag. 65)
+// Agora é implementar a atualizacao no listFormElement
 
 // const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
 form.elements.push(gerarIdentificacao())

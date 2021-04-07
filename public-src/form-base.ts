@@ -226,39 +226,57 @@ export class textFormElement extends inputFormElement {
     }
 }
 
-export class selectTextFormElement extends inputFormElement {
+export class selectTextFormElement implements IBaseFormElement {
+    private documentation: string
+    private required: boolean
     private options: { value: string, helpText?: string }[]
     private onChange: (value: string) => void
+    private getOption: (values: any) => string
+    private startValue: string
 
     constructor(
-        name: string[],
         documentation: string,
         required: boolean,
         options: { value: string, helpText?: string }[],
-        onChange: (value: string) => void) {
-        super(name, documentation, required)
+        onChange: (value: string) => void,
+        getOption: (values: any) => string) {
+        this.documentation = documentation
+        this.required = required
         this.options = options
         this.onChange = onChange
+        this.getOption = getOption
     }
 
     public generate(parent: HTMLElement) {
         const select = document.createElement('input')
         select.title = this.documentation
+        select.required = this.required
         const datalist = document.createElement('datalist')
         datalist.innerHTML = this.options.map(
             k => `<option>${k.value}</option>`).join('')
         select.setAttribute('list', datalist.id = createId())
-        select.onchange = () => this.onChange(select.value)
         parent.appendChild(datalist)
         parent.appendChild(select)
         insertLabel(select, this.documentation)
         select.onchange = () => {
+            if (!select.value && !this.required) {
+                select.setCustomValidity('')
+                this.onChange(undefined)
+            }
             const isValid = this.options.some(v => v.value == select.value)
             const validity = isValid ? '' : 'Por favor, selecione um valor válido.'
             select.setCustomValidity(validity)
+            this.onChange(isValid ? select.value : undefined)
         }
-        select.setCustomValidity('Selecione um valor.')
+        select.setCustomValidity(this.required ? 'Selecione um valor.' : '')
+        if (this.startValue) select.value = this.startValue
         return select
+    }
+
+    public updateValue(values: any) {
+        const option = this.getOption(values)
+        console.log(option)
+        this.startValue = option
     }
 }
 
@@ -410,9 +428,10 @@ export function getDefaultListNameChanger(name: string) {
 export class listFormElement implements IBaseFormElement {
     private content: IBaseFormElement[]
     private container: fieldsetFormElement
+    private parentNames: string[]
     private addHTML: HTMLButtonElement
 
-    constructor(el: fieldsetFormElement) {
+    constructor(el: fieldsetFormElement, parentNames: string[]) {
         this.content = el.children
         const addHTML = document.createElement('button')
         addHTML.type = 'button'
@@ -442,7 +461,9 @@ export class listFormElement implements IBaseFormElement {
         return container
     }
 
-    public updateValue(values: any) { }
+    public updateValue(values: any) {
+        
+    }
 }
 
 interface ISpecificFormFields {
@@ -691,7 +712,7 @@ export class defaultForm {
                 const elements = (isRootList ? field : field.element) as any[]
                 const inputs = elements.map(v => createInput(v, tags))
                 const fieldset = new fieldsetFormElement({ legend, required }, ...inputs)
-                return max > 1 ? new listFormElement(fieldset) : fieldset
+                return max > 1 ? new listFormElement(fieldset, parentTags) : fieldset
             } else if (field.complexType || field.sequence) {
                 const sequence = field.complexType?.sequence ?? field.sequence
                 let fields: IBaseFormElement[]
@@ -704,7 +725,7 @@ export class defaultForm {
                     fields = [createChoice(choice, tags)]
                 }
                 const fieldset = new fieldsetFormElement({ legend, required }, ...fields)
-                return max > 1 ? new listFormElement(fieldset) : fieldset
+                return max > 1 ? new listFormElement(fieldset, parentTags) : fieldset
             } else {
                 console.log(field)
                 throw new Error('Invalid tag for a fieldset')
@@ -722,34 +743,70 @@ export class defaultForm {
                         isRequired(field))
                     : undefined
             }
-            const cMun = genEl('cMun'), cMunFG = genEl('cMunFG'), xMun = genEl('xMun'), UF = genEl('UF')
+            const cMun = genEl('cMun'),
+                cMunFG = genEl('cMunFG'),
+                xMun = genEl('xMun'),
+                UF = genEl('UF'),
+                cUF = genEl('cUF')
             if (!cMun && !cMunFG && !xMun) throw new Error('City field without cMun and xMun.')
 
+            const mun2str = (mun: string, uf: string) => `${mun} (${uf})`
             const municipio = new selectTextFormElement(
-                [], 'Município',
+                'Município',
                 cMun?.required || cMunFG?.required || xMun?.required,
                 IBGE.flatMap(
-                    v => (v.Municipios as any[]).map(
-                        k => { return { value: `${k.Nome} (${v.Sigla})` } })),
-                (value) => {
-                    const startUF = value.indexOf('('),
-                        uf = value.substring(startUF + 1, value.length - 1),
-                        mun = value.substring(0, startUF - 1),
-                        ufIBGE = IBGE.find(v => v.Sigla == uf),
-                        munIBGE = ufIBGE?.Municipios.find(v => v.Nome == mun)
-                    if (munIBGE) {
-                        if (cMun) cMun.value = munIBGE.Codigo
-                        if (cMunFG) cMunFG.value = munIBGE.Codigo
-                        if (xMun) xMun.value = munIBGE.Nome
-                        if (UF) UF.value = ufIBGE.Sigla
-                    } else {
-                        if (cMun) cMun.value = undefined
-                        if (cMunFG) cMunFG.value = undefined
-                        if (xMun) xMun.value = undefined
-                        if (UF) UF.value = undefined
+                    v => v.Municipios.map(
+                        k => { return { value: mun2str(k.Nome, v.Sigla) } })),
+                value => {
+                    if (value) {
+                        const startUF = value.indexOf('('),
+                            uf = value.substring(startUF + 1, value.length - 1),
+                            ufIBGE = IBGE.find(v => v.Sigla == uf),
+                            mun = value.substring(0, startUF - 1),
+                            munIBGE = ufIBGE?.Municipios.find(v => v.Nome == mun)
+                        if (munIBGE) {
+                            if (cMun) cMun.value = munIBGE.Codigo
+                            if (cMunFG) cMunFG.value = munIBGE.Codigo
+                            if (xMun) xMun.value = munIBGE.Nome
+                            if (UF) UF.value = ufIBGE.Sigla
+                            if (cUF) cUF.value = ufIBGE.Codigo
+                            return
+                        }
                     }
+                    if (cMun) cMun.value = undefined
+                    if (cMunFG) cMunFG.value = undefined
+                    if (xMun) xMun.value = undefined
+                    if (UF) UF.value = undefined
+                    if (cUF) cUF.value = undefined
+                },
+                values => {
+                    const filteredNames = parentTags.filter(v => !v.includes('|'))
+                    const baseValue = filteredNames.reduce((p,c) => p?.[c], values)
+                    if (!baseValue) return undefined
+                    const cUFValue = baseValue['cUF']
+                    const ufValue = baseValue['UF']
+                    const cMunValue = baseValue['cMun'] ?? baseValue['cMunFG']
+                    const xMunValue = baseValue['xMun']
+                    if (cMunValue || xMunValue) {
+                        const uf = cUFValue
+                            ? IBGE.find(v => v.Codigo == cUFValue)
+                            : ufValue
+                            ? IBGE.find(v => v.Sigla.toUpperCase() == ufValue.toUpperCase())
+                            : cMunValue
+                            ? IBGE.find(v => v.Municipios.some(k => k.Codigo == cMunValue))
+                            : IBGE.find(v => v.Municipios.some(
+                                k => k.Nome.toUpperCase() == xMunValue.toUpperCase()))
+                        if (!uf) return undefined
+                        const munValue = cMunValue
+                            ? uf.Municipios.find(v => v.Codigo === cMunValue)
+                            : uf.Municipios.find(
+                                k => k.Nome.toUpperCase() == xMunValue.toUpperCase())
+                        return mun2str(munValue.Nome, uf.Sigla)
+                    }
+                    console.log(baseValue)
+                    return undefined
                 })
-            return [cMun, xMun, UF, municipio].filter(v => v)
+            return [cMun, xMun, cUF, UF, municipio].filter(v => v)
         }
 
         function createStateField(parentTags: string[],
@@ -766,14 +823,28 @@ export class defaultForm {
             if (!cUF && !UF) throw new Error('State field without cUF and UF.')
 
             const uf = new selectTextFormElement(
-                [], 'Estado',
+                'Estado',
                 cUF?.required || UF?.required,
                 IBGE.flatMap(
                     v => { return { value: v.Nome } }),
-                (value) => {
+                value => {
                     const uf = IBGE.find(v => v.Nome == value)
                     if (cUF) cUF.value = uf?.Codigo
                     if (UF) UF.value = uf?.Sigla
+                },
+                values => {
+                    const filteredNames = parentTags.filter(v => !v.includes('|'))
+                    const baseValue = filteredNames.reduce((p,c) => p?.[c], values)
+                    if (!baseValue) return undefined
+                    const cUFValue = baseValue['cUF']
+                    const ufValue = baseValue['UF']
+                    if (cUFValue || ufValue) {
+                        const uf = cUFValue
+                            ? IBGE.find(v => v.Codigo == cUFValue)
+                            : IBGE.find(v => v.Sigla.toUpperCase() == ufValue.toUpperCase())
+                        return uf?.Nome
+                    }
+                    return undefined
                 })
             return [cUF, UF, uf].filter(v => v)
         }
@@ -793,13 +864,27 @@ export class defaultForm {
             if (!cPais && !xPais) throw new Error('Country field without cPais and xPais.')
 
             const pais = new selectTextFormElement(
-                [], 'País',
+                'País',
                 cPais?.required || xPais?.required,
                 paises.map(k => { return { value: k.nome } }),
                 (value) => {
                     const pais = paises.find(v => v.nome == value)
                     if (xPais) xPais.value = pais?.nome
                     if (cPais) cPais.value = pais?.codigo
+                },
+                values => {
+                    const filteredNames = parentTags.filter(v => !v.includes('|'))
+                    const baseValue = filteredNames.reduce((p,c) => p?.[c], values)
+                    if (!baseValue) return undefined
+                    const cPais = baseValue['cPais']
+                    const xPais = baseValue['xPais']
+                    if (cPais || xPais) {
+                        const uf = cPais
+                            ? paises.find(v => v.codigo == cPais)
+                            : paises.find(v => v.nome.toUpperCase() == xPais.toUpperCase())
+                        return uf?.nome
+                    }
+                    return undefined
                 })
             return [cPais, xPais, pais].filter(v => v)
         }
