@@ -58,15 +58,20 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     return false
 }
 
+function processLabelText(documentation: string) {
+    const text = documentation.startsWith('Informar campo')
+        ? documentation
+        : ['\n', '.', ':', ' - ', ', ', '(1'].reduce((p, c) => p.split(c)[0], documentation)
+    return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
 function insertLabel(
     input: HTMLSelectElement | HTMLInputElement,
     documentation: string,
     insertBefore = true): HTMLLabelElement {
     const label = document.createElement('label')
     label.htmlFor = input.id = createId()
-    label.innerText = documentation.startsWith('Informar campo')
-        ? documentation
-        : ['\n', '.', '(', ':'].reduce((p, c) => p.split(c)[0], documentation)
+    label.innerText = processLabelText(documentation)
     if (insertBefore) {
         input.before(label)
     } else {
@@ -83,19 +88,36 @@ const customHeaders: { name: string, header: string }[] = [
     {
         name: 'indSomaPISST',
         header: `Indica se o valor do PISST compõe o valor total da NF-e
-        0=Valor do PISST não compõe o valor total da NF-e
-        1=Valor do PISST compõe o valor total da NF-e`
+0=Valor do PISST não compõe o valor total da NF-e
+1=Valor do PISST compõe o valor total da NF-e`
     },
     {
         name: 'indSomaCOFINSST',
         header: `Indica se o valor da COFINS ST compõe o valor total da NF-e
-        0=Valor da COFINSST não compõe o valor total da NF-e
-        1=Valor da COFINSST compõe o valor total da NF-e`
+0=Valor da COFINSST não compõe o valor total da NF-e
+1=Valor da COFINSST compõe o valor total da NF-e`
     },
     { name: 'veicTransp|reboque', header: 'Veículo' },
     { name: 'lacres', header: 'Lacres' },
     { name: 'pag', header: 'Informações de Pagamento' },
-    { name: 'cBenef', header: 'Código de Benefício Fiscal na UF aplicado ao item' }
+    { name: 'cBenef', header: 'Código de Benefício Fiscal na UF aplicado ao item' },
+    { name: 'indTot', header: `O valor do item:
+0 – Não compõe o valor total da NF-e
+1 – Compõe o valor total da NF-e` },
+    { name: 'CEST|indEscala|CNPJFab', header: `Código Especificador da Substituição Tributária`},
+    { name: 'indEscala', header: `Indicador de Produção em escala relevante
+S - Produzido em escala relevante
+N – Produzido em escala não relevante` },
+    { name: 'cProdANVISA', header: 'Código de Produto da ANVISA' },
+    { name: 'xMotivoIsencao', header: 'Motivo da isenção da ANVISA' },
+    { name: 'ICMSUFDest', header: 'Dados do ICMS Interestadual' },
+    { name: 'IPI|ISSQN', header: 'Tributação para serviços' },
+    { name: 'ICMS|IPI|II', header: 'Tributação para produtos' },
+    { name: 'IPI', header: 'Imposto sobre produtos industrializados' },
+    { name: 'impostoDevol', header: 'Informação do imposto devolvido' },
+    { name: 'pFCP|vFCP', header: 'Fundo de combate à pobreza' },
+    { name: 'pFCPST|vFCPST', header: 'Fundo de combate à pobreza retido por substituição tributária' },
+    { name: 'pFCPSTRet|vFCPSTRet', header: 'Fundo de combate à pobreza retido anteriormente por substituição tributária' }
 ]
 
 export interface IBaseFormElement {
@@ -327,8 +349,13 @@ export class fieldsetFormElement implements IBaseFormElement {
             this.children.forEach(v => v.generate(content))
             return content
         }
-        if (this.options.required) {
+        if (this.options.required && (this.options.legend || this.options.hidden)) {
             const content = createFieldset()
+            parent.appendChild(content)
+            return content
+        } else if (this.options.required) {
+            const content = document.createElement('div')
+            this.children.forEach(v => v.generate(content))
             parent.appendChild(content)
             return content
         } else {
@@ -339,7 +366,7 @@ export class fieldsetFormElement implements IBaseFormElement {
             const check = document.createElement('input')
             check.type = 'checkbox'
             parent.appendChild(check)
-            check.before(document.createElement('br'))
+            // check.before(document.createElement('br'))
             const label = insertLabel(check, 'Informar campo: ' + this.options.legend, false)
             let fieldset: HTMLFieldSetElement;
             check.onchange = () => {
@@ -491,8 +518,20 @@ interface ISpecificFormFields {
 
 function getDocumentation(v: any): string {
     const name = getName(v)
-    const custom = customHeaders.find(v => name === v.name)?.header
-    return custom ?? v.annotation?.documentation?._text ?? ''
+    const fromScheme = v.annotation?.documentation?._text
+    if (name && fromScheme) {
+        const custom = customHeaders.find(v => name === v.name)?.header
+        return custom ?? fromScheme
+    } else if (name) {
+        const nameParts = name.split('|')
+        const custom = customHeaders.find(
+            v => {
+                const customParts = v.name.split('|')
+                return customParts.every(k => nameParts.includes(k))
+            })?.header
+        return custom ?? ''
+    }
+    return fromScheme ?? ''
 }
 
 function getName(v: any): string {
@@ -577,6 +616,7 @@ export class defaultForm {
         function isRequired(v: any): boolean {
             const minOccurs = v._attributes?.minOccurs
             const fromCode = customRequireds.includes(getName(v))
+            if (fromCode) return true
             const element = v.element
             if (element && Array.isArray(element)) {
                 const required = element.every(k => isRequired(k) || customRequireds.includes(getName(k)))
@@ -589,7 +629,7 @@ export class defaultForm {
                 if (!required) return false
             }
             const fromSchema = (minOccurs ?? 1) > 0
-            return fromSchema || fromCode
+            return fromSchema
         }
 
         function createInput(field: any, parentTags: string[]): IBaseFormElement {
@@ -642,7 +682,7 @@ export class defaultForm {
                 return new hiddenFormElement(name, required, val0)
             const values = (enumeration as any[]).map(v => v._attributes.value)
             const getValueDescription = (v: string) => {
-                if (isNaN(+v)) return v
+                if (isNaN(+v) && v.length > 1) return v
                 const getIndex = (search: string) => documentation.indexOf(search)
                 const getIndexEnd = (mark: string, pos: number) => documentation.indexOf(mark, pos)
                 const starts = v.includes('.00')
@@ -650,7 +690,7 @@ export class defaultForm {
                     : ['-', ' -', '  –', ' –', '–', '=', ' ='].map(k => getIndex(v + k)).filter(v => v != -1)
                 if (starts.length == 0) return v
                 const start = Math.min(...starts)
-                const ends = [';', '.', '\n'].map(k => getIndexEnd(k, start)).filter(k => k != -1)
+                const ends = [';', '.', ')', '\n'].map(k => getIndexEnd(k, start)).filter(k => k != -1)
                 if (ends.length == 0) {
                     return documentation.substring(start)
                 }
@@ -723,7 +763,7 @@ export class defaultForm {
         }
 
         function createFieldset(field: any, parentTags: string[]): IBaseFormElement {
-            const legend = getDocumentation(field)
+            const legend = processLabelText(getDocumentation(field))
             const name = getName(field)
             const tags = name ? [...parentTags, name] : parentTags
             const isRootList = 'length' in field

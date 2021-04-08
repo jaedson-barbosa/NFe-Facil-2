@@ -9,7 +9,11 @@ export function renderizarProduto(data: {prod: any}): HTMLButtonElement {
 }
 
 export function gerarViewProduto() {
-    return defaultForm.generateView(defaultForm.elementosNFe[7])[0]
+    return defaultForm.generateView(
+        defaultForm.elementosNFe[7],
+        {
+            customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II']
+        })[0]
     // return new fieldsetFormElement(
     //     {
     //         legend: 'Dados dos produtos e serviços',
