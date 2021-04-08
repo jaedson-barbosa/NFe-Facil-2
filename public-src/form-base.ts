@@ -94,7 +94,8 @@ const customHeaders: { name: string, header: string }[] = [
     },
     { name: 'veicTransp|reboque', header: 'Veículo' },
     { name: 'lacres', header: 'Lacres' },
-    { name: 'pag', header: 'Informações de Pagamento' }
+    { name: 'pag', header: 'Informações de Pagamento' },
+    { name: 'cBenef', header: 'Código de Benefício Fiscal na UF aplicado ao item' }
 ]
 
 export interface IBaseFormElement {
@@ -600,8 +601,12 @@ export class defaultForm {
             if (hasOtherRestrictions && !otherRestrictions) {
                 const complexType = field.complexType ?? complexTypes.find(findType)
                 if (!complexType) {
-                    console.log(field)
-                    throw new Error('Invalid field')
+                    const element = field.element
+                    if (!element) {
+                        console.log(field)
+                        throw new Error('Invalid field')
+                    }
+                    return createFieldset(field, parentTags)
                 }
                 const newField = { ...field, complexType: complexType }
                 return createFieldset(newField, parentTags)
@@ -645,7 +650,7 @@ export class defaultForm {
                     : ['-', ' -', '  –', ' –', '–', '=', ' ='].map(k => getIndex(v + k)).filter(v => v != -1)
                 if (starts.length == 0) return v
                 const start = Math.min(...starts)
-                const ends = [';', '.', '\n', '(', ')'].map(k => getIndexEnd(k, start)).filter(k => k != -1)
+                const ends = [';', '.', '\n'].map(k => getIndexEnd(k, start)).filter(k => k != -1)
                 if (ends.length == 0) {
                     return documentation.substring(start)
                 }
@@ -722,8 +727,8 @@ export class defaultForm {
             const name = getName(field)
             const tags = name ? [...parentTags, name] : parentTags
             const isRootList = 'length' in field
-            const required = isRequired(field)
             const max = field._attributes?.maxOccurs ?? 1
+            const required = max > 1 || isRequired(field)
             if (isRootList || field.element) {
                 const elements = (isRootList ? field : field.element) as any[]
                 const inputs = elements.map(v => createInput(v, tags))

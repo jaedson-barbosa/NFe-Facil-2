@@ -9,24 +9,25 @@ export function renderizarProduto(data: {prod: any}): HTMLButtonElement {
 }
 
 export function gerarViewProduto() {
-    return new fieldsetFormElement(
-        {
-            legend: 'Dados dos produtos e serviços',
-            required: true
-        },
-        ...defaultForm.generateViews(
-            defaultForm.elementosNFe[7]['complexType']['sequence']['element'][0],
-            {},
-            'xProd',
-            'cProd',
-            'cEAN',
-            'EXTIPI',
-            'uCom',
-            'uTrib',
-            'CFOP',
-            'cEANTrib',
-            'NCM',
-            'vUnCom',
-            'vUnTrib',
-            'CEST'))
+    return defaultForm.generateView(defaultForm.elementosNFe[7])[0]
+    // return new fieldsetFormElement(
+    //     {
+    //         legend: 'Dados dos produtos e serviços',
+    //         required: true
+    //     },
+    //     ...defaultForm.generateViews(
+    //         defaultForm.elementosNFe[7]['complexType']['sequence']['element'][0],
+    //         {},
+    //         'xProd',
+    //         'cProd',
+    //         'cEAN',
+    //         'EXTIPI',
+    //         'uCom',
+    //         'uTrib',
+    //         'CFOP',
+    //         'cEANTrib',
+    //         'NCM',
+    //         'vUnCom',
+    //         'vUnTrib',
+    //         'CEST'))
 }
