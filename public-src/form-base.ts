@@ -119,7 +119,20 @@ N – Produzido em escala não relevante` },
     { name: 'pFCPST|vFCPST', header: 'Fundo de combate à pobreza retido por substituição tributária' },
     { name: 'pFCPSTRet|vFCPSTRet', header: 'Fundo de combate à pobreza retido anteriormente por substituição tributária' },
     { name: 'vICMSDeson|motDesICMS', header: 'Valor do ICMS/Motiva da desoneração' },
-    { name: 'pRedBCEfet|vBCEfet', header: 'Informações do ICMS Efetivo' }
+    { name: 'pRedBCEfet|vBCEfet', header: 'Informações do ICMS Efetivo' },
+    { name: 'pICMS|vICMS', header: 'Informações do ICMS' },
+    { name: 'pICMSST|vICMSST', header: 'Informações do ICMS ST' },
+    { name: 'vBCSTRet|pST|vICMSSubstituto|vICMSSTRet', header: 'Informações do ICMS ST cobrado anteriormente' },
+    { name: 'pCredSN|vCredICMSSN', header: 'Informações de crédito do ICMS' },
+    { name: 'vBC|pIPI', header: 'Cálculo de IPI por alíquota' },
+    { name: 'vBC|pPIS', header: 'Cálculo de PIS por alíquota' },
+    { name: 'vBC|pCOFINS', header: 'Cálculo de COFINS por alíquota' },
+    { name: 'qUnid|vUnid', header: 'Cálculo de IPI por valor de unidade' },
+    { name: 'qBCProd|vAliqProd', header: 'Cálculo de por valor de unidade' },
+    { name: 'IPITrib', header: 'IPI tributado' },
+    { name: 'IPINT', header: 'IPI não tributado' },
+    { name: 'IPITrib|IPINT', header: 'Tipo de IPI' },
+    { name: 'cAgreg', header: 'Código de agregação' }
 ]
 
 export interface IBaseFormElement {
@@ -521,17 +534,14 @@ interface ISpecificFormFields {
 function getDocumentation(v: any): string {
     const name = getName(v)
     const fromScheme = v.annotation?.documentation?._text
-    if (name && fromScheme) {
+    if (name) {
         const custom = customHeaders.find(v => name === v.name)?.header
-        return custom ?? fromScheme
-    } else if (name) {
         const nameParts = name.split('|')
-        const custom = customHeaders.find(
+        return custom ?? customHeaders.find(
             v => {
                 const customParts = v.name.split('|')
                 return customParts.every(k => nameParts.includes(k))
-            })?.header
-        return custom ?? ''
+            })?.header ?? fromScheme ?? ''
     }
     return fromScheme ?? ''
 }
@@ -616,9 +626,7 @@ export class defaultForm {
         const parentTags = options?.parentTags ?? []
 
         function isRequired(v: any): boolean {
-            const minOccurs = v._attributes?.minOccurs
-            const fromCode = customRequireds.includes(getName(v))
-            if (fromCode) return true
+            if (customRequireds.includes(getName(v))) return true
             const element = v.element
             if (element && Array.isArray(element)) {
                 const required = element.every(k => isRequired(k) || customRequireds.includes(getName(k)))
@@ -630,8 +638,7 @@ export class defaultForm {
                 const required = sequence.every(k => isRequired(k) || customRequireds.includes(getName(k)))
                 if (!required) return false
             }
-            const fromSchema = (minOccurs ?? 1) > 0
-            return fromSchema
+            return (v._attributes?.minOccurs ?? 1) > 0
         }
 
         function createInput(field: any, parentTags: string[]): IBaseFormElement {
