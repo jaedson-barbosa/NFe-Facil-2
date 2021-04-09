@@ -117,7 +117,9 @@ N – Produzido em escala não relevante` },
     { name: 'impostoDevol', header: 'Informação do imposto devolvido' },
     { name: 'pFCP|vFCP', header: 'Fundo de combate à pobreza' },
     { name: 'pFCPST|vFCPST', header: 'Fundo de combate à pobreza retido por substituição tributária' },
-    { name: 'pFCPSTRet|vFCPSTRet', header: 'Fundo de combate à pobreza retido anteriormente por substituição tributária' }
+    { name: 'pFCPSTRet|vFCPSTRet', header: 'Fundo de combate à pobreza retido anteriormente por substituição tributária' },
+    { name: 'vICMSDeson|motDesICMS', header: 'Valor do ICMS/Motiva da desoneração' },
+    { name: 'pRedBCEfet|vBCEfet', header: 'Informações do ICMS Efetivo' }
 ]
 
 export interface IBaseFormElement {
@@ -769,28 +771,31 @@ export class defaultForm {
             const isRootList = 'length' in field
             const max = field._attributes?.maxOccurs ?? 1
             const required = max > 1 || isRequired(field)
+            const fields: IBaseFormElement[] = []
             if (isRootList || field.element) {
                 const elements = (isRootList ? field : field.element) as any[]
-                const inputs = elements.map(v => createInput(v, tags))
-                const fieldset = new fieldsetFormElement({ legend, required }, ...inputs)
-                return max > 1 ? new listFormElement(fieldset, tags) : fieldset
-            } else if (field.complexType || field.sequence) {
+                fields.push(...elements.map(v => createInput(v, tags)))
+            }
+            if (field.complexType || field.sequence) {
                 const sequence = field.complexType?.sequence ?? field.sequence
-                let fields: IBaseFormElement[]
                 if (sequence) {
-                    const pureFields = Object.entries(sequence)
-                    fields = pureFields.flatMap(v => analyseTag(v[0], v[1], tags))
+                    if (fields.length == 0) {
+                        const pureFields = Object.entries(sequence)
+                        fields.push(...pureFields.flatMap(v => analyseTag(v[0], v[1], tags)))
+                    }
+                    else fields.push(createFieldset(sequence, tags))
                 }
                 const choice = field.complexType?.choice
                 if (choice) {
-                    fields = [createChoice(choice, tags)]
+                    fields.push(createChoice(choice, tags))
                 }
-                const fieldset = new fieldsetFormElement({ legend, required }, ...fields)
-                return max > 1 ? new listFormElement(fieldset, tags) : fieldset
-            } else {
+            }
+            if (!fields.length) {
                 console.log(field)
                 throw new Error('Invalid tag for a fieldset')
             }
+            const fieldset = new fieldsetFormElement({ legend, required }, ...fields)
+            return max > 1 ? new listFormElement(fieldset, tags) : fieldset
         }
 
         function createCityField(
@@ -993,8 +998,8 @@ export class defaultForm {
                 default:
                     if (!tag || tag == 'sequence')
                         return [createFieldset(field, parentTags)]
-                    console.log(tag)
-                    throw new Error('Invalid tag')
+                    console.error('Invalid tag', tag)
+                    return []
             }
         }
 
