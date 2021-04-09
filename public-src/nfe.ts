@@ -77,6 +77,14 @@ function gerarEmitente() {
     return view
 }
 
+function gerarProdutos() {
+    return defaultForm.generateView(
+        defaultForm.elementosNFe[7],
+        {
+            customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II']
+        })
+}
+
 function gerarRetirada() {
     const root = defaultForm.elementosNFe[4]
     return defaultForm.generateView(root, { rootTag: 'element' })
@@ -158,6 +166,7 @@ function gerarResponsavelTecnico() {
 form.elements.push(gerarIdentificacao())
 form.elements.push(gerarEmitente())
 form.elements.push(...gerarViewCliente())
+form.elements.push(...gerarProdutos())
 form.elements.push(...gerarRetirada())
 form.elements.push(...gerarEntrega())
 form.elements.push(gerarAutorizacao())

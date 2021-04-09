@@ -9,29 +9,24 @@ export function renderizarProduto(data: {prod: any}): HTMLButtonElement {
 }
 
 export function gerarViewProduto() {
-    return defaultForm.generateView(
-        defaultForm.elementosNFe[7],
+    return new fieldsetFormElement(
         {
-            customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II']
-        })[0]
-    // return new fieldsetFormElement(
-    //     {
-    //         legend: 'Dados dos produtos e serviços',
-    //         required: true
-    //     },
-    //     ...defaultForm.generateViews(
-    //         defaultForm.elementosNFe[7]['complexType']['sequence']['element'][0],
-    //         {},
-    //         'xProd',
-    //         'cProd',
-    //         'cEAN',
-    //         'EXTIPI',
-    //         'uCom',
-    //         'uTrib',
-    //         'CFOP',
-    //         'cEANTrib',
-    //         'NCM',
-    //         'vUnCom',
-    //         'vUnTrib',
-    //         'CEST'))
+            legend: 'Dados dos produtos e serviços',
+            required: true
+        },
+        ...defaultForm.generateViews(
+            defaultForm.elementosNFe[7]['complexType']['sequence']['element'][0],
+            {},
+            'xProd',
+            'cProd',
+            'cEAN',
+            'EXTIPI',
+            'uCom',
+            'uTrib',
+            'CFOP',
+            'cEANTrib',
+            'NCM',
+            'vUnCom',
+            'vUnTrib',
+            'CEST'))
 }

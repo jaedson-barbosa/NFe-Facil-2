@@ -132,7 +132,8 @@ N – Produzido em escala não relevante` },
     { name: 'IPITrib', header: 'IPI tributado' },
     { name: 'IPINT', header: 'IPI não tributado' },
     { name: 'IPITrib|IPINT', header: 'Tipo de IPI' },
-    { name: 'cAgreg', header: 'Código de agregação' }
+    { name: 'cAgreg', header: 'Código de agregação' },
+    { name: 'det', header: 'Produtos ou serviços' }
 ]
 
 export interface IBaseFormElement {
