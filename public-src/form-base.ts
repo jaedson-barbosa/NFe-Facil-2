@@ -445,7 +445,7 @@ export class choiceFormElement implements IBaseFormElement {
             const view = this.options[index].view
             if (view instanceof fieldsetFormElement) {
                 view.options.legend = ''
-            } // remove 
+            } // remove legenda do fieldset
             view?.generate(div)
         }
         select.onchange = () => updateView()
@@ -594,13 +594,11 @@ interface IGenerateViewOptions {
     customRequireds?: string[],
     rootTag?: string,
     parentTags?: string[]
-    customNameChanger?: (names: string[]) => string[]
 }
 
 interface IGenerateViewsOptions {
     customRequireds?: string[],
     parentNames?: string[],
-    customNameChanger?: (names: string[]) => string[]
 }
 
 export class defaultForm {
@@ -617,8 +615,7 @@ export class defaultForm {
                 {
                     customRequireds: options.customRequireds ?? [],
                     rootTag: field.tag,
-                    parentTags: options.parentNames ? [...options.parentNames, ...field.parentNames] : field.parentNames,
-                    customNameChanger: options.customNameChanger
+                    parentTags: options.parentNames ? [...options.parentNames, ...field.parentNames] : field.parentNames
                 })
         })
     }
@@ -629,7 +626,9 @@ export class defaultForm {
         const customRequireds = options?.customRequireds ?? []
         const rootTag = options?.rootTag
         const parentTags = options?.parentTags ?? []
-
+        let additionalNameChanger: ((names: string[]) => string[])[] = []
+        const customNameChanger = (names: string[]) => additionalNameChanger.forEach(v => v(names))
+        
         function isRequired(v: any): boolean {
             if (customRequireds.includes(getName(v))) return true
             const element = v.element
@@ -671,7 +670,7 @@ export class defaultForm {
             }
             const enumeration = fieldRestriction?.enumeration ?? otherRestrictions?.enumeration
             const name = [...parentTags, getName(field)]
-            if (options?.customNameChanger) options.customNameChanger(name)
+            customNameChanger?.(name)
             const required = isRequired(field)
             const documentation = getDocumentation(field)
             if (!enumeration) {
@@ -782,6 +781,8 @@ export class defaultForm {
             const tags = name ? [...parentTags, name] : parentTags
             const isRootList = 'length' in field
             const max = field._attributes?.maxOccurs ?? 1
+            const isList = max > 1
+            if (isList) additionalNameChanger.push(getDefaultListNameChanger(name))
             const required = max > 1 || isRequired(field)
             const fields: IBaseFormElement[] = []
             if (isRootList || field.element) {
@@ -807,7 +808,8 @@ export class defaultForm {
                 throw new Error('Invalid tag for a fieldset')
             }
             const fieldset = new fieldsetFormElement({ legend, required }, ...fields)
-            return max > 1 ? new listFormElement(fieldset, tags) : fieldset
+            if (isList) additionalNameChanger.pop()
+            return isList ? new listFormElement(fieldset, tags) : fieldset
         }
 
         function createCityField(

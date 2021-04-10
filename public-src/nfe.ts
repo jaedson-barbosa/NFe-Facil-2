@@ -41,13 +41,7 @@ Date.prototype.toNFeString = function () {
 function gerarIdentificacao() {
     const root = defaultForm.elementosNFe[0]
     const rootName = 'ide'
-    const NFref = defaultForm.generateViews(
-        root,
-        {
-            customNameChanger: getDefaultListNameChanger('NFref'),
-            customRequireds: ['NFref']
-        },
-        'NFref')[0]
+    const NFref = defaultForm.generateViews(root, {}, 'NFref')[0]
     return new fieldsetFormElement(
         { legend: 'Informações de identificação da NF-e', required: true },
         new hiddenFormElement([rootName, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
@@ -104,12 +98,8 @@ function gerarEntrega() {
 function gerarAutorizacao() {
     return new listFormElement(
         defaultForm.generateView(
-            defaultForm.elementosNFe[6],
-            {
-                customNameChanger: getDefaultListNameChanger('autXML'),
-                customRequireds: ['autXML']
-            })[0] as fieldsetFormElement,
-        ['autXML'])
+            defaultForm.elementosNFe[6])[0] as fieldsetFormElement,
+            ['autXML'])
 }
 
 function gerarTransporte() {
@@ -199,12 +189,13 @@ const telaPrincipal = [
 const telaProdutos = gerarProdutosEdicao()
 
 let tela: 'produtos' | 'principal' = 'produtos'
-let currentData = {}
+let currentData: any = {}
 
-function gerarTela() {
+function renderizarTela() {
     switch (tela) {
         case 'principal':
             form.elements = telaPrincipal
+            form.updateValue(currentData)
             main.appendChild(form.generateForm(data => {
                 currentData = data
                 console.log(data)
@@ -213,12 +204,13 @@ function gerarTela() {
         case 'produtos':
             form.elements = telaProdutos
             main.appendChild(form.generateForm(data => {
-                console.log(data)
+                currentData.det = data.det
+                tela = 'principal'
+                renderizarTela()
             }))
             break
         default:
             break;
     }
 }
-
-gerarTela()
+renderizarTela()
