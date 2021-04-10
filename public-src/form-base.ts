@@ -61,7 +61,7 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
 function processLabelText(documentation: string) {
     const text = documentation.startsWith('Informar campo')
         ? documentation
-        : ['\n', '.', ':', ' - ', ', ', '(1'].reduce((p, c) => p.split(c)[0], documentation)
+        : ['\n', '.', ':', ' - ', ', ', '(1', '(norma'].reduce((p, c) => p.split(c)[0], documentation)
     return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
@@ -133,7 +133,8 @@ N – Produzido em escala não relevante` },
     { name: 'IPINT', header: 'IPI não tributado' },
     { name: 'IPITrib|IPINT', header: 'Tipo de IPI' },
     { name: 'cAgreg', header: 'Código de agregação' },
-    { name: 'det', header: 'Produtos ou serviços' }
+    { name: 'det', header: 'Produtos ou serviços' },
+    { name: 'rastro', header: 'Detalhamento de produto sujeito a rastreabilidade' }
 ]
 
 export interface IBaseFormElement {
@@ -442,6 +443,9 @@ export class choiceFormElement implements IBaseFormElement {
             let index = select.selectedIndex
             div.innerHTML = ''
             const view = this.options[index].view
+            if (view instanceof fieldsetFormElement) {
+                view.options.legend = ''
+            } // remove 
             view?.generate(div)
         }
         select.onchange = () => updateView()
@@ -538,11 +542,11 @@ function getDocumentation(v: any): string {
     if (name) {
         const custom = customHeaders.find(v => name === v.name)?.header
         const nameParts = name.split('|')
-        return custom ?? customHeaders.find(
+        return custom ?? fromScheme ?? customHeaders.find(
             v => {
                 const customParts = v.name.split('|')
                 return customParts.every(k => nameParts.includes(k))
-            })?.header ?? fromScheme ?? ''
+            })?.header ?? ''
     }
     return fromScheme ?? ''
 }
@@ -1014,12 +1018,13 @@ export class defaultForm {
         return analyseTag(rootTag, rootField, parentTags)
     }
 
-    public generateForm(): HTMLFormElement {
+    public generateForm(onSubmit?: (data: any) => void): HTMLFormElement {
         const form = document.createElement('form')
         this.elements.forEach(v => v.generate(form))
         const submit = document.createElement('input')
         submit.type = 'submit'
         form.appendChild(submit)
+        if (onSubmit) form.onsubmit = e => defaultFormSubmit(e, onSubmit)
         return form
     }
 
