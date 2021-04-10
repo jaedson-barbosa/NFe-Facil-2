@@ -7,7 +7,8 @@ import {
     getCodigoEstado,
     getRandomNumber,
     listFormElement,
-    getDefaultListNameChanger
+    getDefaultListNameChanger,
+    IBaseFormElement
 } from './form-base'
 import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
 
@@ -40,11 +41,13 @@ Date.prototype.toNFeString = function () {
 function gerarIdentificacao() {
     const root = defaultForm.elementosNFe[0]
     const rootName = 'ide'
-    const NFrefOptions = {
-        customNameChanger: getDefaultListNameChanger('NFref'),
-        customRequireds: ['NFref']
-    }
-    const NFref = defaultForm.generateViews(root, NFrefOptions, 'NFref')[0]
+    const NFref = defaultForm.generateViews(
+        root,
+        {
+            customNameChanger: getDefaultListNameChanger('NFref'),
+            customRequireds: ['NFref']
+        },
+        'NFref')[0]
     return new fieldsetFormElement(
         { legend: 'Informações de identificação da NF-e', required: true },
         new hiddenFormElement([rootName, 'cUF'], true, getCodigoEstado(emit.enderEmit.UF)),
@@ -66,9 +69,9 @@ function gerarIdentificacao() {
 }
 
 function gerarEmitente() {
-    const root = defaultForm.elementosNFe[1]
-    const views = defaultForm.generateView(root, { rootTag: 'element' })
-    const view = views[0] as fieldsetFormElement
+    const view = defaultForm.generateView(
+        defaultForm.elementosNFe[1],
+        { rootTag: 'element' })[0] as fieldsetFormElement
     view.options.hidden = true
     view.updateValue({ emit })
     return view
@@ -87,70 +90,78 @@ function gerarProdutosVisualizacao() {
 }
 
 function gerarRetirada() {
-    const root = defaultForm.elementosNFe[4]
-    return defaultForm.generateView(root, { rootTag: 'element' })
+    return defaultForm.generateView(
+        defaultForm.elementosNFe[4],
+        { rootTag: 'element' })
 }
 
 function gerarEntrega() {
-    const root = defaultForm.elementosNFe[5]
-    return defaultForm.generateView(root, { rootTag: 'element' })
+    return defaultForm.generateView(
+        defaultForm.elementosNFe[5],
+        { rootTag: 'element' })
 }
 
 function gerarAutorizacao() {
-    const root = defaultForm.elementosNFe[6]
-    const customNameChanger = getDefaultListNameChanger('autXML')
-    const options = { customNameChanger, customRequireds: ['autXML'] }
-    const el = defaultForm.generateView(root, options)[0]
-    return new listFormElement(el as fieldsetFormElement, ['autXML'])
+    return new listFormElement(
+        defaultForm.generateView(
+            defaultForm.elementosNFe[6],
+            {
+                customNameChanger: getDefaultListNameChanger('autXML'),
+                customRequireds: ['autXML']
+            })[0] as fieldsetFormElement,
+        ['autXML'])
 }
 
 function gerarTransporte() {
-    const root = defaultForm.elementosNFe[9]
-    const customRequireds = ['vol', 'veicTransp|reboque', 'reboque', 'lacres']
-    const options = { rootTag: 'element', customRequireds }
-    return defaultForm.generateView(root, options)
+    return defaultForm.generateView(
+        defaultForm.elementosNFe[9],
+        {
+            rootTag: 'element',
+            customRequireds: ['vol', 'veicTransp|reboque', 'reboque', 'lacres']
+        })
 }
 
 function gerarCobranca() {
-    const root = defaultForm.elementosNFe[10]
-    const customRequireds = ['fat', 'dup']
-    const options = { rootTag: 'element', customRequireds }
-    return defaultForm.generateView(root, options)
+    return defaultForm.generateView(
+        defaultForm.elementosNFe[10],
+        {
+            rootTag: 'element',
+            customRequireds: ['fat', 'dup']
+        })
 }
 
 function gerarPagamento() {
-    const root = defaultForm.elementosNFe[11]
-    const options = { rootTag: 'element' }
-    return defaultForm.generateView(root, options)
+    return defaultForm.generateView(
+        defaultForm.elementosNFe[11],
+        { rootTag: 'element' })
 }
 
 function gerarIntermediador() {
-    const root = defaultForm.elementosNFe[12]
-    const options = { rootTag: 'element' }
-    return defaultForm.generateView(root, options)
+    return defaultForm.generateView(
+        defaultForm.elementosNFe[12],
+        { rootTag: 'element' })
 }
 
 function gerarInformacoes() {
-    const root = defaultForm.elementosNFe[13]
     return new fieldsetFormElement(
         { legend: 'Informações Adicionais', required: false },
-        ...defaultForm.generateViews(root, {}, 'infAdFisco', 'infCpl'))
+        ...defaultForm.generateViews(
+            defaultForm.elementosNFe[13],
+            {}, 'infAdFisco', 'infCpl'))
 }
 
 function gerarExportacao() {
-    const root = defaultForm.elementosNFe[14]
-    return defaultForm.generateView(root)
+    return defaultForm.generateView(defaultForm.elementosNFe[14])
 }
 
 function gerarCompra() {
-    const root = defaultForm.elementosNFe[15]
-    return defaultForm.generateView(root)
+    return defaultForm.generateView(defaultForm.elementosNFe[15])
 }
 
 function gerarCana() {
-    const root = defaultForm.elementosNFe[16]
-    const options = { customRequireds: ['deduc'] }
-    return defaultForm.generateView(root, options)
+    return defaultForm.generateView(
+        defaultForm.elementosNFe[16],
+        { customRequireds: ['deduc'] })
 }
 
 function gerarResponsavelTecnico() {
@@ -166,34 +177,48 @@ function gerarResponsavelTecnico() {
 const main = document.getElementById('main')
 const form = new defaultForm()
 
-// const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
-function gerarTelaPrincipal() {
-    return [
-        gerarIdentificacao(),
-        gerarEmitente(),
-        ...gerarViewCliente(),
-        ...gerarProdutosVisualizacao(),
-        ...gerarRetirada(),
-        ...gerarEntrega(),
-        gerarAutorizacao(),
-        ...gerarTransporte(),
-        ...gerarCobranca(),
-        ...gerarPagamento(),
-        ...gerarIntermediador(),
-        gerarInformacoes(),
-        ...gerarExportacao(),
-        ...gerarCompra(),
-        ...gerarCana(),
-        gerarResponsavelTecnico()
-    ]
+const telaPrincipal = [
+    gerarIdentificacao(),
+    gerarEmitente(),
+    ...gerarViewCliente(),
+    ...gerarProdutosVisualizacao(),
+    ...gerarRetirada(),
+    ...gerarEntrega(),
+    gerarAutorizacao(),
+    ...gerarTransporte(),
+    ...gerarCobranca(),
+    ...gerarPagamento(),
+    ...gerarIntermediador(),
+    gerarInformacoes(),
+    ...gerarExportacao(),
+    ...gerarCompra(),
+    ...gerarCana(),
+    gerarResponsavelTecnico()
+]
+
+const telaProdutos = gerarProdutosEdicao()
+
+let tela: 'produtos' | 'principal' = 'produtos'
+let currentData = {}
+
+function gerarTela() {
+    switch (tela) {
+        case 'principal':
+            form.elements = telaPrincipal
+            main.appendChild(form.generateForm(data => {
+                currentData = data
+                console.log(data)
+            }))
+            break;
+        case 'produtos':
+            form.elements = telaProdutos
+            main.appendChild(form.generateForm(data => {
+                console.log(data)
+            }))
+            break
+        default:
+            break;
+    }
 }
 
-function gerarTelaProdutos() {
-    return gerarProdutosEdicao()
-}
-
-const htmlForm = form.generateForm()
-main.appendChild(htmlForm)
-htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
-    console.log(data)
-})
+gerarTela()
