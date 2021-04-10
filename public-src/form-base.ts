@@ -357,7 +357,7 @@ export class fieldsetFormElement implements IBaseFormElement {
             if (this.options.hidden) {
                 content.style.display = 'none'
             }
-            if (this.options.legend) {
+            if (this.options.legend && this.options.required) {
                 const legend = document.createElement('legend')
                 legend.innerText = this.options.legend
                 content.appendChild(legend)
@@ -382,7 +382,6 @@ export class fieldsetFormElement implements IBaseFormElement {
             const check = document.createElement('input')
             check.type = 'checkbox'
             parent.appendChild(check)
-            // check.before(document.createElement('br'))
             const label = insertLabel(check, 'Informar campo: ' + this.options.legend, false)
             let fieldset: HTMLFieldSetElement;
             check.onchange = () => {
@@ -489,6 +488,7 @@ export class listFormElement implements IBaseFormElement {
         el.children = [add]
         this.addHTML = addHTML
         this.container = el
+        this.parentNames = parentNames
         this.startValues = []
     }
 

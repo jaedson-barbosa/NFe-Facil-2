@@ -13,9 +13,6 @@ import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
 
 const empresa = getEmpresaAtiva()
 const emit = empresa.empresa
-const main = document.getElementById('main')
-const form = new defaultForm()
-const reqs = []//['dest', 'xNome', 'enderDest']
 
 declare global {
     interface Date {
@@ -77,12 +74,16 @@ function gerarEmitente() {
     return view
 }
 
-function gerarProdutos() {
+function gerarProdutosEdicao() {
     return defaultForm.generateView(
         defaultForm.elementosNFe[7],
-        {
-            customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II']
-        })
+        { customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'] })
+}
+
+function gerarProdutosVisualizacao() {
+    return defaultForm.generateView(
+        defaultForm.elementosNFe[7],
+        { customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'] })
 }
 
 function gerarRetirada() {
@@ -162,23 +163,35 @@ function gerarResponsavelTecnico() {
         new hiddenFormElement([rootName, 'fone'], true, '83988856440'))
 }
 
+const main = document.getElementById('main')
+const form = new defaultForm()
+
 // const view = defaultForm.generateView(defaultForm.elementosNFe[0], reqs)
-form.elements.push(gerarIdentificacao())
-form.elements.push(gerarEmitente())
-form.elements.push(...gerarViewCliente())
-form.elements.push(...gerarProdutos())
-form.elements.push(...gerarRetirada())
-form.elements.push(...gerarEntrega())
-form.elements.push(gerarAutorizacao())
-form.elements.push(...gerarTransporte())
-form.elements.push(...gerarCobranca())
-form.elements.push(...gerarPagamento())
-form.elements.push(...gerarIntermediador())
-form.elements.push(gerarInformacoes())
-form.elements.push(...gerarExportacao())
-form.elements.push(...gerarCompra())
-form.elements.push(...gerarCana())
-form.elements.push(gerarResponsavelTecnico())
+function gerarTelaPrincipal() {
+    return [
+        gerarIdentificacao(),
+        gerarEmitente(),
+        ...gerarViewCliente(),
+        ...gerarProdutosVisualizacao(),
+        ...gerarRetirada(),
+        ...gerarEntrega(),
+        gerarAutorizacao(),
+        ...gerarTransporte(),
+        ...gerarCobranca(),
+        ...gerarPagamento(),
+        ...gerarIntermediador(),
+        gerarInformacoes(),
+        ...gerarExportacao(),
+        ...gerarCompra(),
+        ...gerarCana(),
+        gerarResponsavelTecnico()
+    ]
+}
+
+function gerarTelaProdutos() {
+    return gerarProdutosEdicao()
+}
+
 const htmlForm = form.generateForm()
 main.appendChild(htmlForm)
 htmlForm.onsubmit = e => defaultFormSubmit(e, async data => {
