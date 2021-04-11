@@ -459,6 +459,7 @@ export class choiceFormElement implements IBaseFormElement {
 
     public updateValue(values: any) {
         const baseValue = this.parentNames.filter(v => !v.includes('|')).reduce((p,c) => p?.[c], values)
+        if (!baseValue) return
         const keys = Object.keys(baseValue)
         const index = this.options.findIndex(v => v.name.split('|').some(k => keys.includes(k)))
         const option = this.options[index]
@@ -470,7 +471,7 @@ export class choiceFormElement implements IBaseFormElement {
 }
 
 export function getDefaultListNameChanger(name: string) {
-    return v => {
+    return (v: string[]) => {
         v.splice(v.indexOf(name) + 1, 0, '0')
         return v
     }
@@ -482,6 +483,7 @@ export class listFormElement implements IBaseFormElement {
     private parentNames: string[]
     private addHTML: HTMLButtonElement
     private startValues: any[]
+    private startValuesArray: any[]
 
     constructor(el: fieldsetFormElement, parentNames: string[]) {
         this.content = el.children
@@ -494,6 +496,7 @@ export class listFormElement implements IBaseFormElement {
         this.container = el
         this.parentNames = parentNames
         this.startValues = []
+        this.startValuesArray = []
     }
 
     public generate(parent: HTMLElement) {
@@ -516,14 +519,15 @@ export class listFormElement implements IBaseFormElement {
             remHTML.onclick = () => details.remove()
         }
         this.addHTML.onclick = () => addItem()
-        this.startValues.forEach(v => addItem(v))
+        this.startValuesArray.forEach(v => addItem(this.startValues))
         return container
     }
 
     public updateValue(values: any) {
         const baseValue = this.parentNames.filter(v => !v.includes('|')).reduce((p,c) => p?.[c], values)
         if (baseValue && Array.isArray(baseValue)) {
-            this.startValues = baseValue
+            this.startValues = values
+            this.startValuesArray = baseValue
         }
     }
 

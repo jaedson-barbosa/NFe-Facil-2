@@ -192,6 +192,7 @@ let tela: 'produtos' | 'principal' = 'produtos'
 let currentData: any = {}
 
 function renderizarTela() {
+    main.innerHTML = ''
     switch (tela) {
         case 'principal':
             form.elements = telaPrincipal
