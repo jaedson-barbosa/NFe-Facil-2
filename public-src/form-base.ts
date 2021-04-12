@@ -139,7 +139,7 @@ N – Produzido em escala não relevante` },
 
 export interface IBaseFormElement {
     generate: (parent: HTMLElement) => HTMLElement
-    updateValue: (values: any) => void
+    updateValue: (values: any) => boolean
     resetValue: () => void
 }
 
@@ -168,7 +168,7 @@ export class genericFormElement implements IBaseFormElement {
         return element
     }
 
-    public updateValue(values: any) { this.options?.value.updateValue(values) }
+    public updateValue(values: any) { return this.options?.value.updateValue(values) ?? true }
     public resetValue() { this.options?.value.resetValue() }
 }
 
@@ -192,8 +192,13 @@ abstract class inputFormElement implements IBaseFormElement {
     public abstract generate(parent: HTMLElement): HTMLElement;
 
     public updateValue(values: any) {
-        const value = this.name.filter(v => !v.includes('|')).reduce((p,c) => p?.[c], values)
+        let hasParent = true
+        const value = this.name.filter(v => !v.includes('|')).reduce((p,c) => {
+            if (!p) hasParent = false
+            return p?.[c]
+        }, values)
         if (value) this.value = value
+        return hasParent && (!!value || !this.required)
     }
 
     public resetValue() { this.value = undefined }
@@ -315,6 +320,7 @@ export class selectTextFormElement implements IBaseFormElement {
     public updateValue(values: any) {
         const option = this.getOption(values)
         this.startValue = option
+        return !!option
     }
 
     public resetValue() { this.startValue = undefined }
@@ -346,10 +352,12 @@ interface IFieldsetOptions {
 export class fieldsetFormElement implements IBaseFormElement {
     public options: IFieldsetOptions
     public children: IBaseFormElement[]
+    private hasInitialValue: boolean
 
     constructor(options: IFieldsetOptions, ...children: IBaseFormElement[]) {
         this.options = options
         this.children = children
+        this.hasInitialValue = false
     }
 
     public generate(parent: HTMLElement) {
@@ -382,10 +390,11 @@ export class fieldsetFormElement implements IBaseFormElement {
             }
             const check = document.createElement('input')
             check.type = 'checkbox'
+            check.checked = this.hasInitialValue
             parent.appendChild(check)
             const label = insertLabel(check, 'Informar campo: ' + this.options.legend, false)
             let fieldset: HTMLFieldSetElement;
-            check.onchange = () => {
+            const onCheckChange = () => {
                 if (check.checked) {
                     fieldset = createFieldset()
                     label.after(fieldset)
@@ -393,44 +402,49 @@ export class fieldsetFormElement implements IBaseFormElement {
                     fieldset?.remove()
                 }
             }
+            check.onchange = () => onCheckChange()
+            onCheckChange()
             return fieldset
         }
     }
 
     public updateValue(values: any) {
-        this.children.forEach(v => v.updateValue(values))
+        const updates = this.children.map(v => v.updateValue(values))
+        const hasInitialValue = updates.every(v => v)
+        this.hasInitialValue = hasInitialValue
+        return hasInitialValue
     }
 
-    public resetValue() { this.children.forEach(v => v.resetValue()) }
+    public resetValue() {
+        this.children.forEach(v => v.resetValue())
+        this.hasInitialValue = false
+    }
 }
 
 interface IChoiceOption {
     text: string
     view: IBaseFormElement
-    name: string
+    name: string[]
 }
 
 export class choiceFormElement implements IBaseFormElement {
     private documentation: string
     private options: IChoiceOption[]
-    private parentNames: string[]
     private startIndex: number
 
     constructor(
         documentation: string,
         isRequired: boolean,
-        options: IChoiceOption[],
-        parentNames: string[]) {
+        options: IChoiceOption[]) {
         this.documentation = documentation
         if (!isRequired) {
             options.unshift({
                 text: 'Nenhuma das opções',
                 view: undefined,
-                name: 'none'
+                name: []
             })
         }
         this.options = options
-        this.parentNames = parentNames
         this.startIndex = 0
     }
 
@@ -458,13 +472,13 @@ export class choiceFormElement implements IBaseFormElement {
     }
 
     public updateValue(values: any) {
-        const baseValue = this.parentNames.filter(v => !v.includes('|')).reduce((p,c) => p?.[c], values)
-        if (!baseValue) return
-        const keys = Object.keys(baseValue)
-        const index = this.options.findIndex(v => v.name.split('|').some(k => keys.includes(k)))
-        const option = this.options[index]
-        option.view.updateValue(values)
-        this.startIndex = index
+        const indexes: number[] = []
+        this.options.some((v,i) => {
+            const active = v.view?.updateValue(values) ?? false
+            if (active) indexes.push(i)
+        })
+        this.startIndex = indexes[0]
+        return true
     }
 
     public resetValue() { this.startIndex = 0 }
@@ -528,7 +542,8 @@ export class listFormElement implements IBaseFormElement {
         if (baseValue && Array.isArray(baseValue)) {
             this.startValues = values
             this.startValuesArray = baseValue
-        }
+            return true
+        } return false
     }
 
     public resetValue() { this.startValues = [] }
@@ -752,7 +767,7 @@ export class defaultForm {
                     return {
                         text: getDocumentation(v),
                         view: createInput(v, parentTags),
-                        name: getName(v)
+                        name: [...parentTags, getName(v)]
                     }
                 }))
             }
@@ -761,7 +776,7 @@ export class defaultForm {
                     options.push({
                         text: getDocumentation(sequence),
                         view: createFieldset(sequence, parentTags),
-                        name: getName(sequence)
+                        name: [...parentTags, getName(sequence)]
                     })
                 } else {
                     const array = Array.isArray(sequence) ? sequence : sequence.element as any[]
@@ -769,24 +784,24 @@ export class defaultForm {
                         return {
                             text: getDocumentation(v),
                             view: createInput(v, parentTags),
-                            name: getName(v)
+                            name: [...parentTags, getName(v)]
                         }
                     }))
                 }
             }
             const doc = getDocumentation(field)
             const req = isRequired(field)
-            return new choiceFormElement(doc, req, options, parentTags)
+            return new choiceFormElement(doc, req, options)
         }
 
         function createFieldset(field: any, parentTags: string[]): IBaseFormElement {
             const legend = processLabelText(getDocumentation(field))
             const name = getName(field)
-            const tags = name ? [...parentTags, name] : parentTags
             const isRootList = 'length' in field
             const max = field._attributes?.maxOccurs ?? 1
             const isList = max > 1
             if (isList) additionalNameChanger.push(getDefaultListNameChanger(name))
+            const tags = name ? [...parentTags, name] : parentTags
             const required = max > 1 || isRequired(field)
             const fields: IBaseFormElement[] = []
             if (isRootList || field.element) {
