@@ -34,6 +34,20 @@ SESSIONSTORAGE
 idEmpresa
 
 Primeiro, implementar a edição de dados base e de emitentes
-Após isso, testar o que foi feito até agora na página de nfe
+Busca de dados base na tela de NFe
+Tipos de ICMS de acordo com o regime do emitente
+Sistemas de servidor
+Se tudo der certo, corrigir documentações no schema json e unir os 2 num único
+Implementar sincronizações
 
-localStore.setItem('empresas', '[{"id":"moemVNqpzdGCmw7dFsp5","status":3,"empresa":{"CNPJ":"12931158000164","xNome":"SEVERINO ALVES SERAFIM ME","xFant":"AREIAL BARRA","enderEmit":{"xLgr":"SÍTIO BARRA","nro":"S/N","xBairro":"ZONA RURAL","CEP":"58208000","fone":"83988962808"},"IE":"161813470","CRT":"1"}}]')
+Id Only Let You Down - Roy Williams
+
+Hyperdrive - Sebastian Forslund
+
+Fix My Head - Dissidence
+
+I'm not crying - Of Men And Wolves
+
+Duckface - Sebastian Forslund
+
+Anywhere but Here - Easton

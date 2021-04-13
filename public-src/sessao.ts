@@ -2,7 +2,15 @@ import { getEmpresa } from './dados/emitentes'
 
 export function iniciarSessao(id: string) {
     sessionStorage.setItem('idEmpresa', id)
+    abrirPainel()
+}
+
+export function abrirPainel() {
     location.href = './painel.html'
+}
+
+export function isSessaoIniciada(): boolean {
+    return !!sessionStorage.idEmpresa
 }
 
 export function getIdEmpresaAtiva(): string {

@@ -624,7 +624,11 @@ export class defaultForm {
     static rootNFe = nfeSchema.schema.complexType[0].sequence.element[0]
     static elementosNFe = defaultForm.rootNFe['complexType']['sequence']['element']
 
-    public elements: IBaseFormElement[] = []
+    public elements: IBaseFormElement[]
+
+    constructor(...elements: IBaseFormElement[]) {
+        this.elements = elements
+    }
 
     static generateViews(rootField: any, options: IGenerateViewsOptions, ...names: string[]) {
         return names.flatMap(name => {
@@ -1051,5 +1055,9 @@ export class defaultForm {
 
     public updateValue(values: any) {
         this.elements.forEach(v => v.updateValue(values))
+    }
+
+    public resetValue() {
+        this.elements.forEach(v => v.resetValue())
     }
 }

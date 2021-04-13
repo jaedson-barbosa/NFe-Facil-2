@@ -15,7 +15,7 @@ export function getEmpresas(): IEmpresa[] {
     return empresasString ? JSON.parse(empresasString) : []
 }
 
-export function addEmpresa(empresa: IEmpresa) {
+export function setEmpresa(empresa: IEmpresa) {
     const empresas = getEmpresas()
     const cadastroAtual = empresas.find(v => v.id == empresa.id)
     if (cadastroAtual) {
