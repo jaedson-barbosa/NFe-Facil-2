@@ -223,6 +223,27 @@ abstract class inputFormElement implements IBaseFormElement {
     }
 }
 
+export class buttonFormElement implements IBaseFormElement {
+    private content: string
+    private onClick: () => void
+
+    constructor(content: string, onClick: () => void) {
+        this.content = content
+        this.onClick = onClick
+    }
+
+    public generate(parent: HTMLElement) {
+        const button = document.createElement('button')
+        button.innerText = this.content
+        button.type = 'button'
+        button.onclick = this.onClick
+        parent.appendChild(button)
+        return button
+    }
+    public updateValue(values: any) { return true }
+    public resetValue() { }
+}
+
 export class selectFormElement extends inputFormElement {
     private options: { value: string, text: string }[]
 
@@ -279,25 +300,22 @@ export class textFormElement extends inputFormElement {
     }
 }
 
-export class selectTextFormElement implements IBaseFormElement {
+abstract class baseSelectTextFormElement implements IBaseFormElement {
     private documentation: string
-    private required: boolean
-    private options: { value: string, helpText?: string }[]
-    private onChange: (value: string) => void
-    private getOption: (values: any) => string
-    private startValue: string
+    protected required: boolean
+    private options: string[]
+    protected onChange: (input: HTMLInputElement, isValid: boolean) => void
+    protected startValue: string
 
     constructor(
         documentation: string,
         required: boolean,
-        options: { value: string, helpText?: string }[],
-        onChange: (value: string) => void,
-        getOption: (values: any) => string) {
+        options: string[],
+        onChange: (input: HTMLInputElement, isValid: boolean) => void) {
         this.documentation = documentation
         this.required = required
         this.options = options
         this.onChange = onChange
-        this.getOption = getOption
     }
 
     public generate(parent: HTMLElement) {
@@ -306,24 +324,56 @@ export class selectTextFormElement implements IBaseFormElement {
         select.required = this.required
         const datalist = document.createElement('datalist')
         datalist.innerHTML = this.options.map(
-            k => `<option>${k.value}</option>`).join('')
+            k => `<option>${k}</option>`).join('')
         select.setAttribute('list', datalist.id = createId())
         parent.appendChild(datalist)
         parent.appendChild(select)
         insertLabel(select, this.documentation)
         select.onchange = () => {
-            if (!select.value && !this.required) {
-                select.setCustomValidity('')
-                this.onChange(undefined)
-            }
-            const isValid = this.options.some(v => v.value == select.value)
-            const validity = isValid ? '' : 'Por favor, selecione um valor válido.'
-            select.setCustomValidity(validity)
-            this.onChange(isValid ? select.value : undefined)
+            const isValid = this.options.some(v => v == select.value)
+            this.onChange(select, isValid)
         }
         select.setCustomValidity(this.required && !this.startValue ? 'Selecione um valor.' : '')
         if (this.startValue) select.value = this.startValue
         return select
+    }
+
+    public abstract updateValue(values: any): boolean
+    public resetValue() { this.startValue = undefined }
+}
+
+export class searchFormElement extends baseSelectTextFormElement {
+    constructor(label: string, options: string[], onResult: (value: string) => void) {
+        super(label, false, options, (select, isValid) => {
+            if (isValid) {
+                onResult(select.value)
+                select.value = ''
+            }
+        })
+    }
+
+    public updateValue(values: any) { return true }
+}
+
+export class selectTextFormElement extends baseSelectTextFormElement {
+    private getOption: (values: any) => string
+
+    constructor(
+        documentation: string,
+        required: boolean,
+        options: string[],
+        onChange: (value: string) => void,
+        getOption: (values: any) => string) {
+        super(documentation, required, options, (select, isValid) => {
+            if (!select.value && !this.required) {
+                select.setCustomValidity('')
+                onChange(undefined)
+            }
+            const validity = isValid ? '' : 'Por favor, selecione um valor válido.'
+            select.setCustomValidity(validity)
+            onChange(isValid ? select.value : undefined)
+        })
+        this.getOption = getOption
     }
 
     public updateValue(values: any) {
@@ -331,8 +381,6 @@ export class selectTextFormElement implements IBaseFormElement {
         this.startValue = option
         return !!option
     }
-
-    public resetValue() { this.startValue = undefined }
 }
 
 export class hiddenFormElement extends inputFormElement {
@@ -501,7 +549,7 @@ export function getDefaultListNameChanger(name: string) {
 }
 
 export class listFormElement implements IBaseFormElement {
-    private content: IBaseFormElement[]
+    public content: IBaseFormElement[]
     private container: fieldsetFormElement
     private parentNames: string[]
     private addHTML: HTMLButtonElement
@@ -761,11 +809,8 @@ export class defaultForm {
                 }
                 return opt
             }).filter(v => v) : otherValues.map(v => getOption(v, false))
-            return new selectFormElement(
-                name,
-                documentation,
-                required,
-                [firstOption, ...otherOptions])
+            const completeOptions = [firstOption, ...otherOptions]
+            return new selectFormElement(name, documentation, required, completeOptions)
         }
 
         function createChoice(field: any, parentTags: string[]): IBaseFormElement {
@@ -868,7 +913,7 @@ export class defaultForm {
                 cMun?.required || cMunFG?.required || xMun?.required,
                 IBGE.flatMap(
                     v => v.Municipios.map(
-                        k => { return { value: mun2str(k.Nome, v.Sigla) } })),
+                        k => mun2str(k.Nome, v.Sigla))),
                 value => {
                     if (value) {
                         const startUF = value.indexOf('('),
@@ -938,8 +983,7 @@ export class defaultForm {
             const uf = new selectTextFormElement(
                 'Estado',
                 cUF?.required || UF?.required,
-                IBGE.flatMap(
-                    v => { return { value: v.Nome } }),
+                IBGE.map(v => v.Nome),
                 value => {
                     const uf = IBGE.find(v => v.Nome == value)
                     if (cUF) cUF.value = uf?.Codigo
@@ -979,7 +1023,7 @@ export class defaultForm {
             const pais = new selectTextFormElement(
                 'País',
                 cPais?.required || xPais?.required,
-                paises.map(k => { return { value: k.nome } }),
+                paises.map(k => k.nome),
                 (value) => {
                     const pais = paises.find(v => v.nome == value)
                     if (xPais) xPais.value = pais?.nome

@@ -9,7 +9,9 @@ export function renderizarCliente(data: {dest: any}): HTMLButtonElement {
 }
 
 export function gerarViewCliente() {
-    return defaultForm.generateView(
+    const view = defaultForm.generateView(
         defaultForm.elementosNFe[3],
         { customRequireds: ['dest', 'xNome', 'enderDest'] })
+    console.log(view)
+    return view
 }

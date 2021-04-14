@@ -1,8 +1,9 @@
 import { defaultForm, defaultFormSubmit, IBaseFormElement, fieldsetFormElement, createId } from './form-base'
-import { entries, set, sync } from './db'
+import { set, sync } from './db'
 import { gerarViewCliente, renderizarCliente } from './dados/clientes'
 import { gerarViewProduto, renderizarProduto } from './dados/produtos'
 import { gerarViewMotorista, renderizarMotorista } from './dados/motoristas'
+import { getItens } from './dados/geral'
 
 function main(
     tipoDado: 'dest' | 'prod' | 'transporta',
@@ -34,8 +35,7 @@ function main(
 
     async function renderizarItens() {
         dados.innerHTML = ''
-        const totalItens = await entries()
-        const itens = totalItens.filter(v => v[1][tipoDado])
+        const itens = await getItens(tipoDado)
         itens.forEach(v => renderizarNovoItem(v))
     }
 

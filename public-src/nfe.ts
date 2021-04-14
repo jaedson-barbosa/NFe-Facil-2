@@ -1,4 +1,5 @@
 import { gerarViewCliente } from './dados/clientes'
+import { getItens } from './dados/geral'
 import {
     defaultForm,
     defaultFormSubmit,
@@ -8,7 +9,10 @@ import {
     getRandomNumber,
     listFormElement,
     getDefaultListNameChanger,
-    IBaseFormElement
+    IBaseFormElement,
+    selectFormElement,
+    buttonFormElement,
+    searchFormElement
 } from './form-base'
 import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
 
@@ -71,10 +75,28 @@ function gerarEmitente() {
     return view
 }
 
-function gerarProdutosEdicao() {
-    return defaultForm.generateView(
+// Finalizar seleção de produto e testá-la
+async function gerarProdutosEdicao() {
+    const views = defaultForm.generateView(
         defaultForm.elementosNFe[7],
         { customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'] })
+    const view = views[0] as listFormElement
+    const prods = await getItens('prod')
+    const button = new searchFormElement(
+        'Buscar produto cadastrado',
+        prods.map(v => {
+            const cProd = v[1].prod.cProd
+            const xProd = v[1].prod.xProd
+            return cProd ? `${xProd} - ${cProd}` : xProd
+        }),
+        value => {
+            const cProd = value.split(' - ')[1]
+            const prod = prods.find(v =>  v[1].prod.cProd == cProd)
+            console.log(prod)
+        })
+    view.content.unshift(button)
+    console.log(view)
+    return view
 }
 
 function gerarProdutosVisualizacao() {
@@ -186,12 +208,11 @@ const telaPrincipal = [
     gerarResponsavelTecnico()
 ]
 
-const telaProdutos = gerarProdutosEdicao()
-
+let telaProdutos: listFormElement
 let tela: 'produtos' | 'principal' = 'produtos'
 let currentData: any = {}
 
-function renderizarTela() {
+async function renderizarTela() {
     main.innerHTML = ''
     switch (tela) {
         case 'principal':
@@ -203,7 +224,8 @@ function renderizarTela() {
             }))
             break;
         case 'produtos':
-            form.elements = telaProdutos
+            if (!telaProdutos) telaProdutos = await gerarProdutosEdicao()
+            form.elements = [telaProdutos]
             main.appendChild(form.generateForm(data => {
                 currentData.det = data.det
                 tela = 'principal'
