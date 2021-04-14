@@ -176,7 +176,15 @@ abstract class inputFormElement implements IBaseFormElement {
     public name: string[]
     protected documentation: string
     public required: boolean
-    public value: string
+
+    private generatedElement: HTMLSelectElement | HTMLInputElement
+
+    private _value: string
+    public get value() : string { return this._value }
+    public set value(v : string) {
+        this._value = v
+        if (this.generatedElement) this.generatedElement.value = v
+    }
 
     constructor(
         name: string[],
@@ -204,6 +212,7 @@ abstract class inputFormElement implements IBaseFormElement {
     public resetValue() { this.value = undefined }
 
     protected updateBaseProps(input: HTMLSelectElement | HTMLInputElement) {
+        this.generatedElement = input
         const name = this.name
         input.name = name.filter(v => !v.includes('|')).join('.')
         const index = name.map(v => !isNaN(+v)).lastIndexOf(true)
@@ -312,7 +321,7 @@ export class selectTextFormElement implements IBaseFormElement {
             select.setCustomValidity(validity)
             this.onChange(isValid ? select.value : undefined)
         }
-        select.setCustomValidity(this.required ? 'Selecione um valor.' : '')
+        select.setCustomValidity(this.required && !this.startValue ? 'Selecione um valor.' : '')
         if (this.startValue) select.value = this.startValue
         return select
     }
@@ -873,6 +882,7 @@ export class defaultForm {
                             if (xMun) xMun.value = munIBGE.Nome
                             if (UF) UF.value = ufIBGE.Sigla
                             if (cUF) cUF.value = ufIBGE.Codigo
+                            console.log(cMun, cMunFG, xMun, UF, cUF)
                             return
                         }
                     }

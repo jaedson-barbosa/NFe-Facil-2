@@ -99,15 +99,14 @@ if (isSessaoIniciada()) {
     const emitView = defaultForm.generateView(defaultForm.elementosNFe[1])
     const form = new defaultForm(...emitView)
     const empresa = getEmpresaAtiva()
-    form.updateValue(empresa.empresa)
+    form.updateValue({emit: empresa.empresa})
     const htmlForm = form.generateForm(data => {
-        empresa.empresa = data
+        empresa.empresa = data.emit
         setEmpresa(empresa)
         alert('Dados cadastrais atualizados.')
         abrirPainel()
     })
     document.body.appendChild(htmlForm)
-    
 } else {
     // Adição de emitente
     document.body.innerHTML = /*html*/`

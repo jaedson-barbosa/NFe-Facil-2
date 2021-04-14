@@ -33,21 +33,10 @@ empresa
 SESSIONSTORAGE
 idEmpresa
 
-Primeiro, implementar a edição de dados base e de emitentes
-Busca de dados base na tela de NFe
-Tipos de ICMS de acordo com o regime do emitente
-Sistemas de servidor
-Se tudo der certo, corrigir documentações no schema json e unir os 2 num único
-Implementar sincronizações
-
-Id Only Let You Down - Roy Williams
-
-Hyperdrive - Sebastian Forslund
-
-Fix My Head - Dissidence
-
-I'm not crying - Of Men And Wolves
-
-Duckface - Sebastian Forslund
-
-Anywhere but Here - Easton
+Metas da semana
+OK  Primeiro, implementar a edição de dados base e de emitentes
+    Busca de dados base na tela de NFe
+    Tipos de ICMS de acordo com o regime do emitente
+    Sistemas de servidor
+    Se tudo der certo, corrigir documentações no schema json e unir os 2 num único
+    Implementar sincronizações
