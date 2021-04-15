@@ -63,7 +63,7 @@ function main(
 const parametros = new URLSearchParams(location.search)
 switch (parametros.get('tipo')) {
     case 'clientes':
-        main('dest', renderizarCliente, ...gerarViewCliente())
+        main('dest', renderizarCliente, gerarViewCliente())
         break
     case 'produtos':
         main('prod', renderizarProduto, gerarViewProduto())

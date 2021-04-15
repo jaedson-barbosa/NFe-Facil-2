@@ -101,11 +101,13 @@ const customHeaders: { name: string, header: string }[] = [
     { name: 'lacres', header: 'Lacres' },
     { name: 'pag', header: 'Informações de Pagamento' },
     { name: 'cBenef', header: 'Código de Benefício Fiscal na UF aplicado ao item' },
-    { name: 'indTot', header: `O valor do item:
+    {
+        name: 'indTot', header: `O valor do item:
 0 – Não compõe o valor total da NF-e
 1 – Compõe o valor total da NF-e` },
-    { name: 'CEST|indEscala|CNPJFab', header: `Código Especificador da Substituição Tributária`},
-    { name: 'indEscala', header: `Indicador de Produção em escala relevante
+    { name: 'CEST|indEscala|CNPJFab', header: `Código Especificador da Substituição Tributária` },
+    {
+        name: 'indEscala', header: `Indicador de Produção em escala relevante
 S - Produzido em escala relevante
 N – Produzido em escala não relevante` },
     { name: 'cProdANVISA', header: 'Código de Produto da ANVISA' },
@@ -141,35 +143,28 @@ export interface IBaseFormElement {
     generate: (parent: HTMLElement) => HTMLElement
     updateValue: (values: any) => boolean
     resetValue: () => void
-}
-
-interface IGenericOptions {
-    valueParent: HTMLElement
-    value: IBaseFormElement
+    clone: IBaseFormElement
 }
 
 export class genericFormElement implements IBaseFormElement {
     private element: HTMLElement
-    private options: IGenericOptions
 
-    constructor(el: HTMLElement, options?: IGenericOptions) {
+    constructor(el: HTMLElement) {
         this.element = el
-        if (options) this.options = options
+    }
+
+    public get clone(): IBaseFormElement {
+        return new genericFormElement(this.element)
     }
 
     public generate(parent: HTMLElement) {
-        if (this.options) {
-            const value = this.options.value
-            const valueParent = this.options.valueParent
-            value.generate(valueParent)
-        }
         const element = this.element
         parent.appendChild(element)
         return element
     }
 
-    public updateValue(values: any) { return this.options?.value.updateValue(values) ?? true }
-    public resetValue() { this.options?.value.resetValue() }
+    public updateValue(values: any) { return true }
+    public resetValue() { }
 }
 
 abstract class inputFormElement implements IBaseFormElement {
@@ -180,10 +175,11 @@ abstract class inputFormElement implements IBaseFormElement {
     private generatedElement: HTMLSelectElement | HTMLInputElement
 
     private _value: string
-    public get value() : string { return this._value }
-    public set value(v : string) {
+    public get value(): string { return this._value }
+    public set value(v: string) {
         this._value = v
-        if (this.generatedElement) this.generatedElement.value = v
+        const el = this.generatedElement
+        if (el) el.value = v ?? ''
     }
 
     constructor(
@@ -197,11 +193,12 @@ abstract class inputFormElement implements IBaseFormElement {
         if (value) this.value = value
     }
 
-    public abstract generate(parent: HTMLElement): HTMLElement;
+    public abstract get clone(): IBaseFormElement
+    public abstract generate(parent: HTMLElement): HTMLElement
 
     public updateValue(values: any) {
         let hasParent = true
-        const value = this.name.filter(v => !v.includes('|')).reduce((p,c) => {
+        const value = this.name.filter(v => !v.includes('|')).reduce((p, c) => {
             if (!p) hasParent = false
             return p?.[c]
         }, values)
@@ -213,10 +210,7 @@ abstract class inputFormElement implements IBaseFormElement {
 
     protected updateBaseProps(input: HTMLSelectElement | HTMLInputElement) {
         this.generatedElement = input
-        const name = this.name
-        input.name = name.filter(v => !v.includes('|')).join('.')
-        const index = name.map(v => !isNaN(+v)).lastIndexOf(true)
-        if (index != -1) this.name[index] = (+name[index] + 1).toString()
+        input.name = this.name.join('.')
         input.title = this.documentation
         input.required = this.required
         if (this.value) input.value = this.value
@@ -230,6 +224,10 @@ export class buttonFormElement implements IBaseFormElement {
     constructor(content: string, onClick: () => void) {
         this.content = content
         this.onClick = onClick
+    }
+
+    public get clone(): IBaseFormElement {
+        return new buttonFormElement(this.content, this.onClick)
     }
 
     public generate(parent: HTMLElement) {
@@ -254,6 +252,15 @@ export class selectFormElement extends inputFormElement {
         options: { value: string, text: string }[]) {
         super(name, documentation, required)
         this.options = options
+    }
+
+    public get clone(): IBaseFormElement {
+        return new selectFormElement(
+            this.name,
+            this.documentation,
+            this.required,
+            this.options
+        )
     }
 
     public generate(parent: HTMLElement) {
@@ -287,6 +294,15 @@ export class textFormElement extends inputFormElement {
         this.options = options
     }
 
+    public get clone(): IBaseFormElement {
+        return new textFormElement(
+            this.name,
+            this.documentation,
+            this.required,
+            this.options
+        )
+    }
+
     public generate(parent: HTMLElement) {
         const text = document.createElement('input')
         text.type = 'text'
@@ -301,9 +317,9 @@ export class textFormElement extends inputFormElement {
 }
 
 abstract class baseSelectTextFormElement implements IBaseFormElement {
-    private documentation: string
+    protected documentation: string
     protected required: boolean
-    private options: string[]
+    protected options: string[]
     protected onChange: (input: HTMLInputElement, isValid: boolean) => void
     protected startValue: string
 
@@ -317,6 +333,8 @@ abstract class baseSelectTextFormElement implements IBaseFormElement {
         this.options = options
         this.onChange = onChange
     }
+
+    public abstract get clone(): IBaseFormElement
 
     public generate(parent: HTMLElement) {
         const select = document.createElement('input')
@@ -343,6 +361,8 @@ abstract class baseSelectTextFormElement implements IBaseFormElement {
 }
 
 export class searchFormElement extends baseSelectTextFormElement {
+    private readonly onResult: (value: string) => void
+
     constructor(label: string, options: string[], onResult: (value: string) => void) {
         super(label, false, options, (select, isValid) => {
             if (isValid) {
@@ -350,12 +370,22 @@ export class searchFormElement extends baseSelectTextFormElement {
                 select.value = ''
             }
         })
+        this.onResult = onResult
+    }
+
+    public get clone(): IBaseFormElement {
+        return new searchFormElement(
+            this.documentation,
+            this.options,
+            this.onResult
+        )
     }
 
     public updateValue(values: any) { return true }
 }
 
 export class selectTextFormElement extends baseSelectTextFormElement {
+    private readonly onChangeArg: (value: string) => void
     private getOption: (values: any) => string
 
     constructor(
@@ -373,7 +403,18 @@ export class selectTextFormElement extends baseSelectTextFormElement {
             select.setCustomValidity(validity)
             onChange(isValid ? select.value : undefined)
         })
+        this.onChangeArg = onChange
         this.getOption = getOption
+    }
+
+    public get clone(): IBaseFormElement {
+        return new selectTextFormElement(
+            this.documentation,
+            this.required,
+            this.options,
+            this.onChangeArg,
+            this.getOption
+        )
     }
 
     public updateValue(values: any) {
@@ -391,6 +432,14 @@ export class hiddenFormElement extends inputFormElement {
         super(name, '', required, value)
     }
 
+    public get clone(): IBaseFormElement {
+        return new hiddenFormElement(
+            this.name,
+            this.required,
+            this.value
+        )
+    }
+
     public generate(parent: HTMLElement) {
         const hidden = document.createElement('input')
         hidden.type = 'hidden'
@@ -398,6 +447,8 @@ export class hiddenFormElement extends inputFormElement {
         parent.appendChild(hidden)
         return hidden
     }
+
+    public resetValue() { }
 }
 
 interface IFieldsetOptions {
@@ -415,6 +466,13 @@ export class fieldsetFormElement implements IBaseFormElement {
         this.options = options
         this.children = children
         this.hasInitialValue = false
+    }
+
+    public get clone(): IBaseFormElement {
+        return new fieldsetFormElement(
+            this.options,
+            ...this.children.map(v => v.clone)
+        )
     }
 
     public generate(parent: HTMLElement) {
@@ -481,7 +539,6 @@ export class fieldsetFormElement implements IBaseFormElement {
 interface IChoiceOption {
     text: string
     view: IBaseFormElement
-    name: string[]
 }
 
 export class choiceFormElement implements IBaseFormElement {
@@ -497,12 +554,24 @@ export class choiceFormElement implements IBaseFormElement {
         if (!isRequired) {
             options.unshift({
                 text: 'Nenhuma das opções',
-                view: undefined,
-                name: []
+                view: undefined
             })
         }
         this.options = options
         this.startIndex = 0
+    }
+
+    public get clone(): IBaseFormElement {
+        return new choiceFormElement(
+            this.documentation,
+            !this.options[0].view,
+            this.options.map(v => {
+                return {
+                    text: v.text,
+                    view: v.view?.clone
+                }
+            })
+        )
     }
 
     public generate(parent: HTMLElement) {
@@ -530,7 +599,7 @@ export class choiceFormElement implements IBaseFormElement {
 
     public updateValue(values: any) {
         const indexes: number[] = []
-        this.options.some((v,i) => {
+        this.options.some((v, i) => {
             const active = v.view?.updateValue(values) ?? false
             if (active) indexes.push(i)
         })
@@ -549,25 +618,33 @@ export function getDefaultListNameChanger(name: string) {
 }
 
 export class listFormElement implements IBaseFormElement {
-    public content: IBaseFormElement[]
+    private readonly elArg: fieldsetFormElement
+    private content: IBaseFormElement[]
     private container: fieldsetFormElement
     private parentNames: string[]
-    private addHTML: HTMLButtonElement
+    private addAction: () => void
     private startValues: any[]
     private startValuesArray: any[]
+    public onAddItem: (content: IBaseFormElement[]) => void
 
     constructor(el: fieldsetFormElement, parentNames: string[]) {
+        this.elArg = el.clone as fieldsetFormElement
         this.content = el.children
-        const addHTML = document.createElement('button')
-        addHTML.type = 'button'
-        addHTML.innerText = 'Adicionar item'
-        const add = new genericFormElement(addHTML)
+        const add = new buttonFormElement('Adicionar item', () => this.addAction())
         el.children = [add]
-        this.addHTML = addHTML
         this.container = el
         this.parentNames = parentNames
         this.startValues = []
         this.startValuesArray = []
+    }
+
+    public get clone(): IBaseFormElement {
+        const newList = new listFormElement(
+            this.elArg.clone as fieldsetFormElement,
+            this.parentNames
+        )
+        newList.onAddItem = this.onAddItem
+        return newList
     }
 
     public generate(parent: HTMLElement) {
@@ -578,24 +655,23 @@ export class listFormElement implements IBaseFormElement {
             const summary = document.createElement('summary')
             summary.innerText = 'Item'
             details.appendChild(summary)
-            this.content.forEach(v => content 
-                ? v.updateValue(content)
-                : v.resetValue())
-            this.content.forEach(v => v.generate(details))
-            const remHTML = document.createElement('button')
-            remHTML.type = 'button'
-            remHTML.innerText = 'Remover item'
-            details.appendChild(remHTML)
+            const newContent = this.content.map(v => v.clone)
+            if (content) newContent.forEach(v => v.updateValue(content))
+            this.onAddItem?.(newContent)
+            const remover = new buttonFormElement(
+                'Remover item',
+                () => details.remove())
+            newContent.push(remover)
+            newContent.forEach(v => v.generate(details))
             container.appendChild(details)
-            remHTML.onclick = () => details.remove()
         }
-        this.addHTML.onclick = () => addItem()
+        this.addAction = () => addItem()
         this.startValuesArray.forEach(v => addItem(this.startValues))
         return container
     }
 
     public updateValue(values: any) {
-        const baseValue = this.parentNames.filter(v => !v.includes('|')).reduce((p,c) => p?.[c], values)
+        const baseValue = this.parentNames.filter(v => !v.includes('|')).reduce((p, c) => p?.[c], values)
         if (baseValue && Array.isArray(baseValue)) {
             this.startValues = values
             this.startValuesArray = baseValue
@@ -708,7 +784,7 @@ export class defaultForm {
         const parentTags = options?.parentTags ?? []
         let additionalNameChanger: ((names: string[]) => string[])[] = []
         const customNameChanger = (names: string[]) => additionalNameChanger.forEach(v => v(names))
-        
+
         function isRequired(v: any): boolean {
             if (customRequireds.includes(getName(v))) return true
             const element = v.element
@@ -833,8 +909,7 @@ export class defaultForm {
                 if (options.length > 0) {
                     options.push({
                         text: getDocumentation(sequence),
-                        view: createFieldset(sequence, parentTags),
-                        name: [...parentTags, getName(sequence)]
+                        view: createFieldset(sequence, parentTags)
                     })
                 } else {
                     const array = Array.isArray(sequence) ? sequence : sequence.element as any[]
@@ -939,7 +1014,7 @@ export class defaultForm {
                 },
                 values => {
                     const filteredNames = parentTags.filter(v => !v.includes('|'))
-                    const baseValue = filteredNames.reduce((p,c) => p?.[c], values)
+                    const baseValue = filteredNames.reduce((p, c) => p?.[c], values)
                     if (!baseValue) return undefined
                     const cUFValue = baseValue['cUF']
                     const ufValue = baseValue['UF']
@@ -949,11 +1024,11 @@ export class defaultForm {
                         const uf = cUFValue
                             ? IBGE.find(v => v.Codigo == cUFValue)
                             : ufValue
-                            ? IBGE.find(v => v.Sigla.toUpperCase() == ufValue.toUpperCase())
-                            : cMunValue
-                            ? IBGE.find(v => v.Municipios.some(k => k.Codigo == cMunValue))
-                            : IBGE.find(v => v.Municipios.some(
-                                k => k.Nome.toUpperCase() == xMunValue.toUpperCase()))
+                                ? IBGE.find(v => v.Sigla.toUpperCase() == ufValue.toUpperCase())
+                                : cMunValue
+                                    ? IBGE.find(v => v.Municipios.some(k => k.Codigo == cMunValue))
+                                    : IBGE.find(v => v.Municipios.some(
+                                        k => k.Nome.toUpperCase() == xMunValue.toUpperCase()))
                         if (!uf) return undefined
                         const munValue = cMunValue
                             ? uf.Municipios.find(v => v.Codigo === cMunValue)
@@ -991,7 +1066,7 @@ export class defaultForm {
                 },
                 values => {
                     const filteredNames = parentTags.filter(v => !v.includes('|'))
-                    const baseValue = filteredNames.reduce((p,c) => p?.[c], values)
+                    const baseValue = filteredNames.reduce((p, c) => p?.[c], values)
                     if (!baseValue) return undefined
                     const cUFValue = baseValue['cUF']
                     const ufValue = baseValue['UF']
@@ -1031,7 +1106,7 @@ export class defaultForm {
                 },
                 values => {
                     const filteredNames = parentTags.filter(v => !v.includes('|'))
-                    const baseValue = filteredNames.reduce((p,c) => p?.[c], values)
+                    const baseValue = filteredNames.reduce((p, c) => p?.[c], values)
                     if (!baseValue) return undefined
                     const cPais = baseValue['cPais']
                     const xPais = baseValue['xPais']

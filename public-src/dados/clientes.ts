@@ -1,4 +1,4 @@
-import { defaultForm } from "../form-base"
+import { defaultForm, fieldsetFormElement } from "../form-base"
 
 export function renderizarCliente(data: {dest: any}): HTMLButtonElement {
     const div = document.createElement('button')
@@ -9,9 +9,9 @@ export function renderizarCliente(data: {dest: any}): HTMLButtonElement {
 }
 
 export function gerarViewCliente() {
-    const view = defaultForm.generateView(
+    const views = defaultForm.generateView(
         defaultForm.elementosNFe[3],
         { customRequireds: ['dest', 'xNome', 'enderDest'] })
-    console.log(view)
+    const view = views[0] as fieldsetFormElement
     return view
 }

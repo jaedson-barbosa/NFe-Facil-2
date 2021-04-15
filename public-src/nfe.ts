@@ -86,19 +86,22 @@ async function gerarProdutosEdicao() {
         const xProd = v[1].prod.xProd
         return cProd ? `${xProd} - ${cProd}` : xProd
     })
-    //Corrigir problema de adição de itens (talvez seja necessário fazer um metodo de clone)
-    //Também é necessário inserir o root de det e a informação de index
-    const search = new searchFormElement(
-        'Buscar produto cadastrado',
-        prodsView,
-        value => {
-            const index = prodsView.indexOf(value)
-            const prod = prods[index][1]
-            console.log(prod)
-            view.content.forEach(v => v.updateValue(prod))
-        })
-    view.content.unshift(search)
-    console.log(view)
+    let i = 0
+    view.onAddItem = content => {
+        const search = new searchFormElement(
+            'Buscar produto cadastrado',
+            prodsView,
+            value => {
+                const index = prodsView.indexOf(value)
+                const prod = prods[index][1]
+                const det = { det: {}}
+                det.det[i++] = prod
+                console.log(det)
+                content.forEach(v => v.updateValue(det))
+            }
+        )
+        content.unshift(search)
+    }
     return view
 }
 
@@ -195,7 +198,7 @@ const form = new defaultForm()
 const telaPrincipal = [
     gerarIdentificacao(),
     gerarEmitente(),
-    ...gerarViewCliente(),
+    gerarViewCliente(),
     ...gerarProdutosVisualizacao(),
     ...gerarRetirada(),
     ...gerarEntrega(),
