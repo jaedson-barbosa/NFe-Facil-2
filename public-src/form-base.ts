@@ -193,6 +193,13 @@ abstract class inputFormElement implements IBaseFormElement {
         if (value) this.value = value
     }
 
+    protected get nextItemName(): string[] {
+        const name = this.name.filter(v => !v.includes('|'))
+        const index = name.map(v => !isNaN(+v)).lastIndexOf(true)
+        if (index != -1) name[index] = (+name[index] + 1).toString()
+        return name
+    }
+
     public abstract get clone(): IBaseFormElement
     public abstract generate(parent: HTMLElement): HTMLElement
 
@@ -256,7 +263,7 @@ export class selectFormElement extends inputFormElement {
 
     public get clone(): IBaseFormElement {
         return new selectFormElement(
-            this.name,
+            this.nextItemName,
             this.documentation,
             this.required,
             this.options
@@ -296,7 +303,7 @@ export class textFormElement extends inputFormElement {
 
     public get clone(): IBaseFormElement {
         return new textFormElement(
-            this.name,
+            this.nextItemName,
             this.documentation,
             this.required,
             this.options
@@ -434,7 +441,7 @@ export class hiddenFormElement extends inputFormElement {
 
     public get clone(): IBaseFormElement {
         return new hiddenFormElement(
-            this.name,
+            this.nextItemName,
             this.required,
             this.value
         )
@@ -655,7 +662,7 @@ export class listFormElement implements IBaseFormElement {
             const summary = document.createElement('summary')
             summary.innerText = 'Item'
             details.appendChild(summary)
-            const newContent = this.content.map(v => v.clone)
+            const newContent = [...this.content]
             if (content) newContent.forEach(v => v.updateValue(content))
             this.onAddItem?.(newContent)
             const remover = new buttonFormElement(
@@ -663,6 +670,7 @@ export class listFormElement implements IBaseFormElement {
                 () => details.remove())
             newContent.push(remover)
             newContent.forEach(v => v.generate(details))
+            this.content = this.content.map(v => v.clone)
             container.appendChild(details)
         }
         this.addAction = () => addItem()

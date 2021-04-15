@@ -88,6 +88,7 @@ async function gerarProdutosEdicao() {
     })
     let i = 0
     view.onAddItem = content => {
+        const localI = i++
         const search = new searchFormElement(
             'Buscar produto cadastrado',
             prodsView,
@@ -95,8 +96,7 @@ async function gerarProdutosEdicao() {
                 const index = prodsView.indexOf(value)
                 const prod = prods[index][1]
                 const det = { det: {}}
-                det.det[i++] = prod
-                console.log(det)
+                det.det[localI] = prod
                 content.forEach(v => v.updateValue(det))
             }
         )
