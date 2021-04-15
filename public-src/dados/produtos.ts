@@ -27,6 +27,5 @@ export function gerarViewProduto() {
             'cEANTrib',
             'NCM',
             'vUnCom',
-            'vUnTrib',
-            'CEST'))
+            'vUnTrib'))
 }

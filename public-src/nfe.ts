@@ -75,26 +75,29 @@ function gerarEmitente() {
     return view
 }
 
-// Finalizar seleção de produto e testá-la
 async function gerarProdutosEdicao() {
     const views = defaultForm.generateView(
         defaultForm.elementosNFe[7],
         { customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'] })
     const view = views[0] as listFormElement
     const prods = await getItens('prod')
-    const button = new searchFormElement(
+    const prodsView = prods.map(v => {
+        const cProd = v[1].prod.cProd
+        const xProd = v[1].prod.xProd
+        return cProd ? `${xProd} - ${cProd}` : xProd
+    })
+    //Corrigir problema de adição de itens (talvez seja necessário fazer um metodo de clone)
+    //Também é necessário inserir o root de det e a informação de index
+    const search = new searchFormElement(
         'Buscar produto cadastrado',
-        prods.map(v => {
-            const cProd = v[1].prod.cProd
-            const xProd = v[1].prod.xProd
-            return cProd ? `${xProd} - ${cProd}` : xProd
-        }),
+        prodsView,
         value => {
-            const cProd = value.split(' - ')[1]
-            const prod = prods.find(v =>  v[1].prod.cProd == cProd)
+            const index = prodsView.indexOf(value)
+            const prod = prods[index][1]
             console.log(prod)
+            view.content.forEach(v => v.updateValue(prod))
         })
-    view.content.unshift(button)
+    view.content.unshift(search)
     console.log(view)
     return view
 }
