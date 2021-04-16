@@ -78,7 +78,23 @@ const dialog = document.getElementById('search') as HTMLDialogElement
 async function gerarProdutosEdicao() {
     const views = defaultForm.generateView(
         defaultForm.elementosNFe[7],
-        { customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'] })
+        {
+            customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'],
+            customOptions: [
+                {
+                    firstOption: 'Tributação pelo ICMS\n00 - Tributada integralmente',
+                    optionsChanger: options => {
+                        if (emit.CRT === 2) {
+                            // Regime normal
+                            options.splice(11)
+                        } else {
+                            // Simples nacional
+                            options.splice(0, 11)
+                        }
+                    }
+                }
+            ]
+        })
     const view = views[0] as listFormElement
     const prods = await getItens('prod')
     const prodsView = prods.map(v => {

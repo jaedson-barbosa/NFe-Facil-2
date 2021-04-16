@@ -39,7 +39,7 @@ OK  Busca de dados base na tela de NFe
 OK      Produtos
 OK      Clientes
 OK      Motoristas
-    Tipos de ICMS de acordo com o regime do emitente
+OK  Tipos de ICMS de acordo com o regime do emitente
     Sistemas de servidor
     Se tudo der certo, corrigir documentações no schema json e unir os 2 num único
     Implementar sincronizações

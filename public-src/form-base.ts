@@ -199,14 +199,14 @@ abstract class inputFormElement implements IBaseFormElement {
         documentation: string,
         required: boolean,
         value?: string) {
-        this.name = name
+        this.name = name.filter(v => !v.includes('|'))
         this.documentation = documentation
         this.required = required
         if (value) this.value = value
     }
 
     protected get nextItemName(): string[] {
-        const name = this.name.filter(v => !v.includes('|'))
+        const name = this.name
         const index = name.map(v => !isNaN(+v)).lastIndexOf(true)
         if (index != -1) name[index] = (+name[index] + 1).toString()
         return name
@@ -217,7 +217,7 @@ abstract class inputFormElement implements IBaseFormElement {
 
     public updateValue(values: any) {
         let hasParent = true
-        const value = this.name.filter(v => !v.includes('|')).reduce((p, c) => {
+        const value = this.name.reduce((p, c) => {
             if (!p) hasParent = false
             return p?.[c]
         }, values)
@@ -565,6 +565,7 @@ export class fieldsetFormElement implements IBaseFormElement {
 interface IChoiceOption {
     text: string
     view: IBaseFormElement
+    name: string[]
 }
 
 export class choiceFormElement implements IBaseFormElement {
@@ -580,7 +581,8 @@ export class choiceFormElement implements IBaseFormElement {
         if (!isRequired) {
             options.unshift({
                 text: 'Nenhuma das opções',
-                view: undefined
+                view: undefined,
+                name: []
             })
         }
         this.options = options
@@ -594,7 +596,8 @@ export class choiceFormElement implements IBaseFormElement {
             this.options.map(v => {
                 return {
                     text: v.text,
-                    view: v.view?.clone
+                    view: v.view?.clone,
+                    name: v.name
                 }
             })
         )
@@ -778,6 +781,10 @@ function findField(
 
 interface IGenerateViewOptions {
     customRequireds?: string[],
+    customOptions?: {
+        firstOption: string;
+        optionsChanger: (options: IChoiceOption[]) => void;
+    }[],
     rootTag?: string,
     parentTags?: string[]
 }
@@ -813,6 +820,7 @@ export class defaultForm {
     static generateView(
         rootField: any,
         options?: IGenerateViewOptions): IBaseFormElement[] {
+        const customOptions = options?.customOptions ?? []
         const customRequireds = options?.customRequireds ?? []
         const rootTag = options?.rootTag
         const parentTags = options?.parentTags ?? []
@@ -943,7 +951,8 @@ export class defaultForm {
                 if (options.length > 0) {
                     options.push({
                         text: getDocumentation(sequence),
-                        view: createFieldset(sequence, parentTags)
+                        view: createFieldset(sequence, parentTags),
+                        name: [...parentTags, getName(sequence)]
                     })
                 } else {
                     const array = Array.isArray(sequence) ? sequence : sequence.element as any[]
@@ -958,6 +967,9 @@ export class defaultForm {
             }
             const doc = getDocumentation(field)
             const req = isRequired(field)
+            customOptions
+                .find(v => v.firstOption == options[0].text)
+                ?.optionsChanger(options)
             return new choiceFormElement(doc, req, options)
         }
 
