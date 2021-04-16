@@ -7,7 +7,10 @@ import {
     getCodigoEstado,
     getRandomNumber,
     listFormElement,
-    searchFormElement
+    searchFormElement,
+    IBaseFormElement,
+    clean,
+    buttonFormElement
 } from './form-base'
 import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
 
@@ -70,6 +73,8 @@ function gerarEmitente() {
     return view
 }
 
+const dialog = document.getElementById('search') as HTMLDialogElement
+
 async function gerarProdutosEdicao() {
     const views = defaultForm.generateView(
         defaultForm.elementosNFe[7],
@@ -93,10 +98,51 @@ async function gerarProdutosEdicao() {
                 const det = { det: {} }
                 det.det[localI] = prod
                 content.forEach(v => v.updateValue(det))
+                dialog.close()
             }
         )
-        content.unshift(search)
+        const button = new buttonFormElement(
+            'Buscar produto cadastrado',
+            () => {
+                clean(dialog)
+                search.generate(dialog)
+                dialog.showModal()
+            }
+        )
+        content.unshift(button)
     }
+    return view
+}
+
+async function gerarCliente() {
+    const view = gerarViewCliente()
+    const content = view.children
+    const dests = await getItens('dest')
+    const destsView = dests.map(v => {
+        const xNome = v[1].dest.xNome
+        const xLgr = v[1].dest.enderDest.xLgr
+        return xLgr ? `${xNome} - ${xLgr}` : xNome
+    })
+    console.log(destsView)
+    const search = new searchFormElement(
+        'Buscar cliente cadastrado',
+        destsView,
+        value => {
+            const index = destsView.indexOf(value)
+            const dest = dests[index][1]
+            content.forEach(v => v.updateValue(dest))
+            dialog.close()
+        }
+    )
+    const button = new buttonFormElement(
+        'Buscar cliente cadastrado',
+        () => {
+            clean(dialog)
+            search.generate(dialog)
+            dialog.showModal()
+        }
+    )
+    content.unshift(button)
     return view
 }
 
@@ -130,13 +176,43 @@ function gerarAutorizacao() {
         ['autXML'])
 }
 
-function gerarTransporte() {
-    return defaultForm.generateView(
+async function gerarTransporte() {
+    const views = defaultForm.generateView(
         defaultForm.elementosNFe[9],
         {
             rootTag: 'element',
             customRequireds: ['vol', 'veicTransp|reboque', 'reboque', 'lacres']
         })
+    const view = views[0] as fieldsetFormElement
+    const motView = view.children[1] as fieldsetFormElement
+    const content = motView.children
+    const mots = await getItens('transporta')
+    const motsView = mots.map(v => {
+        const xNome = v[1].transporta.xNome
+        const xEnder = v[1].transporta.xEnder
+        return xEnder ? `${xNome} - ${xEnder}` : xNome
+    })
+    const search = new searchFormElement(
+        'Buscar motorista cadastrado',
+        motsView,
+        value => {
+            const index = motsView.indexOf(value)
+            const mot = mots[index][1]
+            const transp = { transp: mot }
+            content.forEach(v => v.updateValue(transp))
+            dialog.close()
+        }
+    )
+    const button = new buttonFormElement(
+        'Buscar motorista cadastrado',
+        () => {
+            clean(dialog)
+            search.generate(dialog)
+            dialog.showModal()
+        }
+    )
+    content.unshift(button)
+    return view
 }
 
 function gerarCobranca() {
@@ -195,33 +271,33 @@ function gerarResponsavelTecnico() {
 const main = document.getElementById('main')
 const form = new defaultForm()
 
-const telaPrincipal = [
-    gerarIdentificacao(),
-    gerarEmitente(),
-    gerarViewCliente(),
-    gerarProdutosVisualizacao(),
-    ...gerarRetirada(),
-    ...gerarEntrega(),
-    gerarAutorizacao(),
-    ...gerarTransporte(),
-    ...gerarCobranca(),
-    ...gerarPagamento(),
-    ...gerarIntermediador(),
-    gerarInformacoes(),
-    ...gerarExportacao(),
-    ...gerarCompra(),
-    ...gerarCana(),
-    gerarResponsavelTecnico()
-]
-
+let telaPrincipal: IBaseFormElement[]
 let telaProdutos: listFormElement
 let tela: 'produtos' | 'principal' = 'produtos'
 let currentData: any = {}
 
 async function renderizarTela() {
-    main.innerHTML = ''
+    clean(main)
     switch (tela) {
         case 'principal':
+            if (!telaPrincipal) telaPrincipal = [
+                gerarIdentificacao(),
+                gerarEmitente(),
+                await gerarCliente(),
+                gerarProdutosVisualizacao(),
+                ...gerarRetirada(),
+                ...gerarEntrega(),
+                gerarAutorizacao(),
+                await gerarTransporte(),
+                ...gerarCobranca(),
+                ...gerarPagamento(),
+                ...gerarIntermediador(),
+                gerarInformacoes(),
+                ...gerarExportacao(),
+                ...gerarCompra(),
+                ...gerarCana(),
+                gerarResponsavelTecnico()
+            ]
             form.elements = telaPrincipal
             form.updateValue(currentData)
             main.appendChild(form.generateForm(data => {

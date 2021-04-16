@@ -19,7 +19,13 @@ interface IComplexType extends IType {
 const complexTypes: IComplexType[] = nfeSchema.schema.complexType
 const simpleTypes: IType[] = [...basicSchema.schema.simpleType, ...nfeSchema.schema.simpleType]
 
-export function createId() { return Math.random().toString(36).substr(2, 9) }
+export function createId(): string {
+    const AUTO_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    return [...Array(20)].map(() => {
+        const index = Math.floor(Math.random() * AUTO_ID_CHARS.length)
+        return AUTO_ID_CHARS.charAt(index)
+    }).join('')
+}
 
 export function getCodigoEstado(sigla: string) {
     return IBGE.find(v => v.Sigla == sigla)?.Codigo
@@ -71,13 +77,19 @@ function insertLabel(
     insertBefore = true): HTMLLabelElement {
     const label = document.createElement('label')
     label.htmlFor = input.id = createId()
-    label.innerText = processLabelText(documentation)
+    label.textContent = processLabelText(documentation)
     if (insertBefore) {
         input.before(label)
     } else {
         input.after(label)
     }
     return label
+}
+
+export function clean(el: HTMLElement) {
+    while (el.firstChild) {
+        el.removeChild(el.firstChild);
+    }
 }
 
 const customHeaders: { name: string, header: string }[] = [
@@ -239,7 +251,7 @@ export class buttonFormElement implements IBaseFormElement {
 
     public generate(parent: HTMLElement) {
         const button = document.createElement('button')
-        button.innerText = this.content
+        button.textContent = this.content
         button.type = 'button'
         button.onclick = this.onClick
         parent.appendChild(button)
@@ -272,8 +284,12 @@ export class selectFormElement extends inputFormElement {
 
     public generate(parent: HTMLElement) {
         const select = document.createElement('select')
-        const options = this.options.map(v => `<option value="${v.value}">${v.text}</option>`)
-        select.innerHTML = options.join('')
+        this.options.forEach(v => {
+            const option = document.createElement('option')
+            option.value = v.value
+            option.text = v.text
+            select.appendChild(option)
+        })
         this.updateBaseProps(select)
         parent.appendChild(select)
         insertLabel(select, this.documentation)
@@ -348,11 +364,14 @@ abstract class baseSelectTextFormElement implements IBaseFormElement {
         select.title = this.documentation
         select.required = this.required
         const datalist = document.createElement('datalist')
-        datalist.innerHTML = this.options.map(
-            k => `<option>${k}</option>`).join('')
+        this.options.forEach(v => {
+            const option = document.createElement('option')
+            option.text = v
+            datalist.appendChild(option)
+        })
         select.setAttribute('list', datalist.id = createId())
-        parent.appendChild(datalist)
         parent.appendChild(select)
+        parent.appendChild(datalist)
         insertLabel(select, this.documentation)
         select.onchange = () => {
             const isValid = this.options.some(v => v == select.value)
@@ -490,7 +509,7 @@ export class fieldsetFormElement implements IBaseFormElement {
             }
             if (this.options.legend && this.options.required) {
                 const legend = document.createElement('legend')
-                legend.innerText = this.options.legend
+                legend.textContent = this.options.legend
                 content.appendChild(legend)
             }
             this.children.forEach(v => v.generate(content))
@@ -584,11 +603,14 @@ export class choiceFormElement implements IBaseFormElement {
     public generate(parent: HTMLElement) {
         const select = document.createElement('select')
         const div = document.createElement('div')
-        const options = this.options.map(v => `<option>${v.text}</option>`)
-        select.innerHTML = options.join('')
+        this.options.forEach(v => {
+            const option = document.createElement('option')
+            option.text = v.text
+            select.appendChild(option)
+        })
         const updateView = () => {
             let index = select.selectedIndex
-            div.innerHTML = ''
+            clean(div)
             const view = this.options[index].view
             if (view instanceof fieldsetFormElement) {
                 view.options.legend = ''
@@ -664,7 +686,7 @@ export class listFormElement implements IBaseFormElement {
             const details = document.createElement('details')
             details.open = true
             const summary = document.createElement('summary')
-            summary.innerText = 'Item'
+            summary.textContent = 'Item'
             details.appendChild(summary)
             const newContent = [...this.content]
             if (content) newContent.forEach(v => v.updateValue(content))
