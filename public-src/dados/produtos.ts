@@ -1,11 +1,9 @@
 import { defaultForm, fieldsetFormElement } from "../form-base"
 
-export function renderizarProduto(data: {prod: any}): HTMLButtonElement {
-    const div = document.createElement('button')
-    div.innerHTML = /*html*/ `
+export function renderizarProduto(data: {prod: any}): string {
+    return /*html*/ `
     <div>${data.prod.xProd}
     <i>${data.prod.cProd}</i></div>`
-    return div
 }
 
 export function gerarViewProduto() {

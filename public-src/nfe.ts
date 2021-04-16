@@ -2,16 +2,11 @@ import { gerarViewCliente } from './dados/clientes'
 import { getItens } from './dados/geral'
 import {
     defaultForm,
-    defaultFormSubmit,
     fieldsetFormElement,
     hiddenFormElement,
     getCodigoEstado,
     getRandomNumber,
     listFormElement,
-    getDefaultListNameChanger,
-    IBaseFormElement,
-    selectFormElement,
-    buttonFormElement,
     searchFormElement
 } from './form-base'
 import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
@@ -95,7 +90,7 @@ async function gerarProdutosEdicao() {
             value => {
                 const index = prodsView.indexOf(value)
                 const prod = prods[index][1]
-                const det = { det: {}}
+                const det = { det: {} }
                 det.det[localI] = prod
                 content.forEach(v => v.updateValue(det))
             }
@@ -106,9 +101,13 @@ async function gerarProdutosEdicao() {
 }
 
 function gerarProdutosVisualizacao() {
-    return defaultForm.generateView(
+    const views = defaultForm.generateView(
         defaultForm.elementosNFe[7],
-        { customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'] })
+        { customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'] }
+    )
+    const view = views[0] as listFormElement
+    view.hidden = true
+    return view
 }
 
 function gerarRetirada() {
@@ -126,8 +125,9 @@ function gerarEntrega() {
 function gerarAutorizacao() {
     return new listFormElement(
         defaultForm.generateView(
-            defaultForm.elementosNFe[6])[0] as fieldsetFormElement,
-            ['autXML'])
+            defaultForm.elementosNFe[6]
+        )[0] as fieldsetFormElement,
+        ['autXML'])
 }
 
 function gerarTransporte() {
@@ -199,7 +199,7 @@ const telaPrincipal = [
     gerarIdentificacao(),
     gerarEmitente(),
     gerarViewCliente(),
-    ...gerarProdutosVisualizacao(),
+    gerarProdutosVisualizacao(),
     ...gerarRetirada(),
     ...gerarEntrega(),
     gerarAutorizacao(),

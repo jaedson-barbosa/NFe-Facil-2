@@ -7,7 +7,7 @@ import { getItens } from './dados/geral'
 
 function main(
     tipoDado: 'dest' | 'prod' | 'transporta',
-    renderizarItem: (data: any) => HTMLButtonElement,
+    renderizarItem: (data: any) => string,
     ...view: IBaseFormElement[]) {
     const mainDialog = document.querySelector('dialog')
     mainDialog.showModal()
@@ -40,7 +40,8 @@ function main(
     }
 
     function renderizarNovoItem(v: [IDBValidKey, any], ref?: HTMLElement) {
-        const button = renderizarItem(v[1])
+        const button = document.createElement('button')
+        button.innerHTML = renderizarItem(v[1])
         button.onclick = () => cadastrar([...v, button])
         if (ref) ref.before(button)
         else dados.appendChild(button)

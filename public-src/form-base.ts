@@ -633,6 +633,10 @@ export class listFormElement implements IBaseFormElement {
     private startValues: any[]
     private startValuesArray: any[]
     public onAddItem: (content: IBaseFormElement[]) => void
+    
+    public set hidden(v: boolean) {
+        this.container.options.hidden = v
+    }
 
     constructor(el: fieldsetFormElement, parentNames: string[]) {
         this.elArg = el.clone as fieldsetFormElement

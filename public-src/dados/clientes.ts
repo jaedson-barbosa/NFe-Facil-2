@@ -1,11 +1,9 @@
 import { defaultForm, fieldsetFormElement } from "../form-base"
 
-export function renderizarCliente(data: {dest: any}): HTMLButtonElement {
-    const div = document.createElement('button')
-    div.innerHTML = /*html*/ `
+export function renderizarCliente(data: {dest: any}): string {
+    return /*html*/ `
     <div>${data.dest.xNome}
     <i>${data.dest.enderDest.xLgr}</i></div>`
-    return div
 }
 
 export function gerarViewCliente() {

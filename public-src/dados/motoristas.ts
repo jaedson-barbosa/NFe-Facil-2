@@ -1,11 +1,9 @@
 import { defaultForm } from "../form-base"
 
-export function renderizarMotorista(data: {transporta: any}): HTMLButtonElement {
-    const div = document.createElement('button')
-    div.innerHTML = /*html*/ `
+export function renderizarMotorista(data: {transporta: any}): string {
+    return /*html*/ `
     <div>${data.transporta.xNome}
     <i>${data.transporta.xEnder}</i></div>`
-    return div
 }
 
 export function gerarViewMotorista() {
