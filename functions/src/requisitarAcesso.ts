@@ -34,7 +34,7 @@ export default functions.https.onRequest((req, res) => cors(req, res, async () =
 		const privateKeyPem = forge.pki.privateKeyToPem(keybag.key!);
 		const certificatePem = forge.pki.certificateToPem(certBag.cert!);
 
-		const empresas = await db.collection('empresas').where('CNPJ', '==', cnpj).select().limit(1).get()
+		const empresas = await db.collection('empresas').where('emit.CNPJ', '==', cnpj).select().limit(1).get()
 		if (empresas.empty) {
 			res.status(400).send('Empresa não existe')
 			return
@@ -75,7 +75,7 @@ export default functions.https.onRequest((req, res) => cors(req, res, async () =
 			})
 		}
 	} else {
-		const empresas = await db.collection('empresas').where('CNPJ', '==', cnpj).select().limit(1).get()
+		const empresas = await db.collection('empresas').where('emit.CNPJ', '==', cnpj).select().limit(1).get()
 		if (empresas.empty) {
 			res.status(400).send('Empresa não existe')
 			return

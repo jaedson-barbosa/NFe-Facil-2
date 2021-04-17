@@ -40,6 +40,11 @@ OK      Produtos
 OK      Clientes
 OK      Motoristas
 OK  Tipos de ICMS de acordo com o regime do emitente
-    Sistemas de servidor
-    Se tudo der certo, corrigir documentações no schema json e unir os 2 num único
+    Sistemas de servidor básicos (sem todas análises)
+OK      scanUsuario
+OK      scanRegistro
+OK      cadastrarCNPJ
+        requisitarAcesso
+
+    Corrigir documentações no schema json e unir os 2 num único
     Implementar sincronizações
