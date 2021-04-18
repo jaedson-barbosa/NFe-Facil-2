@@ -45,6 +45,10 @@ OK      scanUsuario
 OK      scanRegistro
 OK      cadastrarCNPJ
         requisitarAcesso
+        apenasSalvarNFe
+        assinarTransmitirNFe
+OK          assinarNFe
+            transmitirNFe
 
     Corrigir documentações no schema json e unir os 2 num único
     Implementar sincronizações
