@@ -1,6 +1,7 @@
 {
     "require": {
         "google/cloud-functions-framework": "^0.7.2",
-        "nfephp-org/sped-da": "^1.0"
+        "nfephp-org/sped-da": "^1.0",
+        "nfephp-org/posprint": "^0.1.3"
     }
 }
