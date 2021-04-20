@@ -1,6 +1,5 @@
 <?php
 
-// include __DIR__ . '\vendor\autoload.php';
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
@@ -29,9 +28,17 @@ function helloHttp(ServerRequestInterface $request): ResponseInterface
         ->withHeader('Content-type', 'application/pdf')
         ->withHeader('Access-Control-Allow-Origin', '*');
 }
-
-//$env:FUNCTION_TARGET='helloHttp'
-//$env:FUNCTION_SOURCE='index.php'
-//vendor/bin/router.php.bat
-//php -S localhost:8080 vendor/google/cloud-functions-framework/router.php
-//gcloud functions deploy helloWorld --runtime=php74 --entry-point='helloHttp' --trigger-http
+/*
+DANFE NFC-e necessita do pacote "opcional" nfephp-org/posprint
+Geração dos DANFES já estão funcionando, mas ainda é preciso implementar personalização.
+Usar JSON com suporte a geração única:
+{
+    nfe/nfce: xml
+    personalizações...
+}
+Comandos úteis:
+$env:FUNCTION_TARGET='helloHttp'                                            Define a entrada
+vendor/bin/router.php.bat                                                   Roda o programa uma vez
+php -S localhost:8080 vendor/google/cloud-functions-framework/router.php    Inicia o server local
+gcloud functions deploy helloWorld --runtime=php74 --entry-point='helloHttp' --trigger-http
+*/

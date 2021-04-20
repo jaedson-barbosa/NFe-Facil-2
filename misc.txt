@@ -45,19 +45,29 @@ OK      scanUsuario
 OK      scanRegistro
 OK      cadastrarCNPJ
 +-      requisitarAcesso
+        prefinalizarNFe //retorna série e número recomendados, serão usados para gerar o ID e aí libera os botões pras funções abaixo
         apenasSalvarNFe
             gerarPreviewDANFE
+                NFe
+                    PHP
+                    Node
+                NFCe
+                    PHP
+                    Node
         assinarTransmitirNFe
 OK          assinarNFe
             transmitirNFe
             gerarDANFE
+                NFe
+                    PHP
+                    Node
+                NFCe
+                    PHP
+                    Node
     Corrigir documentações no schema json e unir os 2 num único
     Implementar sincronizações
 
 Se for dar muito trabalho pra fazer a parte de transmissão, usar o https://github.com/lealhugui/node-dfe
-
-Para gerar o DANFE, o melhor é usar o https://github.com/nfephp-org/sped-da dado que ele não tem toda a complicação presente no Zeus e porque o Zeus aparentemente não faz manutenção da geração de PDF de NFCe no .Net Core e para usar o .Net Framework não dá para ser usado o Functions. Para isso será usado o Cloud Functions e https://github.com/GoogleCloudPlatform/functions-framework-php. Tudo deve ser feito  conforme os tutoriais destes repositórios. Para fazer tudo corretamente é bom aprender pelo menos o básico de PHP. O projeto tem que ficar bom e só vai ser divulgado depois de estar funcionando todos os sistemas.
-Ficar de olho: https://github.com/erpbrasil/erpbrasil.edoc.pdf
 
 Um código muito util na hora de testar se tá tudo funcionando é esse:
 var saveData = (function () {
