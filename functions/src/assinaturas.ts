@@ -1,4 +1,4 @@
-import { cors, functions, db, getUser } from './core'
+import { onLoggedRequest } from './core'
 import { SignedXml } from 'xml-crypto'
 
 class keyProvider {
@@ -23,23 +23,7 @@ class keyProvider {
     }
 }
 
-export const assinarNFe = functions.https.onRequest((req, res) => cors(req, res, async () => {
-    const user = await getUser(req);
-    if (!user) {
-        // Usuário não foi encontrado, então apenas se rejeita a requisição.
-        res.sendStatus(401)
-        return
-    }
-    const body = req.body ? JSON.parse(req.body) : undefined
-    if (!body) {
-        res.status(400).send('Corpo de requisição inválido')
-        return
-    }
-    const empresa = await db.collection('empresas').doc(body.id).get()
-    if (!empresa.exists) {
-        res.status(400).send('Empresa não existe')
-        return
-    }
+export const assinarNFe = onLoggedRequest(async (user, res, empresa, body) => {
     // const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
     // if (usuario.exists) res.status(200).send(usuario.data())
     // else res.status(400).send('Usuário não cadastrado')
@@ -59,4 +43,4 @@ export const assinarNFe = functions.https.onRequest((req, res) => cors(req, res,
     sig.computeSignature(body.xml)
     const signed = sig.getSignedXml()
     res.status(200).type('application/xml').send(signed)
-}))
+})

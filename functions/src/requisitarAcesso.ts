@@ -1,12 +1,7 @@
-import { onRequest, db } from './core'
+import { onLoggedRequest } from './core'
 import * as forge from 'node-forge'
 
-export default onRequest(true, async (user, res, body) => {
-	const cnpj = body.cnpj
-	if (!cnpj) {
-		res.status(400).send('CNPJ inválido')
-		return
-	}
+export default onLoggedRequest(async (user, res, empresa, body) => {
 	if (body.cert && body.senha) {
 		const pfx = body.cert
 		if (!pfx) {
@@ -28,13 +23,7 @@ export default onRequest(true, async (user, res, body) => {
 		const privateKeyPem = forge.pki.privateKeyToPem(keybag.key!);
 		const certificatePem = forge.pki.certificateToPem(certBag.cert!);
 
-		const empresas = await db.collection('empresas').where('emit.CNPJ', '==', cnpj).select().limit(1).get()
-		if (empresas.empty) {
-			res.status(400).send('Empresa não existe')
-			return
-		}
-		const empresa = empresas.docs[0]
-		const currentData = empresa.data()
+		const currentData = empresa.data()!
 		if (currentData.publicCert != certificatePem || currentData.privateCert != privateKeyPem) {
 			res.status(400).send('Certificados não coincidem')
 			return
@@ -51,7 +40,7 @@ export default onRequest(true, async (user, res, body) => {
 				res.status(200).send({
 					id: empresa.id,
 					status: 3,
-					empresa: empresa.data().emit
+					empresa: currentData.emit
 				})
 			} else {
 				res.status(400).send(status)
@@ -65,7 +54,7 @@ export default onRequest(true, async (user, res, body) => {
 			res.status(200).send({
 				id: empresa.id,
 				status: 3,
-				empresa: empresa.data().emit
+				empresa: currentData.emit
 			})
 		}
 	} else if (body.cert) {
@@ -73,12 +62,6 @@ export default onRequest(true, async (user, res, body) => {
 	} else if (body.senha) {
 		res.status(400).send('Não foi selecionado nenhum certificado')
 	} else {
-		const empresas = await db.collection('empresas').where('emit.CNPJ', '==', cnpj).select().limit(1).get()
-		if (empresas.empty) {
-			res.status(400).send('Empresa não existe')
-			return
-		}
-		const empresa = empresas.docs[0]
 		const usuarioRef = empresa.ref.collection('usuarios').doc(user.sub)
 		const usuario = await usuarioRef.get()
 		if (usuario.exists) {
@@ -93,7 +76,7 @@ export default onRequest(true, async (user, res, body) => {
 		res.status(200).send({
 			id: empresa.id,
 			status: 0,
-			empresa: empresa.data().emit
+			empresa: empresa.data()!.emit
 		})
 	}
 })

@@ -1,4 +1,4 @@
-import { onRequest, db } from '../core'
+import { onLoggedRequest } from '../core'
 import * as https from 'https'
 import * as axios from 'axios'
 import * as servicos from './servicos.json'
@@ -24,16 +24,7 @@ async function enviarRequisicao(address: string, body: string, nomeServico: nome
     return resp.data
 }
 
-export const consultarStatus = onRequest(true, async (user, res, body) => {
-    if (!body.id) {
-        res.status(400).send('Corpo de requisição sem ID')
-        return
-    }
-    const empresa = await db.collection('empresas').doc(body.id).get()
-    if (!empresa.exists) {
-        res.status(400).send('Empresa não existe')
-        return
-    }
+export const consultarStatus = onLoggedRequest(async (user, res, empresa, body) => {
     // const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
     // if (usuario.exists) res.status(200).send(usuario.data())
     // else res.status(400).send('Usuário não cadastrado')

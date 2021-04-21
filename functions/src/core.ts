@@ -20,21 +20,66 @@ async function getUser(req: any): Promise<firebase.auth.DecodedIdToken | undefin
 	return undefined
 }
 
-export function onRequest(
+export function onDefaultRequest(
 	bodyRequired: boolean,
-	handler: (user: firebase.auth.DecodedIdToken, resp: functions.Response<any>, body: any) => Promise<void>) : functions.HttpsFunction {
-	return functions.https.onRequest((req, res) => cors(req, res, async () => {
-		const user = await getUser(req);
-		if (!user) {
-			// Usuário não foi encontrado, então apenas se rejeita a requisição.
-			res.sendStatus(401)
-			return
+	handler: (
+		user: firebase.auth.DecodedIdToken,
+		resp: functions.Response<any>,
+		body: any
+	) => Promise<void>
+) : functions.HttpsFunction {
+	return functions.https.onRequest(
+		(req, res) => cors(
+			req, res, async () => {
+				const user = await getUser(req);
+				if (!user) {
+					res.sendStatus(401)
+					return
+				}
+				const body = req.body ? JSON.parse(req.body) : undefined
+				if (!body && bodyRequired) {
+					res.status(400).send('Corpo de requisição não informado')
+					return
+				}
+				await handler(user, res, body)
+			}
+		)
+	)
+}
+
+export function onLoggedRequest(
+	handler: (
+		user: firebase.auth.DecodedIdToken,
+		resp: functions.Response<any>,
+		company: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>,
+		body: any
+	) => Promise<void>
+) : functions.HttpsFunction {
+	return onDefaultRequest(
+		true,
+		async (u, r, b) => {
+			const cnpj = b.cnpj
+			const id = b.id
+			if (!cnpj && !id) {
+				r.status(400).send('Requisição sem identificação de emitente.')
+			} else if (cnpj) {
+				const empresas = await db
+					.collection('empresas')
+					.where('emit.CNPJ', '==', cnpj)
+					.select().limit(1).get()
+				if (empresas.empty) {
+					r.status(400).send('Empresa não existe')
+				} else {
+					await handler(u, r, empresas.docs[0], b)
+				}
+			} else {
+				const empresa = await db.collection('empresas').doc(id).get()
+				if (!empresa.exists) {
+					r.status(400).send('Empresa não existe')
+				} else {
+					await handler(u, r, empresa, b)
+				}
+			}
 		}
-		const body = req.body ? JSON.parse(req.body) : undefined
-		if (!body && bodyRequired) {
-			res.status(400).send('Corpo de requisição não informado')
-			return
-		}
-		await handler(user, res, body)
-	}))
+	)
 }

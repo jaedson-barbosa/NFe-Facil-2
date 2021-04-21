@@ -1,6 +1,6 @@
-import { onRequest, db } from './core'
+import { onDefaultRequest, db } from './core'
 
-export default onRequest(false, async (user, res) => {
+export default onDefaultRequest(false, async (user, res) => {
 	const cadastros = await db.collectionGroup('usuarios').where('id', '==', user.sub).get()
 	if (cadastros.empty) {
 		res.status(400).send('Nenhuma empresa')

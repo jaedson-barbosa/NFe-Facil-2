@@ -1,7 +1,7 @@
-import { onRequest, db, FieldValue } from './core'
+import { onDefaultRequest, db, FieldValue } from './core'
 import * as forge from 'node-forge'
 
-export default onRequest(true, async (user, res, body) => {
+export default onDefaultRequest(true, async (user, res, body) => {
 	const pfx = body.cert
 	if (!pfx) {
 		res.status(400).send('Certificado inválido')
@@ -47,21 +47,17 @@ export default onRequest(true, async (user, res, body) => {
 		res.status(400).send('Empresa já existe')
 		return
 	}
-	try {
-		const empresaRef = db.collection('empresas').doc()
-		await empresaRef.set({
-			publicCert: certificatePem,
-			privateCert: privateKeyPem,
-			emit: emit,
-			lastUpdate: FieldValue.serverTimestamp()
-		})
-		await empresaRef.collection('usuarios').doc(user.sub).set({
-			status: 3,
-			nome: user.email ?? 'Anônimo',
-			id: user.sub
-		})
-		res.status(200).send(empresaRef.id)
-	} catch (error) {
-		res.status(200).send('Erro')
-	}
+	const empresaRef = db.collection('empresas').doc()
+	await empresaRef.set({
+		publicCert: certificatePem,
+		privateCert: privateKeyPem,
+		emit: emit,
+		lastUpdate: FieldValue.serverTimestamp()
+	})
+	await empresaRef.collection('usuarios').doc(user.sub).set({
+		status: 3,
+		nome: user.email,
+		id: user.sub
+	})
+	res.status(200).send(empresaRef.id)
 })
