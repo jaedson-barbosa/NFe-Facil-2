@@ -1,19 +1,13 @@
-import { cors, functions, db, forge, getUser } from './core'
+import { onRequest, db } from './core'
+import * as forge from 'node-forge'
 
-export default functions.https.onRequest((req, res) => cors(req, res, async () => {
-	const user = await getUser(req);
-	if (!user) {
-		// Usuário não foi encontrado, então apenas se rejeita a requisição.
-		res.sendStatus(401)
-		return
-	}
-	const cnpj = req.query.cnpj
+export default onRequest(true, async (user, res, body) => {
+	const cnpj = body.cnpj
 	if (!cnpj) {
 		res.status(400).send('CNPJ inválido')
 		return
 	}
-	const body = req.body ? JSON.parse(req.body) : undefined
-	if (body) {
+	if (body.cert && body.senha) {
 		const pfx = body.cert
 		if (!pfx) {
 			res.status(400).send('Certificado inválido')
@@ -74,6 +68,10 @@ export default functions.https.onRequest((req, res) => cors(req, res, async () =
 				empresa: empresa.data().emit
 			})
 		}
+	} else if (body.cert) {
+		res.status(400).send('Não foi informada a senha do certificado')
+	} else if (body.senha) {
+		res.status(400).send('Não foi selecionado nenhum certificado')
 	} else {
 		const empresas = await db.collection('empresas').where('emit.CNPJ', '==', cnpj).select().limit(1).get()
 		if (empresas.empty) {
@@ -98,4 +96,4 @@ export default functions.https.onRequest((req, res) => cors(req, res, async () =
 			empresa: empresa.data().emit
 		})
 	}
-}))
+})

@@ -1,17 +1,7 @@
-import { cors, functions, db, forge, FieldValue, getUser } from './core'
+import { onRequest, db, FieldValue } from './core'
+import * as forge from 'node-forge'
 
-export default functions.https.onRequest((req, res) => cors(req, res, async () => {
-	const user = await getUser(req);
-	if (!user) {
-		// Usuário não foi encontrado, então apenas se rejeita a requisição.
-		res.sendStatus(401)
-		return
-	}
-	const body = req.body ? JSON.parse(req.body) : undefined
-	if (!body) {
-		res.status(400).send('Corpo de requisição inválido')
-		return
-	}
+export default onRequest(true, async (user, res, body) => {
 	const pfx = body.cert
 	if (!pfx) {
 		res.status(400).send('Certificado inválido')
@@ -52,7 +42,6 @@ export default functions.https.onRequest((req, res) => cors(req, res, async () =
 		return
 	}
 
-	// const certificatePem = forge.pki.certificateToPem(cert!);
 	const empresas = await db.collection('empresas').where('CNPJ', '==', cnpj).select().limit(1).get()
 	if (!empresas.empty) {
 		res.status(400).send('Empresa já existe')
@@ -75,4 +64,4 @@ export default functions.https.onRequest((req, res) => cors(req, res, async () =
 	} catch (error) {
 		res.status(200).send('Erro')
 	}
-}))
+})

@@ -1,12 +1,6 @@
-import { cors, functions, db, getUser } from './core'
+import { onRequest, db } from './core'
 
-export default functions.https.onRequest((req, res) => cors(req, res, async () => {
-	const user = await getUser(req);
-	if (!user) {
-		// Usuário não foi encontrado, então apenas se rejeita a requisição.
-		res.sendStatus(401)
-		return
-	}
+export default onRequest(false, async (user, res) => {
 	const cadastros = await db.collectionGroup('usuarios').where('id', '==', user.sub).get()
 	if (cadastros.empty) {
 		res.status(400).send('Nenhuma empresa')
@@ -26,4 +20,4 @@ export default functions.https.onRequest((req, res) => cors(req, res, async () =
 		}
 	})
 	res.status(200).send(zip)
-}))
+})

@@ -4,3 +4,5 @@ public
 **/.cache
 *.log
 DANFE/vendor
+functions/lib
+saved-data
