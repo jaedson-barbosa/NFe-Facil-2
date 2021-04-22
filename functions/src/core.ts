@@ -1,6 +1,16 @@
 import * as functions from 'firebase-functions'
 import * as firebase from 'firebase-admin'
 
+interface IEmpresaBase<T> {
+	publicCert: string;
+    privateCert: string;
+    emit: any;
+    lastUpdate: T;
+}
+
+export type IEmpresaGet = IEmpresaBase<FirebaseFirestore.Timestamp>
+export type IEmpresaSet = IEmpresaBase<FirebaseFirestore.FieldValue>
+
 firebase.initializeApp()
 const cors = require('cors')({ origin: true, allowedHeaders: ['Content-Type', 'Authorization'] })
 export const db = firebase.firestore()
@@ -51,7 +61,8 @@ export function onLoggedRequest(
 	handler: (
 		user: firebase.auth.DecodedIdToken,
 		resp: functions.Response<any>,
-		company: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>,
+		companyRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>,
+		company: IEmpresaGet,
 		body: any
 	) => Promise<void>
 ) : functions.HttpsFunction {
@@ -70,14 +81,18 @@ export function onLoggedRequest(
 				if (empresas.empty) {
 					r.status(400).send('Empresa não existe')
 				} else {
-					await handler(u, r, empresas.docs[0], b)
+					const empRef = empresas.docs[0].ref
+					const empData = empresas.docs[0].data()! as IEmpresaGet
+					await handler(u, r, empRef, empData, b)
 				}
 			} else {
 				const empresa = await db.collection('empresas').doc(id).get()
 				if (!empresa.exists) {
 					r.status(400).send('Empresa não existe')
 				} else {
-					await handler(u, r, empresa, b)
+					const empRef = empresa.ref
+					const empData = empresa.data()! as IEmpresaGet
+					await handler(u, r, empRef, empData, b)
 				}
 			}
 		}

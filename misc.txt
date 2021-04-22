@@ -82,3 +82,5 @@ var saveData = (function () {
         window.URL.revokeObjectURL(url);
     };
 }());
+
+Deve-se proibir o uso de emitente com CPF

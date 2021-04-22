@@ -1,4 +1,4 @@
-import { onDefaultRequest, db, FieldValue } from './core'
+import { onDefaultRequest, db, FieldValue, IEmpresaSet } from './core'
 import * as forge from 'node-forge'
 
 export default onDefaultRequest(true, async (user, res, body) => {
@@ -48,12 +48,13 @@ export default onDefaultRequest(true, async (user, res, body) => {
 		return
 	}
 	const empresaRef = db.collection('empresas').doc()
-	await empresaRef.set({
+	const empresa: IEmpresaSet = {
 		publicCert: certificatePem,
 		privateCert: privateKeyPem,
 		emit: emit,
 		lastUpdate: FieldValue.serverTimestamp()
-	})
+	}
+	await empresaRef.set(empresa)
 	await empresaRef.collection('usuarios').doc(user.sub).set({
 		status: 3,
 		nome: user.email,

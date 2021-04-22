@@ -23,12 +23,11 @@ class keyProvider {
     }
 }
 
-export const assinarNFe = onLoggedRequest(async (user, res, empresa, body) => {
+export const assinarNFe = onLoggedRequest(async (user, res, empresaRef, dataEmpresa, body) => {
     // const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
     // if (usuario.exists) res.status(200).send(usuario.data())
     // else res.status(400).send('Usuário não cadastrado')
     // TO-DO: Implementar análise de permissões e verificação de XML
-    const dataEmpresa = empresa.data()!
     const sig = new SignedXml()
     sig.keyInfoProvider = new keyProvider(dataEmpresa.publicCert)
     sig.addReference(

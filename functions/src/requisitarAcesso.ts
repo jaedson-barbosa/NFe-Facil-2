@@ -1,7 +1,7 @@
 import { onLoggedRequest } from './core'
 import * as forge from 'node-forge'
 
-export default onLoggedRequest(async (user, res, empresa, body) => {
+export default onLoggedRequest(async (user, res, empresaRef, empresa, body) => {
 	if (body.cert && body.senha) {
 		const pfx = body.cert
 		if (!pfx) {
@@ -23,12 +23,11 @@ export default onLoggedRequest(async (user, res, empresa, body) => {
 		const privateKeyPem = forge.pki.privateKeyToPem(keybag.key!);
 		const certificatePem = forge.pki.certificateToPem(certBag.cert!);
 
-		const currentData = empresa.data()!
-		if (currentData.publicCert != certificatePem || currentData.privateCert != privateKeyPem) {
+		if (empresa.publicCert != certificatePem || empresa.privateCert != privateKeyPem) {
 			res.status(400).send('Certificados não coincidem')
 			return
 		}
-		const usuarioRef = empresa.ref.collection('usuarios').doc(user.sub)
+		const usuarioRef = empresaRef.collection('usuarios').doc(user.sub)
 		const usuario = await usuarioRef.get()
 		if (usuario.exists) {
 			const status = usuario.data()!.status
@@ -38,9 +37,9 @@ export default onLoggedRequest(async (user, res, empresa, body) => {
 					permissoes: null
 				})
 				res.status(200).send({
-					id: empresa.id,
+					id: empresaRef.id,
 					status: 3,
-					empresa: currentData.emit
+					empresa: empresa.emit
 				})
 			} else {
 				res.status(400).send(status)
@@ -52,9 +51,9 @@ export default onLoggedRequest(async (user, res, empresa, body) => {
 				id: user.sub
 			})
 			res.status(200).send({
-				id: empresa.id,
+				id: empresaRef.id,
 				status: 3,
-				empresa: currentData.emit
+				empresa: empresa.emit
 			})
 		}
 	} else if (body.cert) {
@@ -62,7 +61,7 @@ export default onLoggedRequest(async (user, res, empresa, body) => {
 	} else if (body.senha) {
 		res.status(400).send('Não foi selecionado nenhum certificado')
 	} else {
-		const usuarioRef = empresa.ref.collection('usuarios').doc(user.sub)
+		const usuarioRef = empresaRef.collection('usuarios').doc(user.sub)
 		const usuario = await usuarioRef.get()
 		if (usuario.exists) {
 			res.status(400).send(usuario.data()!.status)
@@ -74,9 +73,9 @@ export default onLoggedRequest(async (user, res, empresa, body) => {
 			id: user.sub
 		})
 		res.status(200).send({
-			id: empresa.id,
+			id: empresaRef.id,
 			status: 0,
-			empresa: empresa.data()!.emit
+			empresa: empresa.emit
 		})
 	}
 })
