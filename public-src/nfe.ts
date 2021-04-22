@@ -15,7 +15,7 @@ import {
 import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
 
 const empresa = getEmpresaAtiva()
-const emit = empresa.empresa
+const emit = empresa.emit
 
 declare global {
     interface Date {
@@ -50,7 +50,7 @@ function gerarIdentificacao() {
         new hiddenFormElement([rootName, 'cNF'], true, getRandomNumber().toString()),
         ...defaultForm.generateViews(root, {}, 'natOp'),
         new hiddenFormElement([rootName, 'mod'], true, '55'),
-        new hiddenFormElement([rootName, 'serie'], true, '%SERIE%'),
+        new hiddenFormElement([rootName, 'serie'], true, empresa.serieAtual.toString()),
         new hiddenFormElement([rootName, 'nNF'], true, '%NUMERO%'),
         new hiddenFormElement([rootName, 'dhEmi'], true, new Date().toNFeString()),
         ...defaultForm.generateViews(root, {}, 'tpNF', 'idDest', 'cMunFG'),

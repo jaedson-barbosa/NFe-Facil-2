@@ -14,6 +14,7 @@ empresas:
 publicCert
 privateCert
 emit (...)
+serieAtual
 lastUpdate
 -usuarios:
     status //0-Aguardando analise/1-Acesso revogado/2-Acesso liberado/3-Administrador
@@ -28,7 +29,8 @@ empresas:
 id
 status
 permissoes
-empresa
+emit
+serieAtual
 
 SESSIONSTORAGE
 idEmpresa

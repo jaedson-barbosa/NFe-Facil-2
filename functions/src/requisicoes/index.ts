@@ -9,6 +9,27 @@ type nomesServicos = keyof typeof servicos & keyof typeof webservicesNFe.SVRS.se
 
 enum ambientes { Producao = 1, Homologacao }
 
+export const consultarStatus = onLoggedRequest(async (user, res, empresaRef, empresa, body) => {
+    // const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
+    // if (usuario.exists) res.status(200).send(usuario.data())
+    // else res.status(400).send('Usuário não cadastrado')
+    // TO-DO: Implementar análise de permissões
+    const ambiente = ambientes.Homologacao
+    const uf = empresa.emit.enderEmit.UF as string
+    const cUF = IBGESimplificado.find(v => v.Sigla == uf)?.Codigo
+    const servico: nomesServicos = 'consultarStatusServico'
+    const resp = await enviarRequisicao(
+        `<consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+            <tpAmb>${ambiente}</tpAmb>
+            <cUF>${cUF}</cUF>
+            <xServ>STATUS</xServ>
+        </consStatServ>`,
+        servico, ambiente, empresa
+    )
+    // Passar detalhes pro metodo generico e puxar todos os endereços do projeto original UWP, implementar todas aquelas funções
+    res.status(200).send(resp)
+})
+
 async function enviarRequisicao(
     body: string,
     servico: nomesServicos,
@@ -42,27 +63,6 @@ async function enviarRequisicao(
         )
     ).data as string
 }
-
-export const consultarStatus = onLoggedRequest(async (user, res, empresaRef, empresa, body) => {
-    // const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
-    // if (usuario.exists) res.status(200).send(usuario.data())
-    // else res.status(400).send('Usuário não cadastrado')
-    // TO-DO: Implementar análise de permissões
-    const ambiente =ambientes.Homologacao
-    const uf = empresa.emit.enderEmit.UF as string
-    const cUF = IBGESimplificado.find(v => v.Sigla == uf)?.Codigo
-    const servico: nomesServicos = 'consultarStatusServico'
-    const resp = await enviarRequisicao(
-        `<consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
-            <tpAmb>${ambiente}</tpAmb>
-            <cUF>${cUF}</cUF>
-            <xServ>STATUS</xServ>
-        </consStatServ>`,
-        servico, ambiente, empresa
-    )
-    // Passar detalhes pro metodo generico e puxar todos os endereços do projeto original UWP, implementar todas aquelas funções
-    res.status(200).send(resp)
-})
 
 function getWebServiceByUF(uf: string) {
     switch (uf) {

@@ -38,37 +38,43 @@ async function acessar(cnpj: string, data?: any) {
 function cadastrarEmpresa() {
     const additionalBody = document.createElement('div')
     additionalBody.innerHTML = /*html*/`
+    <label for="serieAtual">Série atual das notas fiscais</label>
+    <input type="number" id="serieAtual" name="serieAtual" value="1" min="1" max="889" required>
     <label for="cert">Certificado</label>
     <input type="file" id="cert" name="cert" accept=".pfx" required>
     <label for="senha">Senha</label>
     <input type="text" id="senha" name="senha" required>`
-    const emitView = defaultForm.generateView(defaultForm.elementosNFe[1])
-    const certView = new genericFormElement(additionalBody)
-    const form = new defaultForm(...emitView, certView).generateForm()
+    const form = new defaultForm(
+        ...defaultForm.generateView(defaultForm.elementosNFe[1]),
+        new genericFormElement(additionalBody)
+    ).generateForm()
     document.body.appendChild(form)
-    form.onsubmit = e => defaultFormSubmit(e, async data => {
-        const opcoes = await getCertPostBody(data, v => v.emit = data.emit)
-        if (!opcoes) {
-            alert('Por favor, selecione o certificado e insira a senha.')
-            return
+    form.onsubmit = e => defaultFormSubmit(
+        e, async data => {
+            const opcoes = await getCertPostBody(data, v => v.emit = data.emit)
+            if (!opcoes) {
+                alert('Por favor, selecione o certificado e insira a senha.')
+                return
+            }
+            const cadastroUrl = 'http://localhost:5001/nfe-facil-980bc/us-central1/cadastrarCNPJ'
+            const cadastro = await fetch(cadastroUrl, opcoes)
+            if (cadastro.status == 401) {
+                location.href = './login.html'
+                return
+            } else if (cadastro.status != 200) {
+                alert(await cadastro.text())
+                return
+            }
+            const newId = await cadastro.text()
+            setEmpresa({
+                id: newId,
+                status: 3,
+                emit: data.emit,
+                serieAtual: data.serieAtual
+            })
+            location.href = './emitentes.html'
         }
-        const cadastroUrl = 'http://localhost:5001/nfe-facil-980bc/us-central1/cadastrarCNPJ'
-        const cadastro = await fetch(cadastroUrl, opcoes)
-        if (cadastro.status == 401) {
-            location.href = './login.html'
-            return
-        } else if (cadastro.status != 200) {
-            alert(await cadastro.text())
-            return
-        }
-        const newId = await cadastro.text()
-        setEmpresa({
-            id: newId,
-            status: 3,
-            empresa: data.emit
-        })
-        location.href = './emitentes.html'
-    })
+    )
 }
 
 function cadastrarUsuario(cnpj: string) {
@@ -96,12 +102,19 @@ function cadastrarUsuario(cnpj: string) {
 }
 
 if (isSessaoIniciada()) {
-    const emitView = defaultForm.generateView(defaultForm.elementosNFe[1])
-    const form = new defaultForm(...emitView)
     const empresa = getEmpresaAtiva()
-    form.updateValue({emit: empresa.empresa})
+    const additionalBody = document.createElement('div')
+    additionalBody.innerHTML = /*html*/`
+    <label for="serieAtual">Série atual das notas fiscais</label>
+    <input type="number" id="serieAtual" name="serieAtual" value="${empresa.serieAtual}" min="1" max="889" required>`
+    const form = new defaultForm(
+        ...defaultForm.generateView(defaultForm.elementosNFe[1]),
+        new genericFormElement(additionalBody)
+    ).generateForm()
+    form.updateValue({emit: empresa.emit})
     const htmlForm = form.generateForm(data => {
-        empresa.empresa = data.emit
+        empresa.emit = data.emit
+        empresa.serieAtual = data.serieAtual
         setEmpresa(empresa)
         alert('Dados cadastrais atualizados.')
         abrirPainel()

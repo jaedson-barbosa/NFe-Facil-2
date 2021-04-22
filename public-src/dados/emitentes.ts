@@ -3,7 +3,8 @@ import { iniciarSessao } from "../sessao"
 export interface IEmpresa {
     id: string,
     status: 0 | 1 | 2 | 3,
-    empresa: any
+    emit: any,
+    serieAtual: number
 }
 
 export function getEmpresa(id: string): IEmpresa {
@@ -41,7 +42,7 @@ export function renderizarEmitente(data: IEmpresa): HTMLButtonElement {
     const button = document.createElement('button')
     button.innerHTML = /*html*/`
     <div>
-        ${data.empresa.xFant ?? data.empresa.xNome}<br>
+        ${data.emit.xFant ?? data.emit.xNome}<br>
         <i>${getDescricaoStatus(data.status)}</i>
     </div>`
     button.onclick = () => iniciarSessao(data.id)

@@ -25,9 +25,9 @@ export default onDefaultRequest(true, async (user, res, body) => {
 	const pkeyBags = p12.getBags({ bagType: forge.pki.oids.pkcs8ShroudedKeyBag });
 	const certBag = certBags[forge.pki.oids.certBag]![0];
 	const keybag = pkeyBags[forge.pki.oids.pkcs8ShroudedKeyBag]![0];
-	const privateKeyPem = forge.pki.privateKeyToPem(keybag.key!);
+	const privateCert = forge.pki.privateKeyToPem(keybag.key!);
 	const cert = certBag.cert!
-	const certificatePem = forge.pki.certificateToPem(cert);
+	const publicCert = forge.pki.certificateToPem(cert);
 
 	const certUser = cert.subject.getField('CN').value as string
 	const certParts = certUser.split(':')
@@ -47,11 +47,14 @@ export default onDefaultRequest(true, async (user, res, body) => {
 		res.status(400).send('Empresa já existe')
 		return
 	}
+	const serieAtual = Math.trunc(Number(body.serieAtual))
+	if (serieAtual < 1 || serieAtual > 889) {
+		res.status(400).send('Série inválida')
+		return
+	}
 	const empresaRef = db.collection('empresas').doc()
 	const empresa: IEmpresaSet = {
-		publicCert: certificatePem,
-		privateCert: privateKeyPem,
-		emit: emit,
+		publicCert, privateCert, emit, serieAtual,
 		lastUpdate: FieldValue.serverTimestamp()
 	}
 	await empresaRef.set(empresa)

@@ -2,10 +2,11 @@ import * as functions from 'firebase-functions'
 import * as firebase from 'firebase-admin'
 
 interface IEmpresaBase<T> {
-	publicCert: string;
-    privateCert: string;
-    emit: any;
-    lastUpdate: T;
+	publicCert: string
+    privateCert: string
+    emit: any
+	serieAtual: number
+    lastUpdate: T
 }
 
 export type IEmpresaGet = IEmpresaBase<FirebaseFirestore.Timestamp>
