@@ -4,31 +4,52 @@ import * as axios from 'axios'
 import * as servicos from './servicos.json'
 import * as webservicesNFe from './webservicesNFe.json'
 import { IBGESimplificado } from './IBGESimplificado.json'
+import { ambientes } from './core'
+export { ambientes }
 
 type nomesServicos = keyof typeof servicos & keyof typeof webservicesNFe.SVRS.servicos
 
-enum ambientes { Producao = 1, Homologacao }
+export function getRandomNumber(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-export const consultarStatus = onLoggedRequest(async (user, res, empresaRef, empresa, body) => {
-    // const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
-    // if (usuario.exists) res.status(200).send(usuario.data())
-    // else res.status(400).send('Usuário não cadastrado')
-    // TO-DO: Implementar análise de permissões
-    const ambiente = ambientes.Homologacao
-    const uf = empresa.emit.enderEmit.UF as string
-    const cUF = IBGESimplificado.find(v => v.Sigla == uf)?.Codigo
-    const servico: nomesServicos = 'consultarStatusServico'
-    const resp = await enviarRequisicao(
-        `<consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
-            <tpAmb>${ambiente}</tpAmb>
-            <cUF>${cUF}</cUF>
-            <xServ>STATUS</xServ>
-        </consStatServ>`,
-        servico, ambiente, empresa
+// const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
+// if (usuario.exists) res.status(200).send(usuario.data())
+// else res.status(400).send('Usuário não cadastrado')
+// TO-DO: Implementar análise de permissões
+
+export const consultarStatusServico = onLoggedRequest(
+    async (user, res, empresaRef, empresa, body) => {
+        const ambiente = ambientes.Homologacao
+        const uf = empresa.emit.enderEmit.UF as string
+        const cUF = IBGESimplificado.find(v => v.Sigla == uf)?.Codigo
+        res.status(200).send(await enviarRequisicao(
+            `<consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+                <tpAmb>${ambiente}</tpAmb>
+                <cUF>${cUF}</cUF>
+                <xServ>STATUS</xServ>
+            </consStatServ>`,
+            'consultarStatusServico',
+            ambiente, empresa
+        ))
+    }
+)
+
+export function autorizacao(
+    empresa: IEmpresaGet,
+    ambiente: ambientes,
+    ...xmls: string[]
+): Promise<string> {
+    return enviarRequisicao(
+        `<enviNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+            <idLote>${getRandomNumber(1,999999999999999)}</idLote>
+            <indSinc>0</indSinc>
+            ${xmls.join('')}
+        </enviNFe>`,
+        'autorizacao',
+        ambiente, empresa
     )
-    // Passar detalhes pro metodo generico e puxar todos os endereços do projeto original UWP, implementar todas aquelas funções
-    res.status(200).send(resp)
-})
+}
 
 async function enviarRequisicao(
     body: string,

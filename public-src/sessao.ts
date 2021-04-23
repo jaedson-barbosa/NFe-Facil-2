@@ -25,7 +25,7 @@ export function getIdEmpresaAtiva(): string {
 
 /** Retorna o ambiente atual: 1=Produção; 2=Homologação. */
 export function getAmbiente(): '1' | '2' {
-    return '1'
+    return '2'
 }
 
 export function versaoEmissor() {

@@ -23,6 +23,12 @@ lastUpdate
 -dados:
     id
     lastUpdate
+-notas:
+    id
+    json
+    xml
+    status //0-Salvo/1-Emitido/2-Cancelado
+    lastUpdade
 
 LOCALSTORAGE
 empresas:
@@ -47,25 +53,17 @@ OK      scanUsuario
 OK      scanRegistro
 OK      cadastrarCNPJ
 +-      requisitarAcesso
-        prefinalizarNFe //retorna série e número recomendados, serão usados para gerar o ID e aí libera os botões pras funções abaixo
         apenasSalvarNFe
-            gerarPreviewDANFE
-                NFe
-                    PHP
-                    Node
-                NFCe
-                    PHP
-                    Node
         assinarTransmitirNFe
 OK          assinarNFe
             transmitirNFe
-            gerarDANFE
-                NFe
-                    PHP
-                    Node
-                NFCe
-                    PHP
-                    Node
+        gerarDANFE
+            NFe
+                PHP
+                Node
+            NFCe
+                PHP
+                Node
     Corrigir documentações no schema json e unir os 2 num único
     Implementar sincronizações
 

@@ -1,13 +1,15 @@
 import * as fs from 'fs'
 import {xml2json} from 'xml-js'
+import {toJson,toXml} from 'xml2json'
 
 function parse(originPath: string, targetPath: string) {
-    fs.writeFileSync(targetPath, xml2json(fs.readFileSync(originPath, 'utf8'), {
-        compact: true,
-        spaces: 4,
-        elementNameFn: v => v.replace('xs:', ''),
-        attributeValueFn: v => v.replace('xs:', '')
-    }))
+    fs.writeFileSync(targetPath, toJson(fs.readFileSync(originPath, 'utf8'), {reversible: true}))
 }
-parse('../../PL_009/tiposBasico_v4.00.xsd', './basic.json')
-parse('../../PL_009/leiauteNFe_v4.00.xsd', './nfe.json')
+function reverse(originPath: string, targetPath: string) {
+    fs.writeFileSync(targetPath, toXml(fs.readFileSync(originPath, 'utf8')))
+}
+
+// parse('../../PL_009/tiposBasico_v4.00.xsd', './basic.json')
+// parse('../../PL_009/leiauteNFe_v4.00.xsd', './nfe.json')
+parse('../../NFe25210412931158000164550010000005501821207189.xml', './teste.json')
+reverse('./teste.json', 'teste.xml')

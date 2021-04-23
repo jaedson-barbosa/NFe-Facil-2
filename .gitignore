@@ -6,3 +6,5 @@ public
 DANFE/vendor
 functions/lib
 saved-data
+*.xml
+teste.json

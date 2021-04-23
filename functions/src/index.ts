@@ -4,5 +4,5 @@ import scanRegistro from './scanRegistro'
 import scanUsuario from './scanUsuario'
 
 export { cadastrarCNPJ, requisitarAcesso, scanRegistro, scanUsuario }
-export { consultarStatus } from './requisicoes'
+export { consultarStatusServico } from './requisicoes'
 export { assinarNFe } from './assinaturas'
