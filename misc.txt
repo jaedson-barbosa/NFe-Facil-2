@@ -48,7 +48,11 @@ OK      Produtos
 OK      Clientes
 OK      Motoristas
 OK  Tipos de ICMS de acordo com o regime do emitente
-    Sistemas de servidor básicos (sem todas análises)
+    Importação de NFe
+        Lado Cliente
+        Lado servidor
+    Clonagem de NFe
+    Servidor básico (sem todas análises)
 OK      scanUsuario
 OK      scanRegistro
 OK      cadastrarCNPJ
@@ -65,7 +69,7 @@ OK          assinarNFe
                 PHP
                 Node
     Corrigir documentações no schema json e unir os 2 num único
-    Implementar sincronizações
+    Sincronização
 
 Se for dar muito trabalho pra fazer a parte de transmissão, usar o https://github.com/lealhugui/node-dfe
 

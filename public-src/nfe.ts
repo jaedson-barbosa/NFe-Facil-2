@@ -67,7 +67,7 @@ function gerarIdentificacao() {
 function gerarEmitente() {
     const view = defaultForm.generateView(
         defaultForm.elementosNFe[1],
-        { rootTag: 'element' })[0] as fieldsetFormElement
+        { rootTag: 'xs:element' })[0] as fieldsetFormElement
     view.options.hidden = true
     view.updateValue({ emit })
     return view
@@ -94,7 +94,8 @@ async function gerarProdutosEdicao() {
                     }
                 }
             ]
-        })
+        }
+    )
     const view = views[0] as listFormElement
     const prods = await getItens('prod')
     const prodsView = prods.map(v => {
@@ -175,13 +176,13 @@ function gerarProdutosVisualizacao() {
 function gerarRetirada() {
     return defaultForm.generateView(
         defaultForm.elementosNFe[4],
-        { rootTag: 'element' })
+        { rootTag: 'xs:element' })
 }
 
 function gerarEntrega() {
     return defaultForm.generateView(
         defaultForm.elementosNFe[5],
-        { rootTag: 'element' })
+        { rootTag: 'xs:element' })
 }
 
 function gerarAutorizacao() {
@@ -196,7 +197,7 @@ async function gerarTransporte() {
     const views = defaultForm.generateView(
         defaultForm.elementosNFe[9],
         {
-            rootTag: 'element',
+            rootTag: 'xs:element',
             customRequireds: ['vol', 'veicTransp|reboque', 'reboque', 'lacres']
         })
     const view = views[0] as fieldsetFormElement
@@ -235,7 +236,7 @@ function gerarCobranca() {
     return defaultForm.generateView(
         defaultForm.elementosNFe[10],
         {
-            rootTag: 'element',
+            rootTag: 'xs:element',
             customRequireds: ['fat', 'dup']
         })
 }
@@ -243,13 +244,13 @@ function gerarCobranca() {
 function gerarPagamento() {
     return defaultForm.generateView(
         defaultForm.elementosNFe[11],
-        { rootTag: 'element' })
+        { rootTag: 'xs:element' })
 }
 
 function gerarIntermediador() {
     return defaultForm.generateView(
         defaultForm.elementosNFe[12],
-        { rootTag: 'element' })
+        { rootTag: 'xs:element' })
 }
 
 function gerarInformacoes() {
@@ -326,6 +327,7 @@ async function renderizarTela() {
             form.elements = [telaProdutos]
             main.appendChild(form.generateForm(data => {
                 currentData.det = data.det
+                console.log(data)
                 tela = 'principal'
                 renderizarTela()
             }))

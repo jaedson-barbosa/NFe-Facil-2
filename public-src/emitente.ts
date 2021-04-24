@@ -110,7 +110,7 @@ if (isSessaoIniciada()) {
     const form = new defaultForm(
         ...defaultForm.generateView(defaultForm.elementosNFe[1]),
         new genericFormElement(additionalBody)
-    ).generateForm()
+    )
     form.updateValue({emit: empresa.emit})
     const htmlForm = form.generateForm(data => {
         empresa.emit = data.emit

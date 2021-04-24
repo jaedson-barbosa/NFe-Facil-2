@@ -13,7 +13,7 @@ export function gerarViewProduto() {
             required: true
         },
         ...defaultForm.generateViews(
-            defaultForm.elementosNFe[7]['complexType']['sequence']['element'][0],
+            defaultForm.elementosNFe[7]['xs:complexType']['xs:sequence']['xs:element'][0],
             {},
             'xProd',
             'cProd',

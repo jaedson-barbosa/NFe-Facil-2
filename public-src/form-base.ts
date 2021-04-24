@@ -7,17 +7,8 @@ export function getForm(index: number = 0) {
     return document.getElementsByTagName('form')[index]
 }
 
-interface IType {
-    _attributes: { name: string }
-    annotation?: { documentation: { _text: string } }
-}
-
-interface IComplexType extends IType {
-    sequence: { element: any[] }
-}
-
-const complexTypes: IComplexType[] = nfeSchema.schema.complexType
-const simpleTypes: IType[] = [...basicSchema.schema.simpleType, ...nfeSchema.schema.simpleType]
+const complexTypes = nfeSchema['xs:schema']['xs:complexType']
+const simpleTypes = [...basicSchema['xs:schema']['xs:simpleType'], ...nfeSchema['xs:schema']['xs:simpleType']]
 
 export function createId(): string {
     const AUTO_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -41,6 +32,7 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
     e.preventDefault()
     var object = {};
     const formData = new FormData(e.target as HTMLFormElement)
+    const objectArrays: any[][] = []
     formData.forEach(function (value, key) {
         if (!value) return
         const path = key.split('.')
@@ -48,18 +40,28 @@ export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
         for (let i = 0; i < path.length; i++) {
             const p = path[i];
             const isLast = i === path.length - 1
-            if (isLast && Array.isArray(temp)) {
-                temp.push(value)
-            } else if (isLast) {
+            if (isLast) {
                 temp[p] = value
             } else if (temp[p]) {
                 temp = temp[p]
             } else {
                 // se nao houver proximo ou se for alfabetico usa {}
-                temp = temp[p] = isNaN(+path[i + 1]) ? {} : []
+                if (isNaN(+path[i + 1])) {
+                    temp = temp[p] = {}
+                } else {
+                    const newArray = []
+                    objectArrays.push(newArray)
+                    temp = temp[p] = newArray
+                }
             }
         }
     });
+    objectArrays.forEach(v => {
+        let index = -1
+        while ((index = v.findIndex(v => !v)) != -1) {
+            v.splice(index, 1)
+        }
+    })
     onSubmit(object)
     return false
 }
@@ -206,7 +208,7 @@ abstract class inputFormElement implements IBaseFormElement {
     }
 
     protected get nextItemName(): string[] {
-        const name = this.name
+        const name = [...this.name]
         const index = name.map(v => !isNaN(+v)).lastIndexOf(true)
         if (index != -1) name[index] = (+name[index] + 1).toString()
         return name
@@ -570,6 +572,7 @@ interface IChoiceOption {
 
 export class choiceFormElement implements IBaseFormElement {
     private documentation: string
+    private isRequired: boolean
     private options: IChoiceOption[]
     private startIndex: number
 
@@ -578,6 +581,7 @@ export class choiceFormElement implements IBaseFormElement {
         isRequired: boolean,
         options: IChoiceOption[]) {
         this.documentation = documentation
+        this.isRequired = isRequired
         if (!isRequired) {
             options.unshift({
                 text: 'Nenhuma das opções',
@@ -592,7 +596,7 @@ export class choiceFormElement implements IBaseFormElement {
     public get clone(): IBaseFormElement {
         return new choiceFormElement(
             this.documentation,
-            !this.options[0].view,
+            this.isRequired,
             this.options.map(v => {
                 return {
                     text: v.text,
@@ -727,7 +731,7 @@ interface ISpecificFormFields {
 
 function getDocumentation(v: any): string {
     const name = getName(v)
-    const fromScheme = v.annotation?.documentation?._text
+    const fromScheme = v['xs:annotation']?.['xs:documentation']
     if (name) {
         const custom = customHeaders.find(v => name === v.name)?.header
         const nameParts = name.split('|')
@@ -741,13 +745,12 @@ function getDocumentation(v: any): string {
 }
 
 function getName(v: any): string {
-    const name = v._attributes?.name
+    const name = v.name
     if (!name && typeof v == 'object') {
         const isRootList = 'length' in v
-        if (isRootList || v.element) {
-            const listParent = isRootList ? v : v.element
-            const childNames = listParent.map(getName).join('|')
-            return childNames
+        if (isRootList || v['xs:element']) {
+            const listParent = isRootList ? v : v['xs:element']
+            return listParent.map(getName).join('|')
         }
     }
     return name
@@ -795,8 +798,8 @@ interface IGenerateViewsOptions {
 }
 
 export class defaultForm {
-    static rootNFe = nfeSchema.schema.complexType[0].sequence.element[0]
-    static elementosNFe = defaultForm.rootNFe['complexType']['sequence']['element']
+    static rootNFe = nfeSchema['xs:schema']['xs:complexType'][0]['xs:sequence']['xs:element'][0]
+    static elementosNFe = defaultForm.rootNFe['xs:complexType']['xs:sequence']['xs:element']
 
     public elements: IBaseFormElement[]
 
@@ -829,52 +832,52 @@ export class defaultForm {
 
         function isRequired(v: any): boolean {
             if (customRequireds.includes(getName(v))) return true
-            const element = v.element
+            const element = v['xs:element']
             if (element && Array.isArray(element)) {
                 const required = element.every(k => isRequired(k) || customRequireds.includes(getName(k)))
                 if (!required) return false
             }
-            const seq = v.sequence
+            const seq = v['xs:sequence']
             if (seq) {
-                const sequence = Array.isArray(seq) ? seq : seq.element as any[]
+                const sequence = Array.isArray(seq) ? seq : seq['xs:element'] as any[]
                 const required = sequence.every(k => isRequired(k) || customRequireds.includes(getName(k)))
                 if (!required) return false
             }
-            return (v._attributes?.minOccurs ?? 1) > 0
+            return (v.minOccurs ?? 1) > 0
         }
 
         function createInput(field: any, parentTags: string[]): IBaseFormElement {
-            const fieldRestriction = field.simpleType?.restriction
-            const baseType = field._attributes?.type ?? fieldRestriction?._attributes.base
+            const fieldRestriction = field['xs:simpleType']?.['xs:restriction']
+            const baseType = field.type ?? fieldRestriction?.base
             const findType = (v: any) => getName(v) == baseType
-            const hasOtherRestrictions = baseType != 'string' && baseType != 'base64Binary'
-            const otherRestrictions: any = (simpleTypes.find(findType) as any)?.restriction
+            const hasOtherRestrictions = baseType != 'xs:string' && baseType != 'xs:base64Binary'
+            const otherRestrictions: any = (simpleTypes.find(findType) as any)?.['xs:restriction']
             if (hasOtherRestrictions && !otherRestrictions) {
-                const complexType = field.complexType ?? complexTypes.find(findType)
+                const complexType = field['xs:complexType'] ?? complexTypes.find(findType)
                 if (!complexType) {
-                    const element = field.element
+                    const element = field['xs:element']
                     if (!element) {
                         console.log(field)
                         throw new Error('Invalid field')
                     }
                     return createFieldset(field, parentTags)
                 }
-                const newField = { ...field, complexType: complexType }
+                const newField = { ...field, 'xs:complexType': complexType }
                 return createFieldset(newField, parentTags)
             }
-            if (hasOtherRestrictions && otherRestrictions?._attributes.base != 'string') {
+            if (hasOtherRestrictions && otherRestrictions?.base != 'xs:string') {
                 console.log(otherRestrictions)
                 throw new Error('The other restrictions have a invalid base.')
             }
-            const enumeration = fieldRestriction?.enumeration ?? otherRestrictions?.enumeration
+            const enumeration = fieldRestriction?.['xs:enumeration'] ?? otherRestrictions?.['xs:enumeration']
             const name = [...parentTags, getName(field)]
             customNameChanger?.(name)
             const required = isRequired(field)
             const documentation = getDocumentation(field)
             if (!enumeration) {
                 const getProp = (el: string) => {
-                    const fieldProp = fieldRestriction?.[el]?._attributes.value
-                    const otherProp = otherRestrictions?.[el]?._attributes.value
+                    const fieldProp = fieldRestriction?.[el]?.value
+                    const otherProp = otherRestrictions?.[el]?.value
                     return fieldProp ?? otherProp
                 }
                 return new textFormElement(name, documentation, required, {
@@ -884,14 +887,14 @@ export class defaultForm {
                 })
             }
             if (!('length' in enumeration)) {
-                const val = enumeration._attributes.value
+                const val = enumeration.value
                 return new hiddenFormElement(name, required, val)
             }
-            const val0 = enumeration[0]._attributes.value
-            const val1 = enumeration[1]._attributes.value.toUpperCase()
+            const val0 = enumeration[0].value
+            const val1 = enumeration[1].value.toUpperCase()
             if (enumeration.length == 2 && val0.toUpperCase() == val1)
                 return new hiddenFormElement(name, required, val0)
-            const values = (enumeration as any[]).map(v => v._attributes.value)
+            const values = (enumeration as any[]).map(v => v.value)
             const getValueDescription = (v: string) => {
                 if (isNaN(+v) && v.length > 1) return v
                 const getIndex = (search: string) => documentation.indexOf(search)
@@ -932,8 +935,8 @@ export class defaultForm {
         }
 
         function createChoice(field: any, parentTags: string[]): IBaseFormElement {
-            const elements = field.element as any[]
-            const sequence = field.sequence
+            const elements = field['xs:element'] as any[]
+            const sequence = field['xs:sequence']
             if (!elements && !sequence) {
                 throw new Error('Choice invalido');
             }
@@ -955,7 +958,7 @@ export class defaultForm {
                         name: [...parentTags, getName(sequence)]
                     })
                 } else {
-                    const array = Array.isArray(sequence) ? sequence : sequence.element as any[]
+                    const array = Array.isArray(sequence) ? sequence : sequence['xs:element'] as any[]
                     options.push(...array.map(v => {
                         return {
                             text: getDocumentation(v),
@@ -977,18 +980,18 @@ export class defaultForm {
             const legend = processLabelText(getDocumentation(field))
             const name = getName(field)
             const isRootList = 'length' in field
-            const max = field._attributes?.maxOccurs ?? 1
+            const max = field?.maxOccurs ?? 1
             const isList = max > 1
             if (isList) additionalNameChanger.push(getDefaultListNameChanger(name))
             const tags = name ? [...parentTags, name] : parentTags
             const required = max > 1 || isRequired(field)
             const fields: IBaseFormElement[] = []
-            if (isRootList || field.element) {
-                const elements = (isRootList ? field : field.element) as any[]
+            if (isRootList || field['xs:element']) {
+                const elements = (isRootList ? field : field['xs:element']) as any[]
                 fields.push(...elements.map(v => createInput(v, tags)))
             }
-            if (field.complexType || field.sequence) {
-                const sequence = field.complexType?.sequence ?? field.sequence
+            if (field['xs:complexType'] || field['xs:sequence']) {
+                const sequence = field['xs:complexType']?.['xs:sequence'] ?? field['xs:sequence']
                 if (sequence) {
                     if (fields.length == 0) {
                         const pureFields = Object.entries(sequence)
@@ -996,7 +999,7 @@ export class defaultForm {
                     }
                     else fields.push(createFieldset(sequence, tags))
                 }
-                const choice = field.complexType?.choice
+                const choice = field['xs:complexType']?.['xs:choice']
                 if (choice) {
                     fields.push(createChoice(choice, tags))
                 }
@@ -1190,27 +1193,28 @@ export class defaultForm {
             return elements.flatMap(v => {
                 const name = getName(v)
                 if (ignoreFields.includes(name)) return undefined
+                const input = createInput(v, parentTags)
                 const specific = specificFields.find(k => k.names.includes(name))
-                if (specific) {
+                if (specific && !(input instanceof hiddenFormElement)) {
                     ignoreFields.push(...specific.names, ...specific.addIgnoreFields)
                     return specific.getNewFields(
                         parentTags,
                         name => elements.find(v => getName(v) == name))
-                }
-                return createInput(v, parentTags)
+                } // Se o valor for um hidden então ele não deve ser substituido
+                return input
             }).filter(v => v)
         }
 
         function analyseTag(tag: string, field: any, parentTags: string[]): IBaseFormElement[] {
             switch (tag) {
-                case 'choice':
+                case 'xs:choice':
                     return [createChoice(field, parentTags)]
-                case 'element':
+                case 'xs:element':
                     return createElements(field, parentTags)
                 default:
-                    if (!tag || tag == 'sequence')
+                    if (!tag || tag == 'xs:sequence')
                         return [createFieldset(field, parentTags)]
-                    console.error('Invalid tag', tag)
+                    console.trace('Invalid tag', tag, field)
                     return []
             }
         }
