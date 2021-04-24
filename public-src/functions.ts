@@ -69,3 +69,15 @@ export async function scanRegistro(
     }
     return await resp.text()
 }
+
+export async function scanUsuario(): Promise<IEmpresa[]> {
+    const resp = await fetch('http://localhost:5001/nfe-facil-980bc/us-central1/scanUsuario')
+    if (resp.status == 401) {
+        location.href = './login.html'
+        return
+    } else if (resp.status != 200) {
+        alert(await resp.text())
+        return
+    }
+    return await resp.json() as IEmpresa[]
+}
