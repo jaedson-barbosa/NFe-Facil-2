@@ -1,33 +1,21 @@
 import { defaultFormSubmit, getForm, defaultForm, genericFormElement } from './form-base'
 import { setEmpresa, IEmpresa } from './dados/emitentes'
 import { abrirPainel, getEmpresaAtiva, isSessaoIniciada } from './sessao'
+import { cadastrarCNPJ, requisitarAcesso, scanRegistro } from './functions'
 
-async function getCertPostBody(data: any, additionalBody?: (body: any) => void) {
-    if (data.cert) {
+async function getCertPostBody(data: any) {
+    if (data?.cert) {
         const body = {
             cert: btoa(String.fromCharCode(...new Uint8Array(await (data.cert as File).arrayBuffer()))),
             senha: data.senha
         }
-        if (additionalBody) additionalBody(body)
-        return {
-            method: 'POST',
-            body: JSON.stringify(body)
-        }
-    } return {}
+        return body
+    }
 }
 
 async function acessar(cnpj: string, data?: any) {
-    const acessarUrl = `http://localhost:5001/nfe-facil-980bc/us-central1/requisitarAcesso?cnpj=${cnpj}`
-    const respAcesso = await fetch(acessarUrl, await getCertPostBody(data))
-    if (respAcesso.status == 401) {
-        location.href = './login.html'
-        return
-    }
-    if (respAcesso.status != 200) {
-        alert(await respAcesso.text())
-        return
-    }
-    const contResp = await respAcesso.json() as IEmpresa
+    const contResp = await requisitarAcesso(cnpj, await getCertPostBody(data))
+    if (!contResp) return
     setEmpresa(contResp)
     if (contResp.status == 0) {
         alert('O pedido de registro já foi enviado, aguarde a autorização pela administração.')
@@ -51,21 +39,12 @@ function cadastrarEmpresa() {
     document.body.appendChild(form)
     form.onsubmit = e => defaultFormSubmit(
         e, async data => {
-            const opcoes = await getCertPostBody(data, v => v.emit = data.emit)
-            if (!opcoes) {
+            const cert = await getCertPostBody(data)
+            if (!cert) {
                 alert('Por favor, selecione o certificado e insira a senha.')
                 return
             }
-            const cadastroUrl = 'http://localhost:5001/nfe-facil-980bc/us-central1/cadastrarCNPJ'
-            const cadastro = await fetch(cadastroUrl, opcoes)
-            if (cadastro.status == 401) {
-                location.href = './login.html'
-                return
-            } else if (cadastro.status != 200) {
-                alert(await cadastro.text())
-                return
-            }
-            const newId = await cadastro.text()
+            const newId = await cadastrarCNPJ({...cert, emit: data.emit})
             setEmpresa({
                 id: newId,
                 status: 3,
@@ -129,17 +108,7 @@ if (isSessaoIniciada()) {
         <input type="submit">
     </form>`
     getForm().onsubmit = e => defaultFormSubmit(e, async data => {
-        const scanUrl = `http://localhost:5001/nfe-facil-980bc/us-central1/scanRegistro?cnpj=${data.cnpj}`
-        const scanned = await fetch(scanUrl)
-        if (scanned.status == 401) {
-            location.href = './login.html'
-            return
-        }
-        if (scanned.status != 200 && scanned.status != 400) {
-            alert('Erro desconhecido.')
-            return
-        }
-        const text = await scanned.text()
+        const text = await scanRegistro(data.cnpj)
         if (text == 'CNPJ inválido') {
             alert('CNPJ inválido.')
             return
