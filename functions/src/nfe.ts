@@ -1,8 +1,8 @@
 import { onLoggedRequest } from './core'
-import { ambientes, autorizacao } from './requisicoes'
-import { IBGESimplificado } from './requisicoes/IBGESimplificado.json'
+// import { ambientes, autorizacao } from './requisicoes'
+// import { IBGESimplificado } from './requisicoes/IBGESimplificado.json'
 
-const ambiente = ambientes.Homologacao
+// const ambiente = ambientes.Homologacao
 
 export const apenasSalvarNFe = onLoggedRequest(
     async (user, res, empresaRef, empresa, body) => {

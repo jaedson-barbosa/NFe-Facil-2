@@ -1,4 +1,5 @@
 import { getForm } from "./form-base";
+import { importar } from "./functions";
 
 let xmls: string[];
 
@@ -12,7 +13,8 @@ document.getElementById('xmls').onchange = async event => {
     )))
 }
 
-getForm(0).onsubmit = e => {
+getForm(0).onsubmit = async e => {
     e.preventDefault()
-    console.log(xmls)
+    const resp = await importar(xmls)
+    console.log(resp)
 }

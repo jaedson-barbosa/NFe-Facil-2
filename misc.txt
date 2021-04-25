@@ -17,18 +17,20 @@ emit (...)
 serieAtual
 lastUpdate
 -usuarios:
+    id
     status //0-Aguardando analise/1-Acesso revogado/2-Acesso liberado/3-Administrador
     nome
     permissoes: visualizar-dados-base, visualizar-notas-emitidas, cadastrar-dados-base, emitir-notas
 -dados:
-    id
     lastUpdate
 -notas:
-    id
     json
     xml
-    status //0-Salvo/1-Emitido/2-Cancelado
+    emitido
     lastUpdade
+    -eventos:
+        json
+        xml
 
 LOCALSTORAGE
 empresas:
@@ -48,9 +50,13 @@ OK      Produtos
 OK      Clientes
 OK      Motoristas
 OK  Tipos de ICMS de acordo com o regime do emitente
-    Importação de NFe
-        Lado Cliente
+    Importação
+OK      Lado Cliente
         Lado servidor
+    Eventos
+        Importação
+        Geração
+        Exibição
     Clonagem de NFe
     Servidor básico (sem todas análises)
 OK      scanUsuario
@@ -70,7 +76,7 @@ OK          assinarNFe
                 Node
     Corrigir documentações no schema json e unir os 2 num único
     Sincronização
-
+!   Verificar esse detalhe do xs:attribute
 Se for dar muito trabalho pra fazer a parte de transmissão, usar o https://github.com/lealhugui/node-dfe
 
 Um código muito util na hora de testar se tá tudo funcionando é esse:
