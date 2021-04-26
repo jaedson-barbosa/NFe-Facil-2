@@ -1,43 +1,47 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="manifest" href="./manifest.webmanifest">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="./manifest.webmanifest" />
     <!-- <link rel="icon" type="image/svg+xml" href="vuvuzela.svg">
     <link rel="stylesheet" href="style.css"> -->
-    <meta name="author" content="Jaedson Barbosa Serafim">
+    <meta name="author" content="Jaedson Barbosa Serafim" />
     <!-- <meta name="description" content="${description}"> -->
     <title>NFe Fácil</title>
     <script src="http://localhost:5000/__/firebase/8.2.6/firebase-app.js"></script>
     <script src="http://localhost:5000/__/firebase/8.2.6/firebase-auth.js"></script>
     <script src="http://localhost:5000/__/firebase/init.js?useEmulator=true"></script>
     <script src="https://www.gstatic.com/firebasejs/ui/4.7.2/firebase-ui-auth__pt_br.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css"
+    />
 
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js', { scope: '/' });
-        }
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', {
+          scope: '/',
+        })
+      }
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="firebaseui-auth-container"></div>
 
     <script>
-        const ui = new firebaseui.auth.AuthUI(firebase.auth())
-        ui.start('#firebaseui-auth-container', {
-            signInOptions: [
-                {
-                    provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-                    requireDisplayName: true
-                }
-            ],
-            signInSuccessUrl: './painel.html'
-        });
+      const ui = new firebaseui.auth.AuthUI(firebase.auth())
+      ui.start('#firebaseui-auth-container', {
+        signInOptions: [
+          {
+            provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            requireDisplayName: true,
+          },
+        ],
+        signInSuccessUrl: './painel.html',
+      })
     </script>
-</body>
-
+  </body>
 </html>

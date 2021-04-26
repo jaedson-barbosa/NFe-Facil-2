@@ -1,48 +1,48 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="manifest" href="./manifest.webmanifest">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="./manifest.webmanifest" />
     <!-- <link rel="icon" type="image/svg+xml" href="vuvuzela.svg">
     <link rel="stylesheet" href="style.css"> -->
-    <meta name="author" content="Jaedson Barbosa Serafim">
+    <meta name="author" content="Jaedson Barbosa Serafim" />
     <!-- <meta name="description" content="${description}"> -->
     <title>NFe Fácil</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+      * {
+        box-sizing: border-box;
+      }
 
-        body {
-            margin: auto;
-            max-width: 500px;
-        }
+      body {
+        margin: auto;
+        max-width: 500px;
+      }
 
-        input:not([type='checkbox']) {
-            width: 100%;
-        }
+      input:not([type='checkbox']) {
+        width: 100%;
+      }
 
-        label {
-            width: 100%;
-        }
+      label {
+        width: 100%;
+      }
 
-        select {
-            width: 100%;
-        }
+      select {
+        width: 100%;
+      }
     </style>
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js', {scope: '/'});
-        }
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', {
+          scope: '/',
+        })
+      }
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
     <a href="./painel.html">Acessar painel</a>
     <a href="./login.html">Conectar-se</a>
     <a href="./emitente.html">Conectar-se</a>
-</body>
-
+  </body>
 </html>

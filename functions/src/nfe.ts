@@ -5,14 +5,12 @@ import { onLoggedRequest } from './core'
 // const ambiente = ambientes.Homologacao
 
 export const apenasSalvarNFe = onLoggedRequest(
-    async (user, res, empresaRef, empresa, body) => {
-        // empresaRef.collection('notas').add()
-        // res.status(200).send(resp)
-    }
+  async (user, res, empresaRef, empresa, body) => {
+    // empresaRef.collection('notas').add()
+    // res.status(200).send(resp)
+  }
 )
 
 export const assinarTransmitirNFe = onLoggedRequest(
-    async (user, res, empresaRef, empresa, body) => {
-        
-    }
+  async (user, res, empresaRef, empresa, body) => {}
 )

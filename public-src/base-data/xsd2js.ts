@@ -1,12 +1,15 @@
 import * as fs from 'fs'
-import {toJson,toXml} from 'xml2json'
+import { toJson, toXml } from 'xml2json'
 
 function parse(originPath: string, targetPath: string) {
-    // Usar o reversible apenas para NFe, em schema isso nao e necessario
-    fs.writeFileSync(targetPath, toJson(fs.readFileSync(originPath, 'utf8')/*, {reversible: true}*/))
+  // Usar o reversible apenas para NFe, em schema isso nao e necessario
+  fs.writeFileSync(
+    targetPath,
+    toJson(fs.readFileSync(originPath, 'utf8') /*, {reversible: true}*/)
+  )
 }
 function reverse(originPath: string, targetPath: string) {
-    fs.writeFileSync(targetPath, toXml(fs.readFileSync(originPath, 'utf8')))
+  fs.writeFileSync(targetPath, toXml(fs.readFileSync(originPath, 'utf8')))
 }
 
 parse('../../PL_009/tiposBasico_v4.00.xsd', './basic.json')

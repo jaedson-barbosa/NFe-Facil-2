@@ -1,1 +1,4 @@
-export enum ambientes { Producao = 1, Homologacao }
+export enum ambientes {
+  Producao = 1,
+  Homologacao,
+}
