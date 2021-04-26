@@ -9,6 +9,6 @@ export function renderizarMotorista(data: { transporta: any }): string {
 export function gerarViewMotorista() {
   return defaultForm.generateView(
     defaultForm.elementosNFe[9]['complexType']['sequence']['element'][1],
-    { customRequireds: ['transporta'] }
+    { customRequireds: ['transporta', 'CPF', 'CNPJ'] }
   )
 }
