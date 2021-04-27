@@ -1,5 +1,6 @@
 import { IEmpresa } from './dados/emitentes'
 import { getIdEmpresaAtiva } from './sessao'
+import { IResultadoImportacao } from '../commom/importacao'
 
 export async function requisitarAcesso(
   cnpj: string,
@@ -81,7 +82,7 @@ export async function scanUsuario(): Promise<IEmpresa[]> {
   return (await resp.json()) as IEmpresa[]
 }
 
-export async function importar(xmls: string[]) {
+export async function importar(xmls: string[]): Promise<IResultadoImportacao> {
   const idEmpresa = getIdEmpresaAtiva()
   const resp = await fetch(
     'http://localhost:5001/nfe-facil-980bc/us-central1/importar',
@@ -90,5 +91,8 @@ export async function importar(xmls: string[]) {
       body: JSON.stringify({ id: idEmpresa, xmls }),
     }
   )
-  return await resp.json()
+  const respText = await resp.text()
+  return JSON.parse(respText, (k, v) =>
+    k == 'lastUpdate' ? new Date(v) : v
+  ) as IResultadoImportacao
 }

@@ -2,8 +2,8 @@ import { defaultForm, fieldsetFormElement } from '../form-base'
 
 export function renderizarProduto(data: { prod: any }): string {
   return /*html*/ `
-    <div>${data.prod.xProd}
-    <i>${data.prod.cProd}</i></div>`
+    <div>${data.prod.xProd}<br>
+    <small><i>${data.prod.cProd}</i></small></div>`
 }
 
 export function gerarViewProduto() {

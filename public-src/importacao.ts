@@ -1,3 +1,8 @@
+import { renderizarCliente } from './dados/clientes'
+import { renderizarMotorista } from './dados/motoristas'
+import { renderizarNota } from './dados/notas'
+import { renderizarProduto } from './dados/produtos'
+import { set, setMany } from './db'
 import { getForm } from './form-base'
 import { importar } from './functions'
 
@@ -11,8 +16,24 @@ document.getElementById('xmls').onchange = async (event) => {
   )
 }
 
-getForm(0).onsubmit = async (e) => {
+//Salvar retorno da importação e exibir informações na interface (sem estilização por enquanto)
+const form = getForm(0)
+form.onsubmit = async (e) => {
   e.preventDefault()
+  form.remove()
   const resp = await importar(xmls)
-  console.log(resp)
+  await setMany(resp.clientes.map((v) => [v.id, v.data]))
+  await setMany(resp.produtos.map((v) => [v.id, v.data]))
+  await setMany(resp.motoristas.map((v) => [v.id, v.data]))
+  document.body.innerHTML = /*html*/ `
+  <h1>Resultado da importação</h1>
+  <h2>Notas fiscais importadas</h2>
+  ${resp.notas.map((v) => renderizarNota(v)).join('')}
+  <h2>Clientes importados</h2>
+  ${resp.clientes.map((v) => renderizarCliente(v.data)).join('')}
+  <h2>Produtos importados</h2>
+  ${resp.produtos.map((v) => renderizarProduto(v.data)).join('')}
+  <h2>Motoristas importados</h2>
+  ${resp.motoristas.map((v) => renderizarMotorista(v.data)).join('')}
+  <a href="./painel.html">Continuar</a>`
 }

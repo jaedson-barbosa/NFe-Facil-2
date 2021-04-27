@@ -1,5 +1,6 @@
 import { toJson } from 'xml2json'
 import { db, onLoggedRequest } from './core'
+import { IResultadoImportacao } from '../../commom/importacao'
 
 // function addPrefix(obj: any) {
 //     Object.entries(obj).forEach(
@@ -42,7 +43,6 @@ function getLastItens<T extends { lastUpdate: Date }>(
 export const importar = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
     const notasCollection = empresaRef.collection('notas')
-    let batch = db.batch()
     const notas = (body.xmls as string[])
       .map((v) => {
         const root = toJson(v, { object: true, reversible: true }) as any
@@ -57,7 +57,6 @@ export const importar = onLoggedRequest(
       })
       .filter((v) => v)
       .map((v) => v!)
-    batch = notas.reduce((p, c) => p.create(notasCollection.doc(), c), batch)
 
     const dadosCollection = empresaRef.collection('dados')
     const clientes = getLastItens(
@@ -73,8 +72,9 @@ export const importar = onLoggedRequest(
           }
         }),
       (v) => v.dest.CPF ?? v.dest.CNPJ
-    )
-    batch = clientes.reduce((p, c) => p.create(dadosCollection.doc(), c), batch)
+    ).map((data) => {
+      return { id: dadosCollection.doc(), data }
+    })
 
     const camposProdutos = [
       'xProd',
@@ -97,10 +97,12 @@ export const importar = onLoggedRequest(
             const prod = v.prod
             return {
               prod: {
-                cEAN: prod.cEAN ?? 'SEM GTIN',
-                cEANTrib: prod.cEANTrib ?? 'SEM GTIN',
+                cEAN: typeof prod.cEAN == 'string' ? prod.cEAN : 'SEM GTIN',
+                cEANTrib:
+                  typeof prod.cEANTrib == 'string' ? prod.cEANTrib : 'SEM GTIN',
                 ...camposProdutos.reduce((p, c) => {
-                  p[c] = prod[c]
+                  const f = prod[c]
+                  if (f) p[c] = f
                   return p
                 }, {} as any),
               },
@@ -113,8 +115,9 @@ export const importar = onLoggedRequest(
           return p
         }, []),
       (v) => `${v.prod.cProd}${v.prod.xProd}`
-    )
-    batch = produtos.reduce((p, c) => p.create(dadosCollection.doc(), c), batch)
+    ).map((data) => {
+      return { id: dadosCollection.doc(), data }
+    })
 
     const motoristas = getLastItens(
       notas
@@ -129,12 +132,33 @@ export const importar = onLoggedRequest(
           }
         }),
       (v) => v.transporta.CPF ?? v.transporta.CNPJ
-    )
-    batch = motoristas.reduce(
-      (p, c) => p.create(dadosCollection.doc(), c),
-      batch
-    )
-    const commitRes = await batch.commit()
-    res.status(200).send({ newItens: commitRes.length })
+    ).map((data) => {
+      return { id: dadosCollection.doc(), data }
+    })
+    await notas
+      .reduce(
+        (p, c) => p.create(notasCollection.doc(), c),
+        clientes.reduce(
+          (p, c) => p.create(c.id, c.data),
+          produtos.reduce(
+            (p, c) => p.create(c.id, c.data),
+            motoristas.reduce((p, c) => p.create(c.id, c.data), db.batch())
+          )
+        )
+      )
+      .commit()
+    const resultado: IResultadoImportacao = {
+      clientes: clientes.map((v) => {
+        return { id: v.id.id, data: v.data }
+      }),
+      produtos: produtos.map((v) => {
+        return { id: v.id.id, data: v.data }
+      }),
+      motoristas: motoristas.map((v) => {
+        return { id: v.id.id, data: v.data }
+      }),
+      notas: notas.map((v) => v.json),
+    }
+    res.status(200).send(resultado)
   }
 )

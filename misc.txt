@@ -52,7 +52,11 @@ OK      Motoristas
 OK  Tipos de ICMS de acordo com o regime do emitente
     Importação
 OK      Lado Cliente
-        Lado servidor
+OK      Lado servidor
+        Refinamentos
+			Analisar elementos já salvos para não haver repetição de itens no banco de dados
+	Exibição de notas
+	Clonagem de nota
     Eventos
         Importação
         Geração
@@ -86,6 +90,21 @@ var saveData = (function () {
     a.style = "display: none";
     return function (blob, fileName) {
         var url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+}());
+
+var saveData = (function () {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return function (data, fileName) {
+        var json = JSON.stringify(data),
+            blob = new Blob([json], {type: "octet/stream"}),
+            url = window.URL.createObjectURL(blob);
         a.href = url;
         a.download = fileName;
         a.click();
