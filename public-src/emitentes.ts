@@ -4,7 +4,7 @@ import {
   setEmpresas,
   IEmpresa,
 } from './dados/emitentes'
-import { clean } from './form-base'
+import { clearChildren } from './form-base'
 import { scanUsuario } from './functions'
 
 sessionStorage.clear()
@@ -12,7 +12,7 @@ sessionStorage.clear()
 function atualizarEmpresas(empresas?: IEmpresa[]) {
   if (!empresas) empresas = getEmpresas()
   const divEmpresas = document.getElementById('emitentes')
-  clean(divEmpresas)
+  clearChildren(divEmpresas)
   empresas.forEach((v) => {
     const button = renderizarEmitente(v)
     divEmpresas.appendChild(button)

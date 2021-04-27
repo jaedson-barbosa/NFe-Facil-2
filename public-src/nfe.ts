@@ -9,7 +9,7 @@ import {
   listFormElement,
   searchFormElement,
   IBaseFormElement,
-  clean,
+  clearChildren,
   buttonFormElement,
 } from './form-base'
 import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
@@ -148,7 +148,7 @@ async function gerarProdutosEdicao() {
       }
     )
     const button = new buttonFormElement('Buscar produto cadastrado', () => {
-      clean(dialog)
+      clearChildren(dialog)
       search.generate(dialog)
       dialog.showModal()
     })
@@ -178,7 +178,7 @@ async function gerarCliente() {
     }
   )
   const button = new buttonFormElement('Buscar cliente cadastrado', () => {
-    clean(dialog)
+    clearChildren(dialog)
     search.generate(dialog)
     dialog.showModal()
   })
@@ -242,7 +242,7 @@ async function gerarTransporte() {
     }
   )
   const button = new buttonFormElement('Buscar motorista cadastrado', () => {
-    clean(dialog)
+    clearChildren(dialog)
     search.generate(dialog)
     dialog.showModal()
   })
@@ -323,7 +323,7 @@ let tela: 'produtos' | 'principal' = 'produtos'
 let currentData: any = {}
 
 async function renderizarTela() {
-  clean(main)
+  clearChildren(main)
   switch (tela) {
     case 'principal':
       if (!telaPrincipal)

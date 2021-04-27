@@ -46,27 +46,25 @@ function cadastrarEmpresa() {
   const form = new defaultForm(
     ...defaultForm.generateView(defaultForm.elementosNFe[1]),
     new genericFormElement(additionalBody)
-  ).generateForm()
-  document.body.appendChild(form)
-  form.onsubmit = (e) =>
-    defaultFormSubmit(e, async (data) => {
-      const cert = await getCertPostBody(data)
-      if (!cert) {
-        alert('Por favor, selecione o certificado e insira a senha.')
-        return
-      }
-      const newId = await cadastrarCNPJ({
-        ...cert,
-        emit: data.emit,
-      })
-      setEmpresa({
-        id: newId,
-        status: 3,
-        emit: data.emit,
-        serieAtual: data.serieAtual,
-      })
-      location.href = './emitentes.html'
+  ).generateForm(async (data) => {
+    const cert = await getCertPostBody(data)
+    if (!cert) {
+      alert('Por favor, selecione o certificado e insira a senha.')
+      return
+    }
+    const newId = await cadastrarCNPJ({
+      ...cert,
+      emit: data.emit,
     })
+    setEmpresa({
+      id: newId,
+      status: 3,
+      emit: data.emit,
+      serieAtual: data.serieAtual,
+    })
+    location.href = './emitentes.html'
+  })
+  document.body.appendChild(form)
 }
 
 function cadastrarUsuario(cnpj: string) {

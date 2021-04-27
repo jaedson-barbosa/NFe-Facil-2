@@ -98,7 +98,7 @@ function insertLabel(
   return label
 }
 
-export function clean(el: HTMLElement) {
+export function clearChildren(el: HTMLElement) {
   while (el.firstChild) {
     el.removeChild(el.firstChild)
   }
@@ -726,7 +726,7 @@ export class choiceFormElement implements IBaseFormElement {
     })
     const updateView = () => {
       let index = select.selectedIndex
-      clean(div)
+      clearChildren(div)
       const view = this.options[index].view
       if (view instanceof fieldsetFormElement) {
         view.options.legend = ''

@@ -1,9 +1,8 @@
 import {
   defaultForm,
-  defaultFormSubmit,
   IBaseFormElement,
-  fieldsetFormElement,
   createId,
+  clearChildren,
 } from './form-base'
 import { set, sync } from './db'
 import { gerarViewCliente, renderizarCliente } from './dados/clientes'
@@ -11,12 +10,13 @@ import { gerarViewProduto, renderizarProduto } from './dados/produtos'
 import { gerarViewMotorista, renderizarMotorista } from './dados/motoristas'
 import { getItens } from './dados/geral'
 
+const mainDialog = document.querySelector('dialog')
+
 function main(
   tipoDado: 'dest' | 'prod' | 'transporta',
   renderizarItem: (data: any) => string,
   ...view: IBaseFormElement[]
 ) {
-  const mainDialog = document.querySelector('dialog')
   mainDialog.showModal()
   const dados = document.getElementById('dados')
   const form = new defaultForm()
@@ -24,21 +24,19 @@ function main(
 
   const cadastrar = (v?: [IDBValidKey, any, HTMLElement]) => {
     mainDialog.showModal()
-    mainDialog.innerHTML = ''
+    clearChildren(mainDialog)
     if (v?.[1]) form.updateValue(v?.[1])
     else form.resetValue()
-    const htmlForm = form.generateForm()
+    const htmlForm = form.generateForm(async (data) => {
+      const id = v?.[0] ?? createId()
+      await set(id, data)
+      if (v?.[2]) {
+        renderizarNovoItem([id, data], v?.[2])
+        v?.[2].remove()
+      } else renderizarNovoItem([id, data])
+      mainDialog.close()
+    })
     mainDialog.appendChild(htmlForm)
-    htmlForm.onsubmit = (e) =>
-      defaultFormSubmit(e, async (data) => {
-        const id = v?.[0] ?? createId()
-        await set(id, data)
-        if (v?.[2]) {
-          renderizarNovoItem([id, data], v?.[2])
-          v?.[2].remove()
-        } else renderizarNovoItem([id, data])
-        mainDialog.close()
-      })
   }
 
   async function renderizarItens() {
