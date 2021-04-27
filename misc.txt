@@ -28,6 +28,11 @@ lastUpdate
     xml
     emitido
     lastUpdade
+    view
+        serie
+        nNF
+        dhEmi
+        xNome
     -eventos:
         json
         xml

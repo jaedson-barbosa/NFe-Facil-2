@@ -1,5 +1,7 @@
-export function renderizarNota(data: { ide: any, dest: any }): string {
+import { IViewNota } from '../../commom/importacao'
+
+export function renderizarNota(data: { infNFe: IViewNota }): string {
   return /*html*/ `
-    <div>${data.dest.xNome}<br>
-    <small><i>${new Date(data.ide.dhEmi).toLocaleString()}</i></small></div>`
+    <div>${data.infNFe.nNF} (${data.infNFe.serie})<br>${data.infNFe.xNome}<br>
+    <small><i>${new Date(data.infNFe.dhEmi).toLocaleString()}</i></small></div>`
 }

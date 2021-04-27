@@ -20,5 +20,15 @@ export interface IResultadoImportacao {
       lastUpdate: Date
     }
   }[]
-  notas: any[]
+  notas: {
+    id: string
+    data: IViewNota
+  }[]
+}
+
+export interface IViewNota {
+  serie: any
+  nNF: any
+  dhEmi: Date
+  xNome: any
 }

@@ -25,10 +25,11 @@ form.onsubmit = async (e) => {
   await setMany(resp.clientes.map((v) => [v.id, v.data]))
   await setMany(resp.produtos.map((v) => [v.id, v.data]))
   await setMany(resp.motoristas.map((v) => [v.id, v.data]))
+  await setMany(resp.notas.map((v) => [v.id, { infNFe: v.data }]))
   document.body.innerHTML = /*html*/ `
   <h1>Resultado da importação</h1>
   <h2>Notas fiscais importadas</h2>
-  ${resp.notas.map((v) => renderizarNota(v)).join('')}
+  ${resp.notas.map((v) => renderizarNota({ infNFe: v.data })).join('')}
   <h2>Clientes importados</h2>
   ${resp.clientes.map((v) => renderizarCliente(v.data)).join('')}
   <h2>Produtos importados</h2>

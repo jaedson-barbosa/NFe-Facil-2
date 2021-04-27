@@ -53,6 +53,12 @@ export const importar = onLoggedRequest(
           xml: v,
           emitido: !!root.nfeProc,
           lastUpdate: new Date(json.ide.dhEmi),
+          view: {
+            serie: json.ide.serie,
+            nNF: json.ide.nNF,
+            dhEmi: new Date(json.ide.dhEmi),
+            xNome: json.dest.xNome,
+          },
         }
       })
       .filter((v) => v)
@@ -135,9 +141,13 @@ export const importar = onLoggedRequest(
     ).map((data) => {
       return { id: dadosCollection.doc(), data }
     })
-    await notas
+
+    const notasDB = notas.map((data) => {
+      return { id: notasCollection.doc(), data }
+    })
+    await notasDB
       .reduce(
-        (p, c) => p.create(notasCollection.doc(), c),
+        (p, c) => p.create(c.id, c.data),
         clientes.reduce(
           (p, c) => p.create(c.id, c.data),
           produtos.reduce(
@@ -157,7 +167,9 @@ export const importar = onLoggedRequest(
       motoristas: motoristas.map((v) => {
         return { id: v.id.id, data: v.data }
       }),
-      notas: notas.map((v) => v.json),
+      notas: notasDB.map((v) => {
+        return { id: v.id.id, data: v.data.view }
+      }),
     }
     res.status(200).send(resultado)
   }
