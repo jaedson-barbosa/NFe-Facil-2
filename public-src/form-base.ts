@@ -265,7 +265,7 @@ export interface IBaseFormElement {
 
 export class genericFormElement implements IBaseFormElement {
   private element: HTMLElement
-  public readOnly:boolean
+  public readOnly: boolean
 
   constructor(el: HTMLElement) {
     this.element = el
@@ -274,7 +274,6 @@ export class genericFormElement implements IBaseFormElement {
   public get clone(): IBaseFormElement {
     return new genericFormElement(this.element)
   }
-
 
   public generate(parent: HTMLElement) {
     const element = this.element
@@ -292,7 +291,7 @@ abstract class inputFormElement implements IBaseFormElement {
   public name: string[]
   protected documentation: string
   public required: boolean
-  public readOnly:boolean
+  public readOnly: boolean
 
   private generatedElement: HTMLSelectElement | HTMLInputElement
 
@@ -358,7 +357,7 @@ abstract class inputFormElement implements IBaseFormElement {
 export class buttonFormElement implements IBaseFormElement {
   private content: string
   private onClick: () => void
-  public readOnly:boolean
+  public readOnly: boolean
 
   constructor(content: string, onClick: () => void) {
     this.content = content
@@ -378,7 +377,9 @@ export class buttonFormElement implements IBaseFormElement {
     parent.appendChild(button)
     return button
   }
-  public updateValue() { return true }
+  public updateValue() {
+    return true
+  }
   public resetValue() {}
 }
 
@@ -617,9 +618,11 @@ export class fieldsetFormElement implements IBaseFormElement {
   public options: IFieldsetOptions
   public children: IBaseFormElement[]
   private hasInitialValue: boolean
-  public get readOnly() { return this.children[0].readOnly }
+  public get readOnly() {
+    return this.children[0].readOnly
+  }
   public set readOnly(v: boolean) {
-    this.children.forEach(k => k.readOnly = v)
+    this.children.forEach((k) => (k.readOnly = v))
   }
 
   constructor(options: IFieldsetOptions, ...children: IBaseFormElement[]) {
@@ -712,9 +715,11 @@ export class choiceFormElement implements IBaseFormElement {
   private isRequired: boolean
   private options: IChoiceOption[]
   private startIndex: number
-  public get readOnly() { return this.options[1].view.readOnly }
+  public get readOnly() {
+    return this.options[1].view.readOnly
+  }
   public set readOnly(v: boolean) {
-    this.options.filter(k => k.view).forEach(k => k.view.readOnly = v)
+    this.options.filter((k) => k.view).forEach((k) => (k.view.readOnly = v))
   }
 
   constructor(
@@ -807,10 +812,12 @@ export class listFormElement implements IBaseFormElement {
   private startValues: any[]
   private startValuesArray: any[]
   public onAddItem: (content: IBaseFormElement[]) => void
-  public get readOnly() {return this.container.readOnly}
+  public get readOnly() {
+    return this.container.readOnly
+  }
   public set readOnly(v: boolean) {
     this.container.readOnly = v
-    this.content.forEach(k => k.readOnly = v)
+    this.content.forEach((k) => (k.readOnly = v))
   }
 
   public set hidden(v: boolean) {
@@ -1458,7 +1465,7 @@ export class defaultForm {
       const btn = document.createElement('button')
       if (text) btn.textContent = text
       // btn.type = 'button' Ainda queremos a validação do form
-      btn.onclick = () => console.log(text)//defaultFormSubmit(action, form)
+      btn.onclick = () => console.log(text) //defaultFormSubmit(action, form)
       form.appendChild(btn)
     }
     if (params) {

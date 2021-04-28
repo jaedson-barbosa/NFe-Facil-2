@@ -322,11 +322,12 @@ function gerarResponsavelTecnico() {
 }
 
 ;(async function () {
+  const prodsVisualizacao = gerarProdutosVisualizacao()
   let telaPrincipal: IBaseFormElement[] = [
     gerarIdentificacao(),
     gerarEmitente(),
     await gerarCliente(),
-    gerarProdutosVisualizacao(),
+    prodsVisualizacao,
     ...gerarRetirada(),
     ...gerarEntrega(),
     gerarAutorizacao(),
@@ -340,7 +341,7 @@ function gerarResponsavelTecnico() {
     ...gerarCana(),
     gerarResponsavelTecnico(),
   ]
-  let telaProdutos: listFormElement = await gerarProdutosEdicao()
+  let prodsEdicao: listFormElement = await gerarProdutosEdicao()
 
   const main = document.getElementById('main')
   const form = new defaultForm()
@@ -356,24 +357,8 @@ function gerarResponsavelTecnico() {
     currentData = nota.infNFe
   }
 
-  const actions = exibir
-    ? [
-        { label: 'Clonar nota', task: (data) => {} },
-        { label: 'Gerar DANFE', task: () => gerarDANFE(idNota) },
-        { label: 'Baixar XML', task: () => baixarXML(idNota) },
-      ]
-    : [
-        {
-          label: 'Apenas salvar',
-          task: (data) => apenasSalvarNota({ infNFe: data }, editar),
-        },
-        {
-          label: 'Assinar e transmitir',
-          task: (data) => assinarTransmitirNota({ infNFe: data }, editar),
-        },
-      ]
-
   function renderPrincipal() {
+    clearChildren(main)
     form.elements = telaPrincipal
     form.updateValue(currentData)
     //Apenas salvar e assinar e transmitir
@@ -381,12 +366,45 @@ function gerarResponsavelTecnico() {
   }
 
   function renderProdutos() {
-    form.elements = [telaProdutos]
+    clearChildren(main)
+    form.elements = [prodsEdicao]
     main.appendChild(
       form.generateForm((data) => {
         currentData.det = data.det
         renderPrincipal()
       })
     )
+  }
+
+  const actionsExibir = [
+    {
+      label: 'Clonar nota',
+      task: () => {
+        prodsVisualizacao.hidden = true
+        telaPrincipal.forEach((v) => (v.readOnly = false))
+        renderProdutos()
+      },
+    },
+    { label: 'Gerar DANFE', task: () => gerarDANFE(idNota) },
+    { label: 'Baixar XML', task: () => baixarXML(idNota) },
+  ]
+  const actionsEditar = [
+    {
+      label: 'Apenas salvar',
+      task: (data) => apenasSalvarNota({ infNFe: data }, editar),
+    },
+    {
+      label: 'Assinar e transmitir',
+      task: (data) => assinarTransmitirNota({ infNFe: data }, editar),
+    },
+  ]
+  const actions = exibir ? actionsExibir : actionsEditar
+
+  if (exibir) {
+    prodsVisualizacao.hidden = false
+    telaPrincipal.forEach((v) => (v.readOnly = true))
+    renderPrincipal()
+  } else {
+    renderProdutos()
   }
 })()
