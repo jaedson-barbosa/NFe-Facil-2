@@ -1,5 +1,6 @@
 import { gerarViewCliente } from './dados/clientes'
 import { getItens } from './dados/geral'
+import { baixarXML, gerarDANFE } from './dados/notas'
 import {
   defaultForm,
   fieldsetFormElement,
@@ -11,7 +12,13 @@ import {
   IBaseFormElement,
   clearChildren,
   buttonFormElement,
+  IFormAction,
 } from './form-base'
+import {
+  apenasSalvarNota,
+  assinarTransmitirNota,
+  getJsonNota,
+} from './functions'
 import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
 
 const empresa = getEmpresaAtiva()
@@ -314,60 +321,72 @@ function gerarResponsavelTecnico() {
   )
 }
 
-const main = document.getElementById('main')
-const form = new defaultForm()
+;(async function () {
+  let telaPrincipal: IBaseFormElement[] = [
+    gerarIdentificacao(),
+    gerarEmitente(),
+    await gerarCliente(),
+    gerarProdutosVisualizacao(),
+    ...gerarRetirada(),
+    ...gerarEntrega(),
+    gerarAutorizacao(),
+    await gerarTransporte(),
+    ...gerarCobranca(),
+    ...gerarPagamento(),
+    ...gerarIntermediador(),
+    gerarInformacoes(),
+    ...gerarExportacao(),
+    ...gerarCompra(),
+    ...gerarCana(),
+    gerarResponsavelTecnico(),
+  ]
+  let telaProdutos: listFormElement = await gerarProdutosEdicao()
 
-let telaPrincipal: IBaseFormElement[]
-let telaProdutos: listFormElement
-let tela: 'produtos' | 'principal' = 'produtos'
-let currentData: any = {}
+  const main = document.getElementById('main')
+  const form = new defaultForm()
+  let currentData: any = {}
 
-async function renderizarTela() {
-  clearChildren(main)
-  switch (tela) {
-    case 'principal':
-      if (!telaPrincipal)
-        telaPrincipal = [
-          gerarIdentificacao(),
-          gerarEmitente(),
-          await gerarCliente(),
-          gerarProdutosVisualizacao(),
-          ...gerarRetirada(),
-          ...gerarEntrega(),
-          gerarAutorizacao(),
-          await gerarTransporte(),
-          ...gerarCobranca(),
-          ...gerarPagamento(),
-          ...gerarIntermediador(),
-          gerarInformacoes(),
-          ...gerarExportacao(),
-          ...gerarCompra(),
-          ...gerarCana(),
-          gerarResponsavelTecnico(),
-        ]
-      form.elements = telaPrincipal
-      form.updateValue(currentData)
-      main.appendChild(
-        form.generateForm((data) => {
-          currentData = data
-          console.log(data)
-        })
-      )
-      break
-    case 'produtos':
-      if (!telaProdutos) telaProdutos = await gerarProdutosEdicao()
-      form.elements = [telaProdutos]
-      main.appendChild(
-        form.generateForm((data) => {
-          currentData.det = data.det
-          console.log(data)
-          tela = 'principal'
-          renderizarTela()
-        })
-      )
-      break
-    default:
-      break
+  const parametros = new URLSearchParams(location.search)
+  const clonar = parametros.get('c') //Nova nota baseada em outra
+  const exibir = parametros.get('ex') //Exibir nota salva
+  const editar = parametros.get('ed') //Edita uma nota apenas salva
+  const idNota = clonar ?? exibir ?? editar
+  if (idNota) {
+    const nota = await getJsonNota(idNota)
+    currentData = nota.infNFe
   }
-}
-renderizarTela()
+
+  const actions = exibir
+    ? [
+        { label: 'Clonar nota', task: (data) => {} },
+        { label: 'Gerar DANFE', task: () => gerarDANFE(idNota) },
+        { label: 'Baixar XML', task: () => baixarXML(idNota) },
+      ]
+    : [
+        {
+          label: 'Apenas salvar',
+          task: (data) => apenasSalvarNota({ infNFe: data }, editar),
+        },
+        {
+          label: 'Assinar e transmitir',
+          task: (data) => assinarTransmitirNota({ infNFe: data }, editar),
+        },
+      ]
+
+  function renderPrincipal() {
+    form.elements = telaPrincipal
+    form.updateValue(currentData)
+    //Apenas salvar e assinar e transmitir
+    main.appendChild(form.generateForm(actions))
+  }
+
+  function renderProdutos() {
+    form.elements = [telaProdutos]
+    main.appendChild(
+      form.generateForm((data) => {
+        currentData.det = data.det
+        renderPrincipal()
+      })
+    )
+  }
+})()

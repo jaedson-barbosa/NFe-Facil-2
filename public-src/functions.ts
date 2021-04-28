@@ -96,3 +96,32 @@ export async function importar(xmls: string[]): Promise<IResultadoImportacao> {
     k == 'lastUpdate' ? new Date(v) : v
   ) as IResultadoImportacao
 }
+
+export async function getJsonNota(idNota: string) {
+  const resp = await fetch(
+    'http://localhost:5001/nfe-facil-980bc/us-central1/getJsonNota',
+    {
+      method: 'POST',
+      body: JSON.stringify({ id: getIdEmpresaAtiva(), idNota }),
+    }
+  )
+  if (resp.status == 401) {
+    location.href = './login.html'
+    return
+  } else if (resp.status != 200) {
+    alert(await resp.text())
+    return
+  }
+  return (await resp.json()) as { infNFe: any }
+}
+
+export async function apenasSalvarNota(nota: { infNFe: any }, idNota?: string) {
+  await Promise.resolve()
+}
+
+export async function assinarTransmitirNota(
+  nota: { infNFe: any },
+  idNota?: string
+) {
+  await Promise.resolve()
+}

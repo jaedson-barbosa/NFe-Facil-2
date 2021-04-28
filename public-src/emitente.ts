@@ -88,9 +88,9 @@ function cadastrarUsuario(cnpj: string) {
         </fieldset>
     </form>`
   getForm(0).onsubmit = (e) =>
-    defaultFormSubmit(e, (data) => acessar(data.cnpj))
+    defaultFormSubmit((data) => acessar(data.cnpj), e)
   getForm(1).onsubmit = (e) =>
-    defaultFormSubmit(e, (data) => acessar(data.cnpj, data))
+    defaultFormSubmit((data) => acessar(data.cnpj, data), e)
 }
 
 if (isSessaoIniciada()) {
@@ -121,7 +121,7 @@ if (isSessaoIniciada()) {
         <input type="submit">
     </form>`
   getForm().onsubmit = (e) =>
-    defaultFormSubmit(e, async (data) => {
+    defaultFormSubmit(async (data) => {
       const text = await scanRegistro(data.cnpj)
       if (text == 'CNPJ inválido') {
         alert('CNPJ inválido.')
@@ -135,5 +135,5 @@ if (isSessaoIniciada()) {
         // Acesso já está liberado
         location.href = './emitentes.html'
       }
-    })
+    }, e)
 }

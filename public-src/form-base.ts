@@ -34,10 +34,24 @@ export function getRandomNumber(digits: number = 8) {
   return Math.floor(Math.random() * (maxm - minm + 1)) + minm
 }
 
-export function defaultFormSubmit(e: Event, onSubmit: (data: any) => void) {
-  e.preventDefault()
+export function defaultFormSubmit(onSubmit: (data: any) => void, e: Event)
+export function defaultFormSubmit(
+  onSubmit: (data: any) => void,
+  form: HTMLFormElement
+)
+export function defaultFormSubmit(
+  onSubmit: (data: any) => void,
+  param: Event | HTMLFormElement
+) {
+  let form: HTMLFormElement
+  if (param instanceof Event) {
+    param.preventDefault()
+    form = param.target as HTMLFormElement
+  } else {
+    form = param
+  }
   var object = {}
-  const formData = new FormData(e.target as HTMLFormElement)
+  const formData = new FormData(form)
   const objectArrays: any[][] = []
   formData.forEach(function (value, key) {
     if (!value) return
@@ -242,14 +256,16 @@ N – Produzido em escala não relevante`,
 ]
 
 export interface IBaseFormElement {
-  generate: (parent: HTMLElement) => HTMLElement
-  updateValue: (values: any) => boolean
-  resetValue: () => void
+  generate(parent: HTMLElement): HTMLElement
+  updateValue(values: any): boolean
+  resetValue(): void
+  readOnly: boolean
   clone: IBaseFormElement
 }
 
 export class genericFormElement implements IBaseFormElement {
   private element: HTMLElement
+  public readOnly:boolean
 
   constructor(el: HTMLElement) {
     this.element = el
@@ -258,6 +274,7 @@ export class genericFormElement implements IBaseFormElement {
   public get clone(): IBaseFormElement {
     return new genericFormElement(this.element)
   }
+
 
   public generate(parent: HTMLElement) {
     const element = this.element
@@ -275,6 +292,7 @@ abstract class inputFormElement implements IBaseFormElement {
   public name: string[]
   protected documentation: string
   public required: boolean
+  public readOnly:boolean
 
   private generatedElement: HTMLSelectElement | HTMLInputElement
 
@@ -288,16 +306,14 @@ abstract class inputFormElement implements IBaseFormElement {
     if (el) el.value = v ?? ''
   }
 
-  constructor(
-    name: string[],
-    documentation: string,
-    required: boolean,
-    value?: string
-  ) {
+  private readonly fixedValue: boolean
+
+  constructor(name: string[], doc: string, req: boolean, value?: string) {
     this.name = name.filter((v) => !v.includes('|'))
-    this.documentation = documentation
-    this.required = required
+    this.documentation = doc
+    this.required = req
     if (value) this.value = value
+    this.fixedValue = !!value
   }
 
   protected get nextItemName(): string[] {
@@ -311,6 +327,7 @@ abstract class inputFormElement implements IBaseFormElement {
   public abstract generate(parent: HTMLElement): HTMLElement
 
   public updateValue(values: any) {
+    if (this.fixedValue) return true
     let hasParent = true
     const value = this.name.reduce((p, c) => {
       if (!p) hasParent = false
@@ -326,6 +343,11 @@ abstract class inputFormElement implements IBaseFormElement {
 
   protected updateBaseProps(input: HTMLSelectElement | HTMLInputElement) {
     this.generatedElement = input
+    if (input instanceof HTMLSelectElement) {
+      input.disabled = true
+    } else {
+      input.readOnly = true
+    }
     input.name = this.name.join('.')
     input.title = this.documentation
     input.required = this.required
@@ -336,6 +358,7 @@ abstract class inputFormElement implements IBaseFormElement {
 export class buttonFormElement implements IBaseFormElement {
   private content: string
   private onClick: () => void
+  public readOnly:boolean
 
   constructor(content: string, onClick: () => void) {
     this.content = content
@@ -347,6 +370,7 @@ export class buttonFormElement implements IBaseFormElement {
   }
 
   public generate(parent: HTMLElement) {
+    if (this.readOnly) return
     const button = document.createElement('button')
     button.textContent = this.content
     button.type = 'button'
@@ -354,9 +378,7 @@ export class buttonFormElement implements IBaseFormElement {
     parent.appendChild(button)
     return button
   }
-  public updateValue(values: any) {
-    return true
-  }
+  public updateValue() { return true }
   public resetValue() {}
 }
 
@@ -446,6 +468,7 @@ abstract class baseSelectTextFormElement implements IBaseFormElement {
   protected options: string[]
   protected onChange: (input: HTMLInputElement, isValid: boolean) => void
   protected startValue: string
+  public readOnly: boolean
 
   constructor(
     documentation: string,
@@ -463,6 +486,7 @@ abstract class baseSelectTextFormElement implements IBaseFormElement {
 
   public generate(parent: HTMLElement) {
     const select = document.createElement('input')
+    select.readOnly = this.readOnly
     select.title = this.documentation
     select.required = this.required
     const datalist = document.createElement('datalist')
@@ -593,6 +617,10 @@ export class fieldsetFormElement implements IBaseFormElement {
   public options: IFieldsetOptions
   public children: IBaseFormElement[]
   private hasInitialValue: boolean
+  public get readOnly() { return this.children[0].readOnly }
+  public set readOnly(v: boolean) {
+    this.children.forEach(k => k.readOnly = v)
+  }
 
   constructor(options: IFieldsetOptions, ...children: IBaseFormElement[]) {
     this.options = options
@@ -637,6 +665,7 @@ export class fieldsetFormElement implements IBaseFormElement {
       }
       const check = document.createElement('input')
       check.type = 'checkbox'
+      check.readOnly = this.readOnly
       check.checked = this.hasInitialValue
       parent.appendChild(check)
       const label = insertLabel(
@@ -683,6 +712,10 @@ export class choiceFormElement implements IBaseFormElement {
   private isRequired: boolean
   private options: IChoiceOption[]
   private startIndex: number
+  public get readOnly() { return this.options[1].view.readOnly }
+  public set readOnly(v: boolean) {
+    this.options.filter(k => k.view).forEach(k => k.view.readOnly = v)
+  }
 
   constructor(
     documentation: string,
@@ -718,6 +751,7 @@ export class choiceFormElement implements IBaseFormElement {
 
   public generate(parent: HTMLElement) {
     const select = document.createElement('select')
+    if (this.readOnly) select.disabled = true
     const div = document.createElement('div')
     this.options.forEach((v) => {
       const option = document.createElement('option')
@@ -773,6 +807,11 @@ export class listFormElement implements IBaseFormElement {
   private startValues: any[]
   private startValuesArray: any[]
   public onAddItem: (content: IBaseFormElement[]) => void
+  public get readOnly() {return this.container.readOnly}
+  public set readOnly(v: boolean) {
+    this.container.readOnly = v
+    this.content.forEach(k => k.readOnly = v)
+  }
 
   public set hidden(v: boolean) {
     this.container.options.hidden = v
@@ -1408,14 +1447,32 @@ export class defaultForm {
 
     return analyseTag(rootTag, rootField, parentTags)
   }
-
-  public generateForm(onSubmit?: (data: any) => void): HTMLFormElement {
+  public generateForm(onSubmit: (data: any) => void): HTMLFormElement
+  public generateForm(actions: IFormAction[]): HTMLFormElement
+  public generateForm(
+    params: ((data: any) => void) | IFormAction[]
+  ): HTMLFormElement {
     const form = document.createElement('form')
     this.elements.forEach((v) => v.generate(form))
-    const submit = document.createElement('input')
-    submit.type = 'submit'
-    form.appendChild(submit)
-    if (onSubmit) form.onsubmit = (e) => defaultFormSubmit(e, onSubmit)
+    const createSub = (action: (data: any) => void, text?: string) => {
+      const btn = document.createElement('button')
+      if (text) btn.textContent = text
+      // btn.type = 'button' Ainda queremos a validação do form
+      btn.onclick = () => console.log(text)//defaultFormSubmit(action, form)
+      form.appendChild(btn)
+    }
+    if (params) {
+      if (Array.isArray(params)) {
+        params.forEach((v) => createSub(v.task, v.label))
+      } else {
+        createSub(params)
+      }
+    }
+    form.onsubmit = (e) => {
+      e.preventDefault()
+      console.log('Submissão ignorada.')
+      return false
+    }
     return form
   }
 
@@ -1426,4 +1483,9 @@ export class defaultForm {
   public resetValue() {
     this.elements.forEach((v) => v.resetValue())
   }
+}
+
+export interface IFormAction {
+  label: string
+  task: (data: any) => void
 }

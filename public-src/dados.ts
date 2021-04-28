@@ -9,36 +9,41 @@ import { gerarViewCliente, renderizarCliente } from './dados/clientes'
 import { gerarViewProduto, renderizarProduto } from './dados/produtos'
 import { gerarViewMotorista, renderizarMotorista } from './dados/motoristas'
 import { getItens, TDados, TDadosBase, TNota } from './dados/geral'
-import { renderizarNota } from './dados/notas'
-
-const mainDialog = document.querySelector('dialog')
-
-function main(tipoDado: TNota, renderizarItem: (data: any) => string): void
+import {
+  baixarXML,
+  gerarDANFE,
+  renderizarNota,
+} from './dados/notas'
+function main(tDado: TNota, render: (data: any) => string): void
 function main(
-  tipoDado: TDadosBase,
-  renderizarItem: (data: any) => string,
+  tDado: TDadosBase,
+  render: (data: any) => string,
   ...view: IBaseFormElement[]
 ): void
 function main(
-  tipoDado: TDados,
-  renderizarItem: (data: any) => string,
+  tDado: TDados,
+  render: (data: any) => string,
   ...view: IBaseFormElement[]
 ): void {
+  const mainDialog = document.querySelector('dialog')
   mainDialog.showModal()
   const dados = document.getElementById('dados')
   function cadastrar(v?: [IDBValidKey, any, HTMLButtonElement]) {
     mainDialog.showModal()
     clearChildren(mainDialog)
-    if (tipoDado == 'infNFe') {
+    if (tDado == 'infNFe') {
       const genButton = (label: string, action: () => void) => {
         const btn = document.createElement('button')
         btn.textContent = label
         btn.onclick = action
         mainDialog.appendChild(btn)
       }
-      genButton('Clonar nota', () => alert('Gerar DANFE!'))
-      genButton('Gerar DANFE', () => alert('Gerar DANFE!'))
-      genButton('Baixar XML', () => alert('Baixar XML!'))
+      const clonar = document.createElement('a')
+      clonar.textContent = 'Clonar nota'
+      clonar.href = './nfe.html?c=' + v[0]
+      mainDialog.appendChild(clonar)
+      genButton('Gerar DANFE', () => alert(gerarDANFE(v[0] as string)))
+      genButton('Baixar XML', () => alert(baixarXML(v[0] as string)))
     } else {
       const form = new defaultForm()
       form.elements.push(...view)
@@ -57,13 +62,13 @@ function main(
 
   async function renderizarItens() {
     dados.innerHTML = ''
-    const itens = await getItens(tipoDado)
+    const itens = await getItens(tDado)
     itens.forEach((v) => renderizarNovoItem(v))
   }
 
   function renderizarNovoItem(v: [IDBValidKey, any], ref?: HTMLButtonElement) {
     const button = document.createElement('button')
-    button.innerHTML = renderizarItem(v[1])
+    button.innerHTML = render(v[1])
     button.onclick = () => cadastrar([...v, button])
     if (ref) ref.before(button)
     else dados.appendChild(button)

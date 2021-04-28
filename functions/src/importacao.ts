@@ -1,6 +1,6 @@
 import { toJson } from 'xml2json'
 import { db, onLoggedRequest } from './core'
-import { IResultadoImportacao } from '../../commom/importacao'
+import { INotaDB, IResultadoImportacao } from '../../commom/importacao'
 
 // function addPrefix(obj: any) {
 //     Object.entries(obj).forEach(
@@ -48,18 +48,20 @@ export const importar = onLoggedRequest(
         const root = toJson(v, { object: true, reversible: true }) as any
         if (!root?.NFe && !root?.nfeProc) return undefined
         const json = removePrefix((root.NFe ?? root.nfeProc.NFe).infNFe)
-        return {
+        const dhEmi = new Date(json.ide.dhEmi)
+        const nota: INotaDB<Date> = {
           json,
           xml: v,
           emitido: !!root.nfeProc,
-          lastUpdate: new Date(json.ide.dhEmi),
+          lastUpdate: dhEmi,
           view: {
             serie: json.ide.serie,
             nNF: json.ide.nNF,
-            dhEmi: new Date(json.ide.dhEmi),
+            dhEmi,
             xNome: json.dest.xNome,
           },
         }
+        return nota
       })
       .filter((v) => v)
       .map((v) => v!)

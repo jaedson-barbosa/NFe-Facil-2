@@ -32,3 +32,16 @@ export interface IViewNota {
   dhEmi: Date
   xNome: any
 }
+
+export interface INotaDB<TDate> {
+  json: any
+  xml: string
+  emitido: boolean
+  lastUpdate: TDate
+  view: {
+    serie: any
+    nNF: any
+    dhEmi: TDate
+    xNome: any
+  }
+}
