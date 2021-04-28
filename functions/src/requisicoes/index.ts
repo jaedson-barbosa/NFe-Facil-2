@@ -3,7 +3,7 @@ import * as https from 'https'
 import * as axios from 'axios'
 import * as servicos from './servicos.json'
 import * as webservicesNFe from './webservicesNFe.json'
-import { IBGESimplificado } from './IBGESimplificado.json'
+import { IBGESimplificado } from '../IBGESimplificado.json'
 import { ambientes } from './core'
 export { ambientes }
 

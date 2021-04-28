@@ -223,6 +223,12 @@ function gerarAutorizacao() {
   )
 }
 
+function gerarTotal() {
+  return defaultForm.generateView(defaultForm.elementosNFe[8], {
+    rootTag: 'xs:element'
+  })
+}
+
 async function gerarTransporte() {
   const views = defaultForm.generateView(defaultForm.elementosNFe[9], {
     rootTag: 'xs:element',
@@ -331,6 +337,7 @@ function gerarResponsavelTecnico() {
     ...gerarRetirada(),
     ...gerarEntrega(),
     gerarAutorizacao(),
+    ...gerarTotal(),
     await gerarTransporte(),
     ...gerarCobranca(),
     ...gerarPagamento(),
@@ -391,7 +398,11 @@ function gerarResponsavelTecnico() {
   const actionsEditar = [
     {
       label: 'Apenas salvar',
-      task: (data) => apenasSalvarNota({ infNFe: data }, editar),
+      task: (data) => {
+        if (apenasSalvarNota({ infNFe: data }, editar)) {
+          alert('Nota salva com sucesso.')
+        }
+      },
     },
     {
       label: 'Assinar e transmitir',

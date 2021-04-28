@@ -2,16 +2,6 @@ import { toJson } from 'xml2json'
 import { db, onLoggedRequest } from './core'
 import { INotaDB, IResultadoImportacao } from '../../commom/importacao'
 
-// function addPrefix(obj: any) {
-//     Object.entries(obj).forEach(
-//         v => {
-//             if (typeof v[1] != 'object') {
-//                 obj[v[0]] = { '$t': v[1] }
-//             } else addPrefix(v[1])
-//         }
-//     )
-// }
-
 function removePrefix(obj: any) {
   if (typeof obj != 'object') return obj
   const e = Object.entries(obj)
