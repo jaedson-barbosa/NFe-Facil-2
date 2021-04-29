@@ -132,7 +132,14 @@ if (isSessaoIniciada()) {
       } else if (text == 'Usuário não cadastrado') {
         cadastrarUsuario(data.cnpj)
       } else {
+        const obj = JSON.parse(text) as IEmpresa
         // Acesso já está liberado
+        setEmpresa({
+          id: obj.id,
+          status: obj.status,
+          emit: obj.emit,
+          serieAtual: obj.serieAtual,
+        })
         location.href = './emitentes.html'
       }
     }, e)

@@ -50,7 +50,6 @@ export function renderizarEmitente(data: IEmpresa): HTMLButtonElement {
         <small><i>${getDescricaoStatus(data.status)}</small></i>
     </div>`
   button.onclick = async () => {
-    alert('k')
     await iniciarSessao(data.id)
   }
   return button

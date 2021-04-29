@@ -25,6 +25,3 @@ export function setMany(entries: [IDBValidKey, any][]) {
 export function update(key: IDBValidKey, updater: (oldValue: any) => any) {
   return idb.update(key, updater, sessionStore)
 }
-export function sync() {
-  return Promise.resolve()
-}

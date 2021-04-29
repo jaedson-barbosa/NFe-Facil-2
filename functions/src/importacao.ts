@@ -150,7 +150,7 @@ export const importar = onLoggedRequest(
         )
       )
       .commit()
-    const resultado: IResultadoImportacao = {
+    const resultado: IResultadoImportacao<Date> = {
       clientes: clientes.map((v) => {
         return { id: v.id.id, dest: v.data.dest }
       }),

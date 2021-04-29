@@ -79,7 +79,6 @@ export function onLoggedRequest(
       const empresas = await db
         .collection('empresas')
         .where('emit.CNPJ', '==', cnpj)
-        .select()
         .limit(1)
         .get()
       if (empresas.empty) {

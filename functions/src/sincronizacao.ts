@@ -13,9 +13,9 @@ export const sincronizar = onLoggedRequest(
     ).get()
     const novasNotas = await (lastUpdate
       ? notasCollection.where('lastUpdate', '>=', new Date(lastUpdate))
-      : dadosCollection
+      : notasCollection
     ).get()
-    const resp: IResultadoSincronizacao = {
+    const resp: IResultadoSincronizacao<number> = {
       novosDados: novosDados.docs.map((v) => {
         const data = v.data() as any
         delete data['lastUpdate']
@@ -23,7 +23,15 @@ export const sincronizar = onLoggedRequest(
       }),
       novasNotas: novasNotas.docs.map((v) => {
         const data = v.data() as INotaDB<FirebaseFirestore.Timestamp>
-        return { id: v.id, infNFe: data.view }
+        return {
+          id: v.id,
+          infNFe: {
+            serie: data.view.serie,
+            nNF: data.view.nNF,
+            dhEmi: data.view.dhEmi.toMillis(),
+            xNome: data.view.xNome,
+          },
+        }
       }),
       now: new Date().valueOf(),
     }

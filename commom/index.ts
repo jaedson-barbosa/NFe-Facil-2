@@ -1,4 +1,4 @@
-export interface IResultadoImportacao {
+export interface IResultadoImportacao<TDate> {
   clientes: {
     id: string
     dest: any
@@ -13,25 +13,25 @@ export interface IResultadoImportacao {
   }[]
   notas: {
     id: string
-    infNFe: IViewNota
+    infNFe: IViewNota<TDate>
   }[]
 }
 
-export interface IResultadoSincronizacao {
+export interface IResultadoSincronizacao<TDate> {
   novosDados: {
     id: string
     data: any
   }[]
   novasNotas: {
     id: string
-    infNFe: IViewNota
+    infNFe: IViewNota<TDate>
   }[]
   now: number
 }
 
-export interface IViewNota {
+export interface IViewNota<TDate> {
   serie: any
   nNF: any
-  dhEmi: Date
+  dhEmi: TDate
   xNome: any
 }

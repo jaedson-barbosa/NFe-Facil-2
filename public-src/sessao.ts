@@ -1,9 +1,7 @@
 import { getEmpresa } from './dados/emitentes'
-import { getLastAlteracoes } from './sincronizacao'
 
 export async function iniciarSessao(id: string) {
   sessionStorage.setItem('idEmpresa', id)
-  await getLastAlteracoes()
   abrirPainel()
 }
 

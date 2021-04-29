@@ -10,5 +10,5 @@ export interface INotaDB<TDate> {
   xml: string
   emitido: boolean
   lastUpdate: TDate
-  view: IViewNota
+  view: IViewNota<TDate>
 }

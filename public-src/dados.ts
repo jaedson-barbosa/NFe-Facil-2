@@ -4,7 +4,7 @@ import {
   createId,
   clearChildren,
 } from './form-base'
-import { set, sync } from './db'
+import { set } from './db'
 import { gerarViewCliente, renderizarCliente } from './dados/clientes'
 import { gerarViewProduto, renderizarProduto } from './dados/produtos'
 import { gerarViewMotorista, renderizarMotorista } from './dados/motoristas'
@@ -14,6 +14,7 @@ import {
   gerarDANFE,
   renderizarNota,
 } from './dados/notas'
+import { getLastAlteracoes } from './sincronizacao'
 function main(tDado: TNota, render: (data: any) => string): void
 function main(
   tDado: TDadosBase,
@@ -74,14 +75,14 @@ function main(
     else dados.appendChild(button)
   }
 
-  sync()
+  getLastAlteracoes()
     .then(async () => {
       await renderizarItens()
       document.getElementById('cadastrar').onclick = () => cadastrar()
       document.getElementById('atualizar').onclick = async () => {
         mainDialog.innerHTML = 'Carregando'
         mainDialog.showModal()
-        await sync()
+        await getLastAlteracoes()
         await renderizarItens()
         mainDialog.close()
       }

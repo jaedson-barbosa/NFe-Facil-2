@@ -1,6 +1,6 @@
-import * as db from './db'
+import { getLastAlteracoes } from './sincronizacao'
 const carregando = document.querySelector('dialog')
 
-db.sync().then(() => {
+getLastAlteracoes().then(() => {
   carregando.close()
 })

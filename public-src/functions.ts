@@ -82,7 +82,7 @@ export async function scanUsuario(): Promise<IEmpresa[]> {
   return (await resp.json()) as IEmpresa[]
 }
 
-export async function importar(xmls: string[]): Promise<IResultadoImportacao> {
+export async function importar(xmls: string[]) {
   const idEmpresa = getIdEmpresaAtiva()
   const resp = await fetch(
     'http://localhost:5001/nfe-facil-980bc/us-central1/importar',
@@ -94,7 +94,7 @@ export async function importar(xmls: string[]): Promise<IResultadoImportacao> {
   const respText = await resp.text()
   return JSON.parse(respText, (k, v) =>
     k == 'lastUpdate' ? new Date(v) : v
-  ) as IResultadoImportacao
+  ) as IResultadoImportacao<Date>
 }
 
 export async function getJsonNota(idNota: string) {
@@ -159,11 +159,11 @@ export async function sincronizar() {
   if (resp.status == 401) {
     location.href = './login.html'
     return
-  } else if (resp.status != 201) {
+  } else if (resp.status != 200) {
     alert(await resp.text())
     return
   }
-  const resultado = (await resp.json()) as IResultadoSincronizacao
+  const resultado = (await resp.json()) as IResultadoSincronizacao<number>
   localStorage.setItem('lastUpdate', resultado.now.toString())
   return resultado
 }
