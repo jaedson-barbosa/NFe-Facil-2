@@ -225,7 +225,7 @@ function gerarAutorizacao() {
 
 function gerarTotal() {
   return defaultForm.generateView(defaultForm.elementosNFe[8], {
-    rootTag: 'xs:element'
+    rootTag: 'xs:element',
   })
 }
 
@@ -398,7 +398,7 @@ function gerarResponsavelTecnico() {
   const actionsEditar = [
     {
       label: 'Apenas salvar',
-      task: (data) => {
+      task: (data: any) => {
         if (apenasSalvarNota({ infNFe: data }, editar)) {
           alert('Nota salva com sucesso.')
         }
@@ -406,7 +406,7 @@ function gerarResponsavelTecnico() {
     },
     {
       label: 'Assinar e transmitir',
-      task: (data) => assinarTransmitirNota({ infNFe: data }, editar),
+      task: (data: any) => assinarTransmitirNota({ infNFe: data }, editar),
     },
   ]
   const actions = exibir ? actionsExibir : actionsEditar

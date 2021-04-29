@@ -1,9 +1,9 @@
-import { INotaDB } from '../../commom/importacao'
 import { onLoggedRequest } from './core'
 // import { ambientes, autorizacao } from './requisicoes'
 import { IBGESimplificado } from './IBGESimplificado.json'
 import * as dateformat from 'dateformat'
 import { toXml } from 'xml2json'
+import { INotaDB } from './types'
 
 // const ambiente = ambientes.Homologacao
 

@@ -1,6 +1,6 @@
 import { IEmpresa } from './dados/emitentes'
 import { getIdEmpresaAtiva } from './sessao'
-import { IResultadoImportacao } from '../commom/importacao'
+import { IResultadoImportacao, IResultadoSincronizacao } from '../commom'
 
 export async function requisitarAcesso(
   cnpj: string,
@@ -142,4 +142,28 @@ export async function assinarTransmitirNota(
   idNota?: string
 ) {
   await Promise.resolve()
+}
+
+export async function sincronizar() {
+  const lastUpdate = localStorage.getItem('lastUpdate')
+  const resp = await fetch(
+    'http://localhost:5001/nfe-facil-980bc/us-central1/sincronizar',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        id: getIdEmpresaAtiva(),
+        ...(lastUpdate ? { lastUpdate: Number(lastUpdate) } : {}),
+      }),
+    }
+  )
+  if (resp.status == 401) {
+    location.href = './login.html'
+    return
+  } else if (resp.status != 201) {
+    alert(await resp.text())
+    return
+  }
+  const resultado = (await resp.json()) as IResultadoSincronizacao
+  localStorage.setItem('lastUpdate', resultado.now.toString())
+  return resultado
 }

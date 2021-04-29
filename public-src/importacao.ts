@@ -22,19 +22,21 @@ form.onsubmit = async (e) => {
   e.preventDefault()
   form.remove()
   const resp = await importar(xmls)
-  await setMany(resp.clientes.map((v) => [v.id, v.data]))
-  await setMany(resp.produtos.map((v) => [v.id, v.data]))
-  await setMany(resp.motoristas.map((v) => [v.id, v.data]))
-  await setMany(resp.notas.map((v) => [v.id, { infNFe: v.data }]))
+  await setMany(resp.clientes.map((v) => [v.id, { dest: v.dest }]))
+  await setMany(resp.produtos.map((v) => [v.id, { prod: v.prod }]))
+  await setMany(
+    resp.motoristas.map((v) => [v.id, { transporta: v.transporta }])
+  )
+  await setMany(resp.notas.map((v) => [v.id, { infNFe: v.infNFe }]))
   document.body.innerHTML = /*html*/ `
   <h1>Resultado da importação</h1>
   <h2>Notas fiscais importadas</h2>
-  ${resp.notas.map((v) => renderizarNota({ infNFe: v.data })).join('')}
+  ${resp.notas.map((v) => renderizarNota(v)).join('')}
   <h2>Clientes importados</h2>
-  ${resp.clientes.map((v) => renderizarCliente(v.data)).join('')}
+  ${resp.clientes.map((v) => renderizarCliente(v)).join('')}
   <h2>Produtos importados</h2>
-  ${resp.produtos.map((v) => renderizarProduto(v.data)).join('')}
+  ${resp.produtos.map((v) => renderizarProduto(v)).join('')}
   <h2>Motoristas importados</h2>
-  ${resp.motoristas.map((v) => renderizarMotorista(v.data)).join('')}
+  ${resp.motoristas.map((v) => renderizarMotorista(v)).join('')}
   <a href="./painel.html">Continuar</a>`
 }

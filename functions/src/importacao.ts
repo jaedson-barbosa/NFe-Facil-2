@@ -1,6 +1,7 @@
 import { toJson } from 'xml2json'
 import { db, onLoggedRequest } from './core'
-import { INotaDB, IResultadoImportacao } from '../../commom/importacao'
+import { IResultadoImportacao } from '../../commom'
+import { INotaDB } from './types'
 
 function removePrefix(obj: any) {
   if (typeof obj != 'object') return obj
@@ -151,16 +152,16 @@ export const importar = onLoggedRequest(
       .commit()
     const resultado: IResultadoImportacao = {
       clientes: clientes.map((v) => {
-        return { id: v.id.id, data: v.data }
+        return { id: v.id.id, dest: v.data.dest }
       }),
       produtos: produtos.map((v) => {
-        return { id: v.id.id, data: v.data }
+        return { id: v.id.id, prod: v.data.prod }
       }),
       motoristas: motoristas.map((v) => {
-        return { id: v.id.id, data: v.data }
+        return { id: v.id.id, transporta: v.data.transporta }
       }),
       notas: notasDB.map((v) => {
-        return { id: v.id.id, data: v.data.view }
+        return { id: v.id.id, infNFe: v.data.view }
       }),
     }
     res.status(200).send(resultado)

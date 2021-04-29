@@ -1,4 +1,4 @@
-import { IViewNota } from '../../commom/importacao'
+import { IViewNota } from '../../commom'
 
 export function renderizarNota(data: { infNFe: IViewNota }): string {
   return /*html*/ `

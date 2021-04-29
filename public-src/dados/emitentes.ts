@@ -49,6 +49,9 @@ export function renderizarEmitente(data: IEmpresa): HTMLButtonElement {
         ${data.emit.xFant ?? data.emit.xNome}<br>
         <small><i>${getDescricaoStatus(data.status)}</small></i>
     </div>`
-  button.onclick = () => iniciarSessao(data.id)
+  button.onclick = async () => {
+    alert('k')
+    await iniciarSessao(data.id)
+  }
   return button
 }
