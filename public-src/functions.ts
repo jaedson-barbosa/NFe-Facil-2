@@ -123,7 +123,7 @@ export async function apenasSalvarNota(nota: { infNFe: any }, idNota?: string) {
       body: JSON.stringify({
         id: getIdEmpresaAtiva(),
         infNFe: nota.infNFe,
-        idNota,
+        idNota: idNota ?? '',
       }),
     }
   )

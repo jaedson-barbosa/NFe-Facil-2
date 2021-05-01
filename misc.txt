@@ -118,3 +118,5 @@ var saveData = (function () {
 }());
 
 Deve-se proibir o uso de emitente com CPF
+
+Não está funcionando a clonagem de NFe, corrigir!

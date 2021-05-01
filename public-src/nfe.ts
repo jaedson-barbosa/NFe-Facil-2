@@ -362,6 +362,9 @@ function gerarResponsavelTecnico() {
   if (idNota) {
     const nota = await getJsonNota(idNota)
     currentData = nota.infNFe
+    if (!Array.isArray(currentData.det)) {
+      currentData.det = [currentData.det]
+    }
   }
 
   function renderPrincipal() {
@@ -375,6 +378,8 @@ function gerarResponsavelTecnico() {
   function renderProdutos() {
     clearChildren(main)
     form.elements = [prodsEdicao]
+    form.updateValue(currentData)
+    console.log(currentData)
     main.appendChild(
       form.generateForm((data) => {
         currentData.det = data.det
@@ -398,8 +403,8 @@ function gerarResponsavelTecnico() {
   const actionsEditar = [
     {
       label: 'Apenas salvar',
-      task: (data: any) => {
-        if (apenasSalvarNota({ infNFe: data }, editar)) {
+      task: async (data: any) => {
+        if (await apenasSalvarNota({ infNFe: data }, editar)) {
           alert('Nota salva com sucesso.')
         }
       },

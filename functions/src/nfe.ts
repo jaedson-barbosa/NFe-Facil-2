@@ -25,11 +25,13 @@ export const getJsonNota = onLoggedRequest(
 )
 
 function addPrefix(obj: any) {
-  Object.entries(obj).forEach((v) => {
-    if (typeof v[1] != 'object') {
-      obj[v[0]] = { $t: v[1] }
-    } else addPrefix(v[1])
-  })
+  return Object.entries(obj).reduce(
+    (p, v) => {
+      p[v[0]] = typeof v[1] != 'object' ? { $t: v[1] } : addPrefix(v[1])
+      return p
+    },
+    Array.isArray(obj) ? [] : ({} as any)
+  )
 }
 
 function calcularDV(chave: string) {
@@ -57,7 +59,7 @@ export const apenasSalvarNota = onLoggedRequest(
       return
     }
     try {
-      infNFe.ide.nNF = 999999999
+      infNFe.ide.nNF = '999999999'
       // Calculo da chave
       const cUF = IBGESimplificado.find(
         (v) => v.Sigla == (infNFe.emit.enderEmit.UF as string)
@@ -65,20 +67,19 @@ export const apenasSalvarNota = onLoggedRequest(
       const AAMM = dateformat(infNFe.ide.dhEmi, 'yymm')
       const CNPJ = infNFe.emit.CNPJ
       const mod = infNFe.ide.mod
-      const serie = infNFe.ide.serie.PadLeft(3, '0')
-      const nNF = infNFe.ide.nNF.ToString().PadLeft(9, '0')
+      const serie = (infNFe.ide.serie as string).padStart(3, '0')
+      const nNF = (infNFe.ide.nNF as string).padStart(9, '0')
       const tpEmis = infNFe.ide.tpEmis
       const cNF = infNFe.ide.cNF
       const chave = `${cUF}${AAMM}${CNPJ}${mod}${serie}${nNF}${tpEmis}${cNF}`
       const cDV = calcularDV(chave).toString()
       infNFe.ide.cDV = cDV
-      addPrefix(infNFe)
+      const dhEmi = new Date(infNFe.ide.dhEmi)
       infNFe.versao = '4.00'
       infNFe.Id = `NFe${chave}${cDV}`
-      const dhEmi = new Date(infNFe.ide.dhEmi)
       const nota: INotaDB<Date> = {
         json: infNFe,
-        xml: toXml({ NFe: { infNFe } }),
+        xml: toXml({ NFe: { infNFe: addPrefix(infNFe) } }),
         emitido: false,
         lastUpdate: dhEmi,
         view: {
@@ -94,7 +95,7 @@ export const apenasSalvarNota = onLoggedRequest(
       ).set(nota)
       res.sendStatus(201)
     } catch (error) {
-      res.status(500).send(error)
+      res.status(500).send(JSON.stringify(error))
     }
   }
 )

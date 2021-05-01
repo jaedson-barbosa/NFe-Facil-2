@@ -272,7 +272,9 @@ export class genericFormElement implements IBaseFormElement {
   }
 
   public get clone(): IBaseFormElement {
-    return new genericFormElement(this.element)
+    const el = new genericFormElement(this.element)
+    el.readOnly = this.readOnly
+    return el
   }
 
   public generate(parent: HTMLElement) {
@@ -343,9 +345,9 @@ abstract class inputFormElement implements IBaseFormElement {
   protected updateBaseProps(input: HTMLSelectElement | HTMLInputElement) {
     this.generatedElement = input
     if (input instanceof HTMLSelectElement) {
-      input.disabled = true
+      input.disabled = this.readOnly
     } else {
-      input.readOnly = true
+      input.readOnly = this.readOnly
     }
     input.name = this.name.join('.')
     input.title = this.documentation
@@ -365,7 +367,9 @@ export class buttonFormElement implements IBaseFormElement {
   }
 
   public get clone(): IBaseFormElement {
-    return new buttonFormElement(this.content, this.onClick)
+    const el = new buttonFormElement(this.content, this.onClick)
+    el.readOnly = this.readOnly
+    return el
   }
 
   public generate(parent: HTMLElement) {
@@ -397,12 +401,14 @@ export class selectFormElement extends inputFormElement {
   }
 
   public get clone(): IBaseFormElement {
-    return new selectFormElement(
+    const el = new selectFormElement(
       this.nextItemName,
       this.documentation,
       this.required,
       this.options
     )
+    el.readOnly = this.readOnly
+    return el
   }
 
   public generate(parent: HTMLElement) {
@@ -442,12 +448,14 @@ export class textFormElement extends inputFormElement {
   }
 
   public get clone(): IBaseFormElement {
-    return new textFormElement(
+    const el = new textFormElement(
       this.nextItemName,
       this.documentation,
       this.required,
       this.options
     )
+    el.readOnly = this.readOnly
+    return el
   }
 
   public generate(parent: HTMLElement) {
@@ -535,11 +543,13 @@ export class searchFormElement extends baseSelectTextFormElement {
   }
 
   public get clone(): IBaseFormElement {
-    return new searchFormElement(
+    const el = new searchFormElement(
       this.documentation,
       this.options,
       this.onResult
     )
+    el.readOnly = this.readOnly
+    return el
   }
 
   public updateValue(values: any) {
@@ -572,13 +582,15 @@ export class selectTextFormElement extends baseSelectTextFormElement {
   }
 
   public get clone(): IBaseFormElement {
-    return new selectTextFormElement(
+    const el = new selectTextFormElement(
       this.documentation,
       this.required,
       this.options,
       this.onChangeArg,
       this.getOption
     )
+    el.readOnly = this.readOnly
+    return el
   }
 
   public updateValue(values: any) {
@@ -594,7 +606,13 @@ export class hiddenFormElement extends inputFormElement {
   }
 
   public get clone(): IBaseFormElement {
-    return new hiddenFormElement(this.nextItemName, this.required, this.value)
+    const el = new hiddenFormElement(
+      this.nextItemName,
+      this.required,
+      this.value
+    )
+    el.readOnly = this.readOnly
+    return el
   }
 
   public generate(parent: HTMLElement) {
@@ -618,10 +636,12 @@ export class fieldsetFormElement implements IBaseFormElement {
   public options: IFieldsetOptions
   public children: IBaseFormElement[]
   private hasInitialValue: boolean
+  private _readOnly: boolean
   public get readOnly() {
-    return this.children[0].readOnly
+    return this._readOnly
   }
   public set readOnly(v: boolean) {
+    this._readOnly = v
     this.children.forEach((k) => (k.readOnly = v))
   }
 
@@ -632,10 +652,12 @@ export class fieldsetFormElement implements IBaseFormElement {
   }
 
   public get clone(): IBaseFormElement {
-    return new fieldsetFormElement(
+    const el = new fieldsetFormElement(
       this.options,
       ...this.children.map((v) => v.clone)
     )
+    el.readOnly = this.readOnly
+    return el
   }
 
   public generate(parent: HTMLElement) {
@@ -741,7 +763,7 @@ export class choiceFormElement implements IBaseFormElement {
   }
 
   public get clone(): IBaseFormElement {
-    return new choiceFormElement(
+    const el = new choiceFormElement(
       this.documentation,
       this.isRequired,
       this.options.map((v) => {
@@ -752,6 +774,8 @@ export class choiceFormElement implements IBaseFormElement {
         }
       })
     )
+    el.readOnly = this.readOnly
+    return el
   }
 
   public generate(parent: HTMLElement) {
@@ -817,7 +841,7 @@ export class listFormElement implements IBaseFormElement {
   }
   public set readOnly(v: boolean) {
     this.container.readOnly = v
-    this.content.forEach((k) => (k.readOnly = v))
+    this.content?.forEach((k) => (k.readOnly = v))
   }
 
   public set hidden(v: boolean) {
@@ -841,6 +865,7 @@ export class listFormElement implements IBaseFormElement {
       this.parentNames
     )
     newList.onAddItem = this.onAddItem
+    newList.readOnly = this.readOnly
     return newList
   }
 
@@ -1461,11 +1486,14 @@ export class defaultForm {
   ): HTMLFormElement {
     const form = document.createElement('form')
     this.elements.forEach((v) => v.generate(form))
-    const createSub = (action: (data: any) => void, text?: string) => {
+    const createSub = (
+      action: (data: any) => void,
+      text: string = 'Enviar'
+    ) => {
       const btn = document.createElement('button')
       if (text) btn.textContent = text
       // btn.type = 'button' Ainda queremos a validação do form
-      btn.onclick = () => console.log(text) //defaultFormSubmit(action, form)
+      btn.onclick = () => defaultFormSubmit(action, form)
       form.appendChild(btn)
     }
     if (params) {
