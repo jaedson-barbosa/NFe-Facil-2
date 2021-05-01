@@ -4,6 +4,7 @@ import { IBGESimplificado } from './IBGESimplificado.json'
 import * as dateformat from 'dateformat'
 import { toXml } from 'xml2json'
 import { INotaDB } from './types'
+import { ambientes } from './requisicoes'
 
 // const ambiente = ambientes.Homologacao
 
@@ -27,7 +28,13 @@ export const getJsonNota = onLoggedRequest(
 function addPrefix(obj: any) {
   return Object.entries(obj).reduce(
     (p, v) => {
-      p[v[0]] = typeof v[1] != 'object' ? { $t: v[1] } : addPrefix(v[1])
+      const name = v[0]
+      p[name] =
+        typeof v[1] == 'object'
+          ? addPrefix(v[1])
+          : name == 'nItem' || name == 'dia' //xs:attribute
+          ? v[1]
+          : { $t: v[1] }
       return p
     },
     Array.isArray(obj) ? [] : ({} as any)
@@ -76,8 +83,8 @@ export const apenasSalvarNota = onLoggedRequest(
       infNFe.ide.cDV = cDV
       const dhEmi = new Date(infNFe.ide.dhEmi)
       const prefixedInfNFe = addPrefix(infNFe)
-      infNFe.versao = '4.00'
-      infNFe.Id = `NFe${chave}${cDV}`
+      prefixedInfNFe.versao = infNFe.versao = '4.00'
+      prefixedInfNFe.Id = infNFe.Id = `NFe${chave}${cDV}`
       const nota: INotaDB<Date> = {
         json: infNFe,
         xml: toXml({ NFe: { infNFe: prefixedInfNFe } }),
@@ -103,30 +110,40 @@ export const apenasSalvarNota = onLoggedRequest(
 
 export const assinarTransmitirNota = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
-    const idNota = body.idNota
-    const infNFe = body.infNFe
     let serie = 1
     let tpAmb = 2
-    if (!idNota && !infNFe) {
+    if (!body.idNota && !body.infNFe) {
       res.status(400).send('Requisição sem nenhuma referência de nota')
       return
     }
-    if (idNota && infNFe) {
+    if (body.idNota && body.infNFe) {
       res.status(400).send('Requisição com duas referências simultâneas.')
       return
     }
-      // Calculo do numero
-      const maxNota = await empresaRef
-        .collection('notas')
-        .where('json.ide.serie', '==', serie)
-        .where('json.ide.tpAmb', '==', tpAmb)
-        .orderBy('json.ide.nNF')
-        .select('json.ide.nNF')
-        .limit(1)
-        .get()
-      infNFe.ide.nNF = maxNota.empty
-        ? 1
-        : maxNota.docs[0].data().json.ide.nNF + 1
+    let infNFe: any
+    if (body.idNota) {
+      const nota = await empresaRef.collection('notas').doc(body.idNota).get()
+      if (!nota.exists) {
+        res.status(400).send('Nota não existe')
+        return
+      }
+      const data = nota.data() as INotaDB<FirebaseFirestore.Timestamp>
+      infNFe = data.json
+    } else {
+      infNFe = body.infNFe
+    }
+    infNFe.ide.tpAmb = ambientes.Homologacao
+
+    // Calculo do numero
+    const maxNota = await empresaRef
+      .collection('notas')
+      .where('json.ide.serie', '==', serie)
+      .where('json.ide.tpAmb', '==', tpAmb)
+      .orderBy('json.ide.nNF')
+      .select('json.ide.nNF')
+      .limit(1)
+      .get()
+    infNFe.ide.nNF = maxNota.empty ? 1 : maxNota.docs[0].data().json.ide.nNF + 1
   }
 )
 
@@ -145,7 +162,7 @@ export const getXML = onLoggedRequest(
     const data = nota.data() as INotaDB<FirebaseFirestore.Timestamp>
     res.status(200).send({
       chave: data.json.Id,
-      xml: data.xml
+      xml: data.xml,
     })
   }
 )

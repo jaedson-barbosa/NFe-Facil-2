@@ -902,6 +902,7 @@ export class listFormElement implements IBaseFormElement {
       this.startValuesArray = baseValue
       return true
     }
+    //Corrigir aqui pra remover a alteração pra array no nfe.ts
     return false
   }
 
@@ -1336,7 +1337,7 @@ export class defaultForm {
           return undefined
         }
       )
-      return [cMun, xMun, cUF, UF, municipio].filter((v) => v)
+      return [cMun, cMunFG, xMun, cUF, UF, municipio].filter((v) => v)
     }
 
     function createStateField(

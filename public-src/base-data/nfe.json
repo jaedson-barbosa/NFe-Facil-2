@@ -1147,6 +1147,23 @@
                         "xs:sequence": {
                           "xs:element": [
                             {
+                              "name": "nItem",
+                              "xs:annotation": {
+                                "xs:documentation": "Número do item do NF"
+                              },
+                              "xs:simpleType": {
+                                "xs:restriction": {
+                                  "base": "xs:string",
+                                  "xs:whiteSpace": {
+                                    "value": "preserve"
+                                  },
+                                  "xs:pattern": {
+                                    "value": "[1-9]{1}[0-9]{0,1}|[1-8]{1}[0-9]{2}|[9]{1}[0-8]{1}[0-9]{1}|[9]{1}[9]{1}[0]{1}"
+                                  }
+                                }
+                              }
+                            },
+                            {
                               "name": "prod",
                               "xs:annotation": {
                                 "xs:documentation": "Dados dos produtos e serviços da NF-e"
@@ -6643,24 +6660,6 @@
                               }
                             }
                           ]
-                        },
-                        "xs:attribute": {
-                          "name": "nItem",
-                          "use": "required",
-                          "xs:annotation": {
-                            "xs:documentation": "Número do item do NF"
-                          },
-                          "xs:simpleType": {
-                            "xs:restriction": {
-                              "base": "xs:string",
-                              "xs:whiteSpace": {
-                                "value": "preserve"
-                              },
-                              "xs:pattern": {
-                                "value": "[1-9]{1}[0-9]{0,1}|[1-8]{1}[0-9]{2}|[9]{1}[0-8]{1}[0-9]{1}|[9]{1}[9]{1}[0]{1}"
-                              }
-                            }
-                          }
                         }
                       }
                     },
@@ -8270,31 +8269,32 @@
                               },
                               "xs:complexType": {
                                 "xs:sequence": {
-                                  "xs:element": {
-                                    "name": "qtde",
-                                    "type": "TDec_1110v",
-                                    "xs:annotation": {
-                                      "xs:documentation": "Quantidade em quilogramas - peso líquido"
-                                    }
-                                  }
-                                },
-                                "xs:attribute": {
-                                  "name": "dia",
-                                  "use": "required",
-                                  "xs:annotation": {
-                                    "xs:documentation": "Número do dia"
-                                  },
-                                  "xs:simpleType": {
-                                    "xs:restriction": {
-                                      "base": "xs:string",
-                                      "xs:whiteSpace": {
-                                        "value": "preserve"
+                                  "xs:element": [
+                                    {
+                                      "name": "dia",
+                                      "xs:annotation": {
+                                        "xs:documentation": "Número do dia"
                                       },
-                                      "xs:pattern": {
-                                        "value": "[1-9]|[1][0-9]|[2][0-9]|[3][0-1]"
+                                      "xs:simpleType": {
+                                        "xs:restriction": {
+                                          "base": "xs:string",
+                                          "xs:whiteSpace": {
+                                            "value": "preserve"
+                                          },
+                                          "xs:pattern": {
+                                            "value": "[1-9]|[1][0-9]|[2][0-9]|[3][0-1]"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "name": "qtde",
+                                      "type": "TDec_1110v",
+                                      "xs:annotation": {
+                                        "xs:documentation": "Quantidade em quilogramas - peso líquido"
                                       }
                                     }
-                                  }
+                                  ]
                                 }
                               },
                               "xs:unique": {

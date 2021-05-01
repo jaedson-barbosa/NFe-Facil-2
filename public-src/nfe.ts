@@ -173,7 +173,6 @@ async function gerarCliente() {
     const xLgr = v[1].dest.enderDest.xLgr
     return xLgr ? `${xNome} - ${xLgr}` : xNome
   })
-  console.log(destsView)
   const search = new searchFormElement(
     'Buscar cliente cadastrado',
     destsView,
@@ -365,6 +364,11 @@ function gerarResponsavelTecnico() {
     if (!Array.isArray(currentData.det)) {
       currentData.det = [currentData.det]
     }
+    ;(currentData.det as any[]).forEach((v) => {
+      v.prod.cEAN = typeof v.prod.cEAN == 'object' ? 'SEM GTIN' : v.prod.cEAN
+      v.prod.cEANTrib =
+        typeof v.prod.cEANTrib == 'object' ? 'SEM GTIN' : v.prod.cEANTrib
+    })
   }
 
   function renderPrincipal() {
@@ -388,6 +392,28 @@ function gerarResponsavelTecnico() {
     )
   }
 
+  const posProcessamento = (data: any) => {
+    const ordem = [
+      'vTotTrib',
+      'ICMS',
+      'IPI',
+      'II',
+      'ISSQN',
+      'PIS',
+      'PISST',
+      'COFINS',
+      'COFINSST',
+      'ICMSUFDest',
+    ]
+    ;(data.det as any[]).forEach((v) =>
+      v.imposto = ordem.reduce((p, c) => {
+        const k = v.imposto[c]
+        if (k) p[c] = k
+        return p
+      }, {})
+    )
+  }
+
   const actionsExibir = [
     {
       label: 'Clonar nota',
@@ -404,6 +430,7 @@ function gerarResponsavelTecnico() {
     {
       label: 'Apenas salvar',
       task: async (data: any) => {
+        posProcessamento(data)
         if (await apenasSalvarNota({ infNFe: data }, editar)) {
           alert('Nota salva com sucesso.')
         }
