@@ -7,5 +7,5 @@ export { cadastrarCNPJ, requisitarAcesso, scanRegistro, scanUsuario }
 export { consultarStatusServico } from './requisicoes'
 export { assinarNFe } from './assinaturas'
 export { importar } from './importacao'
-export { apenasSalvarNota, getJsonNota } from './nfe'
+export { apenasSalvarNota, getJsonNota, getXML } from './nfe'
 export { sincronizar } from './sincronizacao'

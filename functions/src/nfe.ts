@@ -75,11 +75,12 @@ export const apenasSalvarNota = onLoggedRequest(
       const cDV = calcularDV(chave).toString()
       infNFe.ide.cDV = cDV
       const dhEmi = new Date(infNFe.ide.dhEmi)
+      const prefixedInfNFe = addPrefix(infNFe)
       infNFe.versao = '4.00'
       infNFe.Id = `NFe${chave}${cDV}`
       const nota: INotaDB<Date> = {
         json: infNFe,
-        xml: toXml({ NFe: { infNFe: addPrefix(infNFe) } }),
+        xml: toXml({ NFe: { infNFe: prefixedInfNFe } }),
         emitido: false,
         lastUpdate: dhEmi,
         view: {
@@ -102,10 +103,23 @@ export const apenasSalvarNota = onLoggedRequest(
 
 export const assinarTransmitirNota = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
-    /*
+    const idNota = body.idNota
+    const infNFe = body.infNFe
+    let serie = 1
+    let tpAmb = 2
+    if (!idNota && !infNFe) {
+      res.status(400).send('Requisição sem nenhuma referência de nota')
+      return
+    }
+    if (idNota && infNFe) {
+      res.status(400).send('Requisição com duas referências simultâneas.')
+      return
+    }
       // Calculo do numero
       const maxNota = await empresaRef
         .collection('notas')
+        .where('json.ide.serie', '==', serie)
+        .where('json.ide.tpAmb', '==', tpAmb)
         .orderBy('json.ide.nNF')
         .select('json.ide.nNF')
         .limit(1)
@@ -113,6 +127,25 @@ export const assinarTransmitirNota = onLoggedRequest(
       infNFe.ide.nNF = maxNota.empty
         ? 1
         : maxNota.docs[0].data().json.ide.nNF + 1
-    */
+  }
+)
+
+export const getXML = onLoggedRequest(
+  async (user, res, empresaRef, empresa, body) => {
+    const idNota = body.idNota
+    if (!idNota) {
+      res.status(400).send('Requisição sem id da nota.')
+      return
+    }
+    const nota = await empresaRef.collection('notas').doc(idNota).get()
+    if (!nota.exists) {
+      res.status(400).send('Nota não existe')
+      return
+    }
+    const data = nota.data() as INotaDB<FirebaseFirestore.Timestamp>
+    res.status(200).send({
+      chave: data.json.Id,
+      xml: data.xml
+    })
   }
 )

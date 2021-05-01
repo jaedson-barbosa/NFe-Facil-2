@@ -44,7 +44,7 @@ function main(
       clonar.href = './nfe.html?c=' + v[0]
       mainDialog.appendChild(clonar)
       genButton('Gerar DANFE', () => alert(gerarDANFE(v[0] as string)))
-      genButton('Baixar XML', () => alert(baixarXML(v[0] as string)))
+      genButton('Baixar XML', () => baixarXML(v[0] as string))
     } else {
       const form = new defaultForm()
       form.elements.push(...view)
