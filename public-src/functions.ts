@@ -204,3 +204,21 @@ export async function getXML(idNota: string) {
   }
   return (await resp.json()) as { chave: string; xml: string }
 }
+
+export async function gerarDANFE(idNota: string) {
+  const resp = await fetch(
+    'http://localhost:5001/nfe-facil-980bc/us-central1/gerarDANFE',
+    {
+      method: 'POST',
+      body: JSON.stringify({ id: getIdEmpresaAtiva(), idNota }),
+    }
+  )
+  if (resp.status == 401) {
+    location.href = './login.html'
+    return
+  } else if (resp.status != 200) {
+    alert(await resp.text())
+    return
+  }
+  return await resp.blob()
+}

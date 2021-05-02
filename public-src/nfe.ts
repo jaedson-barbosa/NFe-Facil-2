@@ -1,6 +1,6 @@
 import { gerarViewCliente } from './dados/clientes'
 import { getItens } from './dados/geral'
-import { baixarXML, gerarDANFE } from './dados/notas'
+import { baixarXML, baixarDANFE } from './dados/notas'
 import {
   defaultForm,
   fieldsetFormElement,
@@ -418,7 +418,7 @@ function gerarResponsavelTecnico() {
         renderProdutos()
       },
     },
-    { label: 'Gerar DANFE', task: () => gerarDANFE(idNota) },
+    { label: 'Gerar DANFE', task: () => baixarDANFE(idNota) },
     { label: 'Baixar XML', task: () => baixarXML(idNota) },
   ]
   const actionsEditar = [

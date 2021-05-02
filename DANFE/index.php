@@ -40,6 +40,9 @@ function helloHttp(ServerRequestInterface $request): ResponseInterface
         ->withHeader('Access-Control-Allow-Origin', '*');
 }
 /*
+O codigo no servidor está com debug ativado e rodando nos EUA
+Pode ser usado assim apenas na versão alpha
+
 DANFE NFC-e necessita do pacote "opcional" nfephp-org/posprint
 Geração dos DANFES já estão funcionando, mas ainda é preciso implementar personalização.
 Usar JSON com suporte a geração única:

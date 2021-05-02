@@ -6,5 +6,5 @@ import scanUsuario from './scanUsuario'
 export { cadastrarCNPJ, requisitarAcesso, scanRegistro, scanUsuario }
 export { consultarStatusServico } from './requisicoes'
 export { importar } from './importacao'
-export { apenasSalvarNota, getJsonNota, getXML, assinarTransmitirNota } from './nfe'
+export { apenasSalvarNota, getJsonNota, getXML, assinarTransmitirNota, gerarDANFE } from './nfe'
 export { sincronizar } from './sincronizacao'

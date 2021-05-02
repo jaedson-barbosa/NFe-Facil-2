@@ -11,7 +11,7 @@ import { gerarViewMotorista, renderizarMotorista } from './dados/motoristas'
 import { getItens, TDados, TDadosBase, TNota } from './dados/geral'
 import {
   baixarXML,
-  gerarDANFE,
+  baixarDANFE,
   renderizarNota,
 } from './dados/notas'
 import { getLastAlteracoes } from './sincronizacao'
@@ -44,7 +44,7 @@ function main(
       clonar.textContent = 'Clonar nota'
       clonar.href = './nfe.html?c=' + v[0]
       mainDialog.appendChild(clonar)
-      genButton('Gerar DANFE', () => alert(gerarDANFE(v[0] as string)))
+      genButton('Gerar DANFE', () => baixarDANFE(v[0] as string))
       genButton('Baixar XML', () => baixarXML(v[0] as string))
     } else {
       const form = new defaultForm()

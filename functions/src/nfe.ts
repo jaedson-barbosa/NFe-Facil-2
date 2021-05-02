@@ -5,6 +5,7 @@ import { toJson, toXml } from 'xml2json'
 import { INotaDB } from './types'
 import { TAmb, enviarRequisicao, getRandomNumber } from './requisicoes'
 import { assinarNFe } from './assinaturas'
+import axios from 'axios'
 
 // const ambiente = ambientes.Homologacao
 
@@ -309,6 +310,10 @@ export const getXML = onLoggedRequest(
   }
 )
 
+/**
+ * Sucesso em todas as situações: produção, homologação e apenas salva
+ * Será usada a cloud pra ser uma preocupação a menos e pra analisar custos
+ */
 export const gerarDANFE = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
     const idNota = body.idNota
@@ -322,10 +327,17 @@ export const gerarDANFE = onLoggedRequest(
       return
     }
     const data = nota.data() as INotaDB<FirebaseFirestore.Timestamp>
-    
-    res.status(200).send({
-      chave: data.json.Id,
-      xml: data.xml,
+    const urlCloud =
+      'https://us-central1-nfe-facil-980bc.cloudfunctions.net/helloWorld'
+    const parametros = {
+      xml: data.xml.replace(/>\s+</g, '><'),
+      orientacao: 'P',
+      margSup: 5,
+      margEsq: 5,
+    }
+    const danfe = await axios.post(urlCloud, parametros, {
+      responseType: 'arraybuffer', // Repassa as informações sem corrompê-las
     })
+    res.send(danfe.data)
   }
 )

@@ -1,5 +1,5 @@
 import { IViewNota } from '../../commom'
-import { getXML } from '../functions'
+import { gerarDANFE, getXML } from '../functions'
 
 export function renderizarNota(data: { infNFe: IViewNota<number> }): string {
   return /*html*/ `
@@ -9,12 +9,27 @@ export function renderizarNota(data: { infNFe: IViewNota<number> }): string {
     <small><i>${new Date(data.infNFe.dhEmi).toLocaleString()}</i></small></div>`
 }
 
-export function gerarDANFE(idNota: string) {}
+export async function baixarDANFE(idNota: string) {
+  const pdf = await gerarDANFE(idNota)
+  const saveData = (function () {
+    const a = document.createElement('a')
+    document.body.appendChild(a)
+    a.style.display = 'none'
+    return function (blob, fileName) {
+      var url = window.URL.createObjectURL(blob)
+      a.href = url
+      a.download = fileName
+      a.click()
+      window.URL.revokeObjectURL(url)
+    }
+  })()
+  saveData(pdf, 'teste.pdf')
+}
 
 export async function baixarXML(idNota: string) {
   const xml = await getXML(idNota)
-  var saveData = (function () {
-    var a = document.createElement('a')
+  const saveData = (function () {
+    const a = document.createElement('a')
     document.body.appendChild(a)
     a.style.display = 'none'
     return function (xml: string, fileName: string) {
