@@ -1,10 +1,10 @@
 import { onLoggedRequest } from './core'
-// import { ambientes, autorizacao } from './requisicoes'
 import { IBGESimplificado } from './IBGESimplificado.json'
 import * as dateformat from 'dateformat'
-import { toXml } from 'xml2json'
+import { toJson, toXml } from 'xml2json'
 import { INotaDB } from './types'
-import { ambientes } from './requisicoes'
+import { ambientes, autorizacao, retAutorizacao } from './requisicoes'
+import { assinarNFe } from './assinaturas'
 
 // const ambiente = ambientes.Homologacao
 
@@ -56,38 +56,49 @@ function calcularDV(chave: string) {
   return resto == 0 || resto == 1 ? 0 : 11 - resto
 }
 
+function preProcessar(infNFe: any, numero: string) {
+  infNFe.ide.nNF = numero
+  // Calculo da chave
+  const cUF = IBGESimplificado.find(
+    (v) => v.Sigla == (infNFe.emit.enderEmit.UF as string)
+  )!.Codigo
+  const AAMM = dateformat(infNFe.ide.dhEmi, 'yymm')
+  const CNPJ = infNFe.emit.CNPJ
+  const mod = infNFe.ide.mod
+  const serie = (infNFe.ide.serie as string).padStart(3, '0')
+  const nNF = (infNFe.ide.nNF as string).padStart(9, '0')
+  const tpEmis = infNFe.ide.tpEmis
+  const cNF = infNFe.ide.cNF
+  const chave = `${cUF}${AAMM}${CNPJ}${mod}${serie}${nNF}${tpEmis}${cNF}`
+  const cDV = calcularDV(chave).toString()
+  infNFe.ide.cDV = cDV
+  const dhEmi = new Date(infNFe.ide.dhEmi)
+  const prefixedInfNFe = addPrefix(infNFe)
+  prefixedInfNFe.versao = infNFe.versao = '4.00'
+  prefixedInfNFe.Id = infNFe.Id = `NFe${chave}${cDV}`
+  const xml = toXml({
+    NFe: {
+      xmlns: 'http://www.portalfiscal.inf.br/nfe',
+      infNFe: prefixedInfNFe,
+    },
+  })
+  return { xml, dhEmi }
+}
+
 export const apenasSalvarNota = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
     // Inserir analise pra quando a nota ja foi emitida
     const idNota = body.idNota
     const infNFe = body.infNFe
     if (!infNFe) {
-      res.status(400).send('Requisição sem corpo da nota.')
+      res.status(400).send('Requisição sem corpo da nota')
       return
     }
     try {
-      infNFe.ide.nNF = '999999999'
-      // Calculo da chave
-      const cUF = IBGESimplificado.find(
-        (v) => v.Sigla == (infNFe.emit.enderEmit.UF as string)
-      )!.Codigo
-      const AAMM = dateformat(infNFe.ide.dhEmi, 'yymm')
-      const CNPJ = infNFe.emit.CNPJ
-      const mod = infNFe.ide.mod
-      const serie = (infNFe.ide.serie as string).padStart(3, '0')
-      const nNF = (infNFe.ide.nNF as string).padStart(9, '0')
-      const tpEmis = infNFe.ide.tpEmis
-      const cNF = infNFe.ide.cNF
-      const chave = `${cUF}${AAMM}${CNPJ}${mod}${serie}${nNF}${tpEmis}${cNF}`
-      const cDV = calcularDV(chave).toString()
-      infNFe.ide.cDV = cDV
-      const dhEmi = new Date(infNFe.ide.dhEmi)
-      const prefixedInfNFe = addPrefix(infNFe)
-      prefixedInfNFe.versao = infNFe.versao = '4.00'
-      prefixedInfNFe.Id = infNFe.Id = `NFe${chave}${cDV}`
+      const { xml, dhEmi } = preProcessar(infNFe, '999999999')
       const nota: INotaDB<Date> = {
         json: infNFe,
-        xml: toXml({ NFe: { infNFe: prefixedInfNFe } }),
+        xml,
         emitido: false,
         lastUpdate: dhEmi,
         view: {
@@ -110,40 +121,58 @@ export const apenasSalvarNota = onLoggedRequest(
 
 export const assinarTransmitirNota = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
-    let serie = 1
-    let tpAmb = 2
-    if (!body.idNota && !body.infNFe) {
-      res.status(400).send('Requisição sem nenhuma referência de nota')
+    const idNota = body.idNota
+    const infNFe = body.infNFe
+    if (!infNFe) {
+      res.status(400).send('Requisição sem corpo da nota')
       return
     }
-    if (body.idNota && body.infNFe) {
-      res.status(400).send('Requisição com duas referências simultâneas.')
-      return
-    }
-    let infNFe: any
-    if (body.idNota) {
-      const nota = await empresaRef.collection('notas').doc(body.idNota).get()
-      if (!nota.exists) {
-        res.status(400).send('Nota não existe')
-        return
+    try {
+      let serie = infNFe.ide.serie
+      const ambiente: ambientes = ambientes.Homologacao //infNFe.ide.tpAmb
+      if (ambiente == ambientes.Homologacao) {
+        infNFe.dest.xNome =
+          'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
       }
-      const data = nota.data() as INotaDB<FirebaseFirestore.Timestamp>
-      infNFe = data.json
-    } else {
-      infNFe = body.infNFe
-    }
-    infNFe.ide.tpAmb = ambientes.Homologacao
+      // Calculo do numero
+      const maxNota = await empresaRef
+        .collection('notas')
+        .where('emitido', '==', true)
+        .where('json.ide.serie', '==', serie)
+        .where('json.ide.tpAmb', '==', ambiente)
+        .orderBy('json.ide.nNF')
+        .select('json.ide.nNF')
+        .limit(1)
+        .get()
+      const numero: number = maxNota.empty
+        ? 1
+        : maxNota.docs[0].data().json.ide.nNF + 1
+      const { xml } = preProcessar(infNFe, numero.toString())
+      const signedXml = assinarNFe(empresa, xml)
+      const respAutorizacao = await autorizacao(
+        empresa,
+        ambientes.Homologacao,
+        signedXml
+      )
+      const retEnviNFe = (toJson(respAutorizacao, {
+        object: true,
+        coerce: true
+      }) as any)['soap:Envelope']['soap:Body'].nfeResultMsg.retEnviNFe
+      const respRetAutorizacao = await retAutorizacao(
+        empresa,
+        ambientes.Homologacao,
+        retEnviNFe.infRec.nRec
+      )
+      
+      const retConsReciNFe = (toJson(respRetAutorizacao, {
+        object: true,
+        reversible: true,
+      }) as any)['soap:Envelope']['soap:Body'].nfeResultMsg.retConsReciNFe
 
-    // Calculo do numero
-    const maxNota = await empresaRef
-      .collection('notas')
-      .where('json.ide.serie', '==', serie)
-      .where('json.ide.tpAmb', '==', tpAmb)
-      .orderBy('json.ide.nNF')
-      .select('json.ide.nNF')
-      .limit(1)
-      .get()
-    infNFe.ide.nNF = maxNota.empty ? 1 : maxNota.docs[0].data().json.ide.nNF + 1
+      res.status(201).send(respRetAutorizacao)
+    } catch (error) {
+      res.status(500).send(JSON.stringify(error))
+    }
   }
 )
 

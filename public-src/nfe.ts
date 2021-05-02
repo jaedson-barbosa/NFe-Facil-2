@@ -361,14 +361,9 @@ function gerarResponsavelTecnico() {
   if (idNota) {
     const nota = await getJsonNota(idNota)
     currentData = nota.infNFe
-    if (!Array.isArray(currentData.det)) {
-      currentData.det = [currentData.det]
-    }
-    ;(currentData.det as any[]).forEach((v) => {
-      v.prod.cEAN = typeof v.prod.cEAN == 'object' ? 'SEM GTIN' : v.prod.cEAN
-      v.prod.cEANTrib =
-        typeof v.prod.cEANTrib == 'object' ? 'SEM GTIN' : v.prod.cEANTrib
-    })
+    // if (!Array.isArray(currentData.det)) {
+    //   currentData.det = [currentData.det]
+    // }
   }
 
   function renderPrincipal() {
@@ -432,13 +427,18 @@ function gerarResponsavelTecnico() {
       task: async (data: any) => {
         posProcessamento(data)
         if (await apenasSalvarNota({ infNFe: data }, editar)) {
-          alert('Nota salva com sucesso.')
+          alert('Nota salva com sucesso')
         }
       },
     },
     {
       label: 'Assinar e transmitir',
-      task: (data: any) => assinarTransmitirNota({ infNFe: data }, editar),
+      task: async (data: any) => {
+        posProcessamento(data)
+        if (await assinarTransmitirNota({ infNFe: data }, editar)) {
+          alert('Nota assinada com sucesso')
+        }
+      },
     },
   ]
   const actions = exibir ? actionsExibir : actionsEditar

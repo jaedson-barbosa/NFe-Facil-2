@@ -15,6 +15,7 @@ import {
   renderizarNota,
 } from './dados/notas'
 import { getLastAlteracoes } from './sincronizacao'
+import { assinarTransmitirNota } from './functions'
 function main(tDado: TNota, render: (data: any) => string): void
 function main(
   tDado: TDadosBase,

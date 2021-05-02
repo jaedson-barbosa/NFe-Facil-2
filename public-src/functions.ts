@@ -141,7 +141,26 @@ export async function assinarTransmitirNota(
   nota: { infNFe: any },
   idNota?: string
 ) {
-  await Promise.resolve()
+  const resp = await fetch(
+    'http://localhost:5001/nfe-facil-980bc/us-central1/assinarTransmitirNota',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        id: getIdEmpresaAtiva(),
+        infNFe: nota.infNFe,
+        idNota: idNota ?? '',
+      }),
+    }
+  )
+  if (resp.status == 401) {
+    location.href = './login.html'
+    return false
+  } else if (resp.status != 201) {
+    alert(await resp.text())
+    return false
+  }
+  console.log(await resp.text())
+  return true
 }
 
 export async function sincronizar() {

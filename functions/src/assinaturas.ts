@@ -1,4 +1,4 @@
-import { onLoggedRequest } from './core'
+import { IEmpresaGet } from './core'
 import { SignedXml } from 'xml-crypto'
 
 class keyProvider {
@@ -23,27 +23,24 @@ class keyProvider {
   }
 }
 
-export const assinarNFe = onLoggedRequest(
-  async (user, res, empresaRef, dataEmpresa, body) => {
-    // const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
-    // if (usuario.exists) res.status(200).send(usuario.data())
-    // else res.status(400).send('Usuário não cadastrado')
-    // TO-DO: Implementar análise de permissões e verificação de XML
-    const sig = new SignedXml()
-    sig.keyInfoProvider = new keyProvider(dataEmpresa.publicCert)
-    sig.addReference(
-      "//*[local-name(.)='infNFe']",
-      [
-        'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
-        'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
-      ],
-      'http://www.w3.org/2000/09/xmldsig#sha1'
-    )
-    sig.canonicalizationAlgorithm =
+export function assinarNFe(dataEmpresa: IEmpresaGet, unsignedXml: string) {
+  // const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
+  // if (usuario.exists) res.status(200).send(usuario.data())
+  // else res.status(400).send('Usuário não cadastrado')
+  // TO-DO: Implementar análise de permissões e verificação de XML
+  const sig = new SignedXml()
+  sig.keyInfoProvider = new keyProvider(dataEmpresa.publicCert)
+  sig.addReference(
+    "//*[local-name(.)='infNFe']",
+    [
+      'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
       'http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
-    sig.signingKey = dataEmpresa.privateCert
-    sig.computeSignature(body.xml)
-    const signed = sig.getSignedXml()
-    res.status(200).type('application/xml').send(signed)
-  }
-)
+    ],
+    'http://www.w3.org/2000/09/xmldsig#sha1'
+  )
+  sig.canonicalizationAlgorithm =
+    'http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
+  sig.signingKey = dataEmpresa.privateCert
+  sig.computeSignature(unsignedXml)
+  return sig.getSignedXml()
+}

@@ -46,13 +46,26 @@ export function autorizacao(
 ): Promise<string> {
   return enviarRequisicao(
     `<enviNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
-            <idLote>${getRandomNumber(1, 999999999999999)}</idLote>
-            <indSinc>0</indSinc>
-            ${xmls.join('')}
-        </enviNFe>`,
+      <idLote>${getRandomNumber(1, 999999999999999)}</idLote>
+      <indSinc>0</indSinc>
+      ${xmls.join('')}
+    </enviNFe>`,
     'autorizacao',
     ambiente,
     empresa
+  )
+}
+
+export function retAutorizacao(
+  empresa: IEmpresaGet,
+  ambiente: ambientes,
+  nRec: number
+): Promise<string> {
+  return enviarRequisicao(
+    `<consReciNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+      <tpAmb>${ambiente}</tpAmb>
+      <nRec>${nRec}</nRec>
+    </consReciNFe>`,'retAutorizacao', ambiente, empresa
   )
 }
 

@@ -289,6 +289,11 @@ export class genericFormElement implements IBaseFormElement {
   public resetValue() {}
 }
 
+const defaultValues: [string, string][] = [
+  ['cEAN', 'SEM GTIN'],
+  ['cEANTrib', 'SEM GTIN'],
+]
+
 abstract class inputFormElement implements IBaseFormElement {
   public name: string[]
   protected documentation: string
@@ -334,7 +339,12 @@ abstract class inputFormElement implements IBaseFormElement {
       if (!p) hasParent = false
       return p?.[c]
     }, values)
-    if (value) this.value = value
+    if (value) {
+      if (typeof value == 'object') {
+        const name = this.name[this.name.length - 1]
+        this.value = defaultValues.find((v) => v[0] == name)?.[1]
+      } else this.value = value
+    }
     return hasParent && (!!value || !this.required)
   }
 
@@ -854,7 +864,7 @@ export class listFormElement implements IBaseFormElement {
     const add = new buttonFormElement('Adicionar item', () => this.addAction())
     el.children = [add]
     this.container = el
-    this.parentNames = parentNames
+    this.parentNames = parentNames.filter((v) => !v.includes('|'))
     this.startValues = []
     this.startValuesArray = []
   }
@@ -894,12 +904,18 @@ export class listFormElement implements IBaseFormElement {
   }
 
   public updateValue(values: any) {
-    const baseValue = this.parentNames
-      .filter((v) => !v.includes('|'))
-      .reduce((p, c) => p?.[c], values)
-    if (baseValue && Array.isArray(baseValue)) {
+    let baseValueParent = undefined
+    const baseValue = this.parentNames.reduce((p, c) => {
+      baseValueParent = p
+      return p?.[c]
+    }, values)
+    if (baseValue) {
+      if (!Array.isArray(baseValue)) {
+        if (!baseValueParent) return false
+        const lastName = this.parentNames[this.parentNames.length - 1]
+        baseValueParent[lastName] = this.startValuesArray = [baseValue]
+      } else this.startValuesArray = baseValue
       this.startValues = values
-      this.startValuesArray = baseValue
       return true
     }
     //Corrigir aqui pra remover a alteração pra array no nfe.ts

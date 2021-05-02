@@ -15,4 +15,4 @@ function reverse(originPath: string, targetPath: string) {
 // parse('../../PL_009/tiposBasico_v4.00.xsd', './basic.json')
 // parse('../../PL_009/leiauteNFe_v4.00.xsd', './nfe.json')
 parse('../../NFe25210412931158000164550010000005501821207189.xml', './teste.json')
-// reverse('./teste.json', 'teste.xml')
+reverse('./teste.json', 'teste.xml')
