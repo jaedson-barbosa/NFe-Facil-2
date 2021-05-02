@@ -208,7 +208,8 @@ export const assinarTransmitirNota = onLoggedRequest(
       let serie = infNFe.ide.serie
       const ambiente: TAmb = TAmb.Homologacao //infNFe.ide.tpAmb
       if (ambiente == TAmb.Homologacao) {
-        const homologDest = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+        const homologDest =
+          'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
         infNFe.dest.xNome = homologDest
       }
       // Calculo do numero
@@ -263,8 +264,8 @@ export const assinarTransmitirNota = onLoggedRequest(
           '<nfeProc versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">' +
           signedXml +
           toXml({ protNFe: respRet.protNFe }) +
-          '</nfeProc>'  
-      } while(!nfeProc)
+          '</nfeProc>'
+      } while (!nfeProc)
       const nota: INotaDB<Date> = {
         json: infNFe,
         xml: nfeProc,
@@ -301,6 +302,27 @@ export const getXML = onLoggedRequest(
       return
     }
     const data = nota.data() as INotaDB<FirebaseFirestore.Timestamp>
+    res.status(200).send({
+      chave: data.json.Id,
+      xml: data.xml,
+    })
+  }
+)
+
+export const gerarDANFE = onLoggedRequest(
+  async (user, res, empresaRef, empresa, body) => {
+    const idNota = body.idNota
+    if (!idNota) {
+      res.status(400).send('Requisição sem id da nota.')
+      return
+    }
+    const nota = await empresaRef.collection('notas').doc(idNota).get()
+    if (!nota.exists) {
+      res.status(400).send('Nota não existe')
+      return
+    }
+    const data = nota.data() as INotaDB<FirebaseFirestore.Timestamp>
+    
     res.status(200).send({
       chave: data.json.Id,
       xml: data.xml,

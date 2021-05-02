@@ -72,17 +72,13 @@ OK      scanUsuario
 OK      scanRegistro
 OK      cadastrarCNPJ
 +-      requisitarAcesso
-        apenasSalvarNFe
-        assinarTransmitirNFe
+OK      apenasSalvarNFe
+OK      assinarTransmitirNFe
 OK          assinarNFe
-            transmitirNFe
-        gerarDANFE
-            NFe
-                PHP
-                Node
-            NFCe
-                PHP
-                Node
+OK          transmitirNFe
+        gerarDANFE (apenas NFe)
+OK          PHP
+            Node
     Corrigir documentações no schema json e unir os 2 num único
     Sincronização
 !   Verificar esse detalhe do xs:attribute
