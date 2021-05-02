@@ -1,9 +1,9 @@
-import { onLoggedRequest } from './core'
+import { IEmpresaGet, onLoggedRequest } from './core'
 import { IBGESimplificado } from './IBGESimplificado.json'
 import * as dateformat from 'dateformat'
 import { toJson, toXml } from 'xml2json'
 import { INotaDB } from './types'
-import { ambientes, autorizacao, retAutorizacao } from './requisicoes'
+import { TAmb, enviarRequisicao, getRandomNumber } from './requisicoes'
 import { assinarNFe } from './assinaturas'
 
 // const ambiente = ambientes.Homologacao
@@ -56,7 +56,10 @@ function calcularDV(chave: string) {
   return resto == 0 || resto == 1 ? 0 : 11 - resto
 }
 
-function preProcessar(infNFe: any, numero: string) {
+function getDhEmi(infNFe: any) {
+  return new Date(infNFe.ide.dhEmi)
+}
+function getXml(infNFe: any, numero: string) {
   infNFe.ide.nNF = numero
   // Calculo da chave
   const cUF = IBGESimplificado.find(
@@ -72,7 +75,6 @@ function preProcessar(infNFe: any, numero: string) {
   const chave = `${cUF}${AAMM}${CNPJ}${mod}${serie}${nNF}${tpEmis}${cNF}`
   const cDV = calcularDV(chave).toString()
   infNFe.ide.cDV = cDV
-  const dhEmi = new Date(infNFe.ide.dhEmi)
   const prefixedInfNFe = addPrefix(infNFe)
   prefixedInfNFe.versao = infNFe.versao = '4.00'
   prefixedInfNFe.Id = infNFe.Id = `NFe${chave}${cDV}`
@@ -82,7 +84,7 @@ function preProcessar(infNFe: any, numero: string) {
       infNFe: prefixedInfNFe,
     },
   })
-  return { xml, dhEmi }
+  return xml
 }
 
 export const apenasSalvarNota = onLoggedRequest(
@@ -95,12 +97,13 @@ export const apenasSalvarNota = onLoggedRequest(
       return
     }
     try {
-      const { xml, dhEmi } = preProcessar(infNFe, '999999999')
+      const dhEmi = getDhEmi(infNFe)
+      const xml = getXml(infNFe, '999999999')
       const nota: INotaDB<Date> = {
         json: infNFe,
         xml,
         emitido: false,
-        lastUpdate: dhEmi,
+        lastUpdate: new Date(),
         view: {
           serie: infNFe.ide.serie,
           nNF: infNFe.ide.nNF,
@@ -119,6 +122,80 @@ export const apenasSalvarNota = onLoggedRequest(
   }
 )
 
+interface TRetEnviNFe {
+  versao: string
+  tpAmb: string
+  verAplic: string
+  cStat: string
+  xMotivo: string
+  cUF: string
+  dhRecbto: string
+  infRec: {
+    nRec: string
+    tMed: string
+  }
+}
+
+async function autorizacao(
+  empresa: IEmpresaGet,
+  ambiente: TAmb,
+  ...xmls: string[]
+): Promise<TRetEnviNFe> {
+  const respAutorizacao = await enviarRequisicao(
+    `<enviNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+      <idLote>${getRandomNumber(1, 999999999999999)}</idLote>
+      <indSinc>0</indSinc>
+      ${xmls.join('')}
+    </enviNFe>`,
+    'autorizacao',
+    ambiente,
+    empresa
+  )
+  const retEnviNFe = (toJson(respAutorizacao, {
+    object: true,
+  }) as any)['soap:Envelope']['soap:Body'].nfeResultMsg.retEnviNFe
+  return retEnviNFe as TRetEnviNFe
+}
+
+interface TRetConsReciNFe {
+  versao: string
+  tpAmb: { $t: string }
+  verAplic: { $t: string }
+  nRec: { $t: string }
+  cStat: { $t: string }
+  xMotivo: { $t: string }
+  cUF: { $t: string }
+  dhRecbto: { $t: string }
+  cMsg: { $t: string }
+  xMsg: { $t: string }
+  protNFe: any
+}
+
+async function retAutorizacao(
+  empresa: IEmpresaGet,
+  ambiente: TAmb,
+  nRec: string
+): Promise<TRetConsReciNFe> {
+  const respRetAutorizacao = await enviarRequisicao(
+    `<consReciNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+      <tpAmb>${ambiente}</tpAmb>
+      <nRec>${nRec}</nRec>
+    </consReciNFe>`,
+    'retAutorizacao',
+    ambiente,
+    empresa
+  )
+  const retConsReciNFe = (toJson(respRetAutorizacao, {
+    object: true,
+    reversible: true,
+  }) as any)['soap:Envelope']['soap:Body'].nfeResultMsg.retConsReciNFe
+  return retConsReciNFe as TRetConsReciNFe
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 export const assinarTransmitirNota = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
     const idNota = body.idNota
@@ -129,10 +206,10 @@ export const assinarTransmitirNota = onLoggedRequest(
     }
     try {
       let serie = infNFe.ide.serie
-      const ambiente: ambientes = ambientes.Homologacao //infNFe.ide.tpAmb
-      if (ambiente == ambientes.Homologacao) {
-        infNFe.dest.xNome =
-          'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+      const ambiente: TAmb = TAmb.Homologacao //infNFe.ide.tpAmb
+      if (ambiente == TAmb.Homologacao) {
+        const homologDest = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+        infNFe.dest.xNome = homologDest
       }
       // Calculo do numero
       const maxNota = await empresaRef
@@ -144,32 +221,67 @@ export const assinarTransmitirNota = onLoggedRequest(
         .select('json.ide.nNF')
         .limit(1)
         .get()
-      const numero: number = maxNota.empty
+      const dhEmi = getDhEmi(infNFe)
+      let nfeProc: string | undefined = undefined
+      let numero: number = maxNota.empty
         ? 1
         : maxNota.docs[0].data().json.ide.nNF + 1
-      const { xml } = preProcessar(infNFe, numero.toString())
-      const signedXml = assinarNFe(empresa, xml)
-      const respAutorizacao = await autorizacao(
-        empresa,
-        ambientes.Homologacao,
-        signedXml
-      )
-      const retEnviNFe = (toJson(respAutorizacao, {
-        object: true,
-        coerce: true
-      }) as any)['soap:Envelope']['soap:Body'].nfeResultMsg.retEnviNFe
-      const respRetAutorizacao = await retAutorizacao(
-        empresa,
-        ambientes.Homologacao,
-        retEnviNFe.infRec.nRec
-      )
-      
-      const retConsReciNFe = (toJson(respRetAutorizacao, {
-        object: true,
-        reversible: true,
-      }) as any)['soap:Envelope']['soap:Body'].nfeResultMsg.retConsReciNFe
-
-      res.status(201).send(respRetAutorizacao)
+      do {
+        const xml = getXml(infNFe, numero.toString())
+        const signedXml = assinarNFe(empresa, xml)
+        const resp = await autorizacao(empresa, ambiente, signedXml)
+        if (resp.cStat != '103') {
+          res.status(400).send('Falha ao tentar enviar lote: ' + resp.xMotivo)
+          return
+        }
+        let respRet: TRetConsReciNFe | undefined = undefined
+        do {
+          await sleep(Number(resp.infRec.tMed) * 1000)
+          respRet = await retAutorizacao(empresa, ambiente, resp.infRec.nRec)
+          if (respRet.cStat.$t == '105') {
+            // Lote em processamento (78)
+            respRet = undefined
+          }
+        } while (!respRet)
+        if (respRet.cStat.$t != '104') {
+          res.status(400).send('Falha no lote: ' + respRet.xMotivo.$t)
+          return
+        }
+        const cStat = respRet.protNFe.infProt.cStat.$t
+        if (cStat == '539') {
+          // Rejeição: Duplicidade de NF-e com diferença na Chave de Acesso (148)
+          numero += 1
+          continue
+        }
+        if (cStat != '100') {
+          res
+            .status(400)
+            .send('Falha na NFe: ' + respRet.protNFe.infProt.xMotivo.$t)
+          return
+        }
+        nfeProc =
+          '<nfeProc versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">' +
+          signedXml +
+          toXml({ protNFe: respRet.protNFe }) +
+          '</nfeProc>'  
+      } while(!nfeProc)
+      const nota: INotaDB<Date> = {
+        json: infNFe,
+        xml: nfeProc,
+        emitido: true,
+        lastUpdate: new Date(),
+        view: {
+          serie: infNFe.ide.serie,
+          nNF: infNFe.ide.nNF,
+          dhEmi,
+          xNome: infNFe.dest.xNome,
+        },
+      }
+      await (idNota
+        ? empresaRef.collection('notas').doc(idNota)
+        : empresaRef.collection('notas').doc()
+      ).set(nota)
+      res.sendStatus(201)
     } catch (error) {
       res.status(500).send(JSON.stringify(error))
     }

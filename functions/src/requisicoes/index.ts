@@ -4,14 +4,17 @@ import * as axios from 'axios'
 import * as servicos from './servicos.json'
 import * as webservicesNFe from './webservicesNFe.json'
 import { IBGESimplificado } from '../IBGESimplificado.json'
-import { ambientes } from './core'
-export { ambientes }
 
 type nomesServicos = keyof typeof servicos &
   keyof typeof webservicesNFe.SVRS.servicos
 
 export function getRandomNumber(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+export enum TAmb {
+  Producao = 1,
+  Homologacao,
 }
 
 // const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
@@ -21,16 +24,16 @@ export function getRandomNumber(min: number, max: number) {
 
 export const consultarStatusServico = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
-    const ambiente = ambientes.Homologacao
+    const ambiente = TAmb.Homologacao
     const uf = empresa.emit.enderEmit.UF as string
     const cUF = IBGESimplificado.find((v) => v.Sigla == uf)?.Codigo
     res.status(200).send(
       await enviarRequisicao(
         `<consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
-                <tpAmb>${ambiente}</tpAmb>
-                <cUF>${cUF}</cUF>
-                <xServ>STATUS</xServ>
-            </consStatServ>`,
+          <tpAmb>${ambiente}</tpAmb>
+          <cUF>${cUF}</cUF>
+          <xServ>STATUS</xServ>
+        </consStatServ>`,
         'consultarStatusServico',
         ambiente,
         empresa
@@ -39,46 +42,16 @@ export const consultarStatusServico = onLoggedRequest(
   }
 )
 
-export function autorizacao(
-  empresa: IEmpresaGet,
-  ambiente: ambientes,
-  ...xmls: string[]
-): Promise<string> {
-  return enviarRequisicao(
-    `<enviNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
-      <idLote>${getRandomNumber(1, 999999999999999)}</idLote>
-      <indSinc>0</indSinc>
-      ${xmls.join('')}
-    </enviNFe>`,
-    'autorizacao',
-    ambiente,
-    empresa
-  )
-}
-
-export function retAutorizacao(
-  empresa: IEmpresaGet,
-  ambiente: ambientes,
-  nRec: number
-): Promise<string> {
-  return enviarRequisicao(
-    `<consReciNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
-      <tpAmb>${ambiente}</tpAmb>
-      <nRec>${nRec}</nRec>
-    </consReciNFe>`,'retAutorizacao', ambiente, empresa
-  )
-}
-
-async function enviarRequisicao(
+export async function enviarRequisicao(
   body: string,
   servico: nomesServicos,
-  amb: ambientes,
+  amb: TAmb,
   empresa: IEmpresaGet
 ): Promise<string> {
   return (
     await axios.default.post(
       getWebServiceByUF(empresa.emit.enderEmit.UF as string).servicos[servico][
-        amb == ambientes.Producao ? 'url_producao' : 'url_homologacao'
+        amb == TAmb.Producao ? 'url_producao' : 'url_homologacao'
       ],
       `<Envelope xmlns="http://www.w3.org/2003/05/soap-envelope">
             <Body>
