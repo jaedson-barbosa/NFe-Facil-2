@@ -8,7 +8,7 @@ function removePrefix(obj: any) {
   const e = Object.entries(obj)
   if (!e[0]) return obj
   if (e[0][0] == '$t') return e[0][1]
-  e.forEach((v) => (obj[v[0]] = removePrefix(v[1])))
+  e.forEach(([v0,v1]) => (obj[v0] = removePrefix(v1)))
   return obj
 }
 

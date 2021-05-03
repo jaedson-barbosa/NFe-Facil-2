@@ -28,14 +28,14 @@ export const getJsonNota = onLoggedRequest(
 
 function addPrefix(obj: any) {
   return Object.entries(obj).reduce(
-    (p, v) => {
-      const name = v[0]
+    (p, [v0,v1]) => {
+      const name = v0
       p[name] =
-        typeof v[1] == 'object'
-          ? addPrefix(v[1])
+        typeof v1 == 'object'
+          ? addPrefix(v1)
           : name == 'nItem' || name == 'dia' //xs:attribute
-          ? v[1]
-          : { $t: v[1] }
+          ? v1
+          : { $t: v1 }
       return p
     },
     Array.isArray(obj) ? [] : ({} as any)
