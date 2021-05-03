@@ -1,4 +1,4 @@
-import { IBaseFormElement } from './IBaseFormElement';
+import { IBaseFormElement } from './form-elements/IBaseFormElement';
 
 
 export interface ISpecificFormFields {

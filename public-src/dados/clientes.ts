@@ -1,4 +1,4 @@
-import { defaultForm, fieldsetFormElement } from '../form-base'
+import { elementosNFe, generateView, fieldsetFormElement } from '../form-base'
 
 export function renderizarCliente(data: { dest: any }): string {
   return /*html*/ `
@@ -7,7 +7,7 @@ export function renderizarCliente(data: { dest: any }): string {
 }
 
 export function gerarViewCliente() {
-  const views = defaultForm.generateView(defaultForm.elementosNFe[3], {
+  const views = generateView(elementosNFe[3], {
     customRequireds: ['dest', 'xNome', 'enderDest'],
   })
   const view = views[0] as fieldsetFormElement

@@ -1,4 +1,4 @@
-import { defaultForm, fieldsetFormElement } from '../form-base'
+import { elementosNFe, generateViews, fieldsetFormElement } from '../form-base'
 
 export function renderizarProduto(data: { prod: any }): string {
   return /*html*/ `
@@ -12,8 +12,8 @@ export function gerarViewProduto() {
       legend: 'Dados dos produtos e serviços',
       required: true,
     },
-    ...defaultForm.generateViews(
-      defaultForm.elementosNFe[7]['xs:complexType']['xs:sequence'][
+    ...generateViews(
+      elementosNFe[7]['xs:complexType']['xs:sequence'][
         'xs:element'
       ][0],
       {},

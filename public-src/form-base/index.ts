@@ -1,12 +1,19 @@
-export { IBaseFormElement } from './IBaseFormElement'
-export { defaultForm } from './defaultForm'
+export { IBaseFormElement } from './form-elements/IBaseFormElement'
+export {
+  elementosNFe,
+  generateView,
+  generateViews,
+  generateForm,
+} from './defaultForm'
 export { defaultFormSubmit } from './defaultFormSubmit'
-export { fieldsetFormElement } from './fieldsetFormElement'
-export { hiddenFormElement } from './hiddenFormElement'
-export { searchFormElement } from './searchFormElement'
-export { listFormElement } from './listFormElement'
-export { genericFormElement } from './genericFormElement'
-export { buttonFormElement } from './buttonFormElement'
+export {
+  fieldsetFormElement,
+  hiddenFormElement,
+  searchFormElement,
+  listFormElement,
+  genericFormElement,
+  buttonFormElement,
+} from './form-elements'
 export { clearChildren } from './clearChildren'
 export { createId } from './createId'
 export { getForm } from './getForm'

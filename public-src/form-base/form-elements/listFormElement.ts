@@ -2,7 +2,6 @@ import { fieldsetFormElement } from './fieldsetFormElement';
 import { IBaseFormElement } from './IBaseFormElement';
 import { buttonFormElement } from "./buttonFormElement";
 
-
 export class listFormElement implements IBaseFormElement {
   private readonly elArg: fieldsetFormElement;
   private content: IBaseFormElement[];

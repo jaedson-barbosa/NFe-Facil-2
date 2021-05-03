@@ -1,5 +1,5 @@
 import { IBaseFormElement } from './IBaseFormElement';
-import { insertLabel } from "./insertLabel";
+import { insertLabel } from "../insertLabel";
 
 interface IFieldsetOptions {
   legend: string;

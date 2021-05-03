@@ -1,4 +1,4 @@
-import { defaultForm } from '../form-base'
+import { elementosNFe, generateView } from '../form-base'
 
 export function renderizarMotorista(data: { transporta: any }): string {
   return /*html*/ `
@@ -7,8 +7,8 @@ export function renderizarMotorista(data: { transporta: any }): string {
 }
 
 export function gerarViewMotorista() {
-  return defaultForm.generateView(
-    defaultForm.elementosNFe[9]['xs:complexType']['xs:sequence']['xs:element'][1],
+  return generateView(
+    elementosNFe[9]['xs:complexType']['xs:sequence']['xs:element'][1],
     { customRequireds: ['transporta', 'CPF', 'CNPJ'] }
   )
 }

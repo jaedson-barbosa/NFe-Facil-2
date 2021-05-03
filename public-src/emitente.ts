@@ -1,8 +1,10 @@
 import {
   defaultFormSubmit,
   getForm,
-  defaultForm,
+  generateForm,
   genericFormElement,
+  generateView,
+  elementosNFe
 } from './form-base'
 import { setEmpresa, IEmpresa } from './dados/emitentes'
 import { abrirPainel, getEmpresaAtiva, isSessaoIniciada } from './sessao'
@@ -43,10 +45,7 @@ function cadastrarEmpresa() {
     <input type="file" id="cert" name="cert" accept=".pfx" required>
     <label for="senha">Senha</label>
     <input type="text" id="senha" name="senha" required>`
-  const form = new defaultForm(
-    ...defaultForm.generateView(defaultForm.elementosNFe[1]),
-    new genericFormElement(additionalBody)
-  ).generateForm(async (data) => {
+  const form = generateForm(async (data) => {
     const cert = await getCertPostBody(data)
     if (!cert) {
       alert('Por favor, selecione o certificado e insira a senha.')
@@ -63,7 +62,8 @@ function cadastrarEmpresa() {
       serieAtual: data.serieAtual,
     })
     location.href = './emitentes.html'
-  })
+  }, ...generateView(elementosNFe[1]),
+  new genericFormElement(additionalBody))
   document.body.appendChild(form)
 }
 
@@ -99,18 +99,18 @@ if (isSessaoIniciada()) {
   additionalBody.innerHTML = /*html*/ `
     <label for="serieAtual">Série atual das notas fiscais</label>
     <input type="number" id="serieAtual" name="serieAtual" value="${empresa.serieAtual}" min="1" max="889" required>`
-  const form = new defaultForm(
-    ...defaultForm.generateView(defaultForm.elementosNFe[1]),
+  const formElements = [
+    ...generateView(elementosNFe[1]),
     new genericFormElement(additionalBody)
-  )
-  form.updateValue({ emit: empresa.emit })
-  const htmlForm = form.generateForm((data) => {
+  ]
+  formElements.forEach(v => v.updateValue({ emit: empresa.emit }))
+  const htmlForm = generateForm((data) => {
     empresa.emit = data.emit
     empresa.serieAtual = data.serieAtual
     setEmpresa(empresa)
     alert('Dados cadastrais atualizados.')
     abrirPainel()
-  })
+  }, ...formElements)
   document.body.appendChild(htmlForm)
 } else {
   // Adição de emitente

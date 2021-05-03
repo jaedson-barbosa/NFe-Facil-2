@@ -1,8 +1,8 @@
 import {
-  defaultForm,
   IBaseFormElement,
   createId,
   clearChildren,
+  generateForm
 } from './form-base'
 import { set } from './db'
 import { gerarViewCliente, renderizarCliente } from './dados/clientes'
@@ -47,9 +47,7 @@ function main(
       genButton('Gerar DANFE', () => baixarDANFE(v[0] as string))
       genButton('Baixar XML', () => baixarXML(v[0] as string))
     } else {
-      const form = new defaultForm()
-      form.elements.push(...view)
-      const htmlForm = form.generateForm(async (data) => {
+      const htmlForm = generateForm(async (data) => {
         const id = v?.[0] ?? createId()
         await set(id, data)
         if (v?.[2]) {
@@ -57,7 +55,7 @@ function main(
           v?.[2].remove()
         } else renderizarNovoItem([id, data])
         mainDialog.close()
-      })
+      }, ...view)
       mainDialog.appendChild(htmlForm)
     }
   }

@@ -1,6 +1,6 @@
 import { IBaseFormElement } from './IBaseFormElement';
-import { createId } from "./createId";
-import { insertLabel } from "./insertLabel";
+import { createId } from "../createId";
+import { insertLabel } from "../insertLabel";
 
 export abstract class baseSelectTextFormElement implements IBaseFormElement {
   protected documentation: string;

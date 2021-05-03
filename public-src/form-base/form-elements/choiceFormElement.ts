@@ -1,8 +1,8 @@
 import { fieldsetFormElement } from './fieldsetFormElement';
 import { IBaseFormElement } from './IBaseFormElement';
-import { IChoiceOption } from './IChoiceOption';
-import { clearChildren } from "./clearChildren";
-import { insertLabel } from "./insertLabel";
+import { IChoiceOption } from '../IChoiceOption';
+import { clearChildren } from "../clearChildren";
+import { insertLabel } from "../insertLabel";
 
 
 export class choiceFormElement implements IBaseFormElement {

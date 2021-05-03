@@ -1,6 +1,6 @@
 import { IBaseFormElement } from './IBaseFormElement';
 import { inputFormElement } from "./inputFormElement";
-import { insertLabel } from "./insertLabel";
+import { insertLabel } from "../insertLabel";
 
 
 export class selectFormElement extends inputFormElement {
