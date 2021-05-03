@@ -1,6 +1,29 @@
-import { getName } from "./getName";
+import { getName } from "./getName"
+import { generateView } from './generateView';
 
-export function findField(
+export function generateViews(
+  rootField: any,
+  options: IGenerateViewsOptions,
+  ...names: string[]
+) {
+  return names.flatMap((name) => {
+    const field = findField(rootField, name);
+    return generateView(field.field, {
+      customRequireds: options.customRequireds ?? [],
+      rootTag: field.tag,
+      parentTags: options.parentNames
+        ? [...options.parentNames, ...field.parentNames]
+        : field.parentNames,
+    });
+  });
+}
+
+interface IGenerateViewsOptions {
+  customRequireds?: string[];
+  parentNames?: string[];
+}
+
+function findField(
   rootField: any,
   name: string,
   parentNames: string[] = [],

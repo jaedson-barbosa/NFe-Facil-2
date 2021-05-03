@@ -3,7 +3,6 @@ import { renderizarMotorista } from './dados/motoristas'
 import { renderizarNota } from './dados/notas'
 import { renderizarProduto } from './dados/produtos'
 import { setMany } from './db'
-import { getForm } from "./form-base"
 import { importar } from './functions'
 
 let xmls: string[]
@@ -14,6 +13,10 @@ document.getElementById('xmls').onchange = async (event) => {
   xmls = await Promise.all(
     Array.from((event.target as any).files as FileList).map((v) => v.text())
   )
+}
+
+function getForm(index: number = 0) {
+  return document.getElementsByTagName('form')[index];
 }
 
 //Salvar retorno da importação e exibir informações na interface (sem estilização por enquanto)

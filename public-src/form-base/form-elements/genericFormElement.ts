@@ -2,10 +2,10 @@ import { IBaseFormElement } from './IBaseFormElement';
 
 
 export class genericFormElement implements IBaseFormElement {
-  private element: HTMLElement;
+  private element: string;
   public readOnly: boolean;
 
-  constructor(el: HTMLElement) {
+  constructor(el: string) {
     this.element = el;
   }
 
@@ -16,9 +16,10 @@ export class genericFormElement implements IBaseFormElement {
   }
 
   public generate(parent: HTMLElement) {
-    const element = this.element;
-    parent.appendChild(element);
-    return element;
+    const element = document.createElement('div')
+    element.innerHTML = this.element
+    parent.appendChild(element)
+    return element
   }
 
   public updateValue(values: any) {
