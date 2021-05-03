@@ -2,8 +2,8 @@ import { renderizarCliente } from './dados/clientes'
 import { renderizarMotorista } from './dados/motoristas'
 import { renderizarNota } from './dados/notas'
 import { renderizarProduto } from './dados/produtos'
-import { set, setMany } from './db'
-import { getForm } from './form-base'
+import { setMany } from './db'
+import { getForm } from "./form-base"
 import { importar } from './functions'
 
 let xmls: string[]

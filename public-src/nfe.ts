@@ -6,13 +6,11 @@ import {
   fieldsetFormElement,
   hiddenFormElement,
   getCodigoEstado,
-  getRandomNumber,
   listFormElement,
   searchFormElement,
   IBaseFormElement,
   clearChildren,
   buttonFormElement,
-  IFormAction,
 } from './form-base'
 import {
   apenasSalvarNota,
@@ -23,6 +21,12 @@ import { getAmbiente, getEmpresaAtiva, versaoEmissor } from './sessao'
 
 const empresa = getEmpresaAtiva()
 const emit = empresa.emit
+
+function getRandomNumber(digits: number = 8) {
+  var minm = 10 ** (digits - 1)
+  var maxm = 10 ** digits - 1
+  return Math.floor(Math.random() * (maxm - minm + 1)) + minm
+}
 
 declare global {
   interface Date {
