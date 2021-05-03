@@ -72,7 +72,6 @@ OK  Fragmentar form-base.ts em varios arquivos em uma pasta
 OK  Limpar pasta PL_009
 OK  Limpar pasta base-data
 OK  Remover pasta VM
-    Analise geral da solução e limpeza completa
     Corrigir documentações no schema json e unir os 2 num único
     Atualizar entradas para que tenham o tipo correto
     Proibir o uso de emitente com CPF
@@ -98,6 +97,10 @@ OK  Remover pasta VM
         Importação
         Cadastro
         Exibição
+    Interfaces para banco de dados
+        Firestore
+        IntexedDB
+    Interfaces para requisições e respostas na pasta commom
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
 
