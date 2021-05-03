@@ -60,7 +60,7 @@ interface IGenerateViewOptions {
 
 function getDocumentation(v: any): string {
   const name = getName(v);
-  const fromScheme = v['xs:annotation']?.['xs:documentation'];
+  const fromScheme = v['annotation']?.['documentation'];
   if (name) {
     const custom = customHeaders.find((v) => name === v.name)?.header;
     const nameParts = name.split('|');
@@ -227,7 +227,7 @@ function isRequired(
 ): boolean {
   const customRequireds = creationOptions?.customRequireds ?? []
   if (customRequireds.includes(getName(v))) return true
-  const element = v['xs:element']
+  const element = v['element']
   if (element && Array.isArray(element)) {
     const required = element.every(
       (k) =>
@@ -235,9 +235,9 @@ function isRequired(
     )
     if (!required) return false
   }
-  const seq = v['xs:sequence']
+  const seq = v['sequence']
   if (seq) {
-    const sequence = Array.isArray(seq) ? seq : (seq['xs:element'] as any[])
+    const sequence = Array.isArray(seq) ? seq : (seq['element'] as any[])
     const required = sequence.every(
       (k) =>
         customRequireds.includes(getName(k)) || isRequired(k, creationOptions)
@@ -252,18 +252,18 @@ function createInput(
   parentTags: string[],
   creationOptions: IElementCreationOptions
 ): IBaseFormElement {
-  const fieldRestriction = field['xs:simpleType']?.['xs:restriction']
+  const fieldRestriction = field['simpleType']?.['restriction']
   const baseType = field.type ?? fieldRestriction?.base
   const findType = (v: any) => getName(v) == baseType
   const hasOtherRestrictions =
-    baseType != 'xs:string' && baseType != 'xs:base64Binary'
+    baseType != 'string' && baseType != 'base64Binary'
   const otherRestrictions: any = (simpleTypes.find(findType) as any)?.[
-    'xs:restriction'
+    'restriction'
   ]
   if (hasOtherRestrictions && !otherRestrictions) {
-    const complexType = field['xs:complexType'] ?? complexTypes.find(findType)
+    const complexType = field['complexType'] ?? complexTypes.find(findType)
     if (!complexType) {
-      const element = field['xs:element']
+      const element = field['element']
       if (!element) {
         console.log(field)
         throw new Error('Invalid field')
@@ -272,17 +272,17 @@ function createInput(
     }
     const newField = {
       ...field,
-      'xs:complexType': complexType,
+      'complexType': complexType,
     }
     return createFieldset(newField, parentTags, creationOptions)
   }
-  if (hasOtherRestrictions && otherRestrictions?.base != 'xs:string') {
+  if (hasOtherRestrictions && otherRestrictions?.base != 'string') {
     console.log(otherRestrictions)
     throw new Error('The other restrictions have a invalid base.')
   }
   const enumeration =
-    fieldRestriction?.['xs:enumeration'] ??
-    otherRestrictions?.['xs:enumeration']
+    fieldRestriction?.['enumeration'] ??
+    otherRestrictions?.['enumeration']
   const name = [...parentTags, getName(field)]
   creationOptions.customNameChanger?.(name)
   const required = isRequired(field, creationOptions)
@@ -361,8 +361,8 @@ function createChoice(
   parentTags: string[],
   creationOptions: IElementCreationOptions
 ): IBaseFormElement {
-  const elements = field['xs:element'] as any[]
-  const sequence = field['xs:sequence']
+  const elements = field['element'] as any[]
+  const sequence = field['sequence']
   if (!elements && !sequence) {
     throw new Error('Choice invalido')
   }
@@ -388,7 +388,7 @@ function createChoice(
     } else {
       const array = Array.isArray(sequence)
         ? sequence
-        : (sequence['xs:element'] as any[])
+        : (sequence['element'] as any[])
       options.push(
         ...array.map((v) => {
           return {
@@ -424,13 +424,13 @@ function createFieldset(
   const tags = name ? [...parentTags, name] : parentTags
   const required = max > 1 || isRequired(field, creationOptions)
   const fields: IBaseFormElement[] = []
-  if (isRootList || field['xs:element']) {
-    const elements = (isRootList ? field : field['xs:element']) as any[]
+  if (isRootList || field['element']) {
+    const elements = (isRootList ? field : field['element']) as any[]
     fields.push(...elements.map((v) => createInput(v, tags, creationOptions)))
   }
-  if (field['xs:complexType'] || field['xs:sequence']) {
+  if (field['complexType'] || field['sequence']) {
     const sequence =
-      field['xs:complexType']?.['xs:sequence'] ?? field['xs:sequence']
+      field['complexType']?.['sequence'] ?? field['sequence']
     if (sequence) {
       if (fields.length == 0) {
         const pureFields = Object.entries(sequence)
@@ -441,7 +441,7 @@ function createFieldset(
         )
       } else fields.push(createFieldset(sequence, tags, creationOptions))
     }
-    const choice = field['xs:complexType']?.['xs:choice']
+    const choice = field['complexType']?.['choice']
     if (choice) {
       fields.push(createChoice(choice, tags, creationOptions))
     }
@@ -669,12 +669,12 @@ function analyseTag(
   creationOptions: IElementCreationOptions
 ): IBaseFormElement[] {
   switch (tag) {
-    case 'xs:choice':
+    case 'choice':
       return [createChoice(field, parentTags, creationOptions)]
-    case 'xs:element':
+    case 'element':
       return createElements(field, parentTags, creationOptions)
     default:
-      if (!tag || tag == 'xs:sequence')
+      if (!tag || tag == 'sequence')
         return [createFieldset(field, parentTags, creationOptions)]
       console.trace('Invalid tag', tag, field)
       return []
@@ -691,8 +691,8 @@ interface IElementCreationOptions {
   customNameChanger: (names: string[]) => void
 }
 
-const complexTypes = nfeSchema['xs:schema']['xs:complexType']
+const complexTypes = nfeSchema['schema']['complexType']
 const simpleTypes = [
-  ...basicSchema['xs:schema']['xs:simpleType'],
-  ...nfeSchema['xs:schema']['xs:simpleType'],
+  ...basicSchema['schema']['simpleType'],
+  ...nfeSchema['schema']['simpleType'],
 ]

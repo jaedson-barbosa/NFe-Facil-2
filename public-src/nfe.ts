@@ -112,7 +112,7 @@ function gerarIdentificacao() {
 
 function gerarEmitente() {
   const view = generateView(elementosNFe[1], {
-    rootTag: 'xs:element',
+    rootTag: 'element',
   })[0] as fieldsetFormElement
   view.options.hidden = true
   view.updateValue({ emit })
@@ -210,13 +210,13 @@ function gerarProdutosVisualizacao() {
 
 function gerarRetirada() {
   return generateView(elementosNFe[4], {
-    rootTag: 'xs:element',
+    rootTag: 'element',
   })
 }
 
 function gerarEntrega() {
   return generateView(elementosNFe[5], {
-    rootTag: 'xs:element',
+    rootTag: 'element',
   })
 }
 
@@ -231,13 +231,13 @@ function gerarAutorizacao() {
 
 function gerarTotal() {
   return generateView(elementosNFe[8], {
-    rootTag: 'xs:element',
+    rootTag: 'element',
   })
 }
 
 async function gerarTransporte() {
   const views = generateView(elementosNFe[9], {
-    rootTag: 'xs:element',
+    rootTag: 'element',
     customRequireds: ['vol', 'veicTransp|reboque', 'reboque', 'lacres'],
   })
   const view = views[0] as fieldsetFormElement
@@ -271,20 +271,20 @@ async function gerarTransporte() {
 
 function gerarCobranca() {
   return generateView(elementosNFe[10], {
-    rootTag: 'xs:element',
+    rootTag: 'element',
     customRequireds: ['fat', 'dup'],
   })
 }
 
 function gerarPagamento() {
   return generateView(elementosNFe[11], {
-    rootTag: 'xs:element',
+    rootTag: 'element',
   })
 }
 
 function gerarIntermediador() {
   return generateView(elementosNFe[12], {
-    rootTag: 'xs:element',
+    rootTag: 'element',
   })
 }
 

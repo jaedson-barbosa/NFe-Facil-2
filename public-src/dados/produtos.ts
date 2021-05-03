@@ -13,8 +13,8 @@ export function gerarViewProduto() {
       required: true,
     },
     ...generateViews(
-      elementosNFe[7]['xs:complexType']['xs:sequence'][
-        'xs:element'
+      elementosNFe[7]['complexType']['sequence'][
+        'element'
       ][0],
       {},
       'xProd',
