@@ -69,9 +69,9 @@ OK  Verificar esse detalhe do xs:attribute
 
 REFINAMENTOS IMEDIATOS (antes da fase alpha):
 OK  Fragmentar form-base.ts em varios arquivos em uma pasta
-    Limpar pasta PL_009
-    Remover xsd2js.ts
-    Remover pasta VM
+OK  Limpar pasta PL_009
+OK  Limpar pasta base-data
+OK  Remover pasta VM
     Analise geral da solução e limpeza completa
     Corrigir documentações no schema json e unir os 2 num único
     Atualizar entradas para que tenham o tipo correto

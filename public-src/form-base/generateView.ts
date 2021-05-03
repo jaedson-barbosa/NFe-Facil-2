@@ -1,7 +1,7 @@
-import * as basicSchema from '../base-data/basic.json'
-import * as nfeSchema from '../base-data/nfe.json'
-import { IBGE } from '../base-data/IBGE.json'
-import { paises } from '../base-data/paises.json'
+import * as basicSchema from './data/basic.json'
+import * as nfeSchema from './data/nfe.json'
+import { IBGE } from './data/IBGE.json'
+import { paises } from './data/paises.json'
 import { processLabelText } from './processLabelText'
 import {
   listFormElement,

@@ -1,4 +1,4 @@
-import { IBGE } from '../base-data/IBGE.json';
+import { IBGE } from './data/IBGE.json';
 
 
 export function getCodigoEstado(sigla: string) {

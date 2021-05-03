@@ -1,4 +1,4 @@
-import * as nfeSchema from '../base-data/nfe.json'
+import * as nfeSchema from './data/nfe.json'
 
 const rootNFe =
   nfeSchema['xs:schema']['xs:complexType'][0]['xs:sequence']['xs:element'][0]
