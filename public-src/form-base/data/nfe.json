@@ -44,10 +44,12 @@
                   },
                   {
                     "name": "mod",
-                    "type": "TMod",
                     "annotation": {
                       "label": "Código do modelo do Documento Fiscal",
                       "itens": ["NF-e", "NFC-e."]
+                    },
+                    "simpleType": {
+                      "restriction": { "base": "string", "enumeration": ["55", "65"] }
                     }
                   },
                   {
@@ -149,18 +151,22 @@
                   },
                   {
                     "name": "tpAmb",
-                    "type": "TAmb",
                     "annotation": {
                       "label": "Identificação do Ambiente",
                       "itens":["Produção","Homologação"]
+                    },
+                    "simpleType": {
+                      "restriction": { "base": "string", "enumeration": ["1", "2"] }
                     }
                   },
                   {
                     "name": "finNFe",
-                    "type": "TFinNFe",
                     "annotation": {
                       "label": "Finalidade da emissão",
                       "itens":["Normal","Complementar","Ajuste","Devolução/Retorno"]
+                    },
+                    "simpleType": {
+                      "restriction": { "base": "string", "enumeration": ["1", "2", "3", "4"] }
                     }
                   },
                   {
@@ -205,10 +211,12 @@
                   },
                   {
                     "name": "procEmi",
-                    "type": "TProcEmi",
                     "annotation": {
                       "label": "Processo de emissão",
                       "itens":["Com aplicativo do contribuinte","Avulsa pelo Fisco","Avulsa através do site do Fisco","Com aplicativo fornecido pelo Fisco"]
+                    },
+                    "simpleType": {
+                      "restriction": { "base": "string", "enumeration": ["0", "1", "2", "3"] }
                     }
                   },
                   {
@@ -505,10 +513,16 @@
                   },
                   {
                     "name": "IEST",
-                    "type": "TIeST",
                     "minOccurs": "0",
                     "annotation": {
                       "label": "Inscricao Estadual do Substituto Tributário"
+                    },
+                    "simpleType": {
+                      "restriction": {
+                        "base": "string",
+                        "maxLength": "14",
+                        "pattern": "[0-9]{2,14}"
+                      }
                     }
                   },
                   {
@@ -632,9 +646,15 @@
                                           },
                                           {
                                             "name": "IE",
-                                            "type": "TIeDestNaoIsento",
                                             "annotation": {
                                               "label": "Inscrição Estadual"
+                                            },
+                                            "simpleType": {
+                                              "restriction": {
+                                                "base": "string",
+                                                "maxLength": "14",
+                                                "pattern": "[0-9]{2,14}"
+                                              }
                                             }
                                           }
                                         ]
@@ -1451,10 +1471,15 @@
                           },
                           {
                             "name": "nFCI",
-                            "type": "TGuid",
                             "minOccurs": "0",
                             "annotation": {
                               "label": "Número de controle da FCI - Ficha de Conteúdo de Importação."
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "pattern": "[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}"
+                              }
                             }
                           },
                           {
@@ -1479,9 +1504,14 @@
                                   },
                                   {
                                     "name": "qLote",
-                                    "type": "TDec_0803v",
                                     "annotation": {
                                       "label": "Quantidade de produto no lote."
+                                    },
+                                    "simpleType": {
+                                      "restriction": {
+                                        "base": "string",
+                                        "pattern": "0|0\\.[0-9]{3}|[1-9]{1}[0-9]{0,7}(\\.[0-9]{1,3})?"
+                                      }
                                     }
                                   },
                                   {
@@ -2065,10 +2095,15 @@
                                     },
                                     {
                                       "name": "qTemp",
-                                      "type": "TDec_1204temperatura",
                                       "minOccurs": "0",
                                       "annotation": {
                                         "label": "Quantidade de combustível\nfaturada à temperatura ambiente.\nInformar quando a quantidade\nfaturada informada no campo\nqCom (I10) tiver sido ajustada para\numa temperatura diferente da\nambiente."
+                                      },
+                                      "simpleType": {
+                                        "restriction": {
+                                          "base": "string",
+                                          "pattern": "0\\.[1-9]{1}[0-9]{3}|0\\.[0-9]{3}[1-9]{1}|0\\.[0-9]{2}[1-9]{1}[0-9]{1}|0\\.[0-9]{1}[1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{0,11}(\\.[0-9]{4})?"
+                                        }
                                       }
                                     },
                                     {
@@ -5238,9 +5273,214 @@
                                         },
                                         {
                                           "name": "cListServ",
-                                          "type": "TCListServ",
                                           "annotation": {
-                                            "label": "Informar o Item da lista de serviços da LC 116/03 em que se classifica o serviço."
+                                            "label": "Classificação do serviço segundo a lista de serviços LC 116/03"
+                                          },
+                                          "simpleType": {
+                                            "restriction": {
+                                              "base": "string",
+                                              "enumeration": [
+                                                "01.01",
+                                                "01.02",
+                                                "01.03",
+                                                "01.04",
+                                                "01.05",
+                                                "01.06",
+                                                "01.07",
+                                                "01.08",
+                                                "01.09",
+                                                "02.01",
+                                                "03.02",
+                                                "03.03",
+                                                "03.04",
+                                                "03.05",
+                                                "04.01",
+                                                "04.02",
+                                                "04.03",
+                                                "04.04",
+                                                "04.05",
+                                                "04.06",
+                                                "04.07",
+                                                "04.08",
+                                                "04.09",
+                                                "04.10",
+                                                "04.11",
+                                                "04.12",
+                                                "04.13",
+                                                "04.14",
+                                                "04.15",
+                                                "04.16",
+                                                "04.17",
+                                                "04.18",
+                                                "04.19",
+                                                "04.20",
+                                                "04.21",
+                                                "04.22",
+                                                "04.23",
+                                                "05.01",
+                                                "05.02",
+                                                "05.03",
+                                                "05.04",
+                                                "05.05",
+                                                "05.06",
+                                                "05.07",
+                                                "05.08",
+                                                "05.09",
+                                                "06.01",
+                                                "06.02",
+                                                "06.03",
+                                                "06.04",
+                                                "06.05",
+                                                "06.06",
+                                                "07.01",
+                                                "07.02",
+                                                "07.03",
+                                                "07.04",
+                                                "07.05",
+                                                "07.06",
+                                                "07.07",
+                                                "07.08",
+                                                "07.09",
+                                                "07.10",
+                                                "07.11",
+                                                "07.12",
+                                                "07.13",
+                                                "07.16",
+                                                "07.17",
+                                                "07.18",
+                                                "07.19",
+                                                "07.20",
+                                                "07.21",
+                                                "07.22",
+                                                "08.01",
+                                                "08.02",
+                                                "09.01",
+                                                "09.02",
+                                                "09.03",
+                                                "10.01",
+                                                "10.02",
+                                                "10.03",
+                                                "10.04",
+                                                "10.05",
+                                                "10.06",
+                                                "10.07",
+                                                "10.08",
+                                                "10.09",
+                                                "10.10",
+                                                "11.01",
+                                                "11.02",
+                                                "11.03",
+                                                "11.04",
+                                                "12.01",
+                                                "12.02",
+                                                "12.03",
+                                                "12.04",
+                                                "12.05",
+                                                "12.06",
+                                                "12.07",
+                                                "12.08",
+                                                "12.09",
+                                                "12.10",
+                                                "12.11",
+                                                "12.12",
+                                                "12.13",
+                                                "12.14",
+                                                "12.15",
+                                                "12.16",
+                                                "12.17",
+                                                "13.02",
+                                                "13.03",
+                                                "13.04",
+                                                "13.05",
+                                                "14.01",
+                                                "14.02",
+                                                "14.03",
+                                                "14.04",
+                                                "14.05",
+                                                "14.06",
+                                                "14.07",
+                                                "14.08",
+                                                "14.09",
+                                                "14.10",
+                                                "14.11",
+                                                "14.12",
+                                                "14.13",
+                                                "14.14",
+                                                "15.01",
+                                                "15.02",
+                                                "15.03",
+                                                "15.04",
+                                                "15.05",
+                                                "15.06",
+                                                "15.07",
+                                                "15.08",
+                                                "15.09",
+                                                "15.10",
+                                                "15.11",
+                                                "15.12",
+                                                "15.13",
+                                                "15.14",
+                                                "15.15",
+                                                "15.16",
+                                                "15.17",
+                                                "15.18",
+                                                "16.01",
+                                                "16.02",
+                                                "17.01",
+                                                "17.02",
+                                                "17.03",
+                                                "17.04",
+                                                "17.05",
+                                                "17.06",
+                                                "17.08",
+                                                "17.09",
+                                                "17.10",
+                                                "17.11",
+                                                "17.12",
+                                                "17.13",
+                                                "17.14",
+                                                "17.15",
+                                                "17.16",
+                                                "17.17",
+                                                "17.18",
+                                                "17.19",
+                                                "17.20",
+                                                "17.21",
+                                                "17.22",
+                                                "17.23",
+                                                "17.24",
+                                                "17.25",
+                                                "18.01",
+                                                "19.01",
+                                                "20.01",
+                                                "20.02",
+                                                "20.03",
+                                                "21.01",
+                                                "22.01",
+                                                "23.01",
+                                                "24.01",
+                                                "25.01",
+                                                "25.02",
+                                                "25.03",
+                                                "25.04",
+                                                "25.05",
+                                                "26.01",
+                                                "27.01",
+                                                "28.01",
+                                                "29.01",
+                                                "30.01",
+                                                "31.01",
+                                                "32.01",
+                                                "33.01",
+                                                "34.01",
+                                                "35.01",
+                                                "36.01",
+                                                "37.01",
+                                                "38.01",
+                                                "39.01",
+                                                "40.01"
+                                              ]
+                                            }
                                           }
                                         },
                                         {
@@ -5383,9 +5623,14 @@
                         "element": [
                           {
                             "name": "pDevol",
-                            "type": "TDec_0302Max100",
                             "annotation": {
                               "label": "Percentual de mercadoria devolvida"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "pattern": "0(\\.[0-9]{2})?|100(\\.00)?|[1-9]{1}[0-9]{0,1}(\\.[0-9]{2})?"
+                              }
                             }
                           },
                           {
@@ -6477,7 +6722,7 @@
             "name": "infIntermed",
             "minOccurs": "0",
             "annotation": {
-              "label": "Grupo de Informações do Intermediador da Transação"
+              "label": "Informações do Intermediador da Transação"
             },
             "complexType": {
               "sequence": {
@@ -6486,7 +6731,7 @@
                     "name": "CNPJ",
                     "type": "TCnpj",
                     "annotation": {
-                      "label": "CNPJ do Intermediador da Transação (agenciador, plataforma de delivery, marketplace e similar) de serviços e de negócios."
+                      "label": "CNPJ do Intermediador (plataforma de delivery, marketplace...)"
                     }
                   },
                   {
@@ -6517,7 +6762,7 @@
                     "name": "infAdFisco",
                     "minOccurs": "0",
                     "annotation": {
-                      "label": "Informações adicionais de interesse do Fisco (v2.0)"
+                      "label": "Informações adicionais de interesse do Fisco"
                     },
                     "simpleType": {
                       "restriction": {
@@ -6542,77 +6787,11 @@
                     }
                   },
                   {
-                    "name": "obsCont",
-                    "minOccurs": "0",
-                    "maxOccurs": "10",
-                    "annotation": {
-                      "label": "Campo de uso livre do contribuinte\ninformar o nome do campo no atributo xCampo\ne o conteúdo do campo no xTexto"
-                    },
-                    "complexType": {
-                      "sequence": {
-                        "element": {
-                          "name": "xTexto",
-                          "simpleType": {
-                            "restriction": {
-                              "base": "string",
-                              "minLength": "1",
-                              "maxLength": "60"
-                            }
-                          }
-                        }
-                      },
-                      "attribute": {
-                        "name": "xCampo",
-                        "use": "required",
-                        "simpleType": {
-                          "restriction": {
-                            "base": "string",
-                            "minLength": "1",
-                            "maxLength": "20"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "name": "obsFisco",
-                    "minOccurs": "0",
-                    "maxOccurs": "10",
-                    "annotation": {
-                      "label": "Campo de uso exclusivo do Fisco\ninformar o nome do campo no atributo xCampo\ne o conteúdo do campo no xTexto"
-                    },
-                    "complexType": {
-                      "sequence": {
-                        "element": {
-                          "name": "xTexto",
-                          "simpleType": {
-                            "restriction": {
-                              "base": "string",
-                              "minLength": "1",
-                              "maxLength": "60"
-                            }
-                          }
-                        }
-                      },
-                      "attribute": {
-                        "name": "xCampo",
-                        "use": "required",
-                        "simpleType": {
-                          "restriction": {
-                            "base": "string",
-                            "minLength": "1",
-                            "maxLength": "20"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  {
                     "name": "procRef",
                     "minOccurs": "0",
                     "maxOccurs": "100",
                     "annotation": {
-                      "label": "Grupo de informações do  processo referenciado"
+                      "label": "Informações do  processo referenciado"
                     },
                     "complexType": {
                       "sequence": {
@@ -6620,7 +6799,7 @@
                           {
                             "name": "nProc",
                             "annotation": {
-                              "label": "Indentificador do processo ou ato\nconcessório"
+                              "label": "Indentificador do processo ou ato concessório"
                             },
                             "simpleType": {
                               "restriction": {
@@ -6633,7 +6812,8 @@
                           {
                             "name": "indProc",
                             "annotation": {
-                              "label": "Origem do processo, informar com:\n0 - SEFAZ;\n1 - Justiça Federal;\n2 - Justiça Estadual;\n3 - Secex/RFB;\n9 - Outros"
+                              "label": "Origem do processo",
+                              "itens":["SEFAZ","Justiça Federal","Justiça Estadual","Secex/RFB","Outros"]
                             },
                             "simpleType": {
                               "restriction": {
@@ -6699,7 +6879,7 @@
             "name": "compra",
             "minOccurs": "0",
             "annotation": {
-              "label": "Informações de compras  (Nota de Empenho, Pedido e Contrato)"
+              "label": "Informações de compras"
             },
             "complexType": {
               "sequence": {
@@ -6708,7 +6888,7 @@
                     "name": "xNEmp",
                     "minOccurs": "0",
                     "annotation": {
-                      "label": "Informação da Nota de Empenho de compras públicas (NT2011/004)"
+                      "label": "Informação da Nota de Empenho de compras públicas"
                     },
                     "simpleType": {
                       "restriction": {
@@ -6769,7 +6949,7 @@
                   {
                     "name": "ref",
                     "annotation": {
-                      "label": "Mês e Ano de Referência, formato: MM/AAAA"
+                      "label": "Mês e Ano de Referência"
                     },
                     "simpleType": {
                       "restriction": {
@@ -6804,11 +6984,6 @@
                           }
                         ]
                       }
-                    },
-                    "unique": {
-                      "name": "pk_Dia",
-                      "selector": { "xpath": "./*" },
-                      "field": { "xpath": "@dia" }
                     }
                   },
                   {
@@ -6887,10 +7062,78 @@
           },
           {
             "name": "infRespTec",
-            "type": "TInfRespTec",
             "minOccurs": "0",
             "annotation": {
               "label": "Informações do Responsável Técnico pela emissão do DF-e"
+            },
+            "complexType": {
+              "sequence": {
+                "element": [
+                  {
+                    "name": "CNPJ",
+                    "type": "TCnpjOpc",
+                    "annotation": { "label": "CNPJ" }
+                  },
+                  {
+                    "name": "xContato",
+                    "annotation": {
+                      "label": "Nome da pessoa a ser contatada na empresa desenvolvedora do sistema"
+                    },
+                    "simpleType": {
+                      "restriction": {
+                        "base": "string",
+                        "maxLength": "60",
+                        "minLength": "2"
+                      }
+                    }
+                  },
+                  {
+                    "name": "email",
+                    "annotation": {
+                      "label": "E-mail da pessoa a ser contatada na empresa desenvolvedora do sistema"
+                    },
+                    "simpleType": {
+                      "restriction": {
+                        "base": "string",
+                        "minLength": "6",
+                        "maxLength": "60"
+                      }
+                    }
+                  },
+                  {
+                    "name": "fone",
+                    "annotation": {
+                      "label": "Telefone da pessoa a ser contatada na empresa desenvolvedora do sistema"
+                    },
+                    "simpleType": {
+                      "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
+                    }
+                  }
+                ],
+                "sequence": {
+                  "minOccurs": "0",
+                  "element": [
+                    {
+                      "name": "idCSRT",
+                      "annotation": {
+                        "label": "Identificador do CSRT utilizado para montar o hash do CSRT"
+                      },
+                      "simpleType": {
+                        "restriction": { "base": "string", "pattern": "[0-9]{2}" }
+                      }
+                    },
+                    {
+                      "name": "hashCSRT",
+                      "annotation": {
+                        "label": "Chave do CSRT"
+                      },
+                      "simpleType": {
+                        "restriction": { "base": "base64Binary", "length": "20" }
+                      }
+                    }
+                  ]
+                }
+              }        
             }
           }
         ]
@@ -7124,7 +7367,7 @@
     {
       "name": "TLocal",
       "annotation": {
-        "label": "Tipo Dados do Local de Retirada ou Entrega // 24/10/08 - tamanho mínimo // v2.0"
+        "label": "Tipo Dados do Local de Retirada ou Entrega"
       },
       "sequence": {
         "choice": {
@@ -7137,7 +7380,7 @@
             {
               "name": "CPF",
               "type": "TCpf",
-              "annotation": { "label": "CPF (v2.0)" }
+              "annotation": { "label": "CPF" }
             }
           ]
         },
@@ -7205,7 +7448,7 @@
             "name": "cMun",
             "type": "TCodMunIBGE",
             "annotation": {
-              "label": "Código do município (utilizar a tabela do IBGE)"
+              "label": "Código do município"
             }
           },
           {
@@ -7256,7 +7499,7 @@
             "name": "fone",
             "minOccurs": "0",
             "annotation": {
-              "label": "Telefone, preencher com Código DDD + número do telefone , nas operações com exterior é permtido informar o código do país + código da localidade + número do telefone"
+              "label": "Telefone"
             },
             "simpleType": {
               "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
@@ -7266,7 +7509,7 @@
             "name": "email",
             "minOccurs": "0",
             "annotation": {
-              "label": "Informar o e-mail do expedidor/Recebedor. O campo pode ser utilizado para informar o e-mail de recepção da NF-e indicada pelo expedidor"
+              "label": "Informar o e-mail do expedidor/Recebedor"
             },
             "simpleType": {
               "restriction": {
@@ -7286,86 +7529,13 @@
       }
     },
     {
-      "name": "TInfRespTec",
-      "annotation": {
-        "label": "Grupo de informações do responsável técnico pelo sistema de emissão de DF-e"
-      },
-      "sequence": {
-        "element": [
-          {
-            "name": "CNPJ",
-            "type": "TCnpjOpc",
-            "annotation": { "label": "CNPJ" }
-          },
-          {
-            "name": "xContato",
-            "annotation": {
-              "label": "Informar o nome da pessoa a ser contatada na empresa desenvolvedora do sistema utilizado na emissão do documento fiscal eletrônico."
-            },
-            "simpleType": {
-              "restriction": {
-                "base": "string",
-                "maxLength": "60",
-                "minLength": "2"
-              }
-            }
-          },
-          {
-            "name": "email",
-            "annotation": {
-              "label": "Informar o e-mail da pessoa a ser contatada na empresa desenvolvedora do sistema."
-            },
-            "simpleType": {
-              "restriction": {
-                "base": "string",
-                "minLength": "6",
-                "maxLength": "60"
-              }
-            }
-          },
-          {
-            "name": "fone",
-            "annotation": {
-              "label": "Informar o telefone da pessoa a ser contatada na empresa desenvolvedora do sistema. Preencher com o Código DDD + número do telefone."
-            },
-            "simpleType": {
-              "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
-            }
-          }
-        ],
-        "sequence": {
-          "minOccurs": "0",
-          "element": [
-            {
-              "name": "idCSRT",
-              "annotation": {
-                "label": "Identificador do CSRT utilizado para montar o hash do CSRT"
-              },
-              "simpleType": {
-                "restriction": { "base": "string", "pattern": "[0-9]{2}" }
-              }
-            },
-            {
-              "name": "hashCSRT",
-              "annotation": {
-                "label": "O hashCSRT é o resultado da função hash (SHA-1 – Base64) do CSRT fornecido pelo fisco mais a Chave de Acesso da NFe."
-              },
-              "simpleType": {
-                "restriction": { "base": "base64Binary", "length": "20" }
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "name": "TVeiculo",
       "annotation": { "label": "Tipo Dados do Veículo" },
       "sequence": {
         "element": [
           {
             "name": "placa",
-            "annotation": { "label": "Placa do veículo (NT2011/004)" },
+            "annotation": { "label": "Placa do veículo" },
             "simpleType": {
               "restriction": {
                 "base": "string",
@@ -7405,7 +7575,7 @@
             "type": "TCnpj",
             "minOccurs": "0",
             "annotation": {
-              "label": "CNPJ do produtor da mercadoria, quando diferente do emitente. Somente para os casos de exportação direta ou indireta."
+              "label": "CNPJ do produtor da mercadoria, se diferente do emitente e somente em exportação"
             }
           },
           {
@@ -7435,7 +7605,7 @@
           {
             "name": "cEnq",
             "annotation": {
-              "label": "Código de Enquadramento Legal do IPI (tabela a ser criada pela RFB)"
+              "label": "Código de Enquadramento Legal do IPI"
             },
             "simpleType": {
               "restriction": {
@@ -7456,7 +7626,8 @@
                     {
                       "name": "CST",
                       "annotation": {
-                        "label": "Código da Situação Tributária do IPI:\n00-Entrada com recuperação de crédito\n49 - Outras entradas\n50-Saída tributada\n99-Outras saídas"
+                        "label": "Código da Situação Tributária do IPI",
+                        "itens": ["Entrada com recuperação de crédito","Outras entradas","Saída tributada","Outras saídas"]
                       },
                       "simpleType": {
                         "restriction": {
@@ -7502,7 +7673,7 @@
                             "name": "vUnid",
                             "type": "TDec_1104",
                             "annotation": {
-                              "label": "Valor por Unidade Tributável. Informar o valor do imposto Pauta por unidade de medida."
+                              "label": "Valor por Unidade Tributável"
                             }
                           }
                         ]
@@ -7519,7 +7690,8 @@
                   "element": {
                     "name": "CST",
                     "annotation": {
-                      "label": "Código da Situação Tributária do IPI:\n01-Entrada tributada com alíquota zero\n02-Entrada isenta\n03-Entrada não-tributada\n04-Entrada imune\n05-Entrada com suspensão\n51-Saída tributada com alíquota zero\n52-Saída isenta\n53-Saída não-tributada\n54-Saída imune\n55-Saída com suspensão"
+                      "label": "Código da Situação Tributária do IPI",
+                      "itens":["Entrada tributada com alíquota zero","Entrada isenta","Entrada não-tributada","Entrada imune","Entrada com suspensão","Saída tributada com alíquota zero","Saída isenta","Saída não-tributada","Saída imune","Saída com suspensão"]
                     },
                     "simpleType": {
                       "restriction": {
@@ -7551,243 +7723,12 @@
     {
       "name": "Torig",
       "annotation": {
-        "label": "Tipo Origem da mercadoria CST ICMS  origem da mercadoria: 0-Nacional exceto as indicadas nos códigos 3, 4, 5 e 8;\n1-Estrangeira - Importação direta; 2-Estrangeira - Adquirida no mercado interno; 3-Nacional, conteudo superior 40% e inferior ou igual a 70%; 4-Nacional, processos produtivos básicos; 5-Nacional, conteudo inferior 40%; 6-Estrangeira - Importação direta, com similar nacional, lista CAMEX; 7-Estrangeira - mercado interno, sem simular,lista CAMEX;8-Nacional, Conteúdo de Importação superior a 70%."
+        "label": "Tipo Origem da mercadoria CST ICMS  origem da mercadoria",
+        "itens":["Nacional exceto as indicadas nos códigos 3, 4, 5 e 8","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno","Nacional, conteudo superior 40% e inferior ou igual a 70%","Nacional, processos produtivos básicos","Nacional, conteudo inferior 40%","Estrangeira - Importação direta, com similar nacional, lista CAMEX","Estrangeira - mercado interno, sem simular,lista CAMEX","Nacional, Conteúdo de Importação superior a 70%"]
       },
       "restriction": {
         "base": "string",
         "enumeration": ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
-      }
-    },
-    {
-      "name": "TFinNFe",
-      "annotation": {
-        "label": "Tipo Finalidade da NF-e (1=Normal; 2=Complementar; 3=Ajuste; 4=Devolução/Retorno)"
-      },
-      "restriction": { "base": "string", "enumeration": ["1", "2", "3", "4"] }
-    },
-    {
-      "name": "TProcEmi",
-      "annotation": { "label": "Tipo processo de emissão da NF-e" },
-      "restriction": { "base": "string", "enumeration": ["0", "1", "2", "3"] }
-    },
-    {
-      "name": "TCListServ",
-      "annotation": {
-        "label": "Tipo Código da Lista de Serviços LC 116/2003"
-      },
-      "restriction": {
-        "base": "string",
-        "enumeration": [
-          "01.01",
-          "01.02",
-          "01.03",
-          "01.04",
-          "01.05",
-          "01.06",
-          "01.07",
-          "01.08",
-          "01.09",
-          "02.01",
-          "03.02",
-          "03.03",
-          "03.04",
-          "03.05",
-          "04.01",
-          "04.02",
-          "04.03",
-          "04.04",
-          "04.05",
-          "04.06",
-          "04.07",
-          "04.08",
-          "04.09",
-          "04.10",
-          "04.11",
-          "04.12",
-          "04.13",
-          "04.14",
-          "04.15",
-          "04.16",
-          "04.17",
-          "04.18",
-          "04.19",
-          "04.20",
-          "04.21",
-          "04.22",
-          "04.23",
-          "05.01",
-          "05.02",
-          "05.03",
-          "05.04",
-          "05.05",
-          "05.06",
-          "05.07",
-          "05.08",
-          "05.09",
-          "06.01",
-          "06.02",
-          "06.03",
-          "06.04",
-          "06.05",
-          "06.06",
-          "07.01",
-          "07.02",
-          "07.03",
-          "07.04",
-          "07.05",
-          "07.06",
-          "07.07",
-          "07.08",
-          "07.09",
-          "07.10",
-          "07.11",
-          "07.12",
-          "07.13",
-          "07.16",
-          "07.17",
-          "07.18",
-          "07.19",
-          "07.20",
-          "07.21",
-          "07.22",
-          "08.01",
-          "08.02",
-          "09.01",
-          "09.02",
-          "09.03",
-          "10.01",
-          "10.02",
-          "10.03",
-          "10.04",
-          "10.05",
-          "10.06",
-          "10.07",
-          "10.08",
-          "10.09",
-          "10.10",
-          "11.01",
-          "11.02",
-          "11.03",
-          "11.04",
-          "12.01",
-          "12.02",
-          "12.03",
-          "12.04",
-          "12.05",
-          "12.06",
-          "12.07",
-          "12.08",
-          "12.09",
-          "12.10",
-          "12.11",
-          "12.12",
-          "12.13",
-          "12.14",
-          "12.15",
-          "12.16",
-          "12.17",
-          "13.02",
-          "13.03",
-          "13.04",
-          "13.05",
-          "14.01",
-          "14.02",
-          "14.03",
-          "14.04",
-          "14.05",
-          "14.06",
-          "14.07",
-          "14.08",
-          "14.09",
-          "14.10",
-          "14.11",
-          "14.12",
-          "14.13",
-          "14.14",
-          "15.01",
-          "15.02",
-          "15.03",
-          "15.04",
-          "15.05",
-          "15.06",
-          "15.07",
-          "15.08",
-          "15.09",
-          "15.10",
-          "15.11",
-          "15.12",
-          "15.13",
-          "15.14",
-          "15.15",
-          "15.16",
-          "15.17",
-          "15.18",
-          "16.01",
-          "16.02",
-          "17.01",
-          "17.02",
-          "17.03",
-          "17.04",
-          "17.05",
-          "17.06",
-          "17.08",
-          "17.09",
-          "17.10",
-          "17.11",
-          "17.12",
-          "17.13",
-          "17.14",
-          "17.15",
-          "17.16",
-          "17.17",
-          "17.18",
-          "17.19",
-          "17.20",
-          "17.21",
-          "17.22",
-          "17.23",
-          "17.24",
-          "17.25",
-          "18.01",
-          "19.01",
-          "20.01",
-          "20.02",
-          "20.03",
-          "21.01",
-          "22.01",
-          "23.01",
-          "24.01",
-          "25.01",
-          "25.02",
-          "25.03",
-          "25.04",
-          "25.05",
-          "26.01",
-          "27.01",
-          "28.01",
-          "29.01",
-          "30.01",
-          "31.01",
-          "32.01",
-          "33.01",
-          "34.01",
-          "35.01",
-          "36.01",
-          "37.01",
-          "38.01",
-          "39.01",
-          "40.01"
-        ]
-      }
-    },
-    {
-      "name": "TGuid",
-      "annotation": {
-        "label": "Identificador único (Globally Unique Identifier)"
-      },
-      "restriction": {
-        "base": "string",
-        "pattern": "[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}"
       }
     },
     {
@@ -7847,52 +7788,12 @@
       }
     },
     {
-      "name": "TProt",
-      "annotation": { "label": "Tipo Número do Protocolo de Status" },
-      "restriction": {
-        "base": "string",
-        "maxLength": "15",
-        "pattern": "[0-9]{15}"
-      }
-    },
-    {
-      "name": "TRec",
-      "annotation": {
-        "label": "Tipo Número do Recibo do envio de lote de NF-e"
-      },
-      "restriction": {
-        "base": "string",
-        "maxLength": "15",
-        "pattern": "[0-9]{15}"
-      }
-    },
-    {
-      "name": "TStat",
-      "annotation": { "label": "Tipo Código da Mensagem enviada" },
-      "restriction": {
-        "base": "string",
-        "maxLength": "3",
-        "pattern": "[0-9]{3}"
-      }
-    },
-    {
       "name": "TCnpj",
       "annotation": { "label": "Tipo Número do CNPJ" },
       "restriction": {
         "base": "string",
         "maxLength": "14",
         "pattern": "[0-9]{14}"
-      }
-    },
-    {
-      "name": "TCnpjVar",
-      "annotation": {
-        "label": "Tipo Número do CNPJ tmanho varíavel (3-14)"
-      },
-      "restriction": {
-        "base": "string",
-        "maxLength": "14",
-        "pattern": "[0-9]{3,14}"
       }
     },
     {
@@ -7911,37 +7812,6 @@
         "base": "string",
         "maxLength": "11",
         "pattern": "[0-9]{11}"
-      }
-    },
-    {
-      "name": "TCpfVar",
-      "annotation": {
-        "label": "Tipo Número do CPF de tamanho variável (3-11)"
-      },
-      "restriction": {
-        "base": "string",
-        "maxLength": "11",
-        "pattern": "[0-9]{3,11}"
-      }
-    },
-    {
-      "name": "TDec_0104v",
-      "annotation": {
-        "label": "Tipo Decimal com até 1 dígitos inteiros, podendo ter de 1 até 4 decimais"
-      },
-      "restriction": {
-        "base": "string",
-        "pattern": "0|0\\.[0-9]{1,4}|[1-9]{1}(\\.[0-9]{1,4})?"
-      }
-    },
-    {
-      "name": "TDec_0204v",
-      "annotation": {
-        "label": "Tipo Decimal com até 2 dígitos inteiros, podendo ter de 1 até 4 decimais"
-      },
-      "restriction": {
-        "base": "string",
-        "pattern": "0|0\\.[0-9]{1,4}|[1-9]{1}[0-9]{0,1}(\\.[0-9]{1,4})?"
       }
     },
     {
@@ -7965,26 +7835,6 @@
       }
     },
     {
-      "name": "TDec_0302Max100",
-      "annotation": {
-        "label": "Tipo Decimal com 3 inteiros (no máximo 100), com 2 decimais"
-      },
-      "restriction": {
-        "base": "string",
-        "pattern": "0(\\.[0-9]{2})?|100(\\.00)?|[1-9]{1}[0-9]{0,1}(\\.[0-9]{2})?"
-      }
-    },
-    {
-      "name": "TDec_0304Max100",
-      "annotation": {
-        "label": "Tipo Decimal com 3 inteiros (no máximo 100), com 4 decimais"
-      },
-      "restriction": {
-        "base": "string",
-        "pattern": "0(\\.[0-9]{4})?|100(\\.00)?|[1-9]{1}[0-9]{0,1}(\\.[0-9]{4})?"
-      }
-    },
-    {
       "name": "TDec_0302a04Max100",
       "annotation": {
         "label": "Tipo Decimal com 3 inteiros (no máximo 100), com até 4 decimais"
@@ -7992,16 +7842,6 @@
       "restriction": {
         "base": "string",
         "pattern": "0(\\.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(\\.[0-9]{2,4})?|100(\\.0{2,4})?"
-      }
-    },
-    {
-      "name": "TDec_0803v",
-      "annotation": {
-        "label": "Tipo Decimal com 8 inteiros, podendo ter de 1 até 3 decimais"
-      },
-      "restriction": {
-        "base": "string",
-        "pattern": "0|0\\.[0-9]{3}|[1-9]{1}[0-9]{0,7}(\\.[0-9]{1,3})?"
       }
     },
     {
@@ -8022,16 +7862,6 @@
       "restriction": {
         "base": "string",
         "pattern": "0|0\\.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(\\.[0-9]{1,4})?"
-      }
-    },
-    {
-      "name": "TDec_1104Opc",
-      "annotation": {
-        "label": "Tipo Decimal com 11 inteiros, podendo ter 4 decimais (utilizado em tags opcionais)"
-      },
-      "restriction": {
-        "base": "string",
-        "pattern": "0\\.[1-9]{1}[0-9]{3}|0\\.[0-9]{3}[1-9]{1}|0\\.[0-9]{2}[1-9]{1}[0-9]{1}|0\\.[0-9]{1}[1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{0,10}(\\.[0-9]{4})?"
       }
     },
     {
@@ -8075,26 +7905,6 @@
       }
     },
     {
-      "name": "TDec_1204Opc",
-      "annotation": {
-        "label": "Tipo Decimal com 12 inteiros com 1 até 4 decimais"
-      },
-      "restriction": {
-        "base": "string",
-        "pattern": "0\\.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(\\.[0-9]{1,4})?"
-      }
-    },
-    {
-      "name": "TDec_1204temperatura",
-      "annotation": {
-        "label": "Tipo Decimal com 12 inteiros, 1 a 4 decimais"
-      },
-      "restriction": {
-        "base": "string",
-        "pattern": "0\\.[1-9]{1}[0-9]{3}|0\\.[0-9]{3}[1-9]{1}|0\\.[0-9]{2}[1-9]{1}[0-9]{1}|0\\.[0-9]{1}[1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{0,11}(\\.[0-9]{4})?"
-      }
-    },
-    {
       "name": "TDec_1302",
       "annotation": {
         "label": "Tipo Decimal com 15 dígitos, sendo 13 de corpo e 2 decimais"
@@ -8126,28 +7936,6 @@
       }
     },
     {
-      "name": "TIeDestNaoIsento",
-      "annotation": {
-        "label": "Tipo Inscrição Estadual do Destinatário // alterado para aceitar vazio ou ISENTO - maio/2010 v2.0"
-      },
-      "restriction": {
-        "base": "string",
-        "maxLength": "14",
-        "pattern": "[0-9]{2,14}"
-      }
-    },
-    {
-      "name": "TIeST",
-      "annotation": {
-        "label": "Tipo Inscrição Estadual do ST // acrescentado EM 24/10/08"
-      },
-      "restriction": {
-        "base": "string",
-        "maxLength": "14",
-        "pattern": "[0-9]{2,14}"
-      }
-    },
-    {
       "name": "TIe",
       "annotation": {
         "label": "Tipo Inscrição Estadual do Emitente // alterado EM 24/10/08 para aceitar ISENTO"
@@ -8157,11 +7945,6 @@
         "maxLength": "14",
         "pattern": "[0-9]{2,14}|ISENTO"
       }
-    },
-    {
-      "name": "TMod",
-      "annotation": { "label": "Tipo Modelo Documento Fiscal" },
-      "restriction": { "base": "string", "enumeration": ["55", "65"] }
     },
     {
       "name": "TNF",
@@ -8249,68 +8032,11 @@
       }
     },
     {
-      "name": "TAmb",
-      "annotation": { "label": "Tipo Ambiente" },
-      "restriction": { "base": "string", "enumeration": ["1", "2"] }
-    },
-    {
-      "name": "TVerAplic",
-      "annotation": { "label": "Tipo Versão do Aplicativo" },
-      "restriction": {
-        "base": "nfe:string",
-        "minLength": "1",
-        "maxLength": "20"
-      }
-    },
-    {
-      "name": "TMotivo",
-      "annotation": { "label": "Tipo Motivo" },
-      "restriction": {
-        "base": "nfe:string",
-        "maxLength": "255",
-        "minLength": "1"
-      }
-    },
-    {
-      "name": "TJust",
-      "annotation": { "label": "Tipo Justificativa" },
-      "restriction": {
-        "base": "nfe:string",
-        "minLength": "15",
-        "maxLength": "255"
-      }
-    },
-    {
-      "name": "TServ",
-      "annotation": { "label": "Tipo Serviço solicitado" },
-      "restriction": { "base": "nfe:string" }
-    },
-    {
-      "name": "Tano",
-      "annotation": { "label": "Tipo ano" },
-      "restriction": { "base": "string", "pattern": "[0-9]{2}" }
-    },
-    {
-      "name": "TMed",
-      "annotation": { "label": "Tipo temp médio em segundos" },
-      "restriction": { "base": "string", "pattern": "[0-9]{1,4}" }
-    },
-    {
       "name": "TData",
       "annotation": { "label": "Tipo data AAAA-MM-DD" },
       "restriction": {
         "base": "string",
         "pattern": "(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1\\d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))"
-      }
-    },
-    {
-      "name": "TTime",
-      "annotation": {
-        "label": "Tipo hora HH:MM:SS // tipo acrescentado na v2.0"
-      },
-      "restriction": {
-        "base": "string",
-        "pattern": "(([0-1][0-9])|([2][0-3])):([0-5][0-9]):([0-5][0-9])"
       }
     },
     {
@@ -8321,54 +8047,6 @@
       "restriction": {
         "base": "string",
         "pattern": "(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1\\d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))T(20|21|22|23|[0-1]\\d):[0-5]\\d:[0-5]\\d([\\-,\\+](0[0-9]|10|11):00|([\\+](12):00))"
-      }
-    },
-    {
-      "name": "TPlaca",
-      "restriction": {
-        "base": "string",
-        "pattern": "[A-Z]{2,3}[0-9]{4}|[A-Z]{3,4}[0-9]{3}"
-      }
-    },
-    {
-      "name": "TCOrgaoIBGE",
-      "annotation": {
-        "label": "Tipo Código de orgão (UF da tabela do IBGE + 90 RFB)"
-      },
-      "restriction": {
-        "base": "string",
-        "enumeration": [
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28",
-          "29",
-          "31",
-          "32",
-          "33",
-          "35",
-          "41",
-          "42",
-          "43",
-          "50",
-          "51",
-          "52",
-          "53",
-          "90",
-          "91",
-          "92"
-        ]
       }
     }
   ]
