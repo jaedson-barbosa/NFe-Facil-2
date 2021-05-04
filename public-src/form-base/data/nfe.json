@@ -512,6 +512,41 @@
                     }
                   },
                   {
+                    "name": "",
+                    "minOccurs": "0",
+                    "annotation": {
+                      "label": "Grupo de informações de interesse da Prefeitura"
+                    },
+                    "complexType": {
+                      "sequence": {
+                        "element": [
+                          {
+                            "name": "IM",
+                            "annotation": { "label": "Inscrição Municipal" },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "TString",
+                                "minLength": "1",
+                                "maxLength": "15"
+                              }
+                            }
+                          },
+                          {
+                            "name": "CNAE",
+                            "minOccurs": "0",
+                            "annotation": { "label": "CNAE Fiscal" },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "pattern": "[0-9]{7}"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
                     "name": "CRT",
                     "annotation": {
                       "label": "Código de Regime Tributário",
@@ -524,37 +559,7 @@
                       }
                     }
                   }
-                ],
-                "sequence": {
-                  "minOccurs": "0",
-                  "annotation": {
-                    "label": "Grupo de informações de interesse da Prefeitura"
-                  },
-                  "element": [
-                    {
-                      "name": "IM",
-                      "annotation": { "label": "Inscrição Municipal" },
-                      "simpleType": {
-                        "restriction": {
-                          "base": "TString",
-                          "minLength": "1",
-                          "maxLength": "15"
-                        }
-                      }
-                    },
-                    {
-                      "name": "CNAE",
-                      "minOccurs": "0",
-                      "annotation": { "label": "CNAE Fiscal" },
-                      "simpleType": {
-                        "restriction": {
-                          "base": "string",
-                          "pattern": "[0-9]{7}"
-                        }
-                      }
-                    }
-                  ]
-                }
+                ]
               }
             }
           },
