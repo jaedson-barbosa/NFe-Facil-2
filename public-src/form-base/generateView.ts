@@ -1,4 +1,3 @@
-import * as basicSchema from './data/basic.json'
 import * as nfeSchema from './data/nfe.json'
 import { IBGE } from './data/IBGE.json'
 import { paises } from './data/paises.json'
@@ -60,7 +59,7 @@ interface IGenerateViewOptions {
 
 function getDocumentation(v: any): string {
   const name = getName(v);
-  const fromScheme = v['annotation']?.['documentation'];
+  const fromScheme = v['annotation']?.['label'];
   if (name) {
     const custom = customHeaders.find((v) => name === v.name)?.header;
     const nameParts = name.split('|');
@@ -257,9 +256,7 @@ function createInput(
   const findType = (v: any) => getName(v) == baseType
   const hasOtherRestrictions =
     baseType != 'string' && baseType != 'base64Binary'
-  const otherRestrictions: any = (simpleTypes.find(findType) as any)?.[
-    'restriction'
-  ]
+  const otherRestrictions: any = (simpleTypes.find(findType) as any)?.restriction
   if (hasOtherRestrictions && !otherRestrictions) {
     const complexType = field['complexType'] ?? complexTypes.find(findType)
     if (!complexType) {
@@ -289,8 +286,8 @@ function createInput(
   const documentation = getDocumentation(field)
   if (!enumeration) {
     const getProp = (el: string) => {
-      const fieldProp = fieldRestriction?.[el]?.value
-      const otherProp = otherRestrictions?.[el]?.value
+      const fieldProp = fieldRestriction?.[el]
+      const otherProp = otherRestrictions?.[el]
       return fieldProp ?? otherProp
     }
     return new textFormElement(name, documentation, required, {
@@ -299,15 +296,15 @@ function createInput(
       maxLength: getProp('maxLength'),
     })
   }
-  if (!('length' in enumeration)) {
-    const val = enumeration.value
+  if (typeof enumeration == 'string') {
+    const val = enumeration
     return new hiddenFormElement(name, required, val)
   }
-  const val0 = enumeration[0].value
-  const val1 = enumeration[1].value.toUpperCase()
+  const val0 = enumeration[0]
+  const val1 = enumeration[1].toUpperCase()
   if (enumeration.length == 2 && val0.toUpperCase() == val1)
     return new hiddenFormElement(name, required, val0)
-  const values = (enumeration as any[]).map((v) => v.value)
+  const values = (enumeration as any[]).map((v) => v)
   const getValueDescription = (v: string) => {
     if (isNaN(+v) && v.length > 1) return v
     const getIndex = (search: string) => documentation.indexOf(search)
@@ -691,8 +688,5 @@ interface IElementCreationOptions {
   customNameChanger: (names: string[]) => void
 }
 
-const complexTypes = nfeSchema['schema']['complexType']
-const simpleTypes = [
-  ...basicSchema['schema']['simpleType'],
-  ...nfeSchema['schema']['simpleType'],
-]
+const complexTypes = nfeSchema['complexType']
+const simpleTypes = nfeSchema['simpleType']

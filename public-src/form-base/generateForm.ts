@@ -9,10 +9,11 @@ export function generateForm(
   ...elements: IBaseFormElement[]
 ): HTMLFormElement
 export function generateForm(
-  params: ((data: any) => void) | IFormAction[]
+  params: ((data: any) => void) | IFormAction[],
+  ...elements: IBaseFormElement[]
 ): HTMLFormElement {
   const form = document.createElement('form')
-  this.elements.forEach((v) => v.generate(form))
+  elements.forEach((v) => v.generate(form))
   const createSub = (action: (data: any) => void, text: string = 'Enviar') => {
     const btn = document.createElement('button')
     if (text) btn.textContent = text

@@ -13,7 +13,7 @@ export function gerarViewProduto() {
       required: true,
     },
     ...generateViews(
-      elementosNFe[7]['complexType']['sequence'][
+      elementosNFe[6]['complexType']['sequence'][
         'element'
       ][0],
       {},

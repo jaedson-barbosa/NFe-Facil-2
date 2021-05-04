@@ -7,7 +7,7 @@ export function renderizarCliente(data: { dest: any }): string {
 }
 
 export function gerarViewCliente() {
-  const views = generateView(elementosNFe[3], {
+  const views = generateView(elementosNFe[2], {
     customRequireds: ['dest', 'xNome', 'enderDest'],
   })
   const view = views[0] as fieldsetFormElement

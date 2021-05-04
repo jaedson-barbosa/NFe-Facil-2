@@ -122,7 +122,7 @@ function gerarEmitente() {
 const dialog = document.getElementById('search') as HTMLDialogElement
 
 async function gerarProdutosEdicao() {
-  const views = generateView(elementosNFe[7], {
+  const views = generateView(elementosNFe[6], {
     customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'],
     customOptions: [
       {
@@ -200,7 +200,7 @@ async function gerarCliente() {
 }
 
 function gerarProdutosVisualizacao() {
-  const views = generateView(elementosNFe[7], {
+  const views = generateView(elementosNFe[6], {
     customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'],
   })
   const view = views[0] as listFormElement
@@ -209,13 +209,13 @@ function gerarProdutosVisualizacao() {
 }
 
 function gerarRetirada() {
-  return generateView(elementosNFe[4], {
+  return generateView(elementosNFe[3], {
     rootTag: 'element',
   })
 }
 
 function gerarEntrega() {
-  return generateView(elementosNFe[5], {
+  return generateView(elementosNFe[4], {
     rootTag: 'element',
   })
 }
@@ -223,20 +223,20 @@ function gerarEntrega() {
 function gerarAutorizacao() {
   return new listFormElement(
     generateView(
-      elementosNFe[6]
+      elementosNFe[5]
     )[0] as fieldsetFormElement,
     ['autXML']
   )
 }
 
 function gerarTotal() {
-  return generateView(elementosNFe[8], {
+  return generateView(elementosNFe[7], {
     rootTag: 'element',
   })
 }
 
 async function gerarTransporte() {
-  const views = generateView(elementosNFe[9], {
+  const views = generateView(elementosNFe[8], {
     rootTag: 'element',
     customRequireds: ['vol', 'veicTransp|reboque', 'reboque', 'lacres'],
   })
@@ -270,20 +270,20 @@ async function gerarTransporte() {
 }
 
 function gerarCobranca() {
-  return generateView(elementosNFe[10], {
+  return generateView(elementosNFe[9], {
     rootTag: 'element',
     customRequireds: ['fat', 'dup'],
   })
 }
 
 function gerarPagamento() {
-  return generateView(elementosNFe[11], {
+  return generateView(elementosNFe[10], {
     rootTag: 'element',
   })
 }
 
 function gerarIntermediador() {
-  return generateView(elementosNFe[12], {
+  return generateView(elementosNFe[11], {
     rootTag: 'element',
   })
 }
@@ -292,7 +292,7 @@ function gerarInformacoes() {
   return new fieldsetFormElement(
     { legend: 'Informações Adicionais', required: false },
     ...generateViews(
-      elementosNFe[13],
+      elementosNFe[12],
       {},
       'infAdFisco',
       'infCpl'
@@ -301,15 +301,15 @@ function gerarInformacoes() {
 }
 
 function gerarExportacao() {
-  return generateView(elementosNFe[14])
+  return generateView(elementosNFe[13])
 }
 
 function gerarCompra() {
-  return generateView(elementosNFe[15])
+  return generateView(elementosNFe[14])
 }
 
 function gerarCana() {
-  return generateView(elementosNFe[16], {
+  return generateView(elementosNFe[15], {
     customRequireds: ['deduc'],
   })
 }
@@ -384,7 +384,6 @@ function gerarResponsavelTecnico() {
     clearChildren(main)
     const elements = [prodsEdicao]
     elements.forEach(v => v.updateValue(currentData))
-    console.log(currentData)
     main.appendChild(
       generateForm((data) => {
         currentData.det = data.det
