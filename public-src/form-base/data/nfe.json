@@ -876,7 +876,7 @@
             "type": "TLocal",
             "minOccurs": "0",
             "annotation": {
-              "label": "Identificação do Local de Retirada (informar apenas quando for diferente do endereço do remetente)"
+              "label": "Local de retirada (diferente do endereço do remetente)"
             }
           },
           {
@@ -884,7 +884,7 @@
             "type": "TLocal",
             "minOccurs": "0",
             "annotation": {
-              "label": "Identificação do Local de Entrega (informar apenas quando for diferente do endereço do destinatário)"
+              "label": "Local de entrega (diferente do endereço do destinatário)"
             }
           },
           {
@@ -5429,7 +5429,7 @@
           },
           {
             "name": "total",
-            "annotation": { "label": "Dados dos totais da NF-e" },
+            "annotation": { "label": "Totais da NF-e" },
             "complexType": {
               "sequence": {
                 "element": [
@@ -5450,14 +5450,14 @@
                             "name": "vICMS",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do ICMS"
+                              "label": "Total do ICMS"
                             }
                           },
                           {
                             "name": "vICMSDeson",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do ICMS desonerado"
+                              "label": "Total do ICMS desonerado"
                             }
                           },
                           {
@@ -5465,7 +5465,7 @@
                             "type": "TDec_1302",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Valor total do ICMS relativo ao Fundo de Combate à Pobreza (FCP) para a UF de destino."
+                              "label": "Total do ICMS relativo ao FCP para a UF de destino"
                             }
                           },
                           {
@@ -5473,7 +5473,7 @@
                             "type": "TDec_1302",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Valor total do ICMS de partilha para a UF do destinatário"
+                              "label": "Total do ICMS de partilha para a UF do destinatário"
                             }
                           },
                           {
@@ -5481,14 +5481,14 @@
                             "type": "TDec_1302",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Valor total do ICMS de partilha para a UF do remetente"
+                              "label": "Total do ICMS de partilha para a UF do remetente"
                             }
                           },
                           {
                             "name": "vFCP",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do FCP (Fundo de Combate à Pobreza)."
+                              "label": "Total do FCP (Fundo de Combate à Pobreza)."
                             }
                           },
                           {
@@ -5500,81 +5500,81 @@
                             "name": "vST",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do ICMS ST"
+                              "label": "Total do ICMS ST"
                             }
                           },
                           {
                             "name": "vFCPST",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do FCP (Fundo de Combate à Pobreza) retido por substituição tributária."
+                              "label": "Total do FCP retido por ST."
                             }
                           },
                           {
                             "name": "vFCPSTRet",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do FCP (Fundo de Combate à Pobreza) retido anteriormente por substituição tributária."
+                              "label": "Total do FCP retido anteriormente por ST."
                             }
                           },
                           {
                             "name": "vProd",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total dos produtos e serviços"
+                              "label": "Total dos produtos e serviços"
                             }
                           },
                           {
                             "name": "vFrete",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do Frete"
+                              "label": "Total do frete"
                             }
                           },
                           {
                             "name": "vSeg",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do Seguro"
+                              "label": "Total do seguro"
                             }
                           },
                           {
                             "name": "vDesc",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do Desconto"
+                              "label": "Total do desconto"
                             }
                           },
                           {
                             "name": "vII",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do II"
+                              "label": "Total do II"
                             }
                           },
                           {
                             "name": "vIPI",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do IPI"
+                              "label": "Total do IPI"
                             }
                           },
                           {
                             "name": "vIPIDevol",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total do IPI devolvido. Deve ser informado quando preenchido o Grupo Tributos Devolvidos na emissão de nota finNFe=4 (devolução) nas operações com não contribuintes do IPI. Corresponde ao total da soma dos campos id: UA04."
+                              "label": "Total do IPI devolvido."
                             }
                           },
                           {
                             "name": "vPIS",
                             "type": "TDec_1302",
-                            "annotation": { "label": "Valor do PIS" }
+                            "annotation": { "label": "Total do PIS" }
                           },
                           {
                             "name": "vCOFINS",
                             "type": "TDec_1302",
-                            "annotation": { "label": "Valor do COFINS" }
+                            "annotation": { "label": "Total do COFINS" }
                           },
                           {
                             "name": "vOutro",
@@ -5587,7 +5587,7 @@
                             "name": "vNF",
                             "type": "TDec_1302",
                             "annotation": {
-                              "label": "Valor Total da NF-e"
+                              "label": "Total da NF-e"
                             }
                           },
                           {
@@ -5595,7 +5595,7 @@
                             "type": "TDec_1302",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Valor estimado total de impostos federais, estaduais e municipais"
+                              "label": "Total estimado de impostos federais, estaduais e municipais"
                             }
                           }
                         ]
@@ -5616,7 +5616,7 @@
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Valor Total dos Serviços sob não-incidência ou não tributados pelo ICMS"
+                              "label": "Total dos Serviços sob não-incidência ou não tributados pelo ICMS"
                             }
                           },
                           {
@@ -5632,7 +5632,7 @@
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Valor Total do ISS"
+                              "label": "Total do ISS"
                             }
                           },
                           {
@@ -5640,7 +5640,7 @@
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Valor do PIS sobre serviços"
+                              "label": "Total do PIS sobre serviços"
                             }
                           },
                           {
@@ -5648,7 +5648,7 @@
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Valor do COFINS sobre serviços"
+                              "label": "Total do COFINS sobre serviços"
                             }
                           },
                           {
@@ -5695,14 +5695,15 @@
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Valor Total Retenção ISS"
+                              "label": "Total Retenção ISS"
                             }
                           },
                           {
                             "name": "cRegTrib",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Código do regime especial de tributação"
+                              "label": "Código do regime especial de tributação",
+                              "itens": ["Microempresa Municipal","Estimativa","Sociedade de Profissionais","Cooperativa","Microempresário Individual (MEI)","Microempresário e Empresa de Pequeno Porte"]
                             },
                             "simpleType": {
                               "restriction": {
@@ -5797,7 +5798,8 @@
                   {
                     "name": "modFrete",
                     "annotation": {
-                      "label": "Modalidade do frete\n0- Contratação do Frete por conta do Remetente (CIF);\n1- Contratação do Frete por conta do destinatário/remetente (FOB);\n2- Contratação do Frete por conta de terceiros;\n3- Transporte próprio por conta do remetente;\n4- Transporte próprio por conta do destinatário;\n9- Sem Ocorrência de transporte."
+                      "label": "Modalidade do frete",
+                      "itens":["Contratação do Frete por conta do Remetente (CIF)","Contratação do Frete por conta do destinatário/remetente (FOB)","Contratação do Frete por conta de terceiros","Transporte próprio por conta do remetente","Transporte próprio por conta do destinatário","Sem Ocorrência de transporte"]
                     },
                     "simpleType": {
                       "restriction": {
@@ -5851,7 +5853,7 @@
                             "type": "TIeDest",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Inscrição Estadual (v2.0)"
+                              "label": "Inscrição Estadual"
                             }
                           },
                           {
@@ -5945,7 +5947,7 @@
                             "name": "cMunFG",
                             "type": "TCodMunIBGE",
                             "annotation": {
-                              "label": "Código do Município de Ocorrência do Fato Gerador (utilizar a tabela do IBGE)"
+                              "label": "Código do Município de Ocorrência do Fato Gerador"
                             }
                           }
                         ]
@@ -6040,7 +6042,7 @@
                                 "element": {
                                   "name": "nLacre",
                                   "annotation": {
-                                    "label": "Número dos Lacres"
+                                    "label": "Número dos lacres"
                                   },
                                   "simpleType": {
                                     "restriction": {
@@ -6074,7 +6076,7 @@
                         "minOccurs": "0",
                         "maxOccurs": "5",
                         "annotation": {
-                          "label": "Dados do reboque/Dolly (v2.0)"
+                          "label": "Dados do reboque/Dolly"
                         }
                       }
                     ]
@@ -6084,7 +6086,7 @@
                       "name": "vagao",
                       "minOccurs": "0",
                       "annotation": {
-                        "label": "Identificação do vagão (v2.0)"
+                        "label": "Identificação do vagão"
                       },
                       "simpleType": {
                         "restriction": {
@@ -6098,7 +6100,7 @@
                       "name": "balsa",
                       "minOccurs": "0",
                       "annotation": {
-                        "label": "Identificação da balsa (v2.0)"
+                        "label": "Identificação da balsa"
                       },
                       "simpleType": {
                         "restriction": {
@@ -6174,7 +6176,7 @@
                     "minOccurs": "0",
                     "maxOccurs": "120",
                     "annotation": {
-                      "label": "Dados das duplicatas NT 2011/004"
+                      "label": "Dados das duplicatas"
                     },
                     "complexType": {
                       "sequence": {
@@ -6198,7 +6200,7 @@
                             "type": "TData",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Data de vencimento da duplicata (AAAA-MM-DD)"
+                              "label": "Data de vencimento da duplicata"
                             }
                           },
                           {
@@ -6219,7 +6221,7 @@
           {
             "name": "pag",
             "annotation": {
-              "label": "Dados de Pagamento. Obrigatório apenas para (NFC-e) NT 2012/004"
+              "label": "Dados de Pagamento"
             },
             "complexType": {
               "sequence": {
@@ -6228,7 +6230,7 @@
                     "name": "detPag",
                     "maxOccurs": "100",
                     "annotation": {
-                      "label": "Grupo de detalhamento da forma de pagamento."
+                      "label": "Detalhamento da forma de pagamento."
                     },
                     "complexType": {
                       "sequence": {
@@ -6237,7 +6239,8 @@
                             "name": "indPag",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Indicador da Forma de Pagamento:0-Pagamento à Vista;1-Pagamento à Prazo;"
+                              "label": "Indicador da Forma de Pagamento",
+                              "itens": ["Pagamento à Vista","Pagamento à Prazo"]
                             },
                             "simpleType": {
                               "restriction": {
@@ -6247,54 +6250,122 @@
                             }
                           },
                           {
-                            "name": "tPag",
-                            "annotation": {
-                              "label": "Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão de Débito;05-Crédito Loja;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t10-Vale Alimentação;11-Vale Refeição;12-Vale Presente;13-Vale Combustível;14 - Duplicata Mercantil;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t15 - Boleto Bancario;16\tDepósito Bancário\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t17\tPagamento Instantâneo (PIX)\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t18\tTransferência bancária, Carteira Digital\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t19\tPrograma de fidelidade, Cashback, Crédito Virtual 90 - Sem Pagamento;99 - Outros"
-                            },
-                            "simpleType": {
-                              "restriction": {
-                                "base": "string",
-                                "enumeration": [
-                                  "01",
-                                  "02",
-                                  "03",
-                                  "04",
-                                  "05",
-                                  "10",
-                                  "11",
-                                  "12",
-                                  "13",
-                                  "14",
-                                  "15",
-                                  "16",
-                                  "17",
-                                  "18",
-                                  "19",
-                                  "90",
-                                  "99"
+                            "annotation": { "label": "Forma de Pagamento" },
+                            "complexType": {
+                              "choice": {
+                                "element": [
+                                  {
+                                    "annotation": {"label":"Comum"},
+                                    "complexType": {
+                                      "sequence": {
+                                        "element": [
+                                          {
+                                            "name": "tPag",
+                                            "annotation": {
+                                              "label": "Forma de Pagamento",
+                                              "itens":["Dinheiro","Cheque","Cartão de crédito","Cartão de débito","Crédito Loja","Vale Alimentação","Vale Refeição","Vale Presente","Vale Combustível","Duplicata Mercantil","Boleto Bancario","Depósito Bancário","Pagamento Instantâneo (PIX)","Transferência bancária, Carteira Digital","Programa de fidelidade, Cashback, Crédito Virtual"]
+                                            },
+                                            "simpleType": {
+                                              "restriction": {
+                                                "base": "string",
+                                                "enumeration": [
+                                                  "01",
+                                                  "02",
+                                                  "03",
+                                                  "04",
+                                                  "05",
+                                                  "10",
+                                                  "11",
+                                                  "12",
+                                                  "13",
+                                                  "14",
+                                                  "15",
+                                                  "16",
+                                                  "17",
+                                                  "18",
+                                                  "19"
+                                                ]
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "name": "vPag",
+                                            "type": "TDec_1302",
+                                            "annotation": {
+                                              "label": "Valor do Pagamento"
+                                            }
+                                          }                
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "annotation": {"label": "Sem Pagamento"},
+                                    "complexType": {
+                                      "sequence": {
+                                        "element": [
+                                          {
+                                            "name": "tPag",
+                                            "annotation": {
+                                              "label": "Forma de Pagamento",
+                                              "itens": ["Sem Pagamento"]
+                                            },
+                                            "simpleType": {
+                                              "restriction": {
+                                                "base": "string",
+                                                "enumeration": "90"
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "annotation": {"label": "Outros"},
+                                    "complexType": {
+                                      "sequence": {
+                                        "element": [
+                                          {
+                                            "name": "tPag",
+                                            "annotation": {
+                                              "label": "Forma de Pagamento",
+                                              "itens":["Outros"]
+                                            },
+                                            "simpleType": {
+                                              "restriction": {
+                                                "base": "string",
+                                                "enumeration": "99"
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "name": "xPag",
+                                            "minOccurs": "0",
+                                            "annotation": {
+                                              "label": "Descrição do Meio de Pagamento"
+                                            },
+                                            "simpleType": {
+                                              "restriction": {
+                                                "base": "string",
+                                                "minLength": "2",
+                                                "maxLength": "60"
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "name": "vPag",
+                                            "type": "TDec_1302",
+                                            "annotation": {
+                                              "label": "Valor do Pagamento"
+                                            }
+                                          }                
+                                        ]
+                                      }
+                                    }
+                                  }
                                 ]
                               }
-                            }
-                          },
-                          {
-                            "name": "xPag",
-                            "minOccurs": "0",
-                            "annotation": {
-                              "label": "Descrição do Meio de Pagamento"
-                            },
-                            "simpleType": {
-                              "restriction": {
-                                "base": "string",
-                                "minLength": "2",
-                                "maxLength": "60"
-                              }
-                            }
-                          },
-                          {
-                            "name": "vPag",
-                            "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Valor do Pagamento. Esta tag poderá ser omitida quando a tag tPag=90 (Sem Pagamento), caso contrário deverá ser preenchida."
                             }
                           },
                           {
@@ -6309,7 +6380,8 @@
                                   {
                                     "name": "tpIntegra",
                                     "annotation": {
-                                      "label": "Tipo de Integração do processo de pagamento com o sistema de automação da empresa/ \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t1=Pagamento integrado com o sistema de automação da empresa Ex. equipamento TEF , Comercio Eletronico\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t2=Pagamento não integrado com o sistema de automação da empresa Ex: equipamento POS"
+                                      "label": "Tipo de Integração do processo de pagamento",
+                                      "itens":["Pagamento integrado (TEF ou comércio eletrônico)","Pagamento não integrado (POS)"]
                                     },
                                     "simpleType": {
                                       "restriction": {
@@ -6330,7 +6402,8 @@
                                     "name": "tBand",
                                     "minOccurs": "0",
                                     "annotation": {
-                                      "label": "Bandeira da operadora de cartão de crédito/débito:01–Visa; 02–Mastercard; 03–American Express; 04–Sorocred;05-Diners Club;06-Elo;07-Hipercard;08-Aura;09-Cabal\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t10-Alelo; 11-Banes Card; 12-CalCard; 13-Credz; 14-Discover; 15-GoodCard; 16-GreenCard; 17-Hiper; 18-JcB; 19-Mais;20-MaxVan; 21-Policard;22-RedeCompras\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t23-Sodexo; 24-ValeCard; 25-Verocheque; 26-VR; 27-Ticket;99–Outros"
+                                      "label": "Bandeira da operadora de cartão de crédito/débito",
+                                      "itens": ["Visa","Mastercard","American Express","Sorocred","Diners Club","Elo","Hipercard","Aura","Cabal","Alelo","Banes Card","CalCard","Credz","Discover","GoodCard","GreenCard","Hiper","JcB","Mais","MaxVan","Policard","RedeCompras","Sodexo","ValeCard","Verocheque","VR","Ticket","Outros"]
                                     },
                                     "simpleType": {
                                       "restriction": {
@@ -6372,7 +6445,7 @@
                                     "name": "cAut",
                                     "minOccurs": "0",
                                     "annotation": {
-                                      "label": "Número de autorização da operação cartão de crédito/débito"
+                                      "label": "Número de autorização da operação"
                                     },
                                     "simpleType": {
                                       "restriction": {
@@ -6394,7 +6467,7 @@
                     "name": "vTroco",
                     "type": "TDec_1302",
                     "minOccurs": "0",
-                    "annotation": { "label": "Valor do Troco." }
+                    "annotation": { "label": "Valor do Troco" }
                   }
                 ]
               }
