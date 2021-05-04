@@ -36,7 +36,7 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "minLength": "1",
                         "maxLength": "60"
                       }
@@ -218,7 +218,7 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "minLength": "1",
                         "maxLength": "20"
                       }
@@ -473,7 +473,7 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "maxLength": "60",
                         "minLength": "2"
                       }
@@ -485,7 +485,7 @@
                     "annotation": { "label": "Nome fantasia" },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "maxLength": "60",
                         "minLength": "1"
                       }
@@ -525,7 +525,7 @@
                             "annotation": { "label": "Inscrição Municipal" },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "15"
                               }
@@ -568,112 +568,302 @@
             "minOccurs": "0",
             "annotation": { "label": "Identificação do Destinatário" },
             "complexType": {
-              "sequence": {
-                "choice": {
-                  "element": [
-                    {
-                      "name": "CNPJ",
-                      "type": "TCnpj",
-                      "annotation": { "label": "CNPJ" }
-                    },
-                    {
-                      "name": "CPF",
-                      "type": "TCpf",
-                      "annotation": { "label": "CPF" }
-                    },
-                    {
-                      "name": "idEstrangeiro",
-                      "annotation": {
-                        "label": "Identificador do destinatário (estrangeiro)"
-                      },
-                      "simpleType": {
-                        "restriction": {
-                          "base": "string",
-                          "pattern": "([!-ÿ]{0}|[!-ÿ]{5,20})?"
-                        }
-                      }
-                    }
-                  ]
+              "choice": {
+                "annotation": {
+                  "label": "Tipo de destinatário"
                 },
                 "element": [
                   {
-                    "name": "xNome",
-                    "minOccurs": "0",
-                    "annotation": {
-                      "label": "Razão Social ou nome do destinatário"
-                    },
-                    "simpleType": {
-                      "restriction": {
-                        "base": "TString",
-                        "maxLength": "60",
-                        "minLength": "2"
+                    "name": "",
+                    "annotation": { "label": "Pessoa jurídica" },
+                    "complexType": {
+                      "sequence": {
+                        "element": [
+                          {
+                            "name": "CNPJ",
+                            "type": "TCnpj",
+                            "annotation": { "label": "CNPJ" }
+                          },
+                          {
+                            "name": "xNome",
+                            "minOccurs": "0",
+                            "annotation": {
+                              "label": "Razão Social ou nome do destinatário"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "maxLength": "60",
+                                "minLength": "2"
+                              }
+                            }
+                          },
+                          {
+                            "name": "enderDest",
+                            "type": "TEnderEmi", 
+                            "minOccurs": "0",
+                            "annotation": { "label": "Endereço" }
+                          },
+                          {
+                            "annotation": {
+                              "label": "Indicador da IE do destinatário"
+                            },
+                            "complexType": {
+                              "choice": {
+                                "element": [
+                                  {
+                                    "annotation": {
+                                      "label": "Contribuinte ICMS"
+                                    },
+                                    "complexType": {
+                                      "sequence": {
+                                        "element": [
+                                          {
+                                            "name": "indIEDest",
+                                            "annotation": {
+                                              "label": "Indicador da IE do destinatário:"
+                                            },
+                                            "simpleType": {
+                                              "restriction": {
+                                                "base": "string",
+                                                "enumeration": "1"
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "name": "IE",
+                                            "type": "TIeDestNaoIsento",
+                                            "annotation": {
+                                              "label": "Inscrição Estadual"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "name": "",
+                                    "annotation": {
+                                      "label": "Contribuinte isento de inscrição"
+                                    },
+                                    "complexType": {
+                                      "sequence": {
+                                        "element": [
+                                          {
+                                            "name": "indIEDest",
+                                            "annotation": {
+                                              "label": "Indicador da IE do destinatário"
+                                            },
+                                            "simpleType": {
+                                              "restriction": {
+                                                "base": "string",
+                                                "enumeration": "2"
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "name": "",
+                                    "annotation": {
+                                      "label": "Não Contribuinte"
+                                    },
+                                    "complexType": {
+                                      "sequence": {
+                                        "element": [
+                                          {
+                                            "name": "indIEDest",
+                                            "annotation": {
+                                              "label": "Indicador da IE do destinatário"
+                                            },
+                                            "simpleType": {
+                                              "restriction": {
+                                                "base": "string",
+                                                "enumeration": "9"
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "name": "ISUF",
+                            "minOccurs": "0",
+                            "annotation": {
+                              "label": "Inscrição na SUFRAMA"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "pattern": "[0-9]{8,9}"
+                              }
+                            }
+                          },
+                          {
+                            "name": "IM",
+                            "minOccurs": "0",
+                            "annotation": {
+                              "label": "Inscrição Municipal do tomador do serviço"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "minLength": "1",
+                                "maxLength": "15"
+                              }
+                            }
+                          },
+                          {
+                            "name": "email",
+                            "minOccurs": "0",
+                            "annotation": {
+                              "label": "E-mail do destinatário"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "minLength": "1",
+                                "maxLength": "60"
+                              }
+                            }
+                          }        
+                        ]
                       }
                     }
                   },
                   {
-                    "name": "enderDest",
-                    "type": "TEndereco",
-                    "minOccurs": "0",
-                    "annotation": { "label": "Dados do endereço" }
-                  },
-                  {
-                    "name": "indIEDest",
-                    "annotation": {
-                      "label": "Indicador da IE do destinatário:\n1 – Contribuinte ICMSpagamento à vista;\n2 – Contribuinte isento de inscrição;\n9 – Não Contribuinte"
-                    },
-                    "simpleType": {
-                      "restriction": {
-                        "base": "string",
-                        "enumeration": ["1", "2", "9"]
+                    "name": "",
+                    "annotation": { "label": "Pessoa física - brasileiro" },
+                    "complexType": {
+                      "sequence": {
+                        "element": [
+                          {
+                            "name": "CPF",
+                            "type": "TCpf",
+                            "annotation": { "label": "CPF" }
+                          },
+                          {
+                            "name": "xNome",
+                            "minOccurs": "0",
+                            "annotation": {
+                              "label": "Nome do destinatário"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "maxLength": "60",
+                                "minLength": "2"
+                              }
+                            }
+                          },
+                          {
+                            "name": "enderDest",
+                            "type": "TEnderEmi", 
+                            "minOccurs": "0",
+                            "annotation": { "label": "Endereço" }
+                          },
+                          {
+                            "name": "indIEDest",
+                            "annotation": {
+                              "label": "Indicador da IE do destinatário"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "enumeration": "9"
+                              }
+                            }
+                          },
+                          {
+                            "name": "email",
+                            "minOccurs": "0",
+                            "annotation": {
+                              "label": "E-mail do destinatário"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "minLength": "1",
+                                "maxLength": "60"
+                              }
+                            }
+                          }        
+                        ]
                       }
                     }
                   },
                   {
-                    "name": "IE",
-                    "type": "TIeDestNaoIsento",
-                    "minOccurs": "0",
-                    "annotation": {
-                      "label": "Inscrição Estadual (obrigatório nas operações com contribuintes do ICMS)"
-                    }
-                  },
-                  {
-                    "name": "ISUF",
-                    "minOccurs": "0",
-                    "annotation": {
-                      "label": "Inscrição na SUFRAMA (Obrigatório nas operações com as áreas com benefícios de incentivos fiscais sob controle da SUFRAMA) PL_005d - 11/08/09 - alterado para aceitar 8 ou 9 dígitos"
-                    },
-                    "simpleType": {
-                      "restriction": {
-                        "base": "string",
-                        "pattern": "[0-9]{8,9}"
-                      }
-                    }
-                  },
-                  {
-                    "name": "IM",
-                    "minOccurs": "0",
-                    "annotation": {
-                      "label": "Inscrição Municipal do tomador do serviço"
-                    },
-                    "simpleType": {
-                      "restriction": {
-                        "base": "TString",
-                        "minLength": "1",
-                        "maxLength": "15"
-                      }
-                    }
-                  },
-                  {
-                    "name": "email",
-                    "minOccurs": "0",
-                    "annotation": {
-                      "label": "Informar o e-mail do destinatário. O campo pode ser utilizado para informar o e-mail\nde recepção da NF-e indicada pelo destinatário"
-                    },
-                    "simpleType": {
-                      "restriction": {
-                        "base": "TString",
-                        "minLength": "1",
-                        "maxLength": "60"
+                    "name": "",
+                    "annotation": { "label": "Pessoa física - estrangeiro" },
+                    "complexType": {
+                      "sequence": {
+                        "element": [
+                          {
+                            "name": "idEstrangeiro",
+                            "annotation": {
+                              "label": "Identificação do destinatário"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "pattern": "([!-ÿ]{0}|[!-ÿ]{5,20})?"
+                              }
+                            }
+                          },
+                          {
+                            "name": "xNome",
+                            "minOccurs": "0",
+                            "annotation": {
+                              "label": "Nome do destinatário"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "maxLength": "60",
+                                "minLength": "2"
+                              }
+                            }
+                          },
+                          {
+                            "name": "enderDest",
+                            "type": "TEnderecoEstrangeiro", 
+                            "minOccurs": "0",
+                            "annotation": { "label": "Endereço" }
+                          },
+                          {
+                            "name": "indIEDest",
+                            "annotation": {
+                              "label": "Indicador da IE do destinatário"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "enumeration": "9"
+                              }
+                            }
+                          },
+                          {
+                            "name": "email",
+                            "minOccurs": "0",
+                            "annotation": {
+                              "label": "E-mail do destinatário"
+                            },
+                            "simpleType": {
+                              "restriction": {
+                                "base": "string",
+                                "minLength": "1",
+                                "maxLength": "60"
+                              }
+                            }
+                          }        
+                        ]
                       }
                     }
                   }
@@ -753,7 +943,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "maxLength": "60",
                                 "minLength": "1"
                               }
@@ -778,7 +968,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "maxLength": "120",
                                 "minLength": "1"
                               }
@@ -850,7 +1040,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "maxLength": "6",
                                 "minLength": "1"
                               }
@@ -896,7 +1086,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "maxLength": "6",
                                 "minLength": "1"
                               }
@@ -977,7 +1167,7 @@
                                     },
                                     "simpleType": {
                                       "restriction": {
-                                        "base": "TString",
+                                        "base": "string",
                                         "minLength": "1",
                                         "maxLength": "12"
                                       }
@@ -997,7 +1187,7 @@
                                     },
                                     "simpleType": {
                                       "restriction": {
-                                        "base": "TString",
+                                        "base": "string",
                                         "minLength": "1",
                                         "maxLength": "60"
                                       }
@@ -1085,7 +1275,7 @@
                                     },
                                     "simpleType": {
                                       "restriction": {
-                                        "base": "TString",
+                                        "base": "string",
                                         "minLength": "1",
                                         "maxLength": "60"
                                       }
@@ -1131,7 +1321,7 @@
                                             },
                                             "simpleType": {
                                               "restriction": {
-                                                "base": "TString",
+                                                "base": "string",
                                                 "minLength": "1",
                                                 "maxLength": "60"
                                               }
@@ -1240,7 +1430,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "15"
                               }
@@ -1404,7 +1594,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "4"
                                         }
@@ -1417,7 +1607,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "40"
                                         }
@@ -1430,7 +1620,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "4"
                                         }
@@ -1443,7 +1633,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "4"
                                         }
@@ -1456,7 +1646,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "9"
                                         }
@@ -1469,7 +1659,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "9"
                                         }
@@ -1482,7 +1672,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "9"
                                         }
@@ -1495,7 +1685,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "2"
                                         }
@@ -1508,7 +1698,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "21"
                                         }
@@ -1521,7 +1711,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "9"
                                         }
@@ -1534,7 +1724,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "4"
                                         }
@@ -1571,7 +1761,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "length": "1"
                                         }
                                       }
@@ -1607,7 +1797,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "length": "1",
                                           "enumeration": ["R", "N"]
                                         }
@@ -1703,7 +1893,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "pattern": "[0-9]{13}|ISENTO"
                                         }
                                       }
@@ -1716,7 +1906,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "255"
                                         }
@@ -1759,7 +1949,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "15"
                                         }
@@ -1772,7 +1962,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "15"
                                         }
@@ -1785,7 +1975,7 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "TString",
+                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "256"
                                         }
@@ -5227,7 +5417,7 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "minLength": "1",
                         "maxLength": "500"
                       }
@@ -5650,7 +5840,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "maxLength": "60",
                                 "minLength": "2"
                               }
@@ -5672,7 +5862,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "60"
                               }
@@ -5686,7 +5876,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "maxLength": "60",
                                 "minLength": "1"
                               }
@@ -5791,7 +5981,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "60"
                               }
@@ -5805,7 +5995,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "60"
                               }
@@ -5819,7 +6009,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "60"
                               }
@@ -5854,7 +6044,7 @@
                                   },
                                   "simpleType": {
                                     "restriction": {
-                                      "base": "TString",
+                                      "base": "string",
                                       "minLength": "1",
                                       "maxLength": "60"
                                     }
@@ -5898,7 +6088,7 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "TString",
+                          "base": "string",
                           "minLength": "1",
                           "maxLength": "20"
                         }
@@ -5912,7 +6102,7 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "TString",
+                          "base": "string",
                           "minLength": "1",
                           "maxLength": "20"
                         }
@@ -5945,7 +6135,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "60"
                               }
@@ -5997,7 +6187,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "maxLength": "60",
                                 "minLength": "1"
                               }
@@ -6094,7 +6284,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "minLength": "2",
                                 "maxLength": "60"
                               }
@@ -6186,7 +6376,7 @@
                                     },
                                     "simpleType": {
                                       "restriction": {
-                                        "base": "TString",
+                                        "base": "string",
                                         "minLength": "1",
                                         "maxLength": "20"
                                       }
@@ -6233,7 +6423,7 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "minLength": "2",
                         "maxLength": "60"
                       }
@@ -6258,7 +6448,7 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "maxLength": "2000",
                         "minLength": "1"
                       }
@@ -6272,7 +6462,7 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "maxLength": "5000",
                         "minLength": "1"
                       }
@@ -6291,7 +6481,7 @@
                           "name": "xTexto",
                           "simpleType": {
                             "restriction": {
-                              "base": "TString",
+                              "base": "string",
                               "minLength": "1",
                               "maxLength": "60"
                             }
@@ -6303,7 +6493,7 @@
                         "use": "required",
                         "simpleType": {
                           "restriction": {
-                            "base": "TString",
+                            "base": "string",
                             "minLength": "1",
                             "maxLength": "20"
                           }
@@ -6324,7 +6514,7 @@
                           "name": "xTexto",
                           "simpleType": {
                             "restriction": {
-                              "base": "TString",
+                              "base": "string",
                               "minLength": "1",
                               "maxLength": "60"
                             }
@@ -6336,7 +6526,7 @@
                         "use": "required",
                         "simpleType": {
                           "restriction": {
-                            "base": "TString",
+                            "base": "string",
                             "minLength": "1",
                             "maxLength": "20"
                           }
@@ -6361,7 +6551,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "60"
                               }
@@ -6408,7 +6598,7 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "minLength": "1",
                         "maxLength": "60"
                       }
@@ -6422,7 +6612,7 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "minLength": "1",
                         "maxLength": "60"
                       }
@@ -6449,7 +6639,7 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "minLength": "1",
                         "maxLength": "22"
                       }
@@ -6461,7 +6651,7 @@
                     "annotation": { "label": "Informação do pedido" },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "minLength": "1",
                         "maxLength": "60"
                       }
@@ -6473,7 +6663,7 @@
                     "annotation": { "label": "Informação do contrato" },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "minLength": "1",
                         "maxLength": "60"
                       }
@@ -6497,7 +6687,7 @@
                     "annotation": { "label": "Identificação da safra" },
                     "simpleType": {
                       "restriction": {
-                        "base": "TString",
+                        "base": "string",
                         "minLength": "4",
                         "maxLength": "9"
                       }
@@ -6580,7 +6770,7 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "TString",
+                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "60"
                               }
@@ -6634,9 +6824,9 @@
       }
     },
     {
-      "name": "TEndereco",
+      "name": "TEnderecoEstrangeiro",
       "annotation": {
-        "label": "Tipo Dados do Endereço  // 24/10/08 - tamanho mínimo"
+        "label": "Tipo Dados do Endereço"
       },
       "sequence": {
         "element": [
@@ -6645,7 +6835,7 @@
             "annotation": { "label": "Logradouro" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -6656,7 +6846,7 @@
             "annotation": { "label": "Número" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "1"
               }
@@ -6668,7 +6858,7 @@
             "annotation": { "label": "Complemento" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "1"
               }
@@ -6679,7 +6869,7 @@
             "annotation": { "label": "Bairro" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -6687,29 +6877,25 @@
           },
           {
             "name": "cMun",
-            "type": "TCodMunIBGE",
-            "annotation": {
-              "label": "Código do município (utilizar a tabela do IBGE), informar 9999999 para operações com o exterior."
+            "annotation": { "label": "Código do município" },
+            "simpleType": {
+              "restriction": { "base": "string", "enumeration": "9999999" }
             }
           },
           {
             "name": "xMun",
-            "annotation": {
-              "label": "Nome do município, informar EXTERIOR para operações com o exterior."
-            },
+            "annotation": { "label": "Nome do município" },
             "simpleType": {
-              "restriction": {
-                "base": "TString",
-                "maxLength": "60",
-                "minLength": "2"
-              }
+              "restriction": { "base": "string", "enumeration": "EXTERIOR" }
             }
           },
           {
             "name": "UF",
-            "type": "TUf",
             "annotation": {
-              "label": "Sigla da UF, informar EX para operações com o exterior."
+              "label": "Sigla da UF"
+            },
+            "simpleType": {
+              "restriction": { "base": "string", "enumeration": "EX" }
             }
           },
           {
@@ -6734,7 +6920,7 @@
             "annotation": { "label": "Nome do país" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -6744,7 +6930,7 @@
             "name": "fone",
             "minOccurs": "0",
             "annotation": {
-              "label": "Telefone, preencher com Código DDD + número do telefone , nas operações com exterior é permtido informar o código do país + código da localidade + número do telefone"
+              "label": "Telefone (código do país + código da localidade + número)"
             },
             "simpleType": {
               "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
@@ -6756,7 +6942,7 @@
     {
       "name": "TEnderEmi",
       "annotation": {
-        "label": "Tipo Dados do Endereço do Emitente  // 24/10/08 - desmembrado / tamanho mínimo"
+        "label": "Tipo Dados do Endereço do Emitente"
       },
       "sequence": {
         "element": [
@@ -6765,7 +6951,7 @@
             "annotation": { "label": "Logradouro" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -6776,7 +6962,7 @@
             "annotation": { "label": "Número" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "1"
               }
@@ -6788,7 +6974,7 @@
             "annotation": { "label": "Complemento" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "1"
               }
@@ -6799,7 +6985,7 @@
             "annotation": { "label": "Bairro" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -6815,7 +7001,7 @@
             "annotation": { "label": "Nome do município" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -6838,7 +7024,7 @@
             "minOccurs": "0",
             "annotation": { "label": "Código do país" },
             "simpleType": {
-              "restriction": { "base": "TString", "enumeration": "1058" }
+              "restriction": { "base": "string", "enumeration": "1058" }
             }
           },
           {
@@ -6846,7 +7032,7 @@
             "minOccurs": "0",
             "annotation": { "label": "Nome do país" },
             "simpleType": {
-              "restriction": { "base": "TString", "enumeration": "BRASIL" }
+              "restriction": { "base": "string", "enumeration": "BRASIL" }
             }
           },
           {
@@ -6891,7 +7077,7 @@
             },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -6902,7 +7088,7 @@
             "annotation": { "label": "Logradouro" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -6913,7 +7099,7 @@
             "annotation": { "label": "Número" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "1"
               }
@@ -6925,7 +7111,7 @@
             "annotation": { "label": "Complemento" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "1"
               }
@@ -6936,7 +7122,7 @@
             "annotation": { "label": "Bairro" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -6954,7 +7140,7 @@
             "annotation": { "label": "Nome do município" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -6987,7 +7173,7 @@
             "annotation": { "label": "Nome do país" },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -7011,7 +7197,7 @@
             },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "minLength": "1",
                 "maxLength": "60"
               }
@@ -7045,7 +7231,7 @@
             },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "maxLength": "60",
                 "minLength": "2"
               }
@@ -7058,7 +7244,7 @@
             },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "minLength": "6",
                 "maxLength": "60"
               }
@@ -7127,7 +7313,7 @@
             },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "minLength": "1",
                 "maxLength": "20"
               }
@@ -7157,7 +7343,7 @@
             },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "minLength": "1",
                 "maxLength": "60"
               }
@@ -7180,7 +7366,7 @@
             },
             "simpleType": {
               "restriction": {
-                "base": "TString",
+                "base": "string",
                 "minLength": "1",
                 "maxLength": "3"
               }
@@ -7998,7 +8184,7 @@
       "name": "TVerAplic",
       "annotation": { "label": "Tipo Versão do Aplicativo" },
       "restriction": {
-        "base": "nfe:TString",
+        "base": "nfe:string",
         "minLength": "1",
         "maxLength": "20"
       }
@@ -8007,7 +8193,7 @@
       "name": "TMotivo",
       "annotation": { "label": "Tipo Motivo" },
       "restriction": {
-        "base": "nfe:TString",
+        "base": "nfe:string",
         "maxLength": "255",
         "minLength": "1"
       }
@@ -8016,7 +8202,7 @@
       "name": "TJust",
       "annotation": { "label": "Tipo Justificativa" },
       "restriction": {
-        "base": "nfe:TString",
+        "base": "nfe:string",
         "minLength": "15",
         "maxLength": "255"
       }
@@ -8024,7 +8210,7 @@
     {
       "name": "TServ",
       "annotation": { "label": "Tipo Serviço solicitado" },
-      "restriction": { "base": "nfe:TString" }
+      "restriction": { "base": "nfe:string" }
     },
     {
       "name": "Tano",
@@ -8035,14 +8221,6 @@
       "name": "TMed",
       "annotation": { "label": "Tipo temp médio em segundos" },
       "restriction": { "base": "string", "pattern": "[0-9]{1,4}" }
-    },
-    {
-      "name": "TString",
-      "annotation": { "label": "Tipo string genérico" },
-      "restriction": {
-        "base": "string",
-        "pattern": "[!-ÿ]{1}[ -ÿ]{0,}[!-ÿ]{1}|[!-ÿ]{1}"
-      }
     },
     {
       "name": "TData",
