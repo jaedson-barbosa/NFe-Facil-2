@@ -673,7 +673,7 @@ function analyseTag(
     default:
       if (!tag || tag == 'sequence')
         return [createFieldset(field, parentTags, creationOptions)]
-      console.trace('Invalid tag', tag, field)
+      console.log('Invalid tag', tag, field)
       return []
   }
 }

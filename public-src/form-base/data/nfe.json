@@ -3181,37 +3181,39 @@
                                                 },
                                                 {
                                                   "complexType": {
-                                                    "sequence": [
-                                                      {
-                                                        "annotation": {
-                                                          "label": "Informações relativas ao FCP"
-                                                        },
-                                                        "minOccurs": "0",
-                                                        "element": [
-                                                          {
-                                                            "name": "vBCFCP",
-                                                            "type": "TDec_1302",
-                                                            "annotation": {
-                                                              "label": "Valor da Base de cálculo do FCP."
-                                                            }
+                                                    "sequence": {
+                                                      "element":[
+                                                        {
+                                                          "annotation": {
+                                                            "label": "Informações relativas ao FCP"
                                                           },
-                                                          {
-                                                            "name": "pFCP",
-                                                            "type": "TDec_0302a04Opc",
-                                                            "annotation": {
-                                                              "label": "Percentual de ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
+                                                          "minOccurs": "0",
+                                                          "element": [
+                                                            {
+                                                              "name": "vBCFCP",
+                                                              "type": "TDec_1302",
+                                                              "annotation": {
+                                                                "label": "Valor da Base de cálculo do FCP."
+                                                              }
+                                                            },
+                                                            {
+                                                              "name": "pFCP",
+                                                              "type": "TDec_0302a04Opc",
+                                                              "annotation": {
+                                                                "label": "Percentual de ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
+                                                              }
+                                                            },
+                                                            {
+                                                              "name": "vFCP",
+                                                              "type": "TDec_1302",
+                                                              "annotation": {
+                                                                "label": "Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
+                                                              }
                                                             }
-                                                          },
-                                                          {
-                                                            "name": "vFCP",
-                                                            "type": "TDec_1302",
-                                                            "annotation": {
-                                                              "label": "Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
-                                                            }
-                                                          }
-                                                        ]
-                                                      }
-                                                    ]      
+                                                          ]
+                                                        }
+                                                      ]
+                                                    }      
                                                   }
                                                 },
                                                 {
@@ -3273,38 +3275,36 @@
                                                   }
                                                 },
                                                 {
+                                                  "annotation": {
+                                                    "label": "Informações relativas ao FCP ST"
+                                                  },
+                                                  "minOccurs": "0",
                                                   "complexType": {
-                                                    "sequence": [
-                                                      {
-                                                        "annotation": {
-                                                          "label": "Informações relativas ao FCP ST"
-                                                        },
-                                                        "minOccurs": "0",
-                                                        "element": [
-                                                          {
-                                                            "name": "vBCFCPST",
-                                                            "type": "TDec_1302",
-                                                            "annotation": {
-                                                              "label": "Valor da Base de cálculo do FCP retido por substituicao tributaria."
-                                                            }
-                                                          },
-                                                          {
-                                                            "name": "pFCPST",
-                                                            "type": "TDec_0302a04Opc",
-                                                            "annotation": {
-                                                              "label": "Percentual de FCP retido por substituição tributária."
-                                                            }
-                                                          },
-                                                          {
-                                                            "name": "vFCPST",
-                                                            "type": "TDec_1302",
-                                                            "annotation": {
-                                                              "label": "Valor do FCP retido por substituição tributária."
-                                                            }
+                                                    "sequence": {
+                                                      "element": [
+                                                        {
+                                                          "name": "vBCFCPST",
+                                                          "type": "TDec_1302",
+                                                          "annotation": {
+                                                            "label": "Valor da Base de cálculo do FCP retido por substituicao tributaria."
                                                           }
-                                                        ]
-                                                      }
-                                                    ]      
+                                                        },
+                                                        {
+                                                          "name": "pFCPST",
+                                                          "type": "TDec_0302a04Opc",
+                                                          "annotation": {
+                                                            "label": "Percentual de FCP retido por substituição tributária."
+                                                          }
+                                                        },
+                                                        {
+                                                          "name": "vFCPST",
+                                                          "type": "TDec_1302",
+                                                          "annotation": {
+                                                            "label": "Valor do FCP retido por substituição tributária."
+                                                          }
+                                                        }
+                                                      ]
+                                                    }   
                                                   }
                                                 }
                                               ]
@@ -4048,10 +4048,10 @@
                                                   }
                                                 },
                                                 {
+                                                  "minOccurs": "0",
                                                   "complexType": {
-                                                    "sequence": [
+                                                    "sequence":
                                                       {
-                                                        "minOccurs": "0",
                                                         "element": [
                                                           {
                                                             "name": "vBCFCP",
@@ -4076,7 +4076,7 @@
                                                           }
                                                         ]
                                                       }
-                                                    ]      
+                                                         
                                                   }
                                                 },
                                                 {
@@ -4667,10 +4667,10 @@
                                                   }
                                                 },
                                                 {
+                                                  "minOccurs": "0",
                                                   "complexType": {
-                                                    "sequence": [
+                                                    "sequence": 
                                                       {
-                                                        "minOccurs": "0",
                                                         "element": [
                                                           {
                                                             "name": "vBCFCPSTRet",
@@ -4695,7 +4695,7 @@
                                                           }
                                                         ]
                                                       }      
-                                                    ]
+                                                    
                                                   }
                                                 },
                                                 {
@@ -4937,9 +4937,9 @@
                                                   }
                                                 },
                                                 {
+                                                  "minOccurs": "0",
                                                   "complexType": {
                                                     "sequence": {
-                                                      "minOccurs": "0",
                                                       "element": [
                                                         {
                                                           "name": "vBCFCPST",

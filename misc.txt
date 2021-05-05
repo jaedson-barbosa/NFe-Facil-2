@@ -72,7 +72,8 @@ OK  Fragmentar form-base.ts em varios arquivos em uma pasta
 OK  Limpar pasta PL_009
 OK  Limpar pasta base-data
 OK  Remover pasta VM
-    Corrigir documentações no schema json e unir os 2 num único
+OK  Corrigir documentações no schema json e unir os 2 num único
+    Aplicar novidades do nfe.json ao form-base
     Atualizar entradas para que tenham o tipo correto
     Proibir o uso de emitente com CPF
       Via cadastro
@@ -100,6 +101,7 @@ OK  Corrigir erro em Grupo de informações de interesse da Prefeitura (ordem, p
       Importação
       Cadastro
       Exibição
+    Otimizar nfe.json
     Interfaces para banco de dados
       Firestore
       IntexedDB
