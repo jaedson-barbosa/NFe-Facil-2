@@ -8,6 +8,6 @@ export function renderizarMotorista(data: { transporta: any }): string {
 
 export function gerarViewMotorista() {
   return generateView(
-    elementosNFe[8]['sequence']['element'][1].sequence
+    elementosNFe[8]['element'][1].element
   )
 }

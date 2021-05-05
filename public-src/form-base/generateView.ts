@@ -76,6 +76,10 @@ function createInput(
   parentTags: string[],
   creationOptions: IElementCreationOptions
 ): IBaseFormElement {
+  const create = (result: any) => createFieldset(result, parentTags, creationOptions)
+  if (field.element) {
+    return create(field)
+  }
   const fieldRestriction = field['simpleType']?.['restriction']
   const baseType = field.type ?? fieldRestriction?.base
   const findType = (v: any) => getName(v) == baseType
@@ -83,9 +87,8 @@ function createInput(
     baseType != 'string' && baseType != 'base64Binary'
   const otherRestrictions: any = (simpleTypes.find(findType) as any)?.restriction
   if (hasOtherRestrictions && !otherRestrictions) {
-    const create = (result: any) => createFieldset(result, parentTags, creationOptions)
-    if (field.sequence || field.choice || field.element) {
-      return create({...field})
+    if (field.choice || field.element) {
+      return create(field)
     }
     const complexType = complexTypes.find(findType)
     if (complexType) {
@@ -179,8 +182,7 @@ function createChoice(
   creationOptions: IElementCreationOptions
 ): IBaseFormElement {
   const elements = field['element'] as any[]
-  const sequence = field['sequence']
-  if (!elements && !sequence) {
+  if (!elements) {
     throw new Error('Choice invalido')
   }
   let options: IChoiceOption[] = []
@@ -194,28 +196,6 @@ function createChoice(
         }
       })
     )
-  }
-  if (sequence) {
-    if (options.length > 0) {
-      options.push({
-        text: getDocumentation(sequence),
-        view: createFieldset(sequence, parentTags, creationOptions),
-        name: [...parentTags, getName(sequence)],
-      })
-    } else {
-      const array = Array.isArray(sequence)
-        ? sequence
-        : (sequence['element'] as any[])
-      options.push(
-        ...array.map((v) => {
-          return {
-            text: getDocumentation(v),
-            view: createInput(v, parentTags, creationOptions),
-            name: [...parentTags, getName(v)],
-          }
-        })
-      )
-    }
   }
   const doc = getDocumentation(field)
   const req = isRequired(field)
@@ -244,19 +224,6 @@ function createFieldset(
   if (isRootList || field['element']) {
     const elements = (isRootList ? field : field['element']) as any[]
     fields.push(...elements.map((v) => createInput(v, tags, creationOptions)))
-  }
-  if (field['sequence']) {
-    const sequence = field['sequence']
-    if (sequence) {
-      if (fields.length == 0) {
-        const pureFields = Object.entries(sequence)
-        fields.push(
-          ...pureFields.flatMap((v) =>
-            analyseTag(v[0], v[1], tags, creationOptions)
-          )
-        )
-      } else fields.push(createFieldset(sequence, tags, creationOptions))
-    }
   }
   else if (field.choice) {
     fields.push(createChoice(field.choice, tags, creationOptions))
@@ -489,7 +456,7 @@ function analyseTag(
     case 'element':
       return createElements(field, parentTags, creationOptions)
     default:
-      if (!tag || tag == 'sequence')
+      if (!tag || tag == 'element')
         return [createFieldset(field, parentTags, creationOptions)]
       console.log('Invalid tag', tag, field)
       return []
