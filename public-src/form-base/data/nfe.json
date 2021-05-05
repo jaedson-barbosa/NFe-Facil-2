@@ -2,9 +2,7 @@
   "complexType": [
     {
       "name": "infNFe",
-      "annotation": {
-        "label": "Informações da Nota Fiscal eletrônica"
-      },
+      "annotation": { "label": "Informações da Nota Fiscal eletrônica" },
       "sequence": {
         "element": [
           {
@@ -31,9 +29,7 @@
                   },
                   {
                     "name": "natOp",
-                    "annotation": {
-                      "label": "Natureza da Operação"
-                    },
+                    "annotation": { "label": "Natureza da Operação" },
                     "simpleType": {
                       "restriction": {
                         "base": "string",
@@ -49,22 +45,21 @@
                       "itens": ["NF-e", "NFC-e."]
                     },
                     "simpleType": {
-                      "restriction": { "base": "string", "enumeration": ["55", "65"] }
+                      "restriction": {
+                        "base": "string",
+                        "enumeration": ["55", "65"]
+                      }
                     }
                   },
                   {
                     "name": "serie",
                     "type": "TSerie",
-                    "annotation": {
-                      "label": "Série do Documento Fiscal"
-                    }
+                    "annotation": { "label": "Série do Documento Fiscal" }
                   },
                   {
                     "name": "nNF",
                     "type": "TNF",
-                    "annotation": {
-                      "label": "Número do Documento Fiscal"
-                    }
+                    "annotation": { "label": "Número do Documento Fiscal" }
                   },
                   {
                     "name": "dhEmi",
@@ -85,7 +80,7 @@
                     "name": "tpNF",
                     "annotation": {
                       "label": "Tipo do Documento Fiscal",
-                      "itens":["Entrada","Saída"]
+                      "itens": ["Entrada", "Saída"]
                     },
                     "simpleType": {
                       "restriction": {
@@ -98,7 +93,7 @@
                     "name": "idDest",
                     "annotation": {
                       "label": "Identificador de Local de destino da operação",
-                      "itens":["Interna","Interestadual","Exterior"]
+                      "itens": ["Interna", "Interestadual", "Exterior"]
                     },
                     "simpleType": {
                       "restriction": {
@@ -118,7 +113,14 @@
                     "name": "tpImp",
                     "annotation": {
                       "label": "Formato de impressão do DANFE",
-                      "itens":["Sem DANFE","DANFe Retrato","DANFe Paisagem","DANFe Simplificado","DANFe NFC-e","DANFe NFC-e em mensagem eletrônica"]
+                      "itens": [
+                        "Sem DANFE",
+                        "DANFe Retrato",
+                        "DANFe Paisagem",
+                        "DANFe Simplificado",
+                        "DANFe NFC-e",
+                        "DANFe NFC-e em mensagem eletrônica"
+                      ]
                     },
                     "simpleType": {
                       "restriction": {
@@ -131,7 +133,16 @@
                     "name": "tpEmis",
                     "annotation": {
                       "label": "Forma de emissão da NF-e",
-                      "itens":["Normal","Contingência FS","Contingência SCAN","Contingência DPEC","Contingência FSDA","Contingência SVC - AN","Contingência SVC - RS","Contingência off-line NFC-e"]
+                      "itens": [
+                        "Normal",
+                        "Contingência FS",
+                        "Contingência SCAN",
+                        "Contingência DPEC",
+                        "Contingência FSDA",
+                        "Contingência SVC - AN",
+                        "Contingência SVC - RS",
+                        "Contingência off-line NFC-e"
+                      ]
                     },
                     "simpleType": {
                       "restriction": {
@@ -153,27 +164,38 @@
                     "name": "tpAmb",
                     "annotation": {
                       "label": "Identificação do Ambiente",
-                      "itens":["Produção","Homologação"]
+                      "itens": ["Produção", "Homologação"]
                     },
                     "simpleType": {
-                      "restriction": { "base": "string", "enumeration": ["1", "2"] }
+                      "restriction": {
+                        "base": "string",
+                        "enumeration": ["1", "2"]
+                      }
                     }
                   },
                   {
                     "name": "finNFe",
                     "annotation": {
                       "label": "Finalidade da emissão",
-                      "itens":["Normal","Complementar","Ajuste","Devolução/Retorno"]
+                      "itens": [
+                        "Normal",
+                        "Complementar",
+                        "Ajuste",
+                        "Devolução/Retorno"
+                      ]
                     },
                     "simpleType": {
-                      "restriction": { "base": "string", "enumeration": ["1", "2", "3", "4"] }
+                      "restriction": {
+                        "base": "string",
+                        "enumeration": ["1", "2", "3", "4"]
+                      }
                     }
                   },
                   {
                     "name": "indFinal",
                     "annotation": {
                       "label": "Operação com consumidor final",
-                      "itens":["Não","Sim"]
+                      "itens": ["Não", "Sim"]
                     },
                     "simpleType": {
                       "restriction": {
@@ -186,7 +208,15 @@
                     "name": "indPres",
                     "annotation": {
                       "label": "Presença do comprador",
-                      "itens": ["Não se aplica (complementar ou ajuste)","Operação presencial","Não presencial, internet","Não presencial, teleatendimento","NFC-e entrega em domicílio","Operação presencial, fora do estabelecimento","Não presencial, outros"]
+                      "itens": [
+                        "Não se aplica (complementar ou ajuste)",
+                        "Operação presencial",
+                        "Não presencial, internet",
+                        "Não presencial, teleatendimento",
+                        "NFC-e entrega em domicílio",
+                        "Operação presencial, fora do estabelecimento",
+                        "Não presencial, outros"
+                      ]
                     },
                     "simpleType": {
                       "restriction": {
@@ -200,7 +230,10 @@
                     "minOccurs": "0",
                     "annotation": {
                       "label": "Indicador de intermediador/marketplace",
-                      "itens":["Operação em site ou plataforma própria","Operação em site ou plataforma de terceiros"]
+                      "itens": [
+                        "Operação em site ou plataforma própria",
+                        "Operação em site ou plataforma de terceiros"
+                      ]
                     },
                     "simpleType": {
                       "restriction": {
@@ -213,10 +246,18 @@
                     "name": "procEmi",
                     "annotation": {
                       "label": "Processo de emissão",
-                      "itens":["Com aplicativo do contribuinte","Avulsa pelo Fisco","Avulsa através do site do Fisco","Com aplicativo fornecido pelo Fisco"]
+                      "itens": [
+                        "Com aplicativo do contribuinte",
+                        "Avulsa pelo Fisco",
+                        "Avulsa através do site do Fisco",
+                        "Com aplicativo fornecido pelo Fisco"
+                      ]
                     },
                     "simpleType": {
-                      "restriction": { "base": "string", "enumeration": ["0", "1", "2", "3"] }
+                      "restriction": {
+                        "base": "string",
+                        "enumeration": ["0", "1", "2", "3"]
+                      }
                     }
                   },
                   {
@@ -245,9 +286,7 @@
                           {
                             "name": "refNFe",
                             "type": "TChNFe",
-                            "annotation": {
-                              "label": "Chave de acesso da NF-e"
-                            }
+                            "annotation": { "label": "Chave de acesso da NF-e" }
                           },
                           {
                             "name": "refNF",
@@ -287,7 +326,10 @@
                                     "name": "mod",
                                     "annotation": {
                                       "label": "Código do modelo do Documento Fiscal",
-                                      "itens": ["NF modelo 1/1A","NF modelo 02"]
+                                      "itens": [
+                                        "NF modelo 1/1A",
+                                        "NF modelo 02"
+                                      ]
                                     },
                                     "simpleType": {
                                       "restriction": {
@@ -316,9 +358,7 @@
                           },
                           {
                             "name": "refNFP",
-                            "annotation": {
-                              "label": "NF de produtor rural"
-                            },
+                            "annotation": { "label": "NF de produtor rural" },
                             "complexType": {
                               "sequence": {
                                 "element": [
@@ -400,15 +440,11 @@
                           {
                             "name": "refCTe",
                             "type": "TChNFe",
-                            "annotation": {
-                              "label": "Chave de acesso do CT-e"
-                            }
+                            "annotation": { "label": "Chave de acesso do CT-e" }
                           },
                           {
                             "name": "refECF",
-                            "annotation": {
-                              "label": "Cupom Fiscal"
-                            },
+                            "annotation": { "label": "Cupom Fiscal" },
                             "complexType": {
                               "sequence": {
                                 "element": [
@@ -416,7 +452,11 @@
                                     "name": "mod",
                                     "annotation": {
                                       "label": "Modelo do Documento Fiscal",
-                                      "itens": ["Emitido por máquina registradora (não ECF)","Cupom Fiscal PDV","Cupom Fiscal emitido por ECF"]
+                                      "itens": [
+                                        "Emitido por máquina registradora (não ECF)",
+                                        "Cupom Fiscal PDV",
+                                        "Cupom Fiscal emitido por ECF"
+                                      ]
                                     },
                                     "simpleType": {
                                       "restriction": {
@@ -470,9 +510,7 @@
                   {
                     "name": "CNPJ",
                     "type": "TCnpj",
-                    "annotation": {
-                      "label": "CNPJ"
-                    }
+                    "annotation": { "label": "CNPJ" }
                   },
                   {
                     "name": "xNome",
@@ -507,9 +545,7 @@
                   {
                     "name": "IE",
                     "type": "TIe",
-                    "annotation": {
-                      "label": "Inscrição Estadual"
-                    }
+                    "annotation": { "label": "Inscrição Estadual" }
                   },
                   {
                     "name": "IEST",
@@ -564,7 +600,11 @@
                     "name": "CRT",
                     "annotation": {
                       "label": "Código de Regime Tributário",
-                      "itens":["Simples Nacional","Simples Nacional, excesso de sublimite de receita bruta", "Regime Normal"]
+                      "itens": [
+                        "Simples Nacional",
+                        "Simples Nacional, excesso de sublimite de receita bruta",
+                        "Regime Normal"
+                      ]
                     },
                     "simpleType": {
                       "restriction": {
@@ -583,9 +623,7 @@
             "annotation": { "label": "Identificação do Destinatário" },
             "complexType": {
               "choice": {
-                "annotation": {
-                  "label": "Tipo de destinatário"
-                },
+                "annotation": { "label": "Tipo de destinatário" },
                 "element": [
                   {
                     "name": "",
@@ -614,7 +652,7 @@
                           },
                           {
                             "name": "enderDest",
-                            "type": "TEnderEmi", 
+                            "type": "TEnderEmi",
                             "minOccurs": "0",
                             "annotation": { "label": "Endereço" }
                           },
@@ -716,9 +754,7 @@
                           {
                             "name": "ISUF",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Inscrição na SUFRAMA"
-                            },
+                            "annotation": { "label": "Inscrição na SUFRAMA" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -743,9 +779,7 @@
                           {
                             "name": "email",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "E-mail do destinatário"
-                            },
+                            "annotation": { "label": "E-mail do destinatário" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -753,7 +787,7 @@
                                 "maxLength": "60"
                               }
                             }
-                          }        
+                          }
                         ]
                       }
                     }
@@ -772,9 +806,7 @@
                           {
                             "name": "xNome",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Nome do destinatário"
-                            },
+                            "annotation": { "label": "Nome do destinatário" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -785,7 +817,7 @@
                           },
                           {
                             "name": "enderDest",
-                            "type": "TEnderEmi", 
+                            "type": "TEnderEmi",
                             "minOccurs": "0",
                             "annotation": { "label": "Endereço" }
                           },
@@ -804,9 +836,7 @@
                           {
                             "name": "email",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "E-mail do destinatário"
-                            },
+                            "annotation": { "label": "E-mail do destinatário" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -814,7 +844,7 @@
                                 "maxLength": "60"
                               }
                             }
-                          }        
+                          }
                         ]
                       }
                     }
@@ -840,9 +870,7 @@
                           {
                             "name": "xNome",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Nome do destinatário"
-                            },
+                            "annotation": { "label": "Nome do destinatário" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -853,7 +881,7 @@
                           },
                           {
                             "name": "enderDest",
-                            "type": "TEnderecoEstrangeiro", 
+                            "type": "TEnderecoEstrangeiro",
                             "minOccurs": "0",
                             "annotation": { "label": "Endereço" }
                           },
@@ -872,9 +900,7 @@
                           {
                             "name": "email",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "E-mail do destinatário"
-                            },
+                            "annotation": { "label": "E-mail do destinatário" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -882,7 +908,7 @@
                                 "maxLength": "60"
                               }
                             }
-                          }        
+                          }
                         ]
                       }
                     }
@@ -1033,9 +1059,7 @@
                           {
                             "name": "EXTIPI",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Código EX TIPI"
-                            },
+                            "annotation": { "label": "Código EX TIPI" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -1055,9 +1079,7 @@
                           },
                           {
                             "name": "uCom",
-                            "annotation": {
-                              "label": "Unidade comercial"
-                            },
+                            "annotation": { "label": "Unidade comercial" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -1101,9 +1123,7 @@
                           },
                           {
                             "name": "uTrib",
-                            "annotation": {
-                              "label": "Unidade Tributável"
-                            },
+                            "annotation": { "label": "Unidade Tributável" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -1115,9 +1135,7 @@
                           {
                             "name": "qTrib",
                             "type": "TDec_1104v",
-                            "annotation": {
-                              "label": "Quantidade Tributável"
-                            }
+                            "annotation": { "label": "Quantidade Tributável" }
                           },
                           {
                             "name": "vUnTrib",
@@ -1130,25 +1148,19 @@
                             "name": "vFrete",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Valor Total do Frete"
-                            }
+                            "annotation": { "label": "Valor Total do Frete" }
                           },
                           {
                             "name": "vSeg",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Valor Total do Seguro"
-                            }
+                            "annotation": { "label": "Valor Total do Seguro" }
                           },
                           {
                             "name": "vDesc",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Valor do Desconto"
-                            }
+                            "annotation": { "label": "Valor do Desconto" }
                           },
                           {
                             "name": "vOutro",
@@ -1162,7 +1174,7 @@
                             "name": "indTot",
                             "annotation": {
                               "label": "O valor do item compõe o valor total da NF-e",
-                              "itens":["Sim","Não"]
+                              "itens": ["Sim", "Não"]
                             },
                             "simpleType": {
                               "restriction": {
@@ -1232,7 +1244,18 @@
                                     "name": "tpViaTransp",
                                     "annotation": {
                                       "label": "Via de transporte internacional informada na DI",
-                                      "itens":["Maritima","Fluvial","Lacustre","Aerea","Postal","Ferroviaria","Rodoviaria","Conduto","Meios Proprios","Entrada/Saida Ficta"]
+                                      "itens": [
+                                        "Maritima",
+                                        "Fluvial",
+                                        "Lacustre",
+                                        "Aerea",
+                                        "Postal",
+                                        "Ferroviaria",
+                                        "Rodoviaria",
+                                        "Conduto",
+                                        "Meios Proprios",
+                                        "Entrada/Saida Ficta"
+                                      ]
                                     },
                                     "simpleType": {
                                       "restriction": {
@@ -1264,7 +1287,11 @@
                                     "name": "tpIntermedio",
                                     "annotation": {
                                       "label": "Forma de Importação quanto a intermediação",
-                                      "itens":["Por conta propria","Por conta e ordem","Encomenda"]
+                                      "itens": [
+                                        "Por conta propria",
+                                        "Por conta e ordem",
+                                        "Encomenda"
+                                      ]
                                     },
                                     "simpleType": {
                                       "restriction": {
@@ -1305,9 +1332,7 @@
                                   {
                                     "name": "adi",
                                     "maxOccurs": "100",
-                                    "annotation": {
-                                      "label": "Adições"
-                                    },
+                                    "annotation": { "label": "Adições" },
                                     "complexType": {
                                       "sequence": {
                                         "element": [
@@ -1381,9 +1406,7 @@
                             "name": "detExport",
                             "minOccurs": "0",
                             "maxOccurs": "500",
-                            "annotation": {
-                              "label": "Detalhe da exportação"
-                            },
+                            "annotation": { "label": "Detalhe da exportação" },
                             "complexType": {
                               "sequence": {
                                 "element": [
@@ -1485,7 +1508,7 @@
                           },
                           {
                             "name": "rastro",
-                            "annotation":{
+                            "annotation": {
                               "label": "Detalhamento de rastreabilidade_Obrigatório o preenchimento deste grupo no caso de medicamentos e produtos farmacêuticos"
                             },
                             "minOccurs": "0",
@@ -1566,7 +1589,7 @@
                               "name": "indEscala",
                               "annotation": {
                                 "label": "Prozido em escala relevante",
-                                "itens":["Sim","Não"]
+                                "itens": ["Sim", "Não"]
                               },
                               "minOccurs": "0",
                               "simpleType": {
@@ -1594,9 +1617,7 @@
                           "element": [
                             {
                               "name": "veicProd",
-                              "annotation": {
-                                "label": "Veículos novos"
-                              },
+                              "annotation": { "label": "Veículos novos" },
                               "complexType": {
                                 "sequence": {
                                   "element": [
@@ -1604,7 +1625,12 @@
                                       "name": "tpOp",
                                       "annotation": {
                                         "label": "Tipo da Operação",
-                                        "itens":["Venda concessionária","Faturamento direto","Venda direta","Outros"]
+                                        "itens": [
+                                          "Venda concessionária",
+                                          "Faturamento direto",
+                                          "Venda direta",
+                                          "Outros"
+                                        ]
                                       },
                                       "simpleType": {
                                         "restriction": {
@@ -1680,9 +1706,7 @@
                                     },
                                     {
                                       "name": "pesoL",
-                                      "annotation": {
-                                        "label": "Peso líquido"
-                                      },
+                                      "annotation": { "label": "Peso líquido" },
                                       "simpleType": {
                                         "restriction": {
                                           "base": "string",
@@ -1693,9 +1717,7 @@
                                     },
                                     {
                                       "name": "pesoB",
-                                      "annotation": {
-                                        "label": "Peso bruto"
-                                      },
+                                      "annotation": { "label": "Peso bruto" },
                                       "simpleType": {
                                         "restriction": {
                                           "base": "string",
@@ -1721,12 +1743,50 @@
                                       "name": "tpComb",
                                       "annotation": {
                                         "label": "Tipo de combustível",
-                                        "itens": ["Álcool","Gasolina","Diesel","Gasogênio","Gás Metano","Elétrico/Fonte Interna","Elétrico/Fonte Externa","Gasolina/Gás Natural Combustível","Álcool/Gás Natural Combustível","Diesel/Gás Natural Combustível","Vide/Campo/Observação","Álcool/GNV","Gasolina/GNV","Diesel/GNV","GNV","Álcool/Gasolina","Gasolina/Álcool/GNV","Gasolina/Elétrico"]
+                                        "itens": [
+                                          "Álcool",
+                                          "Gasolina",
+                                          "Diesel",
+                                          "Gasogênio",
+                                          "Gás Metano",
+                                          "Elétrico/Fonte Interna",
+                                          "Elétrico/Fonte Externa",
+                                          "Gasolina/Gás Natural Combustível",
+                                          "Álcool/Gás Natural Combustível",
+                                          "Diesel/Gás Natural Combustível",
+                                          "Vide/Campo/Observação",
+                                          "Álcool/GNV",
+                                          "Gasolina/GNV",
+                                          "Diesel/GNV",
+                                          "GNV",
+                                          "Álcool/Gasolina",
+                                          "Gasolina/Álcool/GNV",
+                                          "Gasolina/Elétrico"
+                                        ]
                                       },
                                       "simpleType": {
                                         "restriction": {
                                           "base": "string",
-                                          "enumeration":["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18"]
+                                          "enumeration": [
+                                            "01",
+                                            "02",
+                                            "03",
+                                            "04",
+                                            "05",
+                                            "06",
+                                            "07",
+                                            "08",
+                                            "09",
+                                            "10",
+                                            "11",
+                                            "12",
+                                            "13",
+                                            "14",
+                                            "15",
+                                            "16",
+                                            "17",
+                                            "18"
+                                          ]
                                         }
                                       }
                                     },
@@ -1809,12 +1869,54 @@
                                       "name": "tpVeic",
                                       "annotation": {
                                         "label": "Tipo de veículo",
-                                        "itens":["Ciclomotor","Motoneta","Motocicleta","Triciclo","Automóvel","Micro-ônibus","Ônibus","Reboque","Semirreboque","Camioneta","Caminhão","Caminhão trator","Trator de rodas","Trador esteira","Trator misto","Quadriciclo","Chassi plataforma","Caminhonete","Utilitário","Motor-casa"]
+                                        "itens": [
+                                          "Ciclomotor",
+                                          "Motoneta",
+                                          "Motocicleta",
+                                          "Triciclo",
+                                          "Automóvel",
+                                          "Micro-ônibus",
+                                          "Ônibus",
+                                          "Reboque",
+                                          "Semirreboque",
+                                          "Camioneta",
+                                          "Caminhão",
+                                          "Caminhão trator",
+                                          "Trator de rodas",
+                                          "Trador esteira",
+                                          "Trator misto",
+                                          "Quadriciclo",
+                                          "Chassi plataforma",
+                                          "Caminhonete",
+                                          "Utilitário",
+                                          "Motor-casa"
+                                        ]
                                       },
                                       "simpleType": {
                                         "restriction": {
                                           "base": "string",
-                                          "enumeration":["02","03","04","05","06","07","08","10","11","13","14","17","18","19","20","21","22","23","25","26"]
+                                          "enumeration": [
+                                            "02",
+                                            "03",
+                                            "04",
+                                            "05",
+                                            "06",
+                                            "07",
+                                            "08",
+                                            "10",
+                                            "11",
+                                            "13",
+                                            "14",
+                                            "17",
+                                            "18",
+                                            "19",
+                                            "20",
+                                            "21",
+                                            "22",
+                                            "23",
+                                            "25",
+                                            "26"
+                                          ]
                                         }
                                       }
                                     },
@@ -1822,12 +1924,26 @@
                                       "name": "espVeic",
                                       "annotation": {
                                         "label": "Espécie de veículo",
-                                        "itens":["Passageiro","Carga","Misto","Corrida","Tração","Especial"]
+                                        "itens": [
+                                          "Passageiro",
+                                          "Carga",
+                                          "Misto",
+                                          "Corrida",
+                                          "Tração",
+                                          "Especial"
+                                        ]
                                       },
                                       "simpleType": {
                                         "restriction": {
                                           "base": "string",
-                                        "enumeration": ["1","2","3","4","5","6"]
+                                          "enumeration": [
+                                            "1",
+                                            "2",
+                                            "3",
+                                            "4",
+                                            "5",
+                                            "6"
+                                          ]
                                         }
                                       }
                                     },
@@ -1835,7 +1951,7 @@
                                       "name": "VIN",
                                       "annotation": {
                                         "label": "Chassi remarcado",
-                                        "itens":["Sim","Não"]
+                                        "itens": ["Sim", "Não"]
                                       },
                                       "simpleType": {
                                         "restriction": {
@@ -1849,7 +1965,11 @@
                                       "name": "condVeic",
                                       "annotation": {
                                         "label": "Condição do veículo",
-                                        "itens":["Acabado","Inacabado","Semi-acabado"]
+                                        "itens": [
+                                          "Acabado",
+                                          "Inacabado",
+                                          "Semi-acabado"
+                                        ]
                                       },
                                       "simpleType": {
                                         "restriction": {
@@ -1874,12 +1994,46 @@
                                       "name": "cCorDENATRAN",
                                       "annotation": {
                                         "label": "Cor",
-                                        "itens":["Amarelo","Azul","Bege","Branca","Cinza","Dourada","Grená","Laranja","Marrom","Prata","Preta","Rosa","Roxa","Verde","Vermelha","Fantasia"]
+                                        "itens": [
+                                          "Amarelo",
+                                          "Azul",
+                                          "Bege",
+                                          "Branca",
+                                          "Cinza",
+                                          "Dourada",
+                                          "Grená",
+                                          "Laranja",
+                                          "Marrom",
+                                          "Prata",
+                                          "Preta",
+                                          "Rosa",
+                                          "Roxa",
+                                          "Verde",
+                                          "Vermelha",
+                                          "Fantasia"
+                                        ]
                                       },
                                       "simpleType": {
                                         "restriction": {
                                           "base": "string",
-                                          "enumeration":["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16"]
+                                          "enumeration": [
+                                            "01",
+                                            "02",
+                                            "03",
+                                            "04",
+                                            "05",
+                                            "06",
+                                            "07",
+                                            "08",
+                                            "09",
+                                            "10",
+                                            "11",
+                                            "12",
+                                            "13",
+                                            "14",
+                                            "15",
+                                            "16"
+                                          ]
                                         }
                                       }
                                     },
@@ -1901,7 +2055,14 @@
                                       "name": "tpRest",
                                       "annotation": {
                                         "label": "Restrição",
-                                        "itens":["Não há","Alienação Fiduciária","Arrendamento Mercantil","Reserva de Domínio","Penhor de Veículos","Outras"]
+                                        "itens": [
+                                          "Não há",
+                                          "Alienação Fiduciária",
+                                          "Arrendamento Mercantil",
+                                          "Reserva de Domínio",
+                                          "Penhor de Veículos",
+                                          "Outras"
+                                        ]
                                       },
                                       "simpleType": {
                                         "restriction": {
@@ -1937,9 +2098,7 @@
                                         "choice": {
                                           "element": [
                                             {
-                                              "annotation": {
-                                                "label": "Sim"
-                                              },
+                                              "annotation": { "label": "Sim" },
                                               "complexType": {
                                                 "sequence": {
                                                   "element": [
@@ -1960,9 +2119,7 @@
                                               }
                                             },
                                             {
-                                              "annotation": {
-                                                "label": "Não"
-                                              },
+                                              "annotation": { "label": "Não" },
                                               "complexType": {
                                                 "sequence": {
                                                   "element": [
@@ -2022,7 +2179,10 @@
                                       "name": "tpArma",
                                       "annotation": {
                                         "label": "Tipo de arma de fogo",
-                                        "itens":["Uso permitido","Uso restrito"]
+                                        "itens": [
+                                          "Uso permitido",
+                                          "Uso restrito"
+                                        ]
                                       },
                                       "simpleType": {
                                         "restriction": {
@@ -2146,7 +2306,7 @@
                                               "annotation": {
                                                 "label": "Valor de partida (por quilograma sem ICMS)"
                                               }
-                                            }        
+                                            }
                                           ]
                                         }
                                       }
@@ -2288,9 +2448,7 @@
                             },
                             {
                               "name": "nRECOPI",
-                              "annotation": {
-                                "label": "Número do RECOPI"
-                              },
+                              "annotation": { "label": "Número do RECOPI" },
                               "simpleType": {
                                 "restriction": {
                                   "base": "string",
@@ -2306,9 +2464,7 @@
                   },
                   {
                     "name": "imposto",
-                    "annotation": {
-                      "label": "Tributos incidentes"
-                    },
+                    "annotation": { "label": "Tributos incidentes" },
                     "complexType": {
                       "sequence": {
                         "element": [
@@ -2339,7 +2495,10 @@
                                             "name": "CST",
                                             "annotation": {
                                               "label": "Código de Situação Tributária",
-                                              "itens":["Alíquota Normal (Cumulativo/Não Cumulativo)","Alíquota Diferenciada"]
+                                              "itens": [
+                                                "Alíquota Normal (Cumulativo/Não Cumulativo)",
+                                                "Alíquota Diferenciada"
+                                              ]
                                             },
                                             "simpleType": {
                                               "restriction": {
@@ -2420,16 +2579,21 @@
                                   },
                                   {
                                     "name": "PISNT",
-                                    "annotation": {
-                                      "label": "Não tributado"
-                                    },
+                                    "annotation": { "label": "Não tributado" },
                                     "complexType": {
                                       "sequence": {
                                         "element": {
                                           "name": "CST",
                                           "annotation": {
                                             "label": "Código de Situação Tributária",
-                                            "itens":["Operação com tributação monofásica (Alíquota Zero)","Operação Tributável (ST)","Operação Tributável - Alíquota Zero","Operação Isenta da contribuição","Operação sem incidência da contribuição","Operação com suspensão da contribuição"]
+                                            "itens": [
+                                              "Operação com tributação monofásica (Alíquota Zero)",
+                                              "Operação Tributável (ST)",
+                                              "Operação Tributável - Alíquota Zero",
+                                              "Operação Isenta da contribuição",
+                                              "Operação sem incidência da contribuição",
+                                              "Operação com suspensão da contribuição"
+                                            ]
                                           },
                                           "simpleType": {
                                             "restriction": {
@@ -2518,7 +2682,7 @@
                                                     ]
                                                   }
                                                 ]
-                                              }      
+                                              }
                                             }
                                           },
                                           {
@@ -2568,9 +2732,7 @@
                                       ]
                                     },
                                     {
-                                      "annotation": {
-                                        "label": "Em valor"
-                                      },
+                                      "annotation": { "label": "Em valor" },
                                       "element": [
                                         {
                                           "name": "qBCProd",
@@ -2593,9 +2755,7 @@
                                 "element": {
                                   "name": "vPIS",
                                   "type": "TDec_1302",
-                                  "annotation": {
-                                    "label": "Valor do PIS ST"
-                                  }
+                                  "annotation": { "label": "Valor do PIS ST" }
                                 }
                               }
                             }
@@ -2603,9 +2763,7 @@
                           {
                             "name": "COFINS",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Dados do COFINS"
-                            },
+                            "annotation": { "label": "Dados do COFINS" },
                             "complexType": {
                               "choice": {
                                 "element": [
@@ -2621,7 +2779,10 @@
                                             "name": "CST",
                                             "annotation": {
                                               "label": "Código de Situação Tributária",
-                                              "itens":["Alíquota Normal (Cumulativo/Não Cumulativo)","Alíquota Diferenciada"]
+                                              "itens": [
+                                                "Alíquota Normal (Cumulativo/Não Cumulativo)",
+                                                "Alíquota Diferenciada"
+                                              ]
                                             },
                                             "simpleType": {
                                               "restriction": {
@@ -2702,16 +2863,21 @@
                                   },
                                   {
                                     "name": "COFINSNT",
-                                    "annotation": {
-                                      "label": "Não tributado"
-                                    },
+                                    "annotation": { "label": "Não tributado" },
                                     "complexType": {
                                       "sequence": {
                                         "element": {
                                           "name": "CST",
                                           "annotation": {
                                             "label": "Código de Situação Tributária",
-                                            "itens":["Operação com tributação monofásica (Alíquota Zero)","Operação Tributável (ST)","Operação Tributável - Alíquota Zero","Operação Isenta da contribuição","Operação Sem Incidência da contribuição","Operação com suspensão da contribuição"]
+                                            "itens": [
+                                              "Operação com tributação monofásica (Alíquota Zero)",
+                                              "Operação Tributável (ST)",
+                                              "Operação Tributável - Alíquota Zero",
+                                              "Operação Isenta da contribuição",
+                                              "Operação Sem Incidência da contribuição",
+                                              "Operação com suspensão da contribuição"
+                                            ]
                                           },
                                           "simpleType": {
                                             "restriction": {
@@ -2741,7 +2907,33 @@
                                           {
                                             "name": "CST",
                                             "annotation": {
-                                              "label": "Código de Situação Tributária","itens":["Outras Operações de Saída","Operação com Direito a Crédito - Vinculada Exclusivamente a Receita Tributada no Mercado Interno","Operação com Direito a Crédito – Vinculada Exclusivamente a Receita Não Tributada no Mercado Interno","Operação com Direito a Crédito - Vinculada Exclusivamente a Receita de Exportação","Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno","Operação com Direito a Crédito - Vinculada a Receitas Tributadas no Mercado Interno e de Exportação","Operação com Direito a Crédito - Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação","Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno, e de Exportação","Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Tributada no Mercado Interno","Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Não-Tributada no Mercado Interno","Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita de Exportação","Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno","Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas no Mercado Interno e de Exportação","Crédito Presumido - Operação de Aquisição Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação","Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno, e de Exportação","Crédito Presumido - Outras Operações","Operação de Aquisição sem Direito a Crédito","Operação de Aquisição com Isenção","Operação de Aquisição com Suspensão","Operação de Aquisição a Alíquota Zero","Operação de Aquisição sem Incidência da Contribuição","Operação de Aquisição por Substituição Tributária","Outras Operações de Entrada","Outras Operações"]
+                                              "label": "Código de Situação Tributária",
+                                              "itens": [
+                                                "Outras Operações de Saída",
+                                                "Operação com Direito a Crédito - Vinculada Exclusivamente a Receita Tributada no Mercado Interno",
+                                                "Operação com Direito a Crédito – Vinculada Exclusivamente a Receita Não Tributada no Mercado Interno",
+                                                "Operação com Direito a Crédito - Vinculada Exclusivamente a Receita de Exportação",
+                                                "Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno",
+                                                "Operação com Direito a Crédito - Vinculada a Receitas Tributadas no Mercado Interno e de Exportação",
+                                                "Operação com Direito a Crédito - Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação",
+                                                "Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno, e de Exportação",
+                                                "Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Tributada no Mercado Interno",
+                                                "Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Não-Tributada no Mercado Interno",
+                                                "Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita de Exportação",
+                                                "Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno",
+                                                "Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas no Mercado Interno e de Exportação",
+                                                "Crédito Presumido - Operação de Aquisição Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação",
+                                                "Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno, e de Exportação",
+                                                "Crédito Presumido - Outras Operações",
+                                                "Operação de Aquisição sem Direito a Crédito",
+                                                "Operação de Aquisição com Isenção",
+                                                "Operação de Aquisição com Suspensão",
+                                                "Operação de Aquisição a Alíquota Zero",
+                                                "Operação de Aquisição sem Incidência da Contribuição",
+                                                "Operação de Aquisição por Substituição Tributária",
+                                                "Outras Operações de Entrada",
+                                                "Outras Operações"
+                                              ]
                                             },
                                             "simpleType": {
                                               "restriction": {
@@ -2825,7 +3017,7 @@
                                                     ]
                                                   }
                                                 ]
-                                              }      
+                                              }
                                             }
                                           },
                                           {
@@ -2944,7 +3136,11 @@
                                     "name": "pICMSInter",
                                     "annotation": {
                                       "label": "Alíquota interestadual das UF envolvidas",
-                                      "itens": ["Alíquota interestadual para produtos importados", "Sul e Sudeste (exceto ES) destinado ao Norte e Nordeste ou ES", "Demais casos"]
+                                      "itens": [
+                                        "Alíquota interestadual para produtos importados",
+                                        "Sul e Sudeste (exceto ES) destinado ao Norte e Nordeste ou ES",
+                                        "Demais casos"
+                                      ]
                                     },
                                     "simpleType": {
                                       "restriction": {
@@ -3021,12 +3217,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -3046,7 +3250,12 @@
                                                   "name": "modBC",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS",
-                                                    "itens":["Margem Valor Agregado (%)", "Pauta (valor)","Preço Tabelado Máximo (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Preço Tabelado Máximo (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -3119,12 +3328,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -3144,7 +3361,12 @@
                                                   "name": "modBC",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS",
-                                                    "itens":["Margem Valor Agregado (%)", "Pauta (valor)","Preço Tabelado Máximo (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Preço Tabelado Máximo (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -3182,7 +3404,7 @@
                                                 {
                                                   "complexType": {
                                                     "sequence": {
-                                                      "element":[
+                                                      "element": [
                                                         {
                                                           "annotation": {
                                                             "label": "Informações relativas ao FCP"
@@ -3213,14 +3435,22 @@
                                                           ]
                                                         }
                                                       ]
-                                                    }      
+                                                    }
                                                   }
                                                 },
                                                 {
                                                   "name": "modBCST",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS ST",
-                                                    "itens":["Preço tabelado ou máximo sugerido","Lista Negativa (valor)","Lista Positiva (valor)","Lista Neutra (valor)","Margem Valor Agregado (%)","Pauta (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Preço tabelado ou máximo sugerido",
+                                                      "Lista Negativa (valor)",
+                                                      "Lista Positiva (valor)",
+                                                      "Lista Neutra (valor)",
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -3304,7 +3534,7 @@
                                                           }
                                                         }
                                                       ]
-                                                    }   
+                                                    }
                                                   }
                                                 }
                                               ]
@@ -3323,12 +3553,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -3348,7 +3586,12 @@
                                                   "name": "modBC",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS",
-                                                    "itens":["Margem Valor Agregado (%)", "Pauta (valor)","Preço Tabelado Máximo (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Preço Tabelado Máximo (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -3435,7 +3678,11 @@
                                                       "name": "motDesICMS",
                                                       "annotation": {
                                                         "label": "Motivo da desoneração",
-                                                        "itens": ["Uso na agropecuária","Outros","Fomento agropecuário"]
+                                                        "itens": [
+                                                          "Uso na agropecuária",
+                                                          "Outros",
+                                                          "Fomento agropecuário"
+                                                        ]
                                                       },
                                                       "simpleType": {
                                                         "restriction": {
@@ -3466,12 +3713,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -3491,7 +3746,15 @@
                                                   "name": "modBCST",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS ST",
-                                                    "itens":["Preço tabelado ou máximo sugerido","Lista Negativa (valor)","Lista Positiva (valor)","Lista Neutra (valor)","Margem Valor Agregado (%)","Pauta (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Preço tabelado ou máximo sugerido",
+                                                      "Lista Negativa (valor)",
+                                                      "Lista Positiva (valor)",
+                                                      "Lista Neutra (valor)",
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -3590,7 +3853,11 @@
                                                       "name": "motDesICMS",
                                                       "annotation": {
                                                         "label": "Motivo da desoneração",
-                                                        "itens": ["Utilitários Motocicleta A Área Livre","SUFRAMA","Outros"]
+                                                        "itens": [
+                                                          "Utilitários Motocicleta A Área Livre",
+                                                          "SUFRAMA",
+                                                          "Outros"
+                                                        ]
                                                       },
                                                       "simpleType": {
                                                         "restriction": {
@@ -3621,12 +3888,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -3634,7 +3909,11 @@
                                                   "name": "CST",
                                                   "annotation": {
                                                     "label": "Código de situação tributária",
-                                                    "itens": ["Isenta","Não tributada","Suspensão"]
+                                                    "itens": [
+                                                      "Isenta",
+                                                      "Não tributada",
+                                                      "Suspensão"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -3649,7 +3928,9 @@
                                                 }
                                               ],
                                               "sequence": {
-                                                "annotation":{"label":"Informações sobre ICMS desonerado_O valor do ICMS será informado apenas nas operações com veículos beneficiados com a desoneração condicional do ICMS"},
+                                                "annotation": {
+                                                  "label": "Informações sobre ICMS desonerado_O valor do ICMS será informado apenas nas operações com veículos beneficiados com a desoneração condicional do ICMS"
+                                                },
                                                 "minOccurs": "0",
                                                 "element": [
                                                   {
@@ -3663,7 +3944,20 @@
                                                     "name": "motDesICMS",
                                                     "annotation": {
                                                       "label": "Motivo da desoneração",
-                                                      "itens":["Táxi","Produtor Agropecuário","Frotista/Locadora","Diplomático/Consular","Utilitários e Motocicletas da Amazônia Ocidental e Áreas de Livre Comércio","SUFRAMA","Venda a órgão Público","Outros","Deficiente Condutor","Deficiente não condutor","Olimpíadas Rio 2016","Solicitado pelo Fisco"]
+                                                      "itens": [
+                                                        "Táxi",
+                                                        "Produtor Agropecuário",
+                                                        "Frotista/Locadora",
+                                                        "Diplomático/Consular",
+                                                        "Utilitários e Motocicletas da Amazônia Ocidental e Áreas de Livre Comércio",
+                                                        "SUFRAMA",
+                                                        "Venda a órgão Público",
+                                                        "Outros",
+                                                        "Deficiente Condutor",
+                                                        "Deficiente não condutor",
+                                                        "Olimpíadas Rio 2016",
+                                                        "Solicitado pelo Fisco"
+                                                      ]
                                                     },
                                                     "simpleType": {
                                                       "restriction": {
@@ -3702,12 +3996,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -3727,7 +4029,12 @@
                                                   "name": "modBC",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS",
-                                                    "itens":["Margem Valor Agregado (%)", "Pauta (valor)","Preço Tabelado Máximo (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Preço Tabelado Máximo (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -3839,12 +4146,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -3980,12 +4295,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -4005,7 +4328,12 @@
                                                   "name": "modBC",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS",
-                                                    "itens":["Margem Valor Agregado (%)", "Pauta (valor)","Preço Tabelado Máximo (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Preço Tabelado Máximo (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -4050,40 +4378,46 @@
                                                 {
                                                   "minOccurs": "0",
                                                   "complexType": {
-                                                    "sequence":
-                                                      {
-                                                        "element": [
-                                                          {
-                                                            "name": "vBCFCP",
-                                                            "type": "TDec_1302",
-                                                            "annotation": {
-                                                              "label": "Valor da Base de cálculo do FCP."
-                                                            }
-                                                          },
-                                                          {
-                                                            "name": "pFCP",
-                                                            "type": "TDec_0302a04Opc",
-                                                            "annotation": {
-                                                              "label": "Percentual de ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
-                                                            }
-                                                          },
-                                                          {
-                                                            "name": "vFCP",
-                                                            "type": "TDec_1302",
-                                                            "annotation": {
-                                                              "label": "Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
-                                                            }
+                                                    "sequence": {
+                                                      "element": [
+                                                        {
+                                                          "name": "vBCFCP",
+                                                          "type": "TDec_1302",
+                                                          "annotation": {
+                                                            "label": "Valor da Base de cálculo do FCP."
                                                           }
-                                                        ]
-                                                      }
-                                                         
+                                                        },
+                                                        {
+                                                          "name": "pFCP",
+                                                          "type": "TDec_0302a04Opc",
+                                                          "annotation": {
+                                                            "label": "Percentual de ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
+                                                          }
+                                                        },
+                                                        {
+                                                          "name": "vFCP",
+                                                          "type": "TDec_1302",
+                                                          "annotation": {
+                                                            "label": "Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP)."
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
                                                   }
                                                 },
                                                 {
                                                   "name": "modBCST",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS ST",
-                                                    "itens":["Preço tabelado ou máximo sugerido","Lista Negativa (valor)","Lista Positiva (valor)","Lista Neutra (valor)","Margem Valor Agregado (%)","Pauta (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Preço tabelado ou máximo sugerido",
+                                                      "Lista Negativa (valor)",
+                                                      "Lista Positiva (valor)",
+                                                      "Lista Neutra (valor)",
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -4182,7 +4516,11 @@
                                                       "name": "motDesICMS",
                                                       "annotation": {
                                                         "label": "Motivo da desoneração",
-                                                        "itens": ["Uso na agropecuária","Outros","Fomento agropecuário"]
+                                                        "itens": [
+                                                          "Uso na agropecuária",
+                                                          "Outros",
+                                                          "Fomento agropecuário"
+                                                        ]
                                                       },
                                                       "simpleType": {
                                                         "restriction": {
@@ -4213,12 +4551,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -4240,23 +4586,28 @@
                                                   "minOccurs": "0",
                                                   "element": [
                                                     {
-                                                  "name": "modBC",
-                                                  "annotation": {
-                                                    "label": "Modalidade de determinação da BC do ICMS",
-                                                    "itens":["Margem Valor Agregado (%)", "Pauta (valor)","Preço Tabelado Máximo (valor)","Valor da Operação"]
-                                                  },
-                                                  "simpleType": {
-                                                    "restriction": {
-                                                      "base": "string",
-                                                      "enumeration": [
-                                                        "0",
-                                                        "1",
-                                                        "2",
-                                                        "3"
-                                                      ]
-                                                    }
-                                                  }
-                                                },
+                                                      "name": "modBC",
+                                                      "annotation": {
+                                                        "label": "Modalidade de determinação da BC do ICMS",
+                                                        "itens": [
+                                                          "Margem Valor Agregado (%)",
+                                                          "Pauta (valor)",
+                                                          "Preço Tabelado Máximo (valor)",
+                                                          "Valor da Operação"
+                                                        ]
+                                                      },
+                                                      "simpleType": {
+                                                        "restriction": {
+                                                          "base": "string",
+                                                          "enumeration": [
+                                                            "0",
+                                                            "1",
+                                                            "2",
+                                                            "3"
+                                                          ]
+                                                        }
+                                                      }
+                                                    },
                                                     {
                                                       "name": "vBC",
                                                       "type": "TDec_1302",
@@ -4318,26 +4669,34 @@
                                                   "minOccurs": "0",
                                                   "element": [
                                                     {
-                                                  "name": "modBCST",
-                                                  "annotation": {
-                                                    "label": "Modalidade de determinação da BC do ICMS ST",
-                                                    "itens":["Preço tabelado ou máximo sugerido","Lista Negativa (valor)","Lista Positiva (valor)","Lista Neutra (valor)","Margem Valor Agregado (%)","Pauta (valor)","Valor da Operação"]
-                                                  },
-                                                  "simpleType": {
-                                                    "restriction": {
-                                                      "base": "string",
-                                                      "enumeration": [
-                                                        "0",
-                                                        "1",
-                                                        "2",
-                                                        "3",
-                                                        "4",
-                                                        "5",
-                                                        "6"
-                                                      ]
-                                                    }
-                                                  }
-                                                },
+                                                      "name": "modBCST",
+                                                      "annotation": {
+                                                        "label": "Modalidade de determinação da BC do ICMS ST",
+                                                        "itens": [
+                                                          "Preço tabelado ou máximo sugerido",
+                                                          "Lista Negativa (valor)",
+                                                          "Lista Positiva (valor)",
+                                                          "Lista Neutra (valor)",
+                                                          "Margem Valor Agregado (%)",
+                                                          "Pauta (valor)",
+                                                          "Valor da Operação"
+                                                        ]
+                                                      },
+                                                      "simpleType": {
+                                                        "restriction": {
+                                                          "base": "string",
+                                                          "enumeration": [
+                                                            "0",
+                                                            "1",
+                                                            "2",
+                                                            "3",
+                                                            "4",
+                                                            "5",
+                                                            "6"
+                                                          ]
+                                                        }
+                                                      }
+                                                    },
                                                     {
                                                       "name": "pMVAST",
                                                       "type": "TDec_0302a04Opc",
@@ -4420,7 +4779,11 @@
                                                       "name": "motDesICMS",
                                                       "annotation": {
                                                         "label": "Motivo da desoneração",
-                                                        "itens":["Uso na agropecuária","Outros","Fomento agropecuário"]
+                                                        "itens": [
+                                                          "Uso na agropecuária",
+                                                          "Outros",
+                                                          "Fomento agropecuário"
+                                                        ]
                                                       },
                                                       "simpleType": {
                                                         "restriction": {
@@ -4451,12 +4814,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -4464,7 +4835,10 @@
                                                   "name": "CST",
                                                   "annotation": {
                                                     "label": "Código de situação tributária",
-                                                    "itens":["Tributada e com cobrança do ICMS por substituição tributária","Outros"]
+                                                    "itens": [
+                                                      "Tributada e com cobrança do ICMS por substituição tributária",
+                                                      "Outros"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -4480,7 +4854,12 @@
                                                   "name": "modBC",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS",
-                                                    "itens":["Margem Valor Agregado (%)", "Pauta (valor)","Preço Tabelado Máximo (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Preço Tabelado Máximo (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -4527,7 +4906,15 @@
                                                   "name": "modBCST",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS ST",
-                                                    "itens":["Preço tabelado ou máximo sugerido","Lista Negativa (valor)","Lista Positiva (valor)","Lista Neutra (valor)","Margem Valor Agregado (%)","Pauta (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Preço tabelado ou máximo sugerido",
+                                                      "Lista Negativa (valor)",
+                                                      "Lista Positiva (valor)",
+                                                      "Lista Neutra (valor)",
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -4611,12 +4998,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -4624,7 +5019,10 @@
                                                   "name": "CST",
                                                   "annotation": {
                                                     "label": "Tributção pelo ICMS",
-                                                    "itens":["Não Tributado","Cobrado anteriormente por substituição tributária"]
+                                                    "itens": [
+                                                      "Não Tributado",
+                                                      "Cobrado anteriormente por substituição tributária"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -4669,33 +5067,31 @@
                                                 {
                                                   "minOccurs": "0",
                                                   "complexType": {
-                                                    "sequence": 
-                                                      {
-                                                        "element": [
-                                                          {
-                                                            "name": "vBCFCPSTRet",
-                                                            "type": "TDec_1302",
-                                                            "annotation": {
-                                                              "label": "Informar o valor da Base de Cálculo do FCP retido anteriormente por ST."
-                                                            }
-                                                          },
-                                                          {
-                                                            "name": "pFCPSTRet",
-                                                            "type": "TDec_0302a04Opc",
-                                                            "annotation": {
-                                                              "label": "Percentual relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária."
-                                                            }
-                                                          },
-                                                          {
-                                                            "name": "vFCPSTRet",
-                                                            "type": "TDec_1302",
-                                                            "annotation": {
-                                                              "label": "Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária."
-                                                            }
+                                                    "sequence": {
+                                                      "element": [
+                                                        {
+                                                          "name": "vBCFCPSTRet",
+                                                          "type": "TDec_1302",
+                                                          "annotation": {
+                                                            "label": "Informar o valor da Base de Cálculo do FCP retido anteriormente por ST."
                                                           }
-                                                        ]
-                                                      }      
-                                                    
+                                                        },
+                                                        {
+                                                          "name": "pFCPSTRet",
+                                                          "type": "TDec_0302a04Opc",
+                                                          "annotation": {
+                                                            "label": "Percentual relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária."
+                                                          }
+                                                        },
+                                                        {
+                                                          "name": "vFCPSTRet",
+                                                          "type": "TDec_1302",
+                                                          "annotation": {
+                                                            "label": "Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária."
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
                                                   }
                                                 },
                                                 {
@@ -4763,12 +5159,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -4814,12 +5218,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -4827,7 +5239,12 @@
                                                   "name": "CSOSN",
                                                   "annotation": {
                                                     "label": "Código de situação da operação",
-                                                    "itens":["Tributada sem permissão de crédito","Isenção do ICMS para faixa de receita bruta","Imune","Não tributada"]
+                                                    "itens": [
+                                                      "Tributada sem permissão de crédito",
+                                                      "Isenção do ICMS para faixa de receita bruta",
+                                                      "Imune",
+                                                      "Não tributada"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -4857,12 +5274,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -4882,7 +5307,15 @@
                                                   "name": "modBCST",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS ST",
-                                                    "itens":["Preço tabelado ou máximo sugerido","Lista Negativa (valor)","Lista Positiva (valor)","Lista Neutra (valor)","Margem Valor Agregado (%)","Pauta (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Preço tabelado ou máximo sugerido",
+                                                      "Lista Negativa (valor)",
+                                                      "Lista Positiva (valor)",
+                                                      "Lista Neutra (valor)",
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -4963,7 +5396,7 @@
                                                           }
                                                         }
                                                       ]
-                                                    }      
+                                                    }
                                                   }
                                                 },
                                                 {
@@ -4996,12 +5429,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -5009,7 +5450,10 @@
                                                   "name": "CSOSN",
                                                   "annotation": {
                                                     "label": "Código de situação da operação",
-                                                    "itens":["Tributada pelo Simples Nacional sem permissão de crédito e com cobrança do ICMS por Substituição Tributária","Isenção do ICMS nos Simples Nacional para faixa de receita bruta e com cobrança do ICMS por Substituição Tributária"]
+                                                    "itens": [
+                                                      "Tributada pelo Simples Nacional sem permissão de crédito e com cobrança do ICMS por Substituição Tributária",
+                                                      "Isenção do ICMS nos Simples Nacional para faixa de receita bruta e com cobrança do ICMS por Substituição Tributária"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -5025,7 +5469,15 @@
                                                   "name": "modBCST",
                                                   "annotation": {
                                                     "label": "Modalidade de determinação da BC do ICMS ST",
-                                                    "itens":["Preço tabelado ou máximo sugerido","Lista Negativa (valor)","Lista Positiva (valor)","Lista Neutra (valor)","Margem Valor Agregado (%)","Pauta (valor)","Valor da Operação"]
+                                                    "itens": [
+                                                      "Preço tabelado ou máximo sugerido",
+                                                      "Lista Negativa (valor)",
+                                                      "Lista Positiva (valor)",
+                                                      "Lista Neutra (valor)",
+                                                      "Margem Valor Agregado (%)",
+                                                      "Pauta (valor)",
+                                                      "Valor da Operação"
+                                                    ]
                                                   },
                                                   "simpleType": {
                                                     "restriction": {
@@ -5121,12 +5573,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -5243,9 +5703,7 @@
                                         },
                                         {
                                           "name": "ICMSSN900",
-                                          "annotation": {
-                                            "label": "Outros"
-                                          },
+                                          "annotation": { "label": "Outros" },
                                           "complexType": {
                                             "sequence": {
                                               "element": [
@@ -5253,12 +5711,20 @@
                                                   "name": "orig",
                                                   "annotation": {
                                                     "label": "Origem da mercadoria",
-                                                    "itens": ["Nacional","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno"]
+                                                    "itens": [
+                                                      "Nacional",
+                                                      "Estrangeira - Importação direta",
+                                                      "Estrangeira - Adquirida no mercado interno"
+                                                    ]
                                                   },
-                                                  "simpleType":{
+                                                  "simpleType": {
                                                     "restriction": {
                                                       "base": "string",
-                                                      "enumeration": ["0", "1", "2"]
+                                                      "enumeration": [
+                                                        "0",
+                                                        "1",
+                                                        "2"
+                                                      ]
                                                     }
                                                   }
                                                 },
@@ -5280,23 +5746,28 @@
                                                   "minOccurs": "0",
                                                   "element": [
                                                     {
-                                                  "name": "modBC",
-                                                  "annotation": {
-                                                    "label": "Modalidade de determinação da BC do ICMS",
-                                                    "itens":["Margem Valor Agregado (%)", "Pauta (valor)","Preço Tabelado Máximo (valor)","Valor da Operação"]
-                                                  },
-                                                  "simpleType": {
-                                                    "restriction": {
-                                                      "base": "string",
-                                                      "enumeration": [
-                                                        "0",
-                                                        "1",
-                                                        "2",
-                                                        "3"
-                                                      ]
-                                                    }
-                                                  }
-                                                },
+                                                      "name": "modBC",
+                                                      "annotation": {
+                                                        "label": "Modalidade de determinação da BC do ICMS",
+                                                        "itens": [
+                                                          "Margem Valor Agregado (%)",
+                                                          "Pauta (valor)",
+                                                          "Preço Tabelado Máximo (valor)",
+                                                          "Valor da Operação"
+                                                        ]
+                                                      },
+                                                      "simpleType": {
+                                                        "restriction": {
+                                                          "base": "string",
+                                                          "enumeration": [
+                                                            "0",
+                                                            "1",
+                                                            "2",
+                                                            "3"
+                                                          ]
+                                                        }
+                                                      }
+                                                    },
                                                     {
                                                       "name": "vBC",
                                                       "type": "TDec_1302",
@@ -5332,26 +5803,34 @@
                                                   "minOccurs": "0",
                                                   "element": [
                                                     {
-                                                  "name": "modBCST",
-                                                  "annotation": {
-                                                    "label": "Modalidade de determinação da BC do ICMS ST",
-                                                    "itens":["Preço tabelado ou máximo sugerido","Lista Negativa (valor)","Lista Positiva (valor)","Lista Neutra (valor)","Margem Valor Agregado (%)","Pauta (valor)","Valor da Operação"]
-                                                  },
-                                                  "simpleType": {
-                                                    "restriction": {
-                                                      "base": "string",
-                                                      "enumeration": [
-                                                        "0",
-                                                        "1",
-                                                        "2",
-                                                        "3",
-                                                        "4",
-                                                        "5",
-                                                        "6"
-                                                      ]
-                                                    }
-                                                  }
-                                                },
+                                                      "name": "modBCST",
+                                                      "annotation": {
+                                                        "label": "Modalidade de determinação da BC do ICMS ST",
+                                                        "itens": [
+                                                          "Preço tabelado ou máximo sugerido",
+                                                          "Lista Negativa (valor)",
+                                                          "Lista Positiva (valor)",
+                                                          "Lista Neutra (valor)",
+                                                          "Margem Valor Agregado (%)",
+                                                          "Pauta (valor)",
+                                                          "Valor da Operação"
+                                                        ]
+                                                      },
+                                                      "simpleType": {
+                                                        "restriction": {
+                                                          "base": "string",
+                                                          "enumeration": [
+                                                            "0",
+                                                            "1",
+                                                            "2",
+                                                            "3",
+                                                            "4",
+                                                            "5",
+                                                            "6"
+                                                          ]
+                                                        }
+                                                      }
+                                                    },
                                                     {
                                                       "name": "pMVAST",
                                                       "type": "TDec_0302a04Opc",
@@ -5789,7 +6268,15 @@
                                           "name": "indISS",
                                           "annotation": {
                                             "label": "Exigibilidade do ISS",
-                                            "itens":["Exigível","Não incidente","Isenção","Exportação","Imunidade","Suspensa por decisão judicial","Suspensa por processo administrativo"]
+                                            "itens": [
+                                              "Exigível",
+                                              "Não incidente",
+                                              "Isenção",
+                                              "Exportação",
+                                              "Imunidade",
+                                              "Suspensa por decisão judicial",
+                                              "Suspensa por processo administrativo"
+                                            ]
                                           },
                                           "simpleType": {
                                             "restriction": {
@@ -5859,7 +6346,7 @@
                                           "name": "indIncentivo",
                                           "annotation": {
                                             "label": "Indicador de Incentivo Fiscal",
-                                            "itens":["Sim","Não"]
+                                            "itens": ["Sim", "Não"]
                                           },
                                           "simpleType": {
                                             "restriction": {
@@ -5881,7 +6368,9 @@
                   },
                   {
                     "name": "impostoDevol",
-                    "annotation":{"label":"Imposto devolvido_Obrigatório informar motivo da devolução nas informações adicionais do produto"},
+                    "annotation": {
+                      "label": "Imposto devolvido_Obrigatório informar motivo da devolução nas informações adicionais do produto"
+                    },
                     "minOccurs": "0",
                     "complexType": {
                       "sequence": {
@@ -5945,9 +6434,7 @@
                 "element": [
                   {
                     "name": "ICMSTot",
-                    "annotation": {
-                      "label": "Totais referentes ao ICMS"
-                    },
+                    "annotation": { "label": "Totais referentes ao ICMS" },
                     "complexType": {
                       "sequence": {
                         "element": [
@@ -5959,9 +6446,7 @@
                           {
                             "name": "vICMS",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Total do ICMS"
-                            }
+                            "annotation": { "label": "Total do ICMS" }
                           },
                           {
                             "name": "vICMSDeson",
@@ -6009,9 +6494,7 @@
                           {
                             "name": "vST",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Total do ICMS ST"
-                            }
+                            "annotation": { "label": "Total do ICMS ST" }
                           },
                           {
                             "name": "vFCPST",
@@ -6037,44 +6520,32 @@
                           {
                             "name": "vFrete",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Total do frete"
-                            }
+                            "annotation": { "label": "Total do frete" }
                           },
                           {
                             "name": "vSeg",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Total do seguro"
-                            }
+                            "annotation": { "label": "Total do seguro" }
                           },
                           {
                             "name": "vDesc",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Total do desconto"
-                            }
+                            "annotation": { "label": "Total do desconto" }
                           },
                           {
                             "name": "vII",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Total do II"
-                            }
+                            "annotation": { "label": "Total do II" }
                           },
                           {
                             "name": "vIPI",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Total do IPI"
-                            }
+                            "annotation": { "label": "Total do IPI" }
                           },
                           {
                             "name": "vIPIDevol",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Total do IPI devolvido."
-                            }
+                            "annotation": { "label": "Total do IPI devolvido." }
                           },
                           {
                             "name": "vPIS",
@@ -6096,9 +6567,7 @@
                           {
                             "name": "vNF",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Total da NF-e"
-                            }
+                            "annotation": { "label": "Total da NF-e" }
                           },
                           {
                             "name": "vTotTrib",
@@ -6115,9 +6584,7 @@
                   {
                     "name": "ISSQNtot",
                     "minOccurs": "0",
-                    "annotation": {
-                      "label": "Totais referentes ao ISSQN"
-                    },
+                    "annotation": { "label": "Totais referentes ao ISSQN" },
                     "complexType": {
                       "sequence": {
                         "element": [
@@ -6133,17 +6600,13 @@
                             "name": "vBC",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Base de Cálculo do ISS"
-                            }
+                            "annotation": { "label": "Base de Cálculo do ISS" }
                           },
                           {
                             "name": "vISS",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Total do ISS"
-                            }
+                            "annotation": { "label": "Total do ISS" }
                           },
                           {
                             "name": "vPIS",
@@ -6180,9 +6643,7 @@
                             "name": "vOutro",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Valor outras retenções"
-                            }
+                            "annotation": { "label": "Valor outras retenções" }
                           },
                           {
                             "name": "vDescIncond",
@@ -6204,16 +6665,21 @@
                             "name": "vISSRet",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Total Retenção ISS"
-                            }
+                            "annotation": { "label": "Total Retenção ISS" }
                           },
                           {
                             "name": "cRegTrib",
                             "minOccurs": "0",
                             "annotation": {
                               "label": "Código do regime especial de tributação",
-                              "itens": ["Microempresa Municipal","Estimativa","Sociedade de Profissionais","Cooperativa","Microempresário Individual (MEI)","Microempresário e Empresa de Pequeno Porte"]
+                              "itens": [
+                                "Microempresa Municipal",
+                                "Estimativa",
+                                "Sociedade de Profissionais",
+                                "Cooperativa",
+                                "Microempresário Individual (MEI)",
+                                "Microempresário e Empresa de Pequeno Porte"
+                              ]
                             },
                             "simpleType": {
                               "restriction": {
@@ -6229,9 +6695,7 @@
                   {
                     "name": "retTrib",
                     "minOccurs": "0",
-                    "annotation": {
-                      "label": "Retenção de Tributos Federais"
-                    },
+                    "annotation": { "label": "Retenção de Tributos Federais" },
                     "complexType": {
                       "sequence": {
                         "element": [
@@ -6239,41 +6703,31 @@
                             "name": "vRetPIS",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Valor Retido de PIS"
-                            }
+                            "annotation": { "label": "Valor Retido de PIS" }
                           },
                           {
                             "name": "vRetCOFINS",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Valor Retido de COFINS"
-                            }
+                            "annotation": { "label": "Valor Retido de COFINS" }
                           },
                           {
                             "name": "vRetCSLL",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Valor Retido de CSLL"
-                            }
+                            "annotation": { "label": "Valor Retido de CSLL" }
                           },
                           {
                             "name": "vBCIRRF",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Base de Cálculo do IRRF"
-                            }
+                            "annotation": { "label": "Base de Cálculo do IRRF" }
                           },
                           {
                             "name": "vIRRF",
                             "type": "TDec_1302Opc",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Valor Retido de IRRF"
-                            }
+                            "annotation": { "label": "Valor Retido de IRRF" }
                           },
                           {
                             "name": "vBCRetPrev",
@@ -6309,7 +6763,14 @@
                     "name": "modFrete",
                     "annotation": {
                       "label": "Modalidade do frete",
-                      "itens":["Contratação do Frete por conta do Remetente (CIF)","Contratação do Frete por conta do destinatário/remetente (FOB)","Contratação do Frete por conta de terceiros","Transporte próprio por conta do remetente","Transporte próprio por conta do destinatário","Sem Ocorrência de transporte"]
+                      "itens": [
+                        "Contratação do Frete por conta do Remetente (CIF)",
+                        "Contratação do Frete por conta do destinatário/remetente (FOB)",
+                        "Contratação do Frete por conta de terceiros",
+                        "Transporte próprio por conta do remetente",
+                        "Transporte próprio por conta do destinatário",
+                        "Sem Ocorrência de transporte"
+                      ]
                     },
                     "simpleType": {
                       "restriction": {
@@ -6330,16 +6791,12 @@
                             {
                               "name": "CNPJ",
                               "type": "TCnpj",
-                              "annotation": {
-                                "label": "CNPJ do transportador"
-                              }
+                              "annotation": { "label": "CNPJ do transportador" }
                             },
                             {
                               "name": "CPF",
                               "type": "TCpf",
-                              "annotation": {
-                                "label": "CPF do transportador"
-                              }
+                              "annotation": { "label": "CPF do transportador" }
                             }
                           ]
                         },
@@ -6362,16 +6819,12 @@
                             "name": "IE",
                             "type": "TIeDest",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Inscrição Estadual"
-                            }
+                            "annotation": { "label": "Inscrição Estadual" }
                           },
                           {
                             "name": "xEnder",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Endereço completo"
-                            },
+                            "annotation": { "label": "Endereço completo" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -6383,9 +6836,7 @@
                           {
                             "name": "xMun",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Nome do munícipio"
-                            },
+                            "annotation": { "label": "Nome do munícipio" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -6416,30 +6867,22 @@
                           {
                             "name": "vServ",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Valor do Serviço"
-                            }
+                            "annotation": { "label": "Valor do Serviço" }
                           },
                           {
                             "name": "vBCRet",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "BC da Retenção do ICMS"
-                            }
+                            "annotation": { "label": "BC da Retenção do ICMS" }
                           },
                           {
                             "name": "pICMSRet",
                             "type": "TDec_0302a04",
-                            "annotation": {
-                              "label": "Alíquota da Retenção"
-                            }
+                            "annotation": { "label": "Alíquota da Retenção" }
                           },
                           {
                             "name": "vICMSRet",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Valor do ICMS Retido"
-                            }
+                            "annotation": { "label": "Valor do ICMS Retido" }
                           },
                           {
                             "name": "CFOP",
@@ -6531,17 +6974,13 @@
                             "name": "pesoL",
                             "type": "TDec_1203",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Peso líquido (em kg)"
-                            }
+                            "annotation": { "label": "Peso líquido (em kg)" }
                           },
                           {
                             "name": "pesoB",
                             "type": "TDec_1203",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Peso bruto (em kg)"
-                            }
+                            "annotation": { "label": "Peso bruto (em kg)" }
                           },
                           {
                             "name": "lacres",
@@ -6585,9 +7024,7 @@
                         "type": "TVeiculo",
                         "minOccurs": "0",
                         "maxOccurs": "5",
-                        "annotation": {
-                          "label": "Dados do reboque/Dolly"
-                        }
+                        "annotation": { "label": "Dados do reboque/Dolly" }
                       }
                     ]
                   },
@@ -6595,9 +7032,7 @@
                     {
                       "name": "vagao",
                       "minOccurs": "0",
-                      "annotation": {
-                        "label": "Identificação do vagão"
-                      },
+                      "annotation": { "label": "Identificação do vagão" },
                       "simpleType": {
                         "restriction": {
                           "base": "string",
@@ -6609,9 +7044,7 @@
                     {
                       "name": "balsa",
                       "minOccurs": "0",
-                      "annotation": {
-                        "label": "Identificação da balsa"
-                      },
+                      "annotation": { "label": "Identificação da balsa" },
                       "simpleType": {
                         "restriction": {
                           "base": "string",
@@ -6642,9 +7075,7 @@
                           {
                             "name": "nFat",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Número da fatura"
-                            },
+                            "annotation": { "label": "Número da fatura" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -6673,9 +7104,7 @@
                             "name": "vLiq",
                             "type": "TDec_1302",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Valor líquido da fatura"
-                            }
+                            "annotation": { "label": "Valor líquido da fatura" }
                           }
                         ]
                       }
@@ -6685,18 +7114,14 @@
                     "name": "dup",
                     "minOccurs": "0",
                     "maxOccurs": "120",
-                    "annotation": {
-                      "label": "Dados das duplicatas"
-                    },
+                    "annotation": { "label": "Dados das duplicatas" },
                     "complexType": {
                       "sequence": {
                         "element": [
                           {
                             "name": "nDup",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Número da duplicata"
-                            },
+                            "annotation": { "label": "Número da duplicata" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -6716,9 +7141,7 @@
                           {
                             "name": "vDup",
                             "type": "TDec_1302Opc",
-                            "annotation": {
-                              "label": "Valor da duplicata"
-                            }
+                            "annotation": { "label": "Valor da duplicata" }
                           }
                         ]
                       }
@@ -6730,9 +7153,7 @@
           },
           {
             "name": "pag",
-            "annotation": {
-              "label": "Dados de Pagamento"
-            },
+            "annotation": { "label": "Dados de Pagamento" },
             "complexType": {
               "sequence": {
                 "element": [
@@ -6750,7 +7171,10 @@
                             "minOccurs": "0",
                             "annotation": {
                               "label": "Indicador da Forma de Pagamento",
-                              "itens": ["Pagamento à Vista","Pagamento à Prazo"]
+                              "itens": [
+                                "Pagamento à Vista",
+                                "Pagamento à Prazo"
+                              ]
                             },
                             "simpleType": {
                               "restriction": {
@@ -6765,7 +7189,7 @@
                               "choice": {
                                 "element": [
                                   {
-                                    "annotation": {"label":"Comum"},
+                                    "annotation": { "label": "Comum" },
                                     "complexType": {
                                       "sequence": {
                                         "element": [
@@ -6773,7 +7197,23 @@
                                             "name": "tPag",
                                             "annotation": {
                                               "label": "Forma de Pagamento",
-                                              "itens":["Dinheiro","Cheque","Cartão de crédito","Cartão de débito","Crédito Loja","Vale Alimentação","Vale Refeição","Vale Presente","Vale Combustível","Duplicata Mercantil","Boleto Bancario","Depósito Bancário","Pagamento Instantâneo (PIX)","Transferência bancária, Carteira Digital","Programa de fidelidade, Cashback, Crédito Virtual"]
+                                              "itens": [
+                                                "Dinheiro",
+                                                "Cheque",
+                                                "Cartão de crédito",
+                                                "Cartão de débito",
+                                                "Crédito Loja",
+                                                "Vale Alimentação",
+                                                "Vale Refeição",
+                                                "Vale Presente",
+                                                "Vale Combustível",
+                                                "Duplicata Mercantil",
+                                                "Boleto Bancario",
+                                                "Depósito Bancário",
+                                                "Pagamento Instantâneo (PIX)",
+                                                "Transferência bancária, Carteira Digital",
+                                                "Programa de fidelidade, Cashback, Crédito Virtual"
+                                              ]
                                             },
                                             "simpleType": {
                                               "restriction": {
@@ -6804,13 +7244,13 @@
                                             "annotation": {
                                               "label": "Valor do Pagamento"
                                             }
-                                          }                
+                                          }
                                         ]
                                       }
                                     }
                                   },
                                   {
-                                    "annotation": {"label": "Sem Pagamento"},
+                                    "annotation": { "label": "Sem Pagamento" },
                                     "complexType": {
                                       "sequence": {
                                         "element": [
@@ -6832,7 +7272,7 @@
                                     }
                                   },
                                   {
-                                    "annotation": {"label": "Outros"},
+                                    "annotation": { "label": "Outros" },
                                     "complexType": {
                                       "sequence": {
                                         "element": [
@@ -6840,7 +7280,7 @@
                                             "name": "tPag",
                                             "annotation": {
                                               "label": "Forma de Pagamento",
-                                              "itens":["Outros"]
+                                              "itens": ["Outros"]
                                             },
                                             "simpleType": {
                                               "restriction": {
@@ -6869,7 +7309,7 @@
                                             "annotation": {
                                               "label": "Valor do Pagamento"
                                             }
-                                          }                
+                                          }
                                         ]
                                       }
                                     }
@@ -6881,9 +7321,7 @@
                           {
                             "name": "card",
                             "minOccurs": "0",
-                            "annotation": {
-                              "label": "Grupo de Cartões"
-                            },
+                            "annotation": { "label": "Grupo de Cartões" },
                             "complexType": {
                               "sequence": {
                                 "element": [
@@ -6891,7 +7329,10 @@
                                     "name": "tpIntegra",
                                     "annotation": {
                                       "label": "Tipo de Integração do processo de pagamento",
-                                      "itens":["Pagamento integrado (TEF ou comércio eletrônico)","Pagamento não integrado (POS)"]
+                                      "itens": [
+                                        "Pagamento integrado (TEF ou comércio eletrônico)",
+                                        "Pagamento não integrado (POS)"
+                                      ]
                                     },
                                     "simpleType": {
                                       "restriction": {
@@ -6913,7 +7354,36 @@
                                     "minOccurs": "0",
                                     "annotation": {
                                       "label": "Bandeira da operadora de cartão de crédito/débito",
-                                      "itens": ["Visa","Mastercard","American Express","Sorocred","Diners Club","Elo","Hipercard","Aura","Cabal","Alelo","Banes Card","CalCard","Credz","Discover","GoodCard","GreenCard","Hiper","JcB","Mais","MaxVan","Policard","RedeCompras","Sodexo","ValeCard","Verocheque","VR","Ticket","Outros"]
+                                      "itens": [
+                                        "Visa",
+                                        "Mastercard",
+                                        "American Express",
+                                        "Sorocred",
+                                        "Diners Club",
+                                        "Elo",
+                                        "Hipercard",
+                                        "Aura",
+                                        "Cabal",
+                                        "Alelo",
+                                        "Banes Card",
+                                        "CalCard",
+                                        "Credz",
+                                        "Discover",
+                                        "GoodCard",
+                                        "GreenCard",
+                                        "Hiper",
+                                        "JcB",
+                                        "Mais",
+                                        "MaxVan",
+                                        "Policard",
+                                        "RedeCompras",
+                                        "Sodexo",
+                                        "ValeCard",
+                                        "Verocheque",
+                                        "VR",
+                                        "Ticket",
+                                        "Outros"
+                                      ]
                                     },
                                     "simpleType": {
                                       "restriction": {
@@ -7078,7 +7548,13 @@
                             "name": "indProc",
                             "annotation": {
                               "label": "Origem do processo",
-                              "itens":["SEFAZ","Justiça Federal","Justiça Estadual","Secex/RFB","Outros"]
+                              "itens": [
+                                "SEFAZ",
+                                "Justiça Federal",
+                                "Justiça Estadual",
+                                "Secex/RFB",
+                                "Outros"
+                              ]
                             },
                             "simpleType": {
                               "restriction": {
@@ -7125,9 +7601,7 @@
                   {
                     "name": "xLocDespacho",
                     "minOccurs": "0",
-                    "annotation": {
-                      "label": "Descrição do local de despacho"
-                    },
+                    "annotation": { "label": "Descrição do local de despacho" },
                     "simpleType": {
                       "restriction": {
                         "base": "string",
@@ -7143,9 +7617,7 @@
           {
             "name": "compra",
             "minOccurs": "0",
-            "annotation": {
-              "label": "Informações de compras"
-            },
+            "annotation": { "label": "Informações de compras" },
             "complexType": {
               "sequence": {
                 "element": [
@@ -7213,9 +7685,7 @@
                   },
                   {
                     "name": "ref",
-                    "annotation": {
-                      "label": "Mês e Ano de Referência"
-                    },
+                    "annotation": { "label": "Mês e Ano de Referência" },
                     "simpleType": {
                       "restriction": {
                         "base": "string",
@@ -7278,9 +7748,7 @@
                         "element": [
                           {
                             "name": "xDed",
-                            "annotation": {
-                              "label": "Descrição da Dedução"
-                            },
+                            "annotation": { "label": "Descrição da Dedução" },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -7292,9 +7760,7 @@
                           {
                             "name": "vDed",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "valor da dedução"
-                            }
+                            "annotation": { "label": "valor da dedução" }
                           }
                         ]
                       }
@@ -7303,23 +7769,17 @@
                   {
                     "name": "vFor",
                     "type": "TDec_1302",
-                    "annotation": {
-                      "label": "Valor  dos fornecimentos"
-                    }
+                    "annotation": { "label": "Valor  dos fornecimentos" }
                   },
                   {
                     "name": "vTotDed",
                     "type": "TDec_1302",
-                    "annotation": {
-                      "label": "Valor Total das Deduções"
-                    }
+                    "annotation": { "label": "Valor Total das Deduções" }
                   },
                   {
                     "name": "vLiqFor",
                     "type": "TDec_1302",
-                    "annotation": {
-                      "label": "Valor Líquido dos fornecimentos"
-                    }
+                    "annotation": { "label": "Valor Líquido dos fornecimentos" }
                   }
                 ]
               }
@@ -7371,7 +7831,10 @@
                       "label": "Telefone da pessoa a ser contatada na empresa desenvolvedora do sistema"
                     },
                     "simpleType": {
-                      "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
+                      "restriction": {
+                        "base": "string",
+                        "pattern": "[0-9]{6,14}"
+                      }
                     }
                   }
                 ],
@@ -7384,21 +7847,25 @@
                         "label": "Identificador do CSRT utilizado para montar o hash do CSRT"
                       },
                       "simpleType": {
-                        "restriction": { "base": "string", "pattern": "[0-9]{2}" }
+                        "restriction": {
+                          "base": "string",
+                          "pattern": "[0-9]{2}"
+                        }
                       }
                     },
                     {
                       "name": "hashCSRT",
-                      "annotation": {
-                        "label": "Chave do CSRT"
-                      },
+                      "annotation": { "label": "Chave do CSRT" },
                       "simpleType": {
-                        "restriction": { "base": "base64Binary", "length": "20" }
+                        "restriction": {
+                          "base": "base64Binary",
+                          "length": "20"
+                        }
                       }
                     }
                   ]
                 }
-              }        
+              }
             }
           }
         ]
@@ -7406,9 +7873,7 @@
     },
     {
       "name": "TEnderecoEstrangeiro",
-      "annotation": {
-        "label": "Tipo Dados do Endereço"
-      },
+      "annotation": { "label": "Tipo Dados do Endereço" },
       "sequence": {
         "element": [
           {
@@ -7472,9 +7937,7 @@
           },
           {
             "name": "UF",
-            "annotation": {
-              "label": "Sigla da UF"
-            },
+            "annotation": { "label": "Sigla da UF" },
             "simpleType": {
               "restriction": { "base": "string", "enumeration": "EX" }
             }
@@ -7522,9 +7985,7 @@
     },
     {
       "name": "TEnderEmi",
-      "annotation": {
-        "label": "Tipo Dados do Endereço do Emitente"
-      },
+      "annotation": { "label": "Tipo Dados do Endereço do Emitente" },
       "sequence": {
         "element": [
           {
@@ -7631,9 +8092,7 @@
     },
     {
       "name": "TLocal",
-      "annotation": {
-        "label": "Tipo Dados do Local de Retirada ou Entrega"
-      },
+      "annotation": { "label": "Tipo Dados do Local de Retirada ou Entrega" },
       "sequence": {
         "choice": {
           "element": [
@@ -7642,11 +8101,7 @@
               "type": "TCnpjOpc",
               "annotation": { "label": "CNPJ" }
             },
-            {
-              "name": "CPF",
-              "type": "TCpf",
-              "annotation": { "label": "CPF" }
-            }
+            { "name": "CPF", "type": "TCpf", "annotation": { "label": "CPF" } }
           ]
         },
         "element": [
@@ -7712,9 +8167,7 @@
           {
             "name": "cMun",
             "type": "TCodMunIBGE",
-            "annotation": {
-              "label": "Código do município"
-            }
+            "annotation": { "label": "Código do município" }
           },
           {
             "name": "xMun",
@@ -7763,9 +8216,7 @@
           {
             "name": "fone",
             "minOccurs": "0",
-            "annotation": {
-              "label": "Telefone"
-            },
+            "annotation": { "label": "Telefone" },
             "simpleType": {
               "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
             }
@@ -7846,9 +8297,7 @@
           {
             "name": "cSelo",
             "minOccurs": "0",
-            "annotation": {
-              "label": "Código do selo de controle do IPI"
-            },
+            "annotation": { "label": "Código do selo de controle do IPI" },
             "simpleType": {
               "restriction": {
                 "base": "string",
@@ -7860,18 +8309,14 @@
           {
             "name": "qSelo",
             "minOccurs": "0",
-            "annotation": {
-              "label": "Quantidade de selo de controle do IPI"
-            },
+            "annotation": { "label": "Quantidade de selo de controle do IPI" },
             "simpleType": {
               "restriction": { "base": "string", "pattern": "[0-9]{1,12}" }
             }
           },
           {
             "name": "cEnq",
-            "annotation": {
-              "label": "Código de Enquadramento Legal do IPI"
-            },
+            "annotation": { "label": "Código de Enquadramento Legal do IPI" },
             "simpleType": {
               "restriction": {
                 "base": "string",
@@ -7892,7 +8337,12 @@
                       "name": "CST",
                       "annotation": {
                         "label": "Código da Situação Tributária do IPI",
-                        "itens": ["Entrada com recuperação de crédito","Outras entradas","Saída tributada","Outras saídas"]
+                        "itens": [
+                          "Entrada com recuperação de crédito",
+                          "Outras entradas",
+                          "Saída tributada",
+                          "Outras saídas"
+                        ]
                       },
                       "simpleType": {
                         "restriction": {
@@ -7914,9 +8364,7 @@
                           {
                             "name": "vBC",
                             "type": "TDec_1302",
-                            "annotation": {
-                              "label": "Valor da BC do IPI"
-                            }
+                            "annotation": { "label": "Valor da BC do IPI" }
                           },
                           {
                             "name": "pIPI",
@@ -7956,7 +8404,18 @@
                     "name": "CST",
                     "annotation": {
                       "label": "Código da Situação Tributária do IPI",
-                      "itens":["Entrada tributada com alíquota zero","Entrada isenta","Entrada não-tributada","Entrada imune","Entrada com suspensão","Saída tributada com alíquota zero","Saída isenta","Saída não-tributada","Saída imune","Saída com suspensão"]
+                      "itens": [
+                        "Entrada tributada com alíquota zero",
+                        "Entrada isenta",
+                        "Entrada não-tributada",
+                        "Entrada imune",
+                        "Entrada com suspensão",
+                        "Saída tributada com alíquota zero",
+                        "Saída isenta",
+                        "Saída não-tributada",
+                        "Saída imune",
+                        "Saída com suspensão"
+                      ]
                     },
                     "simpleType": {
                       "restriction": {
@@ -7989,7 +8448,17 @@
       "name": "Torig",
       "annotation": {
         "label": "Tipo Origem da mercadoria CST ICMS  origem da mercadoria",
-        "itens":["Nacional exceto as indicadas nos códigos 3, 4, 5 e 8","Estrangeira - Importação direta","Estrangeira - Adquirida no mercado interno","Nacional, conteudo superior 40% e inferior ou igual a 70%","Nacional, processos produtivos básicos","Nacional, conteudo inferior 40%","Estrangeira - Importação direta, com similar nacional, lista CAMEX","Estrangeira - mercado interno, sem simular,lista CAMEX","Nacional, Conteúdo de Importação superior a 70%"]
+        "itens": [
+          "Nacional exceto as indicadas nos códigos 3, 4, 5 e 8",
+          "Estrangeira - Importação direta",
+          "Estrangeira - Adquirida no mercado interno",
+          "Nacional, conteudo superior 40% e inferior ou igual a 70%",
+          "Nacional, processos produtivos básicos",
+          "Nacional, conteudo inferior 40%",
+          "Estrangeira - Importação direta, com similar nacional, lista CAMEX",
+          "Estrangeira - mercado interno, sem simular,lista CAMEX",
+          "Nacional, Conteúdo de Importação superior a 70%"
+        ]
       },
       "restriction": {
         "base": "string",
@@ -7998,9 +8467,7 @@
     },
     {
       "name": "TCodUfIBGE",
-      "annotation": {
-        "label": "Tipo Código da UF da tabela do IBGE"
-      },
+      "annotation": { "label": "Tipo Código da UF da tabela do IBGE" },
       "restriction": {
         "base": "string",
         "enumeration": [
@@ -8036,16 +8503,12 @@
     },
     {
       "name": "TCodMunIBGE",
-      "annotation": {
-        "label": "Tipo Código do Município da tabela do IBGE"
-      },
+      "annotation": { "label": "Tipo Código do Município da tabela do IBGE" },
       "restriction": { "base": "string", "pattern": "[0-9]{7}" }
     },
     {
       "name": "TChNFe",
-      "annotation": {
-        "label": "Tipo Chave da Nota Fiscal Eletrônica"
-      },
+      "annotation": { "label": "Tipo Chave da Nota Fiscal Eletrônica" },
       "restriction": {
         "base": "string",
         "maxLength": "44",
@@ -8151,9 +8614,7 @@
     },
     {
       "name": "TDec_1204",
-      "annotation": {
-        "label": "Tipo Decimal com 12 inteiros e 4 decimais"
-      },
+      "annotation": { "label": "Tipo Decimal com 12 inteiros e 4 decimais" },
       "restriction": {
         "base": "string",
         "pattern": "0|0\\.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(\\.[0-9]{4})?"
