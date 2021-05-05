@@ -75,7 +75,6 @@ OK  Remover pasta VM
 OK  Corrigir documentações no schema json e unir os 2 num único
 OK  Remover tag complexType
 OK  Remover tag sequence
-    Remover tag choice (torná-la um field)
     Aplicar novidades do nfe.json ao form-base
 OK  Passar custom headers para o nfe.json
     Atualizar entradas para que tenham o tipo correto
