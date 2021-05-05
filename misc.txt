@@ -75,7 +75,9 @@ OK  Remover pasta VM
     Corrigir documentações no schema json e unir os 2 num único
     Atualizar entradas para que tenham o tipo correto
     Proibir o uso de emitente com CPF
-    Corrigir erro em Grupo de informações de interesse da Prefeitura (ordem, pag 13)
+      Via cadastro
+      Via importação
+OK  Corrigir erro em Grupo de informações de interesse da Prefeitura (ordem, pag 13)
     Analisar elementos já salvos para não haver repetição de itens no banco de dados
     Tela para exibição de NFe, removendo caixa de dialogo
     Caixa de dialogo mais completa para sincronização
