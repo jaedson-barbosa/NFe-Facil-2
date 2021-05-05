@@ -37,34 +37,34 @@ export function generateView(
 }
 
 interface ISpecificFormFields {
-  names: string[];
-  addIgnoreFields: string[];
+  names: string[]
+  addIgnoreFields: string[]
   getNewFields: (
     parentTags: string[],
     getField: (name: string) => any
-  ) => IBaseFormElement[];
+  ) => IBaseFormElement[]
 }
 
 interface IGenerateViewOptions {
   customOptions?: {
-    firstOption: string;
-    optionsChanger: (options: IChoiceOption[]) => void;
-  }[];
-  rootTag?: string;
-  parentTags?: string[];
+    firstOption: string
+    optionsChanger: (options: IChoiceOption[]) => void
+  }[]
+  rootTag?: string
+  parentTags?: string[]
 }
 
 function getDocumentation(v: any): string {
   const doc = v.annotation?.label
   // if (!doc) console.log(v)
-  return doc ?? '';
+  return doc ?? ''
 }
 
 function getDefaultListNameChanger(name: string) {
   return (v: string[]) => {
-    v.splice(v.indexOf(name) + 1, 0, '0');
-    return v;
-  };
+    v.splice(v.indexOf(name) + 1, 0, '0')
+    return v
+  }
 }
 
 function isRequired(v: any): boolean {
@@ -76,23 +76,24 @@ function createInput(
   parentTags: string[],
   creationOptions: IElementCreationOptions
 ): IBaseFormElement {
-  const create = (result: any) => createFieldset(result, parentTags, creationOptions)
+  const create = (result: any) =>
+    createFieldset(result, parentTags, creationOptions)
   if (field.element) {
     return create(field)
   }
   const fieldRestriction = field['simpleType']?.['restriction']
   const baseType = field.type ?? fieldRestriction?.base
   const findType = (v: any) => getName(v) == baseType
-  const hasOtherRestrictions =
-    baseType != 'string' && baseType != 'base64Binary'
-  const otherRestrictions: any = (simpleTypes.find(findType) as any)?.restriction
+  const hasOtherRestrictions = baseType != 'string'
+  const otherRestrictions: any = (simpleTypes.find(findType) as any)
+    ?.restriction
   if (hasOtherRestrictions && !otherRestrictions) {
     if (field.choice || field.element) {
       return create(field)
     }
     const complexType = complexTypes.find(findType)
     if (complexType) {
-      return create({...complexType, ...field})
+      return create({ ...complexType, ...field })
     }
     throw new Error('Invalid field')
   }
@@ -101,8 +102,7 @@ function createInput(
     throw new Error('The other restrictions have a invalid base.')
   }
   const enumeration =
-    fieldRestriction?.['enumeration'] ??
-    otherRestrictions?.['enumeration']
+    fieldRestriction?.['enumeration'] ?? otherRestrictions?.['enumeration']
   const name = [...parentTags, getName(field)]
   creationOptions.customNameChanger?.(name)
   const required = isRequired(field)
@@ -120,60 +120,19 @@ function createInput(
     })
   }
   if (typeof enumeration == 'string') {
-    const val = enumeration
-    return new hiddenFormElement(name, required, val)
+    return new hiddenFormElement(name, required, enumeration)
   }
-  const val0 = enumeration[0]
-  const val1 = enumeration[1].toUpperCase()
-  if (enumeration.length == 2 && val0.toUpperCase() == val1)
-    return new hiddenFormElement(name, required, val0)
-  const values = (enumeration as any[]).map((v) => v)
-  const getValueDescription = (v: string) => {
-    if (isNaN(+v) && v.length > 1) return v
-    const getIndex = (search: string) => documentation.indexOf(search)
-    const getIndexEnd = (mark: string, pos: number) =>
-      documentation.indexOf(mark, pos)
-    const starts = v.includes('.00')
-      ? [getIndex(v.replace('.00', '%'))]
-      : ['-', ' -', '  –', ' –', '–', '=', ' =']
-          .map((k) => getIndex(v + k))
-          .filter((v) => v != -1)
-    if (starts.length == 0) return v
-    const start = Math.min(...starts)
-    const ends = [';', '.', ')', '\n']
-      .map((k) => getIndexEnd(k, start))
-      .filter((k) => k != -1)
-    if (ends.length == 0) {
-      return documentation.substring(start)
-    }
-    let end = Math.min(...ends)
-    return documentation.substring(start, end)
-  }
-  const getOption = (v: any, processDescription: boolean = true) => {
-    return {
-      value: v,
-      text: processDescription ? getValueDescription(v) : v,
-    }
-  }
-  const firstOption = getOption(values[0])
-  const optionsHaveDescriptions = firstOption.text != firstOption.value
-  const otherValues = values.slice(1)
-  let stopValuesMap = false
-  const otherOptions = optionsHaveDescriptions
-    ? otherValues
-        .map((v) => {
-          if (stopValuesMap) return undefined
-          const opt = getOption(v, true)
-          if (opt.value == opt.text) {
-            stopValuesMap = true
-            return undefined
-          }
-          return opt
-        })
-        .filter((v) => v)
-    : otherValues.map((v) => getOption(v, false))
-  const completeOptions = [firstOption, ...otherOptions]
-  return new selectFormElement(name, documentation, required, completeOptions)
+  const itensDescriptions = field.annotation.itens
+
+  return new selectFormElement(
+    name,
+    documentation,
+    required,
+    (enumeration as any[]).map((v, i) => {
+      const text = itensDescriptions ? v + ' - ' + itensDescriptions[i] : v
+      return { value: v, text }
+    })
+  )
 }
 
 function createChoice(
@@ -224,8 +183,7 @@ function createFieldset(
   if (isRootList || field['element']) {
     const elements = (isRootList ? field : field['element']) as any[]
     fields.push(...elements.map((v) => createInput(v, tags, creationOptions)))
-  }
-  else if (field.choice) {
+  } else if (field.choice) {
     fields.push(createChoice(field.choice, tags, creationOptions))
   }
   if (!fields.length) {
