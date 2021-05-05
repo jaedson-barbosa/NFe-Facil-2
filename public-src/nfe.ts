@@ -126,7 +126,7 @@ async function gerarProdutosEdicao() {
     customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'],
     customOptions: [
       {
-        firstOption: 'Tributação pelo ICMS\n00 - Tributada integralmente',
+        firstOption: 'Tributado integralmente',
         optionsChanger: (options) => {
           if (emit.CRT === 2) {
             // Regime normal
