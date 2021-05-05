@@ -417,7 +417,7 @@
                                   }
                                 ],
                                 "choice": {
-                                  "annotation":{"label":"Documento usado"},
+                                  "annotation": { "label": "Documento usado" },
                                   "element": [
                                     {
                                       "name": "CNPJ",
@@ -943,7 +943,7 @@
             },
             "complexType": {
               "choice": {
-                "annotation":{"label":"Documento usado"},
+                "annotation": { "label": "Documento usado" },
                 "element": [
                   {
                     "name": "CNPJ",
@@ -1050,7 +1050,9 @@
                           },
                           {
                             "name": "cBenef",
-                            "annotation":{"label":"Código de Benefício Fiscal na UF aplicado ao item"},
+                            "annotation": {
+                              "label": "Código de Benefício Fiscal na UF aplicado ao item"
+                            },
                             "minOccurs": "0",
                             "simpleType": {
                               "restriction": {
@@ -1072,7 +1074,9 @@
                           },
                           {
                             "name": "CFOP",
-                            "annotation": { "label": "CFOP (Código Fiscal de Operações e Prestações)" },
+                            "annotation": {
+                              "label": "CFOP (Código Fiscal de Operações e Prestações)"
+                            },
                             "simpleType": {
                               "restriction": {
                                 "base": "string",
@@ -1560,7 +1564,9 @@
                                   },
                                   {
                                     "name": "cAgreg",
-                                    "annotation":{"label":"Código de agregação"},
+                                    "annotation": {
+                                      "label": "Código de agregação"
+                                    },
                                     "minOccurs": "0",
                                     "simpleType": {
                                       "restriction": {
@@ -1575,7 +1581,9 @@
                           }
                         ],
                         "sequence": {
-                          "annotation":{"label":"Código Especificador da Substituição Tributária"},
+                          "annotation": {
+                            "label": "Código Especificador da Substituição Tributária"
+                          },
                           "minOccurs": "0",
                           "element": [
                             {
@@ -3054,7 +3062,9 @@
                                   },
                                   "sequence": [
                                     {
-                                      "annotation":{"label":"Em percentual"},
+                                      "annotation": {
+                                        "label": "Em percentual"
+                                      },
                                       "element": [
                                         {
                                           "name": "vBC",
@@ -3073,7 +3083,7 @@
                                       ]
                                     },
                                     {
-                                      "annotation":{"label":"Em valor"},
+                                      "annotation": { "label": "Em valor" },
                                       "element": [
                                         {
                                           "name": "qBCProd",
@@ -3204,10 +3214,12 @@
                           }
                         ],
                         "choice": {
-                          "annotation":{"label":"Tipo de tributação"},
+                          "annotation": { "label": "Tipo de tributação" },
                           "sequence": [
                             {
-                              "annotation":{"label":"Tributação para produtos"},
+                              "annotation": {
+                                "label": "Tributação para produtos"
+                              },
                               "element": [
                                 {
                                   "name": "ICMS",
@@ -4692,7 +4704,9 @@
                                                   }
                                                 },
                                                 {
-                                                  "annotation":{"label":"Substituição tributária de ICMS"},
+                                                  "annotation": {
+                                                    "label": "Substituição tributária de ICMS"
+                                                  },
                                                   "minOccurs": "0",
                                                   "element": [
                                                     {
@@ -5955,7 +5969,9 @@
                                                 },
                                                 {
                                                   "minOccurs": "0",
-                                                  "annotation":{"label":"Crédito do ICMS"},
+                                                  "annotation": {
+                                                    "label": "Crédito do ICMS"
+                                                  },
                                                   "element": [
                                                     {
                                                       "name": "pCredSN",
@@ -5983,7 +5999,9 @@
                                 },
                                 {
                                   "name": "IPI",
-                                  "annotation":{"label":"Imposto sobre produtos industrializados"},
+                                  "annotation": {
+                                    "label": "Imposto sobre produtos industrializados"
+                                  },
                                   "type": "TIpi",
                                   "minOccurs": "0"
                                 },
@@ -6031,11 +6049,15 @@
                               ]
                             },
                             {
-                              "annotation":{"label":"Tributação para serviços"},
+                              "annotation": {
+                                "label": "Tributação para serviços"
+                              },
                               "element": [
                                 {
                                   "name": "IPI",
-                                  "annotation":{"label":"Imposto sobre produtos industrializados"},
+                                  "annotation": {
+                                    "label": "Imposto sobre produtos industrializados"
+                                  },
                                   "type": "TIpi",
                                   "minOccurs": "0"
                                 },
@@ -6847,7 +6869,7 @@
                     "complexType": {
                       "sequence": {
                         "choice": {
-                          "annotation":{"label":"Documento usado"},
+                          "annotation": { "label": "Documento usado" },
                           "minOccurs": "0",
                           "element": [
                             {
@@ -7046,7 +7068,7 @@
                           },
                           {
                             "name": "lacres",
-                            "annotation":{"label":"Lacres"},
+                            "annotation": { "label": "Lacres" },
                             "minOccurs": "0",
                             "maxOccurs": "5000",
                             "complexType": {
@@ -7073,7 +7095,7 @@
                   }
                 ],
                 "choice": {
-                  "annotation":{"label":"Veículo"},
+                  "annotation": { "label": "Veículo" },
                   "sequence": {
                     "minOccurs": "0",
                     "element": [
@@ -8159,7 +8181,7 @@
       "annotation": { "label": "Tipo Dados do Local de Retirada ou Entrega" },
       "sequence": {
         "choice": {
-          "annotation":{"label":"Documento usado"},
+          "annotation": { "label": "Documento usado" },
           "element": [
             {
               "name": "CNPJ",
@@ -8392,11 +8414,11 @@
           }
         ],
         "choice": {
-          "annotation":{"label":"Tipo de IPI"},
+          "annotation": { "label": "Tipo de IPI" },
           "element": [
             {
               "name": "IPITrib",
-              "annotation":{"label":"IPI tributado"},
+              "annotation": { "label": "IPI tributado" },
               "complexType": {
                 "sequence": {
                   "element": [
@@ -8442,7 +8464,9 @@
                         ]
                       },
                       {
-                        "annotation": { "label": "Cálculo por valor de unidade" },
+                        "annotation": {
+                          "label": "Cálculo por valor de unidade"
+                        },
                         "element": [
                           {
                             "name": "qUnid",
@@ -8467,7 +8491,7 @@
             },
             {
               "name": "IPINT",
-              "annotation":{"label":"IPI não tributado"},
+              "annotation": { "label": "IPI não tributado" },
               "complexType": {
                 "sequence": {
                   "element": {

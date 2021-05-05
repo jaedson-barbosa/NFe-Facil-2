@@ -38,7 +38,7 @@ SESSIONSTORAGE
 idEmpresa
 
 METAS:
-BASE (para analisar viabilidade técnica):
+BASE para análise de viabilidade técnica:
 OK  Primeiro, implementar a edição de dados base e de emitentes
 OK  Busca de dados base na tela de NFe
 OK    Produtos
@@ -67,7 +67,7 @@ OK    Servidor
 OK    Cliente
 OK  Verificar esse detalhe do xs:attribute
 
-REFINAMENTOS IMEDIATOS (antes da fase alpha):
+BASE para emissão de NFe:
 OK  Fragmentar form-base.ts em varios arquivos em uma pasta
 OK  Limpar pasta PL_009
 OK  Limpar pasta base-data
@@ -83,7 +83,7 @@ OK  Corrigir erro em Grupo de informações de interesse da Prefeitura
     Analisar elementos já salvos para não haver repetição de itens no banco de dados
     Tela para exibição de NFe, removendo caixa de dialogo
     Caixa de dialogo mais completa para sincronização
-    Edição de emitente com mais configurações
+    Mais configurações na tela de emitente
       Função no servidor para atualização
       Emitente atualizado na sincronização
       Modo de sessão única (com sinc apenas no painel)
@@ -95,6 +95,10 @@ OK  Corrigir erro em Grupo de informações de interesse da Prefeitura
       Importação
       Geração
       Exibição
+    Tela index básica com login
+    Remover tela de login
+
+REFINAMENTOS (pré-alpha):
     Calculo de impostos semi-automático
       ICMS
       PIS
@@ -107,10 +111,12 @@ OK  Corrigir erro em Grupo de informações de interesse da Prefeitura
       Firestore
       IntexedDB
     Interfaces para requisições e respostas na pasta commom
+    Mais configurações na tela de emitente
+      Personalização de campos da NFe em templates personalizáveis
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
 
-REFINAMENTOS FUTUROS (durante a fase alplha):
+REFINAMENTOS FUTUROS (alplha):
     Scanner de código de barras
       USB
       Câmera de celular
