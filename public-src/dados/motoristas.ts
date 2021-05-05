@@ -8,7 +8,6 @@ export function renderizarMotorista(data: { transporta: any }): string {
 
 export function gerarViewMotorista() {
   return generateView(
-    elementosNFe[8]['complexType']['sequence']['element'][1],
-    { customRequireds: ['transporta', 'CPF', 'CNPJ'] }
+    elementosNFe[8]['sequence']['element'][1].sequence
   )
 }

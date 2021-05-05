@@ -20,13 +20,11 @@ export function generateView(
   optionsInstance?: IGenerateViewOptions
 ): IBaseFormElement[] {
   const customOptions = optionsInstance?.customOptions ?? []
-  const customRequireds = optionsInstance?.customRequireds ?? []
   const additionalNameChanger: ((names: string[]) => string[])[] = []
   const customNameChanger = (names: string[]) =>
     additionalNameChanger.forEach((v) => v(names))
   const creationOptions: IElementCreationOptions = {
     customOptions,
-    customRequireds,
     additionalNameChanger,
     customNameChanger,
   }
@@ -48,7 +46,6 @@ interface ISpecificFormFields {
 }
 
 interface IGenerateViewOptions {
-  customRequireds?: string[];
   customOptions?: {
     firstOption: string;
     optionsChanger: (options: IChoiceOption[]) => void;
@@ -58,7 +55,9 @@ interface IGenerateViewOptions {
 }
 
 function getDocumentation(v: any): string {
-  return v.annotation?.label ?? '';
+  const doc = v.annotation?.label
+  // if (!doc) console.log(v)
+  return doc ?? '';
 }
 
 function getDefaultListNameChanger(name: string) {
@@ -68,29 +67,7 @@ function getDefaultListNameChanger(name: string) {
   };
 }
 
-function isRequired(
-  v: any,
-  creationOptions?: IElementCreationOptions
-): boolean {
-  const customRequireds = creationOptions?.customRequireds ?? []
-  if (customRequireds.includes(getName(v))) return true
-  const element = v['element']
-  if (element && Array.isArray(element)) {
-    const required = element.every(
-      (k) =>
-        customRequireds.includes(getName(k)) || isRequired(k, creationOptions)
-    )
-    if (!required) return false
-  }
-  const seq = v['sequence']
-  if (seq) {
-    const sequence = Array.isArray(seq) ? seq : (seq['element'] as any[])
-    const required = sequence.every(
-      (k) =>
-        customRequireds.includes(getName(k)) || isRequired(k, creationOptions)
-    )
-    if (!required) return false
-  }
+function isRequired(v: any): boolean {
   return (v.minOccurs ?? 1) > 0
 }
 
@@ -106,20 +83,15 @@ function createInput(
     baseType != 'string' && baseType != 'base64Binary'
   const otherRestrictions: any = (simpleTypes.find(findType) as any)?.restriction
   if (hasOtherRestrictions && !otherRestrictions) {
-    const complexType = field['complexType'] ?? complexTypes.find(findType)
-    if (!complexType) {
-      const element = field['element']
-      if (!element) {
-        console.log(field)
-        throw new Error('Invalid field')
-      }
-      return createFieldset(field, parentTags, creationOptions)
+    const create = (result: any) => createFieldset(result, parentTags, creationOptions)
+    if (field.sequence || field.choice || field.element) {
+      return create({...field})
     }
-    const newField = {
-      ...field,
-      'complexType': complexType,
+    const complexType = complexTypes.find(findType)
+    if (complexType) {
+      return create({...complexType, ...field})
     }
-    return createFieldset(newField, parentTags, creationOptions)
+    throw new Error('Invalid field')
   }
   if (hasOtherRestrictions && otherRestrictions?.base != 'string') {
     console.log(otherRestrictions)
@@ -130,7 +102,7 @@ function createInput(
     otherRestrictions?.['enumeration']
   const name = [...parentTags, getName(field)]
   creationOptions.customNameChanger?.(name)
-  const required = isRequired(field, creationOptions)
+  const required = isRequired(field)
   const documentation = getDocumentation(field)
   if (!enumeration) {
     const getProp = (el: string) => {
@@ -246,7 +218,7 @@ function createChoice(
     }
   }
   const doc = getDocumentation(field)
-  const req = isRequired(field, creationOptions)
+  const req = isRequired(field)
   creationOptions.customOptions
     .find((v) => v.firstOption == options[0].text)
     ?.optionsChanger(options)
@@ -267,15 +239,14 @@ function createFieldset(
     creationOptions.additionalNameChanger.push(getDefaultListNameChanger(name))
   }
   const tags = name ? [...parentTags, name] : parentTags
-  const required = max > 1 || isRequired(field, creationOptions)
+  const required = max > 1 || isRequired(field)
   const fields: IBaseFormElement[] = []
   if (isRootList || field['element']) {
     const elements = (isRootList ? field : field['element']) as any[]
     fields.push(...elements.map((v) => createInput(v, tags, creationOptions)))
   }
-  if (field['complexType'] || field['sequence']) {
-    const sequence =
-      field['complexType']?.['sequence'] ?? field['sequence']
+  if (field['sequence']) {
+    const sequence = field['sequence']
     if (sequence) {
       if (fields.length == 0) {
         const pureFields = Object.entries(sequence)
@@ -286,10 +257,9 @@ function createFieldset(
         )
       } else fields.push(createFieldset(sequence, tags, creationOptions))
     }
-    const choice = field['complexType']?.['choice']
-    if (choice) {
-      fields.push(createChoice(choice, tags, creationOptions))
-    }
+  }
+  else if (field.choice) {
+    fields.push(createChoice(field.choice, tags, creationOptions))
   }
   if (!fields.length) {
     console.log(field)
@@ -527,7 +497,6 @@ function analyseTag(
 }
 
 interface IElementCreationOptions {
-  customRequireds: string[]
   customOptions: {
     firstOption: string
     optionsChanger: (options: IChoiceOption[]) => void

@@ -9,7 +9,6 @@ export function generateViews(
   return names.flatMap((name) => {
     const field = findField(rootField, name);
     return generateView(field.field, {
-      customRequireds: options.customRequireds ?? [],
       rootTag: field.tag,
       parentTags: options.parentNames
         ? [...options.parentNames, ...field.parentNames]
@@ -19,7 +18,6 @@ export function generateViews(
 }
 
 interface IGenerateViewsOptions {
-  customRequireds?: string[];
   parentNames?: string[];
 }
 

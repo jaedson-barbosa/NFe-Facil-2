@@ -123,7 +123,6 @@ const dialog = document.getElementById('search') as HTMLDialogElement
 
 async function gerarProdutosEdicao() {
   const views = generateView(elementosNFe[6], {
-    customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'],
     customOptions: [
       {
         firstOption: 'Tributado integralmente',
@@ -200,9 +199,7 @@ async function gerarCliente() {
 }
 
 function gerarProdutosVisualizacao() {
-  const views = generateView(elementosNFe[6], {
-    customRequireds: ['IPI|ISSQN', 'ICMS|IPI|II'],
-  })
+  const views = generateView(elementosNFe[6])
   const view = views[0] as listFormElement
   view.hidden = true
   return view
@@ -237,8 +234,7 @@ function gerarTotal() {
 
 async function gerarTransporte() {
   const views = generateView(elementosNFe[8], {
-    rootTag: 'element',
-    customRequireds: ['vol', 'veicTransp|reboque', 'reboque', 'lacres'],
+    rootTag: 'element'
   })
   const view = views[0] as fieldsetFormElement
   const motView = view.children[1] as fieldsetFormElement
@@ -271,8 +267,7 @@ async function gerarTransporte() {
 
 function gerarCobranca() {
   return generateView(elementosNFe[9], {
-    rootTag: 'element',
-    customRequireds: ['fat', 'dup'],
+    rootTag: 'element'
   })
 }
 
@@ -309,9 +304,7 @@ function gerarCompra() {
 }
 
 function gerarCana() {
-  return generateView(elementosNFe[15], {
-    customRequireds: ['deduc'],
-  })
+  return generateView(elementosNFe[15])
 }
 
 function gerarResponsavelTecnico() {
