@@ -342,13 +342,13 @@ function gerarResponsavelTecnico() {
 
   function renderProdutos() {
     clearChildren(main)
-    const elements = [prodsEdicao]
-    elements.forEach((v) => v.updateValue(currentData))
+    prodsEdicao.updateValue(currentData)
     main.appendChild(
       generateForm((data) => {
+        (data.det as any[]).forEach((v,i) => v.nItem = i + 1)
         currentData.det = data.det
         renderPrincipal()
-      }, ...elements)
+      }, prodsEdicao)
     )
   }
 

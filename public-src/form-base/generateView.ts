@@ -102,12 +102,12 @@ function createInput(
   } else {
     let type = 'text'
     if (field.name == 'fone') {
-      type = 'tel';
+      type = 'tel'
     } else if (field.name == 'email') {
-      type = 'email';
+      type = 'email'
     } else if (field.type == 'TData') {
       type = 'date'
-    } else if (!(/[a-zA-Z]|ÿ/).test(restriction.pattern)) {
+    } else if (!/[a-zA-Z]|ÿ/.test(restriction.pattern)) {
       type = 'number'
     }
     return new textFormElement(name, documentation, required, {
@@ -115,7 +115,7 @@ function createInput(
       minLength: restriction.minLength,
       maxLength: restriction.maxLength,
       type,
-      decimal: restriction.decimal
+      decimal: restriction.decimal,
     })
   }
 }
@@ -179,21 +179,23 @@ function createFieldset(
       },
     ]
     const ignoreFields: string[] = []
-    fields.push(...elements
-      .flatMap((v) => {
-        const name = v.name
-        if (ignoreFields.includes(name)) return undefined
-        const input = createInput(v, parentTags, creationOptions)
-        const specific = specificFields.find((k) => k.names.includes(name))
-        if (specific && !(input instanceof hiddenFormElement)) {
-          ignoreFields.push(...specific.names, ...specific.addIgnoreFields)
-          return specific.getNewFields(parentTags, (name) =>
-            elements.find((v) => v.name == name)
-          )
-        } // Se o valor for um hidden então ele não deve ser substituido
-        return input
-      })
-      .filter((v) => v))
+    fields.push(
+      ...elements
+        .flatMap((v) => {
+          const name = v.name
+          if (ignoreFields.includes(name)) return undefined
+          const input = createInput(v, tags, creationOptions)
+          const specific = specificFields.find((k) => k.names.includes(name))
+          if (specific && !(input instanceof hiddenFormElement)) {
+            ignoreFields.push(...specific.names, ...specific.addIgnoreFields)
+            return specific.getNewFields(tags, (name) =>
+              elements.find((v) => v.name == name)
+            )
+          } // Se o valor for um hidden então ele não deve ser substituido
+          return input
+        })
+        .filter((v) => v)
+    )
   } else if (field.choice) {
     fields.push(createChoice(field.choice, tags, creationOptions))
   }
@@ -202,7 +204,10 @@ function createFieldset(
     throw new Error('Invalid fieldset')
   }
   const fieldset = new fieldsetFormElement(
-    { legend: getDocumentation(field), required: !field.optional },
+    {
+      legend: getDocumentation(field),
+      required: field.maxOccurs || !field.optional,
+    },
     ...fields
   )
   if (field.maxOccurs) {
