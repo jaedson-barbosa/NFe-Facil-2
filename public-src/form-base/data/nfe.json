@@ -862,7 +862,8 @@
                 {
                   "name": "cProd",
                   "annotation": {
-                    "label": "Código do produto ou serviço_Preencher com CFOP caso se trate de itens não relacionados com mercadorias/produto e que o contribuinte não possua codificação própria (Formato: CFOP9999)."
+                    "label": "Código do produto ou serviço",
+                    "aux": "Preencher com CFOP caso se trate de itens não relacionados com mercadorias/produto e que o contribuinte não possua codificação própria (Formato: CFOP9999)"
                   },
                   "simpleType": {
                     "restriction": {
@@ -898,7 +899,8 @@
                 {
                   "name": "NCM",
                   "annotation": {
-                    "label": "Código NCM_É permitida a informação do gênero (posição do capítulo do NCM) quando a operação não for de comércio exterior (importação/exportação) ou o produto não seja tributado pelo IPI. Em caso de item de serviço ou item que não tenham produto (Ex. transferência de crédito, crédito do ativo imobilizado, etc.), informar o código 00"
+                    "label": "Código NCM",
+                    "aux": "É permitida a informação do gênero (posição do capítulo do NCM) quando a operação não for de comércio exterior (importação/exportação) ou o produto não seja tributado pelo IPI. Em caso de item de serviço ou item que não tenham produto (Ex. transferência de crédito, crédito do ativo imobilizado, etc.), informar o código 00"
                   },
                   "simpleType": {
                     "restriction": {
@@ -1178,7 +1180,8 @@
                     {
                       "name": "cExportador",
                       "annotation": {
-                        "label": "Código do exportador_Usado nos sistemas internos de informação do emitente"
+                        "label": "Código do exportador",
+                        "aux": "Usado nos sistemas internos de informação do emitente"
                       },
                       "simpleType": {
                         "restriction": {
@@ -1218,7 +1221,8 @@
                         {
                           "name": "cFabricante",
                           "annotation": {
-                            "label": "Código do fabricante estrangeiro_Usado nos sistemas internos de informação do emitente"
+                            "label": "Código do fabricante estrangeiro",
+                            "aux": "Usado nos sistemas internos de informação do emitente"
                           },
                           "simpleType": {
                             "restriction": {
@@ -1309,7 +1313,8 @@
                   "name": "xPed",
                   "minOccurs": "0",
                   "annotation": {
-                    "label": "Pedido de compra_Informação de interesse do emissor para controle do B2B"
+                    "label": "Pedido de compra",
+                    "aux": "Informação de interesse do emissor para controle do B2B"
                   },
                   "simpleType": {
                     "restriction": {
@@ -1345,7 +1350,8 @@
                 {
                   "name": "rastro",
                   "annotation": {
-                    "label": "Rastreabilidade_Obrigatório o preenchimento deste grupo no caso de medicamentos e produtos farmacêuticos"
+                    "label": "Rastreabilidade",
+                    "aux": "Obrigatório o preenchimento deste grupo no caso de medicamentos e produtos farmacêuticos"
                   },
                   "minOccurs": "0",
                   "maxOccurs": "500",
@@ -1382,7 +1388,8 @@
                       "name": "dVal",
                       "type": "TData",
                       "annotation": {
-                        "label": "Data de validade_Informar o último dia do mês caso a validade não especifique o dia"
+                        "label": "Data de validade",
+                        "aux": "Informar o último dia do mês caso a validade não especifique o dia"
                       }
                     },
                     {
@@ -1407,7 +1414,8 @@
                     {
                       "name": "CEST",
                       "annotation": {
-                        "label": "CEST (Codigo especificador da Substuicao Tributaria)_Identifica a mercadoria sujeita aos regimes de substituicao tributária e de antecipação do recolhimento do imposto"
+                        "label": "CEST (Codigo especificador da Substuicao Tributaria)",
+                        "aux": "Identifica a mercadoria sujeita aos regimes de substituicao tributária e de antecipação do recolhimento do imposto"
                       },
                       "simpleType": {
                         "restriction": {
@@ -1921,7 +1929,8 @@
                                       "name": "xMotivoIsencao",
                                       "minOccurs": "0",
                                       "annotation": {
-                                        "label": "Motivo da isenção_Para medicamento isento de registro na ANVISA, informar o número da decisão que o isenta, como por exemplo o número da Resolução da Diretoria Colegiada da ANVISA (RDC)."
+                                        "label": "Motivo da isenção",
+                                        "aux": "Para medicamento isento de registro na ANVISA, informar o número da decisão que o isenta, como por exemplo o número da Resolução da Diretoria Colegiada da ANVISA (RDC)"
                                       },
                                       "simpleType": {
                                         "restriction": {
@@ -1992,7 +2001,8 @@
                           {
                             "name": "descr",
                             "annotation": {
-                              "label": "Descrição completa da arma_Compreendendo: calibre, marca, capacidade, tipo de funcionamento, comprimento e demais elementos que permitam a sua perfeita identificação"
+                              "label": "Descrição completa da arma",
+                              "aux": "Compreendendo: calibre, marca, capacidade, tipo de funcionamento, comprimento e demais elementos que permitam a sua perfeita identificação"
                             },
                             "simpleType": {
                               "restriction": {
@@ -2023,7 +2033,8 @@
                           {
                             "name": "descANP",
                             "annotation": {
-                              "label": "Descrição do Produto conforme ANP_Utilizar a descrição de produtos do SIMP (Sistema de Informações de Movimentação de Produtos)."
+                              "label": "Descrição do Produto conforme ANP",
+                              "aux": "Utilizar a descrição de produtos do SIMP (Sistema de Informações de Movimentação de Produtos)"
                             },
                             "simpleType": {
                               "restriction": {
@@ -2044,7 +2055,8 @@
                                 "type": "TDec_0302a04Max100",
                                 "minOccurs": "0",
                                 "annotation": {
-                                  "label": "Percentual do GLP derivado do petróleo no produto GLP_Valores de 0 a 100."
+                                  "label": "Percentual do GLP derivado do petróleo no produto GLP",
+                                  "aux": "Valores de 0 a 100"
                                 }
                               },
                               {
@@ -2052,7 +2064,8 @@
                                 "type": "TDec_0302a04Max100",
                                 "minOccurs": "0",
                                 "annotation": {
-                                  "label": "Percentual de gás natural nacional GLGNn para o produto GLP_Valores de 0 a 100."
+                                  "label": "Percentual de gás natural nacional GLGNn para o produto GLP",
+                                  "aux": "Valores de 0 a 100"
                                 }
                               },
                               {
@@ -2060,7 +2073,8 @@
                                 "type": "TDec_0302a04Max100",
                                 "minOccurs": "0",
                                 "annotation": {
-                                  "label": "Percentual de gás natural importado GLGNi para o produto GLP_Valores de 0 a 100."
+                                  "label": "Percentual de gás natural importado GLGNi para o produto GLP",
+                                  "aux": "Valores de 0 a 100"
                                 }
                               },
                               {
@@ -2077,7 +2091,8 @@
                             "name": "CODIF",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Código de autorização / registro do CODIF_Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com Álcool Etílico Anidro Combustível)."
+                              "label": "Código de autorização / registro do CODIF",
+                              "aux": "Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com Álcool Etílico Anidro Combustível)"
                             },
                             "simpleType": {
                               "restriction": {
@@ -2090,7 +2105,8 @@
                             "name": "qTemp",
                             "minOccurs": "0",
                             "annotation": {
-                              "label": "Quantidade de combustível faturada à temperatura ambiente_Informar quando a quantidade faturada informada no campo de quantidade comercial tiver sido ajustada para uma temperatura diferente da ambiente."
+                              "label": "Quantidade de combustível faturada à temperatura ambiente",
+                              "aux": "Informar quando a quantidade faturada informada no campo de quantidade comercial tiver sido ajustada para uma temperatura diferente da ambiente"
                             },
                             "simpleType": {
                               "restriction": {
@@ -2762,7 +2778,8 @@
                   "name": "ICMSUFDest",
                   "minOccurs": "0",
                   "annotation": {
-                    "label": "ICMS interestardual_Para consumidor final não contribuinte de ICMS"
+                    "label": "ICMS interestardual",
+                    "aux": "Para consumidor final não contribuinte de ICMS"
                   },
                   "element": [
                     {
@@ -3499,7 +3516,8 @@
                                     },
                                     {
                                       "annotation": {
-                                        "label": "Desoneração_O valor do ICMS será informado apenas nas operações com veículos beneficiados com a desoneração condicional do ICMS"
+                                        "label": "Desoneração",
+                                        "aux": "O valor do ICMS será informado apenas nas operações com veículos beneficiados com a desoneração condicional do ICMS"
                                       },
                                       "minOccurs": "0",
                                       "element": [
@@ -4304,7 +4322,8 @@
                                 {
                                   "name": "ICMSPart",
                                   "annotation": {
-                                    "label": "Partilha do ICMS entre a UF de origem e UF de destino ou a UF definida na legislação_Operação interestadual para consumidor final com partilha do ICMS  devido na operação entre a UF de origem e a UF do destinatário ou ou a UF definida na legislação. (Ex. UF da concessionária de entrega do  veículos)"
+                                    "label": "Partilha do ICMS entre a UF de origem e UF de destino ou a UF definida na legislação",
+                                    "aux": "Operação interestadual para consumidor final com partilha do ICMS  devido na operação entre a UF de origem e a UF do destinatário ou ou a UF definida na legislação. (Ex. UF da concessionária de entrega do  veículos)"
                                   },
                                   "element": [
                                     {
@@ -4470,7 +4489,8 @@
                                 {
                                   "name": "ICMSST",
                                   "annotation": {
-                                    "label": "Repasse via Substituto Tributário_Informação do ICMSST para a UF de destino, nas operações interestaduais de produtos que tiveram retenção antecipada de ICMS por ST na UF do remetente"
+                                    "label": "Repasse via Substituto Tributário",
+                                    "aux": "Informação do ICMSST para a UF de destino, nas operações interestaduais de produtos que tiveram retenção antecipada de ICMS por ST na UF do remetente"
                                   },
                                   "element": [
                                     {
@@ -4655,7 +4675,8 @@
                                       "name": "vCredICMSSN",
                                       "type": "TDec_1302",
                                       "annotation": {
-                                        "label": "Valor crédito do ICMS_Aproveitado nos termos do art. 23 da LC 123"
+                                        "label": "Valor crédito do ICMS",
+                                        "aux": "Aproveitado nos termos do art. 23 da LC 123"
                                       }
                                     }
                                   ]
@@ -5327,7 +5348,8 @@
                                           "name": "vCredICMSSN",
                                           "type": "TDec_1302",
                                           "annotation": {
-                                            "label": "Valor_Aproveitado nos termos do art. 23 da LC 123"
+                                            "label": "Valor",
+                                            "aux": "Aproveitado nos termos do art. 23 da LC 123"
                                           }
                                         }
                                       ]
@@ -5774,7 +5796,8 @@
             {
               "name": "impostoDevol",
               "annotation": {
-                "label": "Imposto devolvido_Obrigatório informar motivo da devolução nas informações adicionais do produto"
+                "label": "Imposto devolvido",
+                "aux": "Obrigatório informar motivo da devolução nas informações adicionais do produto"
               },
               "minOccurs": "0",
               "element": [
@@ -5807,7 +5830,8 @@
               "name": "infAdProd",
               "minOccurs": "0",
               "annotation": {
-                "label": "Informações adicionais do produto_Norma referenciada, informações complementares, etc"
+                "label": "Informações adicionais do produto",
+                "aux": "Norma referenciada, informações complementares, etc"
               },
               "simpleType": {
                 "restriction": {
@@ -7196,7 +7220,8 @@
           "name": "fone",
           "minOccurs": "0",
           "annotation": {
-            "label": "Telefone_Código do país + código da localidade + número"
+            "label": "Telefone",
+            "aux": "Código do país + código da localidade + número"
           },
           "simpleType": {
             "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
@@ -7301,7 +7326,8 @@
           "name": "fone",
           "minOccurs": "0",
           "annotation": {
-            "label": "Telefone_Preencher com Código DDD + número do telefone"
+            "label": "Telefone",
+            "aux": "Preencher com Código DDD + número do telefone"
           },
           "simpleType": {
             "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }

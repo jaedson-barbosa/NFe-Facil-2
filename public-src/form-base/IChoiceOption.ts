@@ -1,8 +1,9 @@
 import { IBaseFormElement } from './form-elements/IBaseFormElement';
+import { ILabel } from './insertLabel';
 
 
 export interface IChoiceOption {
-  text: string;
+  text: ILabel;
   view: IBaseFormElement;
   name: string[];
 }

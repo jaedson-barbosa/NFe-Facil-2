@@ -1,6 +1,6 @@
 import { IBaseFormElement } from './IBaseFormElement';
 import { inputFormElement } from "./inputFormElement";
-import { insertLabel } from "../insertLabel";
+import { ILabel, insertLabel } from "../insertLabel";
 
 
 export class selectFormElement extends inputFormElement {
@@ -8,7 +8,7 @@ export class selectFormElement extends inputFormElement {
 
   constructor(
     name: string[],
-    documentation: string,
+    documentation: ILabel,
     required: boolean,
     options: { value: string; text: string; }[]
   ) {
@@ -37,7 +37,7 @@ export class selectFormElement extends inputFormElement {
     });
     this.updateBaseProps(select);
     parent.appendChild(select);
-    insertLabel(select, this.documentation);
+    insertLabel(select, this.required, this.documentation);
     return select;
   }
 }

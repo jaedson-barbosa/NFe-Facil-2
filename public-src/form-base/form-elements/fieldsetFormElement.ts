@@ -1,8 +1,8 @@
 import { IBaseFormElement } from './IBaseFormElement';
-import { insertLabel } from "../insertLabel";
+import { ILabel, insertLabel } from "../insertLabel";
 
 interface IFieldsetOptions {
-  legend: string;
+  legend: ILabel;
   required: boolean;
   hidden?: boolean;
 }
@@ -36,20 +36,22 @@ export class fieldsetFormElement implements IBaseFormElement {
   }
 
   public generate(parent: HTMLElement) {
+    let legend = this.options.legend
     const createFieldset: () => HTMLFieldSetElement = () => {
       const content = document.createElement('fieldset');
       if (this.options.hidden) {
         content.style.display = 'none';
       }
-      if (this.options.legend && this.options.required) {
-        const legend = document.createElement('legend');
-        legend.textContent = this.options.legend;
-        content.appendChild(legend);
+      if (legend?.label && this.options.required) {
+        const legendHTML = document.createElement('legend');
+        legendHTML.textContent = legend.label;
+        legendHTML.title = legend.aux ?? ''
+        content.appendChild(legendHTML);
       }
       this.children.forEach((v) => v.generate(content));
       return content;
     };
-    if (this.options.required && (this.options.legend || this.options.hidden)) {
+    if (this.options.required && (legend?.label || this.options.hidden)) {
       const content = createFieldset();
       parent.appendChild(content);
       return content;
@@ -59,20 +61,16 @@ export class fieldsetFormElement implements IBaseFormElement {
       parent.appendChild(content);
       return content;
     } else {
-      if (!this.options.legend) {
+      if (!legend?.label) {
         console.error('Campo opcional sem legenda!');
-        this.options.legend = 'SEM LEGENDA';
+        legend = { label: 'SEM LEGENDA' };
       }
       const check = document.createElement('input');
       check.type = 'checkbox';
       check.readOnly = this.readOnly;
       check.checked = this.hasInitialValue;
       parent.appendChild(check);
-      const label = insertLabel(
-        check,
-        'Informar campo: ' + this.options.legend,
-        false
-      );
+      const label = insertLabel(check, true, legend, false);
       let fieldset: HTMLFieldSetElement;
       const onCheckChange = () => {
         if (check.checked) {

@@ -1,6 +1,6 @@
 import { IBaseFormElement } from './IBaseFormElement';
 import { inputFormElement } from "./inputFormElement";
-import { insertLabel } from "../insertLabel";
+import { ILabel, insertLabel } from "../insertLabel";
 
 
 export class textFormElement extends inputFormElement {
@@ -12,7 +12,7 @@ export class textFormElement extends inputFormElement {
 
   constructor(
     name: string[],
-    documentation: string,
+    documentation: ILabel,
     required: boolean,
     options: {
       pattern?: string;
@@ -46,7 +46,7 @@ export class textFormElement extends inputFormElement {
       text.maxLength = this.options.maxLength;
     this.updateBaseProps(text);
     parent.appendChild(text);
-    insertLabel(text, this.documentation);
+    insertLabel(text, this.required, this.documentation);
     return text;
   }
 }

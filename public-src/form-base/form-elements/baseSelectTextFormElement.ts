@@ -1,9 +1,9 @@
 import { IBaseFormElement } from './IBaseFormElement';
 import { createId } from "../createId";
-import { insertLabel } from "../insertLabel";
+import { ILabel, insertLabel } from "../insertLabel";
 
 export abstract class baseSelectTextFormElement implements IBaseFormElement {
-  protected documentation: string;
+  protected documentation: ILabel;
   protected required: boolean;
   protected options: string[];
   protected onChange: (input: HTMLInputElement, isValid: boolean) => void;
@@ -11,7 +11,7 @@ export abstract class baseSelectTextFormElement implements IBaseFormElement {
   public readOnly: boolean;
 
   constructor(
-    documentation: string,
+    documentation: ILabel,
     required: boolean,
     options: string[],
     onChange: (input: HTMLInputElement, isValid: boolean) => void
@@ -27,7 +27,7 @@ export abstract class baseSelectTextFormElement implements IBaseFormElement {
   public generate(parent: HTMLElement) {
     const select = document.createElement('input');
     select.readOnly = this.readOnly;
-    select.title = this.documentation;
+    // select.title = this.documentation;
     select.required = this.required;
     const datalist = document.createElement('datalist');
     this.options.forEach((v) => {
@@ -38,7 +38,7 @@ export abstract class baseSelectTextFormElement implements IBaseFormElement {
     select.setAttribute('list', (datalist.id = createId()));
     parent.appendChild(select);
     parent.appendChild(datalist);
-    insertLabel(select, this.documentation);
+    insertLabel(select, this.required, this.documentation);
     select.onchange = () => {
       const isValid = this.options.some((v) => v == select.value);
       this.onChange(select, isValid);

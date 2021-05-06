@@ -75,7 +75,7 @@ OK  Remover pasta VM
 OK  Corrigir documentações no schema json e unir os 2 num único
 OK  Remover tag complexType
 OK  Remover tag sequence
-    Aplicar novidades do nfe.json ao form-base
+OK  Aplicar novidades do nfe.json ao form-base
 OK  Passar custom headers para o nfe.json
     Atualizar entradas para que tenham o tipo correto
     Proibir o uso de emitente com CPF

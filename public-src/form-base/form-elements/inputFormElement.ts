@@ -1,9 +1,10 @@
+import { ILabel } from '../insertLabel';
 import { IBaseFormElement } from './IBaseFormElement';
 
 
 export abstract class inputFormElement implements IBaseFormElement {
   public name: string[];
-  protected documentation: string;
+  protected documentation: ILabel;
   public required: boolean;
   public readOnly: boolean;
 
@@ -22,7 +23,7 @@ export abstract class inputFormElement implements IBaseFormElement {
 
   private readonly fixedValue: boolean;
 
-  constructor(name: string[], doc: string, req: boolean, value?: string) {
+  constructor(name: string[], doc: ILabel, req: boolean, value?: string) {
     this.name = name.filter((v) => !v.includes('|'));
     this.documentation = doc;
     this.required = req;
@@ -73,7 +74,7 @@ export abstract class inputFormElement implements IBaseFormElement {
       input.readOnly = this.readOnly;
     }
     input.name = this.name.join('.');
-    input.title = this.documentation;
+    // input.title = this.documentation;
     input.required = this.required;
     if (this.value)
       input.value = this.value;

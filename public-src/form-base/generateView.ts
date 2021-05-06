@@ -1,7 +1,6 @@
 import * as nfeSchema from './data/nfe.json'
 import { IBGE } from './data/IBGE.json'
 import { paises } from './data/paises.json'
-import { processLabelText } from './processLabelText'
 import {
   listFormElement,
   selectFormElement,
@@ -54,10 +53,15 @@ interface IGenerateViewOptions {
   parentTags?: string[]
 }
 
-function getDocumentation(v: any): string {
-  const doc = v.annotation?.label
+function getDocumentation(v: any): {label: string, aux: string} {
+  let label = v.annotation?.label
+  if (label) {
+    const aux = v.annotation?.aux
+    if (aux) label += ' *'
+    return { label, aux }
+  }
   // if (!doc) console.log(v)
-  return doc ?? ''
+  return undefined
 }
 
 function getDefaultListNameChanger(name: string) {
@@ -97,10 +101,6 @@ function createInput(
     }
     throw new Error('Invalid field')
   }
-  if (hasOtherRestrictions && otherRestrictions?.base != 'string') {
-    console.log(otherRestrictions)
-    throw new Error('The other restrictions have a invalid base.')
-  }
   const enumeration =
     fieldRestriction?.['enumeration'] ?? otherRestrictions?.['enumeration']
   const name = [...parentTags, getName(field)]
@@ -123,7 +123,6 @@ function createInput(
     return new hiddenFormElement(name, required, enumeration)
   }
   const itensDescriptions = field.annotation.itens
-
   return new selectFormElement(
     name,
     documentation,
@@ -159,7 +158,7 @@ function createChoice(
   const doc = getDocumentation(field)
   const req = isRequired(field)
   creationOptions.customOptions
-    .find((v) => v.firstOption == options[0].text)
+    .find((v) => v.firstOption == options[0].text.label)
     ?.optionsChanger(options)
   return new choiceFormElement(doc, req, options)
 }
@@ -169,7 +168,7 @@ function createFieldset(
   parentTags: string[],
   creationOptions: IElementCreationOptions
 ): IBaseFormElement {
-  const legend = processLabelText(getDocumentation(field))
+  const legend = getDocumentation(field)
   const name = getName(field)
   const isRootList = 'length' in field
   const max = field?.maxOccurs ?? 1
@@ -217,7 +216,7 @@ function createCityField(
 
   const mun2str = (mun: string, uf: string) => `${mun} (${uf})`
   const municipio = new selectTextFormElement(
-    'Município',
+    {label:'Município'},
     cMun?.required || cMunFG?.required || xMun?.required,
     IBGE.flatMap((v) => v.Municipios.map((k) => mun2str(k.Nome, v.Sigla))),
     (value) => {
@@ -293,7 +292,7 @@ function createStateField(
   if (!cUF && !UF) throw new Error('State field without cUF and UF.')
 
   const uf = new selectTextFormElement(
-    'Estado',
+    {label:'Estado'},
     cUF?.required || UF?.required,
     IBGE.map((v) => v.Nome),
     (value) => {
@@ -335,7 +334,7 @@ function createCountryField(
     throw new Error('Country field without cPais and xPais.')
 
   const pais = new selectTextFormElement(
-    'País',
+    {label:'País'},
     cPais?.required || xPais?.required,
     paises.map((k) => k.nome),
     (value) => {

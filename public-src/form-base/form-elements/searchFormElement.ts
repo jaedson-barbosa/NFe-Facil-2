@@ -1,3 +1,4 @@
+import { ILabel } from '../insertLabel';
 import { baseSelectTextFormElement } from './baseSelectTextFormElement';
 import { IBaseFormElement } from './IBaseFormElement';
 
@@ -6,7 +7,7 @@ export class searchFormElement extends baseSelectTextFormElement {
   private readonly onResult: (value: string) => void;
 
   constructor(
-    label: string,
+    label: ILabel,
     options: string[],
     onResult: (value: string) => void
   ) {

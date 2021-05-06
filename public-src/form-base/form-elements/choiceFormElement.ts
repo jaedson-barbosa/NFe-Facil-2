@@ -2,11 +2,11 @@ import { fieldsetFormElement } from './fieldsetFormElement';
 import { IBaseFormElement } from './IBaseFormElement';
 import { IChoiceOption } from '../IChoiceOption';
 import { clearChildren } from "../clearChildren";
-import { insertLabel } from "../insertLabel";
+import { ILabel, insertLabel } from "../insertLabel";
 
 
 export class choiceFormElement implements IBaseFormElement {
-  private documentation: string;
+  private documentation: ILabel;
   private isRequired: boolean;
   private options: IChoiceOption[];
   private startIndex: number;
@@ -18,7 +18,7 @@ export class choiceFormElement implements IBaseFormElement {
   }
 
   constructor(
-    documentation: string,
+    documentation: ILabel,
     isRequired: boolean,
     options: IChoiceOption[]
   ) {
@@ -26,7 +26,7 @@ export class choiceFormElement implements IBaseFormElement {
     this.isRequired = isRequired;
     if (!isRequired) {
       options.unshift({
-        text: 'Nenhuma das opções',
+        text: {label:'Nenhuma das opções'},
         view: undefined,
         name: [],
       });
@@ -58,7 +58,8 @@ export class choiceFormElement implements IBaseFormElement {
     const div = document.createElement('div');
     this.options.forEach((v) => {
       const option = document.createElement('option');
-      option.text = v.text;
+      option.text = v.text.label;
+      option.title = v.text.aux ?? '';
       select.appendChild(option);
     });
     const updateView = () => {
@@ -66,14 +67,14 @@ export class choiceFormElement implements IBaseFormElement {
       clearChildren(div);
       const view = this.options[index].view;
       if (view instanceof fieldsetFormElement) {
-        view.options.legend = '';
+        view.options.legend = {label:''};
       } // remove legenda do fieldset
       view?.generate(div);
     };
     select.onchange = () => updateView();
     parent.appendChild(select);
     parent.appendChild(div);
-    insertLabel(select, this.documentation);
+    insertLabel(select, this.isRequired, this.documentation);
     select.selectedIndex = this.startIndex;
     updateView();
     return select;

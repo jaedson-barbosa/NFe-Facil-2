@@ -4,7 +4,7 @@ import { inputFormElement } from "./inputFormElement";
 
 export class hiddenFormElement extends inputFormElement {
   constructor(name: string[], required: boolean, value?: string) {
-    super(name, '', required, value);
+    super(name, undefined, required, value);
   }
 
   public get clone(): IBaseFormElement {
