@@ -7,7 +7,5 @@ export function renderizarMotorista(data: { transporta: any }): string {
 }
 
 export function gerarViewMotorista() {
-  return generateView(
-    elementosNFe[8]['element'][1].element
-  )
+  return generateView(elementosNFe[8]['element'][1].element)
 }

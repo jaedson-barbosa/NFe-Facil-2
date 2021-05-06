@@ -63,7 +63,7 @@ function cadastrarEmpresa() {
       })
       location.href = './emitentes.html'
     },
-    ...generateView(elementosNFe[1]),
+    generateView(elementosNFe[1]),
     new genericFormElement(additionalBody)
   )
   document.body.appendChild(form)
@@ -97,7 +97,7 @@ if (isSessaoIniciada()) {
   <label for="serieAtual">Série atual das notas fiscais</label>
   <input type="number" id="serieAtual" name="serieAtual" value="${empresa.serieAtual}" min="1" max="889" required>`
   const formElements = [
-    ...generateView(elementosNFe[1]),
+    generateView(elementosNFe[1]),
     new genericFormElement(additionalBody),
   ]
   formElements.forEach((v) => v.updateValue({ emit: empresa.emit }))

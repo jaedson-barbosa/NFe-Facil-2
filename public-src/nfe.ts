@@ -13,7 +13,7 @@ import {
   IBaseFormElement,
   clearChildren,
   buttonFormElement,
-  elementosNFe
+  elementosNFe,
 } from './form-base'
 import {
   apenasSalvarNota,
@@ -69,7 +69,7 @@ function gerarIdentificacao() {
   const NFref = generateViews(root, {}, 'NFref')[0]
   return new fieldsetFormElement(
     {
-      legend: 'Informações de identificação da NF-e',
+      legend: { label: 'Informações de identificação da NF-e' },
       required: true,
     },
     new hiddenFormElement(
@@ -96,14 +96,7 @@ function gerarIdentificacao() {
     new hiddenFormElement([rootName, 'tpEmis'], true, '1'),
     new hiddenFormElement([rootName, 'cDV'], true, '%CDV%'),
     new hiddenFormElement([rootName, 'tpAmb'], true, getAmbiente()),
-    ...generateViews(
-      root,
-      {},
-      'finNFe',
-      'indFinal',
-      'indPres',
-      'indIntermed'
-    ),
+    ...generateViews(root, {}, 'finNFe', 'indFinal', 'indPres', 'indIntermed'),
     new hiddenFormElement([rootName, 'procEmi'], true, '0'),
     new hiddenFormElement([rootName, 'verProc'], true, versaoEmissor()),
     new listFormElement(NFref as fieldsetFormElement, ['ide', 'NFref'])
@@ -111,9 +104,7 @@ function gerarIdentificacao() {
 }
 
 function gerarEmitente() {
-  const view = generateView(elementosNFe[1], {
-    rootTag: 'element',
-  })[0] as fieldsetFormElement
+  const view = generateView(elementosNFe[1]) as fieldsetFormElement
   view.options.hidden = true
   view.updateValue({ emit })
   return view
@@ -122,7 +113,7 @@ function gerarEmitente() {
 const dialog = document.getElementById('search') as HTMLDialogElement
 
 async function gerarProdutosEdicao() {
-  const views = generateView(elementosNFe[6], {
+  const view = generateView(elementosNFe[6], {
     customOptions: [
       {
         firstOption: 'Tributado integralmente',
@@ -137,8 +128,7 @@ async function gerarProdutosEdicao() {
         },
       },
     ],
-  })
-  const view = views[0] as listFormElement
+  }) as listFormElement
   const prods = await getItens('prod')
   const prodsView = prods.map((v) => {
     const cProd = v[1].prod.cProd
@@ -149,7 +139,7 @@ async function gerarProdutosEdicao() {
   view.onAddItem = (content) => {
     const localI = i++
     const search = new searchFormElement(
-      'Buscar produto cadastrado',
+      { label: 'Buscar produto cadastrado' },
       prodsView,
       (value) => {
         const index = prodsView.indexOf(value)
@@ -180,7 +170,7 @@ async function gerarCliente() {
     return xLgr ? `${xNome} - ${xLgr}` : xNome
   })
   const search = new searchFormElement(
-    'Buscar cliente cadastrado',
+    { label: 'Buscar cliente cadastrado' },
     destsView,
     (value) => {
       const index = destsView.indexOf(value)
@@ -199,44 +189,32 @@ async function gerarCliente() {
 }
 
 function gerarProdutosVisualizacao() {
-  const views = generateView(elementosNFe[6])
-  const view = views[0] as listFormElement
+  const view = generateView(elementosNFe[6]) as listFormElement
   view.hidden = true
   return view
 }
 
 function gerarRetirada() {
-  return generateView(elementosNFe[3], {
-    rootTag: 'element',
-  })
+  return generateView(elementosNFe[3])
 }
 
 function gerarEntrega() {
-  return generateView(elementosNFe[4], {
-    rootTag: 'element',
-  })
+  return generateView(elementosNFe[4])
 }
 
 function gerarAutorizacao() {
   return new listFormElement(
-    generateView(
-      elementosNFe[5]
-    )[0] as fieldsetFormElement,
+    generateView(elementosNFe[5]) as fieldsetFormElement,
     ['autXML']
   )
 }
 
 function gerarTotal() {
-  return generateView(elementosNFe[7], {
-    rootTag: 'element',
-  })
+  return generateView(elementosNFe[7])
 }
 
 async function gerarTransporte() {
-  const views = generateView(elementosNFe[8], {
-    rootTag: 'element'
-  })
-  const view = views[0] as fieldsetFormElement
+  const view = generateView(elementosNFe[8]) as fieldsetFormElement
   const motView = view.children[1] as fieldsetFormElement
   const content = motView.children
   const mots = await getItens('transporta')
@@ -246,7 +224,7 @@ async function gerarTransporte() {
     return xEnder ? `${xNome} - ${xEnder}` : xNome
   })
   const search = new searchFormElement(
-    'Buscar motorista cadastrado',
+    { label: 'Buscar motorista cadastrado' },
     motsView,
     (value) => {
       const index = motsView.indexOf(value)
@@ -266,32 +244,21 @@ async function gerarTransporte() {
 }
 
 function gerarCobranca() {
-  return generateView(elementosNFe[9], {
-    rootTag: 'element'
-  })
+  return generateView(elementosNFe[9])
 }
 
 function gerarPagamento() {
-  return generateView(elementosNFe[10], {
-    rootTag: 'element',
-  })
+  return generateView(elementosNFe[10])
 }
 
 function gerarIntermediador() {
-  return generateView(elementosNFe[11], {
-    rootTag: 'element',
-  })
+  return generateView(elementosNFe[11])
 }
 
 function gerarInformacoes() {
   return new fieldsetFormElement(
-    { legend: 'Informações Adicionais', required: false },
-    ...generateViews(
-      elementosNFe[12],
-      {},
-      'infAdFisco',
-      'infCpl'
-    )
+    { legend: { label: 'Informações Adicionais' }, required: false },
+    ...generateViews(elementosNFe[12], {}, 'infAdFisco', 'infCpl')
   )
 }
 
@@ -311,7 +278,7 @@ function gerarResponsavelTecnico() {
   const rootName = 'infRespTec'
   return new fieldsetFormElement(
     {
-      legend: 'Responsável técnico',
+      legend: { label: 'Responsável técnico' },
       required: true,
       hidden: true,
     },
@@ -333,18 +300,18 @@ function gerarResponsavelTecnico() {
     gerarEmitente(),
     await gerarCliente(),
     prodsVisualizacao,
-    ...gerarRetirada(),
-    ...gerarEntrega(),
+    gerarRetirada(),
+    gerarEntrega(),
     gerarAutorizacao(),
-    ...gerarTotal(),
+    gerarTotal(),
     await gerarTransporte(),
-    ...gerarCobranca(),
-    ...gerarPagamento(),
-    ...gerarIntermediador(),
+    gerarCobranca(),
+    gerarPagamento(),
+    gerarIntermediador(),
     gerarInformacoes(),
-    ...gerarExportacao(),
-    ...gerarCompra(),
-    ...gerarCana(),
+    gerarExportacao(),
+    gerarCompra(),
+    gerarCana(),
     gerarResponsavelTecnico(),
   ]
   let prodsEdicao: listFormElement = await gerarProdutosEdicao()
@@ -368,7 +335,7 @@ function gerarResponsavelTecnico() {
   function renderPrincipal() {
     clearChildren(main)
     const elements = telaPrincipal
-    elements.forEach(v => v.updateValue(currentData))
+    elements.forEach((v) => v.updateValue(currentData))
     //Apenas salvar e assinar e transmitir
     main.appendChild(generateForm(actions, ...elements))
   }
@@ -376,7 +343,7 @@ function gerarResponsavelTecnico() {
   function renderProdutos() {
     clearChildren(main)
     const elements = [prodsEdicao]
-    elements.forEach(v => v.updateValue(currentData))
+    elements.forEach((v) => v.updateValue(currentData))
     main.appendChild(
       generateForm((data) => {
         currentData.det = data.det
@@ -398,12 +365,13 @@ function gerarResponsavelTecnico() {
       'COFINSST',
       'ICMSUFDest',
     ]
-    ;(data.det as any[]).forEach((v) =>
-      v.imposto = ordem.reduce((p, c) => {
-        const k = v.imposto[c]
-        if (k) p[c] = k
-        return p
-      }, {})
+    ;(data.det as any[]).forEach(
+      (v) =>
+        (v.imposto = ordem.reduce((p, c) => {
+          const k = v.imposto[c]
+          if (k) p[c] = k
+          return p
+        }, {}))
     )
   }
 
@@ -446,6 +414,6 @@ function gerarResponsavelTecnico() {
     telaPrincipal.forEach((v) => (v.readOnly = true))
     renderPrincipal()
   } else {
-    renderProdutos()
+    renderPrincipal()
   }
 })()

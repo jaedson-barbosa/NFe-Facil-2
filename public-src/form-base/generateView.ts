@@ -16,7 +16,7 @@ import { IBaseFormElement } from './form-elements/IBaseFormElement'
 export function generateView(
   rootField: any,
   optionsInstance?: IGenerateViewOptions
-): IBaseFormElement[] {
+): IBaseFormElement {
   const customOptions = optionsInstance?.customOptions ?? []
   const additionalNameChanger: ((names: string[]) => string[])[] = []
   const customNameChanger = (names: string[]) =>
@@ -26,8 +26,7 @@ export function generateView(
     additionalNameChanger,
     customNameChanger,
   }
-  return analyseTag(
-    optionsInstance?.rootTag,
+  return createInput(
     rootField,
     optionsInstance?.parentTags ?? [],
     creationOptions
@@ -48,11 +47,10 @@ interface IGenerateViewOptions {
     firstOption: string
     optionsChanger: (options: IChoiceOption[]) => void
   }[]
-  rootTag?: string
   parentTags?: string[]
 }
 
-function getDocumentation(v: any): {label: string, aux: string} {
+function getDocumentation(v: any): { label: string; aux: string } {
   let label = v.annotation?.label
   if (label) {
     const aux = v.annotation?.aux
@@ -63,67 +61,51 @@ function getDocumentation(v: any): {label: string, aux: string} {
   return undefined
 }
 
-function getDefaultListNameChanger(name: string) {
-  return (v: string[]) => {
-    v.splice(v.indexOf(name) + 1, 0, '0')
-    return v
-  }
-}
+const complex = nfeSchema.complexType
+const simple = nfeSchema.simpleType
 
 function createInput(
   field: any,
   parentTags: string[],
   creationOptions: IElementCreationOptions
 ): IBaseFormElement {
-  const create = (result: any) =>
-    createFieldset(result, parentTags, creationOptions)
-  if (field.element) {
-    return create(field)
+  if (field.choice || field.element) {
+    return createFieldset(field, parentTags, creationOptions)
   }
-  const fieldRestriction = field['simpleType']?.['restriction']
   const findType = (v: any) => v.name == field.type
-  const referSimpleType: any = simpleTypes.find(findType)?.restriction
-  if (!fieldRestriction && field.type != 'string' && !referSimpleType) {
-    if (field.choice || field.element) {
-      return create(field)
-    }
-    const complexType = complexTypes.find(findType)
-    if (complexType) {
-      return create({ ...complexType, ...field })
-    }
-    throw new Error('Invalid field')
+  const restriction = (field.simpleType ?? simple.find(findType))?.restriction
+  if (!restriction) {
+    const complexType = complex.find(findType)
+    if (!complexType) throw new Error('Invalid field')
+    const newField = { ...complexType, ...field }
+    return createFieldset(newField, parentTags, creationOptions)
   }
-  const enumeration =
-    fieldRestriction?.['enumeration'] ?? referSimpleType?.['enumeration']
+  const enumeration = restriction.enumeration
   const name = [...parentTags, field.name]
   creationOptions.customNameChanger?.(name)
   const required = !field.optional
   const documentation = getDocumentation(field)
-  if (!enumeration) {
-    const getProp = (el: string) => {
-      const fieldProp = fieldRestriction?.[el]
-      const otherProp = referSimpleType?.[el]
-      return fieldProp ?? otherProp
+  if (enumeration) {
+    if (typeof enumeration == 'string') {
+      return new hiddenFormElement(name, required, enumeration)
     }
+    const itensDescriptions = field.annotation.itens
+    return new selectFormElement(
+      name,
+      documentation,
+      required,
+      (enumeration as any[]).map((v, i) => {
+        const text = itensDescriptions ? v + ' - ' + itensDescriptions[i] : v
+        return { value: v, text }
+      })
+    )
+  } else {
     return new textFormElement(name, documentation, required, {
-      pattern: getProp('pattern'),
-      minLength: getProp('minLength'),
-      maxLength: getProp('maxLength'),
+      pattern: restriction.pattern,
+      minLength: restriction.minLength,
+      maxLength: restriction.maxLength,
     })
   }
-  if (typeof enumeration == 'string') {
-    return new hiddenFormElement(name, required, enumeration)
-  }
-  const itensDescriptions = field.annotation.itens
-  return new selectFormElement(
-    name,
-    documentation,
-    required,
-    (enumeration as any[]).map((v, i) => {
-      const text = itensDescriptions ? v + ' - ' + itensDescriptions[i] : v
-      return { value: v, text }
-    })
-  )
 }
 
 function createChoice(
@@ -132,27 +114,22 @@ function createChoice(
   creationOptions: IElementCreationOptions
 ): IBaseFormElement {
   const elements = field['element'] as any[]
-  if (!elements) {
-    throw new Error('Choice invalido')
-  }
-  let options: IChoiceOption[] = []
-  if (elements) {
-    options.push(
-      ...elements.map((v) => {
-        return {
-          text: getDocumentation(v),
-          view: createInput(v, parentTags, creationOptions),
-          name: [...parentTags, v.name],
-        }
-      })
-    )
-  }
-  const doc = getDocumentation(field)
-  const req = !field.optional
+  if (!elements) throw new Error('Choice invalido')
+  let options: IChoiceOption[] = elements.map((v) => {
+    return {
+      text: getDocumentation(v),
+      view: createInput(v, parentTags, creationOptions),
+      name: [...parentTags, v.name],
+    }
+  })
   creationOptions.customOptions
     .find((v) => v.firstOption == options[0].text.label)
     ?.optionsChanger(options)
-  return new choiceFormElement(doc, req, options)
+  return new choiceFormElement(
+    getDocumentation(field),
+    !field.optional,
+    options
+  )
 }
 
 function createFieldset(
@@ -160,32 +137,66 @@ function createFieldset(
   parentTags: string[],
   creationOptions: IElementCreationOptions
 ): IBaseFormElement {
-  const legend = getDocumentation(field)
   const name = field.name
   const isRootList = 'length' in field
-  const max = field?.maxOccurs ?? 1
-  const isList = max > 1
-  if (isList) {
-    creationOptions.additionalNameChanger.push(getDefaultListNameChanger(name))
+  if (field.maxOccurs) {
+    creationOptions.additionalNameChanger.push((v: string[]) => {
+      v.splice(v.indexOf(name) + 1, 0, '0')
+      return v
+    })
   }
   const tags = name ? [...parentTags, name] : parentTags
-  const required = max > 1 || !field.optional
   const fields: IBaseFormElement[] = []
   if (isRootList || field['element']) {
     const elements = (isRootList ? field : field['element']) as any[]
-    fields.push(...elements.map((v) => createInput(v, tags, creationOptions)))
+    const specificFields: ISpecificFormFields[] = [
+      {
+        names: ['cMun', 'xMun', 'cMunFG'],
+        addIgnoreFields: ['cUF', 'UF'],
+        getNewFields: createCityField,
+      },
+      {
+        names: ['cUF', 'UF'],
+        addIgnoreFields: [],
+        getNewFields: createStateField,
+      },
+      {
+        names: ['cPais', 'xPais'],
+        addIgnoreFields: [],
+        getNewFields: createCountryField,
+      },
+    ]
+    const ignoreFields: string[] = []
+    fields.push(...elements
+      .flatMap((v) => {
+        const name = v.name
+        if (ignoreFields.includes(name)) return undefined
+        const input = createInput(v, parentTags, creationOptions)
+        const specific = specificFields.find((k) => k.names.includes(name))
+        if (specific && !(input instanceof hiddenFormElement)) {
+          ignoreFields.push(...specific.names, ...specific.addIgnoreFields)
+          return specific.getNewFields(parentTags, (name) =>
+            elements.find((v) => v.name == name)
+          )
+        } // Se o valor for um hidden então ele não deve ser substituido
+        return input
+      })
+      .filter((v) => v))
   } else if (field.choice) {
     fields.push(createChoice(field.choice, tags, creationOptions))
   }
-  if (!fields.length) {
+  if (fields.length == 0) {
     console.log(field)
-    throw new Error('Invalid tag for a fieldset')
+    throw new Error('Invalid fieldset')
   }
-  const fieldset = new fieldsetFormElement({ legend, required }, ...fields)
-  if (isList) {
+  const fieldset = new fieldsetFormElement(
+    { legend: getDocumentation(field), required: !field.optional },
+    ...fields
+  )
+  if (field.maxOccurs) {
     creationOptions.additionalNameChanger.pop()
-  }
-  return isList ? new listFormElement(fieldset, tags) : fieldset
+    return new listFormElement(fieldset, tags)
+  } else return fieldset
 }
 
 function createCityField(
@@ -208,7 +219,7 @@ function createCityField(
 
   const mun2str = (mun: string, uf: string) => `${mun} (${uf})`
   const municipio = new selectTextFormElement(
-    {label:'Município'},
+    { label: 'Município' },
     cMun?.required || cMunFG?.required || xMun?.required,
     IBGE.flatMap((v) => v.Municipios.map((k) => mun2str(k.Nome, v.Sigla))),
     (value) => {
@@ -284,7 +295,7 @@ function createStateField(
   if (!cUF && !UF) throw new Error('State field without cUF and UF.')
 
   const uf = new selectTextFormElement(
-    {label:'Estado'},
+    { label: 'Estado' },
     cUF?.required || UF?.required,
     IBGE.map((v) => v.Nome),
     (value) => {
@@ -326,7 +337,7 @@ function createCountryField(
     throw new Error('Country field without cPais and xPais.')
 
   const pais = new selectTextFormElement(
-    {label:'País'},
+    { label: 'País' },
     cPais?.required || xPais?.required,
     paises.map((k) => k.nome),
     (value) => {
@@ -352,66 +363,6 @@ function createCountryField(
   return [cPais, xPais, pais].filter((v) => v)
 }
 
-function createElements(
-  field: any,
-  parentTags: string[],
-  creationOptions: IElementCreationOptions
-) {
-  const elements = 'length' in field ? (field as any[]) : [field]
-  const specificFields: ISpecificFormFields[] = [
-    {
-      names: ['cMun', 'xMun', 'cMunFG'],
-      addIgnoreFields: ['cUF', 'UF'],
-      getNewFields: createCityField,
-    },
-    {
-      names: ['cUF', 'UF'],
-      addIgnoreFields: [],
-      getNewFields: createStateField,
-    },
-    {
-      names: ['cPais', 'xPais'],
-      addIgnoreFields: [],
-      getNewFields: createCountryField,
-    },
-  ]
-  const ignoreFields: string[] = []
-  return elements
-    .flatMap((v) => {
-      const name = v.name
-      if (ignoreFields.includes(name)) return undefined
-      const input = createInput(v, parentTags, creationOptions)
-      const specific = specificFields.find((k) => k.names.includes(name))
-      if (specific && !(input instanceof hiddenFormElement)) {
-        ignoreFields.push(...specific.names, ...specific.addIgnoreFields)
-        return specific.getNewFields(parentTags, (name) =>
-          elements.find((v) => v.name == name)
-        )
-      } // Se o valor for um hidden então ele não deve ser substituido
-      return input
-    })
-    .filter((v) => v)
-}
-
-function analyseTag(
-  tag: string,
-  field: any,
-  parentTags: string[],
-  creationOptions: IElementCreationOptions
-): IBaseFormElement[] {
-  switch (tag) {
-    case 'choice':
-      return [createChoice(field, parentTags, creationOptions)]
-    case 'element':
-      return createElements(field, parentTags, creationOptions)
-    default:
-      if (!tag || tag == 'element')
-        return [createFieldset(field, parentTags, creationOptions)]
-      console.log('Invalid tag', tag, field)
-      return []
-  }
-}
-
 interface IElementCreationOptions {
   customOptions: {
     firstOption: string
@@ -420,6 +371,3 @@ interface IElementCreationOptions {
   additionalNameChanger: ((names: string[]) => string[])[]
   customNameChanger: (names: string[]) => void
 }
-
-const complexTypes = nfeSchema['complexType']
-const simpleTypes = nfeSchema['simpleType']

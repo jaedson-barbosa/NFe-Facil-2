@@ -5,10 +5,9 @@ export function generateViews(
   options: IGenerateViewsOptions,
   ...names: string[]
 ) {
-  return names.flatMap((name) => {
+  return names.map((name) => {
     const field = findField(rootField, name);
     return generateView(field.field, {
-      rootTag: field.tag,
       parentTags: options.parentNames
         ? [...options.parentNames, ...field.parentNames]
         : field.parentNames,

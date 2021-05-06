@@ -101,7 +101,7 @@ switch (parametros.get('tipo')) {
     main('prod', renderizarProduto, gerarViewProduto())
     break
   case 'motoristas':
-    main('transporta', renderizarMotorista, ...gerarViewMotorista())
+    main('transporta', renderizarMotorista, gerarViewMotorista())
     break
   case 'notas':
     main('infNFe', renderizarNota)
