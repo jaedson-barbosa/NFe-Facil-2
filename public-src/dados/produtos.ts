@@ -7,15 +7,14 @@ export function renderizarProduto(data: { prod: any }): string {
 }
 
 export function gerarViewProduto() {
+  console.log(elementosNFe[6]['element'][1])
   return new fieldsetFormElement(
     {
-      legend: 'Dados dos produtos e serviços',
+      legend: {label: 'Dados dos produtos e serviços' },
       required: true,
     },
     ...generateViews(
-      elementosNFe[6]['complexType']['sequence'][
-        'element'
-      ][0],
+      elementosNFe[6]['element'][1],
       {},
       'xProd',
       'cProd',

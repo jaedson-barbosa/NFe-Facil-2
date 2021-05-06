@@ -54,7 +54,7 @@ export const importar = onLoggedRequest(
         }
         return nota
       })
-      .filter((v) => v)
+      .filter((v) => v && v.json.emit.CNPJ === empresa.emit.CNPJ)
       .map((v) => v!)
 
     const dadosCollection = empresaRef.collection('dados')
