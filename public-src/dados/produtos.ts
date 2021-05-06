@@ -7,7 +7,6 @@ export function renderizarProduto(data: { prod: any }): string {
 }
 
 export function gerarViewProduto() {
-  console.log(elementosNFe[6]['element'][1])
   return new fieldsetFormElement(
     {
       legend: {label: 'Dados dos produtos e serviços' },

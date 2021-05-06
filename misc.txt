@@ -78,10 +78,12 @@ OK  Remover tag sequence
 OK  Aplicar novidades do nfe.json ao form-base
 OK  Passar custom headers para o nfe.json
     Atualizar entradas para que tenham o tipo correto
+OK  Remover getName
 OK  Proibir o uso de emitente com CPF
 OK    Via cadastro
 OK    Via importação (restringido para emitente logado)
 OK  Corrigir erro em Grupo de informações de interesse da Prefeitura
+OK  Corrigir erro na edição de dados
     Analisar elementos já salvos para não haver repetição de itens no banco de dados
     Tela para exibição de NFe, removendo caixa de dialogo
     Caixa de dialogo mais completa para sincronização
@@ -97,8 +99,8 @@ OK  Corrigir erro em Grupo de informações de interesse da Prefeitura
       Importação
       Geração
       Exibição
-    Tela index básica com login
     Remover tela de login
+    Tela index básica com login
 
 REFINAMENTOS (pré-alpha):
     Cadastro via importação

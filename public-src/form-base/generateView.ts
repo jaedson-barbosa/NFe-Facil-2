@@ -10,7 +10,6 @@ import {
   selectTextFormElement,
   textFormElement,
 } from './form-elements'
-import { getName } from './getName'
 import { IChoiceOption } from './IChoiceOption'
 import { IBaseFormElement } from './form-elements/IBaseFormElement'
 
@@ -71,10 +70,6 @@ function getDefaultListNameChanger(name: string) {
   }
 }
 
-function isRequired(v: any): boolean {
-  return (v.minOccurs ?? 1) > 0
-}
-
 function createInput(
   field: any,
   parentTags: string[],
@@ -86,12 +81,9 @@ function createInput(
     return create(field)
   }
   const fieldRestriction = field['simpleType']?.['restriction']
-  const baseType = field.type ?? fieldRestriction?.base
-  const findType = (v: any) => getName(v) == baseType
-  const hasOtherRestrictions = baseType != 'string'
-  const otherRestrictions: any = (simpleTypes.find(findType) as any)
-    ?.restriction
-  if (hasOtherRestrictions && !otherRestrictions) {
+  const findType = (v: any) => v.name == field.type
+  const referSimpleType: any = simpleTypes.find(findType)?.restriction
+  if (!fieldRestriction && field.type != 'string' && !referSimpleType) {
     if (field.choice || field.element) {
       return create(field)
     }
@@ -102,15 +94,15 @@ function createInput(
     throw new Error('Invalid field')
   }
   const enumeration =
-    fieldRestriction?.['enumeration'] ?? otherRestrictions?.['enumeration']
-  const name = [...parentTags, getName(field)]
+    fieldRestriction?.['enumeration'] ?? referSimpleType?.['enumeration']
+  const name = [...parentTags, field.name]
   creationOptions.customNameChanger?.(name)
-  const required = isRequired(field)
+  const required = !field.optional
   const documentation = getDocumentation(field)
   if (!enumeration) {
     const getProp = (el: string) => {
       const fieldProp = fieldRestriction?.[el]
-      const otherProp = otherRestrictions?.[el]
+      const otherProp = referSimpleType?.[el]
       return fieldProp ?? otherProp
     }
     return new textFormElement(name, documentation, required, {
@@ -150,13 +142,13 @@ function createChoice(
         return {
           text: getDocumentation(v),
           view: createInput(v, parentTags, creationOptions),
-          name: [...parentTags, getName(v)],
+          name: [...parentTags, v.name],
         }
       })
     )
   }
   const doc = getDocumentation(field)
-  const req = isRequired(field)
+  const req = !field.optional
   creationOptions.customOptions
     .find((v) => v.firstOption == options[0].text.label)
     ?.optionsChanger(options)
@@ -169,7 +161,7 @@ function createFieldset(
   creationOptions: IElementCreationOptions
 ): IBaseFormElement {
   const legend = getDocumentation(field)
-  const name = getName(field)
+  const name = field.name
   const isRootList = 'length' in field
   const max = field?.maxOccurs ?? 1
   const isList = max > 1
@@ -177,7 +169,7 @@ function createFieldset(
     creationOptions.additionalNameChanger.push(getDefaultListNameChanger(name))
   }
   const tags = name ? [...parentTags, name] : parentTags
-  const required = max > 1 || isRequired(field)
+  const required = max > 1 || !field.optional
   const fields: IBaseFormElement[] = []
   if (isRootList || field['element']) {
     const elements = (isRootList ? field : field['element']) as any[]
@@ -203,7 +195,7 @@ function createCityField(
   const genEl = (name: string) => {
     const field = getField(name)
     return field
-      ? new hiddenFormElement([...parentTags, name], isRequired(field))
+      ? new hiddenFormElement([...parentTags, name], !field.optional)
       : undefined
   }
   const cMun = genEl('cMun'),
@@ -284,7 +276,7 @@ function createStateField(
   const genEl = (name: string) => {
     const field = getField(name)
     return field
-      ? new hiddenFormElement([...parentTags, name], isRequired(field))
+      ? new hiddenFormElement([...parentTags, name], !field.optional)
       : undefined
   }
   const cUF = genEl('cUF'),
@@ -325,7 +317,7 @@ function createCountryField(
   const genEl = (name: string) => {
     const field = getField(name)
     return field
-      ? new hiddenFormElement([...parentTags, name], isRequired(field))
+      ? new hiddenFormElement([...parentTags, name], !field.optional)
       : undefined
   }
   const cPais = genEl('cPais'),
@@ -386,14 +378,14 @@ function createElements(
   const ignoreFields: string[] = []
   return elements
     .flatMap((v) => {
-      const name = getName(v)
+      const name = v.name
       if (ignoreFields.includes(name)) return undefined
       const input = createInput(v, parentTags, creationOptions)
       const specific = specificFields.find((k) => k.names.includes(name))
       if (specific && !(input instanceof hiddenFormElement)) {
         ignoreFields.push(...specific.names, ...specific.addIgnoreFields)
         return specific.getNewFields(parentTags, (name) =>
-          elements.find((v) => getName(v) == name)
+          elements.find((v) => v.name == name)
         )
       } // Se o valor for um hidden então ele não deve ser substituido
       return input

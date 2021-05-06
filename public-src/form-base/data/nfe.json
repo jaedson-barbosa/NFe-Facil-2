@@ -21,7 +21,7 @@
                 "label": "Código numérico que compõe a Chave de Acesso"
               },
               "simpleType": {
-                "restriction": { "base": "string", "pattern": "[0-9]{8}" }
+                "restriction": { "pattern": "[0-9]{8}" }
               }
             },
             {
@@ -29,7 +29,6 @@
               "annotation": { "label": "Natureza da Operação" },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "1",
                   "maxLength": "60"
                 }
@@ -42,7 +41,7 @@
                 "itens": ["NF-e", "NFC-e."]
               },
               "simpleType": {
-                "restriction": { "base": "string", "enumeration": ["55", "65"] }
+                "restriction": { "enumeration": ["55", "65"] }
               }
             },
             {
@@ -65,7 +64,7 @@
             {
               "name": "dhSaiEnt",
               "type": "TDateTimeUTC",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": {
                 "label": "Data e Hora de saída/entrada da mercadoria"
               }
@@ -77,7 +76,7 @@
                 "itens": ["Entrada", "Saída"]
               },
               "simpleType": {
-                "restriction": { "base": "string", "enumeration": ["0", "1"] }
+                "restriction": { "enumeration": ["0", "1"] }
               }
             },
             {
@@ -88,7 +87,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "enumeration": ["1", "2", "3"]
                 }
               }
@@ -113,7 +111,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "enumeration": ["0", "1", "2", "3", "4", "5"]
                 }
               }
@@ -135,7 +132,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "enumeration": ["1", "2", "3", "4", "5", "6", "7", "9"]
                 }
               }
@@ -146,7 +142,7 @@
                 "label": "Digito Verificador da Chave de Acesso"
               },
               "simpleType": {
-                "restriction": { "base": "string", "pattern": "[0-9]{1}" }
+                "restriction": { "pattern": "[0-9]{1}" }
               }
             },
             {
@@ -156,7 +152,7 @@
                 "itens": ["Produção", "Homologação"]
               },
               "simpleType": {
-                "restriction": { "base": "string", "enumeration": ["1", "2"] }
+                "restriction": { "enumeration": ["1", "2"] }
               }
             },
             {
@@ -172,7 +168,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "enumeration": ["1", "2", "3", "4"]
                 }
               }
@@ -184,7 +179,7 @@
                 "itens": ["Não", "Sim"]
               },
               "simpleType": {
-                "restriction": { "base": "string", "enumeration": ["0", "1"] }
+                "restriction": { "enumeration": ["0", "1"] }
               }
             },
             {
@@ -203,14 +198,13 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "enumeration": ["0", "1", "2", "3", "4", "5", "9"]
                 }
               }
             },
             {
               "name": "indIntermed",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": {
                 "label": "Indicador de intermediador/marketplace",
                 "itens": [
@@ -219,7 +213,7 @@
                 ]
               },
               "simpleType": {
-                "restriction": { "base": "string", "enumeration": ["0", "1"] }
+                "restriction": { "enumeration": ["0", "1"] }
               }
             },
             {
@@ -235,7 +229,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "enumeration": ["0", "1", "2", "3"]
                 }
               }
@@ -247,7 +240,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "1",
                   "maxLength": "20"
                 }
@@ -255,7 +247,7 @@
             },
             {
               "name": "NFref",
-              "minOccurs": "0",
+              "optional": true,
               "maxOccurs": "500",
               "annotation": {
                 "label": "Grupo de infromações da NF referenciada"
@@ -283,7 +275,6 @@
                         "annotation": { "label": "Ano e mês da emissão" },
                         "simpleType": {
                           "restriction": {
-                            "base": "string",
                             "pattern": "[0-9]{2}[0]{1}[1-9]{1}|[0-9]{2}[1]{1}[0-2]{1}"
                           }
                         }
@@ -303,7 +294,6 @@
                         },
                         "simpleType": {
                           "restriction": {
-                            "base": "string",
                             "enumeration": ["01", "02"]
                           }
                         }
@@ -338,7 +328,6 @@
                         "annotation": { "label": "Ano e mês de emissão" },
                         "simpleType": {
                           "restriction": {
-                            "base": "string",
                             "pattern": "[0-9]{2}[0]{1}[1-9]{1}|[0-9]{2}[1]{1}[0-2]{1}"
                           }
                         }
@@ -356,7 +345,6 @@
                         },
                         "simpleType": {
                           "restriction": {
-                            "base": "string",
                             "enumeration": ["04", "01"]
                           }
                         }
@@ -415,7 +403,6 @@
                         },
                         "simpleType": {
                           "restriction": {
-                            "base": "string",
                             "enumeration": ["2B", "2C", "2D"]
                           }
                         }
@@ -427,7 +414,6 @@
                         },
                         "simpleType": {
                           "restriction": {
-                            "base": "string",
                             "pattern": "[0-9]{1,3}"
                           }
                         }
@@ -439,7 +425,6 @@
                         },
                         "simpleType": {
                           "restriction": {
-                            "base": "string",
                             "pattern": "[0-9]{1,6}"
                           }
                         }
@@ -465,7 +450,6 @@
               "annotation": { "label": "Razão social ou nome do emitente" },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "maxLength": "60",
                   "minLength": "2"
                 }
@@ -473,11 +457,10 @@
             },
             {
               "name": "xFant",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": { "label": "Nome fantasia" },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "maxLength": "60",
                   "minLength": "1"
                 }
@@ -495,20 +478,19 @@
             },
             {
               "name": "IEST",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": {
                 "label": "Inscricao Estadual do Substituto Tributário"
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "maxLength": "14",
                   "pattern": "[0-9]{2,14}"
                 }
               }
             },
             {
-              "minOccurs": "0",
+              "optional": true,
               "annotation": {
                 "label": "Grupo de informações de interesse da Prefeitura"
               },
@@ -518,7 +500,6 @@
                   "annotation": { "label": "Inscrição Municipal" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "minLength": "1",
                       "maxLength": "15"
                     }
@@ -526,10 +507,10 @@
                 },
                 {
                   "name": "CNAE",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "CNAE Fiscal" },
                   "simpleType": {
-                    "restriction": { "base": "string", "pattern": "[0-9]{7}" }
+                    "restriction": { "pattern": "[0-9]{7}" }
                   }
                 }
               ]
@@ -546,7 +527,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "enumeration": ["1", "2", "3"]
                 }
               }
@@ -574,7 +554,6 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "maxLength": "60",
                         "minLength": "2"
                       }
@@ -601,7 +580,6 @@
                               },
                               "simpleType": {
                                 "restriction": {
-                                  "base": "string",
                                   "enumeration": "1"
                                 }
                               }
@@ -611,7 +589,6 @@
                               "annotation": { "label": "Inscrição Estadual" },
                               "simpleType": {
                                 "restriction": {
-                                  "base": "string",
                                   "maxLength": "14",
                                   "pattern": "[0-9]{2,14}"
                                 }
@@ -631,7 +608,6 @@
                               },
                               "simpleType": {
                                 "restriction": {
-                                  "base": "string",
                                   "enumeration": "2"
                                 }
                               }
@@ -648,7 +624,6 @@
                               },
                               "simpleType": {
                                 "restriction": {
-                                  "base": "string",
                                   "enumeration": "9"
                                 }
                               }
@@ -660,24 +635,22 @@
                   },
                   {
                     "name": "ISUF",
-                    "minOccurs": "0",
+                    "optional": true,
                     "annotation": { "label": "Inscrição na SUFRAMA" },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "pattern": "[0-9]{8,9}"
                       }
                     }
                   },
                   {
                     "name": "IM",
-                    "minOccurs": "0",
+                    "optional": true,
                     "annotation": {
                       "label": "Inscrição Municipal do tomador do serviço"
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "minLength": "1",
                         "maxLength": "15"
                       }
@@ -685,11 +658,10 @@
                   },
                   {
                     "name": "email",
-                    "minOccurs": "0",
+                    "optional": true,
                     "annotation": { "label": "E-mail do destinatário" },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "minLength": "1",
                         "maxLength": "60"
                       }
@@ -710,7 +682,6 @@
                     "annotation": { "label": "Nome do destinatário" },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "maxLength": "60",
                         "minLength": "2"
                       }
@@ -727,16 +698,15 @@
                       "label": "Indicador da IE do destinatário"
                     },
                     "simpleType": {
-                      "restriction": { "base": "string", "enumeration": "9" }
+                      "restriction": { "enumeration": "9" }
                     }
                   },
                   {
                     "name": "email",
-                    "minOccurs": "0",
+                    "optional": true,
                     "annotation": { "label": "E-mail do destinatário" },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "minLength": "1",
                         "maxLength": "60"
                       }
@@ -752,7 +722,6 @@
                     "annotation": { "label": "Identificação do destinatário" },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "pattern": "([!-ÿ]{0}|[!-ÿ]{5,20})?"
                       }
                     }
@@ -762,7 +731,6 @@
                     "annotation": { "label": "Nome do destinatário" },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "maxLength": "60",
                         "minLength": "2"
                       }
@@ -779,16 +747,15 @@
                       "label": "Indicador da IE do destinatário"
                     },
                     "simpleType": {
-                      "restriction": { "base": "string", "enumeration": "9" }
+                      "restriction": { "enumeration": "9" }
                     }
                   },
                   {
                     "name": "email",
-                    "minOccurs": "0",
+                    "optional": true,
                     "annotation": { "label": "E-mail do destinatário" },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "minLength": "1",
                         "maxLength": "60"
                       }
@@ -802,7 +769,7 @@
         {
           "name": "retirada",
           "type": "TLocal",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": {
             "label": "Local de retirada (diferente do endereço do remetente)"
           }
@@ -810,14 +777,14 @@
         {
           "name": "entrega",
           "type": "TLocal",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": {
             "label": "Local de entrega (diferente do endereço do destinatário)"
           }
         },
         {
           "name": "autXML",
-          "minOccurs": "0",
+          "optional": true,
           "maxOccurs": "10",
           "annotation": {
             "label": "Pessoas autorizadas para o download do XML da NF-e"
@@ -848,7 +815,6 @@
               "annotation": { "label": "Número do item do NF" },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "pattern": "[1-9]{1}[0-9]{0,1}|[1-8]{1}[0-9]{2}|[9]{1}[0-8]{1}[0-9]{1}|[9]{1}[9]{1}[0]{1}"
                 }
               }
@@ -867,7 +833,6 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "maxLength": "60",
                       "minLength": "1"
                     }
@@ -880,7 +845,6 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}"
                     }
                   }
@@ -890,7 +854,6 @@
                   "annotation": { "label": "Descrição do produto ou serviço" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "maxLength": "120",
                       "minLength": "1"
                     }
@@ -904,21 +867,19 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "[0-9]{2}|[0-9]{8}"
                     }
                   }
                 },
                 {
                   "name": "NVE",
-                  "minOccurs": "0",
+                  "optional": true,
                   "maxOccurs": "8",
                   "annotation": {
                     "label": "Nomenclatura de Valor aduaneio e Estatístico"
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "[A-Z]{2}[0-9]{4}"
                     }
                   }
@@ -928,20 +889,19 @@
                   "annotation": {
                     "label": "Código de Benefício Fiscal na UF aplicado ao item"
                   },
-                  "minOccurs": "0",
+                  "optional": true,
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "([!-ÿ]{8}|[!-ÿ]{10}|SEM CBENEF)?"
                     }
                   }
                 },
                 {
                   "name": "EXTIPI",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Código EX TIPI" },
                   "simpleType": {
-                    "restriction": { "base": "string", "pattern": "[0-9]{2,3}" }
+                    "restriction": { "pattern": "[0-9]{2,3}" }
                   }
                 },
                 {
@@ -951,7 +911,6 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "[1,2,3,5,6,7]{1}[0-9]{3}"
                     }
                   }
@@ -961,7 +920,6 @@
                   "annotation": { "label": "Unidade comercial" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "maxLength": "6",
                       "minLength": "1"
                     }
@@ -989,7 +947,6 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}"
                     }
                   }
@@ -999,7 +956,6 @@
                   "annotation": { "label": "Unidade Tributável" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "maxLength": "6",
                       "minLength": "1"
                     }
@@ -1018,25 +974,25 @@
                 {
                   "name": "vFrete",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor Total do Frete" }
                 },
                 {
                   "name": "vSeg",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor Total do Seguro" }
                 },
                 {
                   "name": "vDesc",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor do Desconto" }
                 },
                 {
                   "name": "vOutro",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Outras despesas acessórias" }
                 },
                 {
@@ -1047,14 +1003,13 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "enumeration": ["1", "0"]
                     }
                   }
                 },
                 {
                   "name": "DI",
-                  "minOccurs": "0",
+                  "optional": true,
                   "maxOccurs": "100",
                   "annotation": { "label": "Delcaração de Importação" },
                   "element": [
@@ -1065,7 +1020,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "minLength": "1",
                           "maxLength": "12"
                         }
@@ -1083,7 +1037,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "minLength": "1",
                           "maxLength": "60"
                         }
@@ -1120,7 +1073,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "enumeration": [
                             "1",
                             "2",
@@ -1139,7 +1091,7 @@
                     {
                       "name": "vAFRMM",
                       "type": "TDec_1302",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "Valor Adicional ao frete para renovação de marinha mercante"
                       }
@@ -1156,7 +1108,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "enumeration": ["1", "2", "3"]
                         }
                       }
@@ -1164,7 +1115,7 @@
                     {
                       "name": "CNPJ",
                       "type": "TCnpj",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "CNPJ do adquirente ou do encomendante"
                       }
@@ -1172,7 +1123,7 @@
                     {
                       "name": "UFTerceiro",
                       "type": "TUfEmi",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "Sigla da UF do adquirente ou do encomendante"
                       }
@@ -1185,7 +1136,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "minLength": "1",
                           "maxLength": "60"
                         }
@@ -1201,7 +1151,6 @@
                           "annotation": { "label": "Número da adição" },
                           "simpleType": {
                             "restriction": {
-                              "base": "string",
                               "pattern": "[1-9]{1}[0-9]{0,2}"
                             }
                           }
@@ -1213,7 +1162,6 @@
                           },
                           "simpleType": {
                             "restriction": {
-                              "base": "string",
                               "pattern": "[1-9]{1}[0-9]{0,2}"
                             }
                           }
@@ -1226,7 +1174,6 @@
                           },
                           "simpleType": {
                             "restriction": {
-                              "base": "string",
                               "minLength": "1",
                               "maxLength": "60"
                             }
@@ -1235,20 +1182,19 @@
                         {
                           "name": "vDescDI",
                           "type": "TDec_1302Opc",
-                          "minOccurs": "0",
+                          "optional": true,
                           "annotation": {
                             "label": "Valor do desconto do item da DI – adição"
                           }
                         },
                         {
                           "name": "nDraw",
-                          "minOccurs": "0",
+                          "optional": true,
                           "annotation": {
                             "label": "Número do ato concessório de Drawback"
                           },
                           "simpleType": {
                             "restriction": {
-                              "base": "string",
                               "pattern": "[0-9]{0,11}"
                             }
                           }
@@ -1259,26 +1205,25 @@
                 },
                 {
                   "name": "detExport",
-                  "minOccurs": "0",
+                  "optional": true,
                   "maxOccurs": "500",
                   "annotation": { "label": "Detalhe da exportação" },
                   "element": [
                     {
                       "name": "nDraw",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "Número do ato concessório de Drawback"
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "pattern": "[0-9]{0,11}"
                         }
                       }
                     },
                     {
                       "name": "exportInd",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": { "label": "Exportação indireta" },
                       "element": [
                         {
@@ -1286,7 +1231,6 @@
                           "annotation": { "label": "Registro de exportação" },
                           "simpleType": {
                             "restriction": {
-                              "base": "string",
                               "pattern": "[0-9]{0,12}"
                             }
                           }
@@ -1311,14 +1255,13 @@
                 },
                 {
                   "name": "xPed",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Pedido de compra",
                     "aux": "Informação de interesse do emissor para controle do B2B"
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "minLength": "1",
                       "maxLength": "15"
                     }
@@ -1326,23 +1269,22 @@
                 },
                 {
                   "name": "nItemPed",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Número do item do pedido de compra"
                   },
                   "simpleType": {
-                    "restriction": { "base": "string", "pattern": "[0-9]{1,6}" }
+                    "restriction": { "pattern": "[0-9]{1,6}" }
                   }
                 },
                 {
                   "name": "nFCI",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Número de controle da FCI (Ficha de Conteúdo de Importação)"
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}"
                     }
                   }
@@ -1353,7 +1295,7 @@
                     "label": "Rastreabilidade",
                     "aux": "Obrigatório o preenchimento deste grupo no caso de medicamentos e produtos farmacêuticos"
                   },
-                  "minOccurs": "0",
+                  "optional": true,
                   "maxOccurs": "500",
                   "element": [
                     {
@@ -1361,7 +1303,6 @@
                       "annotation": { "label": "Número do lote do produto." },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "minLength": "1",
                           "maxLength": "20"
                         }
@@ -1374,7 +1315,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "pattern": "0|0\\.[0-9]{3}|[1-9]{1}[0-9]{0,7}(\\.[0-9]{1,3})?"
                         }
                       }
@@ -1395,10 +1335,9 @@
                     {
                       "name": "cAgreg",
                       "annotation": { "label": "Código de agregação" },
-                      "minOccurs": "0",
+                      "optional": true,
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "pattern": "[0-9]{1,20}"
                         }
                       }
@@ -1409,7 +1348,7 @@
                   "annotation": {
                     "label": "Código Especificador da Substituição Tributária"
                   },
-                  "minOccurs": "0",
+                  "optional": true,
                   "element": [
                     {
                       "name": "CEST",
@@ -1419,7 +1358,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "pattern": "[0-9]{7}"
                         }
                       }
@@ -1430,10 +1368,9 @@
                         "label": "Prozido em escala relevante",
                         "itens": ["Sim", "Não"]
                       },
-                      "minOccurs": "0",
+                      "optional": true,
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "enumeration": ["S", "N"]
                         }
                       }
@@ -1441,7 +1378,7 @@
                     {
                       "name": "CNPJFab",
                       "type": "TCnpj",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "CNPJ do Fabricante da Mercadoria, obrigatório para produto em escala NÃO relevante."
                       }
@@ -1450,7 +1387,7 @@
                 },
                 {
                   "choice": {
-                    "minOccurs": "0",
+                    "optional": true,
                     "annotation": {
                       "label": "Informações específicas de produtos e serviços"
                     },
@@ -1472,7 +1409,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": ["0", "1", "2", "3"]
                               }
                             }
@@ -1484,7 +1420,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "length": "17",
                                 "pattern": "[A-Z0-9]+"
                               }
@@ -1495,7 +1430,6 @@
                             "annotation": { "label": "Cor do veículo" },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "4"
                               }
@@ -1506,7 +1440,6 @@
                             "annotation": { "label": "Descrição da cor" },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "40"
                               }
@@ -1519,7 +1452,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "4"
                               }
@@ -1532,7 +1464,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "4"
                               }
@@ -1543,7 +1474,6 @@
                             "annotation": { "label": "Peso líquido" },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "9"
                               }
@@ -1554,7 +1484,6 @@
                             "annotation": { "label": "Peso bruto" },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "9"
                               }
@@ -1565,7 +1494,6 @@
                             "annotation": { "label": "Serial (série)" },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "9"
                               }
@@ -1598,7 +1526,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": [
                                   "01",
                                   "02",
@@ -1627,7 +1554,6 @@
                             "annotation": { "label": "Número do motor" },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "21"
                               }
@@ -1640,7 +1566,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "9"
                               }
@@ -1651,7 +1576,6 @@
                             "annotation": { "label": "Distância entre eixos" },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "4"
                               }
@@ -1662,7 +1586,6 @@
                             "annotation": { "label": "Ano do modelo" },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "pattern": "[0-9]{4}"
                               }
                             }
@@ -1672,7 +1595,6 @@
                             "annotation": { "label": "Ano de fabricação" },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "pattern": "[0-9]{4}"
                               }
                             }
@@ -1681,7 +1603,7 @@
                             "name": "tpPint",
                             "annotation": { "label": "Tipo de pintura" },
                             "simpleType": {
-                              "restriction": { "base": "string", "length": "1" }
+                              "restriction": { "length": "1" }
                             }
                           },
                           {
@@ -1713,7 +1635,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": [
                                   "02",
                                   "03",
@@ -1754,7 +1675,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": ["1", "2", "3", "4", "5", "6"]
                               }
                             }
@@ -1767,7 +1687,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "length": "1",
                                 "enumeration": ["R", "N"]
                               }
@@ -1781,7 +1700,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": ["1", "2", "3"]
                               }
                             }
@@ -1793,7 +1711,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "pattern": "[0-9]{1,6}"
                               }
                             }
@@ -1823,7 +1740,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": [
                                   "01",
                                   "02",
@@ -1852,7 +1768,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "3",
                                 "pattern": "[0-9]{1,3}"
@@ -1874,7 +1789,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": ["0", "1", "2", "3", "4", "9"]
                               }
                             }
@@ -1903,7 +1817,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "pattern": "[0-9]{13}|ISENTO"
                                         }
                                       }
@@ -1920,21 +1833,19 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "ISENTO"
                                         }
                                       }
                                     },
                                     {
                                       "name": "xMotivoIsencao",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Motivo da isenção",
                                         "aux": "Para medicamento isento de registro na ANVISA, informar o número da decisão que o isenta, como por exemplo o número da Resolução da Diretoria Colegiada da ANVISA (RDC)"
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "minLength": "1",
                                           "maxLength": "255"
                                         }
@@ -1967,7 +1878,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": ["0", "1"]
                               }
                             }
@@ -1979,7 +1889,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "15"
                               }
@@ -1992,7 +1901,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "15"
                               }
@@ -2006,7 +1914,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "1",
                                 "maxLength": "256"
                               }
@@ -2025,7 +1932,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "pattern": "[0-9]{9}"
                               }
                             }
@@ -2038,14 +1944,13 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "2",
                                 "maxLength": "95"
                               }
                             }
                           },
                           {
-                            "minOccurs": "0",
+                            "optional": true,
                             "annotation": {
                               "label": "Informações de GLP (Código 210203001)"
                             },
@@ -2053,7 +1958,7 @@
                               {
                                 "name": "pGLP",
                                 "type": "TDec_0302a04Max100",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Percentual do GLP derivado do petróleo no produto GLP",
                                   "aux": "Valores de 0 a 100"
@@ -2062,7 +1967,7 @@
                               {
                                 "name": "pGNn",
                                 "type": "TDec_0302a04Max100",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Percentual de gás natural nacional GLGNn para o produto GLP",
                                   "aux": "Valores de 0 a 100"
@@ -2071,7 +1976,7 @@
                               {
                                 "name": "pGNi",
                                 "type": "TDec_0302a04Max100",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Percentual de gás natural importado GLGNi para o produto GLP",
                                   "aux": "Valores de 0 a 100"
@@ -2080,7 +1985,7 @@
                               {
                                 "name": "vPart",
                                 "type": "TDec_1302",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Valor de partida (por quilograma sem ICMS)"
                                 }
@@ -2089,28 +1994,26 @@
                           },
                           {
                             "name": "CODIF",
-                            "minOccurs": "0",
+                            "optional": true,
                             "annotation": {
                               "label": "Código de autorização / registro do CODIF",
                               "aux": "Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com Álcool Etílico Anidro Combustível)"
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "pattern": "[0-9]{1,21}"
                               }
                             }
                           },
                           {
                             "name": "qTemp",
-                            "minOccurs": "0",
+                            "optional": true,
                             "annotation": {
                               "label": "Quantidade de combustível faturada à temperatura ambiente",
                               "aux": "Informar quando a quantidade faturada informada no campo de quantidade comercial tiver sido ajustada para uma temperatura diferente da ambiente"
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "pattern": "0\\.[1-9]{1}[0-9]{3}|0\\.[0-9]{3}[1-9]{1}|0\\.[0-9]{2}[1-9]{1}[0-9]{1}|0\\.[0-9]{1}[1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{0,11}(\\.[0-9]{4})?"
                               }
                             }
@@ -2122,7 +2025,7 @@
                           },
                           {
                             "name": "CIDE",
-                            "minOccurs": "0",
+                            "optional": true,
                             "annotation": {
                               "label": "CIDE (Contribuição de Intervenção no Domínio Econômico)"
                             },
@@ -2150,7 +2053,7 @@
                           },
                           {
                             "name": "encerrante",
-                            "minOccurs": "0",
+                            "optional": true,
                             "annotation": {
                               "label": "Informações do encerrante"
                             },
@@ -2162,20 +2065,18 @@
                                 },
                                 "simpleType": {
                                   "restriction": {
-                                    "base": "string",
                                     "pattern": "[0-9]{1,3}"
                                   }
                                 }
                               },
                               {
                                 "name": "nBomba",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Numero da bomba, caso exista"
                                 },
                                 "simpleType": {
                                   "restriction": {
-                                    "base": "string",
                                     "pattern": "[0-9]{1,3}"
                                   }
                                 }
@@ -2187,7 +2088,6 @@
                                 },
                                 "simpleType": {
                                   "restriction": {
-                                    "base": "string",
                                     "pattern": "[0-9]{1,3}"
                                   }
                                 }
@@ -2215,7 +2115,6 @@
                         "annotation": { "label": "Número do RECOPI" },
                         "simpleType": {
                           "restriction": {
-                            "base": "string",
                             "maxLength": "20",
                             "pattern": "[0-9]{20}"
                           }
@@ -2233,14 +2132,14 @@
                 {
                   "name": "vTotTrib",
                   "type": "TDec_1302",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Valor estimado total de impostos federais, estaduais e municipais"
                   }
                 },
                 {
                   "name": "PIS",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Dados do PIS" },
                   "choice": {
                     "element": [
@@ -2261,7 +2160,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": ["01", "02"]
                               }
                             }
@@ -2298,7 +2196,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": "03"
                               }
                             }
@@ -2341,7 +2238,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": [
                                   "04",
                                   "05",
@@ -2366,7 +2262,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": "99"
                               }
                             }
@@ -2428,7 +2323,7 @@
                 },
                 {
                   "name": "PISST",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Dados do PIS Substituição Tributária"
                   },
@@ -2484,7 +2379,7 @@
                 },
                 {
                   "name": "COFINS",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Dados do COFINS" },
                   "choice": {
                     "element": [
@@ -2503,7 +2398,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": ["01", "02"]
                               }
                             }
@@ -2538,7 +2432,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": "03"
                               }
                             }
@@ -2581,7 +2474,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": [
                                   "04",
                                   "05",
@@ -2632,7 +2524,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": [
                                   "49",
                                   "50",
@@ -2719,7 +2610,7 @@
                 },
                 {
                   "name": "COFINSST",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Dados do COFINS Substituição Tributaria;"
                   },
@@ -2776,7 +2667,7 @@
                 },
                 {
                   "name": "ICMSUFDest",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "ICMS interestardual",
                     "aux": "Para consumidor final não contribuinte de ICMS"
@@ -2792,7 +2683,7 @@
                     {
                       "name": "vBCFCPUFDest",
                       "type": "TDec_1302",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "Valor da Base de Cálculo do FCP na UF do destinatário."
                       }
@@ -2800,7 +2691,7 @@
                     {
                       "name": "pFCPUFDest",
                       "type": "TDec_0302a04",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "Percentual adicional inserido na alíquota interna da UF de destino, relativo ao FCP naquela UF."
                       }
@@ -2824,7 +2715,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "enumeration": ["4.00", "7.00", "12.00"]
                         }
                       }
@@ -2836,7 +2726,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "enumeration": "100.00"
                         }
                       }
@@ -2844,7 +2733,7 @@
                     {
                       "name": "vFCPUFDest",
                       "type": "TDec_1302",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) da UF de destino."
                       }
@@ -2863,7 +2752,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "enumeration": "0.00"
                         }
                       }
@@ -2902,7 +2790,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -2914,7 +2801,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "00"
                                         }
                                       }
@@ -2932,7 +2818,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2", "3"]
                                         }
                                       }
@@ -2960,7 +2845,7 @@
                                       "annotation": {
                                         "label": "Fundo de combate à pobreza"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "pFCP",
@@ -2998,7 +2883,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -3010,7 +2894,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "10"
                                         }
                                       }
@@ -3028,7 +2911,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2", "3"]
                                         }
                                       }
@@ -3056,7 +2938,7 @@
                                       "annotation": {
                                         "label": "Fundo de combate à pobreza"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "vBCFCP",
@@ -3095,7 +2977,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": [
                                             "0",
                                             "1",
@@ -3111,7 +2992,7 @@
                                     {
                                       "name": "pMVAST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual da Margem de Valor Adicionado ICMS ST"
                                       }
@@ -3119,7 +3000,7 @@
                                     {
                                       "name": "pRedBCST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual de redução da BC ICMS ST"
                                       }
@@ -3149,7 +3030,7 @@
                                       "annotation": {
                                         "label": "FCP retido por substituição tributária"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "vBCFCPST",
@@ -3194,7 +3075,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -3206,7 +3086,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "20"
                                         }
                                       }
@@ -3224,7 +3103,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2", "3"]
                                         }
                                       }
@@ -3259,7 +3137,7 @@
                                       "annotation": {
                                         "label": "Fundo de combate à pobreza"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "vBCFCP",
@@ -3283,7 +3161,7 @@
                                       ]
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": { "label": "Desoneração" },
                                       "element": [
                                         {
@@ -3305,7 +3183,6 @@
                                           },
                                           "simpleType": {
                                             "restriction": {
-                                              "base": "string",
                                               "enumeration": ["3", "9", "12"]
                                             }
                                           }
@@ -3332,7 +3209,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -3344,7 +3220,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "30"
                                         }
                                       }
@@ -3365,7 +3240,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": [
                                             "0",
                                             "1",
@@ -3381,7 +3255,7 @@
                                     {
                                       "name": "pMVAST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual da Margem de Valor Adicionado ICMS ST"
                                       }
@@ -3389,7 +3263,7 @@
                                     {
                                       "name": "pRedBCST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual de redução da BC ICMS ST"
                                       }
@@ -3419,7 +3293,7 @@
                                       "annotation": {
                                         "label": "FCP retido por ST"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "vBCFCPST",
@@ -3443,7 +3317,7 @@
                                       ]
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": { "label": "Desoneração" },
                                       "element": [
                                         {
@@ -3465,7 +3339,6 @@
                                           },
                                           "simpleType": {
                                             "restriction": {
-                                              "base": "string",
                                               "enumeration": ["6", "7", "9"]
                                             }
                                           }
@@ -3492,7 +3365,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -3509,7 +3381,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["40", "41", "50"]
                                         }
                                       }
@@ -3519,7 +3390,7 @@
                                         "label": "Desoneração",
                                         "aux": "O valor do ICMS será informado apenas nas operações com veículos beneficiados com a desoneração condicional do ICMS"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "vICMSDeson",
@@ -3549,7 +3420,6 @@
                                           },
                                           "simpleType": {
                                             "restriction": {
-                                              "base": "string",
                                               "enumeration": [
                                                 "1",
                                                 "3",
@@ -3587,7 +3457,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -3599,7 +3468,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "51"
                                         }
                                       }
@@ -3617,7 +3485,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2", "3"]
                                         }
                                       }
@@ -3625,7 +3492,7 @@
                                     {
                                       "name": "pRedBC",
                                       "type": "TDec_0302a04",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual de redução da BC"
                                       }
@@ -3633,7 +3500,7 @@
                                     {
                                       "name": "vBC",
                                       "type": "TDec_1302",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Valor da BC do ICMS"
                                       }
@@ -3641,7 +3508,7 @@
                                     {
                                       "name": "pICMS",
                                       "type": "TDec_0302a04",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Alíquota do imposto"
                                       }
@@ -3649,7 +3516,7 @@
                                     {
                                       "name": "vICMSOp",
                                       "type": "TDec_1302",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Valor do ICMS da Operação"
                                       }
@@ -3657,7 +3524,7 @@
                                     {
                                       "name": "pDif",
                                       "type": "TDec_0302a04Max100",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual do diferemento"
                                       }
@@ -3665,7 +3532,7 @@
                                     {
                                       "name": "vICMSDif",
                                       "type": "TDec_1302",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Valor do ICMS da diferido"
                                       }
@@ -3673,14 +3540,14 @@
                                     {
                                       "name": "vICMS",
                                       "type": "TDec_1302",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": { "label": "Valor do ICMS" }
                                     },
                                     {
                                       "annotation": {
                                         "label": "Fundo de combate à pobreza"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "vBCFCP",
@@ -3723,7 +3590,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -3735,13 +3601,12 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "60"
                                         }
                                       }
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "ICMS ST retido anteriormente"
                                       },
@@ -3763,7 +3628,7 @@
                                         {
                                           "name": "vICMSSubstituto",
                                           "type": "TDec_1302",
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "annotation": {
                                             "label": "Valor do ICMS Próprio do Substituto cobrado em operação anterior"
                                           }
@@ -3778,7 +3643,7 @@
                                       ]
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "FCP retido anteriormente por ST"
                                       },
@@ -3805,7 +3670,7 @@
                                       ]
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": { "label": "ICMS efetivo" },
                                       "element": [
                                         {
@@ -3854,7 +3719,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -3866,7 +3730,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "70"
                                         }
                                       }
@@ -3884,7 +3747,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2", "3"]
                                         }
                                       }
@@ -3916,7 +3778,7 @@
                                       "annotation": { "label": "Valor do ICMS" }
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Fundo de combate à pobreza"
                                       },
@@ -3958,7 +3820,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": [
                                             "0",
                                             "1",
@@ -3974,7 +3835,7 @@
                                     {
                                       "name": "pMVAST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual da Margem de Valor Adicionado ICMS ST"
                                       }
@@ -3982,7 +3843,7 @@
                                     {
                                       "name": "pRedBCST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual de redução da BC ICMS ST"
                                       }
@@ -4012,7 +3873,7 @@
                                       "annotation": {
                                         "label": "FCP retido por ST"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "vBCFCPST",
@@ -4036,7 +3897,7 @@
                                       ]
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": { "label": "Desoneração" },
                                       "element": [
                                         {
@@ -4058,7 +3919,6 @@
                                           },
                                           "simpleType": {
                                             "restriction": {
-                                              "base": "string",
                                               "enumeration": ["3", "9", "12"]
                                             }
                                           }
@@ -4085,7 +3945,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -4097,13 +3956,12 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "90"
                                         }
                                       }
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "modBC",
@@ -4118,7 +3976,6 @@
                                           },
                                           "simpleType": {
                                             "restriction": {
-                                              "base": "string",
                                               "enumeration": [
                                                 "0",
                                                 "1",
@@ -4138,7 +3995,7 @@
                                         {
                                           "name": "pRedBC",
                                           "type": "TDec_0302a04Opc",
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "annotation": {
                                             "label": "Percentual de redução da BC"
                                           }
@@ -4161,7 +4018,7 @@
                                           "annotation": {
                                             "label": "Fundo de combate à pobreza"
                                           },
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "element": [
                                             {
                                               "name": "vBCFCP",
@@ -4190,7 +4047,7 @@
                                       "annotation": {
                                         "label": "Substituição tributária de ICMS"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "modBCST",
@@ -4208,7 +4065,6 @@
                                           },
                                           "simpleType": {
                                             "restriction": {
-                                              "base": "string",
                                               "enumeration": [
                                                 "0",
                                                 "1",
@@ -4224,7 +4080,7 @@
                                         {
                                           "name": "pMVAST",
                                           "type": "TDec_0302a04Opc",
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "annotation": {
                                             "label": "Percentual da Margem de Valor Adicionado ICMS ST"
                                           }
@@ -4232,7 +4088,7 @@
                                         {
                                           "name": "pRedBCST",
                                           "type": "TDec_0302a04Opc",
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "annotation": {
                                             "label": "Percentual de redução da BC ICMS ST"
                                           }
@@ -4262,7 +4118,7 @@
                                           "annotation": {
                                             "label": "FCP retido por ST"
                                           },
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "element": [
                                             {
                                               "name": "vBCFCPST",
@@ -4288,7 +4144,7 @@
                                       ]
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": { "label": "Desoneração" },
                                       "element": [
                                         {
@@ -4310,7 +4166,6 @@
                                           },
                                           "simpleType": {
                                             "restriction": {
-                                              "base": "string",
                                               "enumeration": ["3", "9", "12"]
                                             }
                                           }
@@ -4338,7 +4193,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -4354,7 +4208,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["10", "90"]
                                         }
                                       }
@@ -4372,7 +4225,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2", "3"]
                                         }
                                       }
@@ -4387,7 +4239,7 @@
                                     {
                                       "name": "pRedBC",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual de redução da BC"
                                       }
@@ -4420,7 +4272,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": [
                                             "0",
                                             "1",
@@ -4436,7 +4287,7 @@
                                     {
                                       "name": "pMVAST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual da Margem de Valor Adicionado ICMS ST"
                                       }
@@ -4444,7 +4295,7 @@
                                     {
                                       "name": "pRedBCST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual de redução da BC ICMS ST"
                                       }
@@ -4505,7 +4356,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -4521,7 +4371,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["41", "60"]
                                         }
                                       }
@@ -4536,7 +4385,7 @@
                                     {
                                       "name": "pST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Aliquota suportada pelo consumidor final."
                                       }
@@ -4544,7 +4393,7 @@
                                     {
                                       "name": "vICMSSubstituto",
                                       "type": "TDec_1302",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Valor do ICMS Próprio do Substituto cobrado em operação anterior"
                                       }
@@ -4560,7 +4409,7 @@
                                       "annotation": {
                                         "label": "FCP retido anteriormente por ST"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "vBCFCPSTRet",
@@ -4598,7 +4447,7 @@
                                       }
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": { "label": "ICMS efetivo" },
                                       "element": [
                                         {
@@ -4647,7 +4496,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -4659,7 +4507,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "101"
                                         }
                                       }
@@ -4697,7 +4544,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -4715,7 +4561,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": [
                                             "102",
                                             "103",
@@ -4745,7 +4590,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -4757,7 +4601,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "201"
                                         }
                                       }
@@ -4778,7 +4621,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": [
                                             "0",
                                             "1",
@@ -4794,7 +4636,7 @@
                                     {
                                       "name": "pMVAST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual da Margem de Valor Adicionado ICMS ST"
                                       }
@@ -4802,7 +4644,7 @@
                                     {
                                       "name": "pRedBCST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual de redução da BC ICMS ST"
                                       }
@@ -4832,7 +4674,7 @@
                                       "annotation": {
                                         "label": "FCP retido por ST"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "vBCFCPST",
@@ -4889,7 +4731,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -4905,7 +4746,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["202", "203"]
                                         }
                                       }
@@ -4926,7 +4766,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": [
                                             "0",
                                             "1",
@@ -4942,7 +4781,7 @@
                                     {
                                       "name": "pMVAST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual da Margem de Valor Adicionado ICMS ST"
                                       }
@@ -4950,7 +4789,7 @@
                                     {
                                       "name": "pRedBCST",
                                       "type": "TDec_0302a04Opc",
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Percentual de redução da BC ICMS ST"
                                       }
@@ -4980,7 +4819,7 @@
                                       "annotation": {
                                         "label": "FCP retido por ST"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "vBCFCPST",
@@ -5023,7 +4862,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -5035,13 +4873,12 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "500"
                                         }
                                       }
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "ICMS ST retido anteriormente"
                                       },
@@ -5063,7 +4900,7 @@
                                         {
                                           "name": "vICMSSubstituto",
                                           "type": "TDec_1302",
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "annotation": {
                                             "label": "Valor do ICMS próprio do substituto"
                                           }
@@ -5078,7 +4915,7 @@
                                       ]
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "FCP retido anteriormente por ST."
                                       },
@@ -5105,7 +4942,7 @@
                                       ]
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": { "label": "ICMS efetivo" },
                                       "element": [
                                         {
@@ -5156,7 +4993,6 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": ["0", "1", "2"]
                                         }
                                       }
@@ -5168,13 +5004,12 @@
                                       },
                                       "simpleType": {
                                         "restriction": {
-                                          "base": "string",
                                           "enumeration": "900"
                                         }
                                       }
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "modBC",
@@ -5189,7 +5024,6 @@
                                           },
                                           "simpleType": {
                                             "restriction": {
-                                              "base": "string",
                                               "enumeration": [
                                                 "0",
                                                 "1",
@@ -5209,7 +5043,7 @@
                                         {
                                           "name": "pRedBC",
                                           "type": "TDec_0302a04Opc",
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "annotation": {
                                             "label": "Percentual de redução da BC"
                                           }
@@ -5234,7 +5068,7 @@
                                       "annotation": {
                                         "label": "Substituição tributária de ICMS"
                                       },
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "element": [
                                         {
                                           "name": "modBCST",
@@ -5252,7 +5086,6 @@
                                           },
                                           "simpleType": {
                                             "restriction": {
-                                              "base": "string",
                                               "enumeration": [
                                                 "0",
                                                 "1",
@@ -5268,7 +5101,7 @@
                                         {
                                           "name": "pMVAST",
                                           "type": "TDec_0302a04Opc",
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "annotation": {
                                             "label": "Percentual da Margem de Valor Adicionado ICMS ST"
                                           }
@@ -5276,7 +5109,7 @@
                                         {
                                           "name": "pRedBCST",
                                           "type": "TDec_0302a04Opc",
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "annotation": {
                                             "label": "Percentual de redução da BC ICMS ST"
                                           }
@@ -5306,7 +5139,7 @@
                                           "annotation": {
                                             "label": "FCP retido por ST"
                                           },
-                                          "minOccurs": "0",
+                                          "optional": true,
                                           "element": [
                                             {
                                               "name": "vBCFCPST",
@@ -5332,7 +5165,7 @@
                                       ]
                                     },
                                     {
-                                      "minOccurs": "0",
+                                      "optional": true,
                                       "annotation": {
                                         "label": "Crédito do ICMS"
                                       },
@@ -5365,11 +5198,11 @@
                               "label": "Imposto sobre produtos industrializados"
                             },
                             "type": "TIpi",
-                            "minOccurs": "0"
+                            "optional": true
                           },
                           {
                             "name": "II",
-                            "minOccurs": "0",
+                            "optional": true,
                             "annotation": {
                               "label": "Dados do Imposto de Importação"
                             },
@@ -5415,7 +5248,7 @@
                               "label": "Imposto sobre produtos industrializados"
                             },
                             "type": "TIpi",
-                            "minOccurs": "0"
+                            "optional": true
                           },
                           {
                             "name": "ISSQN",
@@ -5452,7 +5285,6 @@
                                 },
                                 "simpleType": {
                                   "restriction": {
-                                    "base": "string",
                                     "enumeration": [
                                       "01.01",
                                       "01.02",
@@ -5660,7 +5492,7 @@
                               {
                                 "name": "vDeducao",
                                 "type": "TDec_1302Opc",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Valor dedução para redução da base de cálculo"
                                 }
@@ -5668,7 +5500,7 @@
                               {
                                 "name": "vOutro",
                                 "type": "TDec_1302Opc",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Valor outras retenções"
                                 }
@@ -5676,7 +5508,7 @@
                               {
                                 "name": "vDescIncond",
                                 "type": "TDec_1302Opc",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Valor desconto incondicionado"
                                 }
@@ -5684,7 +5516,7 @@
                               {
                                 "name": "vDescCond",
                                 "type": "TDec_1302Opc",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Valor desconto condicionado"
                                 }
@@ -5692,7 +5524,7 @@
                               {
                                 "name": "vISSRet",
                                 "type": "TDec_1302Opc",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": { "label": "Valor Retenção ISS" }
                               },
                               {
@@ -5711,7 +5543,6 @@
                                 },
                                 "simpleType": {
                                   "restriction": {
-                                    "base": "string",
                                     "enumeration": [
                                       "1",
                                       "2",
@@ -5726,13 +5557,12 @@
                               },
                               {
                                 "name": "cServico",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Código do serviço prestado dentro do município"
                                 },
                                 "simpleType": {
                                   "restriction": {
-                                    "base": "string",
                                     "minLength": "1",
                                     "maxLength": "20"
                                   }
@@ -5741,31 +5571,29 @@
                               {
                                 "name": "cMun",
                                 "type": "TCodMunIBGE",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Código do Município de Incidência do Imposto"
                                 }
                               },
                               {
                                 "name": "cPais",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": { "label": "Código de Pais" },
                                 "simpleType": {
                                   "restriction": {
-                                    "base": "string",
                                     "pattern": "[0-9]{1,4}"
                                   }
                                 }
                               },
                               {
                                 "name": "nProcesso",
-                                "minOccurs": "0",
+                                "optional": true,
                                 "annotation": {
                                   "label": "Número do Processo administrativo ou judicial de suspenção do processo"
                                 },
                                 "simpleType": {
                                   "restriction": {
-                                    "base": "string",
                                     "minLength": "1",
                                     "maxLength": "30"
                                   }
@@ -5779,7 +5607,6 @@
                                 },
                                 "simpleType": {
                                   "restriction": {
-                                    "base": "string",
                                     "enumeration": ["1", "2"]
                                   }
                                 }
@@ -5799,7 +5626,7 @@
                 "label": "Imposto devolvido",
                 "aux": "Obrigatório informar motivo da devolução nas informações adicionais do produto"
               },
-              "minOccurs": "0",
+              "optional": true,
               "element": [
                 {
                   "name": "pDevol",
@@ -5808,7 +5635,6 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "0(\\.[0-9]{2})?|100(\\.00)?|[1-9]{1}[0-9]{0,1}(\\.[0-9]{2})?"
                     }
                   }
@@ -5828,14 +5654,13 @@
             },
             {
               "name": "infAdProd",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": {
                 "label": "Informações adicionais do produto",
                 "aux": "Norma referenciada, informações complementares, etc"
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "1",
                   "maxLength": "500"
                 }
@@ -5869,7 +5694,7 @@
                 {
                   "name": "vFCPUFDest",
                   "type": "TDec_1302",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Total do ICMS relativo ao FCP para a UF de destino"
                   }
@@ -5877,7 +5702,7 @@
                 {
                   "name": "vICMSUFDest",
                   "type": "TDec_1302",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Total do ICMS de partilha para a UF do destinatário"
                   }
@@ -5885,7 +5710,7 @@
                 {
                   "name": "vICMSUFRemet",
                   "type": "TDec_1302",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Total do ICMS de partilha para a UF do remetente"
                   }
@@ -5977,7 +5802,7 @@
                 {
                   "name": "vTotTrib",
                   "type": "TDec_1302",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Total estimado de impostos federais, estaduais e municipais"
                   }
@@ -5986,13 +5811,13 @@
             },
             {
               "name": "ISSQNtot",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": { "label": "Totais referentes ao ISSQN" },
               "element": [
                 {
                   "name": "vServ",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Total dos Serviços sob não-incidência ou não tributados pelo ICMS"
                   }
@@ -6000,25 +5825,25 @@
                 {
                   "name": "vBC",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Base de Cálculo do ISS" }
                 },
                 {
                   "name": "vISS",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Total do ISS" }
                 },
                 {
                   "name": "vPIS",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Total do PIS sobre serviços" }
                 },
                 {
                   "name": "vCOFINS",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Total do COFINS sobre serviços" }
                 },
                 {
@@ -6031,7 +5856,7 @@
                 {
                   "name": "vDeducao",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Valor dedução para redução da base de cálculo"
                   }
@@ -6039,30 +5864,30 @@
                 {
                   "name": "vOutro",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor outras retenções" }
                 },
                 {
                   "name": "vDescIncond",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor desconto incondicionado" }
                 },
                 {
                   "name": "vDescCond",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor desconto condicionado" }
                 },
                 {
                   "name": "vISSRet",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Total Retenção ISS" }
                 },
                 {
                   "name": "cRegTrib",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Código do regime especial de tributação",
                     "itens": [
@@ -6076,7 +5901,6 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "enumeration": ["1", "2", "3", "4", "5", "6"]
                     }
                   }
@@ -6085,43 +5909,43 @@
             },
             {
               "name": "retTrib",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": { "label": "Retenção de Tributos Federais" },
               "element": [
                 {
                   "name": "vRetPIS",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor Retido de PIS" }
                 },
                 {
                   "name": "vRetCOFINS",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor Retido de COFINS" }
                 },
                 {
                   "name": "vRetCSLL",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor Retido de CSLL" }
                 },
                 {
                   "name": "vBCIRRF",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Base de Cálculo do IRRF" }
                 },
                 {
                   "name": "vIRRF",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor Retido de IRRF" }
                 },
                 {
                   "name": "vBCRetPrev",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Base de Cálculo da Retenção da Previdêncica Social"
                   }
@@ -6129,7 +5953,7 @@
                 {
                   "name": "vRetPrev",
                   "type": "TDec_1302Opc",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Valor da Retenção da Previdêncica Social"
                   }
@@ -6157,20 +5981,19 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "enumeration": ["0", "1", "2", "3", "4", "9"]
                 }
               }
             },
             {
               "name": "transporta",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": { "label": "Dados do transportador" },
               "element": [
                 {
                   "choice": {
                     "annotation": { "label": "Documento usado" },
-                    "minOccurs": "0",
+                    "optional": true,
                     "element": [
                       {
                         "name": "CNPJ",
@@ -6187,13 +6010,12 @@
                 },
                 {
                   "name": "xNome",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Razão Social ou nome do transportador"
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "maxLength": "60",
                       "minLength": "2"
                     }
@@ -6202,16 +6024,15 @@
                 {
                   "name": "IE",
                   "type": "TIeDest",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Inscrição Estadual" }
                 },
                 {
                   "name": "xEnder",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Endereço completo" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "minLength": "1",
                       "maxLength": "60"
                     }
@@ -6219,11 +6040,10 @@
                 },
                 {
                   "name": "xMun",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Nome do munícipio" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "maxLength": "60",
                       "minLength": "1"
                     }
@@ -6232,14 +6052,14 @@
                 {
                   "name": "UF",
                   "type": "TUf",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Sigla da UF" }
                 }
               ]
             },
             {
               "name": "retTransp",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": {
                 "label": "Dados da retenção  ICMS do Transporte"
               },
@@ -6271,7 +6091,6 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "[1,2,3,5,6,7]{1}[0-9]{3}"
                     }
                   }
@@ -6287,32 +6106,30 @@
             },
             {
               "name": "vol",
-              "minOccurs": "0",
+              "optional": true,
               "maxOccurs": "5000",
               "annotation": { "label": "Dados dos volumes" },
               "element": [
                 {
                   "name": "qVol",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Quantidade de volumes transportados"
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "[0-9]{1,15}"
                     }
                   }
                 },
                 {
                   "name": "esp",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Espécie dos volumes transportados"
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "minLength": "1",
                       "maxLength": "60"
                     }
@@ -6320,11 +6137,10 @@
                 },
                 {
                   "name": "marca",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Marca dos volumes transportados" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "minLength": "1",
                       "maxLength": "60"
                     }
@@ -6332,13 +6148,12 @@
                 },
                 {
                   "name": "nVol",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Numeração dos volumes transportados"
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "minLength": "1",
                       "maxLength": "60"
                     }
@@ -6347,19 +6162,19 @@
                 {
                   "name": "pesoL",
                   "type": "TDec_1203",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Peso líquido (em kg)" }
                 },
                 {
                   "name": "pesoB",
                   "type": "TDec_1203",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Peso bruto (em kg)" }
                 },
                 {
                   "name": "lacres",
                   "annotation": { "label": "Lacres" },
-                  "minOccurs": "0",
+                  "optional": true,
                   "maxOccurs": "5000",
                   "element": [
                     {
@@ -6367,7 +6182,6 @@
                       "annotation": { "label": "Número dos lacres" },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "minLength": "1",
                           "maxLength": "60"
                         }
@@ -6379,7 +6193,7 @@
             },
             {
               "choice": {
-                "minOccurs": "0",
+                "optional": true,
                 "annotation": { "label": "Meio de transporte" },
                 "element": [
                   {
@@ -6388,13 +6202,13 @@
                       {
                         "name": "veicTransp",
                         "type": "TVeiculo",
-                        "minOccurs": "0",
+                        "optional": true,
                         "annotation": { "label": "Dados do veículo" }
                       },
                       {
                         "name": "reboque",
                         "type": "TVeiculo",
-                        "minOccurs": "0",
+                        "optional": true,
                         "maxOccurs": "5",
                         "annotation": { "label": "Dados do reboque/Dolly" }
                       }
@@ -6405,7 +6219,6 @@
                     "annotation": { "label": "Identificação do vagão" },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "minLength": "1",
                         "maxLength": "20"
                       }
@@ -6416,7 +6229,6 @@
                     "annotation": { "label": "Identificação da balsa" },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "minLength": "1",
                         "maxLength": "20"
                       }
@@ -6429,21 +6241,20 @@
         },
         {
           "name": "cobr",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Dados da cobrança da NF-e" },
           "element": [
             {
               "name": "fat",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": { "label": "Dados da fatura" },
               "element": [
                 {
                   "name": "nFat",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Número da fatura" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "minLength": "1",
                       "maxLength": "60"
                     }
@@ -6452,36 +6263,35 @@
                 {
                   "name": "vOrig",
                   "type": "TDec_1302",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor original da fatura" }
                 },
                 {
                   "name": "vDesc",
                   "type": "TDec_1302",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor do desconto da fatura" }
                 },
                 {
                   "name": "vLiq",
                   "type": "TDec_1302",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Valor líquido da fatura" }
                 }
               ]
             },
             {
               "name": "dup",
-              "minOccurs": "0",
+              "optional": true,
               "maxOccurs": "120",
               "annotation": { "label": "Dados das duplicatas" },
               "element": [
                 {
                   "name": "nDup",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Número da duplicata" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "maxLength": "60",
                       "minLength": "1"
                     }
@@ -6490,7 +6300,7 @@
                 {
                   "name": "dVenc",
                   "type": "TData",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Data de vencimento da duplicata" }
                 },
                 {
@@ -6513,14 +6323,13 @@
               "element": [
                 {
                   "name": "indPag",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": {
                     "label": "Indicador da Forma de Pagamento",
                     "itens": ["Pagamento à Vista", "Pagamento à Prazo"]
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "enumeration": ["0", "1"]
                     }
                   }
@@ -6556,7 +6365,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": [
                                   "01",
                                   "02",
@@ -6595,7 +6403,6 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": "90"
                               }
                             }
@@ -6613,20 +6420,18 @@
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "enumeration": "99"
                               }
                             }
                           },
                           {
                             "name": "xPag",
-                            "minOccurs": "0",
+                            "optional": true,
                             "annotation": {
                               "label": "Descrição do Meio de Pagamento"
                             },
                             "simpleType": {
                               "restriction": {
-                                "base": "string",
                                 "minLength": "2",
                                 "maxLength": "60"
                               }
@@ -6644,7 +6449,7 @@
                 },
                 {
                   "name": "card",
-                  "minOccurs": "0",
+                  "optional": true,
                   "annotation": { "label": "Grupo de Cartões" },
                   "element": [
                     {
@@ -6658,7 +6463,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "enumeration": ["1", "2"]
                         }
                       }
@@ -6666,14 +6470,14 @@
                     {
                       "name": "CNPJ",
                       "type": "TCnpj",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "CNPJ da instituição de pagamento"
                       }
                     },
                     {
                       "name": "tBand",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "Bandeira da operadora de cartão de crédito/débito",
                         "itens": [
@@ -6709,7 +6513,6 @@
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "enumeration": [
                             "01",
                             "02",
@@ -6745,13 +6548,12 @@
                     },
                     {
                       "name": "cAut",
-                      "minOccurs": "0",
+                      "optional": true,
                       "annotation": {
                         "label": "Número de autorização da operação"
                       },
                       "simpleType": {
                         "restriction": {
-                          "base": "string",
                           "minLength": "1",
                           "maxLength": "20"
                         }
@@ -6764,14 +6566,14 @@
             {
               "name": "vTroco",
               "type": "TDec_1302",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": { "label": "Valor do Troco" }
             }
           ]
         },
         {
           "name": "infIntermed",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": {
             "label": "Informações do Intermediador da Transação"
           },
@@ -6790,7 +6592,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "2",
                   "maxLength": "60"
                 }
@@ -6800,18 +6601,17 @@
         },
         {
           "name": "infAdic",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Informações adicionais da NF-e" },
           "element": [
             {
               "name": "infAdFisco",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": {
                 "label": "Informações adicionais de interesse do Fisco"
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "maxLength": "2000",
                   "minLength": "1"
                 }
@@ -6819,13 +6619,12 @@
             },
             {
               "name": "infCpl",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": {
                 "label": "Informações complementares de interesse do Contribuinte"
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "maxLength": "5000",
                   "minLength": "1"
                 }
@@ -6833,7 +6632,7 @@
             },
             {
               "name": "procRef",
-              "minOccurs": "0",
+              "optional": true,
               "maxOccurs": "100",
               "annotation": {
                 "label": "Informações do  processo referenciado"
@@ -6846,7 +6645,6 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "minLength": "1",
                       "maxLength": "60"
                     }
@@ -6866,7 +6664,6 @@
                   },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "enumeration": ["0", "1", "2", "3", "9"]
                     }
                   }
@@ -6877,7 +6674,7 @@
         },
         {
           "name": "exporta",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Informações de exportação" },
           "element": [
             {
@@ -6894,7 +6691,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "1",
                   "maxLength": "60"
                 }
@@ -6902,11 +6698,10 @@
             },
             {
               "name": "xLocDespacho",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": { "label": "Descrição do local de despacho" },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "1",
                   "maxLength": "60"
                 }
@@ -6916,18 +6711,17 @@
         },
         {
           "name": "compra",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Informações de compras" },
           "element": [
             {
               "name": "xNEmp",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": {
                 "label": "Informação da Nota de Empenho de compras públicas"
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "1",
                   "maxLength": "22"
                 }
@@ -6935,11 +6729,10 @@
             },
             {
               "name": "xPed",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": { "label": "Informação do pedido" },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "1",
                   "maxLength": "60"
                 }
@@ -6947,11 +6740,10 @@
             },
             {
               "name": "xCont",
-              "minOccurs": "0",
+              "optional": true,
               "annotation": { "label": "Informação do contrato" },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "1",
                   "maxLength": "60"
                 }
@@ -6961,7 +6753,7 @@
         },
         {
           "name": "cana",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": {
             "label": "Informações de registro aquisições de cana"
           },
@@ -6971,7 +6763,6 @@
               "annotation": { "label": "Identificação da safra" },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "4",
                   "maxLength": "9"
                 }
@@ -6982,7 +6773,6 @@
               "annotation": { "label": "Mês e Ano de Referência" },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "pattern": "(0[1-9]|1[0-2])([/][2][0-9][0-9][0-9])"
                 }
               }
@@ -6997,7 +6787,6 @@
                   "annotation": { "label": "Número do dia" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "pattern": "[1-9]|[1][0-9]|[2][0-9]|[3][0-1]"
                     }
                   }
@@ -7028,7 +6817,7 @@
             },
             {
               "name": "deduc",
-              "minOccurs": "0",
+              "optional": true,
               "maxOccurs": "10",
               "annotation": { "label": "Deduções - Taxas e Contribuições" },
               "element": [
@@ -7037,7 +6826,6 @@
                   "annotation": { "label": "Descrição da Dedução" },
                   "simpleType": {
                     "restriction": {
-                      "base": "string",
                       "minLength": "1",
                       "maxLength": "60"
                     }
@@ -7069,7 +6857,7 @@
         },
         {
           "name": "infRespTec",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": {
             "label": "Informações do Responsável Técnico pela emissão do DF-e"
           },
@@ -7086,7 +6874,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "maxLength": "60",
                   "minLength": "2"
                 }
@@ -7099,7 +6886,6 @@
               },
               "simpleType": {
                 "restriction": {
-                  "base": "string",
                   "minLength": "6",
                   "maxLength": "60"
                 }
@@ -7111,7 +6897,7 @@
                 "label": "Telefone da pessoa a ser contatada na empresa desenvolvedora do sistema"
               },
               "simpleType": {
-                "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
+                "restriction": { "pattern": "[0-9]{6,14}" }
               }
             }
           ]
@@ -7127,7 +6913,6 @@
           "annotation": { "label": "Logradouro" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7138,7 +6923,6 @@
           "annotation": { "label": "Número" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "1"
             }
@@ -7146,11 +6930,10 @@
         },
         {
           "name": "xCpl",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Complemento" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "1"
             }
@@ -7161,7 +6944,6 @@
           "annotation": { "label": "Bairro" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7171,46 +6953,45 @@
           "name": "cMun",
           "annotation": { "label": "Código do município" },
           "simpleType": {
-            "restriction": { "base": "string", "enumeration": "9999999" }
+            "restriction": { "enumeration": "9999999" }
           }
         },
         {
           "name": "xMun",
           "annotation": { "label": "Nome do município" },
           "simpleType": {
-            "restriction": { "base": "string", "enumeration": "EXTERIOR" }
+            "restriction": { "enumeration": "EXTERIOR" }
           }
         },
         {
           "name": "UF",
           "annotation": { "label": "Sigla da UF" },
           "simpleType": {
-            "restriction": { "base": "string", "enumeration": "EX" }
+            "restriction": { "enumeration": "EX" }
           }
         },
         {
           "name": "CEP",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "CEP" },
           "simpleType": {
-            "restriction": { "base": "string", "pattern": "[0-9]{8}" }
+            "restriction": { "pattern": "[0-9]{8}" }
           }
         },
         {
           "name": "cPais",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Código de Pais" },
           "simpleType": {
-            "restriction": { "base": "string", "pattern": "[0-9]{1,4}" }
+            "restriction": { "pattern": "[0-9]{1,4}" }
           }
         },
         {
           "name": "xPais",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Nome do país" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7218,13 +6999,13 @@
         },
         {
           "name": "fone",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": {
             "label": "Telefone",
             "aux": "Código do país + código da localidade + número"
           },
           "simpleType": {
-            "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
+            "restriction": { "pattern": "[0-9]{6,14}" }
           }
         }
       ]
@@ -7238,7 +7019,6 @@
           "annotation": { "label": "Logradouro" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7249,7 +7029,6 @@
           "annotation": { "label": "Número" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "1"
             }
@@ -7257,11 +7036,10 @@
         },
         {
           "name": "xCpl",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Complemento" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "1"
             }
@@ -7272,7 +7050,6 @@
           "annotation": { "label": "Bairro" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7288,7 +7065,6 @@
           "annotation": { "label": "Nome do município" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7301,36 +7077,36 @@
         },
         {
           "name": "CEP",
-          "annotation": { "label": "CEP - NT 2011/004" },
+          "annotation": { "label": "CEP" },
           "simpleType": {
-            "restriction": { "base": "string", "pattern": "[0-9]{8}" }
+            "restriction": { "pattern": "[0-9]{8}" }
           }
         },
         {
           "name": "cPais",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Código do país" },
           "simpleType": {
-            "restriction": { "base": "string", "enumeration": "1058" }
+            "restriction": { "enumeration": "1058" }
           }
         },
         {
           "name": "xPais",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Nome do país" },
           "simpleType": {
-            "restriction": { "base": "string", "enumeration": "BRASIL" }
+            "restriction": { "enumeration": "BRASIL" }
           }
         },
         {
           "name": "fone",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": {
             "label": "Telefone",
             "aux": "Preencher com Código DDD + número do telefone"
           },
           "simpleType": {
-            "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
+            "restriction": { "pattern": "[0-9]{6,14}" }
           }
         }
       ]
@@ -7358,13 +7134,12 @@
         },
         {
           "name": "xNome",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": {
             "label": "Razão Social ou Nome do Expedidor/Recebedor"
           },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7375,7 +7150,6 @@
           "annotation": { "label": "Logradouro" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7386,7 +7160,6 @@
           "annotation": { "label": "Número" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "1"
             }
@@ -7394,11 +7167,10 @@
         },
         {
           "name": "xCpl",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Complemento" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "1"
             }
@@ -7409,7 +7181,6 @@
           "annotation": { "label": "Bairro" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7425,7 +7196,6 @@
           "annotation": { "label": "Nome do município" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7438,27 +7208,26 @@
         },
         {
           "name": "CEP",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "CEP" },
           "simpleType": {
-            "restriction": { "base": "string", "pattern": "[0-9]{8}" }
+            "restriction": { "pattern": "[0-9]{8}" }
           }
         },
         {
           "name": "cPais",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Código de Pais" },
           "simpleType": {
-            "restriction": { "base": "string", "pattern": "[0-9]{1,4}" }
+            "restriction": { "pattern": "[0-9]{1,4}" }
           }
         },
         {
           "name": "xPais",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Nome do país" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "maxLength": "60",
               "minLength": "2"
             }
@@ -7466,19 +7235,18 @@
         },
         {
           "name": "fone",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Telefone" },
           "simpleType": {
-            "restriction": { "base": "string", "pattern": "[0-9]{6,14}" }
+            "restriction": { "pattern": "[0-9]{6,14}" }
           }
         },
         {
           "name": "email",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Informar o e-mail do expedidor/Recebedor" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "minLength": "1",
               "maxLength": "60"
             }
@@ -7487,7 +7255,7 @@
         {
           "name": "IE",
           "type": "TIe",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Inscrição Estadual (v2.0)" }
         }
       ]
@@ -7501,7 +7269,6 @@
           "annotation": { "label": "Placa do veículo" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "pattern": "[A-Z]{2,3}[0-9]{4}|[A-Z]{3,4}[0-9]{3}|[A-Z0-9]{7}"
             }
           }
@@ -7513,13 +7280,12 @@
         },
         {
           "name": "RNTC",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": {
             "label": "Registro Nacional de Transportador de Carga (ANTT)"
           },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "minLength": "1",
               "maxLength": "20"
             }
@@ -7534,18 +7300,17 @@
         {
           "name": "CNPJProd",
           "type": "TCnpj",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": {
             "label": "CNPJ do produtor da mercadoria, se diferente do emitente e somente em exportação"
           }
         },
         {
           "name": "cSelo",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Código do selo de controle do IPI" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "minLength": "1",
               "maxLength": "60"
             }
@@ -7553,10 +7318,10 @@
         },
         {
           "name": "qSelo",
-          "minOccurs": "0",
+          "optional": true,
           "annotation": { "label": "Quantidade de selo de controle do IPI" },
           "simpleType": {
-            "restriction": { "base": "string", "pattern": "[0-9]{1,12}" }
+            "restriction": { "pattern": "[0-9]{1,12}" }
           }
         },
         {
@@ -7564,7 +7329,6 @@
           "annotation": { "label": "Código de Enquadramento Legal do IPI" },
           "simpleType": {
             "restriction": {
-              "base": "string",
               "minLength": "1",
               "maxLength": "3"
             }
@@ -7591,7 +7355,6 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "enumeration": ["00", "49", "50", "99"]
                       }
                     }
@@ -7668,7 +7431,6 @@
                     },
                     "simpleType": {
                       "restriction": {
-                        "base": "string",
                         "enumeration": [
                           "01",
                           "02",
@@ -7710,7 +7472,6 @@
         ]
       },
       "restriction": {
-        "base": "string",
         "enumeration": ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
       }
     },
@@ -7718,7 +7479,6 @@
       "name": "TCodUfIBGE",
       "annotation": { "label": "Tipo Código da UF da tabela do IBGE" },
       "restriction": {
-        "base": "string",
         "enumeration": [
           "11",
           "12",
@@ -7753,13 +7513,12 @@
     {
       "name": "TCodMunIBGE",
       "annotation": { "label": "Tipo Código do Município da tabela do IBGE" },
-      "restriction": { "base": "string", "pattern": "[0-9]{7}" }
+      "restriction": { "pattern": "[0-9]{7}" }
     },
     {
       "name": "TChNFe",
       "annotation": { "label": "Tipo Chave da Nota Fiscal Eletrônica" },
       "restriction": {
-        "base": "string",
         "maxLength": "44",
         "pattern": "[0-9]{44}"
       }
@@ -7768,7 +7527,6 @@
       "name": "TCnpj",
       "annotation": { "label": "Tipo Número do CNPJ" },
       "restriction": {
-        "base": "string",
         "maxLength": "14",
         "pattern": "[0-9]{14}"
       }
@@ -7777,7 +7535,6 @@
       "name": "TCnpjOpc",
       "annotation": { "label": "Tipo Número do CNPJ Opcional" },
       "restriction": {
-        "base": "string",
         "maxLength": "14",
         "pattern": "[0-9]{0}|[0-9]{14}"
       }
@@ -7786,7 +7543,6 @@
       "name": "TCpf",
       "annotation": { "label": "Tipo Número do CPF" },
       "restriction": {
-        "base": "string",
         "maxLength": "11",
         "pattern": "[0-9]{11}"
       }
@@ -7797,7 +7553,6 @@
         "label": "Tipo Decimal com até 3 dígitos inteiros, podendo ter de 2 até 4 decimais"
       },
       "restriction": {
-        "base": "string",
         "pattern": "0|0\\.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(\\.[0-9]{2,4})?"
       }
     },
@@ -7807,7 +7562,6 @@
         "label": "Tipo Decimal com até 3 dígitos inteiros e 2 até 4 decimais. Utilizados em TAGs opcionais, não aceita valor zero."
       },
       "restriction": {
-        "base": "string",
         "pattern": "0\\.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(\\.[0-9]{2,4})?"
       }
     },
@@ -7817,7 +7571,6 @@
         "label": "Tipo Decimal com 3 inteiros (no máximo 100), com até 4 decimais"
       },
       "restriction": {
-        "base": "string",
         "pattern": "0(\\.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(\\.[0-9]{2,4})?|100(\\.0{2,4})?"
       }
     },
@@ -7827,7 +7580,6 @@
         "label": "Tipo Decimal com 11 inteiros, podendo ter 4 decimais"
       },
       "restriction": {
-        "base": "string",
         "pattern": "0|0\\.[0-9]{4}|[1-9]{1}[0-9]{0,10}(\\.[0-9]{4})?"
       }
     },
@@ -7837,7 +7589,6 @@
         "label": "Tipo Decimal com 11 inteiros, podendo ter de 1 até 4 decimais"
       },
       "restriction": {
-        "base": "string",
         "pattern": "0|0\\.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(\\.[0-9]{1,4})?"
       }
     },
@@ -7847,7 +7598,6 @@
         "label": "Tipo Decimal com 11 inteiros, podendo ter de 1 até 10 decimais"
       },
       "restriction": {
-        "base": "string",
         "pattern": "0|0\\.[0-9]{1,10}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(\\.[0-9]{1,10})?"
       }
     },
@@ -7857,7 +7607,6 @@
         "label": "Tipo Decimal com 12 inteiros, podendo ter  3 decimais"
       },
       "restriction": {
-        "base": "string",
         "pattern": "0|0\\.[0-9]{3}|[1-9]{1}[0-9]{0,11}(\\.[0-9]{3})?"
       }
     },
@@ -7865,7 +7614,6 @@
       "name": "TDec_1204",
       "annotation": { "label": "Tipo Decimal com 12 inteiros e 4 decimais" },
       "restriction": {
-        "base": "string",
         "pattern": "0|0\\.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(\\.[0-9]{4})?"
       }
     },
@@ -7875,7 +7623,6 @@
         "label": "Tipo Decimal com 12 inteiros de 1 até 4 decimais"
       },
       "restriction": {
-        "base": "string",
         "pattern": "0|0\\.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(\\.[0-9]{1,4})?"
       }
     },
@@ -7885,7 +7632,6 @@
         "label": "Tipo Decimal com 15 dígitos, sendo 13 de corpo e 2 decimais"
       },
       "restriction": {
-        "base": "string",
         "pattern": "0|0\\.[0-9]{2}|[1-9]{1}[0-9]{0,12}(\\.[0-9]{2})?"
       }
     },
@@ -7895,7 +7641,6 @@
         "label": "Tipo Decimal com 15 dígitos, sendo 13 de corpo e 2 decimais, utilizado em tags opcionais"
       },
       "restriction": {
-        "base": "string",
         "pattern": "0\\.[0-9]{1}[1-9]{1}|0\\.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(\\.[0-9]{2})?"
       }
     },
@@ -7905,7 +7650,6 @@
         "label": "Tipo Inscrição Estadual do Destinatário // alterado para aceitar vazio ou ISENTO - maio/2010 v2.0"
       },
       "restriction": {
-        "base": "string",
         "maxLength": "14",
         "pattern": "ISENTO|[0-9]{2,14}"
       }
@@ -7916,7 +7660,6 @@
         "label": "Tipo Inscrição Estadual do Emitente // alterado EM 24/10/08 para aceitar ISENTO"
       },
       "restriction": {
-        "base": "string",
         "maxLength": "14",
         "pattern": "[0-9]{2,14}|ISENTO"
       }
@@ -7924,18 +7667,17 @@
     {
       "name": "TNF",
       "annotation": { "label": "Tipo Número do Documento Fiscal" },
-      "restriction": { "base": "string", "pattern": "[1-9]{1}[0-9]{0,8}" }
+      "restriction": { "pattern": "[1-9]{1}[0-9]{0,8}" }
     },
     {
       "name": "TSerie",
       "annotation": { "label": "Tipo Série do Documento Fiscal" },
-      "restriction": { "base": "string", "pattern": "0|[1-9]{1}[0-9]{0,2}" }
+      "restriction": { "pattern": "0|[1-9]{1}[0-9]{0,2}" }
     },
     {
       "name": "TUf",
       "annotation": { "label": "Tipo Sigla da UF" },
       "restriction": {
-        "base": "string",
         "enumeration": [
           "AC",
           "AL",
@@ -7974,7 +7716,6 @@
         "label": "Tipo Sigla da UF de emissor // acrescentado em 24/10/08"
       },
       "restriction": {
-        "base": "string",
         "enumeration": [
           "AC",
           "AL",
@@ -8010,7 +7751,6 @@
       "name": "TData",
       "annotation": { "label": "Tipo data AAAA-MM-DD" },
       "restriction": {
-        "base": "string",
         "pattern": "(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1\\d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))"
       }
     },
@@ -8020,7 +7760,6 @@
         "label": "Data e Hora, formato UTC (AAAA-MM-DDThh:mm:ssTZD, onde TZD = +hh:mm ou -hh:mm)"
       },
       "restriction": {
-        "base": "string",
         "pattern": "(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1\\d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))T(20|21|22|23|[0-1]\\d):[0-5]\\d:[0-5]\\d([\\-,\\+](0[0-9]|10|11):00|([\\+](12):00))"
       }
     }

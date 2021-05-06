@@ -47,6 +47,8 @@ function main(
       genButton('Gerar DANFE', () => baixarDANFE(v[0] as string))
       genButton('Baixar XML', () => baixarXML(v[0] as string))
     } else {
+      if (v?.[1]) view.forEach(k => k.updateValue(v?.[1]))
+      else view.forEach(k => k.resetValue())
       const htmlForm = generateForm(async (data) => {
         const id = v?.[0] ?? createId()
         await set(id, data)

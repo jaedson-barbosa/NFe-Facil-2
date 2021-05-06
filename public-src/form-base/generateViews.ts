@@ -1,4 +1,3 @@
-import { getName } from "./getName"
 import { generateView } from './generateView';
 
 export function generateViews(
@@ -28,14 +27,14 @@ function findField(
   parentTag: string = '',
   lvl = 0
 ): { tag: string; parentNames: string[]; field: any; } {
-  const rootName = getName(rootField);
+  const rootName = rootField.name;
   if (rootName == name)
     return rootField;
   if (parentNames.length == 0)
     parentNames.push(rootName);
   for (const index in rootField) {
     const field = rootField[index];
-    const fieldName = getName(field);
+    const fieldName = field.name;
     if (fieldName == name) {
       return {
         tag: isNaN(+index) ? index : parentTag,

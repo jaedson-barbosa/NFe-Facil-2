@@ -48,8 +48,10 @@ export abstract class inputFormElement implements IBaseFormElement {
       return true;
     let hasParent = true;
     const value = this.name.reduce((p, c) => {
-      if (!p)
+      if (!p) {
         hasParent = false;
+        return undefined
+      }
       return p?.[c];
     }, values);
     if (value) {
