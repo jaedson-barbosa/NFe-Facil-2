@@ -100,10 +100,22 @@ function createInput(
       })
     )
   } else {
+    let type = 'text'
+    if (field.name == 'fone') {
+      type = 'tel';
+    } else if (field.name == 'email') {
+      type = 'email';
+    } else if (field.type == 'TData') {
+      type = 'date'
+    } else if (!(/[a-zA-Z]|ÿ/).test(restriction.pattern)) {
+      type = 'number'
+    }
     return new textFormElement(name, documentation, required, {
       pattern: restriction.pattern,
       minLength: restriction.minLength,
       maxLength: restriction.maxLength,
+      type,
+      decimal: restriction.decimal
     })
   }
 }

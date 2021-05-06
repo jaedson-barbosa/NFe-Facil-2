@@ -414,6 +414,6 @@ function gerarResponsavelTecnico() {
     telaPrincipal.forEach((v) => (v.readOnly = true))
     renderPrincipal()
   } else {
-    renderPrincipal()
+    renderProdutos()
   }
 })()

@@ -77,13 +77,15 @@ OK  Remover tag complexType
 OK  Remover tag sequence
 OK  Aplicar novidades do nfe.json ao form-base
 OK  Passar custom headers para o nfe.json
-    Atualizar entradas para que tenham o tipo correto
+OK  Atualizar entradas para que tenham o tipo correto
 OK  Remover getName
 OK  Proibir o uso de emitente com CPF
 OK    Via cadastro
 OK    Via importação (restringido para emitente logado)
 OK  Corrigir erro em Grupo de informações de interesse da Prefeitura
 OK  Corrigir erro na edição de dados
+    Corrigir erro de adição em listas
+    Corrigir erro de clonagem
     Analisar elementos já salvos para não haver repetição de itens no banco de dados
     Tela para exibição de NFe, removendo caixa de dialogo
     Caixa de dialogo mais completa para sincronização
