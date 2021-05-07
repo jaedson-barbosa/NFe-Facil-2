@@ -321,9 +321,8 @@ function gerarResponsavelTecnico() {
 
   const parametros = new URLSearchParams(location.search)
   const clonar = parametros.get('c') //Nova nota baseada em outra
-  const exibir = parametros.get('ex') //Exibir nota salva
-  const editar = parametros.get('ed') //Edita uma nota apenas salva
-  const idNota = clonar ?? exibir ?? editar
+  const editar = parametros.get('e') //Edita uma nota apenas salva
+  const idNota = clonar ?? editar
   if (idNota) {
     const nota = await getJsonNota(idNota)
     currentData = nota.infNFe
@@ -374,26 +373,13 @@ function gerarResponsavelTecnico() {
         }, {}))
     )
   }
-
-  const actionsExibir = [
-    {
-      label: 'Clonar nota',
-      task: () => {
-        prodsVisualizacao.hidden = true
-        telaPrincipal.forEach((v) => (v.readOnly = false))
-        renderProdutos()
-      },
-    },
-    { label: 'Gerar DANFE', task: () => baixarDANFE(idNota) },
-    { label: 'Baixar XML', task: () => baixarXML(idNota) },
-  ]
-  const actionsEditar = [
+  const actions = [
     {
       label: 'Apenas salvar',
       task: async (data: any) => {
         posProcessamento(data)
         if (await apenasSalvarNota({ infNFe: data }, editar)) {
-          alert('Nota salva com sucesso')
+          location.href = './dados.html?tipo=notas'
         }
       },
     },
@@ -402,18 +388,10 @@ function gerarResponsavelTecnico() {
       task: async (data: any) => {
         posProcessamento(data)
         if (await assinarTransmitirNota({ infNFe: data }, editar)) {
-          alert('Nota assinada com sucesso')
+          location.href = './dados.html?tipo=notas'
         }
       },
     },
   ]
-  const actions = exibir ? actionsExibir : actionsEditar
-
-  if (exibir) {
-    prodsVisualizacao.hidden = false
-    telaPrincipal.forEach((v) => (v.readOnly = true))
-    renderPrincipal()
-  } else {
-    renderProdutos()
-  }
+  renderProdutos()
 })()

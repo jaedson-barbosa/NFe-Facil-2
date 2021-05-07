@@ -1,5 +1,6 @@
 import { IResultadoSincronizacao } from '../../commom'
 import { onLoggedRequest } from './core'
+import { getViewNota } from './nfe'
 import { INotaDB } from './types'
 
 export const sincronizar = onLoggedRequest(
@@ -23,14 +24,10 @@ export const sincronizar = onLoggedRequest(
       }),
       novasNotas: novasNotas.docs.map((v) => {
         const data = v.data() as INotaDB<FirebaseFirestore.Timestamp>
+        const view = getViewNota(data.json, data.emitido)
         return {
           id: v.id,
-          infNFe: {
-            serie: data.view.serie,
-            nNF: data.view.nNF,
-            dhEmi: data.view.dhEmi.toMillis(),
-            xNome: data.view.xNome,
-          },
+          infNFe: { ...view, dhEmi: view.dhEmi.valueOf() },
         }
       }),
       now: new Date().valueOf(),

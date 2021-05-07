@@ -33,5 +33,6 @@ export interface IViewNota<TDate> {
   serie: any
   nNF: any
   dhEmi: TDate
-  xNome: any
+  xNome: string
+  Id: string
 }

@@ -20,7 +20,8 @@ export default onDefaultRequest(false, async (user, res) => {
       id: v.id,
       status: cadastro.status,
       permissoes: cadastro.permissoes,
-      empresa: v.data()!.emit,
+      emit: v.data()!.emit,
+      serieAtual: v.data()!.serieAtual
     }
   })
   res.status(200).send(zip)

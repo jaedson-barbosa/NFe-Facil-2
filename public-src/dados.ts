@@ -1,10 +1,8 @@
 import {
   IBaseFormElement,
-  createId,
   clearChildren,
   generateForm
 } from './form-base'
-import { set } from './db'
 import { gerarViewCliente, renderizarCliente } from './dados/clientes'
 import { gerarViewProduto, renderizarProduto } from './dados/produtos'
 import { gerarViewMotorista, renderizarMotorista } from './dados/motoristas'
@@ -15,50 +13,57 @@ import {
   renderizarNota,
 } from './dados/notas'
 import { getLastAlteracoes } from './sincronizacao'
+import { registrarDado } from './functions'
 
 function main(tDado: TNota, render: (data: any) => string): void
 function main(
   tDado: TDadosBase,
   render: (data: any) => string,
-  ...view: IBaseFormElement[]
+  view: IBaseFormElement
 ): void
 function main(
   tDado: TDados,
   render: (data: any) => string,
-  ...view: IBaseFormElement[]
+  view?: IBaseFormElement
 ): void {
   const mainDialog = document.querySelector('dialog')
   mainDialog.showModal()
   const dados = document.getElementById('dados')
-  function cadastrar(v?: [IDBValidKey, any, HTMLButtonElement]) {
+  function cadastrar(item?: {id: IDBValidKey, data: any, button: HTMLButtonElement}) {
     mainDialog.showModal()
     clearChildren(mainDialog)
-    if (tDado == 'infNFe') {
+    if (tDado == 'infNFe' && item) {
       const genButton = (label: string, action: () => void) => {
         const btn = document.createElement('button')
         btn.textContent = label
         btn.onclick = action
         mainDialog.appendChild(btn)
       }
-      const clonar = document.createElement('a')
-      clonar.textContent = 'Clonar nota'
-      clonar.href = './nfe.html?c=' + v[0]
-      mainDialog.appendChild(clonar)
-      genButton('Gerar DANFE', () => baixarDANFE(v[0] as string))
-      genButton('Baixar XML', () => baixarXML(v[0] as string))
+      if (item.data.infNFe.Id) {
+        console.log(item.data)
+        const clonar = document.createElement('a')
+        clonar.textContent = 'Clonar nota'
+        clonar.href = './nfe.html?c=' + item.id
+        mainDialog.appendChild(clonar)
+      } else {
+        const editar = document.createElement('a')
+        editar.textContent = "Editar nota"
+        editar.href = './nfe.html?e=' + item.id
+        mainDialog.appendChild(editar)
+      }
+      genButton('Gerar DANFE', () => baixarDANFE(item.id as string))
+      genButton('Baixar XML', () => baixarXML(item.id as string))
+    } else if (tDado != 'infNFe' && view) {
+      if (item?.data) view.updateValue(item.data)
+      else view.resetValue()
+      mainDialog.appendChild(generateForm(async (data) => {
+        if (await registrarDado(data, item?.id as string)) {
+          location.reload()
+        }
+      }, view))
     } else {
-      if (v?.[1]) view.forEach(k => k.updateValue(v?.[1]))
-      else view.forEach(k => k.resetValue())
-      const htmlForm = generateForm(async (data) => {
-        const id = v?.[0] ?? createId()
-        await set(id, data)
-        if (v?.[2]) {
-          renderizarNovoItem([id, data], v?.[2])
-          v?.[2].remove()
-        } else renderizarNovoItem([id, data])
-        mainDialog.close()
-      }, ...view)
-      mainDialog.appendChild(htmlForm)
+      mainDialog.close()
+      alert("Método não implementado")
     }
   }
 
@@ -71,7 +76,7 @@ function main(
   function renderizarNovoItem(v: [IDBValidKey, any], ref?: HTMLButtonElement) {
     const button = document.createElement('button')
     button.innerHTML = render(v[1])
-    button.onclick = () => cadastrar([...v, button])
+    button.onclick = () => cadastrar({id: v[0], data: v[1], button})
     if (ref) ref.before(button)
     else dados.appendChild(button)
   }

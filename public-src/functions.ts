@@ -222,3 +222,21 @@ export async function gerarDANFE(idNota: string) {
   }
   return await resp.blob()
 }
+
+export async function registrarDado(dado: any, idDado?: string) {
+  const resp = await fetch(
+    'http://localhost:5001/nfe-facil-980bc/us-central1/registrarDado',
+    {
+      method: 'POST',
+      body: JSON.stringify({id: getIdEmpresaAtiva(), ...dado, idDado})
+    }
+  )
+  if (resp.status == 401) {
+    location.href = './login.html'
+    return
+  } else if (resp.status != 201) {
+    alert(await resp.text())
+    return
+  }
+  return true
+}

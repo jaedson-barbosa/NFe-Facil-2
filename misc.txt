@@ -18,11 +18,6 @@ lastUpdate
   xml
   emitido
   lastUpdade
-  view
-    serie
-    nNF
-    dhEmi
-    xNome
   -eventos:
     json
     xml
@@ -88,11 +83,10 @@ OK  Corrigir erro na edição de dados
 OK  Corrigir erro de adição em listas
 OK  Corrigir erro de clonagem
 OK  Analisar elementos já salvos na importação
-    Tela para exibição de NFe, removendo caixa de dialogo
-    Refinar sincronização
-      Enviar elementos antes pra nuvem
-      Remover geração de ID de item local
-      Caixa de dialogo mais completa
+OK  Aperfeiçoar caixa de dialogo de nota fiscal
+OK  Refinar sincronização
+OK    Enviar elementos antes pra nuvem
+OK    Remover geração de ID de item local
     Mais configurações na tela de emitente
       Função no servidor para atualização
       Emitente atualizado na sincronização

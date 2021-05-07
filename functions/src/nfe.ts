@@ -6,6 +6,7 @@ import { INotaDB } from './types'
 import { TAmb, enviarRequisicao, getRandomNumber } from './requisicoes'
 import { assinarNFe } from './assinaturas'
 import axios from 'axios'
+import { IViewNota } from '../../commom'
 
 // const ambiente = ambientes.Homologacao
 
@@ -57,9 +58,6 @@ function calcularDV(chave: string) {
   return resto == 0 || resto == 1 ? 0 : 11 - resto
 }
 
-function getDhEmi(infNFe: any) {
-  return new Date(infNFe.ide.dhEmi)
-}
 function getXml(infNFe: any, numero: string) {
   infNFe.ide.nNF = numero
   // Calculo da chave
@@ -98,19 +96,12 @@ export const apenasSalvarNota = onLoggedRequest(
       return
     }
     try {
-      const dhEmi = getDhEmi(infNFe)
       const xml = getXml(infNFe, '999999999')
       const nota: INotaDB<Date> = {
         json: infNFe,
         xml,
         emitido: false,
         lastUpdate: new Date(),
-        view: {
-          serie: infNFe.ide.serie,
-          nNF: infNFe.ide.nNF,
-          dhEmi,
-          xNome: infNFe.dest.xNome,
-        },
       }
       await (idNota
         ? empresaRef.collection('notas').doc(idNota)
@@ -223,7 +214,6 @@ export const assinarTransmitirNota = onLoggedRequest(
         .select('json.ide.nNF')
         .limit(1)
         .get()
-      const dhEmi = getDhEmi(infNFe)
       let nfeProc: string | undefined = undefined
       let numero: number = maxNota.empty
         ? 1
@@ -271,13 +261,7 @@ export const assinarTransmitirNota = onLoggedRequest(
         json: infNFe,
         xml: nfeProc,
         emitido: true,
-        lastUpdate: new Date(),
-        view: {
-          serie: infNFe.ide.serie,
-          nNF: infNFe.ide.nNF,
-          dhEmi,
-          xNome: infNFe.dest.xNome,
-        },
+        lastUpdate: new Date()
       }
       await (idNota
         ? empresaRef.collection('notas').doc(idNota)
@@ -341,3 +325,13 @@ export const gerarDANFE = onLoggedRequest(
     res.send(danfe.data)
   }
 )
+
+export function getViewNota(json: any, emitido: boolean): IViewNota<Date> {
+  return {
+    serie: json.ide.serie,
+    nNF: json.ide.nNF,
+    dhEmi: new Date(json.ide.dhEmi),
+    xNome: json.dest.xNome,
+    Id: emitido ? json.Id?.slice(3) : undefined
+  }
+}

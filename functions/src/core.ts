@@ -51,7 +51,7 @@ export function onDefaultRequest(
         res.sendStatus(401)
         return
       }
-      const body = req.body ? JSON.parse(req.body) : undefined
+      const body = req.body && bodyRequired ? JSON.parse(req.body) : undefined
       if (!body && bodyRequired) {
         res.status(400).send('Corpo de requisição não informado')
         return

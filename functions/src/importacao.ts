@@ -2,6 +2,7 @@ import { toJson } from 'xml2json'
 import { db, onLoggedRequest } from './core'
 import { IResultadoImportacao } from '../../commom'
 import { INotaDB } from './types'
+import { getViewNota } from './nfe'
 
 function removePrefix(obj: any) {
   if (typeof obj != 'object') return obj
@@ -30,7 +31,61 @@ function getLastItens<T extends { lastUpdate: Date }>(
     .map((v) => v[1])
 }
 
-//Adicionar importação de dados base a partir da NFe, por enquanto sem processamento.
+export const registrarDado = onLoggedRequest(
+  async (user, res, empresaRef, empresa, body) => {
+    const id = body.idDado
+    const dadosCollection = empresaRef.collection('dados')
+    if (body.dest) {
+      const idAux = body.dest.CPF ?? body.dest.CNPJ
+      const atual = await dadosCollection
+        .where('idAux', '==', idAux)
+        .limit(2)
+        .get()
+      if (!atual.empty && (!id || atual.docs.every(v => v.id != id))) {
+        res
+          .status(400)
+          .send('Já existe um cliente cadastrado com este CPF/CNPJ')
+        return
+      }
+      const novo = id ? dadosCollection.doc(id) : dadosCollection.doc()
+      await novo.set({ dest: body.dest, idAux, lastUpdate: new Date() })
+      res.sendStatus(201)
+    } else if (body.prod) {
+      const idAux = body.prod.cProd + body.prod.xProd
+      const atual = await dadosCollection
+        .where('idAux', '==', idAux)
+        .limit(1)
+        .get()
+      if (!atual.empty && (!id || id != atual.docs[0].id)) {
+        res
+          .status(400)
+          .send('Já existe um produto cadastrado com este par de código/descrição')
+        return
+      }
+      const novo = id ? dadosCollection.doc(id) : dadosCollection.doc()
+      await novo.set({ prod: body.prod, idAux, lastUpdate: new Date() })
+      res.sendStatus(201)
+    } else if (body.transporta) {
+      const idAux = body.transporta.CPF ?? body.transporta.CNPJ
+      const atual = await dadosCollection
+        .where('idAux', '==', idAux)
+        .limit(2)
+        .get()
+      if (!atual.empty && (!id || atual.docs.every(v => v.id != id))) {
+        res
+          .status(400)
+          .send('Já existe um motorista cadastrado com este CPF/CNPJ')
+        return
+      }
+      const novo = id ? dadosCollection.doc(id) : dadosCollection.doc()
+      await novo.set({ dest: body.dest, idAux, lastUpdate: new Date() })
+      res.sendStatus(201)
+    } else {
+      res.status(400).send('Requisição sem corpo do novo dado')
+    }
+  }
+)
+
 export const importar = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
     const notas = getNotas(body.xmls, empresa.emit.CNPJ)
@@ -129,7 +184,8 @@ export const importar = onLoggedRequest(
       .commit()
     const resultado: IResultadoImportacao<Date> = {
       notas: notasDB.map((v) => {
-        return { id: v.id.id, infNFe: v.data.view }
+        const d = v.data
+        return { id: v.id.id, infNFe: getViewNota(d.json, d.emitido) }
       }),
       clientes: clientesDB.map((v) => {
         return { id: v.id.id, dest: v.data.dest }
@@ -157,12 +213,6 @@ function getNotas(xmls: string[], cnpj: string) {
         xml: v,
         emitido: !!root.nfeProc,
         lastUpdate: dhEmi,
-        view: {
-          serie: json.ide.serie,
-          nNF: json.ide.nNF,
-          dhEmi,
-          xNome: json.dest.xNome,
-        },
       }
       return nota
     })
