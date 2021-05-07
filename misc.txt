@@ -87,14 +87,7 @@ OK  Aperfeiçoar caixa de dialogo de nota fiscal
 OK  Refinar sincronização
 OK    Enviar elementos antes pra nuvem
 OK    Remover geração de ID de item local
-    Mais configurações na tela de emitente
-      Função no servidor para atualização
-      Emitente atualizado na sincronização
-      Modo de sessão única (com sinc apenas no painel)
-      Controle de usuários liberados
-        Liberar novos pedidos
-        Revogar liberações
-        Controlar permissões
+OK  Remover temporariamente edição de emitente
     Eventos
       Importação
       Geração
@@ -106,6 +99,9 @@ OK  Escondem nItem da nfe
 REFINAMENTOS (pré-alpha):
     Cadastro via importação
     Mais configurações na tela de emitente
+      Função no servidor para atualização
+      Emitente atualizado na sincronização
+      Modo de sessão única (com sinc apenas no dados.ts)
       Controle de usuários liberados
         Liberar novos pedidos
         Revogar liberações

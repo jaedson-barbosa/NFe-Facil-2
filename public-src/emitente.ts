@@ -102,10 +102,10 @@ if (isSessaoIniciada()) {
   ]
   formElements.forEach((v) => v.updateValue({ emit: empresa.emit }))
   const htmlForm = generateForm((data) => {
-    empresa.emit = data.emit
-    empresa.serieAtual = data.serieAtual
-    setEmpresa(empresa)
-    alert('Dados cadastrais atualizados.')
+    // empresa.emit = data.emit
+    // empresa.serieAtual = data.serieAtual
+    // setEmpresa(empresa)
+    alert('Não é possível atualizar dados cadastrais, por enquanto')
     abrirPainel()
   }, ...formElements)
   document.body.appendChild(htmlForm)
