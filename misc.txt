@@ -11,6 +11,7 @@ lastUpdate
   nome
   permissoes: visualizar-dados-base, visualizar-notas-emitidas, cadastrar-dados-base, emitir-notas
 -dados:
+  idAux
   lastUpdate
 -notas:
   json
@@ -86,9 +87,12 @@ OK  Corrigir erro em Grupo de informações de interesse da Prefeitura
 OK  Corrigir erro na edição de dados
 OK  Corrigir erro de adição em listas
 OK  Corrigir erro de clonagem
-    Analisar elementos já salvos para não haver repetição de itens no banco de dados
+OK  Analisar elementos já salvos na importação
     Tela para exibição de NFe, removendo caixa de dialogo
-    Caixa de dialogo mais completa para sincronização
+    Refinar sincronização
+      Enviar elementos antes pra nuvem
+      Remover geração de ID de item local
+      Caixa de dialogo mais completa
     Mais configurações na tela de emitente
       Função no servidor para atualização
       Emitente atualizado na sincronização
