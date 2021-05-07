@@ -32,7 +32,11 @@ function main(
   function cadastrar(item?: {id: IDBValidKey, data: any, button: HTMLButtonElement}) {
     mainDialog.showModal()
     clearChildren(mainDialog)
-    if (tDado == 'infNFe' && item) {
+    if (tDado == 'infNFe') {
+      if (!item) {
+        location.href = './nfe.html'
+        return
+      }
       const genButton = (label: string, action: () => void) => {
         const btn = document.createElement('button')
         btn.textContent = label
@@ -53,7 +57,7 @@ function main(
       }
       genButton('Gerar DANFE', () => baixarDANFE(item.id as string))
       genButton('Baixar XML', () => baixarXML(item.id as string))
-    } else if (tDado != 'infNFe' && view) {
+    } else if (view) {
       if (item?.data) view.updateValue(item.data)
       else view.resetValue()
       mainDialog.appendChild(generateForm(async (data) => {

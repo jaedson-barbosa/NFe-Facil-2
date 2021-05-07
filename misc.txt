@@ -105,6 +105,11 @@ OK  Escondem nItem da nfe
 
 REFINAMENTOS (pré-alpha):
     Cadastro via importação
+    Mais configurações na tela de emitente
+      Controle de usuários liberados
+        Liberar novos pedidos
+        Revogar liberações
+        Controlar permissões
     Calculo de impostos semi-automático
       ICMS
       PIS
