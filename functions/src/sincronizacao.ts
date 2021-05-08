@@ -24,7 +24,7 @@ export const sincronizar = onLoggedRequest(
       }),
       novasNotas: novasNotas.docs.map((v) => {
         const data = v.data() as INotaDB<FirebaseFirestore.Timestamp>
-        const view = getViewNota(data.json, data.emitido)
+        const view = getViewNota(data, data.emitido)
         return {
           id: v.id,
           infNFe: { ...view, dhEmi: view.dhEmi.valueOf() },

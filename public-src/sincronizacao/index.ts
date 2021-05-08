@@ -3,6 +3,10 @@ import { sincronizar } from '../functions'
 
 export async function getLastAlteracoes() {
   const resp = await sincronizar()
-  await setMany(resp.novosDados.map((v) => [v.id, v.data]))
-  await setMany(resp.novasNotas.map((v) => [v.id, { infNFe: v.infNFe }]))
+  if (resp.novosDados.length > 0) {
+    await setMany(resp.novosDados.map((v) => [v.id, v.data]))
+  }
+  if (resp.novasNotas.length > 0) {
+    await setMany(resp.novasNotas.map((v) => [v.id, { infNFe: v.infNFe }]))
+  }
 }

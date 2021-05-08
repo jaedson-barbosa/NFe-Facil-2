@@ -8,4 +8,6 @@ export interface INotaDB<TDate> {
   xml: string
   emitido: boolean
   lastUpdate: TDate
+  nProt: number
+  eventos: string[]
 }

@@ -11,6 +11,7 @@ import {
   baixarXML,
   baixarDANFE,
   renderizarNota,
+  cancelarNFeEmitida,
 } from './dados/notas'
 import { getLastAlteracoes } from './sincronizacao'
 import { registrarDado } from './functions'
@@ -49,6 +50,7 @@ function main(
         clonar.textContent = 'Clonar nota'
         clonar.href = './nfe.html?c=' + item.id
         mainDialog.appendChild(clonar)
+        genButton('Cancelar nota', () => cancelarNFeEmitida(item.id as string))
       } else {
         const editar = document.createElement('a')
         editar.textContent = "Editar nota"
@@ -102,21 +104,26 @@ function main(
 }
 
 const parametros = new URLSearchParams(location.search)
-switch (parametros.get('tipo')) {
-  case 'clientes':
-    main('dest', renderizarCliente, gerarViewCliente())
-    break
-  case 'produtos':
-    main('prod', renderizarProduto, gerarViewProduto())
-    break
-  case 'motoristas':
-    main('transporta', renderizarMotorista, gerarViewMotorista())
-    break
-  case 'notas':
-    main('infNFe', renderizarNota)
-    break
-  default:
-    alert('URL inválido, tipo não aceito.')
-    location.href = './painel.html'
-    break
+try {
+  switch (parametros.get('tipo')) {
+    case 'clientes':
+      main('dest', renderizarCliente, gerarViewCliente())
+      break
+    case 'produtos':
+      main('prod', renderizarProduto, gerarViewProduto())
+      break
+    case 'motoristas':
+      main('transporta', renderizarMotorista, gerarViewMotorista())
+      break
+    case 'notas':
+      main('infNFe', renderizarNota)
+      break
+    default:
+      alert('URL inválido, tipo não aceito.')
+      location.href = './painel.html'
+      break
+  }
+} catch (error) {
+  console.log("erro aq")
 }
+

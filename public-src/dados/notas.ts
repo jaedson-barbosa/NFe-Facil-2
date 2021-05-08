@@ -1,12 +1,15 @@
 import { IViewNota } from '../../commom'
-import { gerarDANFE, getXML } from '../functions'
+import { cancelarNFe, gerarDANFE, getXML } from '../functions'
+import { toNFeString } from '../nfe'
 
 export function renderizarNota(data: { infNFe: IViewNota<number> }): string {
   return /*html*/ `
-    <div>Nº ${data.infNFe.nNF}   <small>SÉRIE ${data.infNFe.serie}</small><br>${
+  <div>Nº ${data.infNFe.nNF}   <small>SÉRIE ${data.infNFe.serie}</small><br>${
     data.infNFe.xNome
   }<br>
-    <small><i>${new Date(data.infNFe.dhEmi).toLocaleString()}</i></small></div>`
+  <small><i>${new Date(data.infNFe.dhEmi).toLocaleString()}</i></small>
+  ${data.infNFe.eventos.includes('Cancelamento') ? '<br>Nota cancelada' : ''}
+  </div>`
 }
 
 export async function baixarDANFE(idNota: string) {
@@ -24,6 +27,19 @@ export async function baixarDANFE(idNota: string) {
     }
   })()
   saveData(pdf, 'teste.pdf')
+}
+
+export async function cancelarNFeEmitida(idNota: string) {
+  const justificativa = prompt('Motivação do cancelamento:')
+  if (!justificativa) {
+    alert('Operação cancelada pelo usuário')
+    return
+  }
+  const resp = await cancelarNFe(idNota, justificativa, toNFeString(new Date()))
+  if (resp) {
+    alert('Nota fiscal cancelada com sucesso')
+    location.reload()
+  }
 }
 
 export async function baixarXML(idNota: string) {

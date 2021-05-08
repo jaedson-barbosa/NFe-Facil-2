@@ -35,4 +35,5 @@ export interface IViewNota<TDate> {
   dhEmi: TDate
   xNome: string
   Id: string
+  eventos: string[]
 }

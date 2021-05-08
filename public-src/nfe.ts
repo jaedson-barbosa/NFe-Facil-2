@@ -1,6 +1,5 @@
 import { gerarViewCliente } from './dados/clientes'
 import { getItens } from './dados/geral'
-import { baixarXML, baixarDANFE } from './dados/notas'
 import {
   generateForm,
   generateView,
@@ -31,31 +30,25 @@ function getRandomNumber(digits: number = 8) {
   return Math.floor(Math.random() * (maxm - minm + 1)) + minm
 }
 
-declare global {
-  interface Date {
-    toNFeString(): string
-  }
-}
-
-Date.prototype.toNFeString = function () {
-  var tzo = -this.getTimezoneOffset(),
+export function toNFeString(data: Date) {
+  var tzo = -data.getTimezoneOffset(),
     dif = tzo >= 0 ? '+' : '-',
     pad = function (num) {
       var norm = Math.floor(Math.abs(num))
       return (norm < 10 ? '0' : '') + norm
     }
   return (
-    this.getFullYear() +
+    data.getFullYear() +
     '-' +
-    pad(this.getMonth() + 1) +
+    pad(data.getMonth() + 1) +
     '-' +
-    pad(this.getDate()) +
+    pad(data.getDate()) +
     'T' +
-    pad(this.getHours()) +
+    pad(data.getHours()) +
     ':' +
-    pad(this.getMinutes()) +
+    pad(data.getMinutes()) +
     ':' +
-    pad(this.getSeconds()) +
+    pad(data.getSeconds()) +
     dif +
     pad(tzo / 60) +
     ':' +
@@ -90,7 +83,7 @@ function gerarIdentificacao() {
       empresa.serieAtual.toString()
     ),
     new hiddenFormElement([rootName, 'nNF'], true, '%NUMERO%'),
-    new hiddenFormElement([rootName, 'dhEmi'], true, new Date().toNFeString()),
+    new hiddenFormElement([rootName, 'dhEmi'], true, toNFeString(new Date())),
     ...generateViews(root, {}, 'tpNF', 'idDest', 'cMunFG'),
     new hiddenFormElement([rootName, 'tpImp'], true, '1'),
     new hiddenFormElement([rootName, 'tpEmis'], true, '1'),
@@ -344,7 +337,6 @@ function gerarResponsavelTecnico() {
     prodsEdicao.updateValue(currentData)
     main.appendChild(
       generateForm((data) => {
-        (data.det as any[]).forEach((v,i) => v.nItem = i + 1)
         currentData.det = data.det
         renderPrincipal()
       }, prodsEdicao)
@@ -364,14 +356,16 @@ function gerarResponsavelTecnico() {
       'COFINSST',
       'ICMSUFDest',
     ]
-    ;(data.det as any[]).forEach(
+    const det = data.det as any[]
+    det.forEach(
       (v) =>
         (v.imposto = ordem.reduce((p, c) => {
           const k = v.imposto[c]
           if (k) p[c] = k
           return p
         }, {}))
-    )
+    );
+    det.forEach((v,i) => v.nItem = i + 1)
   }
   const actions = [
     {

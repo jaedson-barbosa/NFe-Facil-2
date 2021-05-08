@@ -1,10 +1,10 @@
-import { IEmpresaGet, onLoggedRequest } from './core'
+import { FieldValue, IEmpresaGet, onLoggedRequest } from './core'
 import { IBGESimplificado } from './IBGESimplificado.json'
 import * as dateformat from 'dateformat'
 import { toJson, toXml } from 'xml2json'
 import { INotaDB } from './types'
 import { TAmb, enviarRequisicao, getRandomNumber } from './requisicoes'
-import { assinarNFe } from './assinaturas'
+import { assinarEvento, assinarNFe } from './assinaturas'
 import axios from 'axios'
 import { IViewNota } from '../../commom'
 
@@ -29,7 +29,7 @@ export const getJsonNota = onLoggedRequest(
 
 function addPrefix(obj: any) {
   return Object.entries(obj).reduce(
-    (p, [v0,v1]) => {
+    (p, [v0, v1]) => {
       const name = v0
       p[name] =
         typeof v1 == 'object'
@@ -102,6 +102,8 @@ export const apenasSalvarNota = onLoggedRequest(
         xml,
         emitido: false,
         lastUpdate: new Date(),
+        nProt: 0,
+        eventos: [],
       }
       await (idNota
         ? empresaRef.collection('notas').doc(idNota)
@@ -198,7 +200,7 @@ export const assinarTransmitirNota = onLoggedRequest(
     }
     try {
       let serie = infNFe.ide.serie
-      const ambiente: TAmb = TAmb.Homologacao //infNFe.ide.tpAmb
+      const ambiente: TAmb = infNFe.ide.tpAmb
       if (ambiente == TAmb.Homologacao) {
         const homologDest =
           'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
@@ -215,6 +217,7 @@ export const assinarTransmitirNota = onLoggedRequest(
         .limit(1)
         .get()
       let nfeProc: string | undefined = undefined
+      let nProt: number = 0
       let numero: number = maxNota.empty
         ? 1
         : maxNota.docs[0].data().json.ide.nNF + 1
@@ -240,8 +243,9 @@ export const assinarTransmitirNota = onLoggedRequest(
           return
         }
         const cStat = respRet.protNFe.infProt.cStat.$t
-        if (cStat == '539') {
+        if (cStat == '539' || cStat == '206') {
           // Rejeição: Duplicidade de NF-e com diferença na Chave de Acesso (148)
+          // Rejeição: NF-e já está inutilizada na Base de Dados da SEFAZ
           numero += 1
           continue
         }
@@ -256,12 +260,15 @@ export const assinarTransmitirNota = onLoggedRequest(
           signedXml +
           toXml({ protNFe: respRet.protNFe }) +
           '</nfeProc>'
+        nProt = Number(respRet.protNFe.infProt.nProt.$t)
       } while (!nfeProc)
       const nota: INotaDB<Date> = {
         json: infNFe,
         xml: nfeProc,
         emitido: true,
-        lastUpdate: new Date()
+        lastUpdate: new Date(),
+        nProt,
+        eventos: [],
       }
       await (idNota
         ? empresaRef.collection('notas').doc(idNota)
@@ -326,12 +333,146 @@ export const gerarDANFE = onLoggedRequest(
   }
 )
 
-export function getViewNota(json: any, emitido: boolean): IViewNota<Date> {
+export function getViewNota(
+  nota: INotaDB<Date | FirebaseFirestore.Timestamp>,
+  emitido: boolean
+): IViewNota<Date> {
+  const json = nota.json
   return {
     serie: json.ide.serie,
     nNF: json.ide.nNF,
     dhEmi: new Date(json.ide.dhEmi),
     xNome: json.dest.xNome,
-    Id: emitido ? json.Id?.slice(3) : undefined
+    Id: emitido ? json.Id?.slice(3) : '',
+    eventos: nota.eventos ?? [],
   }
+}
+
+export const cancelarNFe = onLoggedRequest(
+  async (user, res, empresaRef, empresa, body) => {
+    const idNota = body.idNota
+    const justificativa = body.justificativa?.trim()
+    const dhEvento = body.dhEvento
+    if (!justificativa) {
+      res.status(400).send('É necessário informar o motivo do cancelamento')
+      return
+    }
+    if (!dhEvento) {
+      res.status(400).send('Requisição sem informação da data e hora do evento')
+      return
+    }
+    if (!idNota) {
+      res.status(400).send('Requisição sem id da nota')
+      return
+    }
+    const nota = await empresaRef.collection('notas').doc(idNota).get()
+    if (!nota.exists) {
+      res.status(400).send('Nota não existe')
+      return
+    }
+    const data = nota.data() as INotaDB<FirebaseFirestore.Timestamp>
+    const cOrgao = data.json.ide.cUF
+    const chaveNFe = data.json.Id?.slice(3)
+    const numeroProtocolo = data.nProt
+    const ambiente = data.json.ide.tpAmb as TAmb
+    const signedXml = criarXMLEventoCancelamento(
+      empresa,
+      cOrgao,
+      chaveNFe,
+      numeroProtocolo,
+      justificativa,
+      dhEvento,
+      ambiente
+    )
+    const resp = await recepcaoEvento(empresa, ambiente, signedXml)
+    if (resp.cStat.$t != '128') {
+      res.status(400).send(resp.xMotivo.$t)
+      return
+    }
+    const cStat = resp.retEvento.infEvento.cStat.$t
+    if (cStat != '135' && cStat != '155') {
+      res.status(400).send(resp.retEvento.infEvento.xMotivo.$t)
+      return
+    }
+    const procEventoNFe =
+      '<procEventoNFe versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">' +
+      signedXml +
+      toXml({ retEvento: resp.retEvento }) +
+      '</procEventoNFe>'
+    const refNota = empresaRef.collection('notas').doc(idNota)
+    await refNota.update({ lastUpdate: new Date(), eventos: FieldValue.arrayUnion('Cancelamento') })
+    await refNota
+      .collection('eventos')
+      .doc('Cancelamento')
+      .set({ xml: procEventoNFe })
+    res.sendStatus(201)
+  }
+)
+
+interface retEnvEvento {
+  versao: string
+  idLote: { $t: string }
+  tpAmb: { $t: string }
+  verAplic: { $t: string }
+  cOrgao: { $t: string }
+  cStat: { $t: string }
+  xMotivo: { $t: string }
+  retEvento: {
+    infEvento: {
+      cStat: { $t: string }
+      xMotivo: { $t: string }
+    }
+  }
+}
+
+function criarXMLEventoCancelamento(
+  empresa: IEmpresaGet,
+  cOrgao: number,
+  chaveNFe: string,
+  numeroProtocolo: number,
+  justificativa: string,
+  dhEvento: string,
+  ambiente: TAmb
+) {
+  const xml = `<evento xmlns="http://www.portalfiscal.inf.br/nfe" versao="1.00">
+  <infEvento Id="ID110111${chaveNFe}01">
+    <cOrgao>${cOrgao}</cOrgao>
+    <tpAmb>${ambiente}</tpAmb>
+    <CNPJ>${empresa.emit.CNPJ}</CNPJ>
+    <chNFe>${chaveNFe}</chNFe>
+    <dhEvento>${dhEvento}</dhEvento>
+    <tpEvento>110111</tpEvento>
+    <nSeqEvento>1</nSeqEvento>
+    <verEvento>1.00</verEvento>
+    <detEvento versao="1.00">
+      <descEvento>Cancelamento</descEvento>
+      <nProt>${numeroProtocolo}</nProt>
+      <xJust>${justificativa}</xJust>
+    </detEvento>
+  </infEvento>
+  </evento>`.replace(/>\s+</g, '><')
+  const signedXml = assinarEvento(empresa, xml)
+  return signedXml
+}
+
+async function recepcaoEvento(
+  empresa: IEmpresaGet,
+  ambiente: TAmb,
+  xml: string
+): Promise<retEnvEvento> {
+  const envio = `<envEvento versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+    <idLote>${getRandomNumber(1, 999999999999999)}</idLote>
+    ${xml}
+  </envEvento>`
+  const respRecepcaoEvento = await enviarRequisicao(
+    envio,
+    'recepcaoEvento',
+    ambiente,
+    empresa
+  )
+  const retEnvEvento = (toJson(respRecepcaoEvento, {
+    object: true,
+    reversible: true,
+  }) as any)['soap:Envelope']['soap:Body'].nfeResultMsg.retEnvEvento
+  return retEnvEvento as retEnvEvento
 }

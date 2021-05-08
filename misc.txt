@@ -18,8 +18,8 @@ lastUpdate
   xml
   emitido
   lastUpdade
-  -eventos:
-    json
+  eventos
+  -eventos: (id = Cancelamento)
     xml
 
 LOCALSTORAGE
@@ -88,16 +88,18 @@ OK  Refinar sincronização
 OK    Enviar elementos antes pra nuvem
 OK    Remover geração de ID de item local
 OK  Remover temporariamente edição de emitente
-    Eventos
-      Importação
-      Geração
-      Exibição
+OK  Evento de cancelamento
+OK    Geração
+OK    Exibição de status
 OK  Escondem nItem da nfe
-    Remover tela de login
-    Tela index básica com login
+    Corrigir problema na importação de múltiplos itens
 
 REFINAMENTOS (pré-alpha):
+    Remover tela de login
+    Tela index básica com login
     Cadastro via importação
+    Evento de cancelamento
+      Importação
     Mais configurações na tela de emitente
       Função no servidor para atualização
       Emitente atualizado na sincronização

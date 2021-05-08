@@ -54,12 +54,12 @@ export async function enviarRequisicao(
         amb == TAmb.Producao ? 'url_producao' : 'url_homologacao'
       ],
       `<Envelope xmlns="http://www.w3.org/2003/05/soap-envelope">
-            <Body>
-                <nfeDadosMsg xmlns="${servicos[servico].method}">
-                    ${body}
-                </nfeDadosMsg>
-            </Body>
-            </Envelope>`.replace(/>\s+</g, '><'),
+        <Body>
+          <nfeDadosMsg xmlns="${servicos[servico].method}">
+            ${body}
+          </nfeDadosMsg>
+        </Body>
+        </Envelope>`.replace(/>\s+</g, '><'),
       {
         httpsAgent: new https.Agent({
           rejectUnauthorized: false,
@@ -97,13 +97,13 @@ function getWebServiceByUF(uf: string) {
     case 'SP':
       return webservicesNFe.SP
     case 'MA':
-    case 'PA':
       return webservicesNFe.SVAN
     case 'AC':
     case 'AL':
     case 'AP':
     case 'DF':
     case 'ES':
+    case 'PA':
     case 'PB':
     case 'PI':
     case 'RJ':

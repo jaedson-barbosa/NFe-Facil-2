@@ -185,7 +185,7 @@ export const importar = onLoggedRequest(
     const resultado: IResultadoImportacao<Date> = {
       notas: notasDB.map((v) => {
         const d = v.data
-        return { id: v.id.id, infNFe: getViewNota(d.json, d.emitido) }
+        return { id: v.id.id, infNFe: getViewNota(d, d.emitido) }
       }),
       clientes: clientesDB.map((v) => {
         return { id: v.id.id, dest: v.data.dest }
@@ -213,6 +213,8 @@ function getNotas(xmls: string[], cnpj: string) {
         xml: v,
         emitido: !!root.nfeProc,
         lastUpdate: dhEmi,
+        nProt: root.nfeProc.protNFe.infProt.nProt.$t,
+        eventos: []
       }
       return nota
     })
