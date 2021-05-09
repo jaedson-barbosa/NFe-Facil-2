@@ -5,7 +5,7 @@ public
 *.log
 DANFE/vendor
 functions/lib
-saved-data
+save-data
 *.xml
 teste.json
 .VSCodeCounter

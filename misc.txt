@@ -92,6 +92,7 @@ OK  Evento de cancelamento
 OK    Geração
 OK    Exibição de status
 OK  Escondem nItem da nfe
+    Testar firebase, parcel e DANFE
     Corrigir problema na importação (limite de in de 10 itens)
     Implementar cálculo de totais
 
