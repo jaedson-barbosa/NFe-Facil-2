@@ -92,14 +92,18 @@ OK  Evento de cancelamento
 OK    Geração
 OK    Exibição de status
 OK  Escondem nItem da nfe
-    Testar firebase, parcel e DANFE
-    Corrigir problema na importação (limite de in de 10 itens)
+    Testar firebase, parcel e DANFE no linux
+    Cadastro via importação
+    CNPJ e CPF não podem ter input de number (podem ter 0 à esquerda)
+    Substituir processamento de importação no server por:
+      Processamento no cliente com análises de dados já cadastrados
+      Cadastramento em massa no servidor (que não analisa dados já cadastrados)
     Implementar cálculo de totais
+    Analisar se já está usável eu se puxa mais alguns refinamentos
 
 REFINAMENTOS (pré-alpha):
     Remover tela de login
     Tela index básica com login
-    Cadastro via importação
     Evento de cancelamento
       Importação
     Mais configurações na tela de emitente
