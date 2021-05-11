@@ -101,9 +101,13 @@ OK  Escondem nItem da nfe
     Implementar cálculo de totais
     Analisar se já está usável eu se puxa mais alguns refinamentos
 
+MODERNIZAÇÃO
+    Adicionar Svelte
+    Remover PWA (readicionar apenas na fase beta)
+    Comunicação direta com o Firestore para diminuir a complexidade das funções
+    Bulma CSS para estilização
+
 REFINAMENTOS (pré-alpha):
-    Remover tela de login
-    Tela index básica com login
     Evento de cancelamento
       Importação
     Mais configurações na tela de emitente
