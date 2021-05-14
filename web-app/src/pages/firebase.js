@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';// rollup bundle issue with ESM import
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 

@@ -1,15 +1,20 @@
 <script>
   import TodoItem from './TodoItem.svelte'
   import { db } from './firebase'
-  import { collectionData } from 'rxfire/firestore'
-  import { startWith } from 'rxjs/operators'
+import { onDestroy } from 'svelte';
   export let uid
   let text = 'some task'
   const query = db
     .collection('todos')
     .where('uid', '==', uid)
-    .orderBy('created')
-  const todos = collectionData(query, 'id').pipe(startWith([]))
+    .orderBy('text')
+  let todos = []
+  const unsubscribe = query.onSnapshot(next => {
+    //Implementar ordem correta com adição a partir do server
+    //Passar autenticação para uma store seguindo https://routify.dev/examples/auth
+    next.docChanges().forEach(v => todos = [...todos, v.doc.data()])
+  })
+  onDestroy(() => unsubscribe())
   function add() {
     db.collection('todos').add({
       uid,
@@ -31,7 +36,7 @@
 </script>
 
 <ul>
-  {#each $todos as todo}
+  {#each todos as todo}
     <TodoItem {...todo} on:remove={removeItem} on:toggle={updateStatus} />
   {/each}
 </ul>

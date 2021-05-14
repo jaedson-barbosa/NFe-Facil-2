@@ -1,11 +1,13 @@
 <script>
-  import Login from './Login.svelte'
-  let name = 'FireSvelte 🔥'
+  import Todos from './Todos.svelte';
+  
+  export let scoped
+  $: ({ user } = scoped)
 </script>
 
 <main class="content">
-  <h1>Welcome to {name}!</h1>
-  <Login />
+  <h1>Bem vindo ao NFe Fácil, {user.displayName}</h1>
+  <Todos uid={user.uid} />
 </main>
 
 <style>
