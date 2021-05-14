@@ -1,30 +1,19 @@
 <!-- routify:options bundle=true -->
-<!-- A opção acima ativa o bundle pra todos os filhos deste layout -->
 <script lang="ts">
-  import { url } from '@sveltech/routify'
-  import { auth, googleProvider } from './firebase';
-  import { onDestroy } from 'svelte';
-
-  let user: firebase.default.UserInfo;
-  const unsubscribe = auth.onAuthStateChanged(u => user = u)
-  onDestroy(() => unsubscribe())
-
-  function login() {
-    auth.signInWithPopup(googleProvider);
-  }
+  import { layout, url } from '@sveltech/routify'
+  import { user } from '../store'
 </script>
 
-{#if user}
-  <h3>Logado como {user.displayName}</h3>
-  <small>uid {user.uid}</small>
-  <button on:click={ () => auth.signOut() } class="button">Logout</button>
+{#if $user}
+  <h3>Logado como {$user.displayName}</h3>
+  <small>uid {$user.uid}</small>
+  <button on:click={user.signOut} class="button">Logout</button>
   <nav>
-    <a href={$url('/')} title="Home">Home</a>
-    <a href={$url('./about')} title="About">About</a>
+    {#each $layout.children as node}
+      <a href={$url(node.path)}>{node.title}</a>
+    {/each}
   </nav>
-  <slot scoped={{user}} />
+  <slot />
 {:else}
-  <button on:click={login} class="button">
-    Signin with Google
-  </button>
+  <button on:click={user.signIn} class="button">Signin with Google</button>
 {/if}

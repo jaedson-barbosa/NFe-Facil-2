@@ -36,10 +36,6 @@ if (firebaseConfig) {
       console.log('\t' + key + ': http://' + firebaseEmulators[key].host + ':' + firebaseEmulators[key].port);
     });
 
-    if (firebaseEmulators.database && typeof firebase.database === 'function') {
-      firebase.database().useEmulator(firebaseEmulators.database.host, firebaseEmulators.database.port);
-    }
-
     if (firebaseEmulators.firestore && typeof firebase.firestore === 'function') {
       firebase.firestore().useEmulator(firebaseEmulators.firestore.host, firebaseEmulators.firestore.port);
     }
@@ -57,5 +53,4 @@ if (firebaseConfig) {
 }
 export const auth = firebase.auth();
 export const googleProvider = new firebase.auth.GoogleAuthProvider();
-
 export const db = firebase.firestore();

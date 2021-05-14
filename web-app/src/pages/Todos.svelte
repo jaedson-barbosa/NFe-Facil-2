@@ -1,6 +1,6 @@
 <script>
   import TodoItem from './TodoItem.svelte'
-  import { db } from './firebase'
+  import { db } from '../firebase'
 import { onDestroy } from 'svelte';
   export let uid
   let text = 'some task'
@@ -10,8 +10,6 @@ import { onDestroy } from 'svelte';
     .orderBy('text')
   let todos = []
   const unsubscribe = query.onSnapshot(next => {
-    //Implementar ordem correta com adição a partir do server
-    //Passar autenticação para uma store seguindo https://routify.dev/examples/auth
     next.docChanges().forEach(v => todos = [...todos, v.doc.data()])
   })
   onDestroy(() => unsubscribe())

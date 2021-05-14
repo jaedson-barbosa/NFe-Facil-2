@@ -1,13 +1,11 @@
-<script>
-  import Todos from './Todos.svelte';
-  
-  export let scoped
-  $: ({ user } = scoped)
+<script lang="ts">
+  import Todos from './Todos.svelte'
+  import { user } from '../store'
 </script>
 
 <main class="content">
-  <h1>Bem vindo ao NFe Fácil, {user.displayName}</h1>
-  <Todos uid={user.uid} />
+  <h1>Bem vindo ao NFe Fácil, {$user.displayName}</h1>
+  <Todos uid={$user.uid} />
 </main>
 
 <style>
