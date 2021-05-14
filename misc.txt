@@ -106,6 +106,7 @@ MODERNIZAÇÃO
     Remover PWA (readicionar apenas na fase beta)
     Comunicação direta com o Firestore para diminuir a complexidade das funções
     Bulma CSS para estilização
+    Personalização com o https://jenil.github.io/bulmaswatch/
 
 REFINAMENTOS (pré-alpha):
     Evento de cancelamento

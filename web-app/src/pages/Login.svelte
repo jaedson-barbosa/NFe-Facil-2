@@ -1,9 +1,9 @@
 <script>
-  import Profile from './Profile.svelte';
   import Todos from './Todos.svelte';
   import { auth, googleProvider } from './firebase';
   import { authState } from 'rxfire/auth';
-import { onDestroy } from 'svelte';
+  import { onDestroy } from 'svelte';
+
   let user;
   const unsubscribe = authState(auth).subscribe(u => user = u);
   function login() {
@@ -22,7 +22,8 @@ import { onDestroy } from 'svelte';
 
 <section>
 {#if user}
-  <Profile {...user} />
+  <h3>Hi { user.displayName }!</h3>
+  <p>Your userID is { user.uid }</p>
   <button on:click={ () => auth.signOut() } class="button">Logout</button>
   <hr>
   <Todos uid={user.uid} />

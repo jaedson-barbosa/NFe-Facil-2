@@ -41,6 +41,13 @@ export default {
 		dir: 'public/build'
 	},
 	plugins: [
+		//Added cleaner to clean the chunk files on changes
+		// cleaner({
+		// 	targets: [
+		// 		'public/build/'
+		// 	]
+		// }),
+
 		svelte({
 			preprocess: sveltePreprocess({ sourceMap: !production }),
 			compilerOptions: {
@@ -51,13 +58,6 @@ export default {
 
 		//Added routify plugin with dynamic import support
 		routify({ dynamicImports: true }),
-
-		//Added cleaner to clean the chunk files on changes
-		cleaner({
-			targets: [
-				'public/build/'
-			]
-		}),
 
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
