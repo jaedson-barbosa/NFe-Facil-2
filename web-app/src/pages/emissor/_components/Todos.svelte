@@ -1,6 +1,6 @@
 <script>
-  import TodoItem from './TodoItem.svelte'
-  import { db } from '../firebase'
+  import TodoItem from '../TodoItem.svelte'
+  import { db } from '../../../firebase'
 import { onDestroy } from 'svelte';
   export let uid
   let text = 'some task'

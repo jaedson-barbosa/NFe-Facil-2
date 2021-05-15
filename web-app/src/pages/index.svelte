@@ -1,11 +1,10 @@
-<script lang="ts">
-  import Todos from './Todos.svelte'
-  import { user } from '../store'
+<script>
+  import { url } from '@sveltech/routify'
 </script>
 
 <main class="content">
-  <h1>Bem vindo ao NFe Fácil, {$user.displayName}</h1>
-  <Todos uid={$user.uid} />
+  <h1>Bem vindo ao NFe Fácil</h1>
+  <a href={$url('./emissor')}>Abrir emissor</a>
 </main>
 
 <style>

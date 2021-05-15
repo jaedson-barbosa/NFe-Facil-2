@@ -51,6 +51,11 @@ if (firebaseConfig) {
     console.log("To automatically connect the Firebase SDKs to running emulators, replace '/__/firebase/init.js' with '/__/firebase/init.js?useEmulator=true' in your index.html");
   }
 }
-export const auth = firebase.auth();
-export const googleProvider = new firebase.auth.GoogleAuthProvider();
-export const db = firebase.firestore();
+const _auth = firebase.auth()
+export const auth = _auth;
+
+const _googleProvider = new firebase.auth.GoogleAuthProvider();
+export const googleProvider = _googleProvider;
+
+const _db = firebase.firestore();
+export const db = _db;

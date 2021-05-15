@@ -7,7 +7,8 @@ import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 import { routify } from '@sveltech/routify';
-import cleaner from 'rollup-plugin-cleaner';
+import json from '@rollup/plugin-json';
+// import cleaner from 'rollup-plugin-cleaner';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -41,6 +42,7 @@ export default {
 		dir: 'public/build'
 	},
 	plugins: [
+		json(),
 		//Added cleaner to clean the chunk files on changes
 		// cleaner({
 		// 	targets: [
