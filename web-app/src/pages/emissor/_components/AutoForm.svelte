@@ -31,14 +31,20 @@
         .filter((v) => {
           const enumeration = v.restriction?.enumeration
           return !enumeration || typeof enumeration != 'string'
-        }).sort((a,b) => _munsUFs.indexOf(a.name) > _munsUFs.indexOf(b.name) ? 1 : -1)
+        })
+        .sort((a, b) =>
+          _munsUFs.indexOf(a.name) > _munsUFs.indexOf(b.name) ? 1 : -1
+        )
       const _paises = ['cPais', 'xPais']
       const paises = els
         .filter((v) => _paises.includes(v.name))
         .filter((v) => {
           const enumeration = v.restriction?.enumeration
           return !enumeration || typeof enumeration != 'string'
-        }).sort((a,b) => _paises.indexOf(a.name) > _paises.indexOf(b.name) ? 1 : -1)
+        })
+        .sort((a, b) =>
+          _paises.indexOf(a.name) > _paises.indexOf(b.name) ? 1 : -1
+        )
       const hasmunsUFs = munsUFs.length > 0
       const hasPaises = paises.length > 0
       if (hasmunsUFs && hasPaises) {
@@ -61,18 +67,24 @@
 
   const { aux, label } = el.annotation
   let showElements = !el.optional
-  const showReadonly = specificReadonly && el.name in specificReadonly && !specificReadonly[el.name]
+  
+  const isConstant = typeof el.restriction?.enumeration == 'string'
+  const isPassiveSpecific =
+    specificReadonly &&
+    el.name in specificReadonly &&
+    !specificReadonly[el.name]
   $: {
-    if (showReadonly) {
-      const name = el.name
+    const name = el.name
+    if (isConstant) {
+      root[name] = el.restriction?.enumeration
+    } else if(isPassiveSpecific) {
       root[name] = specificReadonly[name]
     }
   }
 </script>
 
-<!-- Incluir opcao de usar o Readonly para selects com valor unico -->
-{#if showReadonly}
-  <Readonly {el} {specificReadonly} />
+{#if isConstant || isPassiveSpecific}
+  <Readonly {el} value={root[el.name]} />
 {:else if el.element}
   <div class="container content box">
     <div class="field is-horizontal">

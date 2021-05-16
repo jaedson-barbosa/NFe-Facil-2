@@ -2,7 +2,7 @@
   import { createId } from './helpers'
 
   export let el: any
-  export let specificReadonly: any
+  export let value: string
 
   const { aux, label } = el.annotation
   const id = createId()
@@ -19,7 +19,7 @@
           {id}
           class="input is-static"
           type="text"
-          value={specificReadonly[el.name]}
+          {value}
           readonly
         />
       </div>

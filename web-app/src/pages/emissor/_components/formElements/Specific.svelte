@@ -17,25 +17,31 @@
     | { uf: ufType; mun?: munType; text: string }
     | { pais?: paisType; text: string }
 
-  const name = el.name
-  const muns = ['xMun', 'cMun', 'cMunFG']
-  const ufs = ['cUF', 'UF']
+  const name = el.name as string
 
   function getOptions(): optionType[] {
-    // Incluir opcoes para inicio em cMun para ser mais condizente
+    const muns = ['xMun', 'cMun', 'cMunFG']
+    const ufs = ['cUF', 'UF']
+
+    const isC = name.startsWith('c')
     if (muns.includes(name)) {
       return IBGE.flatMap((v) =>
         v.Municipios.map((k) => {
-          return { uf: v, mun: k, text: `${k.Nome} (${v.Sigla})` }
+          const text = isC
+            ? `${k.Codigo} (${k.Nome} - ${v.Sigla})`
+            : `${k.Nome} (${v.Sigla})`
+          return { uf: v, mun: k, text }
         })
       )
     } else if (ufs.includes(name)) {
       return IBGE.map((v) => {
-        return { uf: v, text: v.Nome }
+        const text = isC ? `${v.Codigo} (${v.Nome})` : v.Nome
+        return { uf: v, text }
       })
     } else {
       return paises.map((v) => {
-        return { pais: v, text: v.nome }
+        const text = isC ? `${v.codigo} (${v.nome})` : v.nome
+        return { pais: v, text }
       })
     }
   }
@@ -68,7 +74,7 @@
       return
     }
     updateSpecificReadonly(internalValue)
-    text.value = value = specificReadonly[name]
+    value = specificReadonly[name]
     specificReadonly = specificReadonly
   }
 
