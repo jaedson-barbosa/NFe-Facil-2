@@ -5,4 +5,5 @@
   const root = {}
 </script>
 
+{@debug root}
 <AutoForm el={elementosNFe[1]} {root} />

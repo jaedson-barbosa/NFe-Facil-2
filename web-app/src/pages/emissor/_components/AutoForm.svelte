@@ -1,49 +1,121 @@
 <script lang="ts">
   export let el: any
   export let root: any
+  export let level: number = 3
+  export let specificReadonly: any
 
   import { complexType, simpleType } from './data/nfe.json'
+  import Readonly from './formElements/Readonly.svelte'
   import Select from './formElements/Select.svelte'
+  import Specific from './formElements/Specific.svelte'
   import Input from './formElements/Input.svelte'
 
-  $: restriction = (() => {
-    if (!el.choice && !el.element) {
-      const restriction = el.restriction ?? simpleType.find((v: any) => v.name == el.type)?.restriction
-      if (!restriction) {
-        el.element = complexType.find((v: any) => v.name == el.type).element
+  let childSpecificReadonly: any
+  const childRoot = getNewRoot()
+  function getNewRoot() {
+    if (!root) return undefined
+    let els = el.element as any[]
+    if (!el.choice && !els) {
+      const findType = (v: any) => v.name == el.type
+      if (!el.restriction) {
+        el.restriction = simpleType.find(findType)?.restriction
       }
-      return restriction
+      if (!el.restriction) {
+        els = el.element = complexType.find(findType).element
+      }
     }
-  })()
-  $: annotation = el.annotation
-  $: enumeration = restriction?.enumeration
-  $: type =
-    el.name == 'fone'
-      ? 'tel'
-      : el.name == 'email'
-      ? 'email'
-      : el.type == 'TData'
-      ? 'date'
-      : !/[a-zA-Z]|ÿ/.test(restriction?.pattern)
-      ? 'number'
-      : 'text'
-    $: childRoot = getNewRoot()
-    function getNewRoot() {
-      if (!root) return undefined
-      if (el.element) {
-        return root[el.name] = {}
-      } else return root[el.name] = ''
+    if (els) {
+      const _munsUFs = ['xMun', 'cMun', 'cMunFG', 'cUF', 'UF']
+      const munsUFs = els
+        .filter((v) => _munsUFs.includes(v.name))
+        .filter((v) => {
+          const enumeration = v.restriction?.enumeration
+          return !enumeration || typeof enumeration != 'string'
+        }).sort((a,b) => _munsUFs.indexOf(a.name) > _munsUFs.indexOf(b.name) ? 1 : -1)
+      const _paises = ['cPais', 'xPais']
+      const paises = els
+        .filter((v) => _paises.includes(v.name))
+        .filter((v) => {
+          const enumeration = v.restriction?.enumeration
+          return !enumeration || typeof enumeration != 'string'
+        }).sort((a,b) => _paises.indexOf(a.name) > _paises.indexOf(b.name) ? 1 : -1)
+      const hasmunsUFs = munsUFs.length > 0
+      const hasPaises = paises.length > 0
+      if (hasmunsUFs && hasPaises) {
+        throw new Error('Paises e municipios habilitados ao mesmo tempo')
+      } else if (hasmunsUFs || hasPaises) {
+        const itens = hasmunsUFs ? munsUFs : paises
+        childSpecificReadonly = itens.reduce((p, c, i) => {
+          p[c.name] = i === 0 ? ' ' : ''
+          return p
+        }, {})
+        console.log(itens)
+      }
+      if (el.name) {
+        const child = {}
+        return (root[el.name] = child)
+      } else return root
     }
+    root[el.name] = ''
+  }
+
+  const { aux, label } = el.annotation
+  let showElements = !el.optional
+  const showReadonly = specificReadonly && el.name in specificReadonly && !specificReadonly[el.name]
+  $: {
+    if (showReadonly) {
+      const name = el.name
+      root[name] = specificReadonly[name]
+    }
+  }
 </script>
 
-{@debug root}
-
-{#if el.element}
-  {#each el.element as el}
-    <svelte:self {el} root={childRoot} />
-  {/each}
-{:else if enumeration && root}
-  <Select bind:value={root[el.name]} {annotation} {enumeration} />
+<!-- Incluir opcao de usar o Readonly para selects com valor unico -->
+{#if showReadonly}
+  <Readonly {el} {specificReadonly} />
+{:else if el.element}
+  <div class="container content box">
+    <div class="field is-horizontal">
+      <div class="field-label" />
+      <div class="field-body">
+        <div class="field">
+          <h1 class="title is-{level}">{label}</h1>
+          {#if aux}
+            <h1 class="subtitle is-{level + 2}">{aux}</h1>
+          {/if}
+        </div>
+      </div>
+    </div>
+    {#if el.optional}
+      <div class="field is-horizontal">
+        <div class="field-label" />
+        <div class="field-body">
+          <div class="field">
+            <label class="checkbox">
+              <input type="checkbox" bind:checked={showElements} />
+              Informar campo opcional
+            </label>
+          </div>
+        </div>
+      </div>
+    {/if}
+    {#if showElements}
+      {#each el.element as childEl}
+        <svelte:self
+          el={childEl}
+          root={childRoot}
+          level={level + 2}
+          bind:specificReadonly={childSpecificReadonly}
+        />
+      {/each}
+    {/if}
+  </div>
 {:else if root}
-  <Input bind:value={root[el.name]} {type} {restriction} {annotation} />
+  {#if specificReadonly && specificReadonly[el.name]}
+    <Specific bind:value={root[el.name]} bind:specificReadonly {el} />
+  {:else if el.restriction?.enumeration}
+    <Select bind:value={root[el.name]} {el} />
+  {:else}
+    <Input bind:value={root[el.name]} {el} />
+  {/if}
 {/if}

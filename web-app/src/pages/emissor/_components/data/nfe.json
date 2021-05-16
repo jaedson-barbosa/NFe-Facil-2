@@ -206,7 +206,7 @@
               "optional": true,
               "maxOccurs": "500",
               "annotation": {
-                "label": "Grupo de infromações da NF referenciada"
+                "label": "Infromações da NF referenciada"
               },
               "choice": {
                 "element": [
@@ -413,7 +413,7 @@
             {
               "optional": true,
               "annotation": {
-                "label": "Grupo de informações de interesse da Prefeitura"
+                "label": "Informações de interesse da Prefeitura"
               },
               "element": [
                 {
@@ -5796,7 +5796,7 @@
                 {
                   "name": "card",
                   "optional": true,
-                  "annotation": { "label": "Grupo de Cartões" },
+                  "annotation": { "label": "Cartões" },
                   "element": [
                     {
                       "name": "tpIntegra",

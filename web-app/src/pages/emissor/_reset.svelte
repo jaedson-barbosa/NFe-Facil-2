@@ -5,7 +5,7 @@
 </script>
 
 {#if $user}
-  <button on:click={user.signOut} class="button">Logout</button>
+  <button on:click={user.signOut} class="button">Encerar sessão</button>
   <nav>
     <a href={$url('./cadastrar')}>Cadastrar</a>
     <a href={$url('./requisitar')}>Requisitar acesso</a>
@@ -13,5 +13,5 @@
   </nav>
   <slot />
 {:else}
-  <button on:click={user.signIn} class="button">Signin with Google</button>
+  <button on:click={user.signIn} class="button">Iniciar sessão</button>
 {/if}
