@@ -55,7 +55,6 @@
           p[c.name] = i === 0 ? ' ' : ''
           return p
         }, {})
-        console.log(itens)
       }
       if (el.name) {
         const child = {}
@@ -121,6 +120,7 @@
         />
       {/each}
     {/if}
+    <slot></slot>
   </div>
 {:else if root}
   {#if specificReadonly && specificReadonly[el.name]}

@@ -32,9 +32,10 @@
     // if (!/[a-zA-Z]|ÿ/.test(el.restriction?.pattern)) return 'number'
     return 'text'
   }
+  const isCPF = el.type == 'TCpf'
   const isCNPJ = el.type == 'TCnpj'
   const isCEP = el.name == 'CEP'
-  const hasMask = isCNPJ || isCEP
+  const hasMask = isCPF || isCNPJ || isCEP
   const type = getType()
 
   function handleChange(e: { currentTarget: HTMLInputElement }) {
@@ -44,6 +45,7 @@
       return
     }
     if (type == 'text' && hasMask) {
+      if (isCPF) text.value = mask.exec(text.value, 'cpf', '_')
       if (isCNPJ) text.value = mask.exec(text.value, 'cnpj', '_');
       if (isCEP) text.value = mask.exec(text.value, 'zipcode', '_')
       value = text.value.match(numberPattern).join('')
@@ -59,6 +61,7 @@
   minlength={restriction.minLength}
   maxlength={restriction.maxLength}
   {type}
+  {value}
   on:focus={e => e.currentTarget.value = value}
   on:blur={handleChange}
 />

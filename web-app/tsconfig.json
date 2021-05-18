@@ -4,6 +4,11 @@
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
   "compilerOptions": {
     "resolveJsonModule": true,
-    "target": "ES6"
+    "target": "ES6",
+    "baseUrl": ".",
+    "paths": {
+      "@form/*": ["src/form/*"],
+      "@app/*": ["src/app/*"]
+    }
   }
 }

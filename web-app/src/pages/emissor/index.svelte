@@ -1,6 +1,6 @@
 <!-- Seleção de emitente -->
 <script lang="ts">
-  import { user } from '../../store'
+  import { user } from '@app/store'
   import { url } from '@sveltech/routify'
 </script>
 

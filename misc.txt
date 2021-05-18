@@ -1,26 +1,30 @@
 BANCO DE DADOS - FIRESTORE
-empresas:
+certificados: //completamente inacessivel, usar metodo para cadastra-los
 publicCert
 privateCert
+
+empresas:
 emit (...)
-serieAtual
-lastUpdate
--usuarios:
+serieNFe
+serieNFCe // implementacao futura
+-usuarios: // permissao de leitura apenas para status 3 e escrita apenas com status 0 se nao houver nenhum
   id
   status //0-Aguardando analise/1-Acesso revogado/2-Acesso liberado/3-Administrador
-  nome
+  nome-email
   permissoes: visualizar-dados-base, visualizar-notas-emitidas, cadastrar-dados-base, emitir-notas
 -dados:
   idAux
-  lastUpdate
--notas:
+-resumo-notas:
+  serie
+  nNF
+  dhEmi
+  xNome
+  id //do xml da nota, nao do firestore
+-notas: //usuarios nao podem escrever nesta tabela, apenas le-la
+  emitida
   json
   xml
-  emitido
-  lastUpdade
-  eventos
-  -eventos: (id = Cancelamento)
-    xml
+  xmlCancelamento
 
 LOCALSTORAGE
 empresas:
@@ -35,63 +39,64 @@ idEmpresa
 
 METAS:
 BASE para análise de viabilidade técnica:
-OK  Primeiro, implementar a edição de dados base e de emitentes
-OK  Busca de dados base na tela de NFe
-OK    Produtos
-OK    Clientes
-OK    Motoristas
-OK  Tipos de ICMS de acordo com o regime do emitente
-OK  Importação
-OK    Lado Cliente
-OK    Lado servidor
-OK  Exibição de notas
-OK  Clonagem de NFe
-OK  Servidor básico (sem todas análises)
-OK    scanUsuario
-OK    scanRegistro
-OK    cadastrarCNPJ
-OK    requisitarAcesso
-OK    apenasSalvarNFe
-OK    assinarTransmitirNFe
-OK      assinarNFe
-OK      transmitirNFe
-OK    gerarDANFE (apenas NFe)
-OK      PHP
-OK      Node
-OK  Sincronização
-OK    Servidor
-OK    Cliente
-OK  Verificar esse detalhe do xs:attribute
+    Cadastro de emitentes
+    Cadastro e edição de dados base
+    Busca de dados base na tela de NFe
+      Produtos
+      Clientes
+      Motoristas
+    Tipos de ICMS de acordo com o regime do emitente
+    Importação
+      Lado Cliente
+      Lado servidor
+    Exibição de notas
+    Clonagem de NFe
+    Servidor básico (sem todas análises)
+      scanUsuario
+      scanRegistro
+      cadastrarCNPJ
+      requisitarAcesso
+      apenasSalvarNFe
+      assinarTransmitirNFe
+        assinarNFe
+        transmitirNFe
+      gerarDANFE (apenas NFe)
+        PHP
+        Node
+    Sincronização
+      Servidor
+      Cliente
+    Verificar esse detalhe do xs:attribute
 
 BASE para emissão de NFe:
-OK  Fragmentar form-base.ts em varios arquivos em uma pasta
-OK  Limpar pasta PL_009
-OK  Limpar pasta base-data
-OK  Remover pasta VM
-OK  Corrigir documentações no schema json e unir os 2 num único
-OK  Remover tag complexType
-OK  Remover tag sequence
-OK  Aplicar novidades do nfe.json ao form-base
-OK  Passar custom headers para o nfe.json
-OK  Atualizar entradas para que tenham o tipo correto
-OK  Remover getName
-OK  Proibir o uso de emitente com CPF
-OK    Via cadastro
-OK    Via importação (restringido para emitente logado)
-OK  Corrigir erro em Grupo de informações de interesse da Prefeitura
-OK  Corrigir erro na edição de dados
-OK  Corrigir erro de adição em listas
-OK  Corrigir erro de clonagem
-OK  Analisar elementos já salvos na importação
-OK  Aperfeiçoar caixa de dialogo de nota fiscal
-OK  Refinar sincronização
-OK    Enviar elementos antes pra nuvem
-OK    Remover geração de ID de item local
-OK  Remover temporariamente edição de emitente
-OK  Evento de cancelamento
-OK    Geração
-OK    Exibição de status
-OK  Escondem nItem da nfe
+    Fragmentar form-base.ts em varios arquivos em uma pasta
+    Limpar pasta PL_009
+    Limpar pasta base-data
+    Remover pasta VM
+    Corrigir documentações no schema json e unir os 2 num único
+    Remover tag complexType
+    Remover tag sequence
+    Aplicar novidades do nfe.json ao form-base
+    Passar custom headers para o nfe.json
+    Atualizar entradas para que tenham o tipo correto
+    Remover getName
+    Proibir o uso de emitente com CPF
+      Via cadastro
+      Via importação (restringido para emitente logado)
+    Corrigir erro em Grupo de informações de interesse da Prefeitura
+    Corrigir erro na edição de dados
+    Corrigir erro de adição em listas
+    Corrigir erro de clonagem
+    Analisar elementos já salvos na importação
+    Aperfeiçoar caixa de dialogo de nota fiscal
+    Refinar sincronização
+      Enviar elementos antes pra nuvem
+      Remover geração de ID de item local
+    Remover temporariamente edição de emitente
+    Evento de cancelamento
+      Geração
+      Exibição de status
+    Escondem nItem da nfe
     Testar firebase, parcel e DANFE no linux
     Cadastro via importação
     CNPJ e CPF não podem ter input de number (podem ter 0 à esquerda)

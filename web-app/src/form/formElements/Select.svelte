@@ -16,12 +16,13 @@
       return { value: v, text }
     })
   }
+  const options = getOptions()
 
   const {aux, label} = el.annotation
   const id = createId()
   const required = !el.optional
 
-  const initialValue = value
+  const initialValue = value = required ? options[0].value : ''
   onDestroy(() => value = initialValue)
 </script>
 
@@ -40,7 +41,7 @@
       <div class="control is-expanded">
         <div class="select is-fullwidth">
           <select {id} bind:value={value} {required}>
-            {#each getOptions() as opt}
+            {#each options as opt}
               <option value={opt.value}>{opt.text}</option>
             {/each}
           </select>

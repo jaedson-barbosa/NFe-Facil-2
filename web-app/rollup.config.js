@@ -9,6 +9,10 @@ import css from 'rollup-plugin-css-only';
 import { routify } from '@sveltech/routify';
 import json from '@rollup/plugin-json';
 // import cleaner from 'rollup-plugin-cleaner';
+import alias from '@rollup/plugin-alias';
+import path from 'path'
+
+const projectRootDir = path.resolve(__dirname);
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -64,6 +68,13 @@ export default {
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
 		css({ output: 'bundle.css' }),
+
+		alias({
+      entries: [
+        { find: "@form", replacement: path.resolve(projectRootDir, 'src/form') },
+        { find: "@app", replacement: path.resolve(projectRootDir, 'src/app') }
+      ]
+    }),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
