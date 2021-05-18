@@ -1,11 +1,14 @@
 <script lang="ts">
-  import { url } from '@sveltech/routify'
+  import { url, goto } from '@sveltech/routify'
   import { db } from '@app/firebase'
   import { elementosNFe } from '@form/dataHelper'
   import AutoForm from '@form/AutoForm.svelte'
   import Input from '@form/formElements/Input.svelte'
 
+  export let idEmpresa: string
+
   const infoSerie = {
+    name: 'serieNFe',
     annotation: {
       label: 'Série da NF-e',
       aux: 'Série atual de emissão das NF-es',
@@ -13,26 +16,47 @@
     restriction: { pattern: '0|[1-9]{1}[0-9]{0,2}' },
   }
 
-  const root = {
+  /*const root = {
+    emit: { CNPJ: idEmpresa } as any,
     serieNFe: '1',
+  }*/
+
+  async function carregar() {
+    const empresa = await db.collection('empresas').doc(idEmpresa).get()
+    if (!empresa.exists) {
+      throw new Error('CNPJ não cadastrado.');
+    }
+    return empresa.data()
   }
 
   let loading = false
 
-  function salvar() {}
+  async function salvar(root: any) {
+    loading = true
+    try {
+      await db.collection('empresas').doc(idEmpresa).update(root)
+      $goto('../:idEmpresa', { idEmpresa })
+    } catch (error) {
+      alert(error.message)
+      loading = false
+    }
+  }
 </script>
 
+{#await carregar()}
+  Carregando...
+{:then root}
 {@debug root}
-<form class="block">
+<form>
   <fieldset disabled={loading}>
     <AutoForm el={elementosNFe[1]} {root}>
-      <Input bind:value={root.serieNFe} el={infoSerie} />
+      <Input {root} el={infoSerie} />
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
           <button
             class="button is-primary"
             class:is-loading={loading}
-            on:click={salvar}
+            on:click={() => salvar(root)}
           >
             Salvar
           </button>
@@ -47,3 +71,4 @@
     </AutoForm>
   </fieldset>
 </form>
+{/await}

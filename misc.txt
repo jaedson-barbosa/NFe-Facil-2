@@ -3,7 +3,7 @@ certificados: //completamente inacessivel, usar metodo para cadastra-los
 publicCert
 privateCert
 
-empresas:
+empresas: // cadastro apenas via servidor
 emit (...)
 serieNFe
 serieNFCe // implementacao futura

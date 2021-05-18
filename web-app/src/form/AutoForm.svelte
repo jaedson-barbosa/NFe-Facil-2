@@ -128,6 +128,6 @@
   {:else if el.restriction?.enumeration}
     <Select bind:value={root[el.name]} {el} />
   {:else}
-    <Input bind:value={root[el.name]} {el} />
+    <Input {root} {el} />
   {/if}
 {/if}
