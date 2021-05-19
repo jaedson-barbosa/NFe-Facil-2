@@ -10,6 +10,10 @@ export default onDefaultRequest(true, async (user, res, body) => {
     res.status(400).send('Senha inválida')
     return
   }
+  if (!body.ident) {
+    res.status(400).send('Nome inválido')
+    return
+  }
   //Interessante pôr análise de CA (autoridade certificadora)
   const p12Der = forge.util.decode64(body.cert)
   const p12Asn1 = forge.asn1.fromDer(p12Der)
@@ -49,7 +53,7 @@ export default onDefaultRequest(true, async (user, res, body) => {
   })
   await empresaRef.collection('usuarios').doc(user.sub).set({
     status: 3,
-    nome: user.email,
+    ident: body.ident,
     id: user.sub,
   })
   res.sendStatus(201)

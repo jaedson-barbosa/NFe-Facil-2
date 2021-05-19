@@ -47,7 +47,7 @@
   Carregando...
 {:then root}
 {@debug root}
-<form>
+<form on:submit|preventDefault={() => salvar(root)}>
   <fieldset disabled={loading}>
     <AutoForm el={elementosNFe[1]} {root}>
       <Input {root} el={infoSerie} />
@@ -56,7 +56,6 @@
           <button
             class="button is-primary"
             class:is-loading={loading}
-            on:click={() => salvar(root)}
           >
             Salvar
           </button>

@@ -76,3 +76,5 @@ export const googleProvider = _googleProvider
 
 const _db = firebase.firestore()
 export const db = _db
+
+export const FieldPath = firebase.firestore.FieldPath

@@ -28,6 +28,7 @@
   function getType() {
     if (el.name == 'fone') return 'tel'
     if (el.name == 'email') return 'email'
+    // if (el.name == 'senha') return 'password'
     if (el.type == 'TData') return 'date'
     // if (!/[a-zA-Z]|ÿ/.test(el.restriction?.pattern)) return 'number'
     return 'text'
