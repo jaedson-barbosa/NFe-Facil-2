@@ -51,32 +51,36 @@
         throw new Error('Paises e municipios habilitados ao mesmo tempo')
       } else if (hasmunsUFs || hasPaises) {
         const itens = hasmunsUFs ? munsUFs : paises
-        childSpecificReadonly = itens.reduce((p, c, i) => {
-          p[c.name] = i === 0 ? ' ' : ''
-          return p
-        }, {})
+        childSpecificReadonly = itens.reduce(
+          (p, c, i) => {
+            p[c.name] = i === 0 ? ' ' : ''
+            return p
+          },
+          { specific: itens[0].name }
+        )
+        console.info(childSpecificReadonly)
       }
       if (el.name) {
-        const child = {}
+        const child = root[el.name] ?? {}
         return (root[el.name] = child)
       } else return root
     }
-    root[el.name] = ''
+    root[el.name] = root[el.name] ?? ''
   }
 
   const { aux, label } = el.annotation
   let showElements = !el.optional
-  
+
+  const name = el.name
   const isConstant = typeof el.restriction?.enumeration == 'string'
   const isPassiveSpecific =
     specificReadonly &&
-    el.name in specificReadonly &&
-    !specificReadonly[el.name]
+    name in specificReadonly &&
+    specificReadonly.specific != name
   $: {
-    const name = el.name
     if (isConstant) {
       root[name] = el.restriction?.enumeration
-    } else if(isPassiveSpecific) {
+    } else if (isPassiveSpecific) {
       root[name] = specificReadonly[name]
     }
   }
@@ -120,7 +124,7 @@
         />
       {/each}
     {/if}
-    <slot></slot>
+    <slot />
   </div>
 {:else if root}
   {#if specificReadonly && specificReadonly[el.name]}

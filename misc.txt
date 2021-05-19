@@ -39,7 +39,7 @@ idEmpresa
 
 METAS:
 BASE para análise de viabilidade técnica:
-    Cadastro de emitentes
+OK  Cadastro de emitentes
     Cadastro e edição de dados base
     Busca de dados base na tela de NFe
       Produtos

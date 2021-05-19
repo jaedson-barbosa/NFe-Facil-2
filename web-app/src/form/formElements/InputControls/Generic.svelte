@@ -39,6 +39,13 @@
   const hasMask = isCPF || isCNPJ || isCEP
   const type = getType()
 
+  function getMask(text: string) {
+    if (isCPF) return mask.exec(text, 'cpf', '_')
+    if (isCNPJ) return mask.exec(text, 'cnpj', '_');
+    if (isCEP) return mask.exec(text, 'zipcode', '_')
+    return text
+  }
+
   function handleChange(e: { currentTarget: HTMLInputElement }) {
     const text = e.currentTarget
     if (!text.value) {
@@ -46,9 +53,7 @@
       return
     }
     if (type == 'text' && hasMask) {
-      if (isCPF) text.value = mask.exec(text.value, 'cpf', '_')
-      if (isCNPJ) text.value = mask.exec(text.value, 'cnpj', '_');
-      if (isCEP) text.value = mask.exec(text.value, 'zipcode', '_')
+      text.value = getMask(text.value)
       value = text.value.match(numberPattern).join('')
     } else value = text.value
   }
@@ -63,6 +68,7 @@
   maxlength={restriction.maxLength}
   {type}
   {value}
-  on:focus={e => e.currentTarget.value = value}
-  on:blur={handleChange}
 />
+
+<!-- on:focus={e => e.currentTarget.value = value}
+  on:blur={handleChange} -->

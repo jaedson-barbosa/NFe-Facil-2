@@ -14,8 +14,7 @@
   const paisTypeObj = paises[0]
   type paisType = typeof paisTypeObj
   type optionType =
-    | { uf: ufType; mun?: munType; text: string }
-    | { pais?: paisType; text: string }
+    { uf?: ufType; mun?: munType; pais?: paisType; text: string }
 
   const name = el.name as string
 
@@ -47,6 +46,21 @@
   }
   const options = getOptions()
 
+  function getInitialValue() {
+    if (!value) return ''
+    const find = (get: (v: optionType) => string) => options.find(v => get(v) == value)?.text ?? ''
+    switch (name) {
+      case 'xMun': return find(v => v.mun.Nome)
+      case 'cMun': return find(v => v.mun.Codigo)
+      case 'cMunFG': return find(v => v.mun.Codigo)
+      case 'cUF': return find(v => v.uf.Codigo)
+      case 'UF': return find(v => v.uf.Sigla)
+      case 'cPais': return find(v => v.pais.codigo)
+      case 'xPais': return find(v => v.pais.nome)
+      default: return ''
+    }
+  }
+
   function updateSpecificReadonly(value: any) {
     if ('mun' in value) {
       const mun = value.mun
@@ -66,16 +80,16 @@
     }
   }
 
-  function handleChange(e: { currentTarget: HTMLInputElement }) {
-    const text = e.currentTarget
-    const internalValue: optionType = options.find((v) => v.text == text.value)
-    if (!internalValue) {
-      text.value = ''
-      return
+  let internalValue = getInitialValue()
+
+  $: {
+    const curOption: optionType = options.find((v) => v.text == internalValue)
+    console.log(curOption)
+    if (curOption) {
+      updateSpecificReadonly(curOption)
+      value = specificReadonly[name]
+      specificReadonly = specificReadonly
     }
-    updateSpecificReadonly(internalValue)
-    value = specificReadonly[name]
-    specificReadonly = specificReadonly
   }
 
   const { aux, label } = el.annotation
@@ -95,7 +109,7 @@
           class="input"
           type="text"
           list={listId}
-          on:change={handleChange}
+          value={internalValue}
         />
         <datalist id={listId}>
           {#each options as opt}

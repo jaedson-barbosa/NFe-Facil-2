@@ -35,7 +35,7 @@
     loading = true
     try {
       await db.collection('empresas').doc(idEmpresa).update(root)
-      $goto('../:idEmpresa', { idEmpresa })
+      $goto('../../:idEmpresa', { idEmpresa })
     } catch (error) {
       alert(error.message)
       loading = false
