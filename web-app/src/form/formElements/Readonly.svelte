@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
   import { createId } from './helpers'
 
   export let el: any
@@ -13,8 +12,6 @@
 
   const { aux, label } = el.annotation
   const id = createId()
-
-  onDestroy(() => delete(root[el.name]))
 </script>
 
 <div class="field is-horizontal">

@@ -2,7 +2,6 @@
   import { createId } from './helpers'
   import { IBGE } from '../data/IBGE.json'
   import { paises } from '../data/paises.json'
-  import { onDestroy } from 'svelte';
 
   export let el: any
   export let root: any
@@ -102,8 +101,6 @@
   const { aux, label } = el.annotation
   const id = createId()
   const listId = createId()
-
-  onDestroy(() => delete(root[el.name]))
 </script>
 
 <div class="field is-horizontal">
