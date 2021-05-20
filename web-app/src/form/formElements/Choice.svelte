@@ -18,21 +18,47 @@
     restriction: { enumeration: choice?.element.map((_, i) => `/${i}`) },
   }
 
-  let params = { currentType: '0' }
-  $: currentIndex = +params.currentType
-
   const elements = el.choice.element.map((v) => {
     return { name: el.name, ...v }
   })
 
+  let params = { currentType: '0' }
   let lastIndex = -1
 
-  if (!el.name) {
-    elements.forEach(v => {
-      if (v.name) root[v.name] = ''
-      else v.element.forEach(k => root[k.name] = '')
+  const curRoot = el.name ? root[el.name] ?? {} : root
+
+  const els = (el.choice.element as any[]).map((v) => {
+    if (v.name) {
+      if (el.name) return !!curRoot[v.name]
+      else return !!(root[v.name] = root[v.name] ?? '')
+    }
+    else return v.element.every((k) => {
+      if (el.name) return !!curRoot[k.name] || !!k.optional
+      else {
+        if (root[k.name]) {
+          const curEnum = k.restriction?.enumeration
+          if (curEnum && typeof curEnum == 'string') {
+            return curEnum == root[k.name]
+          } else if (curEnum) {
+            return curEnum.includes(root[k.name])
+          } else return true
+        }
+        root[k.name] = ''
+        return !!k.optional
+      }
     })
+  })
+  const firstIndex = els.indexOf(true)
+  if (firstIndex == els.lastIndexOf(true)) {
+    if (firstIndex != -1) {
+      params.currentType = firstIndex.toString()
+    }
+  } else {
+    console.log(el)
+    throw new Error('Multiple valid itens')
   }
+
+  $: currentIndex = +params.currentType
 
   $: {
     if (currentIndex != lastIndex && lastIndex != -1) {
@@ -41,7 +67,7 @@
       } else {
         const lastEl = elements[lastIndex]
         if (lastEl.name) root[lastEl.name] = ''
-        else lastEl.element.forEach(v => root[v.name] = '')
+        else lastEl.element.forEach((v) => (root[v.name] = ''))
       }
     }
     lastIndex = currentIndex

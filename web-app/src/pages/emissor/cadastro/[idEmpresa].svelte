@@ -16,11 +16,6 @@
     restriction: { pattern: '0|[1-9]{1}[0-9]{0,2}' },
   }
 
-  /*const root = {
-    emit: { CNPJ: idEmpresa } as any,
-    serieNFe: '1',
-  }*/
-
   async function carregar() {
     const empresa = await db.collection('empresas').doc(idEmpresa).get()
     if (!empresa.exists) {

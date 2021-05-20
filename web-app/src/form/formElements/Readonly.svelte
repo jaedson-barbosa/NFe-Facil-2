@@ -7,7 +7,7 @@
   $: {
     const enumeration = el.restriction?.enumeration
     if (typeof enumeration == 'string') root[el.name] = enumeration
-    else root[el.name] = ''
+    else if (!root[el.name]) root[el.name] = ''
   }
 
   const { aux, label } = el.annotation

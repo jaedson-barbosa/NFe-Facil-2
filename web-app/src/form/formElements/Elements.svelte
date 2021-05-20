@@ -5,15 +5,6 @@
   export let root: any
   export let el: any
 
-  /*$: {
-    const entries = Object.entries(childRoot)
-    entries.forEach(v => {
-      if (!elements.some(k => k.name == v[0])) {
-        delete childRoot[v[0]]
-      }
-    })
-  }*/
-
   function getSpecificReadonly(elements: any[]): string[] {
     const _munsUFs = ['xMun', 'cMun', 'cMunFG', 'cUF', 'UF']
     const munsUFs = _munsUFs.filter((v) =>

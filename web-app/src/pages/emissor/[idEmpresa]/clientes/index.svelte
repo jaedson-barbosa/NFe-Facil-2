@@ -1,10 +1,9 @@
 <script lang="ts">
   import { applyMask } from '@app/documentUtils'
-  import { db, FieldPath } from '@app/firebase'
+  import { db } from '@app/firebase'
   import { url } from '@sveltech/routify'
 
-  export let scoped: { idEmpresa: string }
-  $: ({ idEmpresa } = scoped)
+  export let idEmpresa: string
 
   let busca = ''
   let loading = false
@@ -18,10 +17,11 @@
     const end = busca.replace(/.$/, (c) =>
       String.fromCharCode(c.charCodeAt(0) + 1)
     )
-    const fieldPath = +busca ? FieldPath.documentId() : 'dest.xNome'
+    const fieldPath = 'dest.xNome'
     const queryResult = await queryCol
       .where(fieldPath, '>=', busca)
       .where(fieldPath, '<', end)
+      .limit(20)
       .get()
     cadastros = queryResult.docs.map((v) => {
       let doc = v.id
@@ -29,7 +29,7 @@
       if (doc.length == 11) doc = applyMask(doc, 'cpf')
       return {
         id: v.id,
-        doc,
+        doc: v.get('dest.CPF') ?? v.get('dest.CNPJ') ?? v.get('dest.idEstrangeiro'),
         nome: v.get('dest.xNome')
       }
     })
@@ -53,8 +53,8 @@
       <input
         class="input"
         type="text"
-        placeholder="Nome ou documento"
-        value={busca}
+        placeholder="Nome do cliente"
+        bind:value={busca}
       />
     </div>
     <div class="control">

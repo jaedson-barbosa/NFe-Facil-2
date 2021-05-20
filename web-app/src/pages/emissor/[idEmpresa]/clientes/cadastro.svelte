@@ -4,15 +4,20 @@
   import { elementosNFe } from '@form/dataHelper'
   import AutoForm from '@form/AutoForm.svelte'
 
+  export let idEmpresa: string
+
   let loading = false
   const root = {}
 
   async function salvar() {
     loading = true
-    const idEmpresa = ''
     try {
-      await db.collection('empresas').doc(idEmpresa).update(root)
-      $goto('../../:idEmpresa', { idEmpresa })
+      await db
+        .collection('empresas')
+        .doc(idEmpresa)
+        .collection('clientes')
+        .add(root)
+      $goto('../')
     } catch (error) {
       alert(error.message)
       loading = false
@@ -26,10 +31,7 @@
     <AutoForm el={elementosNFe[2]} {root}>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
-          <button
-            class="button is-primary"
-            class:is-loading={loading}
-          >
+          <button class="button is-primary" class:is-loading={loading}>
             Salvar
           </button>
         </p>
