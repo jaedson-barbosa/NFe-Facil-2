@@ -1,0 +1,45 @@
+<script lang="ts">
+  import { url, goto } from '@sveltech/routify'
+  import { db } from '@app/firebase'
+  import { elementosNFe } from '@form/dataHelper'
+  import AutoForm from '@form/AutoForm.svelte'
+
+  let loading = false
+  const root = {}
+
+  async function salvar() {
+    loading = true
+    const idEmpresa = ''
+    try {
+      await db.collection('empresas').doc(idEmpresa).update(root)
+      $goto('../../:idEmpresa', { idEmpresa })
+    } catch (error) {
+      alert(error.message)
+      loading = false
+    }
+  }
+</script>
+
+{@debug root}
+<form on:submit|preventDefault={salvar}>
+  <fieldset disabled={loading}>
+    <AutoForm el={elementosNFe[2]} {root}>
+      <div class="field is-grouped is-grouped-centered">
+        <p class="control">
+          <button
+            class="button is-primary"
+            class:is-loading={loading}
+          >
+            Salvar
+          </button>
+        </p>
+        <p class="control">
+          <button type="reset" class="button is-warning"> Limpar </button>
+        </p>
+        <p class="control">
+          <a href={$url('..')} class="button is-danger"> Cancelar </a>
+        </p>
+      </div>
+    </AutoForm>
+  </fieldset>
+</form>

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte'
   import { createId } from './helpers'
   import Decimal from './InputControls/Decimal.svelte'
   import Generic from './InputControls/Generic.svelte'
@@ -7,11 +6,8 @@
   export let el: any
   export let root: any
 
-  const { aux, label } = el.annotation
+  $: ({ aux, label } = el.annotation)
   const id = createId()
-
-  const initialValue = root[el.name]
-  onDestroy(() => (root[el.name] = initialValue))
 </script>
 
 <div class="field is-horizontal">

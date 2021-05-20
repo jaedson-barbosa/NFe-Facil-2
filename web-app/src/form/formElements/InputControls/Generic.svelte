@@ -1,20 +1,6 @@
-<script context="module">
-  import Mask from './mask'
-
-  const config = {
-    cpf: [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/],
-    cnpj: [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/],
-    date: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/],
-    datetime: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/, ':', /\d/, /\d/],
-    phone: ['(', /\d/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
-    time: [/\d/, /\d/, ':', /\d/, /\d/, ':', /\d/, /\d/],
-    zipcode: [/\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
-  };
-  const mask = new Mask(config);
-  const numberPattern = /\d+/g;
-</script>
-
 <script lang="ts">
+  import { applyMask } from '@app/documentUtils'
+
   export let el: any
   export let id: string
   export let value: string
@@ -40,9 +26,9 @@
   const type = getType()
 
   function getMask(text: string) {
-    if (isCPF) return mask.exec(text, 'cpf', '_')
-    if (isCNPJ) return mask.exec(text, 'cnpj', '_');
-    if (isCEP) return mask.exec(text, 'zipcode', '_')
+    if (isCPF) return applyMask(text, 'cpf')
+    if (isCNPJ) return applyMask(text, 'cnpj')
+    if (isCEP) return applyMask(text, 'zipcode')
     return text
   }
 
@@ -54,7 +40,7 @@
     }
     if (type == 'text' && hasMask) {
       text.value = getMask(text.value)
-      value = text.value.match(numberPattern).join('')
+      value = text.value.match(/\d+/g).join('')
     } else value = text.value
   }
 </script>

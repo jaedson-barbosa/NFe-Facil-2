@@ -2,6 +2,7 @@
 <script lang="ts">
   import { db } from '@app/firebase'
   import { user } from '@app/store'
+  import { url } from '@sveltech/routify'
   import Empresa from './_components/Empresa.svelte'
 
   function getDescricaoStatus(status: 0 | 1 | 2 | 3) {
@@ -20,20 +21,24 @@
       .get()
     return cadastros.docs.map((v) => {
       const parent = v.ref.parent.parent
-      const manager = {
+      return {
         parentId: parent.id,
         status: getDescricaoStatus(v.get('status')),
         loadParentName: async () => {
           const k = await parent.get()
-          // await new Promise(res => setTimeout(res, 5000))
-          return k.get('emit.xNome') as string
+          return await k.get('emit.xNome') as string
         }
       }
-      return manager
     })
   }
 </script>
 
+<button on:click={user.signOut} class="button">Encerar sessão</button>
+<nav>
+  <a href={$url('./precadastro')}>Cadastrar</a>
+  <a href={$url('./requisicao')}>Requisitar acesso</a>
+  <a href={$url('./acesso')}>Acessar com certificado</a>
+</nav>
 {#await getCadastros() then cadastros}
   {#if cadastros.length}
     <table class="table is-hoverable is-fullwidth">

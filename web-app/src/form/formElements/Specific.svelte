@@ -4,8 +4,8 @@
   import { paises } from '../data/paises.json'
 
   export let el: any
+  export let root: any
   export let specificReadonly: any
-  export let value: string = ''
 
   const ufTypeObj = IBGE[0]
   type ufType = typeof ufTypeObj
@@ -13,8 +13,12 @@
   type munType = typeof munTypeObj
   const paisTypeObj = paises[0]
   type paisType = typeof paisTypeObj
-  type optionType =
-    { uf?: ufType; mun?: munType; pais?: paisType; text: string }
+  type optionType = {
+    uf?: ufType
+    mun?: munType
+    pais?: paisType
+    text: string
+  }
 
   const name = el.name as string
 
@@ -47,17 +51,26 @@
   const options = getOptions()
 
   function getInitialValue() {
-    if (!value) return ''
-    const find = (get: (v: optionType) => string) => options.find(v => get(v) == value)?.text ?? ''
+    if (!root[name]) return ''
+    const find = (get: (v: optionType) => string) =>
+      options.find((v) => get(v) == root[name])?.text ?? ''
     switch (name) {
-      case 'xMun': return find(v => v.mun.Nome)
-      case 'cMun': return find(v => v.mun.Codigo)
-      case 'cMunFG': return find(v => v.mun.Codigo)
-      case 'cUF': return find(v => v.uf.Codigo)
-      case 'UF': return find(v => v.uf.Sigla)
-      case 'cPais': return find(v => v.pais.codigo)
-      case 'xPais': return find(v => v.pais.nome)
-      default: return ''
+      case 'xMun':
+        return find((v) => v.mun.Nome)
+      case 'cMun':
+        return find((v) => v.mun.Codigo)
+      case 'cMunFG':
+        return find((v) => v.mun.Codigo)
+      case 'cUF':
+        return find((v) => v.uf.Codigo)
+      case 'UF':
+        return find((v) => v.uf.Sigla)
+      case 'cPais':
+        return find((v) => v.pais.codigo)
+      case 'xPais':
+        return find((v) => v.pais.nome)
+      default:
+        return ''
     }
   }
 
@@ -84,10 +97,9 @@
 
   $: {
     const curOption: optionType = options.find((v) => v.text == internalValue)
-    console.log(curOption)
     if (curOption) {
       updateSpecificReadonly(curOption)
-      value = specificReadonly[name]
+      root[name] = specificReadonly[name]
       specificReadonly = specificReadonly
     }
   }
@@ -109,7 +121,7 @@
           class="input"
           type="text"
           list={listId}
-          value={internalValue}
+          bind:value={internalValue}
         />
         <datalist id={listId}>
           {#each options as opt}

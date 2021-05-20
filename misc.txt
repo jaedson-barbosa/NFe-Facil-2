@@ -12,8 +12,12 @@ serieNFCe // implementacao futura
   status //0-Aguardando analise/1-Acesso revogado/2-Acesso liberado/3-Administrador
   nome-email
   permissoes: visualizar-dados-base, visualizar-notas-emitidas, cadastrar-dados-base, emitir-notas
--dados:
-  idAux
+-clientes:
+  ...
+-motoristas:
+  ...
+-produtos:
+  ...
 -resumo-notas:
   serie
   nNF

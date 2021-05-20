@@ -1,29 +1,28 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
-  import { createId } from "./helpers";
+  import { createId } from './helpers'
 
-  export let el: any;
-  export let value: string = ''
+  export let el: any
+  export let root: any
 
-  function getOptions() {
+  function getOptions(el: any) {
     const enumeration = el.restriction?.enumeration as string | string[]
     if (typeof enumeration == 'string') {
-      return [{value: enumeration, text: enumeration}]
+      return [{ value: enumeration, text: enumeration }]
     }
     const descs = el.annotation.itens
-    return (enumeration as any[]).map((v, i) => {
+    return (enumeration as string[]).map((v, i) => {
+      if (v.startsWith('/')) {
+        return { value: v.slice(1), text: descs[i] }
+      }
       const text = descs ? v + ' - ' + descs[i] : v
       return { value: v, text }
     })
   }
-  const options = getOptions()
+  $: options = getOptions(el)
 
-  const {aux, label} = el.annotation
+  $: ({ aux, label } = el.annotation)
   const id = createId()
-  const required = !el.optional
-
-  const initialValue = value = required ? options[0].value : ''
-  onDestroy(() => value = initialValue)
+  $: required = !el.optional
 </script>
 
 <div class="field is-horizontal">
@@ -40,7 +39,7 @@
     <div class="field">
       <div class="control is-expanded">
         <div class="select is-fullwidth">
-          <select {id} bind:value={value} {required}>
+          <select {id} bind:value={root[el.name]} {required}>
             {#each options as opt}
               <option value={opt.value}>{opt.text}</option>
             {/each}

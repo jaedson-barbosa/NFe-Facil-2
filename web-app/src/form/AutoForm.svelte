@@ -9,71 +9,36 @@
   import Select from './formElements/Select.svelte'
   import Specific from './formElements/Specific.svelte'
   import Input from './formElements/Input.svelte'
+  import Choice from './formElements/Choice.svelte'
+  import Elements from './formElements/Elements.svelte'
 
-  let childSpecificReadonly: any
-  const childRoot = getNewRoot()
-  function getNewRoot() {
-    if (!root) return undefined
-    let els = el.element as any[]
-    if (!el.choice && !els) {
+  $: childRoot = getNewRoot(el, root)
+  function getNewRoot(el: any, root: any) {
+    if (!el.choice && !el.element) {
       const findType = (v: any) => v.name == el.type
       if (!el.restriction) {
         el.restriction = simpleType.find(findType)?.restriction
       }
       if (!el.restriction) {
-        els = el.element = complexType.find(findType).element
+        el.element = complexType.find(findType).element
       }
     }
-    if (els) {
-      const _munsUFs = ['xMun', 'cMun', 'cMunFG', 'cUF', 'UF']
-      const munsUFs = els
-        .filter((v) => _munsUFs.includes(v.name))
-        .filter((v) => {
-          const enumeration = v.restriction?.enumeration
-          return !enumeration || typeof enumeration != 'string'
-        })
-        .sort((a, b) =>
-          _munsUFs.indexOf(a.name) > _munsUFs.indexOf(b.name) ? 1 : -1
-        )
-      const _paises = ['cPais', 'xPais']
-      const paises = els
-        .filter((v) => _paises.includes(v.name))
-        .filter((v) => {
-          const enumeration = v.restriction?.enumeration
-          return !enumeration || typeof enumeration != 'string'
-        })
-        .sort((a, b) =>
-          _paises.indexOf(a.name) > _paises.indexOf(b.name) ? 1 : -1
-        )
-      const hasmunsUFs = munsUFs.length > 0
-      const hasPaises = paises.length > 0
-      if (hasmunsUFs && hasPaises) {
-        throw new Error('Paises e municipios habilitados ao mesmo tempo')
-      } else if (hasmunsUFs || hasPaises) {
-        const itens = hasmunsUFs ? munsUFs : paises
-        childSpecificReadonly = itens.reduce(
-          (p, c, i) => {
-            p[c.name] = i === 0 ? ' ' : ''
-            return p
-          },
-          { specific: itens[0].name }
-        )
-        console.info(childSpecificReadonly)
-      }
+    if (el.element || el.choice) {
       if (el.name) {
         const child = root[el.name] ?? {}
         return (root[el.name] = child)
       } else return root
     }
     root[el.name] = root[el.name] ?? ''
+    return root
   }
 
-  const { aux, label } = el.annotation
+  $: ({ aux, label } = el.annotation)
   let showElements = !el.optional
 
-  const name = el.name
-  const isConstant = typeof el.restriction?.enumeration == 'string'
-  const isPassiveSpecific =
+  $: name = el.name
+  $: isConstant = typeof el.restriction?.enumeration == 'string'
+  $: isPassiveSpecific =
     specificReadonly &&
     name in specificReadonly &&
     specificReadonly.specific != name
@@ -88,7 +53,7 @@
 
 {#if isConstant || isPassiveSpecific}
   <Readonly {el} value={root[el.name]} />
-{:else if el.element}
+{:else if el.choice || el.element}
   <div class="container content box">
     <div class="field is-horizontal">
       <div class="field-label" />
@@ -115,22 +80,19 @@
       </div>
     {/if}
     {#if showElements}
-      {#each el.element as childEl}
-        <svelte:self
-          el={childEl}
-          root={childRoot}
-          level={level + 2}
-          bind:specificReadonly={childSpecificReadonly}
-        />
-      {/each}
+      {#if el.element}
+        <Elements {childRoot} elements={el.element} level={level + 1} />
+      {:else}
+        <Choice {childRoot} choice={el.choice} level={level + 1} />
+      {/if}
     {/if}
     <slot />
   </div>
 {:else if root}
   {#if specificReadonly && specificReadonly[el.name]}
-    <Specific bind:value={root[el.name]} bind:specificReadonly {el} />
+    <Specific {root} bind:specificReadonly {el} />
   {:else if el.restriction?.enumeration}
-    <Select bind:value={root[el.name]} {el} />
+    <Select {root} {el} />
   {:else}
     <Input {root} {el} />
   {/if}

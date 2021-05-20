@@ -1,3 +1,19 @@
+import Mask from './mask'
+
+const config = {
+  cpf: [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/],
+  cnpj: [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/],
+  date: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/],
+  datetime: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/, ':', /\d/, /\d/],
+  time: [/\d/, /\d/, ':', /\d/, /\d/, ':', /\d/, /\d/],
+  zipcode: [/\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
+};
+const mask = new Mask(config);
+
+export function applyMask(text: string, maskName: 'cpf' | 'cnpj' | 'zipcode') {
+  return text ? mask.exec(text, maskName, '_') : ''
+}
+
 export function isCpfValid(cpf: string): boolean {
   const cpfLength = 11;
   const weights = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
