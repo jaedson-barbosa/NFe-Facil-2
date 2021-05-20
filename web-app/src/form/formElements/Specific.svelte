@@ -2,10 +2,11 @@
   import { createId } from './helpers'
   import { IBGE } from '../data/IBGE.json'
   import { paises } from '../data/paises.json'
+  import { onDestroy } from 'svelte';
 
   export let el: any
   export let root: any
-  export let specificReadonly: any
+  export let specificReadonly: string[]
 
   const ufTypeObj = IBGE[0]
   type ufType = typeof ufTypeObj
@@ -23,11 +24,8 @@
   const name = el.name as string
 
   function getOptions(): optionType[] {
-    const muns = ['xMun', 'cMun', 'cMunFG']
-    const ufs = ['cUF', 'UF']
-
     const isC = name.startsWith('c')
-    if (muns.includes(name)) {
+    if (['xMun', 'cMun', 'cMunFG'].includes(name)) {
       return IBGE.flatMap((v) =>
         v.Municipios.map((k) => {
           const text = isC
@@ -36,7 +34,7 @@
           return { uf: v, mun: k, text }
         })
       )
-    } else if (ufs.includes(name)) {
+    } else if (name == 'cUF' || name == 'UF') {
       return IBGE.map((v) => {
         const text = isC ? `${v.Codigo} (${v.Nome})` : v.Nome
         return { uf: v, text }
@@ -74,39 +72,38 @@
     }
   }
 
-  function updateSpecificReadonly(value: any) {
+  function updateValues(value: any) {
     if ('mun' in value) {
       const mun = value.mun
-      if ('xMun' in specificReadonly) specificReadonly.xMun = mun.Nome
-      if ('cMun' in specificReadonly) specificReadonly.cMun = mun.Codigo
-      if ('cMunFG' in specificReadonly) specificReadonly.cMunFG = mun.Codigo
+      if (specificReadonly.includes('xMun')) root.xMun = mun.Nome
+      if (specificReadonly.includes('cMun')) root.cMun = mun.Codigo
+      if (specificReadonly.includes('cMunFG')) root.cMunFG = mun.Codigo
     }
     if ('uf' in value) {
       const uf = value.uf
-      if ('cUF' in specificReadonly) specificReadonly.cUF = uf.Codigo
-      if ('UF' in specificReadonly) specificReadonly.UF = uf.Sigla
+      if (specificReadonly.includes('cUF')) root.cUF = uf.Codigo
+      if (specificReadonly.includes('UF')) root.UF = uf.Sigla
     }
     if ('pais' in value) {
       const pais = value.pais
-      if ('cPais' in specificReadonly) specificReadonly.cPais = pais.codigo
-      if ('xPais' in specificReadonly) specificReadonly.xPais = pais.nome
+      if (specificReadonly.includes('cPais')) root.cPais = pais.codigo
+      if (specificReadonly.includes('xPais')) root.xPais = pais.nome
     }
+    root = root
   }
 
   let internalValue = getInitialValue()
 
   $: {
     const curOption: optionType = options.find((v) => v.text == internalValue)
-    if (curOption) {
-      updateSpecificReadonly(curOption)
-      root[name] = specificReadonly[name]
-      specificReadonly = specificReadonly
-    }
+    if (curOption) updateValues(curOption)
   }
 
   const { aux, label } = el.annotation
   const id = createId()
   const listId = createId()
+
+  onDestroy(() => delete(root[el.name]))
 </script>
 
 <div class="field is-horizontal">

@@ -49,7 +49,7 @@ export default onDefaultRequest(true, async (user, res, body) => {
       CNPJ: cnpj,
       xNome: certParts[0]
     },
-    serieAtual: 1
+    serieNFe: "1"
   })
   await empresaRef.collection('usuarios').doc(user.sub).set({
     status: 3,

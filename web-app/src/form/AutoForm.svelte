@@ -2,7 +2,7 @@
   export let el: any
   export let root: any
   export let level: number = 3
-  export let specificReadonly: any
+  export let specificReadonly: string[] = []
 
   import { complexType, simpleType } from './data/nfe.json'
   import Readonly from './formElements/Readonly.svelte'
@@ -12,8 +12,7 @@
   import Choice from './formElements/Choice.svelte'
   import Elements from './formElements/Elements.svelte'
 
-  $: childRoot = getNewRoot(el, root)
-  function getNewRoot(el: any, root: any) {
+  $: {
     if (!el.choice && !el.element) {
       const findType = (v: any) => v.name == el.type
       if (!el.restriction) {
@@ -23,36 +22,17 @@
         el.element = complexType.find(findType).element
       }
     }
-    if (el.element || el.choice) {
-      if (el.name) {
-        const child = root[el.name] ?? {}
-        return (root[el.name] = child)
-      } else return root
-    }
-    root[el.name] = root[el.name] ?? ''
-    return root
   }
 
   $: ({ aux, label } = el.annotation)
   let showElements = !el.optional
 
-  $: name = el.name
   $: isConstant = typeof el.restriction?.enumeration == 'string'
-  $: isPassiveSpecific =
-    specificReadonly &&
-    name in specificReadonly &&
-    specificReadonly.specific != name
-  $: {
-    if (isConstant) {
-      root[name] = el.restriction?.enumeration
-    } else if (isPassiveSpecific) {
-      root[name] = specificReadonly[name]
-    }
-  }
+  $: specificIndex = specificReadonly.indexOf(el.name)
 </script>
 
-{#if isConstant || isPassiveSpecific}
-  <Readonly {el} value={root[el.name]} />
+{#if isConstant || specificIndex > 0}
+  <Readonly {el} {root} />
 {:else if el.choice || el.element}
   <div class="container content box">
     <div class="field is-horizontal">
@@ -81,16 +61,16 @@
     {/if}
     {#if showElements}
       {#if el.element}
-        <Elements {childRoot} elements={el.element} level={level + 1} />
+        <Elements {el} level={level + 1} {root} />
       {:else}
-        <Choice {childRoot} choice={el.choice} level={level + 1} />
+        <Choice {el} level={level + 1} {root} />
       {/if}
     {/if}
     <slot />
   </div>
 {:else if root}
-  {#if specificReadonly && specificReadonly[el.name]}
-    <Specific {root} bind:specificReadonly {el} />
+  {#if specificIndex == 0}
+    <Specific bind:root bind:specificReadonly {el} />
   {:else if el.restriction?.enumeration}
     <Select {root} {el} />
   {:else}

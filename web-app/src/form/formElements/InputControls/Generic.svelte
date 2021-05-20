@@ -54,6 +54,7 @@
   maxlength={restriction.maxLength}
   {type}
   {value}
+  on:blur={e => value = e.currentTarget.value}
 />
 
 <!-- on:focus={e => e.currentTarget.value = value}

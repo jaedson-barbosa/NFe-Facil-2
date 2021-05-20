@@ -1,11 +1,20 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import { createId } from './helpers'
 
   export let el: any
-  export let value: string
+  export let root: any
+
+  $: {
+    const enumeration = el.restriction?.enumeration
+    if (typeof enumeration == 'string') root[el.name] = enumeration
+    else root[el.name] = ''
+  }
 
   const { aux, label } = el.annotation
   const id = createId()
+
+  onDestroy(() => delete(root[el.name]))
 </script>
 
 <div class="field is-horizontal">
@@ -19,7 +28,7 @@
           {id}
           class="input is-static"
           type="text"
-          {value}
+          value={root[el.name]}
           readonly
         />
       </div>

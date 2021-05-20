@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import { createId } from './helpers'
 
   export let el: any
   export let root: any
+  $: { if (!root[el.name]) root[el.name] = '' }
 
   function getOptions(el: any) {
     const enumeration = el.restriction?.enumeration as string | string[]
@@ -23,6 +25,8 @@
   $: ({ aux, label } = el.annotation)
   const id = createId()
   $: required = !el.optional
+
+  onDestroy(() => delete(root[el.name]))
 </script>
 
 <div class="field is-horizontal">

@@ -3,8 +3,10 @@
   import Elements from './Elements.svelte'
 
   export let level: number = 3
-  export let childRoot: any
-  export let choice: any
+  export let root: any
+  export let el: any
+
+  $: choice = el.choice
 
   $: infoType = {
     name: 'currentType',
@@ -13,14 +15,12 @@
       aux: choice.annotation?.aux ?? '',
       itens: choice.element.map(v => v.annotation.label)
     },
-    restriction: { enumeration: choice?.element.map((_,i) => '/' + i.toString()) }
+    restriction: { enumeration: choice?.element.map((_,i) => `/${i}`) }
   }
 
-  let params = {
-    currentType: '0'
-  }
-  $: elements = choice.element[+params.currentType].element
+  let params = { currentType: '0' }
+  $: elements = {name: el.name, ...choice.element[+params.currentType]}
 </script>
 
 <Select bind:root={params} el={infoType} />
-<Elements {childRoot} {elements} {level} />
+<Elements {root} {level} el={elements} />
