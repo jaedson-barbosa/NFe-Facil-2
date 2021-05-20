@@ -5416,9 +5416,9 @@
               "annotation": { "label": "Dados do transportador" },
               "element": [
                 {
+                  "annotation": { "label": "Documento usado" },
+                  "optional": true,
                   "choice": {
-                    "annotation": { "label": "Documento usado" },
-                    "optional": true,
                     "element": [
                       {
                         "name": "CNPJ",

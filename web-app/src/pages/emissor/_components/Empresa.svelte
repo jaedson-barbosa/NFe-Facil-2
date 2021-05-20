@@ -18,22 +18,14 @@
     <td>
       <div class="buttons">
         <a
-          class="button"
           href={$url('../cadastro/:idEmpresa', {
             idEmpresa: cad.parentId,
           })}
         >
-          <span class="icon is-small">
-            <i class="fas fa-edit" />
-          </span>
+          Editar
         </a>
-        <a
-          class="button"
-          href={$url('../:idEmpresa', { idEmpresa: cad.parentId })}
-        >
-          <span class="icon is-small">
-            <i class="fas fa-sign-in-alt" />
-          </span>
+        <a href={$url('../:idEmpresa', { idEmpresa: cad.parentId })}>
+          Entrar
         </a>
       </div>
     </td>

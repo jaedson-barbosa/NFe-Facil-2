@@ -1,6 +1,7 @@
 <script lang="ts">
   import Select from './Select.svelte'
   import Elements from './Elements.svelte'
+  import AutoForm from '@form/AutoForm.svelte'
 
   export let level: number = 3
   export let root: any
@@ -18,7 +19,7 @@
     restriction: { enumeration: choice?.element.map((_, i) => `/${i}`) },
   }
 
-  const elements = el.choice.element.map((v) => {
+  const elements = (el.choice.element as any[]).map((v) => {
     return { name: el.name, ...v }
   })
 
@@ -77,6 +78,10 @@
 <Select bind:root={params} el={infoType} />
 {#each elements as elChild, i (elChild)}
   {#if i == currentIndex}
+    {#if elChild.element}
     <Elements {root} {level} el={elChild} />
+    {:else}
+    <AutoForm {root} {level} el={elChild} />
+    {/if}
   {/if}
 {/each}

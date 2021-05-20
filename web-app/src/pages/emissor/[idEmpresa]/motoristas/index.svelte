@@ -13,26 +13,21 @@
     const queryCol = db
       .collection('empresas')
       .doc(idEmpresa)
-      .collection('clientes')
+      .collection('motoristas')
     const queryResult = await queryCol
-      .where('dest.xNome', '>=', busca)
+      .where('transporta.xNome', '>=', busca)
       .where(
-        'dest.xNome',
+        'transporta.xNome',
         '<',
         busca.replace(/.$/, (c) => String.fromCharCode(c.charCodeAt(0) + 1))
       )
       .limit(20)
       .get()
     cadastros = queryResult.docs.map((v) => {
-      let doc =
-        v.get('dest.CPF') ?? v.get('dest.CNPJ') ?? v.get('dest.idEstrangeiro')
+      let doc = v.get('transporta.CPF') ?? v.get('transporta.CNPJ') ?? ''
       if (doc.length == 14) doc = applyMask(doc, 'cnpj')
       if (doc.length == 11) doc = applyMask(doc, 'cpf')
-      return {
-        id: v.id,
-        doc,
-        nome: v.get('dest.xNome'),
-      }
+      return { id: v.id, doc, nome: v.get('transporta.xNome') }
     })
     loading = false
   }

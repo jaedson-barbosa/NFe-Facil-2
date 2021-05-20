@@ -15,7 +15,7 @@
       await db
         .collection('empresas')
         .doc(idEmpresa)
-        .collection('clientes')
+        .collection('motoristas')
         .add(root)
       $goto('../')
     } catch (error) {
@@ -23,12 +23,15 @@
       loading = false
     }
   }
+
+  const motObrigatorio = elementosNFe[8]['element'][1]
+  motObrigatorio.optional = false
 </script>
 
 {@debug root}
 <form on:submit|preventDefault={salvar}>
   <fieldset disabled={loading}>
-    <AutoForm el={elementosNFe[2]} {root}>
+    <AutoForm el={motObrigatorio} {root}>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
           <button class="button is-primary" class:is-loading={loading}>

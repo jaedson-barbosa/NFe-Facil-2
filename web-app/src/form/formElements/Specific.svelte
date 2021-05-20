@@ -101,11 +101,18 @@
   const { aux, label } = el.annotation
   const id = createId()
   const listId = createId()
+  $: required = !el.optional
 </script>
 
 <div class="field is-horizontal">
   <div class="field-label is-normal">
-    <label class="label" for={id}>{label}</label>
+    <label class="label" for={id}>
+      {#if required}
+        {label}
+      {:else}
+        <i>{label}</i>
+      {/if}
+    </label>
   </div>
   <div class="field-body">
     <div class="field">
