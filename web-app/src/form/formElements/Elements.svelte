@@ -26,6 +26,8 @@
     return [...munsUFs, ...paises]
   }
 
+  let showElements = !el.optional || root[el.name]
+
   $: specificReadonly = getSpecificReadonly(el.element)
   let childRoot = el.name
     ? typeof root[el.name] == 'object'
@@ -35,7 +37,6 @@
   $: {
     if (!el.name) alert('Sem nome')
   }
-  let showElements = !el.optional || root[el.name]
 </script>
 
 {#if el.optional}

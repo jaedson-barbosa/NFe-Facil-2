@@ -31,7 +31,7 @@
     return { name: el.name, ...v }
   })
 
-  let params = { currentType: '0' }
+  let params = { currentType: el.optional? '-1' : '0' }
   let lastIndex = -1
 
   const curRoot = el.name ? root[el.name] ?? {} : root

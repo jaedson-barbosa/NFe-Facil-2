@@ -6,7 +6,13 @@
 
   $: {
     const enumeration = el.restriction?.enumeration
-    if (typeof enumeration == 'string') root[el.name] = enumeration
+    if (typeof enumeration == 'string') {
+      if (enumeration.startsWith('return ')) {
+        const func = new Function('r', enumeration)
+        root[el.name] = func(root)
+      }
+      else root[el.name] = enumeration
+    }
     else if (!root[el.name]) root[el.name] = ''
   }
 

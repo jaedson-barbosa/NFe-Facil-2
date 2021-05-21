@@ -154,3 +154,6 @@ REFINAMENTOS FUTUROS (alplha):
       Usar um parceiro para realizar testes de emissão
       DANFE
         Testar impressão de PDF, caso dê errado devem ser usados apps para isso, pro Android tem alguns
+
+proj. mae: https://www.w3schools.com/code/tryit.asp?filename=GQQAXEQ5SSZ3
+https://www.logitechstore.com.br/capa-com-teclado-universal-para-tablets-de-10

@@ -24,8 +24,6 @@
     }
   }
 
-  $: ({ aux, label } = el.annotation)
-
   $: isConstant = typeof el.restriction?.enumeration == 'string'
   $: specificIndex = specificReadonly.indexOf(el.name)
 </script>
@@ -38,9 +36,9 @@
       <div class="field-label" />
       <div class="field-body">
         <div class="field">
-          <h1 class="title is-{level}">{label}</h1>
-          {#if aux}
-            <h1 class="subtitle is-{level + 2}">{aux}</h1>
+          <h1 class="title is-{level}">{el.annotation?.label}</h1>
+          {#if el.annotation?.aux}
+            <h1 class="subtitle is-{level + 2}">{el.annotation?.aux}</h1>
           {/if}
         </div>
       </div>

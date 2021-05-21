@@ -661,7 +661,10 @@
           "element": [
             {
               "name": "nItem",
-              "annotation": { "label": "Número do item do NF" },
+              "annotation": {
+                "label": "Número do item na NF",
+                "aux": "Valor gerenciado pelo emissor"
+              },
               "restriction": { "enumeration": "0" }
             },
             {
@@ -749,8 +752,8 @@
                 },
                 {
                   "name": "vProd",
-                  "type": "TDec_1302",
-                  "annotation": { "label": "Valor bruto do produto ou serviço" }
+                  "annotation": { "label": "Valor bruto do produto ou serviço" },
+                  "restriction": { "enumeration": "return (+r.qCom * +r.vUnCom).toFixed(2)" }
                 },
                 {
                   "name": "cEANTrib",
@@ -1114,11 +1117,11 @@
                   ]
                 },
                 {
+                  "annotation": {
+                    "label": "Informações específicas de produtos e serviços"
+                  },
+                  "optional": true,
                   "choice": {
-                    "optional": true,
-                    "annotation": {
-                      "label": "Informações específicas de produtos e serviços"
-                    },
                     "element": [
                       {
                         "name": "veicProd",
