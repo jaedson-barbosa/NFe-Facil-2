@@ -24,15 +24,20 @@
       .limit(20)
       .get()
     cadastros = queryResult.docs.map((v) => {
-      let doc =
-        v.get('dest.CPF') ?? v.get('dest.CNPJ') ?? v.get('dest.idEstrangeiro')
-      if (doc.length == 14) doc = applyMask(doc, 'cnpj')
-      if (doc.length == 11) doc = applyMask(doc, 'cpf')
-      return {
-        id: v.id,
-        doc,
-        nome: v.get('dest.xNome'),
+      let doc = ''
+      if (!doc) {
+        const cpf = v.get('dest.CPF')
+        if (cpf) doc = applyMask(cpf, 'cpf')
       }
+      if (!doc) {
+        const cnpj = v.get('dest.CNPJ')
+        if (cnpj) doc = applyMask(cnpj, 'cnpj')
+      }
+      if (!doc) {
+        const idEstrangeiro = v.get('dest.idEstrangeiro')
+        if (idEstrangeiro) doc = idEstrangeiro
+      }
+      return { id: v.id, doc, nome: v.get('dest.xNome') }
     })
     loading = false
   }

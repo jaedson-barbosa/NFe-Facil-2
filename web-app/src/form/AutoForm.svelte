@@ -25,7 +25,6 @@
   }
 
   $: ({ aux, label } = el.annotation)
-  let showElements = !el.optional
 
   $: isConstant = typeof el.restriction?.enumeration == 'string'
   $: specificIndex = specificReadonly.indexOf(el.name)
@@ -46,25 +45,10 @@
         </div>
       </div>
     </div>
-    {#if el.optional}
-      <div class="field is-horizontal">
-        <div class="field-label" />
-        <div class="field-body">
-          <div class="field">
-            <label class="checkbox">
-              <input type="checkbox" bind:checked={showElements} />
-              Informar campo opcional
-            </label>
-          </div>
-        </div>
-      </div>
-    {/if}
-    {#if showElements}
-      {#if el.element}
-        <Elements {el} level={level + 1} {root} />
-      {:else}
-        <Choice {el} level={level + 1} {root} />
-      {/if}
+    {#if el.element}
+      <Elements {el} level={level + 1} {root} />
+    {:else}
+      <Choice {el} level={level + 1} {root} />
     {/if}
     <slot />
   </div>

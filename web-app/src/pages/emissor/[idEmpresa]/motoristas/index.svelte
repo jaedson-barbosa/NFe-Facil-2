@@ -24,9 +24,15 @@
       .limit(20)
       .get()
     cadastros = queryResult.docs.map((v) => {
-      let doc = v.get('transporta.CPF') ?? v.get('transporta.CNPJ') ?? ''
-      if (doc.length == 14) doc = applyMask(doc, 'cnpj')
-      if (doc.length == 11) doc = applyMask(doc, 'cpf')
+      let doc = ''
+      if (!doc) {
+        const cpf = v.get('transporta.CPF')
+        if (cpf) doc = applyMask(cpf, 'cpf')
+      }
+      if (!doc) {
+        const cnpj = v.get('transporta.CNPJ')
+        if (cnpj) doc = applyMask(cnpj, 'cnpj')
+      }
       return { id: v.id, doc, nome: v.get('transporta.xNome') }
     })
     loading = false

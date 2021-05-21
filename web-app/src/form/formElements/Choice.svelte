@@ -14,9 +14,17 @@
     annotation: {
       label: choice.annotation?.label ?? '',
       aux: choice.annotation?.aux ?? '',
-      itens: choice.element.map((v) => v.annotation.label),
+      itens: [
+        ...(el.optional ? ['Não informar'] : []),
+        ...choice.element.map((v) => v.annotation.label),
+      ],
     },
-    restriction: { enumeration: choice?.element.map((_, i) => `/${i}`) },
+    restriction: {
+      enumeration: [
+        ...(el.optional ? ['/-1'] : []),
+        ...choice?.element.map((_, i) => `/${i}`),
+      ],
+    },
   }
 
   const elements = (el.choice.element as any[]).map((v) => {
@@ -32,22 +40,22 @@
     if (v.name) {
       if (el.name) return !!curRoot[v.name]
       else return !!(root[v.name] = root[v.name] ?? '')
-    }
-    else return v.element.every((k) => {
-      if (el.name) return !!curRoot[k.name] || !!k.optional
-      else {
-        if (root[k.name]) {
-          const curEnum = k.restriction?.enumeration
-          if (curEnum && typeof curEnum == 'string') {
-            return curEnum == root[k.name]
-          } else if (curEnum) {
-            return curEnum.includes(root[k.name])
-          } else return true
+    } else
+      return v.element.every((k) => {
+        if (el.name) return !!curRoot[k.name] || !!k.optional
+        else {
+          if (root[k.name]) {
+            const curEnum = k.restriction?.enumeration
+            if (curEnum && typeof curEnum == 'string') {
+              return curEnum == root[k.name]
+            } else if (curEnum) {
+              return curEnum.includes(root[k.name])
+            } else return true
+          }
+          root[k.name] = ''
+          return !!k.optional
         }
-        root[k.name] = ''
-        return !!k.optional
-      }
-    })
+      })
   })
   const firstIndex = els.indexOf(true)
   if (firstIndex == els.lastIndexOf(true)) {
@@ -76,12 +84,14 @@
 </script>
 
 <Select bind:root={params} el={infoType} />
-{#each elements as elChild, i (elChild)}
-  {#if i == currentIndex}
-    {#if elChild.element}
-    <Elements {root} {level} el={elChild} />
-    {:else}
-    <AutoForm {root} {level} el={elChild} />
+{#if currentIndex != -1}
+  {#each elements as elChild, i (elChild)}
+    {#if i == currentIndex}
+      {#if elChild.element}
+        <Elements {root} {level} el={elChild} />
+      {:else}
+        <AutoForm {root} {level} el={elChild} />
+      {/if}
     {/if}
-  {/if}
-{/each}
+  {/each}
+{/if}

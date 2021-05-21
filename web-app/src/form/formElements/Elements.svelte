@@ -32,8 +32,27 @@
       ? root[el.name]
       : (root[el.name] = {})
     : root
+  $: {
+    if (!el.name) alert('Sem nome')
+  }
+  let showElements = !el.optional || root[el.name]
 </script>
 
-{#each el.element as childEl}
-  <AutoForm el={childEl} bind:root={childRoot} {level} {specificReadonly} />
-{/each}
+{#if el.optional}
+  <div class="field is-horizontal">
+    <div class="field-label" />
+    <div class="field-body">
+      <div class="field">
+        <label class="checkbox">
+          <input type="checkbox" bind:checked={showElements} />
+          Informar campo opcional
+        </label>
+      </div>
+    </div>
+  </div>
+{/if}
+{#if showElements}
+  {#each el.element as childEl}
+    <AutoForm el={childEl} bind:root={childRoot} {level} {specificReadonly} />
+  {/each}
+{/if}
