@@ -1,7 +1,13 @@
 <script lang="ts">
   export let el: any
   export let id: string
-  export let value: string
+  export let root: any
+  let value = root[el.name]
+
+  $: {
+    root[el.name] = value ?? (value = '')
+    root = root
+  }
 
   const restriction = el.restriction as {
     pattern?: string

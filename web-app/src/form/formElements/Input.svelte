@@ -5,7 +5,6 @@
 
   export let el: any
   export let root: any
-  $: { if (typeof root[el.name] != 'string') root[el.name] = '' }
 
   $: ({ aux, label } = el.annotation)
   const id = createId()
@@ -25,9 +24,9 @@
     <div class="field">
       <div class="control is-expanded">
         {#if el.restriction.decimal}
-          <Decimal {el} {id} bind:value={root[el.name]} />
+          <Decimal {el} {id} bind:root />
         {:else}
-          <Generic {el} {id} bind:value={root[el.name]} />
+          <Generic {el} {id} bind:root />
         {/if}
       </div>
       {#if aux}

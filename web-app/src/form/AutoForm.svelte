@@ -56,6 +56,6 @@
   {:else if el.restriction?.enumeration}
     <Select {root} {el} />
   {:else}
-    <Input {root} {el} />
+    <Input bind:root {el} />
   {/if}
 {/if}
