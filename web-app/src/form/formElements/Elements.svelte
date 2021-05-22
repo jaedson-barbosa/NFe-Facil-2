@@ -26,7 +26,7 @@
     return [...munsUFs, ...paises]
   }
 
-  let showElements = !el.optional || root[el.name]
+  let showElements = !el.optional || (el.name && root[el.name])
 
   $: specificReadonly = getSpecificReadonly(el.element)
   let childRoot = el.name
@@ -34,9 +34,6 @@
       ? root[el.name]
       : (root[el.name] = {})
     : root
-  $: {
-    if (!el.name) alert('Sem nome')
-  }
 </script>
 
 {#if el.optional}

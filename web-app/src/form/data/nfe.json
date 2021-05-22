@@ -2359,8 +2359,8 @@
                   ]
                 },
                 {
+                  "annotation": { "label": "Tipo de tributação" },
                   "choice": {
-                    "annotation": { "label": "Tipo de tributação" },
                     "element": [
                       {
                         "annotation": { "label": "Tributação para produtos" },
@@ -2377,6 +2377,7 @@
                                   "annotation": {
                                     "label": "Tributado integralmente"
                                   },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -2462,6 +2463,7 @@
                                   "annotation": {
                                     "label": "Tributado e com cobrança do ICMS por substituição tributária"
                                   },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -2644,6 +2646,7 @@
                                   "annotation": {
                                     "label": "Tributção com redução de base de cálculo"
                                   },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -2768,6 +2771,7 @@
                                   "annotation": {
                                     "label": "Isenta ou não tributada e com cobrança do ICMS por substituição tributária"
                                   },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -2914,6 +2918,7 @@
                                   "annotation": {
                                     "label": "Isenta, não tributada ou suspensa"
                                   },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -3000,6 +3005,7 @@
                                 {
                                   "name": "ICMS51",
                                   "annotation": { "label": "Diferimento" },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -3125,6 +3131,7 @@
                                   "annotation": {
                                     "label": "ICMS cobrado anteriormente por substituição tributária"
                                   },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -3248,6 +3255,7 @@
                                   "annotation": {
                                     "label": "Tributação com redução de base de cálculo e cobrança do ICMS por ST"
                                   },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -3462,6 +3470,7 @@
                                   "annotation": {
                                     "label": "Tributação pelo ICMS\n90 - Outras"
                                   },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -3693,6 +3702,7 @@
                                     "label": "Partilha do ICMS entre a UF de origem e UF de destino ou a UF definida na legislação",
                                     "aux": "Operação interestadual para consumidor final com partilha do ICMS  devido na operação entre a UF de origem e a UF do destinatário ou ou a UF definida na legislação. (Ex. UF da concessionária de entrega do  veículos)"
                                   },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -3848,6 +3858,7 @@
                                     "label": "Repasse via Substituto Tributário",
                                     "aux": "Informação do ICMSST para a UF de destino, nas operações interestaduais de produtos que tiveram retenção antecipada de ICMS por ST na UF do remetente"
                                   },
+                                  "custom": "isNormal",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -3984,6 +3995,7 @@
                                   "annotation": {
                                     "label": "Tributado com permissão de crédito"
                                   },
+                                  "custom": "isSimples",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -4026,6 +4038,7 @@
                                 {
                                   "name": "ICMSSN102",
                                   "annotation": { "label": "Sem tributação" },
+                                  "custom": "isSimples",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -4068,6 +4081,7 @@
                                   "annotation": {
                                     "label": "Tributada com permissão de crédito e com cobrança por ST"
                                   },
+                                  "custom": "isSimples",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -4201,6 +4215,7 @@
                                   "annotation": {
                                     "label": "Tributada sem permissão de crédito ou isenta e com cobrança por ST"
                                   },
+                                  "custom": "isSimples",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -4326,6 +4341,7 @@
                                   "annotation": {
                                     "label": "Cobrado anteriormente por ST ou por antecipação"
                                   },
+                                  "custom": "isSimples",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -4451,6 +4467,7 @@
                                 {
                                   "name": "ICMSSN900",
                                   "annotation": { "label": "Outros" },
+                                  "custom": "isSimples",
                                   "element": [
                                     {
                                       "name": "orig",
@@ -5080,12 +5097,12 @@
                 },
                 {
                   "name": "IPI",
-                  "annotation": { "label": "Informação de IPI devolvido" },
+                  "annotation": { "label": "Informação do IPI devolvido" },
                   "element": [
                     {
                       "name": "vIPIDevol",
                       "type": "TDec_1302",
-                      "annotation": { "label": "Valor do IPI devolvido" }
+                      "annotation": { "label": "Valor" }
                     }
                   ]
                 }

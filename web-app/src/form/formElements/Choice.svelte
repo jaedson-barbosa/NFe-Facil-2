@@ -1,3 +1,10 @@
+<script context="module">
+  const custom = {
+    isSimples: true,
+    isNormal: false
+  }
+</script>
+
 <script lang="ts">
   import Select from './Select.svelte'
   import Elements from './Elements.svelte'
@@ -7,22 +14,25 @@
   export let root: any
   export let el: any
 
-  $: choice = el.choice
+  el.choice.element = el.choice.element.filter(v => {
+    if (v.custom) return custom[v.custom]
+    return true
+  })
 
   $: infoType = {
     name: 'currentType',
     annotation: {
-      label: choice.annotation?.label ?? '',
-      aux: choice.annotation?.aux ?? '',
+      label: el.choice.annotation?.label ?? '',
+      aux: el.choice.annotation?.aux ?? '',
       itens: [
         ...(el.optional ? ['Não informar'] : []),
-        ...choice.element.map((v) => v.annotation.label),
+        ...el.choice.element.map((v) => v.annotation.label),
       ],
     },
     restriction: {
       enumeration: [
         ...(el.optional ? ['/-1'] : []),
-        ...choice?.element.map((_, i) => `/${i}`),
+        ...el.choice.element.map((_, i) => `/${i}`),
       ],
     },
   }
