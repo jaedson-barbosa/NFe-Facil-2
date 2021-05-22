@@ -23,7 +23,7 @@
       loading = false
     }
   }
-//Correção no valor total e ver se é possível simplificar mais alguma coisa na interface
+
   const detUnico = elementosNFe[6] as any
   detUnico.maxOccurs = 1
   detUnico.annotation.label = "Informações do produto"

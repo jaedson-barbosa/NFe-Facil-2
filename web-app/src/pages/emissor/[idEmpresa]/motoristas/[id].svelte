@@ -11,16 +11,16 @@
   let loading = false
 
   async function carregar() {
-    const cliente = await db
+    const mot = await db
       .collection('empresas')
       .doc(idEmpresa)
       .collection('motoristas')
       .doc(id)
       .get()
-    if (!cliente.exists) {
+    if (!mot.exists) {
       throw new Error('Id não reconhecido.')
     }
-    return cliente.data()
+    return mot.data()
   }
 
   async function salvar(root: any) {

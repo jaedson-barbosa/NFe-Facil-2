@@ -14,16 +14,16 @@
       .doc(idEmpresa)
       .collection('produtos')
     const queryResult = await queryCol
-      .where('prod.xProd', '>=', busca)
+      .where('det.prod.xProd', '>=', busca)
       .where(
-        'prod.xProd',
+        'det.prod.xProd',
         '<',
         busca.replace(/.$/, (c) => String.fromCharCode(c.charCodeAt(0) + 1))
       )
       .limit(20)
       .get()
     cadastros = queryResult.docs.map((v) => {
-      return { id: v.id, cod: v.get('prod.cProd'), desc: v.get('prod.xProd') }
+      return { id: v.id, cod: v.get('det.prod.cProd'), desc: v.get('det.prod.xProd') }
     })
     loading = false
   }
