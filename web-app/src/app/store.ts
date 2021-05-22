@@ -9,7 +9,7 @@ function createUser() {
 
 	return {
 		subscribe,
-		signIn: () => auth.signInWithPopup(googleProvider),
+		signIn: () => auth.signInAnonymously(), //auth.signInWithPopup(googleProvider),
 		signOut: () => auth.signOut()
 	};
 }

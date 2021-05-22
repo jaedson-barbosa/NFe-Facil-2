@@ -49,7 +49,7 @@ OK  Cadastro de emitentes
       Produtos
       Clientes
       Motoristas
-    Tipos de ICMS de acordo com o regime do emitente
+OK  Tipos de ICMS de acordo com o regime do emitente
     Importação
       Lado Cliente
       Lado servidor
@@ -70,45 +70,21 @@ OK  Cadastro de emitentes
     Sincronização
       Servidor
       Cliente
-    Verificar esse detalhe do xs:attribute
+    Criar sistema de customização (em choice tem um estatico)
 
 BASE para emissão de NFe:
-    Fragmentar form-base.ts em varios arquivos em uma pasta
-    Limpar pasta PL_009
-    Limpar pasta base-data
-    Remover pasta VM
-    Corrigir documentações no schema json e unir os 2 num único
-    Remover tag complexType
-    Remover tag sequence
-    Aplicar novidades do nfe.json ao form-base
-    Passar custom headers para o nfe.json
-    Atualizar entradas para que tenham o tipo correto
-    Remover getName
     Proibir o uso de emitente com CPF
       Via cadastro
       Via importação (restringido para emitente logado)
-    Corrigir erro em Grupo de informações de interesse da Prefeitura
-    Corrigir erro na edição de dados
-    Corrigir erro de adição em listas
-    Corrigir erro de clonagem
     Analisar elementos já salvos na importação
-    Aperfeiçoar caixa de dialogo de nota fiscal
-    Refinar sincronização
-      Enviar elementos antes pra nuvem
-      Remover geração de ID de item local
-    Remover temporariamente edição de emitente
     Evento de cancelamento
       Geração
       Exibição de status
-    Escondem nItem da nfe
-    Testar firebase, parcel e DANFE no linux
-    Cadastro via importação
-    CNPJ e CPF não podem ter input de number (podem ter 0 à esquerda)
-    Substituir processamento de importação no server por:
-      Processamento no cliente com análises de dados já cadastrados
-      Cadastramento em massa no servidor (que não analisa dados já cadastrados)
     Implementar cálculo de totais
-    Analisar se já está usável eu se puxa mais alguns refinamentos
+    Proteger certificado com senha (armazenada ou não no dspositivo do cliente)
+    Estudar uso de https://nodejs.org/api/crypto.html no lugar de node-forge
+    Avaliar talvez só guardar a chave private e obter a publica a partir dela
+    Analisar se já está usável ou se puxa mais alguns refinamentos
 
 MODERNIZAÇÃO
     Adicionar Svelte
@@ -156,4 +132,7 @@ REFINAMENTOS FUTUROS (alplha):
         Testar impressão de PDF, caso dê errado devem ser usados apps para isso, pro Android tem alguns
 
 proj. mae: https://www.w3schools.com/code/tryit.asp?filename=GQQAXEQ5SSZ3
-https://www.logitechstore.com.br/capa-com-teclado-universal-para-tablets-de-10
+
+Observações:  
+ISSQN limitado para o ambiente nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
+

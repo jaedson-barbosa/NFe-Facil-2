@@ -44,9 +44,9 @@
       </div>
     </div>
     {#if el.element}
-      <Elements {el} level={level + 1} {root} />
+      <Elements {el} level={level + 1} bind:root />
     {:else}
-      <Choice {el} level={level + 1} {root} />
+      <Choice {el} level={level + 1} bind:root />
     {/if}
     <slot />
   </div>
@@ -54,7 +54,7 @@
   {#if specificIndex == 0}
     <Specific bind:root bind:specificReadonly {el} />
   {:else if el.restriction?.enumeration}
-    <Select {root} {el} />
+    <Select bind:root {el} />
   {:else}
     <Input bind:root {el} />
   {/if}

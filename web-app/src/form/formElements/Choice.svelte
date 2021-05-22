@@ -1,7 +1,7 @@
 <script context="module">
   const custom = {
     isSimples: true,
-    isNormal: false
+    isNormal: false,
   }
 </script>
 
@@ -14,7 +14,7 @@
   export let root: any
   export let el: any
 
-  el.choice.element = el.choice.element.filter(v => {
+  const elements = (el.choice.element as any[]).filter((v) => {
     if (v.custom) return custom[v.custom]
     return true
   })
@@ -26,71 +26,61 @@
       aux: el.choice.annotation?.aux ?? '',
       itens: [
         ...(el.optional ? ['Não informar'] : []),
-        ...el.choice.element.map((v) => v.annotation.label),
+        ...elements.map((v) => v.annotation.label),
       ],
     },
     restriction: {
       enumeration: [
         ...(el.optional ? ['/-1'] : []),
-        ...el.choice.element.map((_, i) => `/${i}`),
+        ...elements.map((_, i) => `/${i}`),
       ],
     },
   }
 
-  const elements = (el.choice.element as any[]).map((v) => {
-    return { name: el.name, ...v }
-  })
+  let iRoot = el.name ? (root[el.name] = root[el.name] ?? {}) : root
 
-  let params = { currentType: el.optional? '-1' : '0' }
-  let lastIndex = -1
-
-  const curRoot = el.name ? root[el.name] ?? {} : root
-
-  const els = (el.choice.element as any[]).map((v) => {
-    if (v.name) {
-      if (el.name) return !!curRoot[v.name]
-      else return !!(root[v.name] = root[v.name] ?? '')
-    } else
-      return v.element.every((k) => {
-        if (el.name) return !!curRoot[k.name] || !!k.optional
-        else {
-          if (root[k.name]) {
+  const initialIndex = elements.findIndex((v) => {
+    return v.name
+      ? !!iRoot[v.name]
+      : v.element.every((k: any) => {
+          if (iRoot[k.name]) {
             const curEnum = k.restriction?.enumeration
-            if (curEnum && typeof curEnum == 'string') {
-              return curEnum == root[k.name]
-            } else if (curEnum) {
-              return curEnum.includes(root[k.name])
-            } else return true
+            return curEnum
+              ? typeof curEnum == 'string'
+                ? curEnum == iRoot[k.name]
+                : curEnum.includes(iRoot[k.name])
+              : true
           }
-          root[k.name] = ''
           return !!k.optional
-        }
-      })
+        })
   })
-  const firstIndex = els.indexOf(true)
-  if (firstIndex == els.lastIndexOf(true)) {
-    if (firstIndex != -1) {
-      params.currentType = firstIndex.toString()
-    }
-  } else {
-    console.log(el)
-    throw new Error('Multiple valid itens')
+  let params = {
+    currentType:
+      initialIndex != -1 ? initialIndex.toString() : el.optional ? '-1' : '0',
   }
 
   $: currentIndex = +params.currentType
 
+  let lastIndex = -1
   $: {
     if (currentIndex != lastIndex && lastIndex != -1) {
       if (el.name) {
-        root[el.name] = {}
+        root[el.name] = typeof root[el.name] == 'object' ? {} : ''
       } else {
         const lastEl = elements[lastIndex]
-        if (lastEl.name) root[lastEl.name] = ''
-        else lastEl.element.forEach((v) => (root[v.name] = ''))
+        if (lastEl.name) {
+          root[lastEl.name] = typeof root[lastEl.name] == 'object' ? {} : ''
+        } else
+          lastEl.element.forEach(
+            (v) => (root[v.name] = typeof root[v.name] == 'object' ? {} : '')
+          )
       }
     }
+    root = root
     lastIndex = currentIndex
   }
+
+  $: cRoot = el.name ? (root[el.name] = root[el.name] ?? {}) : root
 </script>
 
 <Select bind:root={params} el={infoType} />
@@ -98,9 +88,9 @@
   {#each elements as elChild, i (elChild)}
     {#if i == currentIndex}
       {#if elChild.element}
-        <Elements {root} {level} el={elChild} />
+        <Elements root={cRoot} {level} el={elChild} />
       {:else}
-        <AutoForm {root} {level} el={elChild} />
+        <AutoForm root={cRoot} {level} el={elChild} />
       {/if}
     {/if}
   {/each}

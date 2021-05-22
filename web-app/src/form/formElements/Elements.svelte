@@ -5,7 +5,9 @@
   export let root: any
   export let el: any
 
-  function getSpecificReadonly(elements: any[]): string[] {
+  const elements = el.element as any[]
+
+  function getSpecificReadonly(): string[] {
     const _munsUFs = ['xMun', 'cMun', 'cMunFG', 'cUF', 'UF']
     const munsUFs = _munsUFs.filter((v) =>
       elements.some((k) => {
@@ -28,12 +30,22 @@
 
   let showElements = !el.optional || (el.name && root[el.name])
 
-  $: specificReadonly = getSpecificReadonly(el.element)
+  const specificReadonly = getSpecificReadonly()
   let childRoot = el.name
     ? typeof root[el.name] == 'object'
       ? root[el.name]
       : (root[el.name] = {})
     : root
+  $: {
+    if (el.name) {
+      if (showElements && typeof root[el.name] != 'object') {
+        childRoot = root[el.name] = {}
+      } else if (!showElements && typeof root[el.name] == 'object') {
+        childRoot = root[el.name] = ''
+      }
+    }
+    root = root
+  }
 </script>
 
 {#if el.optional}
@@ -50,7 +62,9 @@
   </div>
 {/if}
 {#if showElements}
-  {#each el.element as childEl}
-    <AutoForm el={childEl} bind:root={childRoot} {level} {specificReadonly} />
+  {#each elements as childEl}
+    {#if !childEl.ifUndefined || !childRoot[childEl.ifUndefined] || !Object.keys(childRoot[childEl.ifUndefined]).length}
+      <AutoForm el={childEl} bind:root={childRoot} {level} {specificReadonly} />
+    {/if}
   {/each}
 {/if}
