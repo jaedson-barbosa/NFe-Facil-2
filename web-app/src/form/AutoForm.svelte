@@ -11,6 +11,7 @@
   import Input from './formElements/Input.svelte'
   import Choice from './formElements/Choice.svelte'
   import Elements from './formElements/Elements.svelte'
+  import List from './formElements/List.svelte'
 
   $: {
     if (!el.choice && !el.element) {
@@ -30,7 +31,7 @@
 
 {#if isConstant || specificIndex > 0}
   <Readonly {el} {root} />
-{:else if el.choice || el.element}
+{:else if el.choice || el.element || el.maxOccurs > 1}
   <div class="container content box">
     <div class="field is-horizontal">
       <div class="field-label" />
@@ -43,7 +44,9 @@
         </div>
       </div>
     </div>
-    {#if el.element}
+    {#if el.maxOccurs > 1}
+      <List {el} level={level + 1} bind:root />
+    {:else if el.element}
       <Elements {el} level={level + 1} bind:root />
     {:else}
       <Choice {el} level={level + 1} bind:root />
