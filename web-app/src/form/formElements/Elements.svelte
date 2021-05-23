@@ -46,6 +46,18 @@
     }
     root = root
   }
+
+  function getIfUndefined(childEl: any, childRoot: any) {
+    const result =
+      !childEl.ifUndefined ||
+      !childRoot[childEl.ifUndefined] ||
+      !Object.keys(childRoot[childEl.ifUndefined]).length
+    if (childEl.name && !result) {
+      childRoot[childEl.name] =
+        typeof childRoot[childEl.name] == 'string' ? '' : {}
+    }
+    return result
+  }
 </script>
 
 {#if el.optional}
@@ -63,7 +75,7 @@
 {/if}
 {#if showElements}
   {#each elements as childEl}
-    {#if !childEl.ifUndefined || !childRoot[childEl.ifUndefined] || !Object.keys(childRoot[childEl.ifUndefined]).length}
+    {#if getIfUndefined(childEl, childRoot)}
       <AutoForm el={childEl} bind:root={childRoot} {level} {specificReadonly} />
     {/if}
   {/each}

@@ -4162,8 +4162,145 @@
                   "annotation": {
                     "label": "Imposto sobre produtos industrializados"
                   },
-                  "type": "TIpi",
-                  "optional": true
+                  "optional": true,
+                  "element": [
+                    {
+                      "name": "CNPJProd",
+                      "type": "TCnpj",
+                      "optional": true,
+                      "annotation": {
+                        "label": "CNPJ do produtor da mercadoria, se diferente do emitente e somente em exportação"
+                      }
+                    },
+                    {
+                      "name": "cSelo",
+                      "optional": true,
+                      "annotation": { "label": "Código do selo de controle do IPI" },
+                      "restriction": { "minLength": "1", "maxLength": "60" }
+                    },
+                    {
+                      "name": "qSelo",
+                      "optional": true,
+                      "annotation": { "label": "Quantidade de selo de controle do IPI" },
+                      "restriction": { "pattern": "[0-9]{1,12}" }
+                    },
+                    {
+                      "name": "cEnq",
+                      "annotation": { "label": "Código de Enquadramento Legal do IPI" },
+                      "restriction": { "minLength": "1", "maxLength": "3" }
+                    },
+                    {
+                      "choice": {
+                        "annotation": { "label": "Tipo de IPI" },
+                        "element": [
+                          {
+                            "name": "IPITrib",
+                            "annotation": { "label": "IPI tributado" },
+                            "element": [
+                              {
+                                "name": "CST",
+                                "annotation": {
+                                  "label": "Código da Situação Tributária do IPI",
+                                  "itens": [
+                                    "Entrada com recuperação de crédito",
+                                    "Outras entradas",
+                                    "Saída tributada",
+                                    "Outras saídas"
+                                  ]
+                                },
+                                "restriction": { "enumeration": ["00", "49", "50", "99"] }
+                              },
+                              {
+                                "name": "vIPI",
+                                "type": "TDec_1302",
+                                "annotation": { "label": "Valor do IPI" }
+                              },
+                              {
+                                "choice": {
+                                  "element": [
+                                    {
+                                      "annotation": { "label": "Cálculo por alíquota" },
+                                      "element": [
+                                        {
+                                          "name": "vBC",
+                                          "type": "TDec_1302",
+                                          "annotation": { "label": "Valor da BC do IPI" }
+                                        },
+                                        {
+                                          "name": "pIPI",
+                                          "type": "TDec_0302a04",
+                                          "annotation": { "label": "Alíquota do IPI" }
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "annotation": {
+                                        "label": "Cálculo por valor de unidade"
+                                      },
+                                      "element": [
+                                        {
+                                          "name": "qUnid",
+                                          "type": "TDec_1204v",
+                                          "annotation": {
+                                            "label": "Quantidade total na unidade padrão para tributação"
+                                          }
+                                        },
+                                        {
+                                          "name": "vUnid",
+                                          "type": "TDec_1104",
+                                          "annotation": {
+                                            "label": "Valor por Unidade Tributável"
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "name": "IPINT",
+                            "annotation": { "label": "IPI não tributado" },
+                            "element": [
+                              {
+                                "name": "CST",
+                                "annotation": {
+                                  "label": "Código da Situação Tributária do IPI",
+                                  "itens": [
+                                    "Entrada tributada com alíquota zero",
+                                    "Entrada isenta",
+                                    "Entrada não-tributada",
+                                    "Entrada imune",
+                                    "Entrada com suspensão",
+                                    "Saída tributada com alíquota zero",
+                                    "Saída isenta",
+                                    "Saída não-tributada",
+                                    "Saída imune",
+                                    "Saída com suspensão"
+                                  ]
+                                },
+                                "restriction": {
+                                  "enumeration": [
+                                    "01",
+                                    "02",
+                                    "03",
+                                    "04",
+                                    "05",
+                                    "51",
+                                    "52",
+                                    "53",
+                                    "54",
+                                    "55"
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]            
                 },
                 {
                   "name": "II",
@@ -4171,6 +4308,7 @@
                   "annotation": {
                     "label": "Dados do Imposto de Importação"
                   },
+                  "ifUndefined": "ISSQN",
                   "element": [
                     {
                       "name": "vBC",
@@ -6422,148 +6560,6 @@
             "label": "Registro Nacional de Transportador de Carga (ANTT)"
           },
           "restriction": { "minLength": "1", "maxLength": "20" }
-        }
-      ]
-    },
-    {
-      "name": "TIpi",
-      "annotation": { "label": "Tipo: Dados do IPI" },
-      "element": [
-        {
-          "name": "CNPJProd",
-          "type": "TCnpj",
-          "optional": true,
-          "annotation": {
-            "label": "CNPJ do produtor da mercadoria, se diferente do emitente e somente em exportação"
-          }
-        },
-        {
-          "name": "cSelo",
-          "optional": true,
-          "annotation": { "label": "Código do selo de controle do IPI" },
-          "restriction": { "minLength": "1", "maxLength": "60" }
-        },
-        {
-          "name": "qSelo",
-          "optional": true,
-          "annotation": { "label": "Quantidade de selo de controle do IPI" },
-          "restriction": { "pattern": "[0-9]{1,12}" }
-        },
-        {
-          "name": "cEnq",
-          "annotation": { "label": "Código de Enquadramento Legal do IPI" },
-          "restriction": { "minLength": "1", "maxLength": "3" }
-        },
-        {
-          "choice": {
-            "annotation": { "label": "Tipo de IPI" },
-            "element": [
-              {
-                "name": "IPITrib",
-                "annotation": { "label": "IPI tributado" },
-                "element": [
-                  {
-                    "name": "CST",
-                    "annotation": {
-                      "label": "Código da Situação Tributária do IPI",
-                      "itens": [
-                        "Entrada com recuperação de crédito",
-                        "Outras entradas",
-                        "Saída tributada",
-                        "Outras saídas"
-                      ]
-                    },
-                    "restriction": { "enumeration": ["00", "49", "50", "99"] }
-                  },
-                  {
-                    "name": "vIPI",
-                    "type": "TDec_1302",
-                    "annotation": { "label": "Valor do IPI" }
-                  },
-                  {
-                    "choice": {
-                      "element": [
-                        {
-                          "annotation": { "label": "Cálculo por alíquota" },
-                          "element": [
-                            {
-                              "name": "vBC",
-                              "type": "TDec_1302",
-                              "annotation": { "label": "Valor da BC do IPI" }
-                            },
-                            {
-                              "name": "pIPI",
-                              "type": "TDec_0302a04",
-                              "annotation": { "label": "Alíquota do IPI" }
-                            }
-                          ]
-                        },
-                        {
-                          "annotation": {
-                            "label": "Cálculo por valor de unidade"
-                          },
-                          "element": [
-                            {
-                              "name": "qUnid",
-                              "type": "TDec_1204v",
-                              "annotation": {
-                                "label": "Quantidade total na unidade padrão para tributação"
-                              }
-                            },
-                            {
-                              "name": "vUnid",
-                              "type": "TDec_1104",
-                              "annotation": {
-                                "label": "Valor por Unidade Tributável"
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  }
-                ]
-              },
-              {
-                "name": "IPINT",
-                "annotation": { "label": "IPI não tributado" },
-                "element": [
-                  {
-                    "name": "CST",
-                    "annotation": {
-                      "label": "Código da Situação Tributária do IPI",
-                      "itens": [
-                        "Entrada tributada com alíquota zero",
-                        "Entrada isenta",
-                        "Entrada não-tributada",
-                        "Entrada imune",
-                        "Entrada com suspensão",
-                        "Saída tributada com alíquota zero",
-                        "Saída isenta",
-                        "Saída não-tributada",
-                        "Saída imune",
-                        "Saída com suspensão"
-                      ]
-                    },
-                    "restriction": {
-                      "enumeration": [
-                        "01",
-                        "02",
-                        "03",
-                        "04",
-                        "05",
-                        "51",
-                        "52",
-                        "53",
-                        "54",
-                        "55"
-                      ]
-                    }
-                  }
-                ]
-              }
-            ]
-          }
         }
       ]
     }

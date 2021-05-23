@@ -13,19 +13,14 @@ serieNFCe // implementacao futura
   nome-email
   permissoes: visualizar-dados-base, visualizar-notas-emitidas, cadastrar-dados-base, emitir-notas
 -clientes:
-  ...
+  dest: ...
 -motoristas:
-  ...
+  transporta: ...
 -produtos:
-  ...
--resumo-notas:
-  serie
-  nNF
-  dhEmi
-  xNome
-  id //do xml da nota, nao do firestore
+  det: ...
 -notas: //usuarios nao podem escrever nesta tabela, apenas le-la
-  emitida
+  id //do xml da nota, nao do firestore
+  status //0-Salva;1-Emitida;2-Cancelada
   json
   xml
   xmlCancelamento
@@ -44,33 +39,21 @@ idEmpresa
 METAS:
 BASE para análise de viabilidade técnica:
 OK  Cadastro de emitentes
-    Cadastro e edição de dados base
-    Busca de dados base na tela de NFe
-      Produtos
-      Clientes
-      Motoristas
+OK  Cadastro e edição de dados base
 OK  Tipos de ICMS de acordo com o regime do emitente
+    Tela de NFe
+      Identificação
+      Cliente
+      Produtos
+      Campos opcionais
     Importação
-      Lado Cliente
-      Lado servidor
     Exibição de notas
     Clonagem de NFe
     Servidor básico (sem todas análises)
-      scanUsuario
-      scanRegistro
-      cadastrarCNPJ
-      requisitarAcesso
+OK    precadastro
       apenasSalvarNFe
       assinarTransmitirNFe
-        assinarNFe
-        transmitirNFe
-      gerarDANFE (apenas NFe)
-        PHP
-        Node
-    Sincronização
-      Servidor
-      Cliente
-    Criar sistema de customização (em choice tem um estatico)
+      gerarDANFENFe
 
 BASE para emissão de NFe:
     Proibir o uso de emitente com CPF
@@ -81,10 +64,11 @@ BASE para emissão de NFe:
       Geração
       Exibição de status
     Implementar cálculo de totais
-    Proteger certificado com senha (armazenada ou não no dspositivo do cliente)
+    Analise de certificado do precadastro
+    Proteger certificado com senha (armazenada ou não no dispositivo do cliente e criptografada)
     Estudar uso de https://nodejs.org/api/crypto.html no lugar de node-forge
     Avaliar talvez só guardar a chave private e obter a publica a partir dela
-    Analisar se já está usável ou se puxa mais alguns refinamentos
+    Customização (em choice tem um estatico)
 
 MODERNIZAÇÃO
     Adicionar Svelte
