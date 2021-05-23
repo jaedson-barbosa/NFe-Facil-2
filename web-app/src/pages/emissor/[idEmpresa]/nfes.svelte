@@ -7,20 +7,14 @@
   let busca = ''
   let loading = false
   let cadastros = []
+  // Implementar busca (mas dessa vez, bem feito, com filtro de status e tudo mais)
   async function getCadastros() {
     loading = true
-    const queryCol = db
+    const queryResult = await db
       .collection('empresas')
       .doc(idEmpresa)
-      .collection('produtos')
-    const queryResult = await queryCol
-      .where('det.prod.xProd', '>=', busca)
-      .where(
-        'det.prod.xProd',
-        '<',
-        busca.replace(/.$/, (c) => String.fromCharCode(c.charCodeAt(0) + 1))
-      )
-      .limit(20)
+      .collection('notas')
+      .limit(10)
       .get()
     cadastros = queryResult.docs
     loading = false
@@ -30,7 +24,7 @@
 <form on:submit|preventDefault={getCadastros}>
   <div class="field has-addons">
     <div class="control">
-      <a class="button" href={$url('../cadastro')}>
+      <a class="button" href={$url('../nfe')}>
         <span class="icon is-small">
           <i class="fas fa-plus" />
         </span>
@@ -40,7 +34,7 @@
       <input
         class="input"
         type="text"
-        placeholder="Descrição do produto"
+        placeholder="Qualquer coisa"
         bind:value={busca}
       />
     </div>
