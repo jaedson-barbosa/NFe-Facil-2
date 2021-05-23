@@ -7,31 +7,28 @@
   export let root: any
   export let level: number = 3
 
-  //const max = el.maxOccurs
-  let cIndex = -1
-  let cRoot = {}
+  let showIndex = -1
 
-  let showModal = false
+  let elements = (root[el.name] ?? (root[el.name] = [])).map(v => {
+    const orig = {}
+    orig[el.name] = v
+    return orig
+  })
+  $: root[el.name] = elements.map(v => v[el.name])
 
-  $: elements = (root[el.name] as any[]) ?? (root[el.name] = [])
-  async function criar() {
-    cIndex = -1
-    cRoot = {}
-    showModal = true
+  function criar() {
+    showIndex = elements.push({}) - 1
   }
 
-  function salvar() {
-    elements.push(cRoot)
-    root = root
-    showModal = false
+  function remover(i: number) {
+    elements.splice(i, 1)
+    showIndex = -1
   }
 
   // Usado para não alterar o valor original
   const cloneEl = { ...el }
   delete cloneEl['maxOccurs']
   delete cloneEl['optional']
-
-  // Corrigir problemas no modal pra cada item
 </script>
 
 <div class="field is-horizontal">
@@ -47,31 +44,36 @@
   </div>
 </div>
 
-{#each elements as childRoot, i}
-<div class="modal" class:is-active={showModal}>
-  <div class="modal-background" />
-  <div class="modal-content">
-    <div class="container content box">
-      <form method="dialog" on:submit|preventDefault={salvar}>
-        {#if el.element}
-          <Elements el={cloneEl} {level} root={childRoot} />
-        {:else if el.choice}
-          <Choice el={cloneEl} {level} root={childRoot} />
-        {:else}
-          <AutoForm el={cloneEl} {level} root={childRoot} />
-        {/if}
-        <div class="buttons is-centered">
-          <button class="button is-primary">Salvar</button>
-          <button
-            type="button"
-            class="button is-danger"
-            on:click={() => remover(i)}>Cancelar</button
+<div class="buttons">
+  {#each elements as childRoot, i (childRoot)}
+    <button class="button" on:click={() => (showIndex = i)}>Item</button>
+    <div class="modal" class:is-active={showIndex == i}>
+      <div class="modal-background" />
+      <div class="modal-content">
+        <div class="container content box">
+          <form
+            method="dialog"
+            on:submit|preventDefault={() => {
+              elements = elements
+              showIndex = -1
+            }}
           >
+            {#if el.element}
+              <Elements el={cloneEl} {level} root={childRoot} />
+            {:else if el.choice}
+              <Choice el={cloneEl} {level} root={childRoot} />
+            {:else}
+              <AutoForm el={cloneEl} {level} root={childRoot} />
+            {/if}
+            <div class="buttons is-centered">
+              <button class="button is-primary">Salvar</button>
+              <button class="button is-danger" on:click={() => remover(i)}
+                >Remover</button
+              >
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
-  </div>
+  {/each}
 </div>
-{/each}
-
-{elements.length}

@@ -42,7 +42,6 @@ OK  Cadastro de emitentes
 OK  Cadastro e edição de dados base
 OK  Tipos de ICMS de acordo com o regime do emitente
     Sistema de lista para ítens multiplos
-    Dividir cadastro de produto em 2 telas (dados base e impostos) para diminuir 1 nível de hierarquia usando o mesmo sistema da tela de nfe (com root no _reset)
     Tela de NFe
       Identificação
       Cliente
@@ -58,6 +57,8 @@ OK    precadastro
       gerarDANFENFe
 
 BASE para emissão de NFe:
+    Exibição de resumo do item no botão
+    Dividir cadastro de produto em 2 telas (dados base e impostos) para diminuir 1 nível de hierarquia usando o mesmo sistema da tela de nfe (com root no _reset)
     Proibir o uso de emitente com CPF
       Via cadastro
       Via importação (restringido para emitente logado)
