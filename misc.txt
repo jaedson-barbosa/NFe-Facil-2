@@ -50,6 +50,7 @@ OK    precadastro
       gerarDANFENFe
 
 BASE para emissão de NFe:
+    Avaliar usar inputs do app começando com / (podem ser usados por exemplo em CPF/CNPJ e um input unico)
     Exibição de resumo do item no botão
     Dividir cadastro de produto em 2 telas (dados base e impostos) para diminuir 1 nível de hierarquia usando o mesmo sistema da tela de nfe (com root no _reset)
     Proibir o uso de emitente com CPF
@@ -116,3 +117,5 @@ proj. mae: https://www.w3schools.com/code/tryit.asp?filename=GQQAXEQ5SSZ3
 Observações:  
 ISSQN limitado para o ambiente nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
 Retirada e entrega limitados para o ambiente nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
+Obedecida apenas regra geral de cálculo do total (pag. 122)
+Adição do vServ no total do vNF não é feita automaticamente

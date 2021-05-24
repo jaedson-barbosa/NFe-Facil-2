@@ -8,7 +8,6 @@
   export let scoped: { commom: { root: any } }
   export let idEmpresa: string
 
-  const root = scoped.commom.root
   const listId = createId()
   let options = []
   let busca = ''

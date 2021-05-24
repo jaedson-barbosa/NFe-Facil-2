@@ -5368,7 +5368,7 @@
                 {
                   "name": "vNF",
                   "type": "TDec_1302",
-                  "annotation": { "label": "Total da NF-e" }
+                  "annotation": { "label": "Total da NF-e", "aux": "Caso informado, o total dos serviços sob não-incidência ou não tributados pelo ICMS deve ser somado a este campo." }
                 },
                 {
                   "name": "vTotTrib",

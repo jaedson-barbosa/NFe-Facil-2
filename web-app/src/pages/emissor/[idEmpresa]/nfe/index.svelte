@@ -42,7 +42,8 @@
         retirada: '',
         entrega: '',
         autXML: [],
-        det: []
+        det: [],
+        total: {}
       }
       $goto('../identificacao')
     })
