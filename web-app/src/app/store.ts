@@ -1,17 +1,11 @@
 import { auth, googleProvider } from './firebase';
-import { readable } from 'svelte/store'
+import { derived, readable, writable } from 'svelte/store'
 
-function createUser() {
-	const { subscribe } = readable<firebase.default.User>(undefined, (set) => {
-    const unsubscribe = auth.onAuthStateChanged(u => set(u))
-    return () => unsubscribe()
-  })
-
-	return {
-		subscribe,
-		signIn: () => auth.signInAnonymously(), //auth.signInWithPopup(googleProvider),
-		signOut: () => auth.signOut()
-	};
+export const user = {
+	subscribe: readable<firebase.default.User>(undefined, (set) => {
+		const unsubscribe = auth.onAuthStateChanged(u => set(u))
+		return () => unsubscribe()
+	}).subscribe,
+	signIn: () => auth.signInWithPopup(googleProvider), //auth.signInAnonymously(),
+	signOut: () => auth.signOut()
 }
-
-export const user = createUser()

@@ -10,6 +10,7 @@
           "element": [
             {
               "name": "cUF",
+              "readonly": true,
               "type": "TCodUfIBGE",
               "annotation": {
                 "label": "Código da UF do emitente do Documento Fiscal"
@@ -17,6 +18,7 @@
             },
             {
               "name": "cNF",
+              "readonly": true,
               "annotation": {
                 "label": "Código numérico que compõe a Chave de Acesso"
               },
@@ -29,6 +31,7 @@
             },
             {
               "name": "mod",
+              "readonly": true,
               "annotation": {
                 "label": "Código do modelo do Documento Fiscal",
                 "itens": ["NF-e", "NFC-e."]
@@ -37,16 +40,19 @@
             },
             {
               "name": "serie",
+              "readonly": true,
               "type": "TSerie",
               "annotation": { "label": "Série do Documento Fiscal" }
             },
             {
               "name": "nNF",
+              "readonly": true,
               "type": "TNF",
               "annotation": { "label": "Número do Documento Fiscal" }
             },
             {
               "name": "dhEmi",
+              "readonly": true,
               "type": "TDateTimeUTC",
               "annotation": {
                 "label": "Data e Hora de emissão do Documento Fiscal"
@@ -83,6 +89,7 @@
             },
             {
               "name": "tpImp",
+              "readonly": true,
               "annotation": {
                 "label": "Formato de impressão do DANFE",
                 "itens": [
@@ -98,6 +105,7 @@
             },
             {
               "name": "tpEmis",
+              "readonly": true,
               "annotation": {
                 "label": "Forma de emissão da NF-e",
                 "itens": [
@@ -117,6 +125,7 @@
             },
             {
               "name": "cDV",
+              "readonly": true,
               "annotation": {
                 "label": "Digito Verificador da Chave de Acesso"
               },
@@ -173,7 +182,7 @@
               "name": "indIntermed",
               "optional": true,
               "annotation": {
-                "label": "Indicador de intermediador/marketplace",
+                "label": "Indicador de intermediador ou marketplace",
                 "itens": [
                   "Operação em site ou plataforma própria",
                   "Operação em site ou plataforma de terceiros"
@@ -183,6 +192,7 @@
             },
             {
               "name": "procEmi",
+              "readonly": true,
               "annotation": {
                 "label": "Processo de emissão",
                 "itens": [
@@ -196,6 +206,7 @@
             },
             {
               "name": "verProc",
+              "readonly": true,
               "annotation": {
                 "label": "Versão do aplicativo utilizado na emissão"
               },
