@@ -43,7 +43,8 @@
         entrega: '',
         autXML: [],
         det: [],
-        total: {}
+        total: {},
+        transp: {}
       }
       $goto('../identificacao')
     })

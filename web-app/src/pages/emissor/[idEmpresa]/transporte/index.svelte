@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { applyMask } from '@app/documentUtils'
   import { db } from '@app/firebase'
   import { url } from '@sveltech/routify'
 
@@ -13,27 +12,18 @@
     const queryCol = db
       .collection('empresas')
       .doc(idEmpresa)
-      .collection('motoristas')
+      .collection('transportes')
     const queryResult = await queryCol
-      .where('transporta.xNome', '>=', busca)
+      .where('identificador', '>=', busca)
       .where(
-        'transporta.xNome',
+        'identificador',
         '<',
         busca.replace(/.$/, (c) => String.fromCharCode(c.charCodeAt(0) + 1))
       )
       .limit(20)
       .get()
     cadastros = queryResult.docs.map((v) => {
-      let doc = ''
-      if (!doc) {
-        const cpf = v.get('transporta.CPF')
-        if (cpf) doc = applyMask(cpf, 'cpf')
-      }
-      if (!doc) {
-        const cnpj = v.get('transporta.CNPJ')
-        if (cnpj) doc = applyMask(cnpj, 'cnpj')
-      }
-      return { id: v.id, doc, nome: v.get('transporta.xNome') }
+      return { id: v.id, identificador: v.get('identificador') }
     })
     loading = false
   }
@@ -52,7 +42,7 @@
       <input
         class="input"
         type="text"
-        placeholder="Nome do cliente"
+        placeholder="Identificador"
         bind:value={busca}
       />
     </div>
@@ -66,14 +56,12 @@
 
 <table class="table is-hoverable is-fullwidth">
   <tr>
-    <th>Documento</th>
-    <th>Nome social</th>
+    <th>Identificador</th>
     <th>Ações</th>
   </tr>
   {#each cadastros as cad}
     <tr>
-      <td>{cad.doc}</td>
-      <td>{cad.nome}</td>
+      <td>{cad.identificador}</td>
       <td>
         <a href={$url('../:id', { id: cad.id })}> Editar </a>
       </td>

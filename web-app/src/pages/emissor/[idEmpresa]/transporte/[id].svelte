@@ -4,17 +4,31 @@
   import { db } from '@app/firebase'
   import { elementosNFe } from '@form/dataHelper'
   import AutoForm from '@form/AutoForm.svelte'
+  import Input from '@form/formElements/Input.svelte'
 
   export let id: string
   $: idEmpresa = $params['idEmpresa']
 
+  const infoIdentificador = {
+    name: 'identificador',
+    annotation: {
+      label: 'Identificador',
+      aux: 'Identificação deste grupo de transporte, ex.: nome do motorista',
+    },
+    restriction: { minLength: 4 },
+  }
+
   let loading = false
+  const root = {
+    identificador: '',
+    transp: {}
+  }
 
   async function carregar() {
     const mot = await db
       .collection('empresas')
       .doc(idEmpresa)
-      .collection('motoristas')
+      .collection('transportes')
       .doc(id)
       .get()
     if (!mot.exists) {
@@ -29,7 +43,7 @@
       await db
         .collection('empresas')
         .doc(idEmpresa)
-        .collection('motoristas')
+        .collection('transportes')
         .doc(id)
         .set(root)
       $goto('../')
@@ -38,9 +52,6 @@
       loading = false
     }
   }
-
-  const motObrigatorio = elementosNFe[8]['element'][1]
-  motObrigatorio.optional = false
 </script>
 
 {#await carregar()}
@@ -49,7 +60,8 @@
   {@debug root}
   <form on:submit|preventDefault={() => salvar(root)}>
     <fieldset disabled={loading}>
-      <AutoForm el={motObrigatorio} {root}>
+      <AutoForm el={elementosNFe[8]} {root}>
+        <Input {root} el={infoIdentificador} />
         <div class="field is-grouped is-grouped-centered">
           <p class="control">
             <button class="button is-primary" class:is-loading={loading}>

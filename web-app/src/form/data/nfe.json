@@ -5533,7 +5533,7 @@
         },
         {
           "name": "transp",
-          "annotation": { "label": "Dados dos transportes da NF-e" },
+          "annotation": { "label": "Transporte" },
           "element": [
             {
               "name": "modFrete",
@@ -5714,9 +5714,9 @@
               ]
             },
             {
+              "annotation": { "label": "Meio de transporte" },
+              "optional": true,
               "choice": {
-                "optional": true,
-                "annotation": { "label": "Meio de transporte" },
                 "element": [
                   {
                     "annotation": { "label": "Veículo" },

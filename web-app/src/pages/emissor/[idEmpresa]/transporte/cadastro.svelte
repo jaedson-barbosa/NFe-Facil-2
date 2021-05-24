@@ -3,11 +3,24 @@
   import { db } from '@app/firebase'
   import { elementosNFe } from '@form/dataHelper'
   import AutoForm from '@form/AutoForm.svelte'
+  import Input from '@form/formElements/Input.svelte'
 
   export let idEmpresa: string
 
+  const infoIdentificador = {
+    name: 'identificador',
+    annotation: {
+      label: 'Identificador',
+      aux: 'Identificação deste grupo de transporte, ex.: nome do motorista',
+    },
+    restriction: { minLength: 4 },
+  }
+
   let loading = false
-  const root = {}
+  const root = {
+    identificador: '',
+    transp: {}
+  }
 
   async function salvar() {
     loading = true
@@ -15,7 +28,7 @@
       await db
         .collection('empresas')
         .doc(idEmpresa)
-        .collection('motoristas')
+        .collection('transportes')
         .add(root)
       $goto('../')
     } catch (error) {
@@ -23,15 +36,13 @@
       loading = false
     }
   }
-
-  const motObrigatorio = elementosNFe[8]['element'][1]
-  motObrigatorio.optional = false
 </script>
 
 {@debug root}
 <form on:submit|preventDefault={salvar}>
   <fieldset disabled={loading}>
-    <AutoForm el={motObrigatorio} {root}>
+    <AutoForm el={elementosNFe[8]} {root}>
+      <Input {root} el={infoIdentificador} />
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
           <button class="button is-primary" class:is-loading={loading}>
