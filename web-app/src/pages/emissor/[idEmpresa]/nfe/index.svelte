@@ -38,7 +38,11 @@
           NFref: [],
         },
         emit,
-        dest: {}
+        dest: {},
+        retirada: '',
+        entrega: '',
+        autXML: [],
+        det: []
       }
       $goto('../identificacao')
     })

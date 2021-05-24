@@ -73,7 +73,7 @@
       <p class="control">
         <button class="button is-primary">
           {#if appliedValue}
-            Próximo: Retirada, entrega e autorização
+            Próximo: Opcionais 1
           {:else if validValue}
             Selecionar
           {:else}

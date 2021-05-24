@@ -6519,14 +6519,14 @@
         {
           "name": "cPais",
           "optional": true,
-          "annotation": { "label": "Código de Pais" },
-          "restriction": { "pattern": "[0-9]{1,4}" }
+          "annotation": { "label": "Código do país" },
+          "restriction": { "enumeration": "1058" }
         },
         {
           "name": "xPais",
           "optional": true,
           "annotation": { "label": "Nome do país" },
-          "restriction": { "maxLength": "60", "minLength": "2" }
+          "restriction": { "enumeration": "BRASIL" }
         },
         {
           "name": "fone",

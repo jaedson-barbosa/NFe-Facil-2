@@ -35,8 +35,8 @@ OK  Cadastro e edição de dados base
 OK  Tipos de ICMS de acordo com o regime do emitente
 OK  Sistema de lista para ítens multiplos
     Tela de NFe
-      Identificação
-      Cliente
+OK    Identificação
+OK    Cliente
       Opcionais 1 (retirada, entrega e autorização)
       Produtos
       Campos opcionais
@@ -115,4 +115,4 @@ proj. mae: https://www.w3schools.com/code/tryit.asp?filename=GQQAXEQ5SSZ3
 
 Observações:  
 ISSQN limitado para o ambiente nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
-
+Retirada e entrega limitados para o ambiente nacional. Se necessário, basta pedir a implementação ao desenvolvedor.

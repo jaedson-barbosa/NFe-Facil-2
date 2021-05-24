@@ -9,15 +9,15 @@
 
   let showIndex = -1
 
-  let elements = (root[el.name] ?? (root[el.name] = [])).map(v => {
+  let elements = (root[el.name] ?? (root[el.name] = [])).map((v) => {
     const orig = {}
     orig[el.name] = v
     return orig
   })
-  $: root[el.name] = elements.map(v => v[el.name])
-
-  function criar() {
-    showIndex = elements.push({}) - 1
+  $: root[el.name] = elements.map((v) => v[el.name])
+//Fazer alteração direto na root e tornar o elements reativo (inverter o que tem agora)
+  function criar(newEl: any = {}) {
+    showIndex = elements.push(newEl) - 1
   }
 
   function remover(i: number) {
@@ -31,18 +31,20 @@
   delete cloneEl['optional']
 </script>
 
-<div class="field is-horizontal">
-  <div class="field-label is-normal" />
-  <div class="field-body">
-    <div class="field">
-      <div class="control">
-        <button class="button" type="button" on:click={criar}>
-          Adicionar
-        </button>
+<slot name="header" {criar}>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal" />
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <button class="button" type="button" on:click={criar}>
+            Adicionar
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</slot>
 
 <div class="buttons">
   {#each elements as childRoot, i (childRoot)}
