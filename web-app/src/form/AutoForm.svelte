@@ -29,7 +29,7 @@
   $: specificIndex = specificReadonly.indexOf(el.name)
 </script>
 
-{#if isConstant || specificIndex > 0}
+{#if isConstant || specificIndex > 0 || el.readonly}
   <Readonly {el} {root} />
 {:else if el.choice || el.element || el.maxOccurs > 1}
   <div class="container content box">

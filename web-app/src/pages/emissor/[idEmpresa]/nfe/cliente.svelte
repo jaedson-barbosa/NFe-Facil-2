@@ -1,22 +1,17 @@
 <script lang="ts">
   import { url, goto } from '@sveltech/routify'
-  import { elementosNFe } from '@form/dataHelper'
-  import AutoForm from '@form/AutoForm.svelte'
   import { createId } from '@form/formElements/helpers'
   import { db } from '@app/firebase'
-import { init } from 'svelte/internal';
 
   export let scoped: { commom: { root: any } }
   export let idEmpresa: string
 
+  const root = scoped.commom.root
   const listId = createId()
   let options = []
-
-  let showModal = false
-  let busca = ''
+  let busca = root.dest.xNome
 
   async function buscar() {
-    alert('Busca!')
     const queryResult = await db
       .collection('empresas')
       .doc(idEmpresa)
@@ -37,77 +32,55 @@ import { init } from 'svelte/internal';
     })
   }
 
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
-  }
+  $: appliedValue = busca && busca == root.dest.xNome
+  $: validValue = busca && options.some((v) => v.text == busca)
 
-  async function awaitStop(initialValue: string) {
-    if (!initialValue) return
-    await sleep(3000)
-    if (busca == initialValue) buscar()
-  } //Testar, aplicar readonly nos controles da identificação
-
-  $: {
-    awaitStop(busca)
+  function submit() {
+    if (appliedValue) {
+      $goto('../opcionais1')
+    } else if (validValue) {
+      const option = options.find((v) => v.text == busca)
+      const data = option.value.data()
+      root.dest = data.dest
+    } else buscar()
   }
 </script>
 
-<form on:submit|preventDefault={$goto('./cliente')}>
-  <AutoForm el={elementosNFe[2]} root={scoped.commom.root}>
+<div class="container content box">
+  <form on:submit|preventDefault={submit}>
+    <div class="field">
+      <div class="control is-expanded">
+        <input
+          class="input"
+          type="text"
+          list={listId}
+          placeholder="Nome"
+          bind:value={busca}
+        />
+        <datalist id={listId}>
+          {#each options as opt}
+            <option>{opt.text}</option>
+          {/each}
+        </datalist>
+      </div>
+    </div>
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a href={$url('../../')} class="button is-danger">Voltar: Excluir</a>
+        <a href={$url('../identificacao')} class="button is-danger">
+          Voltar: Identificação
+        </a>
       </p>
       <p class="control">
-        <button class="button is-primary"> Próximo: Cliente </button>
+        <button class="button is-primary">
+          {#if appliedValue}
+            Próximo: Retirada, entrega e autorização
+          {:else if validValue}
+            Selecionar
+          {:else}
+            Buscar
+          {/if}
+        </button>
       </p>
     </div>
-  </AutoForm>
-</form>
-
-<div class="modal" class:is-active={showModal}>
-  <div class="modal-background" />
-  <div class="modal-content">
-    <div class="container content box">
-      <form
-        on:submit|preventDefault={() => {
-          const option = options.find((v) => v.text == busca)
-          if (option) {
-            scoped.commom.root.dest = option.value.data()
-            showModal = false
-          } else {
-            alert('Selecione um valor válido!')
-          }
-        }}
-      >
-        <div class="field">
-          <div class="control is-expanded">
-            <input
-              class="input"
-              type="text"
-              list={listId}
-              placeholder="Nome"
-              bind:value={busca}
-            />
-            <datalist id={listId}>
-              {#each options as opt}
-                <option>{opt.text}</option>
-              {/each}
-            </datalist>
-          </div>
-          <p class="help">
-            Digite e aguarde 3 segundos para que a pesquisa seja feita./p>
-          </p>
-        </div>
-        <div class="buttons is-centered">
-          <button class="button is-primary">Salvar</button>
-          <button
-            type="button"
-            class="button is-danger"
-            on:click={() => (showModal = false)}>Cancelar</button
-          >
-        </div>
-      </form>
-    </div>
-  </div>
+  </form>
 </div>

@@ -5,6 +5,8 @@
   } // Um root comum a todas as paginas
 </script>
 
+{@debug commom}
+
 {#if commom.root || $isActive('./index')}
 <slot scoped={{commom}} />
 {:else}

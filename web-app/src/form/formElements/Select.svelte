@@ -3,7 +3,6 @@
 
   export let el: any
   export let root: any
-  $: { if (!root[el.name]) root[el.name] = '' }
 
   function getOptions(el: any) {
     const enumeration = el.restriction?.enumeration as string | string[]
@@ -20,6 +19,7 @@
     })
   }
   $: options = getOptions(el)
+  $: { if (!root[el.name]) root[el.name] = options[0].value }
 
   $: ({ aux, label } = el.annotation)
   const id = createId()

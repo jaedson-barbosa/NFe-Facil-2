@@ -3,8 +3,6 @@
   import { IBGE } from '@form/data/IBGE.json'
   import { db } from '@app/firebase'
 
-  // Usar um sistema de store pra acessar a empresa
-
   export let scoped: { commom: { root: any } }
   export let idEmpresa: string
 
@@ -44,7 +42,10 @@
       }
       $goto('../identificacao')
     })
-    .catch((v) => alert('Erro ao tentar obter informações do emitente'))
+    .catch((v) => {
+      console.log(v)
+      alert('Erro ao tentar obter informações do emitente')
+    })
 
   function getCodigoEstado(sigla: string) {
     return IBGE.find((v) => v.Sigla == sigla)?.Codigo
