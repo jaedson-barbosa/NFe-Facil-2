@@ -1,7 +1,7 @@
 <script lang="ts">
   import { url, goto } from '@sveltech/routify'
-  import { createId } from '@form/formElements/helpers'
-  import Input from '@form/formElements/Input.svelte'
+  import { createId } from '@form/helpers'
+  import Input from '@form/Input.svelte'
   import { user } from '@app/store'
 
   let loading = false

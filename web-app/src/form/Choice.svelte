@@ -8,7 +8,7 @@
 <script lang="ts">
   import Select from './Select.svelte'
   import Elements from './Elements.svelte'
-  import AutoForm from '@form/AutoForm.svelte'
+  import AutoForm from './AutoForm.svelte'
 
   export let level: number = 3
   export let root: any

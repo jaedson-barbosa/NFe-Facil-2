@@ -1,6 +1,6 @@
 <script lang="ts">
   import { url, goto } from '@sveltech/routify'
-  import { createId } from '@form/formElements/helpers'
+  import { createId } from '@form/helpers'
   import { db } from '@app/firebase'
 
   export let scoped: { commom: { root: any } }

@@ -5,13 +5,13 @@
   export let specificReadonly: string[] = []
 
   import { complexType, simpleType } from './data/nfe.json'
-  import Readonly from './formElements/Readonly.svelte'
-  import Select from './formElements/Select.svelte'
-  import Specific from './formElements/Specific.svelte'
-  import Input from './formElements/Input.svelte'
-  import Choice from './formElements/Choice.svelte'
-  import Elements from './formElements/Elements.svelte'
-  import List from './formElements/List.svelte'
+  import Readonly from './Readonly.svelte'
+  import Select from './Select.svelte'
+  import Specific from './Specific.svelte'
+  import Input from './Input.svelte'
+  import Choice from './Choice.svelte'
+  import Elements from './Elements.svelte'
+  import List from './List.svelte'
 
   $: {
     if (!el.choice && !el.element) {

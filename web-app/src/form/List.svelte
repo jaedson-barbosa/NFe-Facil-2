@@ -1,5 +1,5 @@
 <script lang="ts">
-  import AutoForm from '../AutoForm.svelte'
+  import AutoForm from './AutoForm.svelte'
   import Choice from './Choice.svelte'
   import Elements from './Elements.svelte'
 

@@ -2,7 +2,7 @@
   import { url, goto } from '@sveltech/routify'
   import { elementosNFe } from '@form/dataHelper'
   import AutoForm from '@form/AutoForm.svelte'
-  import Readonly from '@form/formElements/Readonly.svelte'
+  import Readonly from '@form/Readonly.svelte'
 
   export let scoped: { commom: { root: any } }
   let root = scoped.commom.root

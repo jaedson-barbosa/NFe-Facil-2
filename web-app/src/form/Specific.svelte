@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createId } from './helpers'
-  import { IBGE } from '../data/IBGE.json'
-  import { paises } from '../data/paises.json'
+  import { IBGE } from './data/IBGE.json'
+  import { paises } from './data/paises.json'
 
   export let el: any
   export let root: any

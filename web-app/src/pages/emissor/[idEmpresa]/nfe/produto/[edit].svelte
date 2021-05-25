@@ -1,7 +1,7 @@
 <script lang="ts">
   import { url, goto } from '@sveltech/routify'
   import { elementosNFe } from '@form/dataHelper'
-  import Elements from '@form/formElements/Elements.svelte'
+  import Elements from '@form/Elements.svelte'
   import type INFeRoot from '../INFeRoot'
 
   export let scoped: { commom: { root: INFeRoot } }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import AutoForm from '../AutoForm.svelte'
+  import AutoForm from './AutoForm.svelte'
 
   export let level: number
   export let root: any

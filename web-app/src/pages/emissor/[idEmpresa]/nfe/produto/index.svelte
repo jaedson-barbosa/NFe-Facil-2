@@ -1,7 +1,7 @@
 <script lang="ts">
   import { url, goto } from '@sveltech/routify'
   import { db } from '@app/firebase'
-  import { createId } from '@form/formElements/helpers'
+  import { createId } from '@form/helpers'
   import type INFeRoot from '../INFeRoot'
 
   export let scoped: { commom: { root: INFeRoot } }

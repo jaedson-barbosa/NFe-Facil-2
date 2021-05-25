@@ -4,7 +4,7 @@
   import { db } from '@app/firebase'
   import { elementosNFe } from '@form/dataHelper'
   import AutoForm from '@form/AutoForm.svelte'
-  import Input from '@form/formElements/Input.svelte'
+  import Input from '@form/Input.svelte'
 
   export let id: string
   $: idEmpresa = $params['idEmpresa']
