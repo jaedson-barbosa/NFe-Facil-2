@@ -121,6 +121,7 @@
           {id}
           class="input"
           type="text"
+          {required}
           list={listId}
           bind:value={internalValue}
         />

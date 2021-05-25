@@ -2,7 +2,8 @@
   import { db } from '@app/firebase'
   import { url } from '@sveltech/routify'
 
-  export let idEmpresa: string
+  export let scoped: {idEmpresa: string};
+  $: ({ idEmpresa } = scoped)
 
   let busca = ''
   let loading = false

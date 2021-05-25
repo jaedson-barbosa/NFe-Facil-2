@@ -8,9 +8,11 @@
   $: {if (!root[el.name]) root[el.name] = ''}
 
   //#region decimal
-  $: {
-    if (root[el.name] && el.restriction.decimal) {
-      const o = parseFloat(root[el.name]).toFixed(el.restriction.decimal)
+  function updateDecimal() {
+    if (root[el.name]) {
+      let parsed = parseFloat(root[el.name].replace(',', '.'))
+      if (Number.isNaN(parsed)) parsed = 0
+      const o = parsed.toFixed(el.restriction.decimal)
       // Fixado o número mínimo de casas decimais em 2
       root[el.name] = o.slice(0, o.indexOf('0', o.indexOf('.') + 3))
     }
@@ -27,17 +29,6 @@
       ? 'zipcode'
       : ''
   $: maskedValue = mask ? applyMask(root[el.name], mask) : ''
-
-  function getType() {
-    // if (!/[a-zA-Z]|ÿ/.test(el.restriction?.pattern)) return 'number'
-    return el.name == 'fone'
-      ? 'tel'
-      : el.name == 'email'
-      ? 'email'
-      : el.type == 'TData'
-      ? 'date'
-      : 'text'
-  }
   //#endregion
 
   $: ({ aux, label } = el.annotation)
@@ -63,9 +54,9 @@
             class="input"
             required={!el.optional}
             pattern={el.restriction.pattern}
-            step={1 / 10 ** el.restriction.decimal}
-            type="number"
+            type="text"
             bind:value={root[el.name]}
+            on:blur={updateDecimal}
           />
         {:else}
           <input

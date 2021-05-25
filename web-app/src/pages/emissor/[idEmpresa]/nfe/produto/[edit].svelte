@@ -1,0 +1,44 @@
+<script lang="ts">
+  import { url, goto } from '@sveltech/routify'
+  import { elementosNFe } from '@form/dataHelper'
+  import Elements from '@form/formElements/Elements.svelte'
+  import type INFeRoot from '../INFeRoot'
+
+  export let scoped: { commom: { root: INFeRoot } }
+  export let edit: string
+
+  const root = { det: scoped.commom.root.det[+edit] }
+
+  function submit() {
+    scoped.commom.root.det[+edit] = root.det
+    $goto('../../produtos')
+  }
+
+  function remover() {
+    scoped.commom.root.det.splice(+edit, 1)
+    $goto('../../produtos')
+  }
+
+  const detUnico = elementosNFe[6] as any
+  detUnico.maxOccurs = 1
+  detUnico.annotation.label = 'Informações do produto'
+</script>
+
+<div class="container content box">
+  <form on:submit|preventDefault={submit}>
+    <div class="field is-grouped is-grouped-centered">
+      <p class="control">
+        <button type="button" class="button is-danger" on:click={remover}>
+          Remover
+        </button>
+      </p>
+      <p class="control">
+        <a href={$url('../../produtos')} class="button"> Cancelar </a>
+      </p>
+      <p class="control">
+        <button class="button is-primary"> Salvar </button>
+      </p>
+    </div>
+    <Elements el={detUnico} {root} />
+  </form>
+</div>
