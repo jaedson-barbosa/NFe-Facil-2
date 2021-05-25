@@ -1,70 +1,61 @@
 <script lang="ts">
+  import { url, goto } from '@sveltech/routify'
   import { db } from '@app/firebase'
-  import { url } from '@sveltech/routify'
+  import { elementosNFe } from '@form/dataHelper'
+  import AutoForm from '@form/AutoForm.svelte'
+  import Input from '@form/formElements/Input.svelte'
 
   export let idEmpresa: string
 
-  let busca = ''
+  const infoIdentificador = {
+    name: 'identificador',
+    annotation: {
+      label: 'Identificador',
+      aux: 'Identificação deste grupo de transporte, ex.: nome do motorista',
+    },
+    restriction: { minLength: 4 },
+  }
+
   let loading = false
-  let cadastros = []
-  async function getCadastros() {
+  const root = {
+    identificador: '',
+    transp: {}
+  }
+
+  async function salvar() {
     loading = true
-    const queryCol = db
-      .collection('empresas')
-      .doc(idEmpresa)
-      .collection('transportes')
-    const queryResult = await queryCol
-      .where('identificador', '>=', busca)
-      .where(
-        'identificador',
-        '<',
-        busca.replace(/.$/, (c) => String.fromCharCode(c.charCodeAt(0) + 1))
-      )
-      .limit(20)
-      .get()
-    cadastros = queryResult.docs.map((v) => {
-      return { id: v.id, identificador: v.get('identificador') }
-    })
-    loading = false
+    try {
+      await db
+        .collection('empresas')
+        .doc(idEmpresa)
+        .collection('transportes')
+        .add(root)
+      $goto('../../transportes')
+    } catch (error) {
+      alert(error.message)
+      loading = false
+    }
   }
 </script>
 
-<form on:submit|preventDefault={getCadastros}>
-  <div class="field has-addons">
-    <div class="control">
-      <a class="button" href={$url('../cadastro')}>
-        <span class="icon is-small">
-          <i class="fas fa-plus" />
-        </span>
-      </a>
-    </div>
-    <div class="control is-expanded">
-      <input
-        class="input"
-        type="text"
-        placeholder="Identificador"
-        bind:value={busca}
-      />
-    </div>
-    <div class="control">
-      <button class="button" disabled={!busca} class:is-loading={loading}>
-        Buscar
-      </button>
-    </div>
-  </div>
+{@debug root}
+<form on:submit|preventDefault={salvar}>
+  <fieldset disabled={loading}>
+    <AutoForm el={elementosNFe[8]} {root}>
+      <Input {root} el={infoIdentificador} />
+      <div class="field is-grouped is-grouped-centered">
+        <p class="control">
+          <button class="button is-primary" class:is-loading={loading}>
+            Salvar
+          </button>
+        </p>
+        <p class="control">
+          <button type="reset" class="button is-warning"> Limpar </button>
+        </p>
+        <p class="control">
+          <a href={$url('../../transportes')} class="button is-danger"> Cancelar </a>
+        </p>
+      </div>
+    </AutoForm>
+  </fieldset>
 </form>
-
-<table class="table is-hoverable is-fullwidth">
-  <tr>
-    <th>Identificador</th>
-    <th>Ações</th>
-  </tr>
-  {#each cadastros as cad}
-    <tr>
-      <td>{cad.identificador}</td>
-      <td>
-        <a href={$url('../:id', { id: cad.id })}> Editar </a>
-      </td>
-    </tr>
-  {/each}
-</table>

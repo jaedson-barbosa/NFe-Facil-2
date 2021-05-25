@@ -57,7 +57,7 @@
       <td>{cad.get('det.prod.cProd')}</td>
       <td>{cad.get('det.prod.xProd')}</td>
       <td>
-        <a href={$url('../:id', { id: cad.id })}> Editar </a>
+        <a href={$url('../nfe/:id', { id: cad.id })}> Editar </a>
       </td>
     </tr>
   {/each}

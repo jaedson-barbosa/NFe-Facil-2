@@ -3,24 +3,11 @@
   import { db } from '@app/firebase'
   import { elementosNFe } from '@form/dataHelper'
   import AutoForm from '@form/AutoForm.svelte'
-  import Input from '@form/formElements/Input.svelte'
 
   export let idEmpresa: string
 
-  const infoIdentificador = {
-    name: 'identificador',
-    annotation: {
-      label: 'Identificador',
-      aux: 'Identificação deste grupo de transporte, ex.: nome do motorista',
-    },
-    restriction: { minLength: 4 },
-  }
-
   let loading = false
-  const root = {
-    identificador: '',
-    transp: {}
-  }
+  const root = {}
 
   async function salvar() {
     loading = true
@@ -28,9 +15,9 @@
       await db
         .collection('empresas')
         .doc(idEmpresa)
-        .collection('transportes')
+        .collection('clientes')
         .add(root)
-      $goto('../')
+      $goto('../../clientes')
     } catch (error) {
       alert(error.message)
       loading = false
@@ -41,8 +28,7 @@
 {@debug root}
 <form on:submit|preventDefault={salvar}>
   <fieldset disabled={loading}>
-    <AutoForm el={elementosNFe[8]} {root}>
-      <Input {root} el={infoIdentificador} />
+    <AutoForm el={elementosNFe[2]} {root}>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
           <button class="button is-primary" class:is-loading={loading}>
@@ -53,7 +39,7 @@
           <button type="reset" class="button is-warning"> Limpar </button>
         </p>
         <p class="control">
-          <a href={$url('../')} class="button is-danger"> Cancelar </a>
+          <a href={$url('../../clientes')} class="button is-danger"> Cancelar </a>
         </p>
       </div>
     </AutoForm>

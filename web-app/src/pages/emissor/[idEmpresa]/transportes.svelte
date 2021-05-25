@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { applyMask } from '@app/documentUtils'
   import { db } from '@app/firebase'
   import { url } from '@sveltech/routify'
 
@@ -13,31 +12,18 @@
     const queryCol = db
       .collection('empresas')
       .doc(idEmpresa)
-      .collection('clientes')
+      .collection('transportes')
     const queryResult = await queryCol
-      .where('dest.xNome', '>=', busca)
+      .where('identificador', '>=', busca)
       .where(
-        'dest.xNome',
+        'identificador',
         '<',
         busca.replace(/.$/, (c) => String.fromCharCode(c.charCodeAt(0) + 1))
       )
       .limit(20)
       .get()
     cadastros = queryResult.docs.map((v) => {
-      let doc = ''
-      if (!doc) {
-        const cpf = v.get('dest.CPF')
-        if (cpf) doc = applyMask(cpf, 'cpf')
-      }
-      if (!doc) {
-        const cnpj = v.get('dest.CNPJ')
-        if (cnpj) doc = applyMask(cnpj, 'cnpj')
-      }
-      if (!doc) {
-        const idEstrangeiro = v.get('dest.idEstrangeiro')
-        if (idEstrangeiro) doc = idEstrangeiro
-      }
-      return { id: v.id, doc, nome: v.get('dest.xNome') }
+      return { id: v.id, identificador: v.get('identificador') }
     })
     loading = false
   }
@@ -46,7 +32,7 @@
 <form on:submit|preventDefault={getCadastros}>
   <div class="field has-addons">
     <div class="control">
-      <a class="button" href={$url('../cadastro')}>
+      <a class="button" href={$url('../transporte')}>
         <span class="icon is-small">
           <i class="fas fa-plus" />
         </span>
@@ -56,7 +42,7 @@
       <input
         class="input"
         type="text"
-        placeholder="Nome do cliente"
+        placeholder="Identificador"
         bind:value={busca}
       />
     </div>
@@ -70,16 +56,14 @@
 
 <table class="table is-hoverable is-fullwidth">
   <tr>
-    <th>Documento</th>
-    <th>Nome social</th>
+    <th>Identificador</th>
     <th>Ações</th>
   </tr>
   {#each cadastros as cad}
     <tr>
-      <td>{cad.doc}</td>
-      <td>{cad.nome}</td>
+      <td>{cad.identificador}</td>
       <td>
-        <a href={$url('../:id', { id: cad.id })}> Editar </a>
+        <a href={$url('../transporte/:id', { id: cad.id })}> Editar </a>
       </td>
     </tr>
   {/each}

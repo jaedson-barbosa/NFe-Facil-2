@@ -36,11 +36,6 @@ OK  Cadastro e edição de dados base
 OK  Tipos de ICMS de acordo com o regime do emitente
 OK  Sistema de lista para ítens multiplos
     Tela de NFe
-OK    Identificação
-OK    Cliente
-      Opcionais 1 (retirada, entrega e autorização)
-      Produtos
-      Campos opcionais
     Importação
     Exibição de notas
     Clonagem de NFe

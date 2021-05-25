@@ -15,20 +15,24 @@
       await db
         .collection('empresas')
         .doc(idEmpresa)
-        .collection('clientes')
+        .collection('produtos')
         .add(root)
-      $goto('../')
+      $goto('../../produtos')
     } catch (error) {
       alert(error.message)
       loading = false
     }
   }
+
+  const detUnico = elementosNFe[6] as any
+  detUnico.maxOccurs = 1
+  detUnico.annotation.label = "Informações do produto"
 </script>
 
 {@debug root}
 <form on:submit|preventDefault={salvar}>
   <fieldset disabled={loading}>
-    <AutoForm el={elementosNFe[2]} {root}>
+    <AutoForm el={detUnico} {root}>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
           <button class="button is-primary" class:is-loading={loading}>
@@ -39,7 +43,7 @@
           <button type="reset" class="button is-warning"> Limpar </button>
         </p>
         <p class="control">
-          <a href={$url('../')} class="button is-danger"> Cancelar </a>
+          <a href={$url('../../produtos')} class="button is-danger"> Cancelar </a>
         </p>
       </div>
     </AutoForm>

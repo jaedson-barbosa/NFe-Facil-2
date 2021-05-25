@@ -30,7 +30,7 @@
 <form on:submit|preventDefault={getCadastros}>
   <div class="field has-addons">
     <div class="control">
-      <a class="button" href={$url('../cadastro')}>
+      <a class="button" href={$url('../produto')}>
         <span class="icon is-small">
           <i class="fas fa-plus" />
         </span>
@@ -63,7 +63,7 @@
       <td>{cad.get('det.prod.cProd')}</td>
       <td>{cad.get('det.prod.xProd')}</td>
       <td>
-        <a href={$url('../:id', { id: cad.id })}> Editar </a>
+        <a href={$url('../produto/:id', { id: cad.id })}> Editar </a>
       </td>
     </tr>
   {/each}
