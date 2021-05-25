@@ -50,8 +50,18 @@
           detPag: [],
           vTroco: ''
         },
-        infIntermed: ''
-        //iniciar demais e infRespTec
+        infIntermed: '',
+        infAdic: '',
+        exporta: '',
+        compra: '',
+        cana: '',
+        infRespTec: {
+          CNPJ: '12931158000164',
+          xContato: 'Jaedson Barbosa Serafim',
+          email: 'jaedson33@gmail.com',
+          fone: '83988856440'
+        }
+        //adicionar produto em tela separada, pois uma caixa de diálogo desse tamanho é inviável
       }
       $goto('../identificacao')
     })
