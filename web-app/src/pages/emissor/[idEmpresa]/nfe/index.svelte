@@ -44,7 +44,13 @@
         autXML: [],
         det: [],
         total: {},
-        transp: {}
+        transp: {},
+        cobr: '',
+        pag: {
+          detPag: [],
+          vTroco: ''
+        },
+        infIntermed: ''
       }
       $goto('../identificacao')
     })

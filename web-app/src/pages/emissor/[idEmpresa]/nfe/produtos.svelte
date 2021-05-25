@@ -51,13 +51,6 @@
     <List el={elementosNFe[6]} root={scoped.commom.root}>
       <form let:criar on:submit|preventDefault={() => submit(criar)} slot="header" class="block">
         <div class="field has-addons">
-          <div class="control">
-            <a class="button" href={$url('../nfe')}>
-              <span class="icon is-small">
-                <i class="fas fa-plus" />
-              </span>
-            </a>
-          </div>
           <div class="control is-expanded">
             <input
               class="input"
@@ -86,8 +79,8 @@
     </List>
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a href={$url('../opcionais1')} class="button is-danger">
-          Voltar: Opcionais 1
+        <a href={$url('../cliente')} class="button is-danger">
+          Voltar: Cliente
         </a>
       </p>
       <p class="control">

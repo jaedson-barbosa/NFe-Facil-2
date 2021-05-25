@@ -37,7 +37,7 @@
 
   function submit() {
     if (appliedValue) {
-      $goto('../opcionais1')
+      $goto('../produtos')
     } else if (validValue) {
       const option = options.find((v) => v.text == busca)
       const data = option.value.data()
@@ -73,7 +73,7 @@
       <p class="control">
         <button class="button is-primary">
           {#if appliedValue}
-            Próximo: Opcionais 1
+            Próximo: Produtos
           {:else if validValue}
             Selecionar
           {:else}
