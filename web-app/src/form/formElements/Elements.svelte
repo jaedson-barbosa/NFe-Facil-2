@@ -31,7 +31,10 @@
   const specificReadonly = getSpecificReadonly()
 
   function getShow(root: any): boolean {
-    return !el.optional || (el.name && root[el.name])
+    if (!el.optional) {
+      if (!root[el.name]) root[el.name] = {}
+      return true
+    } else return el.name && root[el.name]
   }
   $: showElements = getShow(root)
 
