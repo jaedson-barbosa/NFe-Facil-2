@@ -4,14 +4,15 @@
 
   export let el: any
   export let root: any
-  let value = root[el.name] ?? ''
+  
+  $: {if (!root[el.name]) root[el.name] = ''}
 
   //#region decimal
   $: {
-    if (value && el.restriction.decimal) {
-      const o = parseFloat(value).toFixed(el.restriction.decimal)
+    if (root[el.name] && el.restriction.decimal) {
+      const o = parseFloat(root[el.name]).toFixed(el.restriction.decimal)
       // Fixado o número mínimo de casas decimais em 2
-      value = o.slice(0, o.indexOf('0', o.indexOf('.') + 3))
+      root[el.name] = o.slice(0, o.indexOf('0', o.indexOf('.') + 3))
     }
   }
   //#endregion
@@ -25,7 +26,7 @@
       : el.name == 'CEP'
       ? 'zipcode'
       : ''
-  $: maskedValue = mask ? applyMask(value, mask) : ''
+  $: maskedValue = mask ? applyMask(root[el.name], mask) : ''
 
   function getType() {
     // if (!/[a-zA-Z]|ÿ/.test(el.restriction?.pattern)) return 'number'
@@ -38,11 +39,6 @@
       : 'text'
   }
   //#endregion
-
-  $: {
-    root[el.name] = value
-    root = root
-  }
 
   $: ({ aux, label } = el.annotation)
   const id = createId()
@@ -69,7 +65,7 @@
             pattern={el.restriction.pattern}
             step={1 / 10 ** el.restriction.decimal}
             type="number"
-            bind:value
+            bind:value={root[el.name]}
           />
         {:else}
           <input
@@ -80,7 +76,7 @@
             minlength={el.restriction.minLength}
             maxlength={el.restriction.maxLength}
             type="text"
-            bind:value
+            bind:value={root[el.name]}
           />
         {/if}
       </div>

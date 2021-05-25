@@ -51,6 +51,7 @@
           vTroco: ''
         },
         infIntermed: ''
+        //iniciar demais e infRespTec
       }
       $goto('../identificacao')
     })

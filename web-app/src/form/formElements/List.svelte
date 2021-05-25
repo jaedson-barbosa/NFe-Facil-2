@@ -9,20 +9,21 @@
 
   let showIndex = -1
 
-  let elements = (root[el.name] ?? (root[el.name] = [])).map((v) => {
+  $: elements = (root[el.name] ?? (root[el.name] = [])).map((v) => {
     const orig = {}
     orig[el.name] = v
     return orig
   })
   $: root[el.name] = elements.map((v) => v[el.name])
-//Fazer alteração direto na root e tornar o elements reativo (inverter o que tem agora)
+  //Fazer alteração direto na root e tornar o elements reativo (inverter o que tem agora)
   function criar(newEl: any = {}) {
-    showIndex = elements.push(newEl) - 1
+    root[el.name] = [...root[el.name], newEl[el.name] ?? newEl]
+    showIndex = root[el.name].length - 1
   }
 
   function remover(i: number) {
-    elements.splice(i, 1)
-    showIndex = -1
+    root[el.name].splice(i, 1)
+    root = root
   }
 
   // Usado para não alterar o valor original
@@ -37,7 +38,7 @@
     <div class="field-body">
       <div class="field">
         <div class="control">
-          <button class="button" type="button" on:click={criar}>
+          <button class="button" type="button" on:click={() => criar()}>
             Adicionar
           </button>
         </div>
@@ -48,7 +49,9 @@
 
 <div class="buttons">
   {#each elements as childRoot, i (childRoot)}
-    <button class="button" on:click={() => (showIndex = i)}>Item</button>
+    <button type="button" class="button" on:click={() => (showIndex = i)}>
+      Item
+    </button>
     <div class="modal" class:is-active={showIndex == i}>
       <div class="modal-background" />
       <div class="modal-content">
@@ -56,8 +59,8 @@
           <form
             method="dialog"
             on:submit|preventDefault={() => {
-              elements = elements
               showIndex = -1
+              root = root
             }}
           >
             {#if el.element}
@@ -69,9 +72,9 @@
             {/if}
             <div class="buttons is-centered">
               <button class="button is-primary">Salvar</button>
-              <button class="button is-danger" on:click={() => remover(i)}
-                >Remover</button
-              >
+              <button class="button is-danger" on:click={() => remover(i)}>
+                Remover
+              </button>
             </div>
           </form>
         </div>

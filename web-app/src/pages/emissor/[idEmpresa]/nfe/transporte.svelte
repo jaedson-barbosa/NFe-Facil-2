@@ -34,8 +34,7 @@
     })
   }
 
-  let lastAppliedValue = ''
-  $: appliedValue = !busca || appliedValue == busca
+  $: appliedValue = !busca
   $: validValue = busca && options.some((v) => v.text == busca)
 
   function submit() {
@@ -44,9 +43,8 @@
     } else if (validValue) {
       const option = options.find((v) => v.text == busca)
       const data = option.value.data()
-      lastAppliedValue = data.identificador
       root.transp = data.transp
-      root = root
+      busca = ''
     } else buscar()
   }
 </script>
@@ -69,7 +67,6 @@
         </datalist>
       </div>
     </div>
-    <AutoForm el={elementosNFe[8]} {root} />
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
         <a href={$url('../total')} class="button is-danger">
@@ -88,5 +85,6 @@
         </button>
       </p>
     </div>
+    <AutoForm el={elementosNFe[8]} {root} />
   </form>
 </div>

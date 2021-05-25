@@ -28,24 +28,12 @@
     return [...munsUFs, ...paises]
   }
 
-  let showElements = !el.optional || (el.name && root[el.name])
-
   const specificReadonly = getSpecificReadonly()
-  let childRoot = el.name
-    ? typeof root[el.name] == 'object'
-      ? root[el.name]
-      : (root[el.name] = {})
-    : root
-  $: {
-    if (el.name) {
-      if (showElements && typeof root[el.name] != 'object') {
-        childRoot = root[el.name] = {}
-      } else if (!showElements && typeof root[el.name] == 'object') {
-        childRoot = root[el.name] = ''
-      }
-    }
-    root = root
+
+  function getShow(root: any): boolean {
+    return !el.optional || (el.name && root[el.name])
   }
+  $: showElements = getShow(root)
 
   function getIfUndefined(childEl: any, childRoot: any) {
     const result =
@@ -60,23 +48,50 @@
   }
 </script>
 
-{#if el.optional}
+{#if showElements}
+  {#if el.optional}
+    <div class="field is-horizontal">
+      <div class="field-label" />
+      <div class="field-body">
+        <div class="field">
+          <button
+            type="button"
+            class="button"
+            on:click={() => (root[el.name] = '')}
+          >
+            Remover campo opcional
+          </button>
+        </div>
+      </div>
+    </div>
+  {/if}
+  {#each elements as childEl}
+    {#if getIfUndefined(childEl, root[el.name] ?? root)}
+      {#if el.name}
+        <AutoForm
+          el={childEl}
+          bind:root={root[el.name]}
+          {level}
+          {specificReadonly}
+        />
+      {:else}
+        <AutoForm el={childEl} bind:root {level} {specificReadonly} />
+      {/if}
+    {/if}
+  {/each}
+{:else if el.optional}
   <div class="field is-horizontal">
     <div class="field-label" />
     <div class="field-body">
       <div class="field">
-        <label class="checkbox">
-          <input type="checkbox" bind:checked={showElements} />
+        <button
+          type="button"
+          class="button"
+          on:click={() => (root[el.name] = {})}
+        >
           Informar campo opcional
-        </label>
+        </button>
       </div>
     </div>
   </div>
-{/if}
-{#if showElements}
-  {#each elements as childEl}
-    {#if getIfUndefined(childEl, childRoot)}
-      <AutoForm el={childEl} bind:root={childRoot} {level} {specificReadonly} />
-    {/if}
-  {/each}
 {/if}
