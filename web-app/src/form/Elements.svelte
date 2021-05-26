@@ -32,15 +32,16 @@
 
   function getShow(root: any): boolean {
     if (!el.optional) {
-      if (!root[el.name]) {
-        if (!el.name) {
-          console.log(el)
-          alert('Opa!')
-        }
+      if (el.name && !root[el.name]) {
         root[el.name] = {}
       }
       return true
-    } else return el.name && root[el.name]
+    } else {
+      if (el.name) {
+        return root[el.name]
+      }
+      return el.element.some(v => v.name && root[v.name])
+    }
   }
   $: showElements = getShow(root)
 

@@ -14,7 +14,7 @@
   export let root: any
   export let el: any
 
-  const elements = (el.choice.element as any[]).filter((v) => {
+  const elements = (el.element as any[]).filter((v) => {
     if (v.custom) return custom[v.custom]
     return true
   })
@@ -22,8 +22,8 @@
   $: infoType = {
     name: 'currentType',
     annotation: {
-      label: el.choice.annotation?.label ?? '',
-      aux: el.choice.annotation?.aux ?? '',
+      label: el.annotation?.label ?? '',
+      aux: el.annotation?.aux ?? '',
       itens: [
         ...(el.optional ? ['Não informar'] : []),
         ...elements.map((v) => v.annotation.label),

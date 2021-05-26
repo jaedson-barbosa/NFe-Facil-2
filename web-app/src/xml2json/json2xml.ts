@@ -71,7 +71,7 @@ class ToXml {
             this.closeTag(key)
           }
         }
-      } else if (typeof obj[key] == 'object' && obj[key]) {
+      } else if (typeof obj[key] == 'object') {
         this.openTag(key)
         this.parse(obj[key])
         this.closeTag(key)

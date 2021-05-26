@@ -15,7 +15,7 @@
   import Container from './Container.svelte'
 
   $: {
-    if (!el.choice && !el.element) {
+    if (!el.element) {
       const findType = (v: any) => v.name == el.type
       if (!el.restriction) {
         el.restriction = simpleType.find(findType)?.restriction
@@ -32,14 +32,14 @@
 
 {#if isConstant || specificIndex > 0 || el.readonly}
   <Readonly {el} {root} />
-{:else if el.choice || el.element || el.maxOccurs > 1}
+{:else if el.element || el.maxOccurs > 1}
   <Container {level} label={el.annotation?.label} aux={el.annotation?.aux}>
     {#if el.maxOccurs > 1}
       <List {el} level={level + 1} bind:root />
-    {:else if el.element}
-      <Elements {el} level={level + 1} bind:root />
-    {:else}
+    {:else if el.choice}
       <Choice {el} level={level + 1} bind:root />
+    {:else}
+      <Elements {el} level={level + 1} bind:root />
     {/if}
     <slot />
   </Container>

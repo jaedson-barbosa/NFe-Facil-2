@@ -35,6 +35,7 @@ OK  Cadastro de emitentes
 OK  Cadastro e edição de dados base
 OK  Tipos de ICMS de acordo com o regime do emitente
 OK  Sistema de lista para ítens multiplos
++-  Remover choice
     Tela de NFe
     Importação
     Exibição de notas

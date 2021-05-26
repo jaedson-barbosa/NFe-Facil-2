@@ -63,10 +63,10 @@
               root = root
             }}
           >
-            {#if el.element}
-              <Elements el={cloneEl} {level} root={childRoot} />
-            {:else if el.choice}
+            {#if el.choice}
               <Choice el={cloneEl} {level} root={childRoot} />
+            {:else if el.element}
+              <Elements el={cloneEl} {level} root={childRoot} />
             {:else}
               <AutoForm el={cloneEl} {level} root={childRoot} />
             {/if}

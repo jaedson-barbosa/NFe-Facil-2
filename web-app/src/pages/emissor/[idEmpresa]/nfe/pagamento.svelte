@@ -7,12 +7,14 @@
   export let scoped: { commom: { root: any } }
   let root = scoped.commom.root
   $: rootRestante = {
-    restante:
+    restante: (
       root.total.ICMSTot.vNF +
       +(root.pag.vTroco ?? 0) -
-      (root.pag.detPag as any[])
-        .reduce((p, c) => p + +(c.vPag ?? 0), 0)
-        .toFixed(2),
+      (root.pag.detPag as any[]).reduce((p, c) => p + +(c.vPag ?? 0), 0)
+    ).toFixed(2),
+  }
+  $: {
+    console.log(rootRestante)
   }
 
   const infoRestante = {

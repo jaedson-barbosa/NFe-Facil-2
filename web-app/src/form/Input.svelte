@@ -1,5 +1,6 @@
 <script lang="ts">
   import { applyMask } from '@app/documentUtils'
+  import { onDestroy } from 'svelte';
   import { createId } from './helpers'
 
   export let el: any
@@ -12,9 +13,14 @@
     if (root[el.name]) {
       let parsed = parseFloat(root[el.name].replace(',', '.'))
       if (Number.isNaN(parsed)) parsed = 0
+      if (el.restriction.decimal < 2) {
+        console.log(el)
+        alert("AQUI")
+      }
       const o = parsed.toFixed(el.restriction.decimal)
       // Fixado o número mínimo de casas decimais em 2
-      root[el.name] = o.slice(0, o.indexOf('0', o.indexOf('.') + 3))
+      const start = o.indexOf('0', o.indexOf('.') + 3)
+      root[el.name] = start > 0 ? o.slice(0, start) : o
     }
   }
   //#endregion
@@ -33,6 +39,10 @@
 
   $: ({ aux, label } = el.annotation)
   const id = createId()
+
+  onDestroy(() => {
+    if (el.restriction.decimal) updateDecimal()
+  })
 </script>
 
 <div class="field is-horizontal">
