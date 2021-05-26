@@ -12,6 +12,7 @@
   import Choice from './Choice.svelte'
   import Elements from './Elements.svelte'
   import List from './List.svelte'
+  import Container from './Container.svelte'
 
   $: {
     if (!el.choice && !el.element) {
@@ -32,18 +33,7 @@
 {#if isConstant || specificIndex > 0 || el.readonly}
   <Readonly {el} {root} />
 {:else if el.choice || el.element || el.maxOccurs > 1}
-  <div class="container content box">
-    <div class="field is-horizontal">
-      <div class="field-label" />
-      <div class="field-body">
-        <div class="field">
-          <h1 class="title is-{level}">{el.annotation?.label}</h1>
-          {#if el.annotation?.aux}
-            <h1 class="subtitle is-{level + 2}">{el.annotation?.aux}</h1>
-          {/if}
-        </div>
-      </div>
-    </div>
+  <Container {level} label={el.annotation?.label} aux={el.annotation?.aux}>
     {#if el.maxOccurs > 1}
       <List {el} level={level + 1} bind:root />
     {:else if el.element}
@@ -52,7 +42,7 @@
       <Choice {el} level={level + 1} bind:root />
     {/if}
     <slot />
-  </div>
+  </Container>
 {:else if root}
   {#if specificIndex == 0}
     <Specific bind:root bind:specificReadonly {el} />

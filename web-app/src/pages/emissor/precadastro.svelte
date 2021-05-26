@@ -3,13 +3,15 @@
   import { createId } from '@form/helpers'
   import Input from '@form/Input.svelte'
   import { user } from '@app/store'
+  import { requisitar } from '@app/functions';
+  import { get } from 'svelte/store';
 
   let loading = false
   let files: FileList
   
   const requisicao = {
     cert: '',
-    ident: $user.displayName,
+    ident: get(user).displayName,
     senha: ''
   }
 
@@ -35,15 +37,7 @@
     loading = true
     const certArray = new Uint8Array(await files[0].arrayBuffer())
     requisicao.cert = btoa(String.fromCharCode(...certArray))
-    const idToken = await $user.getIdToken()
-    const resp = await fetch(
-      'http://localhost:5001/nfe-facil-980bc/us-central1/precadastro',
-      {
-        method: 'POST',
-        body: JSON.stringify(requisicao),
-        headers: { Authorization: 'Bearer ' + idToken },
-      }
-    )
+    const resp = await requisitar('precadastro', requisicao)
     if (resp.status == 201) {
       $goto('../')
     } else {

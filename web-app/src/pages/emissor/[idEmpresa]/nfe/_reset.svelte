@@ -1,12 +1,12 @@
 <script lang="ts">
   import { isActive, url } from '@sveltech/routify'
-  import type { INFeRoot } from './rootGenerator'
+  import type INFeRoot from './INFeRoot'
   let commom: { root: INFeRoot } = { root: undefined }
 </script>
 
 {@debug commom}
 
-{#if commom.root || $isActive('./index')}
+{#if commom.root || $isActive('./index') || $isActive('./:id')}
   <slot scoped={{ commom }} />
 {:else}
   Raiz inválida!

@@ -1,5 +1,6 @@
 
 export default interface INFeRoot {
+  Id: string,
   ide: {
     cUF: string;
     cNF: string;

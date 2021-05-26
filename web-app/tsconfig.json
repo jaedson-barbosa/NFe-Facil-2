@@ -4,11 +4,13 @@
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
   "compilerOptions": {
     "resolveJsonModule": true,
-    "target": "ES6",
+    "target": "ESNext",
     "baseUrl": ".",
     "paths": {
       "@form/*": ["src/form/*"],
-      "@app/*": ["src/app/*"]
-    }
+      "@app/*": ["src/app/*"],
+      "@xml2json/*": ["src/xml2json/*"]
+    },
+    "lib": ["ESNext","DOM"]
   }
 }

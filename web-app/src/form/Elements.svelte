@@ -32,7 +32,13 @@
 
   function getShow(root: any): boolean {
     if (!el.optional) {
-      if (!root[el.name]) root[el.name] = {}
+      if (!root[el.name]) {
+        if (!el.name) {
+          console.log(el)
+          alert('Opa!')
+        }
+        root[el.name] = {}
+      }
       return true
     } else return el.name && root[el.name]
   }

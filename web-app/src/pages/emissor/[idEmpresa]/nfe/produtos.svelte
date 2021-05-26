@@ -3,7 +3,10 @@
   import type INFeRoot from './INFeRoot'
 
   export let scoped: { commom: { root: INFeRoot } }
-  $: elements = scoped.commom.root.det
+  $: elements = scoped.commom.root.det.map((v,i) => {
+    v.nItem = (i + 1).toString()
+    return v
+  })
 
   function submit() {
     if (elements.length) {

@@ -46,9 +46,11 @@
             },
             {
               "name": "nNF",
-              "readonly": true,
               "type": "TNF",
-              "annotation": { "label": "Número do Documento Fiscal" }
+              "annotation": {
+                "label": "Número do Documento Fiscal",
+                "aux": "Determinado pelo servidor durante a transmissão."
+              }
             },
             {
               "name": "dhEmi",

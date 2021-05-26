@@ -19,10 +19,10 @@ serieNFCe // implementacao futura
   transp: ...
 -produtos:
   det: ...
--notas: //usuarios nao podem escrever nesta tabela, apenas le-la
-  id //do xml da nota, nao do firestore
+-notas: //escrita liberada apenas para status=0, usar ID da NFe
   status //0-Salva;1-Emitida;2-Cancelada
-  json
+  infNFe
+  dhEmi
   xml
   xmlCancelamento
 
@@ -41,8 +41,7 @@ OK  Sistema de lista para ítens multiplos
     Clonagem de NFe
     Servidor básico (sem todas análises)
 OK    precadastro
-      apenasSalvarNFe
-      assinarTransmitirNFe
+      transmitirNFe
       gerarDANFENFe
 
 BASE para emissão de NFe:

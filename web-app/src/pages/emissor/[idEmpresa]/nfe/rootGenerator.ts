@@ -1,51 +1,53 @@
+import { VERSAO } from '@app/info'
 import { IBGE } from '@form/data/IBGE.json'
 import type INFeRoot from './INFeRoot'
 
-export function generate(empresa: any): INFeRoot {
+export function generate(empresa: any, initialValue: INFeRoot = undefined): INFeRoot {
   const emit = empresa.emit
-  const initialValue: INFeRoot = {
+  return {
+    Id: '',
     ide: {
       cUF: getCodigoEstado(emit.enderEmit.UF),
       cNF: getRandomNumber().toString(),
-      natOp: '',
+      natOp: initialValue?.ide.natOp ?? '',
       mod: 55,
       serie: empresa.serieNFe,
-      nNF: 'Gerenciado pelo servidor',
+      nNF: initialValue?.ide.nNF ?? '1',
       dhEmi: toNFeString(new Date()),
-      dhSaiEnt: '',
-      tpNF: '',
-      idDest: '',
-      cMunFG: emit.enderEmit.cMun,
-      tpImp: '1',
+      dhSaiEnt: initialValue?.ide.dhSaiEnt ?? '',
+      tpNF: initialValue?.ide.tpNF ?? '',
+      idDest: initialValue?.ide.idDest ?? '',
+      cMunFG: initialValue?.ide.cMunFG ?? emit.enderEmit.cMun,
+      tpImp: initialValue?.ide.tpImp ?? '1',
       tpEmis: 1,
-      cDV: 'Calculado pelo servidor',
-      tpAmb: '',
-      finNFe: '',
-      indFinal: '',
-      indPres: '',
-      indIntermed: '',
-      procEmi: '0',
-      verProc: '0.0.1',
-      NFref: [],
+      cDV: 'Calculado pela aplicação',
+      tpAmb: initialValue?.ide.tpAmb ?? '',
+      finNFe: initialValue?.ide.finNFe ?? '',
+      indFinal: initialValue?.ide.indFinal ?? '',
+      indPres: initialValue?.ide.indPres ?? '',
+      indIntermed: initialValue?.ide.indIntermed ?? '',
+      procEmi: initialValue?.ide.procEmi ?? '0',
+      verProc: VERSAO,
+      NFref: initialValue?.ide.NFref ?? [],
     },
     emit,
-    dest: {},
-    retirada: '',
-    entrega: '',
-    autXML: [],
-    det: [],
-    total: {},
-    transp: {},
-    cobr: '',
-    pag: {
+    dest: initialValue?.dest ?? {},
+    retirada: initialValue?.retirada ?? '',
+    entrega: initialValue?.entrega ?? '',
+    autXML: initialValue?.autXML ?? [],
+    det: initialValue?.det ?? [],
+    total: initialValue?.total ?? {},
+    transp: initialValue?.transp ?? {},
+    cobr: initialValue?.cobr ?? '',
+    pag: initialValue?.pag ?? {
       detPag: [],
       vTroco: '',
     },
-    infIntermed: '',
-    infAdic: '',
-    exporta: '',
-    compra: '',
-    cana: '',
+    infIntermed: initialValue?.infIntermed ?? '',
+    infAdic: initialValue?.infAdic ?? '',
+    exporta: initialValue?.exporta ?? '',
+    compra: initialValue?.compra ?? '',
+    cana: initialValue?.cana ?? '',
     infRespTec: {
       CNPJ: '12931158000164',
       xContato: 'Jaedson Barbosa Serafim',
@@ -53,7 +55,6 @@ export function generate(empresa: any): INFeRoot {
       fone: '83988856440',
     },
   }
-  return initialValue
 }
 
 function getCodigoEstado(sigla: string) {
