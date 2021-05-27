@@ -71,25 +71,11 @@ export function onLoggedRequest(
   ) => Promise<void>
 ): functions.HttpsFunction {
   return onDefaultRequest(true, async (u, r, b) => {
-    const cnpj = b.cnpj
-    const id = b.id
-    if (!cnpj && !id) {
+    const cnpj = b.idEmpresa
+    if (!cnpj) {
       r.status(400).send('Requisição sem identificação de emitente.')
-    } else if (cnpj) {
-      const empresas = await db
-        .collection('empresas')
-        .where('emit.CNPJ', '==', cnpj)
-        .limit(1)
-        .get()
-      if (empresas.empty) {
-        r.status(400).send('Empresa não existe')
-      } else {
-        const empRef = empresas.docs[0].ref
-        const empData = empresas.docs[0].data()! as IEmpresaGet
-        await handler(u, r, empRef, empData, b)
-      }
     } else {
-      const empresa = await db.collection('empresas').doc(id).get()
+      const empresa = await db.collection('empresas').doc(cnpj).get()
       if (!empresa.exists) {
         r.status(400).send('Empresa não existe')
       } else {

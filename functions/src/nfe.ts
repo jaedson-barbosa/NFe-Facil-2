@@ -1,47 +1,9 @@
-import { FieldValue, IEmpresaGet, onLoggedRequest } from './core'
-import { IBGESimplificado } from './IBGESimplificado.json'
-import * as dateformat from 'dateformat'
+import { db, IEmpresaGet, onLoggedRequest } from './core'
 import { toJson, toXml } from 'xml2json'
 import { INotaDB } from './types'
 import { TAmb, enviarRequisicao, getRandomNumber } from './requisicoes'
-import { assinarEvento, assinarNFe } from './assinaturas'
+import { assinarNFe } from './assinaturas'
 import axios from 'axios'
-import { IViewNota } from '../../commom'
-
-// const ambiente = ambientes.Homologacao
-
-export const getJsonNota = onLoggedRequest(
-  async (user, res, empresaRef, empresa, body) => {
-    const idNota = body.idNota
-    if (!idNota) {
-      res.status(400).send('Id de nota inválido')
-      return
-    }
-    const nota = await empresaRef.collection('notas').doc(idNota).get()
-    if (!nota.exists) {
-      res.status(400).send('Nota não existe')
-      return
-    }
-    const data = nota.data() as INotaDB<FirebaseFirestore.Timestamp>
-    res.status(200).send({ infNFe: data.json })
-  }
-)
-
-function addPrefix(obj: any) {
-  return Object.entries(obj).reduce(
-    (p, [v0, v1]) => {
-      const name = v0
-      p[name] =
-        typeof v1 == 'object'
-          ? addPrefix(v1)
-          : name == 'nItem' || name == 'dia' //xs:attribute
-          ? v1
-          : { $t: v1 }
-      return p
-    },
-    Array.isArray(obj) ? [] : ({} as any)
-  )
-}
 
 function calcularDV(chave: string) {
   let soma = 0 // Vai guardar a Soma
@@ -59,62 +21,15 @@ function calcularDV(chave: string) {
 }
 
 function getXml(infNFe: any, numero: string) {
-  infNFe.ide.nNF = numero
-  // Calculo da chave
-  const cUF = IBGESimplificado.find(
-    (v) => v.Sigla == (infNFe.emit.enderEmit.UF as string)
-  )!.Codigo
-  const AAMM = dateformat(infNFe.ide.dhEmi, 'yymm')
-  const CNPJ = infNFe.emit.CNPJ
-  const mod = infNFe.ide.mod
-  const serie = (infNFe.ide.serie as string).padStart(3, '0')
-  const nNF = (infNFe.ide.nNF as string).padStart(9, '0')
-  const tpEmis = infNFe.ide.tpEmis
-  const cNF = infNFe.ide.cNF
-  const chave = `${cUF}${AAMM}${CNPJ}${mod}${serie}${nNF}${tpEmis}${cNF}`
-  const cDV = calcularDV(chave).toString()
-  infNFe.ide.cDV = cDV
-  const prefixedInfNFe = addPrefix(infNFe)
-  prefixedInfNFe.versao = infNFe.versao = '4.00'
-  prefixedInfNFe.Id = infNFe.Id = `NFe${chave}${cDV}`
-  const xml = toXml({
-    NFe: {
-      xmlns: 'http://www.portalfiscal.inf.br/nfe',
-      infNFe: prefixedInfNFe,
-    },
-  })
-  return xml
+  infNFe.ide.nNF.$t = numero
+  const oldChave = infNFe.Id.substr(3,43)
+  const novaChave = oldChave.substr(0,25)+numero.padStart(9, '0')+oldChave.substr(34)
+  const cDV = calcularDV(novaChave).toString()
+  infNFe.ide.cDV.$t = cDV
+  infNFe.Id = `NFe${novaChave}${cDV}`
+  const NFe = { xmlns: 'http://www.portalfiscal.inf.br/nfe', infNFe }
+  return toXml({ NFe })
 }
-
-export const apenasSalvarNota = onLoggedRequest(
-  async (user, res, empresaRef, empresa, body) => {
-    // Inserir analise pra quando a nota ja foi emitida
-    const idNota = body.idNota
-    const infNFe = body.infNFe
-    if (!infNFe) {
-      res.status(400).send('Requisição sem corpo da nota')
-      return
-    }
-    try {
-      const xml = getXml(infNFe, '999999999')
-      const nota: INotaDB<Date> = {
-        json: infNFe,
-        xml,
-        emitido: false,
-        lastUpdate: new Date(),
-        nProt: 0,
-        eventos: [],
-      }
-      await (idNota
-        ? empresaRef.collection('notas').doc(idNota)
-        : empresaRef.collection('notas').doc()
-      ).set(nota)
-      res.sendStatus(201)
-    } catch (error) {
-      res.status(500).send(JSON.stringify(error))
-    }
-  }
-)
 
 interface TRetEnviNFe {
   versao: string
@@ -132,6 +47,8 @@ interface TRetEnviNFe {
 
 async function autorizacao(
   empresa: IEmpresaGet,
+  publicCert: string,
+  privateCert: string,
   ambiente: TAmb,
   ...xmls: string[]
 ): Promise<TRetEnviNFe> {
@@ -143,7 +60,9 @@ async function autorizacao(
     </enviNFe>`,
     'autorizacao',
     ambiente,
-    empresa
+    empresa,
+    publicCert,
+    privateCert
   )
   const retEnviNFe = (toJson(respAutorizacao, {
     object: true,
@@ -167,6 +86,8 @@ interface TRetConsReciNFe {
 
 async function retAutorizacao(
   empresa: IEmpresaGet,
+  publicCert: string,
+  privateCert: string,
   ambiente: TAmb,
   nRec: string
 ): Promise<TRetConsReciNFe> {
@@ -177,7 +98,9 @@ async function retAutorizacao(
     </consReciNFe>`,
     'retAutorizacao',
     ambiente,
-    empresa
+    empresa,
+    publicCert,
+    privateCert
   )
   const retConsReciNFe = (toJson(respRetAutorizacao, {
     object: true,
@@ -190,41 +113,57 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-export const assinarTransmitirNota = onLoggedRequest(
+function removePrefix(obj: any) {
+  if (typeof obj != 'object') return obj
+  const e = Object.entries(obj)
+  if (!e[0]) return obj
+  if (e[0][0] == '$t') return e[0][1]
+  e.forEach(([v0, v1]) => (obj[v0] = removePrefix(v1)))
+  return obj
+}
+
+export const transmitirNFe = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
-    const idNota = body.idNota
+    const dataCertComplete = await db.collection('certificados').doc(empresaRef.id).get()
+    if (!dataCertComplete.exists) {
+      res.status(400).send('Não existe certificado para este CNPJ')
+      return
+    }
+    const dataCert = dataCertComplete.data()!
     const infNFe = body.infNFe
     if (!infNFe) {
       res.status(400).send('Requisição sem corpo da nota')
       return
     }
+    const oldId = infNFe.Id
     try {
-      let serie = infNFe.ide.serie
-      const ambiente: TAmb = infNFe.ide.tpAmb
+      let serie = infNFe.ide.serie.$t
+      const ambiente: TAmb = +infNFe.ide.tpAmb.$t
       if (ambiente == TAmb.Homologacao) {
-        const homologDest =
-          'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
-        infNFe.dest.xNome = homologDest
+        infNFe.dest.xNome.$t = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+      } else {
+        res.status(400).send("Emissão em produção ainda não está liberada")
+        return
       }
+      const notasSalvasCol = empresaRef.collection('notasSalvas')
+      const notasEmitidasCol = empresaRef.collection('notasEmitidas')
       // Calculo do numero
-      const maxNota = await empresaRef
-        .collection('notas')
-        .where('emitido', '==', true)
-        .where('json.ide.serie', '==', serie)
-        .where('json.ide.tpAmb', '==', ambiente)
-        .orderBy('json.ide.nNF')
-        .select('json.ide.nNF')
+      const maxNota = await notasEmitidasCol
+        .where('infNFe.ide.serie', '==', serie)
+        .where('infNFe.ide.tpAmb', '==', ambiente.toString())
+        .orderBy('infNFe.ide.nNF')
+        .select('infNFe.ide.nNF')
         .limit(1)
         .get()
       let nfeProc: string | undefined = undefined
       let nProt: number = 0
       let numero: number = maxNota.empty
         ? 1
-        : maxNota.docs[0].data().json.ide.nNF + 1
+        : +maxNota.docs[0].get('infNFe.ide.nNF') + 1
       do {
         const xml = getXml(infNFe, numero.toString())
-        const signedXml = assinarNFe(empresa, xml)
-        const resp = await autorizacao(empresa, ambiente, signedXml)
+        const signedXml = await assinarNFe(dataCert, xml)
+        const resp = await autorizacao(empresa, dataCert.publiCert, dataCert.privateCert, ambiente, signedXml)
         if (resp.cStat != '103') {
           res.status(400).send('Falha ao tentar enviar lote: ' + resp.xMotivo)
           return
@@ -232,7 +171,7 @@ export const assinarTransmitirNota = onLoggedRequest(
         let respRet: TRetConsReciNFe | undefined = undefined
         do {
           await sleep(Number(resp.infRec.tMed) * 1000)
-          respRet = await retAutorizacao(empresa, ambiente, resp.infRec.nRec)
+          respRet = await retAutorizacao(empresa, dataCert.publiCert, dataCert.privateCert, ambiente, resp.infRec.nRec)
           if (respRet.cStat.$t == '105') {
             // Lote em processamento (78)
             respRet = undefined
@@ -262,42 +201,27 @@ export const assinarTransmitirNota = onLoggedRequest(
           '</nfeProc>'
         nProt = Number(respRet.protNFe.infProt.nProt.$t)
       } while (!nfeProc)
-      const nota: INotaDB<Date> = {
-        json: infNFe,
-        xml: nfeProc,
-        emitido: true,
-        lastUpdate: new Date(),
-        nProt,
-        eventos: [],
+      const oldDocRef = notasSalvasCol.doc(oldId)
+      const oldDoc = await oldDocRef.get()
+      if (oldDoc.exists) {
+        if (oldDoc.get('status') == 0) {
+          await oldDocRef.delete()
+        } else {
+          res.status(400).send('Proibido: nota fiscal já emitida ou cancelada.')
+          return
+        }
       }
-      await (idNota
-        ? empresaRef.collection('notas').doc(idNota)
-        : empresaRef.collection('notas').doc()
-      ).set(nota)
-      res.sendStatus(201)
+      await notasEmitidasCol.doc(infNFe.Id).set({
+        cancelada: false,
+        infNFe: removePrefix(infNFe),
+        dhEmi: new Date(infNFe.ide.dhEmi.$t),
+        nProt,
+        xml: nfeProc
+      })
+      res.status(201).send(infNFe.Id)
     } catch (error) {
-      res.status(500).send(JSON.stringify(error))
+      res.status(500).send(typeof error == 'object' ? JSON.stringify(error) : error)
     }
-  }
-)
-
-export const getXML = onLoggedRequest(
-  async (user, res, empresaRef, empresa, body) => {
-    const idNota = body.idNota
-    if (!idNota) {
-      res.status(400).send('Requisição sem id da nota.')
-      return
-    }
-    const nota = await empresaRef.collection('notas').doc(idNota).get()
-    if (!nota.exists) {
-      res.status(400).send('Nota não existe')
-      return
-    }
-    const data = nota.data() as INotaDB<FirebaseFirestore.Timestamp>
-    res.status(200).send({
-      chave: data.json.Id,
-      xml: data.xml,
-    })
   }
 )
 
@@ -332,22 +256,7 @@ export const gerarDANFE = onLoggedRequest(
     res.send(danfe.data)
   }
 )
-
-export function getViewNota(
-  nota: INotaDB<Date | FirebaseFirestore.Timestamp>,
-  emitido: boolean
-): IViewNota<Date> {
-  const json = nota.json
-  return {
-    serie: json.ide.serie,
-    nNF: json.ide.nNF,
-    dhEmi: new Date(json.ide.dhEmi),
-    xNome: json.dest.xNome,
-    Id: emitido ? json.Id?.slice(3) : '',
-    eventos: nota.eventos ?? [],
-  }
-}
-
+/*
 export const cancelarNFe = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
     const idNota = body.idNota
@@ -475,4 +384,4 @@ async function recepcaoEvento(
     reversible: true,
   }) as any)['soap:Envelope']['soap:Body'].nfeResultMsg.retEnvEvento
   return retEnvEvento as retEnvEvento
-}
+}*/

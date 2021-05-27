@@ -2,7 +2,8 @@
   import { requisitar } from '@app/functions'
   import { url, goto } from '@sveltech/routify'
   import { db } from '@app/firebase'
-  import generateXml from './finalizacao'
+  import { preparateJSON, generateXML } from './finalizacao'
+  import { user } from '@app/store'
   import type INFeRoot from './INFeRoot'
 
   export let scoped: { commom: { root: INFeRoot } }
@@ -16,7 +17,7 @@
     const notasCol = db
       .collection('empresas')
       .doc(idEmpresa)
-      .collection('notas')
+      .collection('notasSalvas')
     if (oldId) {
       const docRef = notasCol.doc(oldId)
       const doc = await docRef.get()
@@ -30,17 +31,18 @@
         }
       }
     }
-    let xml = generateXml(infNFe)
+    const xml = generateXML(infNFe)
     const dhEmi = new Date(infNFe.ide.dhEmi)
-    const newRegister = { status: 0, infNFe, dhEmi, xml }
+    const newRegister = { infNFe, dhEmi, xml }
     await notasCol.doc(infNFe.Id).set(newRegister)
     $goto('../:id', { id: infNFe.Id })
   }
 
   async function transmitir() {
     loading = true
-    const infNFe = { infNFe: scoped.commom.root }
-    const resp = await requisitar('transmitir', infNFe)
+    const infNFe = preparateJSON(scoped.commom.root)
+    const idToken = await $user.getIdToken()
+    const resp = await requisitar('transmitirNFe', { idEmpresa, infNFe }, idToken)
     const respText = await resp.text()
     if (resp.status == 201) {
       $goto('../:id', { id: respText })

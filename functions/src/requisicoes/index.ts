@@ -1,9 +1,9 @@
-import { onLoggedRequest, IEmpresaGet } from '../core'
+import { IEmpresaGet } from '../core'
 import * as https from 'https'
 import * as axios from 'axios'
 import * as servicos from './servicos.json'
 import * as webservicesNFe from './webservicesNFe.json'
-import { IBGESimplificado } from '../IBGESimplificado.json'
+// import { IBGESimplificado } from '../IBGESimplificado.json'
 
 type nomesServicos = keyof typeof servicos &
   keyof typeof webservicesNFe.SVRS.servicos
@@ -22,7 +22,7 @@ export enum TAmb {
 // else res.status(400).send('Usuário não cadastrado')
 // TO-DO: Implementar análise de permissões
 
-export const consultarStatusServico = onLoggedRequest(
+/*export const consultarStatusServico = onLoggedRequest(
   async (user, res, empresaRef, empresa, body) => {
     const ambiente = TAmb.Homologacao
     const uf = empresa.emit.enderEmit.UF as string
@@ -40,13 +40,15 @@ export const consultarStatusServico = onLoggedRequest(
       )
     )
   }
-)
+)*/
 
 export async function enviarRequisicao(
   body: string,
   servico: nomesServicos,
   amb: TAmb,
-  empresa: IEmpresaGet
+  empresa: IEmpresaGet,
+  publicCert: string,
+  privateCert: string
 ): Promise<string> {
   return (
     await axios.default.post(
@@ -63,8 +65,8 @@ export async function enviarRequisicao(
       {
         httpsAgent: new https.Agent({
           rejectUnauthorized: false,
-          cert: empresa.publicCert,
-          key: empresa.privateCert,
+          cert: publicCert,
+          key: privateCert,
         }),
         headers: { 'Content-Type': 'application/soap+xml' },
       }

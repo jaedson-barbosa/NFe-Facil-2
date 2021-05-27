@@ -19,10 +19,15 @@ serieNFCe // implementacao futura
   transp: ...
 -produtos:
   det: ...
--notas: //escrita liberada apenas para status=0, usar ID da NFe
-  status //0-Salva;1-Emitida;2-Cancelada
+-notasSalvas: //escrita liberada
   infNFe
   dhEmi
+  xml
+-notasEmitidas:
+  cancelada
+  infNFe
+  dhEmi
+  nProt
   xml
   xmlCancelamento
 

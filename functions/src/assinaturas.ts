@@ -23,13 +23,13 @@ class keyProvider {
   }
 }
 
-export function assinarNFe(dataEmpresa: IEmpresaGet, unsignedXml: string) {
+export async function assinarNFe(dataCert: any, unsignedXml: string) {
   // const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
   // if (usuario.exists) res.status(200).send(usuario.data())
   // else res.status(400).send('Usuário não cadastrado')
   // TO-DO: Implementar análise de permissões e verificação de XML
   const sig = new SignedXml()
-  sig.keyInfoProvider = new keyProvider(dataEmpresa.publicCert)
+  sig.keyInfoProvider = new keyProvider(dataCert.publicCert)
   sig.addReference(
     "//*[local-name(.)='infNFe']",
     [
@@ -40,7 +40,7 @@ export function assinarNFe(dataEmpresa: IEmpresaGet, unsignedXml: string) {
   )
   sig.canonicalizationAlgorithm =
     'http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
-  sig.signingKey = dataEmpresa.privateCert
+  sig.signingKey = dataCert.privateCert
   sig.computeSignature(unsignedXml)
   return sig.getSignedXml()
 }

@@ -14,7 +14,7 @@
     const queryResult = await db
       .collection('empresas')
       .doc(idEmpresa)
-      .collection('notas')
+      .collection('notasSalvas')
       .limit(10)
       .get()
     cadastros = queryResult.docs

@@ -6,24 +6,34 @@
   import ReadonlyV from '@form/ReadonlyV.svelte'
   import { db } from '@app/firebase'
   import type INFeRoot from './INFeRoot'
-  import generateXml from './finalizacao'
+  // import { generateXML, preparateJSON } from './finalizacao';
 
   export let id: string
   $: idEmpresa = $params['idEmpresa']
   export let scoped: { commom: { root: INFeRoot } }
 
   async function carregar() {
-    const nota = await db
+    let status = 0
+    let nota = await db
       .collection('empresas')
       .doc(idEmpresa)
-      .collection('notas')
+      .collection('notasSalvas')
       .doc(id)
       .get()
     if (!nota.exists) {
-      throw new Error('Id não reconhecido.')
+      nota = await db
+        .collection('empresas')
+        .doc(idEmpresa)
+        .collection('notasEmitidas')
+        .doc(id)
+        .get()
+      status = nota.get('cancelada') ? 2 : 1
+      if (!nota.exists) {
+        throw new Error('Id não reconhecido.')
+      }
     }
     return {
-      status: nota.get('status'),
+      status,
       nNF: nota.get('infNFe.ide.nNF'),
       dhEmi: nota.get('dhEmi').toDate().toLocaleString(),
       xNome: nota.get('infNFe.dest.xNome'),
@@ -33,6 +43,9 @@
 
   async function editar(root: any) {
     const infNFe: INFeRoot = root.nota.get('infNFe')
+    // const xml = generateXML(infNFe)
+    // console.log(xml)
+    // return 
     const v = await db.collection('empresas')
       .doc(idEmpresa)
       .get()

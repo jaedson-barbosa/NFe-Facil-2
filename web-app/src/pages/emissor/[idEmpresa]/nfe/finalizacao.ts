@@ -1,9 +1,9 @@
 import { IBGE } from '@form/data/IBGE.json'
 import { infNFe as refInfNFe } from '@form/data/nfe.json'
 import toXml from '@xml2json/json2xml'
+import type INFeRoot from './INFeRoot'
 
-export default function generateXml(infNFe: any) {
-  // Calculo da chave
+export function preparateJSON(infNFe: INFeRoot) {
   const cUF = IBGE.find(
     (v) => v.Sigla == (infNFe.emit.enderEmit.UF as string)
   )!.Codigo
@@ -26,13 +26,17 @@ export default function generateXml(infNFe: any) {
   const resultInfNFe = prefixedInfNFe.infNFe
   resultInfNFe.versao = '4.00'
   resultInfNFe.Id = infNFe.Id = `NFe${chave}${cDV}`
-  const xml = toXml({
+  return resultInfNFe
+}
+
+export function generateXML(infNFe: INFeRoot) {
+  const preparatedJSON = preparateJSON(infNFe)
+  return toXml({
     NFe: {
       xmlns: 'http://www.portalfiscal.inf.br/nfe',
-      infNFe: resultInfNFe,
+      infNFe: preparatedJSON,
     },
   })
-  return xml
 }
 
 function prepararParaXML(obj: any, ref: any, result: any) {
@@ -41,15 +45,16 @@ function prepararParaXML(obj: any, ref: any, result: any) {
   if (!cRoot) return
   if (ref.maxOccurs > 1) {
     if (!cRoot.length) return
-    result[name] = []
+    const temp = []
     const itemRef = { ...ref, maxOccurs: 1 }
     for (const el of cRoot as any[]) {
       const validEl: any = {}
       validEl[name] = el
       const item = {}
       prepararParaXML(validEl, itemRef, item)
-      result[name].push(item[name])
+      temp.push(item[name])
     }
+    result[name] = temp
   } else if (ref.choice) {
     const iResult = name ? {} : result
     for (const el of ref.element as any[]) {
@@ -63,7 +68,7 @@ function prepararParaXML(obj: any, ref: any, result: any) {
           const value = cRoot[v.name]
           if (value) {
             const e = v.restriction?.enumeration
-            return !e || typeof e == 'string' ? e == value : e.includes(value)
+            return !e || (typeof e == 'string' ? e == value : e.includes(value))
           }
           return !!v.optional
         })
