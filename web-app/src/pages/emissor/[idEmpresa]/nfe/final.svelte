@@ -40,7 +40,7 @@
 
   async function transmitir() {
     loading = true
-    const infNFe = preparateJSON(scoped.commom.root)
+    const infNFe = preparateJSON(scoped.commom.root, false)
     const idToken = await $user.getIdToken()
     const resp = await requisitar('transmitirNFe', { idEmpresa, infNFe }, idToken)
     const respText = await resp.text()

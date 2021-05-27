@@ -44,7 +44,7 @@ interface TRetEnviNFe {
     tMed: string
   }
 }
-
+//Necessário refatorar o server, está muito bagunçado e precisa ser simplificado e reorganizado
 async function autorizacao(
   empresa: IEmpresaGet,
   publicCert: string,
@@ -163,7 +163,7 @@ export const transmitirNFe = onLoggedRequest(
       do {
         const xml = getXml(infNFe, numero.toString())
         const signedXml = await assinarNFe(dataCert, xml)
-        const resp = await autorizacao(empresa, dataCert.publiCert, dataCert.privateCert, ambiente, signedXml)
+        const resp = await autorizacao(empresa, dataCert.publicCert, dataCert.privateCert, ambiente, signedXml)
         if (resp.cStat != '103') {
           res.status(400).send('Falha ao tentar enviar lote: ' + resp.xMotivo)
           return
@@ -171,7 +171,7 @@ export const transmitirNFe = onLoggedRequest(
         let respRet: TRetConsReciNFe | undefined = undefined
         do {
           await sleep(Number(resp.infRec.tMed) * 1000)
-          respRet = await retAutorizacao(empresa, dataCert.publiCert, dataCert.privateCert, ambiente, resp.infRec.nRec)
+          respRet = await retAutorizacao(empresa, dataCert.publicCert, dataCert.privateCert, ambiente, resp.infRec.nRec)
           if (respRet.cStat.$t == '105') {
             // Lote em processamento (78)
             respRet = undefined
@@ -211,10 +211,11 @@ export const transmitirNFe = onLoggedRequest(
           return
         }
       }
+      const dhEmi = new Date(infNFe.ide.dhEmi.$t)
       await notasEmitidasCol.doc(infNFe.Id).set({
         cancelada: false,
         infNFe: removePrefix(infNFe),
-        dhEmi: new Date(infNFe.ide.dhEmi.$t),
+        dhEmi,
         nProt,
         xml: nfeProc
       })
