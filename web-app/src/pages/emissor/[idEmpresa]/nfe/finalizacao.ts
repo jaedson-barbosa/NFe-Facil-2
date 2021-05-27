@@ -7,10 +7,10 @@ export default function generateXml(infNFe: any) {
   const cUF = IBGE.find(
     (v) => v.Sigla == (infNFe.emit.enderEmit.UF as string)
   )!.Codigo
-  const k = new Date(infNFe.ide.dhEmi)
+  const dhEmi = new Date(infNFe.ide.dhEmi)
   const AAMM =
-    k.getFullYear().toString().slice(2) +
-    (k.getMonth() + 1).toString().padStart(2, '0')
+    dhEmi.getFullYear().toString().slice(2) +
+    (dhEmi.getMonth() + 1).toString().padStart(2, '0')
   const CNPJ = infNFe.emit.CNPJ
   const mod = infNFe.ide.mod
   const serie = (infNFe.ide.serie as string).padStart(3, '0')
@@ -22,7 +22,7 @@ export default function generateXml(infNFe: any) {
   infNFe.ide.cDV = cDV
   delete infNFe['Id']
   const prefixedInfNFe: any = {}
-  prepararParaXML({infNFe}, refInfNFe, prefixedInfNFe)
+  prepararParaXML({ infNFe }, refInfNFe, prefixedInfNFe)
   const resultInfNFe = prefixedInfNFe.infNFe
   resultInfNFe.versao = '4.00'
   resultInfNFe.Id = infNFe.Id = `NFe${chave}${cDV}`
@@ -41,17 +41,15 @@ function prepararParaXML(obj: any, ref: any, result: any) {
   if (!cRoot) return
   if (ref.maxOccurs > 1) {
     if (!cRoot.length) return
-    const temp = []
-    const itemRef = {...ref}
-    delete itemRef['maxOccurs']
+    result[name] = []
+    const itemRef = { ...ref, maxOccurs: 1 }
     for (const el of cRoot as any[]) {
       const validEl: any = {}
       validEl[name] = el
       const item = {}
       prepararParaXML(validEl, itemRef, item)
-      temp.push(item[name])
+      result[name].push(item[name])
     }
-    result[name] = temp
   } else if (ref.choice) {
     const iResult = name ? {} : result
     for (const el of ref.element as any[]) {
@@ -64,13 +62,8 @@ function prepararParaXML(obj: any, ref: any, result: any) {
         const selected = el.element.every((v: any) => {
           const value = cRoot[v.name]
           if (value) {
-            const curEnum = v.restriction?.enumeration
-            if (curEnum) {
-              return typeof curEnum == 'string'
-                ? curEnum == value
-                : curEnum.includes(value)
-            }
-            return true
+            const e = v.restriction?.enumeration
+            return !e || typeof e == 'string' ? e == value : e.includes(value)
           }
           return !!v.optional
         })
@@ -80,23 +73,14 @@ function prepararParaXML(obj: any, ref: any, result: any) {
         }
       }
     }
-    if (name && Object.entries(iResult).length) {
-      result[name] = iResult
-    }
+    if (name && Object.entries(iResult).length) result[name] = iResult
   } else if (ref.element) {
     const iResult = name ? {} : result
     for (const el of ref.element as any[]) {
-      if (el.name) {
-        if (cRoot[el.name]) {
-          prepararParaXML(cRoot, el, iResult)
-        }
-      } else {
-        prepararParaXML(cRoot, el, iResult)
-      }
+      if (el.name && cRoot[el.name]) prepararParaXML(cRoot, el, iResult)
+      else if (!el.name) prepararParaXML(cRoot, el, iResult)
     }
-    if (name && Object.entries(iResult).length) {
-      result[name] = iResult
-    }
+    if (name && Object.entries(iResult).length) result[name] = iResult
   } else {
     const isAttribute = name == 'nItem' || name == 'dia'
     result[name] = isAttribute ? cRoot : { $t: cRoot }

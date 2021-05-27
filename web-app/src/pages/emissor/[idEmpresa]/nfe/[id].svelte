@@ -33,9 +33,6 @@
 
   async function editar(root: any) {
     const infNFe: INFeRoot = root.nota.get('infNFe')
-    const xml = generateXml(infNFe)
-    console.log(xml)
-    return //Select com opcional, indMarktplace, ordenação tá funcioanndo, voltar pro normal aq
     const v = await db.collection('empresas')
       .doc(idEmpresa)
       .get()

@@ -10,16 +10,21 @@
       return [{ value: enumeration, text: enumeration }]
     }
     const descs = el.annotation.itens
-    return (enumeration as string[]).map((v, i) => {
+    const result = (enumeration as string[]).map((v, i) => {
       if (v.startsWith('/')) {
         return { value: v.slice(1), text: descs[i] }
       }
       const text = descs ? v + ' - ' + descs[i] : v
       return { value: v, text }
     })
+    return el.optional
+      ? [{ value: '', text: 'Não informar' }, ...result]
+      : result
   }
   $: options = getOptions(el)
-  $: { if (!root[el.name]) root[el.name] = options[0].value }
+  $: {
+    if (!root[el.name]) root[el.name] = options[0].value
+  }
 
   $: ({ aux, label } = el.annotation)
   const id = createId()

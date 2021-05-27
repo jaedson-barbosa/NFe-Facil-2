@@ -179,6 +179,7 @@
             "optional": true,
             "annotation": {
               "label": "Indicador de intermediador ou marketplace",
+              "aux": "Só deve ser informado em operações não presenciais.",
               "itens": [
                 "Operação em site ou plataforma própria",
                 "Operação em site ou plataforma de terceiros"
