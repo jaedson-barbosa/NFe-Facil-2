@@ -35,7 +35,7 @@ OK  Cadastro de emitentes
 OK  Cadastro e edição de dados base
 OK  Tipos de ICMS de acordo com o regime do emitente
 OK  Sistema de lista para ítens multiplos
-+-  Remover choice
+OK  Remover tag choice
     Tela de NFe
     Importação
     Exibição de notas
@@ -111,7 +111,8 @@ REFINAMENTOS FUTUROS (alplha):
 proj. mae: https://www.w3schools.com/code/tryit.asp?filename=GQQAXEQ5SSZ3
 
 Observações:  
-ISSQN limitado para o ambiente nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
-Retirada e entrega limitados para o ambiente nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
+ISSQN limitado para endereço nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
+Retirada e entrega limitados para endereço nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
 Obedecida apenas regra geral de cálculo do total (pag. 122)
 Adição do vServ no total do vNF não é feita automaticamente
+Podem ocorrer erros no sistema de ordenação

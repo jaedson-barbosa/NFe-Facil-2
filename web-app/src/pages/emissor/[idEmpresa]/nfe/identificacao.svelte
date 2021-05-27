@@ -17,5 +17,4 @@
       </p>
     </div>
   </AutoForm>
-  <AutoForm el={elementosNFe[1]} root={scoped.commom.root} />
 </form>

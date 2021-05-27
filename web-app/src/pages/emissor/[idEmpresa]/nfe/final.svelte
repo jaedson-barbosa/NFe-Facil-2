@@ -12,6 +12,15 @@
   async function salvar() {
     loading = true
     const infNFe = scoped.commom.root
+    let xml = ''
+    try {
+      xml = generateXml(infNFe)
+      return
+    } catch (error) {
+      console.log(error)
+      loading = false
+      return
+    }
     const oldId = infNFe.Id
     const notasCol = db
       .collection('empresas')
@@ -30,7 +39,6 @@
         }
       }
     }
-    const xml = generateXml(infNFe)
     const dhEmi = new Date(infNFe.ide.dhEmi)
     const newRegister = { status: 0, infNFe, dhEmi, xml }
     await notasCol.doc(infNFe.Id).set(newRegister)

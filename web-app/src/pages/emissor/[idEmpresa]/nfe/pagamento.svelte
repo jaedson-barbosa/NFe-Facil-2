@@ -13,9 +13,6 @@
       (root.pag.detPag as any[]).reduce((p, c) => p + +(c.vPag ?? 0), 0)
     ).toFixed(2),
   }
-  $: {
-    console.log(rootRestante)
-  }
 
   const infoRestante = {
     name: 'restante',

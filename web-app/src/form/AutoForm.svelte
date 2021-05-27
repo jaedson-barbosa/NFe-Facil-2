@@ -4,7 +4,7 @@
   export let level: number = 3
   export let specificReadonly: string[] = []
 
-  import { complexType, simpleType } from './data/nfe.json'
+  import { simpleType } from './data/nfe.json'
   import Readonly from './Readonly.svelte'
   import Select from './Select.svelte'
   import Specific from './Specific.svelte'
@@ -15,14 +15,8 @@
   import Container from './Container.svelte'
 
   $: {
-    if (!el.element) {
-      const findType = (v: any) => v.name == el.type
-      if (!el.restriction) {
-        el.restriction = simpleType.find(findType)?.restriction
-      }
-      if (!el.restriction) {
-        el.element = complexType.find(findType).element
-      }
+    if (!el.element && !el.restriction) {
+      el.restriction = simpleType.find((v) => v.name == el.type)?.restriction
     }
   }
 

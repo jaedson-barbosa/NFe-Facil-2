@@ -5,7 +5,7 @@ import type INFeRoot from './INFeRoot'
 export function generate(empresa: any, initialValue: INFeRoot = undefined): INFeRoot {
   const emit = empresa.emit
   return {
-    Id: '',
+    Id: initialValue?.Id ?? '',
     ide: {
       cUF: getCodigoEstado(emit.enderEmit.UF),
       cNF: getRandomNumber().toString(),
