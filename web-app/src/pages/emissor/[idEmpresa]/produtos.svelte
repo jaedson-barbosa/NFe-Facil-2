@@ -1,6 +1,6 @@
 <script lang="ts">
   import { db } from '@app/firebase'
-  import { url } from '@sveltech/routify'
+  import { url } from '@roxi/routify'
 
   export let scoped: {idEmpresa: string};
   $: ({ idEmpresa } = scoped)
@@ -31,7 +31,7 @@
 <form on:submit|preventDefault={getCadastros}>
   <div class="field has-addons">
     <div class="control">
-      <a class="button" href={$url('../produto')}>
+      <a class="button" href={$url('./produto')}>
         <span class="icon is-small">
           <i class="fas fa-plus" />
         </span>
@@ -64,7 +64,7 @@
       <td>{cad.get('det.prod.cProd')}</td>
       <td>{cad.get('det.prod.xProd')}</td>
       <td>
-        <a href={$url('../produto/:id', { id: cad.id })}> Editar </a>
+        <a href={$url('./produto/:id', { id: cad.id })}> Editar </a>
       </td>
     </tr>
   {/each}

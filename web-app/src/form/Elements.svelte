@@ -1,7 +1,7 @@
 <script lang="ts">
   import AutoForm from './AutoForm.svelte'
 
-  export let level: number
+  export let level = 3
   export let root: any
   export let el: any
 

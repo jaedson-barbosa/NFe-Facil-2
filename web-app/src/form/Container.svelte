@@ -1,7 +1,7 @@
 <script>
   export let level = 3
   export let label
-  export let aux
+  export let aux = ''
 </script>
 
 <div class="container content box">

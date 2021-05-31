@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { url, goto } from '@sveltech/routify'
+  import { url, goto } from '@roxi/routify'
   import { createId } from '@form/helpers'
   import { db } from '@app/firebase'
 
@@ -37,7 +37,7 @@
 
   function submit() {
     if (appliedValue) {
-      $goto('../produtos')
+      $goto('./produtos')
     } else if (validValue) {
       const option = options.find((v) => v.text == busca)
       const data = option.value.data()
@@ -66,7 +66,7 @@
     </div>
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a href={$url('../identificacao')} class="button is-danger">
+        <a href={$url('./identificacao')} class="button is-danger">
           Voltar: Identificação
         </a>
       </p>

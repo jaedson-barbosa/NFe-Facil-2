@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { url, goto } from '@sveltech/routify'
+  import { url, goto } from '@roxi/routify'
   import { db } from '@app/firebase'
   import { elementosNFe } from '@form/dataHelper'
   import AutoForm from '@form/AutoForm.svelte'
@@ -30,7 +30,7 @@
         .doc(idEmpresa)
         .collection('transportes')
         .add(root)
-      $goto('../../transportes')
+      $goto('../transportes')
     } catch (error) {
       alert(error.message)
       loading = false
@@ -53,7 +53,7 @@
           <button type="reset" class="button is-warning"> Limpar </button>
         </p>
         <p class="control">
-          <a href={$url('../../transportes')} class="button is-danger"> Cancelar </a>
+          <a href={$url('../transportes')} class="button is-danger"> Cancelar </a>
         </p>
       </div>
     </AutoForm>

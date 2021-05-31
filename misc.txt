@@ -35,25 +35,22 @@ SESSIONSTORAGE
 idEmpresa
 
 METAS:
-BASE para análise de viabilidade técnica:
+BASE para lançamento em pré-alpha:
 OK  Cadastro de emitentes
 OK  Cadastro e edição de dados base
 OK  Tipos de ICMS de acordo com o regime do emitente
 OK  Sistema de lista para ítens multiplos
 OK  Remover tag choice
-    Tela de NFe
+OK  Tela de NFe
     Importação
     Exibição de notas
     Clonagem de NFe
     Servidor básico (sem todas análises)
 OK    precadastro
-      transmitirNFe
+OK    transmitirNFe
       gerarDANFENFe
-
-BASE para emissão de NFe:
-    Avaliar usar inputs do app começando com / (podem ser usados por exemplo em CPF/CNPJ e um input unico)
+    Reorganizar todo o código do servidor (já que agora ele é bem mais simples)
     Exibição de resumo do item no botão
-    Dividir cadastro de produto em 2 telas (dados base e impostos) para diminuir 1 nível de hierarquia usando o mesmo sistema da tela de nfe (com root no _reset)
     Proibir o uso de emitente com CPF
       Via cadastro
       Via importação (restringido para emitente logado)
@@ -61,7 +58,7 @@ BASE para emissão de NFe:
     Evento de cancelamento
       Geração
       Exibição de status
-    Implementar cálculo de totais
+OK  Implementar cálculo de totais
     Analise de certificado do precadastro
     Proteger certificado com senha (armazenada ou não no dispositivo do cliente e criptografada)
     Estudar uso de https://nodejs.org/api/crypto.html no lugar de node-forge
@@ -69,13 +66,14 @@ BASE para emissão de NFe:
     Customização (em choice tem um estatico)
 
 MODERNIZAÇÃO
-    Adicionar Svelte
-    Remover PWA (readicionar apenas na fase beta)
-    Comunicação direta com o Firestore para diminuir a complexidade das funções
-    Bulma CSS para estilização
+OK  Adicionar Svelte
+OK  Remover PWA (readicionar apenas na fase beta)
+OK  Comunicação direta com o Firestore para diminuir a complexidade das funções
+OK  Bulma CSS para estilização
     Personalização com o https://jenil.github.io/bulmaswatch/
 
-REFINAMENTOS (pré-alpha):
+REFINAMENTOS durante pré-alpha:
+    Dividir cadastro de produto em 2 telas (dados base e impostos) para diminuir 1 nível de hierarquia usando o mesmo sistema da tela de nfe (com root no _reset)
     Evento de cancelamento
       Importação
     Mais configurações na tela de emitente
@@ -103,7 +101,7 @@ REFINAMENTOS (pré-alpha):
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
 
-REFINAMENTOS FUTUROS (alplha):
+REFINAMENTOS durante alplha:
     Scanner de código de barras
       USB
       Câmera de celular

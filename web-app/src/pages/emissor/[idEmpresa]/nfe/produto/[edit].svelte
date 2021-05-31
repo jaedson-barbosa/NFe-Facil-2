@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { url, goto } from '@sveltech/routify'
+  import { url, goto } from '@roxi/routify'
   import { elementosNFe } from '@form/dataHelper'
   import Elements from '@form/Elements.svelte'
   import type INFeRoot from '../INFeRoot'
@@ -11,12 +11,12 @@
 
   function submit() {
     scoped.commom.root.det[+edit] = root.det
-    $goto('../../produtos')
+    $goto('../produtos')
   }
 
   function remover() {
     scoped.commom.root.det.splice(+edit, 1)
-    $goto('../../produtos')
+    $goto('../produtos')
   }
 
   const detUnico = elementosNFe[6] as any
@@ -33,7 +33,7 @@
         </button>
       </p>
       <p class="control">
-        <a href={$url('../../produtos')} class="button"> Cancelar </a>
+        <a href={$url('../produtos')} class="button"> Cancelar </a>
       </p>
       <p class="control">
         <button class="button is-primary"> Salvar </button>

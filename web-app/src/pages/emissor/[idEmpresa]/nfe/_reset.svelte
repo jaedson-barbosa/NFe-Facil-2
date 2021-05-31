@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isActive, url } from '@sveltech/routify'
+  import { isActive, url } from '@roxi/routify'
   import type INFeRoot from './INFeRoot'
   let commom: { root: INFeRoot } = { root: undefined }
 </script>

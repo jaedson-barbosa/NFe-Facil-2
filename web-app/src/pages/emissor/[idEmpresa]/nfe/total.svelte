@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { url, goto } from '@sveltech/routify'
+  import { url, goto } from '@roxi/routify'
   import { elementosNFe } from '@form/dataHelper'
   import AutoForm from '@form/AutoForm.svelte'
 
@@ -94,11 +94,11 @@
   }, {})
 </script>
 
-<form on:submit|preventDefault={$goto('../transporte')}>
+<form on:submit|preventDefault={$goto('./transporte')}>
   <AutoForm el={elementosNFe[7]} root={scoped.commom.root}>
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a href={$url('../produtos')} class="button is-danger"
+        <a href={$url('./produtos')} class="button is-danger"
           >Voltar: Produtos</a
         >
       </p>

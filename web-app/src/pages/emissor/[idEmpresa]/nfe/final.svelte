@@ -1,6 +1,6 @@
 <script lang="ts">
   import { requisitar } from '@app/functions'
-  import { url, goto } from '@sveltech/routify'
+  import { url, goto } from '@roxi/routify'
   import { db } from '@app/firebase'
   import { preparateJSON, generateXML } from './finalizacao'
   import { user } from '@app/store'
@@ -35,7 +35,7 @@
     const dhEmi = new Date(infNFe.ide.dhEmi)
     const newRegister = { infNFe, dhEmi, xml }
     await notasCol.doc(infNFe.Id).set(newRegister)
-    $goto('../:id', { id: infNFe.Id })
+    $goto('./:id', { id: infNFe.Id })
   }
 
   async function transmitir() {
@@ -45,7 +45,7 @@
     const resp = await requisitar('transmitirNFe', { idEmpresa, infNFe }, idToken)
     const respText = await resp.text()
     if (resp.status == 201) {
-      $goto('../:id', { id: respText })
+      $goto('./:id', { id: respText })
     } else {
       alert(respText)
       loading = false
@@ -59,7 +59,7 @@
   <div class="container content box">
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a href={$url('../opcionais')} class="button is-danger">
+        <a href={$url('./opcionais')} class="button is-danger">
           Voltar: Opcionais
         </a>
       </p>

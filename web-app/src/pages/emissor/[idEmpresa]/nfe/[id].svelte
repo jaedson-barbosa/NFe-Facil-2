@@ -1,7 +1,6 @@
 <script lang="ts">
   import { generate } from './rootGenerator'
-  import { params } from '@sveltech/routify'
-  import { url, goto } from '@sveltech/routify'
+  import { params, goto } from '@roxi/routify'
   import Container from '@form/Container.svelte'
   import ReadonlyV from '@form/ReadonlyV.svelte'
   import { db } from '@app/firebase'
@@ -52,7 +51,7 @@
     const empresa = v.data()
     const initialValue = generate(empresa, infNFe)
     scoped.commom.root = initialValue
-    $goto('../identificacao')
+    $goto('./identificacao')
   }
 
   function gerarDANFE() {

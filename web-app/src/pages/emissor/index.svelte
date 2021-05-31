@@ -2,7 +2,7 @@
 <script lang="ts">
   import { db } from '@app/firebase'
   import { user } from '@app/store'
-  import { url } from '@sveltech/routify'
+  import { url } from '@roxi/routify'
   import Empresa from './_components/Empresa.svelte'
 
   function getDescricaoStatus(status: 0 | 1 | 2 | 3) {
@@ -35,9 +35,9 @@
 
 <button on:click={user.signOut} class="button">Encerar sessão</button>
 <nav>
-  <a href={$url('../precadastro')}>Cadastrar</a>
-  <a href={$url('../requisicao')}>Requisitar acesso</a>
-  <a href={$url('../acesso')}>Acessar com certificado</a>
+  <a href={$url('./precadastro')}>Cadastrar</a>
+  <a href={$url('./requisicao')}>Requisitar acesso</a>
+  <a href={$url('./acesso')}>Acessar com certificado</a>
 </nav>
 {#await getCadastros() then cadastros}
   {#if cadastros.length}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { url } from '@sveltech/routify'
+  import { url } from '@roxi/routify'
   
   export let idEmpresa: string;
 </script>

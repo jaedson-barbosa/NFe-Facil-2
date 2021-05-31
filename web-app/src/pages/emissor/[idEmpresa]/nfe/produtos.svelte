@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { url, goto } from '@sveltech/routify'
+  import { url, goto } from '@roxi/routify'
   import type INFeRoot from './INFeRoot'
 
   export let scoped: { commom: { root: INFeRoot } }
@@ -10,9 +10,9 @@
 
   function submit() {
     if (elements.length) {
-      $goto('../total')
+      $goto('./total')
     } else {
-      $goto('../produto')
+      $goto('./produto')
     }
   }
 </script>
@@ -21,13 +21,13 @@
   <form on:submit|preventDefault={submit}>
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a href={$url('../cliente')} class="button is-danger">
+        <a href={$url('./cliente')} class="button is-danger">
           Voltar: Cliente
         </a>
       </p>
       {#if elements.length}
         <p class="control">
-          <a href={$url('../produto')} class="button"> Adicionar produto </a>
+          <a href={$url('./produto')} class="button"> Adicionar produto </a>
         </p>
       {/if}
       <p class="control">
@@ -52,7 +52,7 @@
         <td>{cad.prod.cProd}</td>
         <td>{cad.prod.xProd}</td>
         <td>
-          <a href={$url('../produto/:edit', { edit: i })}> Editar </a>
+          <a href={$url('./produto/:edit', { edit: i })}> Editar </a>
         </td>
       </tr>
     {/each}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { url, goto } from '@sveltech/routify'
+  import { url, goto } from '@roxi/routify'
   import { db } from '@app/firebase'
   import { createId } from '@form/helpers'
   import type INFeRoot from '../INFeRoot'
@@ -42,7 +42,7 @@
       const option = options.find((v) => v.text == busca)
       const data = option.value.data()
       const newLength = scoped.commom.root.det.push(data.det)
-      $goto('../:edit', { edit: newLength - 1 })
+      $goto('./:edit', { edit: newLength - 1 })
     } else buscar()
   }
 </script>
@@ -67,7 +67,7 @@
     </div>
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a href={$url('../../produtos')} class="button is-danger"> Cancelar </a>
+        <a href={$url('../produtos')} class="button is-danger"> Cancelar </a>
       </p>
       <p class="control">
         <button class="button is-primary">

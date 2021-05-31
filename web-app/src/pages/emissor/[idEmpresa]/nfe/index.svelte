@@ -1,6 +1,6 @@
 <script lang="ts">
   import { generate } from './rootGenerator'
-  import { goto } from '@sveltech/routify'
+  import { goto } from '@roxi/routify'
   import { db } from '@app/firebase'
   import type INFeRoot from './INFeRoot';
 
@@ -14,7 +14,7 @@
       const empresa = v.data()
       const initialValue = generate(empresa)
       scoped.commom.root = initialValue
-      $goto('../identificacao')
+      $goto('./identificacao')
     })
     .catch((v) => {
       console.log(v)

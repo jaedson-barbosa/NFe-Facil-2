@@ -3,7 +3,7 @@
 
   export let required = true
   export let label
-  export let aux
+  export let aux = ''
   export let value
 
   const id = createId()

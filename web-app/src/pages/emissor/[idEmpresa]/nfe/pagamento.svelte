@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { url, goto } from '@sveltech/routify'
+  import { url, goto } from '@roxi/routify'
   import { elementosNFe } from '@form/dataHelper'
   import AutoForm from '@form/AutoForm.svelte'
   import Readonly from '@form/Readonly.svelte'
@@ -23,12 +23,12 @@
   }
 </script>
 
-<form on:submit|preventDefault={$goto('../opcionais')}>
+<form on:submit|preventDefault={$goto('./opcionais')}>
   <AutoForm el={elementosNFe[10]} bind:root>
     <Readonly el={infoRestante} root={rootRestante} />
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a href={$url('../transporte')} class="button is-danger">
+        <a href={$url('./transporte')} class="button is-danger">
           Voltar: Transporte
         </a>
       </p>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { url, goto } from '@sveltech/routify'
+  import { url, goto } from '@roxi/routify'
   import { createId } from '@form/helpers'
   import Input from '@form/Input.svelte'
   import { user } from '@app/store'
@@ -39,7 +39,7 @@
     requisicao.cert = btoa(String.fromCharCode(...certArray))
     const resp = await requisitar('precadastro', requisicao)
     if (resp.status == 201) {
-      $goto('../')
+      $goto('./')
     } else {
       alert(resp.status == 401 ? 'Erro na autenticação.' : await resp.text())
       loading = false
@@ -94,7 +94,7 @@
         <button type="reset" class="button is-warning"> Limpar </button>
       </p>
       <p class="control">
-        <a href={$url('../')} class="button is-danger"> Cancelar </a>
+        <a href={$url('./')} class="button is-danger"> Cancelar </a>
       </p>
     </div>
   </fieldset>

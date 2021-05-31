@@ -6,7 +6,7 @@ import { terser } from 'rollup-plugin-terser'
 import sveltePreprocess from 'svelte-preprocess'
 import typescript from '@rollup/plugin-typescript'
 import css from 'rollup-plugin-css-only'
-import { routify } from '@sveltech/routify'
+import routify from '@roxi/routify/plugins/rollup'
 import json from '@rollup/plugin-json'
 // import cleaner from 'rollup-plugin-cleaner';
 import alias from '@rollup/plugin-alias'
@@ -44,7 +44,7 @@ function serve() {
 export default {
   input: 'src/main.ts',
   output: {
-    sourcemap: true,
+    sourcemap: !production,
     format: 'esm',
     name: 'app',
     dir: 'public/build',
@@ -67,7 +67,7 @@ export default {
     }),
 
     //Added routify plugin with dynamic import support
-    routify({ dynamicImports: true }),
+    routify({}),
 
     // we'll extract any component CSS out into
     // a separate file - better for performance

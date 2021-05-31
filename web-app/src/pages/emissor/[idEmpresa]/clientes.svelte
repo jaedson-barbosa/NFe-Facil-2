@@ -1,7 +1,7 @@
 <script lang="ts">
   import { applyMask } from '@app/documentUtils'
   import { db } from '@app/firebase'
-  import { url } from '@sveltech/routify'
+  import { url } from '@roxi/routify'
 
   export let scoped: {idEmpresa: string};
   $: ({ idEmpresa } = scoped)
@@ -47,7 +47,7 @@
 <form on:submit|preventDefault={getCadastros}>
   <div class="field has-addons">
     <div class="control">
-      <a class="button" href={$url('../cliente')}>
+      <a class="button" href={$url('./cliente')}>
         <span class="icon is-small">
           <i class="fas fa-plus" />
         </span>
@@ -80,7 +80,7 @@
       <td>{cad.doc}</td>
       <td>{cad.nome}</td>
       <td>
-        <a href={$url('../cliente/:id', { id: cad.id })}> Editar </a>
+        <a href={$url('./cliente/:id', { id: cad.id })}> Editar </a>
       </td>
     </tr>
   {/each}
