@@ -1,36 +1,18 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
   import { createId } from '@form/helpers'
-  import Input from '@form/Input.svelte'
+  import InputT from '@form/InputT.svelte'
   import { user } from '@app/store'
-  import { requisitar } from '@app/functions';
-  import { get } from 'svelte/store';
+  import { requisitar } from '@app/functions'
+  import { get } from 'svelte/store'
 
   let loading = false
   let files: FileList
-  
+
   const requisicao = {
     cert: '',
     ident: get(user).displayName,
-    senha: ''
-  }
-
-  const infoSenha = {
-    name: 'senha',
-    annotation: {
-      label: 'Senha do certificado',
-      aux: 'Necessária para assinatura e comunicação com a SEFAZ.',
-    },
-    restriction: {}
-  }
-
-  const infoNome = {
-    name: 'ident',
-    annotation: {
-      label: 'Identificação',
-      aux: 'Sua identificação no registro de usuários da empresa, por exemplo, seu nome.',
-    },
-    restriction: {}
+    senha: '',
   }
 
   async function precadastrar() {
@@ -60,7 +42,13 @@
           <div class="control is-expanded">
             <div class="file has-name is-fullwidth">
               <label class="file-label">
-                <input {id} class="file-input" type="file" bind:files required />
+                <input
+                  {id}
+                  class="file-input"
+                  type="file"
+                  bind:files
+                  required
+                />
                 <span class="file-cta">
                   <span class="file-icon">
                     <i class="fas fa-upload" />
@@ -78,8 +66,16 @@
         </div>
       </div>
     </div>
-    <Input root={requisicao} el={infoSenha} />
-    <Input root={requisicao} el={infoNome} />
+    <InputT
+      label="Senha do certificado"
+      aux="Necessária para assinatura e comunicação com a SEFAZ."
+      bind:value={requisicao.senha}
+    />
+    <InputT
+      label="Identificação"
+      aux="Sua identificação no registro de usuários da empresa, por exemplo, seu nome."
+      bind:value={requisicao.ident}
+    />
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
         <button
@@ -89,9 +85,6 @@
         >
           Salvar
         </button>
-      </p>
-      <p class="control">
-        <button type="reset" class="button is-warning"> Limpar </button>
       </p>
       <p class="control">
         <a href={$url('./')} class="button is-danger"> Cancelar </a>

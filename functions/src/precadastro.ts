@@ -34,23 +34,21 @@ export default onDefaultRequest(true, async (user, res, body) => {
   }
   const cnpj = certParts[1]
 
-  const empresa = await db.collection('empresas').doc(cnpj).get()
-  if (empresa.exists) {
-    res.status(400).send('Empresa já existe')
-    return
-  }
-  await db.collection('certificados').doc(cnpj).set({
-    publicCert,
-    privateCert,
-  })
   const empresaRef = db.collection('empresas').doc(cnpj)
-  await empresaRef.set({
-    emit: {
-      CNPJ: cnpj,
-      xNome: certParts[0]
-    },
-    serieNFe: "1"
-  })
+  const empresa = await empresaRef.get()
+  if (!empresa.exists) {
+    await db.collection('certificados').doc(cnpj).set({
+      publicCert,
+      privateCert,
+    })
+    await empresaRef.set({
+      emit: {
+        CNPJ: cnpj,
+        xNome: certParts[0]
+      },
+      serieNFe: "1"
+    })
+  }
   await empresaRef.collection('usuarios').doc(user.sub).set({
     status: 3,
     ident: body.ident,

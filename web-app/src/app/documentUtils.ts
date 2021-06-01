@@ -10,7 +10,9 @@ const config = {
 };
 const mask = new Mask(config);
 
-export function applyMask(text: string, maskName: 'cpf' | 'cnpj' | 'zipcode') {
+export type TMask = 'cpf' | 'cnpj' | 'zipcode'
+
+export function applyMask(text: string, maskName: TMask) {
   return text ? mask.exec(text, maskName, '_') : ''
 }
 

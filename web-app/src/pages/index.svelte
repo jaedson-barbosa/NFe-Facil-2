@@ -3,7 +3,6 @@
   import { db } from '@app/firebase'
   import { user } from '@app/store'
   import { url } from '@roxi/routify'
-  import Empresa from './_components/Empresa.svelte'
 
   function getDescricaoStatus(status: 0 | 1 | 2 | 3) {
     switch (status) {
@@ -36,7 +35,6 @@
 <nav>
   <a class="button" href={$url('./precadastro')}>Cadastrar</a>
   <a class="button" href={$url('./requisicao')}>Requisitar acesso</a>
-  <a class="button" href={$url('./acesso')}>Acessar com certificado</a>
   <button class="button" on:click={user.signOut}>Encerar sessão</button>
 </nav>
 {#await getCadastros() then cadastros}

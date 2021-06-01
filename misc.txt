@@ -112,4 +112,4 @@ ISSQN limitado para endereço nacional. Se necessário, basta pedir a implementa
 Retirada e entrega limitados para endereço nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
 Obedecida apenas regra geral de cálculo do total (pag. 122)
 Adição do vServ no total do vNF não é feita automaticamente
-Podem ocorrer erros no sistema de ordenação
+Na requisição de acesso não é feita a análise se a empresa já existe
