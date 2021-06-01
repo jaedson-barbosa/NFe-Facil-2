@@ -1,5 +1,5 @@
 import { IBGE } from '@form/data/IBGE.json'
-import { infNFe as refInfNFe } from '@form/data/nfe.json'
+import * as refInfNFe from '@form/data/nfe.json'
 import toXml from '@xml2json/json2xml'
 import type INFeRoot from './INFeRoot'
 

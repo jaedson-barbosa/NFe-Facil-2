@@ -1,7 +1,7 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
   import { db } from '@app/firebase'
-  import { elementosNFe } from '@form/dataHelper'
+  import { transp } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
   import Input from '@form/Input.svelte'
 
@@ -41,7 +41,7 @@
 {@debug root}
 <form on:submit|preventDefault={salvar}>
   <fieldset disabled={loading}>
-    <AutoForm el={elementosNFe[8]} {root}>
+    <AutoForm el={transp} {root}>
       <Input {root} el={infoIdentificador} />
       <div class="field is-grouped is-grouped-centered">
         <p class="control">

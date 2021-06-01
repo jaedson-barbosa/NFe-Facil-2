@@ -1,6 +1,6 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
-  import { elementosNFe } from '@form/dataHelper'
+  import { det } from '@form/data/nfe.json'
   import Elements from '@form/Elements.svelte'
   import type INFeRoot from '../INFeRoot'
 
@@ -19,7 +19,7 @@
     $goto('../produtos')
   }
 
-  const detUnico = elementosNFe[6] as any
+  const detUnico = det as any
   detUnico.maxOccurs = 1
   detUnico.annotation.label = 'Informações do produto'
 </script>

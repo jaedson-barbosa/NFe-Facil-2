@@ -1,6 +1,6 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
-  import { elementosNFe } from '@form/dataHelper'
+  import { retirada, entrega, autXML, cobr, infIntermed, infAdic, exporta, compra, cana } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
 
   export let scoped: { commom: { root: any } }
@@ -8,15 +8,15 @@
   const el = {
     annotation: { label: 'Campos opcionais' },
     element: [
-      elementosNFe[3],
-      elementosNFe[4],
-      elementosNFe[5],
-      elementosNFe[9],
-      elementosNFe[11],
-      elementosNFe[12],
-      elementosNFe[13],
-      elementosNFe[14],
-      elementosNFe[15],
+      retirada,
+      entrega,
+      autXML,
+      cobr,
+      infIntermed,
+      infAdic,
+      exporta,
+      compra,
+      cana,
     ],
   }
 </script>

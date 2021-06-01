@@ -1,12 +1,11 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
   import { db } from '@app/firebase'
-  import { elementosNFe } from '@form/dataHelper'
+  import { emit } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
   import Input from '@form/Input.svelte'
 
   export let scoped: { idEmpresa: string }
-  $: ({ idEmpresa } = scoped)
 
   const infoSerie = {
     name: 'serieNFe',
@@ -18,7 +17,7 @@
   }
 
   async function carregar() {
-    const empresa = await db.collection('empresas').doc(idEmpresa).get()
+    const empresa = await db.collection('empresas').doc(scoped.idEmpresa).get()
     if (!empresa.exists) {
       throw new Error('CNPJ não cadastrado.')
     }
@@ -30,7 +29,7 @@
   async function salvar(root: any) {
     loading = true
     try {
-      await db.collection('empresas').doc(idEmpresa).update(root)
+      await db.collection('empresas').doc(scoped.idEmpresa).update(root)
       $goto('./')
     } catch (error) {
       alert(error.message)
@@ -45,7 +44,7 @@
   {@debug root}
   <form on:submit|preventDefault={() => salvar(root)}>
     <fieldset disabled={loading}>
-      <AutoForm el={elementosNFe[1]} {root}>
+      <AutoForm el={emit} {root}>
         <Input {root} el={infoSerie} />
         <div class="field is-grouped is-grouped-centered">
           <p class="control">

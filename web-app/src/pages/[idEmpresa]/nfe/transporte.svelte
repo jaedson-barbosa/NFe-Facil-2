@@ -3,7 +3,7 @@
   import { createId } from '@form/helpers'
   import { db } from '@app/firebase'
   import AutoForm from '@form/AutoForm.svelte'
-  import { elementosNFe } from '@form/dataHelper';
+  import { transp } from '@form/data/nfe.json';
 
   export let scoped: { commom: { root: any } }
   export let idEmpresa: string
@@ -85,6 +85,6 @@
         </button>
       </p>
     </div>
-    <AutoForm el={elementosNFe[8]} {root} />
+    <AutoForm el={transp} {root} />
   </form>
 </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
-  import { elementosNFe } from '@form/dataHelper'
+  import { pag } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
   import Readonly from '@form/Readonly.svelte'
 
@@ -24,7 +24,7 @@
 </script>
 
 <form on:submit|preventDefault={$goto('./opcionais')}>
-  <AutoForm el={elementosNFe[10]} bind:root>
+  <AutoForm el={pag} bind:root>
     <Readonly el={infoRestante} root={rootRestante} />
     <div class="field is-grouped is-grouped-centered">
       <p class="control">

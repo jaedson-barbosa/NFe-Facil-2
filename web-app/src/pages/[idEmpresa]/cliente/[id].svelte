@@ -1,7 +1,7 @@
 <script lang="ts">
   import { params, url, goto } from '@roxi/routify'
   import { db } from '@app/firebase'
-  import { elementosNFe } from '@form/dataHelper'
+  import { dest } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
 
   export let id: string
@@ -46,7 +46,7 @@
   {@debug root}
   <form on:submit|preventDefault={() => salvar(root)}>
     <fieldset disabled={loading}>
-      <AutoForm el={elementosNFe[2]} {root}>
+      <AutoForm el={dest} {root}>
         <div class="field is-grouped is-grouped-centered">
           <p class="control">
             <button class="button is-primary" class:is-loading={loading}>

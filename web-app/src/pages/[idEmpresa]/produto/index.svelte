@@ -1,7 +1,7 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
   import { db } from '@app/firebase'
-  import { elementosNFe } from '@form/dataHelper'
+  import { det } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
 
   export let idEmpresa: string
@@ -24,7 +24,7 @@
     }
   }
 
-  const detUnico = elementosNFe[6] as any
+  const detUnico = det as any
   detUnico.maxOccurs = 1
   detUnico.annotation.label = "Informações do produto"
 </script>
