@@ -5,7 +5,8 @@
   import AutoForm from '@form/AutoForm.svelte'
   import Input from '@form/Input.svelte'
 
-  export let idEmpresa: string
+  export let scoped: { idEmpresa: string }
+  $: ({ idEmpresa } = scoped)
 
   const infoSerie = {
     name: 'serieNFe',
@@ -19,7 +20,7 @@
   async function carregar() {
     const empresa = await db.collection('empresas').doc(idEmpresa).get()
     if (!empresa.exists) {
-      throw new Error('CNPJ não cadastrado.');
+      throw new Error('CNPJ não cadastrado.')
     }
     return empresa.data()
   }
@@ -30,7 +31,7 @@
     loading = true
     try {
       await db.collection('empresas').doc(idEmpresa).update(root)
-      $goto('../:idEmpresa', { idEmpresa })
+      $goto('./')
     } catch (error) {
       alert(error.message)
       loading = false
@@ -41,28 +42,25 @@
 {#await carregar()}
   Carregando...
 {:then root}
-{@debug root}
-<form on:submit|preventDefault={() => salvar(root)}>
-  <fieldset disabled={loading}>
-    <AutoForm el={elementosNFe[1]} {root}>
-      <Input {root} el={infoSerie} />
-      <div class="field is-grouped is-grouped-centered">
-        <p class="control">
-          <button
-            class="button is-primary"
-            class:is-loading={loading}
-          >
-            Salvar
-          </button>
-        </p>
-        <p class="control">
-          <button type="reset" class="button is-warning"> Limpar </button>
-        </p>
-        <p class="control">
-          <a href={$url('../')} class="button is-danger"> Cancelar </a>
-        </p>
-      </div>
-    </AutoForm>
-  </fieldset>
-</form>
+  {@debug root}
+  <form on:submit|preventDefault={() => salvar(root)}>
+    <fieldset disabled={loading}>
+      <AutoForm el={elementosNFe[1]} {root}>
+        <Input {root} el={infoSerie} />
+        <div class="field is-grouped is-grouped-centered">
+          <p class="control">
+            <button class="button is-primary" class:is-loading={loading}>
+              Salvar
+            </button>
+          </p>
+          <p class="control">
+            <button type="reset" class="button is-warning"> Limpar </button>
+          </p>
+          <p class="control">
+            <a href={$url('./')} class="button is-danger"> Cancelar </a>
+          </p>
+        </div>
+      </AutoForm>
+    </fieldset>
+  </form>
 {/await}

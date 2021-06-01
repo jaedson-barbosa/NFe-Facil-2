@@ -19,6 +19,7 @@
     if (!cliente.exists) {
       throw new Error('Id não reconhecido.')
     }
+    alert('vai carregar')
     return cliente.data()
   }
 

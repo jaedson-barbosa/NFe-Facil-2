@@ -43,7 +43,7 @@ OK  Sistema de lista para ítens multiplos
 OK  Remover tag choice
 OK  Tela de NFe
     Importação
-    Exibição de notas
+OK  Exibição de notas
     Clonagem de NFe
     Servidor básico (sem todas análises)
 OK    precadastro
@@ -64,13 +64,6 @@ OK  Implementar cálculo de totais
     Estudar uso de https://nodejs.org/api/crypto.html no lugar de node-forge
     Avaliar talvez só guardar a chave private e obter a publica a partir dela
     Customização (em choice tem um estatico)
-
-MODERNIZAÇÃO
-OK  Adicionar Svelte
-OK  Remover PWA (readicionar apenas na fase beta)
-OK  Comunicação direta com o Firestore para diminuir a complexidade das funções
-OK  Bulma CSS para estilização
-    Personalização com o https://jenil.github.io/bulmaswatch/
 
 REFINAMENTOS durante pré-alpha:
     Dividir cadastro de produto em 2 telas (dados base e impostos) para diminuir 1 nível de hierarquia usando o mesmo sistema da tela de nfe (com root no _reset)
@@ -102,6 +95,7 @@ REFINAMENTOS durante pré-alpha:
     Leitura completa dos arquivos de documentação da NFe
 
 REFINAMENTOS durante alplha:
+    Personalização com o https://jenil.github.io/bulmaswatch/
     Scanner de código de barras
       USB
       Câmera de celular

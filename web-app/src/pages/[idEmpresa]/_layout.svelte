@@ -6,10 +6,12 @@
 
 <nav>
   <a href={$url('./')}>Resumo</a>
+  <a href={$url('./cadastro')}>Editar cadastro</a>
   <a href={$url('./clientes')}>Clientes</a>
   <a href={$url('./transportes')}>Transportes</a>
   <a href={$url('./produtos')}>Produtos</a>
-  <a href={$url('./nfes')}>Notas</a>
+  <a href={$url('./nfesEmitidas')}>Notas emitidas</a>
+  <a href={$url('./nfesSalvas')}>Notas salvas</a>
   <a href={$url('../')}>Sair</a>
 </nav>
 <slot scoped={{idEmpresa}} />
