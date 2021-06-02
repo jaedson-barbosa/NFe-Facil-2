@@ -66,6 +66,7 @@ OK  Implementar cálculo de totais
     Customização (em choice tem um estatico)
 
 REFINAMENTOS durante pré-alpha:
+    Remover tag name do nfe.json e fragmentá-lo em diferentes arquivos
     Dividir cadastro de produto em 2 telas (dados base e impostos) para diminuir 1 nível de hierarquia usando o mesmo sistema da tela de nfe (com root no _reset)
     Evento de cancelamento
       Importação
