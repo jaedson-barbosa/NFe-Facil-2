@@ -16,7 +16,7 @@
       "type": "firefox",
       "request": "launch",
       "reAttach": true,
-      "url": "http://localhost:39805",
+      "url": "http://localhost:5000",
       "webRoot": "${workspaceFolder}/web-app"
     },
     {

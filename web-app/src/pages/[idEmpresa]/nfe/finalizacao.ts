@@ -3,8 +3,7 @@ import * as refInfNFe from '@form/data/nfe.json'
 import toXml from '@xml2json/json2xml'
 import type INFeRoot from './INFeRoot'
 
-export function preparateJSON(infNFe: INFeRoot, updateId: boolean) {
-  let Id = infNFe.Id
+export function preparateJSON(infNFe: INFeRoot) {
   const cUF = IBGE.find(
     (v) => v.Sigla == (infNFe.emit.enderEmit.UF as string)
   )!.Codigo
@@ -21,20 +20,19 @@ export function preparateJSON(infNFe: INFeRoot, updateId: boolean) {
   const chave = `${cUF}${AAMM}${CNPJ}${mod}${serie}${nNF}${tpEmis}${cNF}`
   const cDV = calcularDV(chave).toString()
   infNFe.ide.cDV = cDV
-  delete infNFe['Id']
-  const prefixedInfNFe = { infNFe: { versao: '4.00', Id } }
-  Object.entries(infNFe).forEach(([key, value]) => {
-    if (!value) return
+  let Id = `NFe${chave}${cDV}`
+  const prefixedInfNFe = { infNFe: { Id, versao: '4.00' } }
+  Object.entries(refInfNFe).forEach(([key, value]) => {
+    if (!value || key == 'default' || key == 'simpleType') return
     // XML ficou em branco, fazer uma análise mais profunda
-    prepararParaXML(value, refInfNFe[key], prefixedInfNFe.infNFe)
+    prepararParaXML(infNFe, value, prefixedInfNFe.infNFe)
   })
-  const resultInfNFe = prefixedInfNFe.infNFe
-  if (updateId) resultInfNFe.Id = infNFe.Id = `NFe${chave}${cDV}`
-  return resultInfNFe
+  infNFe.Id = Id
+  return prefixedInfNFe.infNFe
 }
 
 export function generateXML(infNFe: INFeRoot) {
-  const preparatedJSON = preparateJSON(infNFe, true)
+  const preparatedJSON = preparateJSON(infNFe)
   return toXml({
     NFe: {
       xmlns: 'http://www.portalfiscal.inf.br/nfe',

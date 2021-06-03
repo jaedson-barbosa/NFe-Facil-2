@@ -42,9 +42,10 @@
 
   async function transmitir() {
     loading = true
-    const infNFe = preparateJSON(scoped.commom.root, false)
+    const oldId = scoped.commom.root.Id
+    const infNFe = preparateJSON(scoped.commom.root)
     const idToken = await $user.getIdToken()
-    const resp = await requisitar('transmitirNFe', { idEmpresa, infNFe }, idToken)
+    const resp = await requisitar('transmitirNFe', { idEmpresa, infNFe, oldId }, idToken)
     const respText = await resp.text()
     if (resp.status == 201) {
       $goto('./:id', { id: respText })

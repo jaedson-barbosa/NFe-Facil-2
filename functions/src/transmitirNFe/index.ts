@@ -22,7 +22,6 @@ export const transmitirNFe = onLoggedRequest(
       res.status(400).send('Certificado não encontrado.')
       return
     }
-    const oldId = infNFe.Id
     try {
       let serie = infNFe.ide.serie.$t
       const ambiente: TAmb = +infNFe.ide.tpAmb.$t
@@ -94,14 +93,18 @@ export const transmitirNFe = onLoggedRequest(
           '</nfeProc>'
         nProt = Number(respRet.protNFe.infProt.nProt.$t)
       } while (!nfeProc)
-      const oldDocRef = notasSalvasCol.doc(oldId)
-      const oldDoc = await oldDocRef.get()
-      if (oldDoc.exists) {
-        if (oldDoc.get('status') == 0) {
-          await oldDocRef.delete()
-        } else {
-          res.status(400).send('Proibido: nota fiscal já emitida ou cancelada.')
-          return
+      if (infNFe.oldId) {
+        const oldDocRef = notasSalvasCol.doc(infNFe.oldId)
+        const oldDoc = await oldDocRef.get()
+        if (oldDoc.exists) {
+          if (oldDoc.get('status') == 0) {
+            await oldDocRef.delete()
+          } else {
+            res
+              .status(400)
+              .send('Proibido: nota fiscal já emitida ou cancelada.')
+            return
+          }
         }
       }
       const dhEmi = new Date(infNFe.ide.dhEmi.$t)

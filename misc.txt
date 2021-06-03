@@ -44,11 +44,11 @@ OK  Remover tag choice
 OK  Tela de NFe
 OK  Exibição de notas
 OK  Clonagem de NFe
-    Servidor básico (sem todas análises)
+OK  Servidor básico (sem todas análises)
 OK    precadastro
 OK    transmitirNFe
 OK    gerarDANFENFe
-+-    cancelarNFe
+OK    cancelarNFe
 OK  Reorganizar todo o código do servidor (já que agora ele é bem mais simples)
     Exibição de resumo do item no botão
 OK  Implementar cálculo de totais
@@ -59,6 +59,7 @@ OK  Implementar cálculo de totais
     Customização (em choice tem um estatico)
     User onCall no lugar de onRequest
     Importação com análise de elementos já salvos
+    Liberar a transmissão em produção e testar com uma nota real
 
 REFINAMENTOS durante pré-alpha:
     Remover tag name do nfe.json e fragmentá-lo em diferentes arquivos

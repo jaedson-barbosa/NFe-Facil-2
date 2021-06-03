@@ -107,7 +107,7 @@
     )
     if (resp.status == 200) {
       alert('Nota fiscal cancelada com sucesso')
-      $goto('./:id', { id })
+      $goto('../')
     } else {
       const text = await resp.text()
       alert(text)
@@ -131,12 +131,15 @@
         : 'Cancelada'}
     />
     <div class="buttons is-centralized">
+      <a class="button" href={$url('../')}> Voltar </a>
       <button class="button" on:click={() => editar(root)}>
         {root.status == 0 ? 'Editar' : 'Clonar'}
       </button>
+      {#if root.status != 2}
       <button class="button" on:click={() => gerarDANFE(root.status > 0)}>
         Gerar DANFE
       </button>
+      {/if}
       <button class="button" on:click={() => XML(root)}> Abrir XML </button>
       {#if root.status == 1}
         <button class="button" on:click={cancelarNFe}> Cancelar NFe </button>
