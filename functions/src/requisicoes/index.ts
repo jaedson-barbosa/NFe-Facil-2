@@ -1,54 +1,20 @@
-import { IEmpresaGet } from '../core'
+import { IEmpresa } from '../IEmpresa'
 import * as https from 'https'
 import * as axios from 'axios'
 import * as servicos from './servicos.json'
 import * as webservicesNFe from './webservicesNFe.json'
-// import { IBGESimplificado } from '../IBGESimplificado.json'
+import { ICertificate } from '../assinatura/ICertificate'
+import { TAmb } from '../TAmb'
 
 type nomesServicos = keyof typeof servicos &
   keyof typeof webservicesNFe.SVRS.servicos
-
-export function getRandomNumber(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
-export enum TAmb {
-  Producao = 1,
-  Homologacao,
-}
-
-// const usuario = await empresa.ref.collection('usuarios').doc(user.sub).get()
-// if (usuario.exists) res.status(200).send(usuario.data())
-// else res.status(400).send('Usuário não cadastrado')
-// TO-DO: Implementar análise de permissões
-
-/*export const consultarStatusServico = onLoggedRequest(
-  async (user, res, empresaRef, empresa, body) => {
-    const ambiente = TAmb.Homologacao
-    const uf = empresa.emit.enderEmit.UF as string
-    const cUF = IBGESimplificado.find((v) => v.Sigla == uf)?.Codigo
-    res.status(200).send(
-      await enviarRequisicao(
-        `<consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
-          <tpAmb>${ambiente}</tpAmb>
-          <cUF>${cUF}</cUF>
-          <xServ>STATUS</xServ>
-        </consStatServ>`,
-        'consultarStatusServico',
-        ambiente,
-        empresa
-      )
-    )
-  }
-)*/
 
 export async function enviarRequisicao(
   body: string,
   servico: nomesServicos,
   amb: TAmb,
-  empresa: IEmpresaGet,
-  publicCert: string,
-  privateCert: string
+  empresa: IEmpresa,
+  cert: ICertificate,
 ): Promise<string> {
   return (
     await axios.default.post(
@@ -65,8 +31,8 @@ export async function enviarRequisicao(
       {
         httpsAgent: new https.Agent({
           rejectUnauthorized: false,
-          cert: publicCert,
-          key: privateCert,
+          cert: cert.publicCert,
+          key: cert.privateCert,
         }),
         headers: { 'Content-Type': 'application/soap+xml' },
       }

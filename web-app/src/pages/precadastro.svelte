@@ -19,7 +19,8 @@
     loading = true
     const certArray = new Uint8Array(await files[0].arrayBuffer())
     requisicao.cert = btoa(String.fromCharCode(...certArray))
-    const resp = await requisitar('precadastro', requisicao)
+    const idToken = await $user.getIdToken()
+    const resp = await requisitar('precadastro', requisicao, idToken)
     if (resp.status == 201) {
       $goto('./')
     } else {

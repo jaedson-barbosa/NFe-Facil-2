@@ -1,5 +1,9 @@
-import precadastro from './precadastro'
+import { initializeApp } from 'firebase-admin'
 
-export { precadastro }
-// export { consultarStatusServico } from './requisicoes'
-export { transmitirNFe, gerarDANFE } from './nfe'
+initializeApp()
+
+export { precadastro } from './precadastro'
+export { statusServico } from './statusServico'
+export { gerarDANFENFe } from './gerarDANFE'
+export { transmitirNFe } from './transmitirNFe'
+export { cancelarNFe } from './cancelarNFe'

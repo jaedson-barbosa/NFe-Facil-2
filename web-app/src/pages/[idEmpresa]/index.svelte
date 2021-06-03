@@ -1,7 +1,8 @@
 <script lang="ts">
   import { url } from '@roxi/routify'
   import { applyMask } from '@app/documentUtils'
-  import Search, { TCadastro } from './_components/Search.svelte'
+  import type { TCadastro } from './_components/Search.svelte'
+  import Search from './_components/Search.svelte'
 
   export let scoped: { idEmpresa: string }
 
@@ -17,11 +18,13 @@
 
 <div class="columns is-multiline">
   <div class="column is-half">
-    <div class="buttons">
-      <a class="button is-fullwidth" href={$url('./cadastro')}>
-        Atualizar cadastro
-      </a>
-      <a class="button is-fullwidth" href={$url('../')}> Trocar emitente </a>
+    <div class="container content box">
+      <div class="buttons">
+        <a class="button is-fullwidth" href={$url('./cadastro')}>
+          Atualizar cadastro
+        </a>
+        <a class="button is-fullwidth" href={$url('../')}> Trocar emitente </a>
+      </div>
     </div>
   </div>
   <div class="column is-half">

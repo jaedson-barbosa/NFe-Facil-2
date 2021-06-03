@@ -42,28 +42,23 @@ OK  Tipos de ICMS de acordo com o regime do emitente
 OK  Sistema de lista para ítens multiplos
 OK  Remover tag choice
 OK  Tela de NFe
-    Importação
 OK  Exibição de notas
-    Clonagem de NFe
+OK  Clonagem de NFe
     Servidor básico (sem todas análises)
 OK    precadastro
 OK    transmitirNFe
-      gerarDANFENFe
-    Reorganizar todo o código do servidor (já que agora ele é bem mais simples)
+OK    gerarDANFENFe
++-    cancelarNFe
+OK  Reorganizar todo o código do servidor (já que agora ele é bem mais simples)
     Exibição de resumo do item no botão
-    Proibir o uso de emitente com CPF
-      Via cadastro
-      Via importação (restringido para emitente logado)
-    Analisar elementos já salvos na importação
-    Evento de cancelamento
-      Geração
-      Exibição de status
 OK  Implementar cálculo de totais
     Analise de certificado do precadastro
     Proteger certificado com senha (armazenada ou não no dispositivo do cliente e criptografada)
     Estudar uso de https://nodejs.org/api/crypto.html no lugar de node-forge
     Avaliar talvez só guardar a chave private e obter a publica a partir dela
     Customização (em choice tem um estatico)
+    User onCall no lugar de onRequest
+    Importação com análise de elementos já salvos
 
 REFINAMENTOS durante pré-alpha:
     Remover tag name do nfe.json e fragmentá-lo em diferentes arquivos
@@ -114,3 +109,5 @@ Retirada e entrega limitados para endereço nacional. Se necessário, basta pedi
 Obedecida apenas regra geral de cálculo do total (pag. 122)
 Adição do vServ no total do vNF não é feita automaticamente
 Na requisição de acesso não é feita a análise se a empresa já existe
+
+firebase emulators:start --import save-data --export-on-exit --only firestore,functions,auth

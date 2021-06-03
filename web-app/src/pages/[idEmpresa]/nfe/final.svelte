@@ -1,14 +1,16 @@
 <script lang="ts">
   import { requisitar } from '@app/functions'
-  import { url, goto } from '@roxi/routify'
+  import { url, goto, params } from '@roxi/routify'
   import { db } from '@app/firebase'
   import { preparateJSON, generateXML } from './finalizacao'
   import { user } from '@app/store'
   import type INFeRoot from './INFeRoot'
 
-  export let scoped: { commom: { root: INFeRoot } }
-  export let idEmpresa: string
+  export let scoped: { commom: { root: INFeRoot, idEmpresa: string } }
+  const idEmpresa = scoped.commom.idEmpresa
   let loading = false
+
+  alert(idEmpresa)
 
   async function salvar() {
     loading = true

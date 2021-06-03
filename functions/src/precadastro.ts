@@ -1,7 +1,10 @@
-import { onDefaultRequest, db } from './core'
+import { firestore } from 'firebase-admin'
+import { onDefaultRequest } from './onDefaultRequest'
 import * as forge from 'node-forge'
 
-export default onDefaultRequest(true, async (user, res, body) => {
+const db = firestore()
+
+export const precadastro = onDefaultRequest(async ({ user, body }, res) => {
   if (!body.cert) {
     res.status(400).send('Certificado inválido')
     return
@@ -44,9 +47,9 @@ export default onDefaultRequest(true, async (user, res, body) => {
     await empresaRef.set({
       emit: {
         CNPJ: cnpj,
-        xNome: certParts[0]
+        xNome: certParts[0],
       },
-      serieNFe: "1"
+      serieNFe: '1',
     })
   }
   await empresaRef.collection('usuarios').doc(user.sub).set({

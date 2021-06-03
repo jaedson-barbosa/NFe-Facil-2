@@ -1,14 +1,16 @@
 <script lang="ts">
-  import { generate } from './rootGenerator'
-  import { params, goto } from '@roxi/routify'
+  import { generate, toNFeString } from './rootGenerator'
+  import { params, goto, url } from '@roxi/routify'
   import Container from '@form/Container.svelte'
   import ReadonlyV from '@form/ReadonlyV.svelte'
   import { db } from '@app/firebase'
   import type INFeRoot from './INFeRoot'
+  import { requisitar } from '@app/functions'
+  import { user } from '@app/store'
   // import { generateXML, preparateJSON } from './finalizacao';
 
   export let id: string
-  $: idEmpresa = $params['idEmpresa']
+  const idEmpresa = $params['idEmpresa']
   export let scoped: { commom: { root: INFeRoot } }
 
   async function carregar() {
@@ -44,18 +46,30 @@
     const infNFe: INFeRoot = root.nota.get('infNFe')
     // const xml = generateXML(infNFe)
     // console.log(xml)
-    // return 
-    const v = await db.collection('empresas')
-      .doc(idEmpresa)
-      .get()
+    // return
+    const v = await db.collection('empresas').doc(idEmpresa).get()
     const empresa = v.data()
     const initialValue = generate(empresa, infNFe)
     scoped.commom.root = initialValue
     $goto('./identificacao')
   }
 
-  function gerarDANFE() {
-    alert('Ainda não implementado')
+  async function gerarDANFE(emitida: boolean) {
+    const token = await $user.getIdToken()
+    const resp = await requisitar(
+      'gerarDANFENFe',
+      { idEmpresa, emitida, idNota: id },
+      token
+    )
+    if (resp.status == 200) {
+      let blob = await resp.blob()
+      blob = new Blob([blob], { type: 'application/pdf' })
+      const url = window.URL.createObjectURL(blob)
+      window.open(url)
+    } else {
+      const text = await resp.text()
+      alert(text)
+    }
   }
 
   function abrirXML(xml: string) {
@@ -67,14 +81,37 @@
   function XML(root: any) {
     const xml = root.nota.get('xml')
     abrirXML(xml)
-    if (root.status == 2) {
-      const xmlCancelamento = root.nota.get('xmlCancelamento')
-      abrirXML(xmlCancelamento)
-    }
   }
 
-  function cancelarNFe() {
-    alert('Ainda não implementado')
+  function XMLCancelamento(root: any) {
+    const xmlCancelamento = root.nota.get('xmlCancelamento')
+    abrirXML(xmlCancelamento)
+  }
+
+  async function cancelarNFe() {
+    const justificativa = prompt('Motivação do cancelamento:')
+    if (!justificativa) {
+      alert('Operação cancelada pelo usuário')
+      return
+    }
+    const token = await $user.getIdToken()
+    const resp = await requisitar(
+      'cancelarNFe',
+      {
+        idEmpresa,
+        idNota: id,
+        justificativa,
+        dhEvento: toNFeString(new Date()),
+      },
+      token
+    )
+    if (resp.status == 200) {
+      alert('Nota fiscal cancelada com sucesso')
+      $goto('./:id', { id })
+    } else {
+      const text = await resp.text()
+      alert(text)
+    }
   }
 </script>
 
@@ -85,27 +122,33 @@
     <ReadonlyV label="Número" value={root.nNF} />
     <ReadonlyV label="Data e hora" value={root.dhEmi} />
     <ReadonlyV label="Cliente" value={root.xNome} />
-    {#if root.status == 0}
-      <ReadonlyV label="Status" value="Apenas salva" />
-      <div class="buttons is-centralized">
-        <button class="button" on:click={() => editar(root)}> Editar </button>
-        <button class="button" on:click={gerarDANFE}> Gerar DANFE </button>
-        <button class="button" on:click={() => XML(root)}> Baixar XML </button>
-      </div>
-      <!-- Ações para cada status! -->
-    {:else if root.status == 1}
-      <ReadonlyV label="Status" value="Emitida" />
-      <div class="buttons is-centralized">
-        <button class="button" on:click={gerarDANFE}> Gerar DANFE </button>
-        <button class="button" on:click={() => XML(root)}> Abrir XML </button>
+    <ReadonlyV
+      label="Status"
+      value={root.status == 0
+        ? 'Apenas salva'
+        : root.status == 1
+        ? 'Emitida'
+        : 'Cancelada'}
+    />
+    <div class="buttons is-centralized">
+      <button class="button" on:click={() => editar(root)}>
+        {root.status == 0 ? 'Editar' : 'Clonar'}
+      </button>
+      <button class="button" on:click={() => gerarDANFE(root.status > 0)}>
+        Gerar DANFE
+      </button>
+      <button class="button" on:click={() => XML(root)}> Abrir XML </button>
+      {#if root.status == 1}
         <button class="button" on:click={cancelarNFe}> Cancelar NFe </button>
-      </div>
-    {:else if root.status == 2}
-      <ReadonlyV label="Status" value="Cancelada" />
-      <div class="buttons is-centralized">
-        <button class="button" on:click={gerarDANFE}> Gerar DANFE </button>
-        <button class="button" on:click={() => XML(root)}> Abrir XMLs </button>
-      </div>
-    {/if}
+      {:else if root.status == 2}
+        <button class="button" on:click={() => XMLCancelamento(root)}>
+          Abrir XML de cancelamento
+        </button>
+      {/if}
+    </div>
   </Container>
+{:catch erro}
+  {erro.message}
+  Não foi possível encontrar a nota
+  <a href={$url('../')}>Voltar</a>
 {/await}

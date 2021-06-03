@@ -45,7 +45,7 @@
         .collection('transportes')
         .doc(id)
         .set(root)
-      $goto('../transportes')
+      $goto('../')
     } catch (error) {
       alert(error.message)
       loading = false
@@ -71,7 +71,7 @@
             <button type="reset" class="button is-warning"> Limpar </button>
           </p>
           <p class="control">
-            <a href={$url('../transportes')} class="button is-danger"> Cancelar </a>
+            <a href={$url('../')} class="button is-danger"> Cancelar </a>
           </p>
         </div>
       </AutoForm>

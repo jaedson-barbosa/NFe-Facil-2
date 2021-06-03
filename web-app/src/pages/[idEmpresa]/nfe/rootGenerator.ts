@@ -67,7 +67,7 @@ function getRandomNumber(digits: number = 8) {
   return Math.floor(Math.random() * (maxm - minm + 1)) + minm
 }
 
-function toNFeString(data: Date) {
+export function toNFeString(data: Date) {
   var tzo = -data.getTimezoneOffset(),
     dif = tzo >= 0 ? '+' : '-',
     pad = function (num) {

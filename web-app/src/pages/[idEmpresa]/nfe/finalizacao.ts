@@ -4,6 +4,7 @@ import toXml from '@xml2json/json2xml'
 import type INFeRoot from './INFeRoot'
 
 export function preparateJSON(infNFe: INFeRoot, updateId: boolean) {
+  let Id = infNFe.Id
   const cUF = IBGE.find(
     (v) => v.Sigla == (infNFe.emit.enderEmit.UF as string)
   )!.Codigo
@@ -20,11 +21,14 @@ export function preparateJSON(infNFe: INFeRoot, updateId: boolean) {
   const chave = `${cUF}${AAMM}${CNPJ}${mod}${serie}${nNF}${tpEmis}${cNF}`
   const cDV = calcularDV(chave).toString()
   infNFe.ide.cDV = cDV
-  if (updateId) delete infNFe['Id']
-  const prefixedInfNFe: any = {}
-  prepararParaXML({ infNFe }, refInfNFe, prefixedInfNFe)
+  delete infNFe['Id']
+  const prefixedInfNFe = { infNFe: { versao: '4.00', Id } }
+  Object.entries(infNFe).forEach(([key, value]) => {
+    if (!value) return
+    // XML ficou em branco, fazer uma análise mais profunda
+    prepararParaXML(value, refInfNFe[key], prefixedInfNFe.infNFe)
+  })
   const resultInfNFe = prefixedInfNFe.infNFe
-  resultInfNFe.versao = '4.00'
   if (updateId) resultInfNFe.Id = infNFe.Id = `NFe${chave}${cDV}`
   return resultInfNFe
 }

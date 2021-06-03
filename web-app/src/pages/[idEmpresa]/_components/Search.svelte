@@ -81,7 +81,7 @@
     <thead>
       <tr>
         {#each headers as h}
-          <th>h</th>
+          <th> {h} </th>
         {/each}
       </tr>
     </thead>
@@ -89,13 +89,13 @@
       {#each cadastros as cad}
         <tr>
           {#each itemRender(cad) as i, index}
-            {#if index == 0}
-              <a href={$url(`./${editUrl}/:id`, { id: cad.id })}>
+            <td>
+              {#if index == 0}
+                <a href={$url(`./${editUrl}/:id`, { id: cad.id })}> {i} </a>
+              {:else}
                 {i}
-              </a>
-            {:else}
-              <td>i</td>
-            {/if}
+              {/if}
+            </td>
           {/each}
         </tr>
       {/each}
