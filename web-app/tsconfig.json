@@ -8,8 +8,7 @@
     "baseUrl": ".",
     "paths": {
       "@form/*": ["src/form/*"],
-      "@app/*": ["src/app/*"],
-      "@xml2json/*": ["src/xml2json/*"]
+      "@app/*": ["src/app/*"]
     },
     "lib": ["ESNext","DOM"]
   }

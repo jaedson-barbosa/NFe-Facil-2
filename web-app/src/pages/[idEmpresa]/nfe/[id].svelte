@@ -13,6 +13,8 @@
   const idEmpresa = $params['idEmpresa']
   export let scoped: { commom: { root: INFeRoot } }
 
+  let loading = false
+
   async function carregar() {
     let status = 0
     let nota = await db
@@ -55,6 +57,8 @@
   }
 
   async function gerarDANFE(emitida: boolean) {
+    if (loading) return
+    loading = true
     const token = await $user.getIdToken()
     const resp = await requisitar(
       'gerarDANFENFe',
@@ -70,6 +74,7 @@
       const text = await resp.text()
       alert(text)
     }
+    loading = false
   }
 
   function abrirXML(xml: string) {
@@ -89,6 +94,8 @@
   }
 
   async function cancelarNFe() {
+    if (loading) return
+    loading = true
     const justificativa = prompt('Motivação do cancelamento:')
     if (!justificativa) {
       alert('Operação cancelada pelo usuário')
@@ -112,6 +119,7 @@
       const text = await resp.text()
       alert(text)
     }
+    loading = false
   }
 </script>
 
@@ -136,13 +144,23 @@
         {root.status == 0 ? 'Editar' : 'Clonar'}
       </button>
       {#if root.status != 2}
-      <button class="button" on:click={() => gerarDANFE(root.status > 0)}>
-        Gerar DANFE
-      </button>
+        <button
+          class="button"
+          class:is-loading={loading}
+          on:click={() => gerarDANFE(root.status > 0)}
+        >
+          Gerar DANFE
+        </button>
       {/if}
       <button class="button" on:click={() => XML(root)}> Abrir XML </button>
       {#if root.status == 1}
-        <button class="button" on:click={cancelarNFe}> Cancelar NFe </button>
+        <button
+          class="button"
+          class:is-loading={loading}
+          on:click={cancelarNFe}
+        >
+          Cancelar NFe
+        </button>
       {:else if root.status == 2}
         <button class="button" on:click={() => XMLCancelamento(root)}>
           Abrir XML de cancelamento

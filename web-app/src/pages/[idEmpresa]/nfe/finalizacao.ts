@@ -1,6 +1,6 @@
 import { IBGE } from '@form/data/IBGE.json'
 import * as refInfNFe from '@form/data/nfe.json'
-import toXml from '@xml2json/json2xml'
+import toXml from './json2xml'
 import type INFeRoot from './INFeRoot'
 
 export function preparateJSON(infNFe: INFeRoot) {

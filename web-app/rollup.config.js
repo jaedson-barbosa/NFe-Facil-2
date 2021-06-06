@@ -80,10 +80,6 @@ export default {
           replacement: path.resolve(projectRootDir, 'src/form'),
         },
         { find: '@app', replacement: path.resolve(projectRootDir, 'src/app') },
-        {
-          find: '@xml2json',
-          replacement: path.resolve(projectRootDir, 'src/xml2json'),
-        },
       ],
     }),
 

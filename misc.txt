@@ -53,9 +53,11 @@ OK  Reorganizar todo o código do servidor (já que agora ele é bem mais simple
 OK  Implementar cálculo de totais
 OK  Analise de certificado do precadastro
 OK  Proteger certificado com a senha atual
++-  Botão indicar carregamento na geração de PDF e cancelamento
     Importação com análise de elementos já salvos
-    Botão indicar carregamento na geração de PDF e cancelamento
     Liberar a transmissão em produção e testar com uma nota real
+    Ajustar funções pro server de São Paulo e URLs no web-app pra produção
+    Excluir antigo public-src
 
 REFINAMENTOS durante pré-alpha:
     Opção de trocar a senha do certificado
