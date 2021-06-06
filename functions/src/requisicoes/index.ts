@@ -1,4 +1,3 @@
-import { IEmpresa } from '../IEmpresa'
 import * as https from 'https'
 import * as axios from 'axios'
 import * as servicos from './servicos.json'
@@ -13,12 +12,12 @@ export async function enviarRequisicao(
   body: string,
   servico: nomesServicos,
   amb: TAmb,
-  empresa: IEmpresa,
+  UF: string,
   cert: ICertificate,
 ): Promise<string> {
   return (
     await axios.default.post(
-      getWebServiceByUF(empresa.emit.enderEmit.UF as string).servicos[servico][
+      getWebServiceByUF(UF).servicos[servico][
         amb == TAmb.Producao ? 'url_producao' : 'url_homologacao'
       ],
       `<Envelope xmlns="http://www.w3.org/2003/05/soap-envelope">

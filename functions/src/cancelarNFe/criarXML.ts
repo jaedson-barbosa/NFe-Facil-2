@@ -1,8 +1,7 @@
-import { IEmpresa } from "../IEmpresa"
 import { TAmb } from "../TAmb"
 
 export function criarXML(
-  empresa: IEmpresa,
+  cnpj: string,
   cOrgao: number,
   chaveNFe: string,
   numeroProtocolo: number,
@@ -14,7 +13,7 @@ export function criarXML(
   <infEvento Id="ID110111${chaveNFe}01">
     <cOrgao>${cOrgao}</cOrgao>
     <tpAmb>${ambiente}</tpAmb>
-    <CNPJ>${empresa.emit.CNPJ}</CNPJ>
+    <CNPJ>${cnpj}</CNPJ>
     <chNFe>${chaveNFe}</chNFe>
     <dhEvento>${dhEvento}</dhEvento>
     <tpEvento>110111</tpEvento>

@@ -1,13 +1,12 @@
 import { toJson } from "xml2json"
 import { ICertificate } from "../assinatura/ICertificate"
-import { IEmpresa } from "../IEmpresa"
 import { getRandomNumber } from "../getRandomNumber"
 import { enviarRequisicao } from "../requisicoes"
 import { TRetEnviNFe } from "./TRetEnviNFe"
 import { TAmb } from "../TAmb"
 
 export async function autorizacao(
-  empresa: IEmpresa,
+  UF: string,
   cert: ICertificate,
   ambiente: TAmb,
   ...xmls: string[]
@@ -20,7 +19,7 @@ export async function autorizacao(
     </enviNFe>`,
     'autorizacao',
     ambiente,
-    empresa,
+    UF,
     cert
   )
   const retEnviNFe = (

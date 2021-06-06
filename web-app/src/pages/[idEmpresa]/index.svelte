@@ -3,6 +3,8 @@
   import { applyMask } from '@app/documentUtils'
   import type { TCadastro } from './_components/Search.svelte'
   import Search from './_components/Search.svelte'
+  import { requisitar } from '@app/functions'
+  import { user } from '@app/store'
 
   export let scoped: { idEmpresa: string }
 
@@ -14,6 +16,20 @@
     const idEstrangeiro = v.get('dest.idEstrangeiro')
     return idEstrangeiro
   }
+
+  async function consultar() {
+    const token = await $user.getIdToken()
+    const resp = await requisitar(
+      'statusServico',
+      { idEmpresa: scoped.idEmpresa },
+      token
+    )
+    if (resp.status == 200) {
+      alert(await resp.text())
+    } else {
+      alert(resp.status == 401 ? 'Erro na autenticação.' : await resp.text())
+    }
+  }
 </script>
 
 <div class="columns is-multiline">
@@ -24,6 +40,9 @@
           Atualizar cadastro
         </a>
         <a class="button is-fullwidth" href={$url('../')}> Trocar emitente </a>
+        <button class="button is-fullwidth" on:click={consultar}>
+          Consultar status do serviço
+        </button>
       </div>
     </div>
   </div>

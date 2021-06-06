@@ -1,14 +1,13 @@
 import { toXml } from 'xml2json'
-import { onLoggedRequest } from '../onLoggedRequest'
+import { onCertifiedRequest } from '../onCertifiedRequest'
 import { TAmb } from '../TAmb'
 import { INotaDB } from '../INotaDB'
 import { criarXML } from './criarXML'
 import { recepcaoEvento } from './recepcaoEvento'
-import { getCert } from '../assinatura/getCert'
 import { assinarEvento } from '../assinatura/assinarEvento'
 
-export const cancelarNFe = onLoggedRequest(
-  async ({ body, empData, empRef }, res) => {
+export const cancelarNFe = onCertifiedRequest(
+  async ({ body, UF, empRef, cert }, res) => {
     const idNota = body.idNota
     const justificativa = body.justificativa?.trim()
     const dhEvento = body.dhEvento
@@ -29,18 +28,13 @@ export const cancelarNFe = onLoggedRequest(
       res.status(400).send('Nota não existe')
       return
     }
-    const dataCert = await getCert(empRef.id)
-    if (!dataCert) {
-      res.status(400).send('Certificado não encontrado.')
-      return
-    }
     const data = nota.data() as INotaDB
     const cOrgao = data.infNFe.ide.cUF
     const chaveNFe = data.infNFe.Id?.slice(3)
     const numeroProtocolo = data.nProt!
     const ambiente = +data.infNFe.ide.tpAmb as TAmb
     const xml = criarXML(
-      empData,
+      empRef.id,
       cOrgao,
       chaveNFe,
       numeroProtocolo,
@@ -48,8 +42,8 @@ export const cancelarNFe = onLoggedRequest(
       dhEvento,
       ambiente
     )
-    const signedXml = assinarEvento(dataCert, xml)
-    const resp = await recepcaoEvento(empData, dataCert, ambiente, signedXml)
+    const signedXml = assinarEvento(cert, xml)
+    const resp = await recepcaoEvento(UF, cert, ambiente, signedXml)
     if (resp.cStat.$t != '128') {
       res.status(400).send(resp.xMotivo.$t)
       return

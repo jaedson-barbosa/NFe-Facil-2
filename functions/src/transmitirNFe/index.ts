@@ -1,4 +1,4 @@
-import { onLoggedRequest } from '../onLoggedRequest'
+import { onCertifiedRequest } from '../onCertifiedRequest'
 import { toXml } from 'xml2json'
 import { TAmb } from '../TAmb'
 import { getXml } from './getXml'
@@ -7,19 +7,13 @@ import { autorizacao } from './autorizacao'
 import { retAutorizacao } from './retAutorizacao'
 import { removePrefix } from './removePrefix'
 import { sleep } from './sleep'
-import { getCert } from '../assinatura/getCert'
 import { assinarNFe } from '../assinatura/assinarNFe'
 
-export const transmitirNFe = onLoggedRequest(
-  async ({ body, empRef, empData }, res) => {
+export const transmitirNFe = onCertifiedRequest(
+  async ({ body, empRef, UF, cert }, res) => {
     const infNFe = body.infNFe
     if (!infNFe) {
       res.status(400).send('Requisição sem corpo da nota')
-      return
-    }
-    const dataCert = await getCert(empRef.id)
-    if (!dataCert) {
-      res.status(400).send('Certificado não encontrado.')
       return
     }
     try {
@@ -49,8 +43,8 @@ export const transmitirNFe = onLoggedRequest(
         : +maxNota.docs[0].get('infNFe.ide.nNF') + 1
       do {
         const xml = getXml(infNFe, numero.toString())
-        const signedXml = await assinarNFe(dataCert, xml)
-        const resp = await autorizacao(empData, dataCert, ambiente, signedXml)
+        const signedXml = await assinarNFe(cert, xml)
+        const resp = await autorizacao(UF, cert, ambiente, signedXml)
         if (resp.cStat != '103') {
           res.status(400).send('Falha ao tentar enviar lote: ' + resp.xMotivo)
           return
@@ -59,8 +53,8 @@ export const transmitirNFe = onLoggedRequest(
         do {
           await sleep(Number(resp.infRec.tMed) * 1000)
           respRet = await retAutorizacao(
-            empData,
-            dataCert,
+            UF,
+            cert,
             ambiente,
             resp.infRec.nRec
           )

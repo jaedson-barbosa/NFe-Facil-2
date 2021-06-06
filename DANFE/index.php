@@ -4,32 +4,22 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
-// use NFePHP\DA\NFe\Danfce;
 use NFePHP\DA\NFe\Danfe;
 
 function helloHttp(ServerRequestInterface $request): ResponseInterface
 {
     $origBody = $request->getBody();
-    // return (new Response())
-    //     ->withBody($origBody)
-    //     ->withStatus(200)
-    //     ->withHeader('Content-type', 'text/plain')
-    //     ->withHeader('Access-Control-Allow-Origin', '*');
     $body = json_decode($origBody, true);
     // $logo = 'data://text/plain;base64,'. base64_encode(file_get_contents("C:/Users/jaeds/Downloads/logo.jpeg"));
     // $logo = 'C:/Users/jaeds/Downloads/logo-nfce.png';
-    $xml = $body['xml'];//file_get_contents("C:/Users/jaeds/Downloads/anfce112.xml");
+    $xml = $body['xml'];
     $orientacao = $body['orientacao'];
     $papel = 'A4';//$body['papel'];
     $margSup = $body['margSup'];
     $margEsq = $body['margEsq'];
 
-    $danfe = new Danfe($xml);//new Danfce($xml);
-    $danfe->debugMode(true);//seta modo debug, deve ser false em produção
-    // $danfe->setPaperWidth(80); //seta a largura do papel em mm max=80 e min=58
-    // $danfe->setMargins(2);//seta as margens
-    // $danfe->setOffLineDoublePrint(true); //ativa ou desativa a impressão conjunta das via do consumidor e da via do estabelecimento qnado a nfce for emitida em contingência OFFLINE
-    // $danfe->setDefaultFont('arial');//altera o font pode ser 'times' ou 'arial'
+    $danfe = new Danfe($xml);
+    $danfe->debugMode(true); //seta modo debug, deve ser false em produção
     $danfe->printParameters($orientacao, $papel, $margSup, $margEsq);
     $danfe->creditsIntegratorFooter('NFe Fácil - https://nfefacil.net');
     $pdf = $danfe->render();

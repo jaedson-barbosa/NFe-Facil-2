@@ -64,6 +64,7 @@
               </label>
             </div>
           </div>
+          <p class="help">O certificado será validado com uma requisição de testes à SEFAZ.</p>
         </div>
       </div>
     </div>

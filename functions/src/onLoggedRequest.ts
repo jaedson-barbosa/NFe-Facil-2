@@ -1,11 +1,10 @@
 import { firestore } from 'firebase-admin'
-import { IEmpresa } from "./IEmpresa"
 import { IDefaultParams, onDefaultRequest } from "./onDefaultRequest"
 import { Response, HttpsFunction } from 'firebase-functions'
 
-interface ILoggedParams extends IDefaultParams {
+export interface ILoggedParams extends IDefaultParams {
   empRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>
-  empData: IEmpresa
+  UF: string
 }
 
 const db = firestore()
@@ -20,15 +19,19 @@ export function onLoggedRequest(
     const cnpj = p.body.idEmpresa
     if (!cnpj) {
       r.status(400).send('Requisição sem identificação de emitente.')
-    } else {
-      const empresa = await db.collection('empresas').doc(cnpj).get()
-      if (!empresa.exists) {
-        r.status(400).send('Empresa não existe')
-      } else {
-        const empRef = empresa.ref
-        const empData = empresa.data()! as IEmpresa
-        await handler({ ...p, empRef, empData }, r)
-      }
+      return
     }
+    const empresa = await db.collection('empresas').doc(cnpj).get()
+    if (!empresa.exists) {
+      r.status(400).send('Empresa não existe')
+      return
+    }
+    const empRef = empresa.ref
+    const UF = empresa.get('emit.enderEmit.UF')
+    if (!UF) {
+      r.status(400).send('UF do emitente não consta no cadastro.')
+      return
+    }
+    await handler({ ...p, empRef, UF }, r)
   })
 }

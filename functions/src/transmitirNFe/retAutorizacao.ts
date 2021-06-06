@@ -1,12 +1,11 @@
 import { toJson } from "xml2json"
 import { ICertificate } from "../assinatura/ICertificate"
-import { IEmpresa } from "../IEmpresa"
 import { enviarRequisicao } from "../requisicoes"
 import { TAmb } from "../TAmb"
 import { TRetConsReciNFe } from "./TRetConsReciNFe"
 
 export async function retAutorizacao(
-  empresa: IEmpresa,
+  UF: string,
   cert: ICertificate,
   ambiente: TAmb,
   nRec: string
@@ -18,7 +17,7 @@ export async function retAutorizacao(
     </consReciNFe>`,
     'retAutorizacao',
     ambiente,
-    empresa,
+    UF,
     cert
   )
   const retConsReciNFe = (

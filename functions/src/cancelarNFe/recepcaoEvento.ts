@@ -3,11 +3,10 @@ import { getRandomNumber } from '../getRandomNumber'
 import { enviarRequisicao } from '../requisicoes'
 import {retEnvEvento} from './retEnvEvento'
 import { ICertificate } from '../assinatura/ICertificate'
-import { IEmpresa } from '../IEmpresa'
 import { TAmb } from '../TAmb'
 
 export async function recepcaoEvento(
-  empresa: IEmpresa,
+  UF: string,
   cert: ICertificate,
   ambiente: TAmb,
   xml: string
@@ -20,7 +19,7 @@ export async function recepcaoEvento(
     envio,
     'recepcaoEvento',
     ambiente,
-    empresa,
+    UF,
     cert
   )
   const retEnvEvento = (

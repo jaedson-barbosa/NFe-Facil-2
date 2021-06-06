@@ -50,18 +50,20 @@ OK    transmitirNFe
 OK    gerarDANFENFe
 OK    cancelarNFe
 OK  Reorganizar todo o código do servidor (já que agora ele é bem mais simples)
-    Exibição de resumo do item no botão
 OK  Implementar cálculo de totais
-    Analise de certificado do precadastro
-    Proteger certificado com senha (armazenada ou não no dispositivo do cliente e criptografada)
-    Estudar uso de https://nodejs.org/api/crypto.html no lugar de node-forge
-    Avaliar talvez só guardar a chave private e obter a publica a partir dela
-    Customização (em choice tem um estatico)
-    User onCall no lugar de onRequest
+OK  Analise de certificado do precadastro
+OK  Proteger certificado com a senha atual
     Importação com análise de elementos já salvos
+    Botão indicar carregamento na geração de PDF e cancelamento
     Liberar a transmissão em produção e testar com uma nota real
 
 REFINAMENTOS durante pré-alpha:
+    Opção de trocar a senha do certificado
+    Estudar uso de https://nodejs.org/api/crypto.html no lugar de node-forge
+    Inserir elementos de try-catch
+    Exibição de resumo do item no botão
+    Customização (em choice tem um estatico)
+    User onCall no lugar de onRequest
     Remover tag name do nfe.json e fragmentá-lo em diferentes arquivos
     Dividir cadastro de produto em 2 telas (dados base e impostos) para diminuir 1 nível de hierarquia usando o mesmo sistema da tela de nfe (com root no _reset)
     Evento de cancelamento
@@ -112,3 +114,4 @@ Adição do vServ no total do vNF não é feita automaticamente
 Na requisição de acesso não é feita a análise se a empresa já existe
 
 firebase emulators:start --import save-data --export-on-exit --only firestore,functions,auth
+sudo kill $(sudo lsof -t -i:8080)
