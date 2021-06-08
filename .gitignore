@@ -1,12 +1,5 @@
 **/node_modules
-*.pfx
-public
-**/.cache
-*.log
 DANFE/vendor
 functions/lib
 save-data
-*.xml
-teste.json
-.VSCodeCounter
 .routify
