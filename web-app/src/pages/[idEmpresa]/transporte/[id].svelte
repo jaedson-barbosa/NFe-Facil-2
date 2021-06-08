@@ -59,9 +59,6 @@
             </button>
           </p>
           <p class="control">
-            <button type="reset" class="button is-warning"> Limpar </button>
-          </p>
-          <p class="control">
             <a href={$url('../')} class="button is-danger"> Cancelar </a>
           </p>
         </div>

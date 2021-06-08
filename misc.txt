@@ -56,7 +56,7 @@ OK  Indicar carregamento na geração de PDF e cancelamento no botão
 OK  Usar documento como Id e aplicar validação de CPF e CNPJ
 OK  Importação com análise de elementos já salvos
 OK  Excluir antigo public-src
-    Aplicar blocos de try-catch
+    Aplicar blocos de try-catch relacionados a funções do server
       Servidor
       Web-app
     Adicionar análise de permissões
@@ -64,7 +64,7 @@ OK  Excluir antigo public-src
       Servidor
       Web-app
     User store para a pasta [idEmpresa]
-    Remover botões limpar
+OK  Remover botões limpar
     Ajustar funções pro server de São Paulo e URLs no web-app pra produção
     Liberar a transmissão em produção e testar com uma nota real
 
