@@ -55,7 +55,7 @@ OK  Proteger certificado com a senha atual
 OK  Indicar carregamento na geração de PDF e cancelamento no botão
 OK  Usar documento como Id e aplicar validação de CPF e CNPJ
 OK  Importação com análise de elementos já salvos
-    Excluir antigo public-src
+OK  Excluir antigo public-src
     Aplicar blocos de try-catch
       Servidor
       Web-app
