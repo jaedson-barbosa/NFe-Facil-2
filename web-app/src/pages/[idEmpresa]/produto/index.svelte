@@ -2,21 +2,31 @@
   import { url, goto } from '@roxi/routify'
   import { db } from '@app/firebase'
   import { det } from '@form/data/nfe.json'
+  import { createId } from '@form/helpers'
   import AutoForm from '@form/AutoForm.svelte'
 
   export let idEmpresa: string
 
   let loading = false
-  const root = {}
+  let root: any = {}
 
   async function salvar() {
     loading = true
     try {
-      await db
+      const det = root.det
+      const docRef = db
         .collection('empresas')
         .doc(idEmpresa)
         .collection('produtos')
-        .add(root)
+        .doc(det.prod.cProd)
+      const doc = await docRef.get()
+      if (doc.exists) {
+        alert(
+          'Já existe um produto com este código. Se este código foi gerado aleatoriamente, basta gerar outro para corrigir este problema.'
+        )
+        return
+      }
+      await docRef.set(root)
       $goto('../')
     } catch (error) {
       alert(error.message)
@@ -24,12 +34,16 @@
     }
   }
 
+  function gerarCodigo() {
+    root.prod.cProd = createId(5)
+    root = root
+  }
+
   const detUnico = det as any
   detUnico.maxOccurs = 1
-  detUnico.annotation.label = "Informações do produto"
+  detUnico.annotation.label = 'Informações do produto'
 </script>
 
-{@debug root}
 <form on:submit|preventDefault={salvar}>
   <fieldset disabled={loading}>
     <AutoForm el={detUnico} {root}>
@@ -40,7 +54,13 @@
           </button>
         </p>
         <p class="control">
-          <button type="reset" class="button is-warning"> Limpar </button>
+          <button
+            type="button"
+            class="button is-warning"
+            on:click={gerarCodigo}
+          >
+            Gerar código aleatório
+          </button>
         </p>
         <p class="control">
           <a href={$url('../')} class="button is-danger"> Cancelar </a>

@@ -5382,7 +5382,6 @@
         "element": [
           {
             "annotation": { "label": "Documento usado" },
-            "optional": true,
             "choice": true,
             "element": [
               {
@@ -5399,7 +5398,6 @@
           },
           {
             "name": "xNome",
-            "optional": true,
             "annotation": { "label": "Razão Social ou nome do transportador" },
             "restriction": { "maxLength": "60", "minLength": "2" }
           },

@@ -99,6 +99,7 @@
     const justificativa = prompt('Motivação do cancelamento:')
     if (!justificativa) {
       alert('Operação cancelada pelo usuário')
+      loading = false
       return
     }
     const token = await $user.getIdToken()

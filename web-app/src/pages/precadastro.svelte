@@ -48,6 +48,7 @@
                   class="file-input"
                   type="file"
                   bind:files
+                  accept="application/x-pkcs12"
                   required
                 />
                 <span class="file-cta">

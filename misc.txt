@@ -15,8 +15,7 @@ serieNFCe // implementacao futura
 -clientes:
   dest: ...
 -transportes:
-  identificador
-  transp: ...
+  transporta: ...
 -produtos:
   det: ...
 -notasSalvas: //escrita liberada
@@ -53,13 +52,24 @@ OK  Reorganizar todo o código do servidor (já que agora ele é bem mais simple
 OK  Implementar cálculo de totais
 OK  Analise de certificado do precadastro
 OK  Proteger certificado com a senha atual
-+-  Botão indicar carregamento na geração de PDF e cancelamento
-    Importação com análise de elementos já salvos
-    Liberar a transmissão em produção e testar com uma nota real
-    Ajustar funções pro server de São Paulo e URLs no web-app pra produção
+OK  Indicar carregamento na geração de PDF e cancelamento no botão
+OK  Usar documento como Id e aplicar validação de CPF e CNPJ
+OK  Importação com análise de elementos já salvos
     Excluir antigo public-src
+    Aplicar blocos de try-catch
+      Servidor
+      Web-app
+    Adicionar análise de permissões
+      Banco de dados
+      Servidor
+      Web-app
+    User store para a pasta [idEmpresa]
+    Remover botões limpar
+    Ajustar funções pro server de São Paulo e URLs no web-app pra produção
+    Liberar a transmissão em produção e testar com uma nota real
 
 REFINAMENTOS durante pré-alpha:
+    Adicionar análises de schema
     Opção de trocar a senha do certificado
     Estudar uso de https://nodejs.org/api/crypto.html no lugar de node-forge
     Inserir elementos de try-catch
@@ -114,6 +124,7 @@ Retirada e entrega limitados para endereço nacional. Se necessário, basta pedi
 Obedecida apenas regra geral de cálculo do total (pag. 122)
 Adição do vServ no total do vNF não é feita automaticamente
 Na requisição de acesso não é feita a análise se a empresa já existe
+Ainda não há importação de eventos, então ainda notas já canceladas serão importadas como se ainda não estivessem canceladas
 
 firebase emulators:start --import save-data --export-on-exit --only firestore,functions,auth
-sudo kill $(sudo lsof -t -i:8080)
+sudo kill $(sudo lsof -t -i:5000)

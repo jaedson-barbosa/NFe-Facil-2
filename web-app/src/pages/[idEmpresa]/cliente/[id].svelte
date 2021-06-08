@@ -16,16 +16,23 @@
       .collection('clientes')
       .doc(id)
       .get()
-    if (!cliente.exists) {
-      throw new Error('Id não reconhecido.')
-    }
-    alert('vai carregar')
+    if (!cliente.exists) throw new Error('Id não reconhecido.')
     return cliente.data()
   }
 
   async function salvar(root: any) {
     loading = true
     try {
+      const dest = root.dest
+      const _id = dest.CPF
+        ? dest.CPF
+        : dest.CNPJ
+        ? dest.CNPJ
+        : dest.idEstrangeiro
+      if (_id != id) {
+        alert('Não é permitido alterar o documento de um cliente cadastrado.')
+        return
+      }
       await db
         .collection('empresas')
         .doc(idEmpresa)
@@ -43,7 +50,6 @@
 {#await carregar()}
   Carregando...
 {:then root}
-  {@debug root}
   <form on:submit|preventDefault={() => salvar(root)}>
     <fieldset disabled={loading}>
       <AutoForm el={dest} {root}>

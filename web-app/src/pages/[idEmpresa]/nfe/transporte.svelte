@@ -3,7 +3,7 @@
   import { createId } from '@form/helpers'
   import { db } from '@app/firebase'
   import AutoForm from '@form/AutoForm.svelte'
-  import { transp } from '@form/data/nfe.json';
+  import { transp } from '@form/data/nfe.json'
 
   export let scoped: { commom: { root: any } }
   export let idEmpresa: string
@@ -18,9 +18,9 @@
       .collection('empresas')
       .doc(idEmpresa)
       .collection('transportes')
-      .where('identificador', '>=', busca)
+      .where('transporta.xNome', '>=', busca)
       .where(
-        'identificador',
+        'transporta.xNome',
         '<',
         busca.replace(/.$/, (c) => String.fromCharCode(c.charCodeAt(0) + 1))
       )
@@ -29,7 +29,7 @@
     options = queryResult.docs.map((v) => {
       return {
         value: v,
-        text: v.get('identificador'),
+        text: v.get('transporta.xNome'),
       }
     })
   }
@@ -43,7 +43,7 @@
     } else if (validValue) {
       const option = options.find((v) => v.text == busca)
       const data = option.value.data()
-      root.transp = data.transp
+      root.transp.transporta = data.transp.transporta
       busca = ''
     } else buscar()
   }
@@ -57,7 +57,7 @@
           class="input"
           type="text"
           list={listId}
-          placeholder="Identificador"
+          placeholder="Nome do transportador"
           bind:value={busca}
         />
         <datalist id={listId}>
@@ -69,9 +69,7 @@
     </div>
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a href={$url('./total')} class="button is-danger">
-          Voltar: Totais
-        </a>
+        <a href={$url('./total')} class="button is-danger"> Voltar: Totais </a>
       </p>
       <p class="control">
         <button class="button is-primary">

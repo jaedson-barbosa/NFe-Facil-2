@@ -1,56 +1,58 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
   import { db } from '@app/firebase'
+  import { isCpfValid, isCnpjValid } from '@app/documentUtils'
   import { transp } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
-  import Input from '@form/Input.svelte'
 
   export let idEmpresa: string
 
-  const infoIdentificador = {
-    name: 'identificador',
-    annotation: {
-      label: 'Identificador',
-      aux: 'Identificação deste grupo de transporte, ex.: nome do motorista',
-    },
-    restriction: { minLength: 4 },
-  }
-
   let loading = false
-  const root = {
-    identificador: '',
-    transp: {}
-  }
+  const root: any = {}
 
   async function salvar() {
     loading = true
     try {
-      await db
+      const transporta = root.transporta
+      if (transporta.CPF && !isCpfValid(transporta.CPF)) {
+        alert('CPF inválido.')
+        return
+      }
+      if (transporta.CNPJ && !isCnpjValid(transporta.CNPJ)) {
+        alert('CNPJ inválido.')
+        return
+      }
+      const id = transporta.CPF ? transporta.CPF : transporta.CNPJ
+      const docRef = db
         .collection('empresas')
         .doc(idEmpresa)
         .collection('transportes')
-        .add(root)
+        .doc(id)
+      const doc = await docRef.get()
+      if (doc.exists) {
+        alert('Já existe um transportador cadastrado com este documento.')
+        return
+      }
+      await docRef.set(root)
       $goto('../')
     } catch (error) {
       alert(error.message)
       loading = false
     }
   }
+
+  const transporta = transp.element[1]
+  transporta.optional = false
 </script>
 
-{@debug root}
 <form on:submit|preventDefault={salvar}>
   <fieldset disabled={loading}>
-    <AutoForm el={transp} {root}>
-      <Input {root} el={infoIdentificador} />
+    <AutoForm el={transporta} {root}>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
           <button class="button is-primary" class:is-loading={loading}>
             Salvar
           </button>
-        </p>
-        <p class="control">
-          <button type="reset" class="button is-warning"> Limpar </button>
         </p>
         <p class="control">
           <a href={$url('../')} class="button is-danger"> Cancelar </a>

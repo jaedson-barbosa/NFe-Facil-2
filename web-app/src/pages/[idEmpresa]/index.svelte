@@ -8,13 +8,20 @@
 
   export let scoped: { idEmpresa: string }
 
-  function getDocumento(v: TCadastro) {
+  function getDocDest(v: TCadastro) {
     const cpf = v.get('dest.CPF')
     if (cpf) return applyMask(cpf, 'cpf')
     const cnpj = v.get('dest.CNPJ')
     if (cnpj) return applyMask(cnpj, 'cnpj')
     const idEstrangeiro = v.get('dest.idEstrangeiro')
     return idEstrangeiro
+  }
+
+  function getDocTransporta(v: TCadastro) {
+    const cpf = v.get('transporta.CPF')
+    if (cpf) return applyMask(cpf, 'cpf')
+    const cnpj = v.get('transporta.CNPJ')
+    return applyMask(cnpj, 'cnpj')
   }
 
   async function consultar() {
@@ -36,13 +43,16 @@
   <div class="column is-half">
     <div class="container content box">
       <div class="buttons">
-        <a class="button is-fullwidth" href={$url('./cadastro')}>
+        <a class="button" href={$url('./cadastro')}>
           Atualizar cadastro
         </a>
-        <a class="button is-fullwidth" href={$url('../')}> Trocar emitente </a>
-        <button class="button is-fullwidth" on:click={consultar}>
+        <a class="button" href={$url('./importacao')}>
+          Importar notas fiscais
+        </a>
+        <button class="button" on:click={consultar}>
           Consultar status do serviço
         </button>
+        <a class="button" href={$url('../')}> Trocar emitente </a>
       </div>
     </div>
   </div>
@@ -54,7 +64,7 @@
       placeholder="Nome do cliente"
       wherePath="dest.xNome"
       headers={['Documento', 'Nome']}
-      itemRender={(v) => [getDocumento(v), v.get('dest.xNome')]}
+      itemRender={(v) => [getDocDest(v), v.get('dest.xNome')]}
     />
   </div>
   <div class="column is-half">
@@ -73,10 +83,10 @@
       coluna="transportes"
       editUrl="transporte"
       idEmpresa={scoped.idEmpresa}
-      placeholder="Identificador"
-      wherePath="identificador"
-      headers={['Identificador']}
-      itemRender={(v) => [v.get('identificador')]}
+      placeholder="Nome do transportador"
+      wherePath="transporta.xNome"
+      headers={['Documento', 'Nome']}
+      itemRender={(v) => [getDocTransporta(v), v.get('transporta.xNome')]}
     />
   </div>
   <div class="column is-half">

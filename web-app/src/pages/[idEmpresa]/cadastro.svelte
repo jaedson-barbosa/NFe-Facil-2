@@ -29,6 +29,10 @@
   async function salvar(root: any) {
     loading = true
     try {
+      if (root.emit.CNPJ != scoped.idEmpresa) {
+        alert('Não é permitida a alteração do CNPJ do emitente.')
+        return
+      }
       await db.collection('empresas').doc(scoped.idEmpresa).update(root)
       $goto('./')
     } catch (error) {
