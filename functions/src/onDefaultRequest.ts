@@ -39,7 +39,14 @@ export function onDefaultRequest(
         res.status(400).send('Corpo de requisição não informado')
         return
       }
-      await handler({ user, body }, res)
+      try {
+        await handler({ user, body }, res)
+      } catch (error) {
+        const e = error as Error
+        res
+          .status(400)
+          .send(`Erro: ${e.name}: ${e.message}.\nCaminho: ${e.stack}`)
+      }
     })
   )
 }

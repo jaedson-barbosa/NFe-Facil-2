@@ -1,35 +1,25 @@
 <script lang="ts">
   import { generate, toNFeString } from './rootGenerator'
-  import { params, goto, url } from '@roxi/routify'
+  import { goto, url } from '@roxi/routify'
   import Container from '@form/Container.svelte'
   import ReadonlyV from '@form/ReadonlyV.svelte'
-  import { db } from '@app/firebase'
   import type INFeRoot from './INFeRoot'
   import { requisitar } from '@app/functions'
-  import { user } from '@app/store'
+  import { user, dbColumns, empresa, idEmpresa } from '@app/store'
   // import { generateXML, preparateJSON } from './finalizacao';
 
   export let id: string
-  const idEmpresa = $params['idEmpresa']
   export let scoped: { commom: { root: INFeRoot } }
 
   let loading = false
 
   async function carregar() {
     let status = 0
-    let nota = await db
-      .collection('empresas')
-      .doc(idEmpresa)
-      .collection('notasSalvas')
+    let nota = await $dbColumns.notasSalvas
       .doc(id)
       .get()
     if (!nota.exists) {
-      nota = await db
-        .collection('empresas')
-        .doc(idEmpresa)
-        .collection('notasEmitidas')
-        .doc(id)
-        .get()
+      nota = await $dbColumns.notasEmitidas.doc(id).get()
       status = nota.get('cancelada') ? 2 : 1
       if (!nota.exists) {
         throw new Error('Id não reconhecido.')
@@ -44,14 +34,12 @@
     }
   }
 
-  async function editar(root: any) {
+  function editar(root: any) {
     const infNFe: INFeRoot = root.nota.get('infNFe')
     // const xml = generateXML(infNFe)
     // console.log(xml)
     // return
-    const v = await db.collection('empresas').doc(idEmpresa).get()
-    const empresa = v.data()
-    const initialValue = generate(empresa, infNFe)
+    const initialValue = generate($empresa, infNFe)
     scoped.commom.root = initialValue
     $goto('./identificacao')
   }

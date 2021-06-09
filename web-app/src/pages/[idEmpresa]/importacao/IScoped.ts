@@ -1,5 +1,4 @@
 export interface IScoped {
-  idEmpresa: string
   files: FileList
   nfes: any[]
   importarClientes: boolean

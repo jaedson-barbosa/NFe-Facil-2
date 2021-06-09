@@ -1,11 +1,9 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
-  import { db } from '@app/firebase'
+  import { dbColumns } from '@app/store'
   import { isCpfValid, isCnpjValid } from '@app/documentUtils'
   import { transp } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
-
-  export let idEmpresa: string
 
   let loading = false
   const root: any = {}
@@ -23,11 +21,7 @@
         return
       }
       const id = transporta.CPF ? transporta.CPF : transporta.CNPJ
-      const docRef = db
-        .collection('empresas')
-        .doc(idEmpresa)
-        .collection('transportes')
-        .doc(id)
+      const docRef = $dbColumns.transportes.doc(id)
       const doc = await docRef.get()
       if (doc.exists) {
         alert('Já existe um transportador cadastrado com este documento.')

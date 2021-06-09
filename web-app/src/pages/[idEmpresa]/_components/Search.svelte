@@ -4,16 +4,10 @@
 </script>
 
 <script lang="ts">
-  import { db } from '@app/firebase'
   import { url } from '@roxi/routify'
+  import type { TColumn } from '@app/store'
 
-  export let idEmpresa: string
-  export let coluna:
-    | 'clientes'
-    | 'transportes'
-    | 'produtos'
-    | 'notasSalvas'
-    | 'notasEmitidas'
+  export let coluna: TColumn
   export let placeholder: string
   export let editUrl: string
   export let wherePath: string
@@ -26,16 +20,11 @@
   let busca = ''
   let loading = false
   let hasMore = false
-  const limitedQuery = db
-    .collection('empresas')
-    .doc(idEmpresa)
-    .collection(coluna)
-    .limit(10)
 
   async function load() {
     if (loading) return
     loading = true
-    let query = limitedQuery
+    let query = coluna.limit(10)
     if (busca != lastBusca) {
       cadastros = []
       const end = busca.replace(/.$/, (c) =>

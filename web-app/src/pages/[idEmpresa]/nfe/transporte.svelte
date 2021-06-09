@@ -1,12 +1,11 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
   import { createId } from '@form/helpers'
-  import { db } from '@app/firebase'
+  import { dbColumns } from '@app/store'
   import AutoForm from '@form/AutoForm.svelte'
   import { transp } from '@form/data/nfe.json'
 
   export let scoped: { commom: { root: any } }
-  export let idEmpresa: string
 
   let root = scoped.commom.root
   const listId = createId()
@@ -14,10 +13,7 @@
   let busca = ''
 
   async function buscar() {
-    const queryResult = await db
-      .collection('empresas')
-      .doc(idEmpresa)
-      .collection('transportes')
+    const queryResult = await $dbColumns.transportes
       .where('transporta.xNome', '>=', busca)
       .where(
         'transporta.xNome',

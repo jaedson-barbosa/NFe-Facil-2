@@ -1,15 +1,11 @@
 <script lang="ts">
   import { url } from '@roxi/routify'
   import * as parser from 'xml2json-light-es6module'
-  import { db } from '@app/firebase'
+  import { dbColumns } from '@app/store'
   import type { IScoped } from './IScoped'
   import { status } from './status'
 
   export let scoped: IScoped
-
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
-  }
 
   type TNFe = { name: string; json?: any; status: status }
 
@@ -18,10 +14,7 @@
     return { name: v.name, status: status.aguardando } as TNFe
   })
 
-  const nfesColumn = db
-    .collection('empresas')
-    .doc(scoped.idEmpresa)
-    .collection('notasEmitidas')
+  const nfesColumn = $dbColumns.notasEmitidas
   Promise.all(files.map(async (v, i) => {
     let json = undefined
     const update = (status: status) => {

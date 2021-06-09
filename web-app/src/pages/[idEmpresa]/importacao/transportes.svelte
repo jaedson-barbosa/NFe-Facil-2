@@ -1,6 +1,6 @@
 <script lang="ts">
   import { url } from '@roxi/routify'
-  import { db } from '@app/firebase'
+  import { dbColumns } from '@app/store'
   import { status } from './status'
   import type { IScoped } from './IScoped'
   import { applyMask } from '@app/documentUtils'
@@ -28,11 +28,7 @@
       return { transporta, status: status.aguardando } as TTransporta
     })
 
-  const transportesColumn = db
-    .collection('empresas')
-    .doc(scoped.idEmpresa)
-    .collection('transportes')
-
+  const transportesColumn = $dbColumns.transportes
   Promise.all(
     filteredTransportes.map(async (v, i) => {
       const update = (status: status) => {

@@ -1,6 +1,16 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
-  import { retirada, entrega, autXML, cobr, infIntermed, infAdic, exporta, compra, cana } from '@form/data/nfe.json'
+  import {
+    retirada,
+    entrega,
+    autXML,
+    cobr,
+    infIntermed,
+    infAdic,
+    exporta,
+    compra,
+    cana,
+  } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
 
   export let scoped: { commom: { root: any } }

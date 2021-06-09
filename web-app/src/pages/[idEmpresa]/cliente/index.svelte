@@ -4,8 +4,7 @@
   import { isCpfValid, isCnpjValid } from '@app/documentUtils'
   import { dest } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
-
-  export let idEmpresa: string
+  import { dbColumns } from '@app/store'
 
   let loading = false
   const root: any = {}
@@ -27,11 +26,7 @@
         : dest.CNPJ
         ? dest.CNPJ
         : dest.idEstrangeiro
-      const docRef = db
-        .collection('empresas')
-        .doc(idEmpresa)
-        .collection('clientes')
-        .doc(id)
+      const docRef = $dbColumns.clientes.doc(id)
       const doc = await docRef.get()
       if (doc.exists) {
         alert('Já existe um cliente cadastrado com este documento.')

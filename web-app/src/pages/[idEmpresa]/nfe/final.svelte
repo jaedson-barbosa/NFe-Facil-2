@@ -1,25 +1,19 @@
 <script lang="ts">
   import { requisitar } from '@app/functions'
-  import { url, goto, params } from '@roxi/routify'
-  import { db } from '@app/firebase'
+  import { url, goto } from '@roxi/routify'
+  import { dbColumns, idEmpresa } from '@app/store'
   import { preparateJSON, generateXML } from './finalizacao'
   import { user } from '@app/store'
   import type INFeRoot from './INFeRoot'
 
-  export let scoped: { commom: { root: INFeRoot, idEmpresa: string } }
-  const idEmpresa = scoped.commom.idEmpresa
+  export let scoped: { commom: { root: INFeRoot } }
   let loading = false
-
-  alert(idEmpresa)
 
   async function salvar() {
     loading = true
     const infNFe = scoped.commom.root
     const oldId = infNFe.Id
-    const notasCol = db
-      .collection('empresas')
-      .doc(idEmpresa)
-      .collection('notasSalvas')
+    const notasCol = $dbColumns.notasSalvas
     if (oldId) {
       const docRef = notasCol.doc(oldId)
       const doc = await docRef.get()
@@ -45,7 +39,11 @@
     const oldId = scoped.commom.root.Id
     const infNFe = preparateJSON(scoped.commom.root)
     const idToken = await $user.getIdToken()
-    const resp = await requisitar('transmitirNFe', { idEmpresa, infNFe, oldId }, idToken)
+    const resp = await requisitar(
+      'transmitirNFe',
+      { idEmpresa, infNFe, oldId },
+      idToken
+    )
     const respText = await resp.text()
     if (resp.status == 201) {
       $goto('./:id', { id: respText })

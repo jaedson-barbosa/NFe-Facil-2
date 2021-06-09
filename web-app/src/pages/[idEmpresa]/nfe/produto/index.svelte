@@ -1,11 +1,10 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
-  import { db } from '@app/firebase'
+  import { dbColumns } from '@app/store'
   import { createId } from '@form/helpers'
   import type INFeRoot from '../INFeRoot'
 
   export let scoped: { commom: { root: INFeRoot } }
-  export let idEmpresa: string
 
   const root = { det: {} }
 
@@ -14,10 +13,7 @@
   let busca = ''
 
   async function buscar() {
-    const queryResult = await db
-      .collection('empresas')
-      .doc(idEmpresa)
-      .collection('produtos')
+    const queryResult = await $dbColumns.produtos
       .where('det.prod.xProd', '>=', busca)
       .where(
         'det.prod.xProd',

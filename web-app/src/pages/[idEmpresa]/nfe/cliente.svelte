@@ -1,10 +1,9 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
   import { createId } from '@form/helpers'
-  import { db } from '@app/firebase'
+  import { dbColumns } from '@app/store'
 
   export let scoped: { commom: { root: any } }
-  export let idEmpresa: string
 
   const root = scoped.commom.root
   const listId = createId()
@@ -12,10 +11,7 @@
   let busca = root.dest.xNome
 
   async function buscar() {
-    const queryResult = await db
-      .collection('empresas')
-      .doc(idEmpresa)
-      .collection('clientes')
+    const queryResult = await $dbColumns.clientes
       .where('dest.xNome', '>=', busca)
       .where(
         'dest.xNome',

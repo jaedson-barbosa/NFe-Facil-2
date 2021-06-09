@@ -4,9 +4,7 @@
   import type { TCadastro } from './_components/Search.svelte'
   import Search from './_components/Search.svelte'
   import { requisitar } from '@app/functions'
-  import { user } from '@app/store'
-
-  export let scoped: { idEmpresa: string }
+  import { user, idEmpresa, dbColumns } from '@app/store'
 
   function getDocDest(v: TCadastro) {
     const cpf = v.get('dest.CPF')
@@ -28,7 +26,7 @@
     const token = await $user.getIdToken()
     const resp = await requisitar(
       'statusServico',
-      { idEmpresa: scoped.idEmpresa },
+      { idEmpresa },
       token
     )
     if (resp.status == 200) {
@@ -58,9 +56,8 @@
   </div>
   <div class="column is-half">
     <Search
-      coluna="clientes"
+      coluna={$dbColumns.clientes}
       editUrl="cliente"
-      idEmpresa={scoped.idEmpresa}
       placeholder="Nome do cliente"
       wherePath="dest.xNome"
       headers={['Documento', 'Nome']}
@@ -69,9 +66,8 @@
   </div>
   <div class="column is-half">
     <Search
-      coluna="produtos"
+      coluna={$dbColumns.produtos}
       editUrl="produto"
-      idEmpresa={scoped.idEmpresa}
       placeholder="Descrição do produto"
       wherePath="det.prod.xProd"
       headers={['Código', 'Descrição']}
@@ -80,9 +76,8 @@
   </div>
   <div class="column is-half">
     <Search
-      coluna="transportes"
+      coluna={$dbColumns.transportes}
       editUrl="transporte"
-      idEmpresa={scoped.idEmpresa}
       placeholder="Nome do transportador"
       wherePath="transporta.xNome"
       headers={['Documento', 'Nome']}
@@ -91,9 +86,8 @@
   </div>
   <div class="column is-half">
     <Search
-      coluna="notasSalvas"
+      coluna={$dbColumns.notasSalvas}
       editUrl="nfe"
-      idEmpresa={scoped.idEmpresa}
       placeholder="Número da NFe"
       wherePath="infNFe.ide.nNF"
       headers={['Número', 'Série', 'Emissão']}
@@ -106,9 +100,8 @@
   </div>
   <div class="column is-half">
     <Search
-      coluna="notasEmitidas"
+      coluna={$dbColumns.notasEmitidas}
       editUrl="nfe"
-      idEmpresa={scoped.idEmpresa}
       placeholder="Número da NFe"
       wherePath="infNFe.ide.nNF"
       headers={['Número', 'Série', 'Emissão']}

@@ -1,24 +1,18 @@
 <script lang="ts">
-  import { params, url, goto  } from '@roxi/routify'
-  import { db } from '@app/firebase'
+  import { url, goto } from '@roxi/routify'
+  import { dbColumns } from '@app/store'
   import { transp } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
 
   export let id: string
-  $: idEmpresa = $params['idEmpresa']
 
   let loading = false
+  let root: any
 
-  async function carregar() {
-    const mot = await db
-      .collection('empresas')
-      .doc(idEmpresa)
-      .collection('transportes')
-      .doc(id)
-      .get()
-    if (!mot.exists) throw new Error('Id não reconhecido.')
-    return mot.data()
-  }
+  $dbColumns.transportes
+    .doc(id)
+    .get()
+    .then((v) => (root = v.data()))
 
   async function salvar(root: any) {
     loading = true
@@ -29,12 +23,7 @@
         alert('Não é permitido alterar o documento de um cliente cadastrado.')
         return
       }
-      await db
-        .collection('empresas')
-        .doc(idEmpresa)
-        .collection('transportes')
-        .doc(id)
-        .set(root)
+      await $dbColumns.transportes.doc(id).set(root)
       $goto('../')
     } catch (error) {
       alert(error.message)
@@ -46,9 +35,7 @@
   transporta.optional = false
 </script>
 
-{#await carregar()}
-  Carregando...
-{:then root}
+{#if root}
   <form on:submit|preventDefault={() => salvar(root)}>
     <fieldset disabled={loading}>
       <AutoForm el={transporta} {root}>
@@ -65,4 +52,4 @@
       </AutoForm>
     </fieldset>
   </form>
-{/await}
+{/if}

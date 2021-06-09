@@ -1,11 +1,9 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
-  import { db } from '@app/firebase'
+  import { dbColumns } from '@app/store'
   import { det } from '@form/data/nfe.json'
   import { createId } from '@form/helpers'
   import AutoForm from '@form/AutoForm.svelte'
-
-  export let idEmpresa: string
 
   let loading = false
   let root: any = {}
@@ -14,15 +12,13 @@
     loading = true
     try {
       const det = root.det
-      const docRef = db
-        .collection('empresas')
-        .doc(idEmpresa)
-        .collection('produtos')
-        .doc(det.prod.cProd)
+      const docRef = $dbColumns.produtos.doc(det.prod.cProd)
       const doc = await docRef.get()
       if (doc.exists) {
         alert(
-          'Já existe um produto com este código. Se este código foi gerado aleatoriamente, basta gerar outro para corrigir este problema.'
+          'Já existe um produto com este código.' +
+            'Se este código foi gerado aleatoriamente, ' +
+            'basta gerar outro para corrigir este problema.'
         )
         return
       }

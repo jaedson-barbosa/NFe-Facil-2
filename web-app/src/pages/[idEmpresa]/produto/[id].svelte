@@ -1,28 +1,18 @@
 <script lang="ts">
-  import { params, url, goto } from '@roxi/routify'
-  import { db } from '@app/firebase'
+  import { url, goto } from '@roxi/routify'
+  import { dbColumns } from '@app/store'
   import { det } from '@form/data/nfe.json'
-  import { createId } from '@form/helpers'
   import AutoForm from '@form/AutoForm.svelte'
 
   export let id: string
-  const idEmpresa = $params['idEmpresa']
 
   let loading = false
   let root: any
 
-  db.collection('empresas')
-    .doc(idEmpresa)
-    .collection('produtos')
+  $dbColumns.produtos
     .doc(id)
     .get()
-    .then((prod) => {
-      if (!prod.exists) {
-        alert('Id não reconhecido.')
-        $goto('../')
-      }
-      root = prod.data()
-    })
+    .then((v) => (root = v.data()))
 
   async function salvar() {
     loading = true
@@ -33,12 +23,7 @@
         alert('Não é permitido alterar o código de um produto cadastrado.')
         return
       }
-      await db
-        .collection('empresas')
-        .doc(idEmpresa)
-        .collection('produtos')
-        .doc(id)
-        .set(root)
+      await $dbColumns.produtos.doc(id).set(root)
       $goto('../')
     } catch (error) {
       alert(error.message)

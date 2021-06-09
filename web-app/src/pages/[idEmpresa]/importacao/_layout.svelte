@@ -1,7 +1,6 @@
 <script lang="ts">
   import { isActive, url } from '@roxi/routify'
   import type { IScoped } from './IScoped';
-  export let scoped: { idEmpresa: string }
 
   function getNext(cur?: './clientes' | './produtos' | './transportes'): string {
     const steps: string[] = []
@@ -13,7 +12,6 @@
   }
   
   let innerScoped: IScoped = {
-    idEmpresa: scoped.idEmpresa,
     files: undefined,
     nfes: [],
     importarClientes: true,
