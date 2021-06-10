@@ -1,15 +1,12 @@
 <script lang="ts">
   import { isActive, url } from '@roxi/routify'
-  import type INFeRoot from './INFeRoot'
 
   // Usar esse aqui e criar uma interface para ajudar nisso
-  let commom: { root: INFeRoot } = { root: undefined }
+  let scoped: any = { }
 </script>
 
-{@debug commom}
-
-{#if commom.root || $isActive('./index') || $isActive('./:id')}
-  <slot scoped={{ commom }} />
+{#if scoped.ide || $isActive('./index') || $isActive('./:id')}
+  <slot {scoped} />
 {:else}
   Raiz inválida!
   <a href={$url('../')}>Retornar</a>

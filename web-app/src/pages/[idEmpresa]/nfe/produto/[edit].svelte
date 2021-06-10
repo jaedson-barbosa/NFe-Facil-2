@@ -4,18 +4,18 @@
   import Elements from '@form/Elements.svelte'
   import type INFeRoot from '../INFeRoot'
 
-  export let scoped: { commom: { root: INFeRoot } }
+  export let scoped: INFeRoot
   export let edit: string
 
-  const root = { det: scoped.commom.root.det[+edit] }
+  const root = { det: scoped.det[+edit] }
 
   function submit() {
-    scoped.commom.root.det[+edit] = root.det
+    scoped.det[+edit] = root.det
     $goto('../produtos')
   }
 
   function remover() {
-    scoped.commom.root.det.splice(+edit, 1)
+    scoped.det.splice(+edit, 1)
     $goto('../produtos')
   }
 

@@ -6,16 +6,14 @@
   import { user } from '@app/store'
   import type INFeRoot from './INFeRoot'
 
-  export let scoped: { commom: { root: INFeRoot } }
+  export let scoped: INFeRoot
   let loading = false
 
   async function salvar() {
     loading = true
-    const infNFe = scoped.commom.root
-    const oldId = infNFe.Id
     const notasCol = $dbColumns.notasSalvas
-    if (oldId) {
-      const docRef = notasCol.doc(oldId)
+    if (scoped.Id) {
+      const docRef = notasCol.doc(scoped.Id)
       const doc = await docRef.get()
       if (doc.exists) {
         if (doc.get('status') == 0) {
@@ -27,21 +25,20 @@
         }
       }
     }
-    const xml = generateXML(infNFe)
-    const dhEmi = new Date(infNFe.ide.dhEmi)
-    const newRegister = { infNFe, dhEmi, xml }
-    await notasCol.doc(infNFe.Id).set(newRegister)
-    $goto('./:id', { id: infNFe.Id })
+    const xml = generateXML(scoped)
+    const dhEmi = new Date(scoped.ide.dhEmi)
+    const newRegister = { scoped, dhEmi, xml }
+    await notasCol.doc(scoped.Id).set(newRegister)
+    $goto('./:id', { id: scoped.Id })
   }
 
   async function transmitir() {
     loading = true
-    const oldId = scoped.commom.root.Id
-    const infNFe = preparateJSON(scoped.commom.root)
+    const infNFe = preparateJSON(scoped)
     const idToken = await $user.getIdToken()
     const resp = await requisitar(
       'transmitirNFe',
-      { idEmpresa, infNFe, oldId },
+      { idEmpresa, infNFe, oldId: scoped.Id },
       idToken
     )
     const respText = await resp.text()

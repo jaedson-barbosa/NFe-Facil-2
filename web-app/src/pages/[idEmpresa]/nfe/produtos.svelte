@@ -2,8 +2,8 @@
   import { url, goto } from '@roxi/routify'
   import type INFeRoot from './INFeRoot'
 
-  export let scoped: { commom: { root: INFeRoot } }
-  $: elements = scoped.commom.root.det.map((v,i) => {
+  export let scoped: INFeRoot
+  $: elements = scoped.det.map((v,i) => {
     v.nItem = (i + 1).toString()
     return v
   })

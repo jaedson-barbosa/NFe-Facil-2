@@ -4,7 +4,7 @@
   import { createId } from '@form/helpers'
   import type INFeRoot from '../INFeRoot'
 
-  export let scoped: { commom: { root: INFeRoot } }
+  export let scoped: INFeRoot
 
   const root = { det: {} }
 
@@ -37,7 +37,7 @@
     if (validValue) {
       const option = options.find((v) => v.text == busca)
       const data = option.value.data()
-      const newLength = scoped.commom.root.det.push(data.det)
+      const newLength = scoped.det.push(data.det)
       $goto('./:edit', { edit: newLength - 1 })
     } else buscar()
   }

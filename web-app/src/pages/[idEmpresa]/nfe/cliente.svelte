@@ -2,13 +2,13 @@
   import { url, goto } from '@roxi/routify'
   import { createId } from '@form/helpers'
   import { dbColumns } from '@app/store'
+  import type INFeRoot from './INFeRoot';
 
-  export let scoped: { commom: { root: any } }
+  export let scoped: INFeRoot
 
-  const root = scoped.commom.root
   const listId = createId()
   let options = []
-  let busca = root.dest.xNome
+  let busca = scoped.dest.xNome
 
   async function buscar() {
     const queryResult = await $dbColumns.clientes
@@ -28,7 +28,7 @@
     })
   }
 
-  $: appliedValue = busca && busca == root.dest.xNome
+  $: appliedValue = busca && busca == scoped.dest.xNome
   $: validValue = busca && options.some((v) => v.text == busca)
 
   function submit() {
@@ -37,7 +37,7 @@
     } else if (validValue) {
       const option = options.find((v) => v.text == busca)
       const data = option.value.data()
-      root.dest = data.dest
+      scoped.dest = data.dest
     } else buscar()
   }
 </script>

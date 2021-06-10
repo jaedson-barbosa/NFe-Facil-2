@@ -4,10 +4,9 @@
   import { empresa } from '@app/store'
   import type INFeRoot from './INFeRoot';
 
-  export let scoped: { commom: { root: INFeRoot } }
+  export let scoped: INFeRoot
 
-  const initialValue = generate($empresa)
-  scoped.commom.root = initialValue
+  generate($empresa, scoped)
   $goto('./identificacao')
 </script>
 

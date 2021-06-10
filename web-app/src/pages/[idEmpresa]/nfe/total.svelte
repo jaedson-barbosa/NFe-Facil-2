@@ -2,12 +2,12 @@
   import { url, goto } from '@roxi/routify'
   import { total as totalJSON } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
+  import type INFeRoot from './INFeRoot';
 
-  export let scoped: { commom: { root: any } }
-  const root = scoped.commom.root
+  export let scoped: INFeRoot
   const total =
-    root.total ?? (root.total = { ICMSTot: {}, ISSQNtot: '', retTrib: '' })
-  const icmsTot = (root.det as any[]).reduce(
+  scoped.total ?? (scoped.total = { ICMSTot: {}, ISSQNtot: '', retTrib: '' })
+  const icmsTot = (scoped.det as any[]).reduce(
     (p, v) => {
       const vIPIDevol = +(v.impostoDevol?.IPI?.vIPIDevol ?? 0)
       p.vIPIDevol += vIPIDevol
@@ -97,7 +97,7 @@
 </script>
 
 <form on:submit|preventDefault={$goto('./transporte')}>
-  <AutoForm el={totalJSON} root={scoped.commom.root}>
+  <AutoForm el={totalJSON} root={scoped}>
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
         <a href={$url('./produtos')} class="button is-danger">

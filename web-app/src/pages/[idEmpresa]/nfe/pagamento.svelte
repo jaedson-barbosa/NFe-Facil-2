@@ -3,14 +3,14 @@
   import { pag } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
   import Readonly from '@form/Readonly.svelte'
+  import type INFeRoot from './INFeRoot';
 
-  export let scoped: { commom: { root: any } }
-  let root = scoped.commom.root
+  export let scoped: INFeRoot
   $: rootRestante = {
     restante: (
-      root.total.ICMSTot.vNF +
-      +(root.pag.vTroco ?? 0) -
-      (root.pag.detPag as any[]).reduce((p, c) => p + +(c.vPag ?? 0), 0)
+      scoped.total.ICMSTot.vNF +
+      +(scoped.pag.vTroco ?? 0) -
+      (scoped.pag.detPag as any[]).reduce((p, c) => p + +(c.vPag ?? 0), 0)
     ).toFixed(2),
   }
 
@@ -24,7 +24,7 @@
 </script>
 
 <form on:submit|preventDefault={$goto('./opcionais')}>
-  <AutoForm el={pag} bind:root>
+  <AutoForm el={pag} root={scoped}>
     <Readonly el={infoRestante} root={rootRestante} />
     <div class="field is-grouped is-grouped-centered">
       <p class="control">

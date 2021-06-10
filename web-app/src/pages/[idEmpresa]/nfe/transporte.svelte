@@ -4,10 +4,10 @@
   import { dbColumns } from '@app/store'
   import AutoForm from '@form/AutoForm.svelte'
   import { transp } from '@form/data/nfe.json'
+  import type INFeRoot from './INFeRoot';
 
-  export let scoped: { commom: { root: any } }
+  export let scoped: INFeRoot
 
-  let root = scoped.commom.root
   const listId = createId()
   let options = []
   let busca = ''
@@ -39,7 +39,7 @@
     } else if (validValue) {
       const option = options.find((v) => v.text == busca)
       const data = option.value.data()
-      root.transp.transporta = data.transp.transporta
+      scoped.transp.transporta = data.transp.transporta
       busca = ''
     } else buscar()
   }
@@ -79,6 +79,6 @@
         </button>
       </p>
     </div>
-    <AutoForm el={transp} {root} />
+    <AutoForm el={transp} root={scoped} />
   </form>
 </div>
