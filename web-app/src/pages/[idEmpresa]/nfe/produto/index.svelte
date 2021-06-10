@@ -1,79 +1,28 @@
 <script lang="ts">
-  import { url, goto } from '@roxi/routify'
   import { dbColumns } from '@app/store'
-  import { createId } from '@form/helpers'
+  import { det } from '@form/data/nfe.json'
   import type INFeRoot from '../INFeRoot'
+  import Search from '../_components/Search.svelte'
 
   export let scoped: INFeRoot
 
-  const root = { det: {} }
+  let root: any = { det: {} }
 
-  const listId = createId()
-  let options = []
-  let busca = ''
-
-  async function buscar() {
-    const queryResult = await $dbColumns.produtos
-      .where('det.prod.xProd', '>=', busca)
-      .where(
-        'det.prod.xProd',
-        '<',
-        busca.replace(/.$/, (c) => String.fromCharCode(c.charCodeAt(0) + 1))
-      )
-      .limit(10)
-      .get()
-    options = queryResult.docs.map((v) => {
-      return {
-        value: v,
-        text: v.get('det.prod.xProd'),
-      }
-    })
-    console.log(options)
-  }
-
-  $: validValue = busca && options.some((v) => v.text == busca)
-
-  function submit() {
-    if (validValue) {
-      const option = options.find((v) => v.text == busca)
-      const data = option.value.data()
-      const newLength = scoped.det.push(data.det)
-      $goto('./:edit', { edit: newLength - 1 })
-    } else buscar()
-  }
+  const detUnico = det as any
+  detUnico.maxOccurs = 1
+  detUnico.annotation.label = 'Informações do produto'
 </script>
 
-<div class="container content box">
-  <form on:submit|preventDefault={submit}>
-    <div class="field">
-      <div class="control is-expanded">
-        <input
-          class="input"
-          type="text"
-          list={listId}
-          placeholder="Descrição"
-          bind:value={busca}
-        />
-        <datalist id={listId}>
-          {#each options as opt}
-            <option>{opt.text}</option>
-          {/each}
-        </datalist>
-      </div>
-    </div>
-    <div class="field is-grouped is-grouped-centered">
-      <p class="control">
-        <a href={$url('../produtos')} class="button is-danger"> Cancelar </a>
-      </p>
-      <p class="control">
-        <button class="button is-primary">
-          {#if validValue}
-            Selecionar
-          {:else}
-            Buscar
-          {/if}
-        </button>
-      </p>
-    </div>
-  </form>
-</div>
+<Search
+  coluna={$dbColumns.produtos}
+  el={detUnico}
+  nextName="Produtos"
+  nextUrl="../produtos"
+  previusName="Produtos"
+  previusUrl="../produtos"
+  placeholder="Descrição"
+  {root}
+  updateRoot={(data) => root = data}
+  onSubmit={() => scoped.det.push(root.det)}
+  wherePath="det.prod.xProd"
+/>

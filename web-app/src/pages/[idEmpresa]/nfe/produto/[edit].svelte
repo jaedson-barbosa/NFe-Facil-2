@@ -1,18 +1,14 @@
 <script lang="ts">
-  import { url, goto } from '@roxi/routify'
+  import { dbColumns } from '@app/store'
   import { det } from '@form/data/nfe.json'
-  import Elements from '@form/Elements.svelte'
+  import { goto } from '@roxi/routify'
   import type INFeRoot from '../INFeRoot'
+  import Search from '../_components/Search.svelte'
 
   export let scoped: INFeRoot
   export let edit: string
 
-  const root = { det: scoped.det[+edit] }
-
-  function submit() {
-    scoped.det[+edit] = root.det
-    $goto('../produtos')
-  }
+  let root: any = { det: scoped.det[+edit] }
 
   function remover() {
     scoped.det.splice(+edit, 1)
@@ -24,21 +20,22 @@
   detUnico.annotation.label = 'Informações do produto'
 </script>
 
-<div class="container content box">
-  <form on:submit|preventDefault={submit}>
-    <div class="field is-grouped is-grouped-centered">
-      <p class="control">
-        <button type="button" class="button is-danger" on:click={remover}>
-          Remover
-        </button>
-      </p>
-      <p class="control">
-        <a href={$url('../produtos')} class="button"> Cancelar </a>
-      </p>
-      <p class="control">
-        <button class="button is-primary"> Salvar </button>
-      </p>
-    </div>
-    <Elements el={detUnico} {root} />
-  </form>
-</div>
+<Search
+  coluna={$dbColumns.produtos}
+  el={detUnico}
+  nextName="Produtos"
+  nextUrl="../produtos"
+  previusName="Produtos"
+  previusUrl="../produtos"
+  placeholder="Descrição"
+  {root}
+  updateRoot={(data) => (root = data)}
+  onSubmit={() => (scoped.det[+edit] = root.det)}
+  wherePath="det.prod.xProd"
+>
+  <p class="control">
+    <button type="button" class="button is-danger" on:click={remover}>
+      Remover
+    </button>
+  </p>
+</Search>

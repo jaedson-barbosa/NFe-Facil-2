@@ -1,6 +1,8 @@
 <script lang="ts" context="module">
-  type TD = firebase.default.firestore.DocumentData
-  export type TCadastro = firebase.default.firestore.QueryDocumentSnapshot<TD>
+  import type firebase from '@app/firebase'
+  
+  type TD = firebase.firestore.DocumentData
+  export type TCadastro = firebase.firestore.QueryDocumentSnapshot<TD>
 </script>
 
 <script lang="ts">
