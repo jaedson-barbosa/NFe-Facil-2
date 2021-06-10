@@ -32,7 +32,6 @@
     "typescript": "^4.3.2"
   },
   "dependencies": {
-    "firebase": "^8.6.5",
     "sirv-cli": "^1.0.12",
     "xml2json-light-es6module": "^2.0.5"
   }

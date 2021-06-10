@@ -3,3 +3,4 @@ DANFE/vendor
 functions/lib
 save-data
 .routify
+*.log

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { db } from '@app/firebase'
+  import { dbColumns } from '@app/store'
   import { url, goto } from '@roxi/routify'
   import { user } from '@app/store'
   import InputT from '@form/InputT.svelte'
@@ -11,16 +11,11 @@
   async function requisitar() {
     loading = true
     try {
-      await db
-        .collection('empresas')
-        .doc(cnpj)
-        .collection('usuarios')
-        .doc($user.uid)
-        .set({
-          id: $user.uid,
-          status: 0,
-          ident,
-        })
+      await $dbColumns.usuarios.doc($user.uid).set({
+        id: $user.uid,
+        status: 0,
+        ident,
+      })
       $goto('./')
     } catch (error) {
       console.error(error)

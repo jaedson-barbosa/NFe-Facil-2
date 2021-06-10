@@ -1,8 +1,12 @@
-import { auth, db, googleProvider } from './firebase'
 import { derived, Readable, readable, Writable, writable } from 'svelte/store'
+import firebase from './firebase' //Usa os arquivos do hosting pra economizar no bundle
+
+const auth = firebase.auth()
+const googleProvider = new firebase.auth.GoogleAuthProvider()
+const db = firebase.firestore()
 
 export const user = {
-  subscribe: readable<firebase.default.User>(undefined, (set) => {
+  subscribe: readable<firebase.User>(undefined, (set) => {
     const unsubscribe = auth.onAuthStateChanged((u) => set(u))
     return () => unsubscribe()
   }).subscribe,
@@ -42,9 +46,9 @@ export const empresa = derived<Readable<TReference>, TEmpresa>(
   undefined
 )
 
-type TDocument = firebase.default.firestore.DocumentData
-type TReference = firebase.default.firestore.DocumentReference<TDocument>
-export type TColumn = firebase.default.firestore.CollectionReference<TDocument>
+type TDocument = firebase.firestore.DocumentData
+type TReference = firebase.firestore.DocumentReference<TDocument>
+export type TColumn = firebase.firestore.CollectionReference<TDocument>
 
 interface IColumns {
   clientes: TColumn
@@ -52,6 +56,7 @@ interface IColumns {
   produtos: TColumn
   notasSalvas: TColumn
   notasEmitidas: TColumn
+  usuarios: TColumn
 }
 
 export const dbColumns = derived<Readable<TReference>, IColumns>(
@@ -64,6 +69,7 @@ export const dbColumns = derived<Readable<TReference>, IColumns>(
       produtos: ref.collection('produtos'),
       notasSalvas: ref.collection('notasSalvas'),
       notasEmitidas: ref.collection('notasEmitidas'),
+      usuarios: ref.collection('usuarios')
     } as IColumns
   },
   undefined

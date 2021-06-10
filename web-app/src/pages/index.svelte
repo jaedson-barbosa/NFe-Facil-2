@@ -1,6 +1,6 @@
 <!-- Seleção de emitente -->
 <script lang="ts">
-  import { db } from '@app/firebase'
+  import firebase from '@app/firebase'
   import { user } from '@app/store'
   import { url } from '@roxi/routify'
 
@@ -18,6 +18,7 @@
   }
 
   async function getCadastros() {
+    const db = firebase.firestore()
     const cadastros = await db
       .collectionGroup('usuarios')
       .where('id', '==', $user.uid)
@@ -32,12 +33,12 @@
   }
 </script>
 
-<nav>
-  <a class="button" href={$url('./precadastro')}>Cadastrar</a>
-  <a class="button" href={$url('./requisicao')}>Requisitar acesso</a>
-  <button class="button" on:click={user.signOut}>Encerar sessão</button>
-</nav>
 {#await getCadastros() then cadastros}
+  <nav>
+    <a class="button" href={$url('./precadastro')}>Cadastrar</a>
+    <a class="button" href={$url('./requisicao')}>Requisitar acesso</a>
+    <button class="button" on:click={user.signOut}>Encerar sessão</button>
+  </nav>
   {#if cadastros.length}
     <table class="table is-hoverable is-fullwidth">
       <tr>

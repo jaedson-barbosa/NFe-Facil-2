@@ -1,6 +1,5 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
-  import { db } from '@app/firebase'
   import { isCpfValid, isCnpjValid } from '@app/documentUtils'
   import { dest } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
