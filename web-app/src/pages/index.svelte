@@ -4,15 +4,17 @@
   import { user } from '@app/store'
   import { url } from '@roxi/routify'
 
-  function getDescricaoStatus(status: 0 | 1 | 2 | 3) {
+  function getDescricaoStatus(status: 0 | 1 | 2 | 3 | 4) {
     switch (status) {
       case 0:
         return 'Em análise'
       case 1:
         return 'Rejeitado'
       case 2:
-        return 'Habilitado'
+        return 'Apenas leitura'
       case 3:
+        return 'Leitura e escrita'
+      case 4:
         return 'Administrador'
     }
   }
@@ -27,7 +29,7 @@
       const parent = v.ref.parent.parent
       return {
         idEmpresa: parent.id,
-        status: getDescricaoStatus(v.get('status')),
+        status: v.get('status'),
       }
     })
   }
@@ -48,9 +50,13 @@
       {#each cadastros as { idEmpresa, status }}
         <tr>
           <td>
-            <a href={$url('./:idEmpresa', { idEmpresa })}> {idEmpresa} </a>
+            {#if status >= 2}
+              <a href={$url('./:idEmpresa', { idEmpresa })}> {idEmpresa} </a>
+            {:else}
+              {idEmpresa}
+            {/if}
           </td>
-          <td> {status} </td>
+          <td> {getDescricaoStatus(status)} </td>
         </tr>
       {/each}
     </table>

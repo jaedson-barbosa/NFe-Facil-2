@@ -4,7 +4,7 @@
   import type { TCadastro } from './_components/Search.svelte'
   import Search from './_components/Search.svelte'
   import { requisitar } from '@app/functions'
-  import { user, idEmpresa, dbColumns } from '@app/store'
+  import { user, idEmpresa, dbColumns, userStatus } from '@app/store'
 
   function getDocDest(v: TCadastro) {
     const cpf = v.get('dest.CPF')
@@ -41,12 +41,14 @@
   <div class="column is-half">
     <div class="container content box">
       <div class="buttons">
-        <a class="button" href={$url('./cadastro')}>
-          Atualizar cadastro
-        </a>
-        <a class="button" href={$url('./importacao')}>
-          Importar notas fiscais
-        </a>
+        {#if $userStatus == 4}
+          <a class="button" href={$url('./cadastro')}>
+            Atualizar cadastro
+          </a>
+          <a class="button" href={$url('./importacao')}>
+            Importar notas fiscais
+          </a>
+        {/if}
         <button class="button" on:click={consultar}>
           Consultar status do serviço
         </button>

@@ -1,5 +1,5 @@
 import { firestore } from 'firebase-admin'
-import { IDefaultParams, onDefaultRequest } from "./onDefaultRequest"
+import { IDefaultParams, onDefaultRequest } from './onDefaultRequest'
 import { Response, HttpsFunction } from 'firebase-functions'
 
 export interface ILoggedParams extends IDefaultParams {
@@ -10,10 +10,8 @@ export interface ILoggedParams extends IDefaultParams {
 const db = firestore()
 
 export function onLoggedRequest(
-  handler: (
-    params: ILoggedParams,
-    resp: Response<any>
-  ) => Promise<void>
+  handler: (params: ILoggedParams, resp: Response<any>) => Promise<void>,
+  needWritePermission: boolean
 ): HttpsFunction {
   return onDefaultRequest(async (p, r) => {
     const cnpj = p.body.idEmpresa
@@ -21,7 +19,27 @@ export function onLoggedRequest(
       r.status(400).send('Requisição sem identificação de emitente.')
       return
     }
-    const empresa = await db.collection('empresas').doc(cnpj).get()
+    const empresaRef = db.collection('empresas').doc(cnpj)
+    const user = await empresaRef.collection('usuarios').doc(p.user.uid).get()
+    if (!user.exists) {
+      r.status(400).send('Usuário não está cadastrado na empresa.')
+      return
+    }
+    const userStatus = user.get('status')
+    if (userStatus >= 3) {
+      // Liberada qualquer operação
+    } else if (userStatus == 2 && needWritePermission) {
+      r.status(400).send(
+        'Usuário não tem permissões suficientes para executar esta operação.'
+      )
+      return
+    } else {
+      r.status(400).send(
+        'Usuário não tem permissão para acessar informações desta empresa.'
+      )
+      return
+    }
+    const empresa = await empresaRef.get()
     if (!empresa.exists) {
       r.status(400).send('Empresa não existe')
       return

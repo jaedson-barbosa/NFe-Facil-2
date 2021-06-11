@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import type firebase from '@app/firebase'
-  
+
   type TD = firebase.firestore.DocumentData
   export type TCadastro = firebase.firestore.QueryDocumentSnapshot<TD>
 </script>
@@ -8,6 +8,7 @@
 <script lang="ts">
   import { url } from '@roxi/routify'
   import type { TColumn } from '@app/store'
+  import { userStatus } from '@app/store'
 
   export let coluna: TColumn
   export let placeholder: string
@@ -50,13 +51,15 @@
 <div class="container content box">
   <form on:submit|preventDefault={load}>
     <div class="field has-addons">
-      <div class="control">
-        <a class="button" href={$url('./' + editUrl)}>
-          <span class="icon is-small">
-            <i class="fas fa-plus" />
-          </span>
-        </a>
-      </div>
+      {#if $userStatus >= 3}
+        <div class="control">
+          <a class="button" href={$url('./' + editUrl)}>
+            <span class="icon is-small">
+              <i class="fas fa-plus" />
+            </span>
+          </a>
+        </div>
+      {/if}
       <div class="control is-expanded">
         <input class="input" type="text" {placeholder} bind:value={busca} />
       </div>

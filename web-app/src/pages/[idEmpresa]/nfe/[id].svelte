@@ -5,7 +5,7 @@
   import ReadonlyV from '@form/ReadonlyV.svelte'
   import type INFeRoot from './INFeRoot'
   import { requisitar } from '@app/functions'
-  import { user, dbColumns, empresa, idEmpresa } from '@app/store'
+  import { user, dbColumns, empresa, idEmpresa, userStatus } from '@app/store'
   // import { generateXML, preparateJSON } from './finalizacao';
 
   export let id: string
@@ -15,9 +15,7 @@
 
   async function carregar() {
     let status = 0
-    let nota = await $dbColumns.notasSalvas
-      .doc(id)
-      .get()
+    let nota = await $dbColumns.notasSalvas.doc(id).get()
     if (!nota.exists) {
       nota = await $dbColumns.notasEmitidas.doc(id).get()
       status = nota.get('cancelada') ? 2 : 1
@@ -129,9 +127,11 @@
     />
     <div class="buttons is-centralized">
       <a class="button" href={$url('../')}> Voltar </a>
-      <button class="button" on:click={() => editar(root)}>
-        {root.status == 0 ? 'Editar' : 'Clonar'}
-      </button>
+      {#if $userStatus >= 3}
+        <button class="button" on:click={() => editar(root)}>
+          {root.status == 0 ? 'Editar' : 'Clonar'}
+        </button>
+      {/if}
       {#if root.status != 2}
         <button
           class="button"
@@ -142,7 +142,7 @@
         </button>
       {/if}
       <button class="button" on:click={() => XML(root)}> Abrir XML </button>
-      {#if root.status == 1}
+      {#if root.status == 1 && $userStatus >= 3}
         <button
           class="button"
           class:is-loading={loading}

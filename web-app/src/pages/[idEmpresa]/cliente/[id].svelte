@@ -2,7 +2,7 @@
   import { url, goto } from '@roxi/routify'
   import { dest } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
-  import { dbColumns } from '@app/store'
+  import { dbColumns, userStatus } from '@app/store'
 
   export let id: string
 
@@ -41,11 +41,13 @@
     <fieldset disabled={loading}>
       <AutoForm el={dest} {root}>
         <div class="field is-grouped is-grouped-centered">
-          <p class="control">
-            <button class="button is-primary" class:is-loading={loading}>
-              Salvar
-            </button>
-          </p>
+          {#if $userStatus >= 3}
+            <p class="control">
+              <button class="button is-primary" class:is-loading={loading}>
+                Salvar
+              </button>
+            </p>
+          {/if}
           <p class="control">
             <a href={$url('../')} class="button is-danger"> Cancelar </a>
           </p>

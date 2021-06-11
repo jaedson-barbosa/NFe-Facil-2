@@ -10,7 +10,7 @@ export const statusServico = onCertifiedRequest(
     const ambiente = TAmb.Homologacao
     const resp = await consultarStatusServico(UF, ambiente, cert)
     res.status(200).send(resp.xMotivo)
-  }
+  }, false
 )
 
 export async function consultarStatusServico(

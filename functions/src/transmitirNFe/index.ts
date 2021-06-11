@@ -115,5 +115,5 @@ export const transmitirNFe = onCertifiedRequest(
         .status(500)
         .send(typeof error == 'object' ? JSON.stringify(error) : error)
     }
-  }
+  }, true
 )

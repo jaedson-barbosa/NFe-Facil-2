@@ -1,4 +1,11 @@
-import { derived, Readable, readable, Writable, writable } from 'svelte/store'
+import {
+  derived,
+  Readable,
+  readable,
+  Writable,
+  writable,
+  get,
+} from 'svelte/store'
 import firebase from './firebase' //Usa os arquivos do hosting pra economizar no bundle
 
 const auth = firebase.auth()
@@ -25,6 +32,21 @@ type TEmpresa = {
 export const empresaRef = derived<Writable<string>, TReference>(
   idEmpresa,
   (id) => (id ? db.collection('empresas').doc(id) : undefined),
+  undefined
+)
+
+export const userStatus = derived<Readable<TReference>, number>(
+  empresaRef,
+  (ref, set) => {
+    if (ref) {
+      ref
+        .collection('usuarios')
+        .doc(get(user).uid)
+        .get()
+        .then((v) => set(v.exists ? v.get('status') : -1))
+        .catch(() => set(-1))
+    } else set(-1)
+  },
   undefined
 )
 
@@ -64,7 +86,7 @@ export const dbColumns = derived<Readable<TReference>, IColumns>(
       produtos: ref.collection('produtos'),
       notasSalvas: ref.collection('notasSalvas'),
       notasEmitidas: ref.collection('notasEmitidas'),
-      usuarios: ref.collection('usuarios')
+      usuarios: ref.collection('usuarios'),
     } as IColumns
   },
   undefined

@@ -34,4 +34,4 @@ export const gerarDANFENFe = onLoggedRequest(async ({ body, empRef }, res) => {
     responseType: 'arraybuffer', // Repassa as informações sem corrompê-las
   })
   res.status(200).send(danfe.data)
-})
+}, false)

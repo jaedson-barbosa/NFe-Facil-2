@@ -1,6 +1,6 @@
 <script lang="ts">
   import { url, goto } from '@roxi/routify'
-  import { dbColumns } from '@app/store'
+  import { dbColumns, userStatus } from '@app/store'
   import { det } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
 
@@ -41,11 +41,13 @@
     <fieldset disabled={loading}>
       <AutoForm el={detUnico} {root}>
         <div class="field is-grouped is-grouped-centered">
-          <p class="control">
-            <button class="button is-primary" class:is-loading={loading}>
-              Salvar
-            </button>
-          </p>
+          {#if $userStatus >= 3}
+            <p class="control">
+              <button class="button is-primary" class:is-loading={loading}>
+                Salvar
+              </button>
+            </p>
+          {/if}
           <p class="control">
             <a href={$url('../')} class="button is-danger"> Cancelar </a>
           </p>

@@ -63,5 +63,5 @@ export const cancelarNFe = onCertifiedRequest(
       xmlCancelamento: procEventoNFe,
     })
     res.sendStatus(200)
-  }
+  }, true
 )

@@ -7,11 +7,10 @@ empresas: // cadastro apenas via servidor
 emit (...)
 serieNFe
 serieNFCe // implementacao futura
--usuarios: // permissao de leitura apenas para status 3 e escrita apenas com status 0 se nao houver nenhum
+-usuarios:
   id
-  status //0-Aguardando analise/1-Acesso revogado/2-Acesso liberado/3-Administrador
+  status //0-Em análise/1-Rejeitado/2-Apenas leitura/3-Leitura e escrita/4-Administrador
   ident
-  readOnly //significa que não pode cadastrar dados ou emitir notas fiscais
 -clientes:
   dest: ...
 -transportes:
@@ -57,10 +56,6 @@ OK  Usar documento como Id e aplicar validação de CPF e CNPJ
 OK  Importação com análise de elementos já salvos
 OK  Excluir antigo public-src
 OK  Aplicar bloco de try-catch na entrada do servidor
-    Adicionar análise de permissões
-+-    Banco de dados
-      Servidor
-      Web-app
 OK  User store para a pasta [idEmpresa]
 OK  Simplificar scoped da NFe
 OK  Corrigir exibição das páginas na NFe
@@ -68,6 +63,10 @@ OK    Busca com edição de clientes, produtos e transportes
 OK    Botões na parte superior da tela
 OK  Remover botões limpar
 OK  Adicionar análise de CPF/CNPJ direto nos inputs destes campos
++-  Adicionar análise de permissões
++-    Banco de dados
++-    Servidor
++-    Web-app
     Deixar tudo pronto pra iniciar o desenvolvimento da NFCe
     Ajustar funções pro server de São Paulo e URLs no web-app pra produção
     Liberar a transmissão em produção e testar com uma nota real
@@ -110,6 +109,7 @@ REFINAMENTOS durante pré-alpha:
     Leitura completa dos arquivos de documentação da NFe
 
 REFINAMENTOS durante alplha:
+    Criar sistema de compartilhamento de informações entre empresas, onde um usuário com permissão de acesso (mesmo que apenas leitura) deve poder transportar informações de um lugar pra outro
     Personalização com o https://jenil.github.io/bulmaswatch/
     Scanner de código de barras
       USB

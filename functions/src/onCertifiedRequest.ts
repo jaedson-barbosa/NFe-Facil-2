@@ -14,7 +14,8 @@ export function onCertifiedRequest(
   handler: (
     params: ICertifiedParams,
     resp: Response<any>
-  ) => Promise<void>
+  ) => Promise<void>,
+  needWritePermission: boolean
 ): HttpsFunction {
   return onLoggedRequest(async (p, r) => {
     const senha = p.body.senha
@@ -37,5 +38,5 @@ export function onCertifiedRequest(
     }
     stored.privateCert = pki.privateKeyToPem(decrypted)
     await handler({ ...p, cert: stored }, r)
-  })
+  }, needWritePermission)
 }
