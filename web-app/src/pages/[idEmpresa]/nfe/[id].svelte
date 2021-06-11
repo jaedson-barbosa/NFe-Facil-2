@@ -9,7 +9,7 @@
   // import { generateXML, preparateJSON } from './finalizacao';
 
   export let id: string
-  export let scoped: INFeRoot
+  export let scoped: any
 
   let loading = false
 
@@ -39,7 +39,8 @@
     // const xml = generateXML(infNFe)
     // console.log(xml)
     // return
-    generate($empresa, scoped, infNFe)
+    const result = generate($empresa, infNFe)
+    scoped.updateScoped(result)
     $goto('./identificacao')
   }
 

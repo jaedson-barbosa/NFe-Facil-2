@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { applyMask } from '@app/documentUtils'
+  import { applyMask, isCnpjValid, isCpfValid } from '@app/documentUtils'
   import type { TMask } from '@app/documentUtils'
   import { createId } from './helpers'
 
@@ -13,6 +13,16 @@
   export let value: string
 
   $: maskedValue = mask ? applyMask(value, mask) : ''
+
+  let input: HTMLInputElement
+
+  $: {
+    if (mask == 'cpf') {
+      input?.setCustomValidity(isCpfValid(value) ? '' : 'CPF inválido.')
+    } else if (mask == 'cnpj') {
+      input?.setCustomValidity(isCnpjValid(value) ? '' : 'CNPJ inválido.')
+    }
+  }
 
   const id = createId()
 </script>
@@ -38,6 +48,7 @@
           {minlength}
           {maxlength}
           type="text"
+          bind:this={input}
           bind:value
         />
       </div>

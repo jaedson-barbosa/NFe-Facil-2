@@ -32,15 +32,10 @@ export const empresa = derived<Readable<TReference>, TEmpresa>(
   empresaRef,
   (ref, set) => {
     if (ref) {
-      const unsub = ref.onSnapshot((v) => {
+      return ref.onSnapshot((v) => {
         if (v.exists) set(v.data() as TEmpresa)
         else set(undefined)
       })
-      return () => {
-        alert('Unsub chamado.')
-        unsub()
-        alert('Removido listener.')
-      }
     } else set(undefined)
   },
   undefined

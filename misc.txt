@@ -62,14 +62,12 @@ OK  Aplicar bloco de try-catch na entrada do servidor
       Servidor
       Web-app
 OK  User store para a pasta [idEmpresa]
-+-  Simplificar scoped da NFe
-    Corrigir exibição das páginas na NFe
-+-    Busca com edição
-OK      Clientes
-OK      Produtos
-OK      Transporte
-    Botões na parte superior da tela
+OK  Simplificar scoped da NFe
+OK  Corrigir exibição das páginas na NFe
+OK    Busca com edição de clientes, produtos e transportes
+OK    Botões na parte superior da tela
 OK  Remover botões limpar
+OK  Adicionar análise de CPF/CNPJ direto nos inputs destes campos
     Deixar tudo pronto pra iniciar o desenvolvimento da NFCe
     Ajustar funções pro server de São Paulo e URLs no web-app pra produção
     Liberar a transmissão em produção e testar com uma nota real

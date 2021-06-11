@@ -28,6 +28,7 @@
   <Readonly {el} {root} />
 {:else if el.element || el.maxOccurs > 1}
   <Container {level} label={el.annotation?.label} aux={el.annotation?.aux}>
+    <slot />
     {#if el.maxOccurs > 1}
       <List {el} level={level + 1} bind:root />
     {:else if el.choice}
@@ -35,7 +36,6 @@
     {:else}
       <Elements {el} level={level + 1} bind:root />
     {/if}
-    <slot />
   </Container>
 {:else if root}
   {#if specificIndex == 0}

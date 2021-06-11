@@ -4,9 +4,10 @@
   import { empresa } from '@app/store'
   import type INFeRoot from './INFeRoot';
 
-  export let scoped: INFeRoot
+  export let scoped: any
 
-  generate($empresa, scoped)
+  const result = generate($empresa)
+  scoped.updateScoped(result)
   $goto('./identificacao')
 </script>
 
