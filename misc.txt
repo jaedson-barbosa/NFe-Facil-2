@@ -10,8 +10,8 @@ serieNFCe // implementacao futura
 -usuarios: // permissao de leitura apenas para status 3 e escrita apenas com status 0 se nao houver nenhum
   id
   status //0-Aguardando analise/1-Acesso revogado/2-Acesso liberado/3-Administrador
-  nome-email
-  permissoes: visualizar-dados, visualizar-notas, cadastrar-dados, emitir-notas
+  ident
+  readOnly //significa que não pode cadastrar dados ou emitir notas fiscais
 -clientes:
   dest: ...
 -transportes:
@@ -58,7 +58,7 @@ OK  Importação com análise de elementos já salvos
 OK  Excluir antigo public-src
 OK  Aplicar bloco de try-catch na entrada do servidor
     Adicionar análise de permissões
-      Banco de dados
++-    Banco de dados
       Servidor
       Web-app
 OK  User store para a pasta [idEmpresa]

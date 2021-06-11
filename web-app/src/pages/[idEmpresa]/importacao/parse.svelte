@@ -30,13 +30,14 @@
       const nfeRef = nfesColumn.doc(infNFe.Id)
       const salva = await nfeRef.get()
       if (salva.exists) throw new Error('Já registrada.')
-      await nfeRef.set({
+      const nfeData = {
         cancelada: false,
         infNFe,
         dhEmi: new Date(infNFe.ide.dhEmi),
         nProt: json.nfeProc.protNFe.infProt.nProt,
         xml
-      })
+      }
+      await nfeRef.set(nfeData)
       update(status.aceito)
     } catch (error) {
       console.log(error)

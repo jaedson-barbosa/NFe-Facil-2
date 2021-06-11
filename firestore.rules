@@ -1,8 +1,59 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
+    // Certificados so devem ser acessados pelo servidor
+    match /certificados/{cert} {
+      allow read, write: if false;
+    }
+
+    match /empresas/{empresa} {
+      function isSignedIn() {
+        return request.auth != null;
+      }
+
+      function getUserData() {
+        return get(/databases/$(database)/documents/empresas/$(empresa)/usuarios/$(request.auth.uid)).data;
+      }
+
+      function isActive() {
+        return isSignedIn() && getUserData().status in [2, 3];
+      }
+
+      function isAdmin() {
+        return isSignedIn() && getUserData().status == 3;
+      }
+
+      allow read: if isActiveUser();
+      allow create, delete: if false;
+      allow update: if isAdmin();
+
+      match /usuarios/{usuario} {
+        allow read: if isAdmin();
+        allow create: if request.resource.data.status == 0;
+        allow update: if isAdmin();
+        allow delete: if false;
+      }
+
+      match /clientes/{nota} {
+        allow read, write: if isActive();
+      }
+
+      match /transportes/{nota} {
+        allow read, write: if isActive();
+      }
+
+      match /produtos/{nota} {
+        allow read, write: if isActive();
+      }
+
+      match /notasSalvas/{nota} {
+        allow read, write: if isActive();
+      }
+
+      match /notasEmitidas/{nota} {
+        allow read: if isActive();
+        allow write: if false;
+      }
     }
   }
 }
