@@ -4,7 +4,7 @@
   import { empresa, idEmpresa, empresaRef } from '@app/store'
   import AutoForm from '@form/AutoForm.svelte'
   import Input from '@form/Input.svelte'
-
+  
   const infoSerie = {
     name: 'serieNFe',
     annotation: {
@@ -15,7 +15,8 @@
   }
 
   let loading = false
-  let root = $empresa
+  // Não podemos alterar o cadastro sem antes clicar em salvar
+  $: root = $empresa ? {...$empresa} : undefined
 
   async function salvar(root: any) {
     loading = true
@@ -33,6 +34,7 @@
   }
 </script>
 
+{#if root}
 <form on:submit|preventDefault={() => salvar(root)}>
   <fieldset disabled={loading}>
     <AutoForm el={emit} {root}>
@@ -50,3 +52,4 @@
     </AutoForm>
   </fieldset>
 </form>
+{/if}

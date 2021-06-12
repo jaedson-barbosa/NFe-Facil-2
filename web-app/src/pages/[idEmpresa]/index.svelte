@@ -26,7 +26,7 @@
     const token = await $user.getIdToken()
     const resp = await requisitar(
       'statusServico',
-      { idEmpresa },
+      { idEmpresa: $idEmpresa },
       token
     )
     if (resp.status == 200) {

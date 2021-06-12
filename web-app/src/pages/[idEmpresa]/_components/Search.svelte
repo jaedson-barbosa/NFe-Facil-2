@@ -94,21 +94,18 @@
         </tr>
       {/each}
     </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="6">
-          <div class="buttons is-centered">
-            <button
-              class="button"
-              class:is-static={!hasMore}
-              class:is-loading={loading}
-              on:click={load}
-            >
-              Carregar mais
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
+    {#if hasMore}
+      <tfoot>
+        <tr>
+          <td colspan="6">
+            <div class="buttons is-centered">
+              <button class="button" class:is-loading={loading} on:click={load}>
+                Carregar mais
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
+    {/if}
   </table>
 </div>

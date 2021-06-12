@@ -45,7 +45,7 @@ export function onDefaultRequest(
         const e = error as Error
         res
           .status(400)
-          .send(`Erro: ${e.name}: ${e.message}.\nCaminho: ${e.stack}`)
+          .send(`${e.name}: ${e.message}.\nCaminho: ${e.stack}`)
       }
     })
   )

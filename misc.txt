@@ -63,10 +63,10 @@ OK    Busca com edição de clientes, produtos e transportes
 OK    Botões na parte superior da tela
 OK  Remover botões limpar
 OK  Adicionar análise de CPF/CNPJ direto nos inputs destes campos
-+-  Adicionar análise de permissões
-+-    Banco de dados
-+-    Servidor
-+-    Web-app
+OK  Adicionar análise de permissões
+OK    Banco de dados
+OK    Servidor
+OK    Web-app
     Deixar tudo pronto pra iniciar o desenvolvimento da NFCe
     Ajustar funções pro server de São Paulo e URLs no web-app pra produção
     Liberar a transmissão em produção e testar com uma nota real

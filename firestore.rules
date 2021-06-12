@@ -6,7 +6,15 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    match /{path=**}/usuarios/{usuario} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.id;
+    }
+
     match /empresas/{empresa} {
+      allow read: if readEnabled();
+      allow create, delete: if false;
+      allow update: if isAdmin();
+
       function isSignedIn() {
         return request.auth != null;
       }
@@ -27,12 +35,8 @@ service cloud.firestore {
         return isSignedIn() && getStatus() == 4;
       }
 
-      allow read: if readEnabled();
-      allow create, delete: if false;
-      allow update: if isAdmin();
-
       match /usuarios/{usuario} {
-        allow read: if isAdmin();
+        allow read: if isAdmin() || request.auth.uid == usuario;
         allow create: if request.resource.data.status == 0;
         allow update: if isAdmin();
         allow delete: if false;

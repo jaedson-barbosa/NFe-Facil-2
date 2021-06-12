@@ -54,10 +54,10 @@ export const empresa = derived<Readable<TReference>, TEmpresa>(
   empresaRef,
   (ref, set) => {
     if (ref) {
-      return ref.onSnapshot((v) => {
+      ref.get().then((v) => {
         if (v.exists) set(v.data() as TEmpresa)
         else set(undefined)
-      })
+      }).catch(() => set(undefined))
     } else set(undefined)
   },
   undefined
