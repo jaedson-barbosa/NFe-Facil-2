@@ -1,10 +1,13 @@
 <script lang="ts">
-  import { createId } from './helpers'
+  import SelectV from './SelectV.svelte'
 
   export let el: any
   export let root: any
 
-  function getOptions(el: any) {
+  function getOptions(el: any): {
+    value: string
+    text: string
+  }[] {
     const enumeration = el.restriction?.enumeration as string | string[]
     if (typeof enumeration == 'string') {
       return [{ value: enumeration, text: enumeration }]
@@ -25,36 +28,12 @@
   $: {
     if (!root[el.name]) root[el.name] = options[0].value
   }
-
-  $: ({ aux, label } = el.annotation)
-  const id = createId()
-  $: required = !el.optional
 </script>
 
-<div class="field is-horizontal">
-  <div class="field-label is-normal">
-    <label class="label" for={id}>
-      {#if required}
-        {label}
-      {:else}
-        <i>{label}</i>
-      {/if}
-    </label>
-  </div>
-  <div class="field-body">
-    <div class="field">
-      <div class="control is-expanded">
-        <div class="select is-fullwidth">
-          <select {id} bind:value={root[el.name]} {required}>
-            {#each options as opt}
-              <option value={opt.value}>{opt.text}</option>
-            {/each}
-          </select>
-        </div>
-      </div>
-      {#if aux}
-        <p class="help">{aux}</p>
-      {/if}
-    </div>
-  </div>
-</div>
+<SelectV
+  required={!el.optional}
+  label={el.annotation.label}
+  aux={el.annotation.aux}
+  {options}
+  bind:value={root[el.name]}
+/>

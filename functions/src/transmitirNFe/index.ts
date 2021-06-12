@@ -90,16 +90,7 @@ export const transmitirNFe = onCertifiedRequest(
       if (infNFe.oldId) {
         const oldDocRef = notasSalvasCol.doc(infNFe.oldId)
         const oldDoc = await oldDocRef.get()
-        if (oldDoc.exists) {
-          if (oldDoc.get('status') == 0) {
-            await oldDocRef.delete()
-          } else {
-            res
-              .status(400)
-              .send('Proibido: nota fiscal já emitida ou cancelada.')
-            return
-          }
-        }
+        if (oldDoc.exists) await oldDocRef.delete()
       }
       const dhEmi = new Date(infNFe.ide.dhEmi.$t)
       await notasEmitidasCol.doc(infNFe.Id).set({

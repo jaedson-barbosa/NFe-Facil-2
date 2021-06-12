@@ -27,6 +27,8 @@ type TEmpresa = {
   emit: any
   serieNFe: string
   serieNFCe: string
+  IDCSC: string
+  CSC: string
 }
 
 export const empresaRef = derived<Writable<string>, TReference>(
@@ -73,6 +75,8 @@ interface IColumns {
   produtos: TColumn
   notasSalvas: TColumn
   notasEmitidas: TColumn
+  notasCSalvas: TColumn
+  notasCEmitidas: TColumn
   usuarios: TColumn
 }
 
@@ -86,6 +90,8 @@ export const dbColumns = derived<Readable<TReference>, IColumns>(
       produtos: ref.collection('produtos'),
       notasSalvas: ref.collection('notasSalvas'),
       notasEmitidas: ref.collection('notasEmitidas'),
+      notasCSalvas: ref.collection('notasCSalvas'),
+      notasCEmitidas: ref.collection('notasCEmitidas'),
       usuarios: ref.collection('usuarios'),
     } as IColumns
   },

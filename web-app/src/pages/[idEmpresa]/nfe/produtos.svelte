@@ -3,7 +3,7 @@
   import type INFeRoot from './INFeRoot'
 
   export let scoped: INFeRoot
-  $: elements = scoped.det.map((v,i) => {
+  $: elements = scoped.det.map((v, i) => {
     v.nItem = (i + 1).toString()
     return v
   })
@@ -15,15 +15,23 @@
       $goto('./produto')
     }
   }
+
+  $: isNFCe = scoped.ide.mod == 65
 </script>
 
 <div class="container content box">
   <form on:submit|preventDefault={submit}>
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
-        <a href={$url('./cliente')} class="button is-danger">
-          Voltar: Cliente
-        </a>
+        {#if !scoped.dest}
+          <a href={$url('./identificacao')} class="button is-danger">
+            Voltar: Identificação
+          </a>
+        {:else}
+          <a href={$url('./cliente')} class="button is-danger">
+            Voltar: Cliente
+          </a>
+        {/if}
       </p>
       {#if elements.length}
         <p class="control">

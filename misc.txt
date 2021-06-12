@@ -6,7 +6,9 @@ privateCert
 empresas: // cadastro apenas via servidor
 emit (...)
 serieNFe
-serieNFCe // implementacao futura
+serieNFCe
+IDCSC
+CSC
 -usuarios:
   id
   status //0-Em análise/1-Rejeitado/2-Apenas leitura/3-Leitura e escrita/4-Administrador
@@ -17,11 +19,22 @@ serieNFCe // implementacao futura
   transporta: ...
 -produtos:
   det: ...
--notasSalvas: //escrita liberada
+-notasSalvas:
   infNFe
   dhEmi
   xml
 -notasEmitidas:
+  cancelada
+  infNFe
+  dhEmi
+  nProt
+  xml
+  xmlCancelamento
+-notasCSalvas:
+  infNFe
+  dhEmi
+  xml
+-notasCEmitidas:
   cancelada
   infNFe
   dhEmi
@@ -67,7 +80,10 @@ OK  Adicionar análise de permissões
 OK    Banco de dados
 OK    Servidor
 OK    Web-app
-    Deixar tudo pronto pra iniciar o desenvolvimento da NFCe
++-  Base da NFCe
++-    Adicionar grupo NFCe
++-    Adicionar colunas de NFCe
++-    Adicionar criação, edição e exibição de NFCe
     Ajustar funções pro server de São Paulo e URLs no web-app pra produção
     Liberar a transmissão em produção e testar com uma nota real
 

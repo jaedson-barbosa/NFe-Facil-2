@@ -1,54 +1,72 @@
 <script lang="ts">
-  import { generate, toNFeString } from './rootGenerator'
+  import { generateNFe, generateNFCe, toNFeString } from '../../rootGenerator'
   import { goto, url } from '@roxi/routify'
   import Container from '@form/Container.svelte'
   import ReadonlyV from '@form/ReadonlyV.svelte'
-  import type INFeRoot from './INFeRoot'
+  import type INFeRoot from '../../INFeRoot'
   import { requisitar } from '@app/functions'
-  import { user, dbColumns, empresa, idEmpresa, userStatus } from '@app/store'
+  import {
+    user,
+    empresa,
+    idEmpresa,
+    userStatus,
+    TColumn,
+    TDocument,
+  } from '@app/store'
+  import type { IScoped } from '../IScoped'
   // import { generateXML, preparateJSON } from './finalizacao';
 
-  export let id: string
-  export let scoped: any
+  export let scoped: IScoped
+  export let coluna: TColumn
+  export let isNFCe: boolean
 
   let loading = false
-
-  async function carregar() {
-    let status = 0
-    let nota = await $dbColumns.notasSalvas.doc(id).get()
-    if (!nota.exists) {
-      nota = await $dbColumns.notasEmitidas.doc(id).get()
-      status = nota.get('cancelada') ? 2 : 1
-      if (!nota.exists) {
-        throw new Error('Id não reconhecido.')
-      }
-    }
-    return {
-      status,
-      nNF: nota.get('infNFe.ide.nNF'),
-      dhEmi: nota.get('dhEmi').toDate().toLocaleString(),
-      xNome: nota.get('infNFe.dest.xNome'),
-      nota,
-    }
+  let root: {
+    status: number
+    dhEmi: string
+    nota: TDocument
   }
+
+  coluna
+    .doc(scoped.id)
+    .get()
+    .then((nota) => {
+      const cancelada = nota.get('cancelada')
+      const status = cancelada ? 2 : cancelada == false ? 1 : 0
+      if (!nota.exists) {
+        alert('Nota fiscal não encontrada.')
+        $goto('../../')
+      }
+      root = {
+        status,
+        dhEmi: nota.get('dhEmi').toDate().toLocaleString(),
+        nota,
+      }
+    })
 
   function editar(root: any) {
     const infNFe: INFeRoot = root.nota.get('infNFe')
     // const xml = generateXML(infNFe)
     // console.log(xml)
     // return
-    const result = generate($empresa, infNFe)
+    const result = isNFCe
+      ? generateNFCe($empresa, infNFe)
+      : generateNFe($empresa, infNFe)
     scoped.updateScoped(result)
-    $goto('./identificacao')
+    $goto('../identificacao')
   }
 
   async function gerarDANFE(emitida: boolean) {
+    if (isNFCe) {
+      alert('Função ainda não implementada.')
+      return
+    }
     if (loading) return
     loading = true
     const token = await $user.getIdToken()
     const resp = await requisitar(
       'gerarDANFENFe',
-      { idEmpresa, emitida, idNota: id },
+      { idEmpresa, emitida, idNota: scoped.id },
       token
     )
     if (resp.status == 200) {
@@ -80,6 +98,10 @@
   }
 
   async function cancelarNFe() {
+    if (isNFCe) {
+      alert('Função ainda não implementada.')
+      return
+    }
     if (loading) return
     loading = true
     const justificativa = prompt('Motivação do cancelamento:')
@@ -93,7 +115,7 @@
       'cancelarNFe',
       {
         idEmpresa,
-        idNota: id,
+        idNota: scoped.id,
         justificativa,
         dhEvento: toNFeString(new Date()),
       },
@@ -101,7 +123,7 @@
     )
     if (resp.status == 200) {
       alert('Nota fiscal cancelada com sucesso')
-      $goto('../')
+      $goto('../../')
     } else {
       const text = await resp.text()
       alert(text)
@@ -110,13 +132,14 @@
   }
 </script>
 
-{#await carregar()}
-  Carregando...
-{:then root}
+{#if root}
   <Container label="Informações da NFe">
-    <ReadonlyV label="Número" value={root.nNF} />
+    <ReadonlyV label="Número" value={root.nota.get('infNFe.ide.nNF')} />
     <ReadonlyV label="Data e hora" value={root.dhEmi} />
-    <ReadonlyV label="Cliente" value={root.xNome} />
+    <ReadonlyV
+      label="Cliente"
+      value={root.nota.get('infNFe.dest.xNome') ?? 'Cliente não informado'}
+    />
     <ReadonlyV
       label="Status"
       value={root.status == 0
@@ -126,7 +149,7 @@
         : 'Cancelada'}
     />
     <div class="buttons is-centralized">
-      <a class="button" href={$url('../')}> Voltar </a>
+      <a class="button" href={$url('../../')}> Voltar </a>
       {#if $userStatus >= 3}
         <button class="button" on:click={() => editar(root)}>
           {root.status == 0 ? 'Editar' : 'Clonar'}
@@ -148,7 +171,7 @@
           class:is-loading={loading}
           on:click={cancelarNFe}
         >
-          Cancelar NFe
+          Cancelar
         </button>
       {:else if root.status == 2}
         <button class="button" on:click={() => XMLCancelamento(root)}>
@@ -157,8 +180,4 @@
       {/if}
     </div>
   </Container>
-{:catch erro}
-  {erro.message}
-  Não foi possível encontrar a nota
-  <a href={$url('../')}>Voltar</a>
-{/await}
+{/if}

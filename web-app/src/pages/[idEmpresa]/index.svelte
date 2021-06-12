@@ -4,7 +4,7 @@
   import type { TCadastro } from './_components/Search.svelte'
   import Search from './_components/Search.svelte'
   import { requisitar } from '@app/functions'
-  import { user, idEmpresa, dbColumns, userStatus } from '@app/store'
+  import { user, empresa, idEmpresa, dbColumns, userStatus } from '@app/store'
 
   function getDocDest(v: TCadastro) {
     const cpf = v.get('dest.CPF')
@@ -35,6 +35,8 @@
       alert(resp.status == 401 ? 'Erro na autenticação.' : await resp.text())
     }
   }
+
+  $: NFCeHabilitado = $empresa.serieNFCe && $empresa.IDCSC && $empresa.CSC
 </script>
 
 <div class="columns is-multiline">
@@ -42,9 +44,7 @@
     <div class="container content box">
       <div class="buttons">
         {#if $userStatus == 4}
-          <a class="button" href={$url('./cadastro')}>
-            Atualizar cadastro
-          </a>
+          <a class="button" href={$url('./cadastro')}> Atualizar cadastro </a>
           <a class="button" href={$url('./importacao')}>
             Importar notas fiscais
           </a>
@@ -59,7 +59,8 @@
   <div class="column is-half">
     <Search
       coluna={$dbColumns.clientes}
-      editUrl="cliente"
+      editUrl="./cliente/:id"
+      addUrl="./cliente"
       placeholder="Nome do cliente"
       wherePath="dest.xNome"
       headers={['Documento', 'Nome']}
@@ -69,7 +70,8 @@
   <div class="column is-half">
     <Search
       coluna={$dbColumns.produtos}
-      editUrl="produto"
+      editUrl="./produto/:id"
+      addUrl="./produto"
       placeholder="Descrição do produto"
       wherePath="det.prod.xProd"
       headers={['Código', 'Descrição']}
@@ -79,7 +81,8 @@
   <div class="column is-half">
     <Search
       coluna={$dbColumns.transportes}
-      editUrl="transporte"
+      editUrl="./transporte/:id"
+      addUrl="./transporte"
       placeholder="Nome do transportador"
       wherePath="transporta.xNome"
       headers={['Documento', 'Nome']}
@@ -89,8 +92,9 @@
   <div class="column is-half">
     <Search
       coluna={$dbColumns.notasSalvas}
-      editUrl="nfe"
-      placeholder="Número da NFe"
+      editUrl="./nfe/:id/salva"
+      addUrl="./nfe/nova"
+      placeholder="Número da NFe salva"
       wherePath="infNFe.ide.nNF"
       headers={['Número', 'Série', 'Emissão']}
       itemRender={(v) => [
@@ -103,8 +107,9 @@
   <div class="column is-half">
     <Search
       coluna={$dbColumns.notasEmitidas}
-      editUrl="nfe"
-      placeholder="Número da NFe"
+      editUrl="./nfe/:id/emitida"
+      addUrl="./nfe/nova"
+      placeholder="Número da NFe emitida"
       wherePath="infNFe.ide.nNF"
       headers={['Número', 'Série', 'Emissão']}
       itemRender={(v) => [
@@ -114,4 +119,36 @@
       ]}
     />
   </div>
+  {#if NFCeHabilitado}
+    <div class="column is-half">
+      <Search
+        coluna={$dbColumns.notasCSalvas}
+        editUrl="./nfe/:id/csalva"
+        addUrl="./nfe/cnova"
+        placeholder="Número da NFCe salva"
+        wherePath="infNFe.ide.nNF"
+        headers={['Número', 'Série', 'Emissão']}
+        itemRender={(v) => [
+          v.get('infNFe.ide.nNF'),
+          v.get('infNFe.ide.serie'),
+          v.get('dhEmi').toDate().toLocaleString(),
+        ]}
+      />
+    </div>
+    <div class="column is-half">
+      <Search
+        coluna={$dbColumns.notasCEmitidas}
+        editUrl="./nfe/:id/cemitida"
+        addUrl="./nfe/cnova"
+        placeholder="Número da NFCe emitida"
+        wherePath="infNFe.ide.nNF"
+        headers={['Número', 'Série', 'Emissão']}
+        itemRender={(v) => [
+          v.get('infNFe.ide.nNF'),
+          v.get('infNFe.ide.serie'),
+          v.get('dhEmi').toDate().toLocaleString(),
+        ]}
+      />
+    </div>
+  {/if}
 </div>

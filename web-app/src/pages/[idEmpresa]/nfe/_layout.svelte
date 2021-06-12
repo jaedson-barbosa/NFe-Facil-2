@@ -11,10 +11,14 @@
   $: isInitial = $isActive('./index') || $isActive('./:id')
 
   $: {
-    if (isInitial) scoped = { updateScoped }
+    if (isInitial) {
+      alert('Resetado scoped')
+      scoped = { updateScoped }
+    }
   }
 </script>
 
+{@debug isInitial}
 {@debug scoped}
 
 {#if scoped.ide || isInitial}

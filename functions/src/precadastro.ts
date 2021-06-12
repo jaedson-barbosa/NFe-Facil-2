@@ -84,6 +84,9 @@ export const precadastro = onDefaultRequest(async ({ user, body }, res) => {
         xNome: certParts[0],
       },
       serieNFe: '1',
+      serieNFCe: '',
+      IDCSC: '',
+      CSC: ''
     })
   }
   await empresaRef.collection('usuarios').doc(user.sub).set({

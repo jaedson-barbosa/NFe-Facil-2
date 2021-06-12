@@ -12,6 +12,7 @@
 
   export let coluna: TColumn
   export let placeholder: string
+  export let addUrl: string
   export let editUrl: string
   export let wherePath: string
   export let headers: string[]
@@ -53,7 +54,7 @@
     <div class="field has-addons">
       {#if $userStatus >= 3}
         <div class="control">
-          <a class="button" href={$url('./' + editUrl)}>
+          <a class="button" href={$url(addUrl)}>
             <span class="icon is-small">
               <i class="fas fa-plus" />
             </span>
@@ -85,7 +86,7 @@
           {#each itemRender(cad) as i, index}
             <td>
               {#if index == 0}
-                <a href={$url(`./${editUrl}/:id`, { id: cad.id })}> {i} </a>
+                <a href={$url(editUrl, { id: cad.id })}> {i} </a>
               {:else}
                 {i}
               {/if}

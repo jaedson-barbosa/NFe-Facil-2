@@ -8,31 +8,28 @@
 
   export let scoped: INFeRoot
   let loading = false
+  const isNFCe = scoped.ide.mod == 65
 
   async function salvar() {
     loading = true
-    const notasCol = $dbColumns.notasSalvas
+    const notasCol = isNFCe ? $dbColumns.notasCSalvas : $dbColumns.notasSalvas
     if (scoped.Id) {
       const docRef = notasCol.doc(scoped.Id)
       const doc = await docRef.get()
-      if (doc.exists) {
-        if (doc.get('status') == 0) {
-          await docRef.delete()
-        } else {
-          alert('Proibido: nota fiscal já emitida ou cancelada.')
-          loading = false
-          return
-        }
-      }
+      if (doc.exists) await docRef.delete()
     }
     const xml = generateXML(scoped)
     const dhEmi = new Date(scoped.ide.dhEmi)
     const newRegister = { scoped, dhEmi, xml }
     await notasCol.doc(scoped.Id).set(newRegister)
-    $goto('./:id', { id: scoped.Id })
+    $goto(isNFCe ? './:id/csalva' : './:id/salva', { id: scoped.Id })
   }
 
   async function transmitir() {
+    if (isNFCe) {
+      alert('Função ainda não implementada.')
+      return
+    }
     loading = true
     const infNFe = preparateJSON(scoped)
     const idToken = await $user.getIdToken()

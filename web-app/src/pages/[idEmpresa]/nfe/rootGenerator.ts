@@ -2,7 +2,7 @@ import { VERSAO } from '@app/info'
 import { IBGE } from '@form/data/IBGE.json'
 import type INFeRoot from './INFeRoot'
 
-export function generate(empresa: any, initialValue: INFeRoot = undefined): INFeRoot {
+export function generateNFe(empresa: any, initialValue: INFeRoot = undefined): INFeRoot {
   const emit = empresa.emit
   return {
     Id: initialValue?.Id ?? '',
@@ -19,6 +19,61 @@ export function generate(empresa: any, initialValue: INFeRoot = undefined): INFe
       idDest: initialValue?.ide.idDest ?? '',
       cMunFG: initialValue?.ide.cMunFG ?? emit.enderEmit.cMun,
       tpImp: initialValue?.ide.tpImp ?? '1',
+      tpEmis: 1,
+      cDV: 'Calculado pela aplicação',
+      tpAmb: initialValue?.ide.tpAmb ?? '',
+      finNFe: initialValue?.ide.finNFe ?? '',
+      indFinal: initialValue?.ide.indFinal ?? '',
+      indPres: initialValue?.ide.indPres ?? '',
+      indIntermed: initialValue?.ide.indIntermed ?? '',
+      procEmi: initialValue?.ide.procEmi ?? '0',
+      verProc: VERSAO,
+      NFref: initialValue?.ide.NFref ?? [],
+    },
+    emit,
+    dest: initialValue?.dest ?? {},
+    retirada: initialValue?.retirada ?? '',
+    entrega: initialValue?.entrega ?? '',
+    autXML: initialValue?.autXML ?? [],
+    det: initialValue?.det ?? [],
+    total: initialValue?.total ?? {},
+    transp: initialValue?.transp ?? {},
+    cobr: initialValue?.cobr ?? '',
+    pag: initialValue?.pag ?? {
+      detPag: [],
+      vTroco: '',
+    },
+    infIntermed: initialValue?.infIntermed ?? '',
+    infAdic: initialValue?.infAdic ?? '',
+    exporta: initialValue?.exporta ?? '',
+    compra: initialValue?.compra ?? '',
+    cana: initialValue?.cana ?? '',
+    infRespTec: {
+      CNPJ: '12931158000164',
+      xContato: 'Jaedson Barbosa Serafim',
+      email: 'jaedson33@gmail.com',
+      fone: '83988856440',
+    },
+  }
+}
+
+export function generateNFCe(empresa: any, initialValue: INFeRoot = undefined): INFeRoot {
+  const emit = empresa.emit
+  return {
+    Id: initialValue?.Id ?? '',
+    ide: {
+      cUF: getCodigoEstado(emit.enderEmit.UF),
+      cNF: getRandomNumber().toString(),
+      natOp: initialValue?.ide.natOp ?? '',
+      mod: 65,
+      serie: empresa.serieNFe,
+      nNF: initialValue?.ide.nNF ?? '1',
+      dhEmi: toNFeString(new Date()),
+      dhSaiEnt: initialValue?.ide.dhSaiEnt ?? '',
+      tpNF: initialValue?.ide.tpNF ?? '',
+      idDest: initialValue?.ide.idDest ?? '',
+      cMunFG: initialValue?.ide.cMunFG ?? emit.enderEmit.cMun,
+      tpImp: initialValue?.ide.tpImp ?? '4',
       tpEmis: 1,
       cDV: 'Calculado pela aplicação',
       tpAmb: initialValue?.ide.tpAmb ?? '',
