@@ -15,6 +15,7 @@
   })
 
   const nfesColumn = $dbColumns.notasEmitidas
+  const nfcesColumn = $dbColumns.notasCEmitidas
   Promise.all(files.map(async (v, i) => {
     let json = undefined
     const update = (status: status) => {
@@ -27,7 +28,8 @@
       json = parser.xml2json(xml)
       const infNFe = json.nfeProc.NFe.infNFe
       if (!infNFe.Id) throw new Error('Sem identificação.')
-      const nfeRef = nfesColumn.doc(infNFe.Id)
+      const isNFCe = infNFe.ide.mod == 65
+      const nfeRef = (isNFCe ? nfcesColumn : nfesColumn).doc(infNFe.Id)
       const salva = await nfeRef.get()
       if (salva.exists) throw new Error('Já registrada.')
       const nfeData = {

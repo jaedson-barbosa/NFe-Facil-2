@@ -84,6 +84,7 @@ OK    Web-app
 +-    Adicionar grupo NFCe
 +-    Adicionar colunas de NFCe
 +-    Adicionar criação, edição e exibição de NFCe
++-    Importação de NFCe
     Ajustar funções pro server de São Paulo e URLs no web-app pra produção
     Liberar a transmissão em produção e testar com uma nota real
 

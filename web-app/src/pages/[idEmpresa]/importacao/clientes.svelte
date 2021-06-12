@@ -19,7 +19,9 @@
   type TCliente = { dest: any; status: status }
 
   let filteredDests: TCliente[] = scoped.nfes
+    .filter((v) => v.dest)
     .map((v) => v.dest)
+    .filter((v) => getDocumento(v))
     .filter((v) => v.xNome)
     .filter((v, i, a) => {
       const doc = getDocumento(v)
@@ -85,10 +87,7 @@
     {/each}
   </div>
   {#if showActions}
-    <a
-      class="button is-primary"
-      href={$url(scoped.getNext('./clientes'))}
-    >
+    <a class="button is-primary" href={$url(scoped.getNext('./clientes'))}>
       Continuar
     </a>
   {/if}

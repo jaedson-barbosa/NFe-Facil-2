@@ -90,7 +90,7 @@ export const precadastro = onDefaultRequest(async ({ user, body }, res) => {
     })
   }
   await empresaRef.collection('usuarios').doc(user.sub).set({
-    status: 3,
+    status: 4,
     ident: body.ident,
     id: user.sub,
   })

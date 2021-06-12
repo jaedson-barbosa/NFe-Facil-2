@@ -1,5 +1,5 @@
 import svelte from 'rollup-plugin-svelte'
-import commonjs from '@rollup/plugin-commonjs'
+// import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
@@ -8,7 +8,7 @@ import typescript from '@rollup/plugin-typescript'
 import css from 'rollup-plugin-css-only'
 import routify from '@roxi/routify/plugins/rollup'
 import json from '@rollup/plugin-json'
-// import cleaner from 'rollup-plugin-cleaner';
+import cleaner from 'rollup-plugin-cleaner';
 import alias from '@rollup/plugin-alias'
 import path from 'path'
 
@@ -52,11 +52,11 @@ export default {
   plugins: [
     json(),
     //Added cleaner to clean the chunk files on changes
-    // cleaner({
-    // 	targets: [
-    // 		'public/build/'
-    // 	]
-    // }),
+    cleaner({
+    	targets: [
+    		'public/build/'
+    	]
+    }),
 
     svelte({
       preprocess: sveltePreprocess({ sourceMap: !production }),
@@ -92,7 +92,7 @@ export default {
       browser: true,
       dedupe: ['svelte'],
     }),
-    commonjs(),
+    // commonjs(),
     typescript({
       sourceMap: !production,
       inlineSources: !production,

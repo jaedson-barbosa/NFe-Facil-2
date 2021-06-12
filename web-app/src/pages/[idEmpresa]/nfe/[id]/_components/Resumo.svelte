@@ -5,14 +5,8 @@
   import ReadonlyV from '@form/ReadonlyV.svelte'
   import type INFeRoot from '../../INFeRoot'
   import { requisitar } from '@app/functions'
-  import {
-    user,
-    empresa,
-    idEmpresa,
-    userStatus,
-    TColumn,
-    TDocument,
-  } from '@app/store'
+  import { user, empresa, idEmpresa, userStatus } from '@app/store'
+  import type { TColumn, TDocument } from '@app/store'
   import type { IScoped } from '../IScoped'
   // import { generateXML, preparateJSON } from './finalizacao';
 
