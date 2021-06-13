@@ -87,7 +87,7 @@ OK    Adicionar criação, edição e exibição de NFCe
 OK    Importação de NFCe
 OK  Adotar onCall no lugar de onRequest
 OK  Ajustar funções pro server de São Paulo
-    Liberar a transmissão em produção
+OK  Liberar a transmissão em produção
 
 REFINAMENTOS durante pré-alpha:
     Adicionar análises de schema

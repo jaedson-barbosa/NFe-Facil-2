@@ -24,11 +24,6 @@ export const transmitirNFe = onCertifiedRequest(
     if (ambiente == TAmb.Homologacao) {
       const k = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
       infNFe.dest.xNome.$t = k
-    } else {
-      throw new https.HttpsError(
-        'unavailable',
-        'Emissão em produção ainda não está liberada'
-      )
     }
     const notasSalvasCol = empRef.collection('notasSalvas')
     const notasEmitidasCol = empRef.collection('notasEmitidas')

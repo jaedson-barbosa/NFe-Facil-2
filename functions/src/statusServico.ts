@@ -7,7 +7,7 @@ import { toJson } from 'xml2json'
 
 export const statusServico = onCertifiedRequest(
   async ({ UF, cert }) => {
-    const ambiente = TAmb.Homologacao
+    const ambiente = TAmb.Producao
     const resp = await consultarStatusServico(UF, ambiente, cert)
     return resp.xMotivo
   }, false
