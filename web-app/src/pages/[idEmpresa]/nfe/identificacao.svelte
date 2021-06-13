@@ -43,19 +43,19 @@
 </script>
 
 <form on:submit|preventDefault={submit}>
-  {#if isNFCe}
-    <SelectV
-      label="Cliente da NFC-e"
-      options={[
-        { value: '0', text: 'Completo' },
-        { value: '1', text: 'Simplificado' },
-        { value: '2', text: 'Sem cliente' },
-      ]}
-      required={true}
-      bind:value={tipoClienteNFCe}
-    />
-  {/if}
   <AutoForm el={ide} root={scoped}>
+    {#if isNFCe}
+      <SelectV
+        label="Cliente da NFC-e"
+        options={[
+          { value: '0', text: 'Completo' },
+          { value: '1', text: 'Simplificado' },
+          { value: '2', text: 'Sem cliente' },
+        ]}
+        required={true}
+        bind:value={tipoClienteNFCe}
+      />
+    {/if}
     <div class="field is-grouped is-grouped-centered">
       <p class="control">
         <a href={$url('../')} class="button is-danger"> Voltar: Excluir </a>

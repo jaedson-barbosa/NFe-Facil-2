@@ -9,12 +9,14 @@
 
   let showIndex = -1
 
-  $: elements = (root[el.name] ?? (root[el.name] = [])).map((v) => {
+  function getRoot(v: any) {
     const orig = {}
     orig[el.name] = v
     return orig
-  })
-  $: root[el.name] = elements.map((v) => v[el.name])
+  }
+
+  $: elements = Array.isArray(root[el.name]) ? root[el.name] : (root[el.name] ? [root[el.name]] : [])
+  
   //Fazer alteração direto na root e tornar o elements reativo (inverter o que tem agora)
   function criar(newEl: any = {}) {
     root[el.name] = [...root[el.name], newEl[el.name] ?? newEl]
@@ -64,11 +66,11 @@
             }}
           >
             {#if el.choice}
-              <Choice el={cloneEl} {level} root={childRoot} />
+              <Choice el={cloneEl} {level} root={getRoot(childRoot)} />
             {:else if el.element}
-              <Elements el={cloneEl} {level} root={childRoot} />
+              <Elements el={cloneEl} {level} root={getRoot(childRoot)} />
             {:else}
-              <AutoForm el={cloneEl} {level} root={childRoot} />
+              <AutoForm el={cloneEl} {level} root={getRoot(childRoot)} />
             {/if}
             <div class="buttons is-centered">
               <button class="button is-primary">Salvar</button>

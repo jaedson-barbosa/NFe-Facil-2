@@ -30,24 +30,24 @@
     <fieldset disabled={loading}>
       <AutoForm el={emit} {root}>
         <InputT
-          value={root.serieNFe}
+          bind:value={root.serieNFe}
           label="Série da NF-e"
           aux="Série atual de emissão das NF-es"
           pattern={'0|[1-9]{1}[0-9]{0,2}'}
         />
         <InputT
-          value={root.serieNFCe}
+          bind:value={root.serieNFCe}
           label="Série da NFC-e"
           aux="Série atual de emissão das NFC-es"
           pattern={'0|[1-9]{1}[0-9]{0,2}'}
         />
         <InputT
-          value={root.IDCSC}
+          bind:value={root.IDCSC}
           label="ID CSC"
           aux="Identificador do CSC"
         />
         <InputT
-          value={root.CSC}
+          bind:value={root.CSC}
           label="CSC"
           aux="Código de Segurança do Contribuinte"
         />

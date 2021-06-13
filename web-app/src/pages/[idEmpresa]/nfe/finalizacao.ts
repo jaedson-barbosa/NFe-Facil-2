@@ -23,8 +23,7 @@ export function preparateJSON(infNFe: INFeRoot) {
   let Id = `NFe${chave}${cDV}`
   const prefixedInfNFe = { infNFe: { Id, versao: '4.00' } }
   Object.entries(refInfNFe).forEach(([key, value]) => {
-    if (!value || key == 'default' || key == 'simpleType') return
-    // XML ficou em branco, fazer uma análise mais profunda
+    if (!infNFe[key] || key == 'default' || key == 'simpleType') return
     prepararParaXML(infNFe, value, prefixedInfNFe.infNFe)
   })
   infNFe.Id = Id

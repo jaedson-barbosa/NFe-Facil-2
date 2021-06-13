@@ -20,7 +20,7 @@
     }
     const xml = generateXML(scoped)
     const dhEmi = new Date(scoped.ide.dhEmi)
-    const newRegister = { scoped, dhEmi, xml }
+    const newRegister = { infNFe: scoped, dhEmi, xml }
     await notasCol.doc(scoped.Id).set(newRegister)
     $goto(isNFCe ? './:id/csalva' : './:id/salva', { id: scoped.Id })
   }

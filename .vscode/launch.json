@@ -5,26 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch index.html",
-      "type": "firefox",
+      "type": "pwa-chrome",
       "request": "launch",
-      "reAttach": true,
-      "file": "${workspaceFolder}/index.html"
-    },
-    {
-      "name": "Launch localhost",
-      "type": "firefox",
-      "request": "launch",
-      "reAttach": true,
-      "url": "http://localhost:5000",
-      "webRoot": "${workspaceFolder}/web-app"
-    },
-    {
-      "name": "Launch WebExtension",
-      "type": "firefox",
-      "request": "launch",
-      "reAttach": true,
-      "addonPath": "${workspaceFolder}"
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:5002",
+      "webRoot": "${workspaceFolder}/web-app/src"
     }
   ]
 }

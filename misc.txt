@@ -80,13 +80,13 @@ OK  Adicionar análise de permissões
 OK    Banco de dados
 OK    Servidor
 OK    Web-app
-+-  Base da NFCe
-+-    Adicionar grupo NFCe
-+-    Adicionar colunas de NFCe
-+-    Adicionar criação, edição e exibição de NFCe
-+-    Importação de NFCe
+OK  Base da NFCe
+OK    Adicionar grupo NFCe
+OK    Adicionar colunas de NFCe
+OK    Adicionar criação, edição e exibição de NFCe
+OK    Importação de NFCe
     Ajustar funções pro server de São Paulo e URLs no web-app pra produção
-    Liberar a transmissão em produção e testar com uma nota real
+    Liberar a transmissão em produção
 
 REFINAMENTOS durante pré-alpha:
     Adicionar análises de schema

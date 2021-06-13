@@ -52,11 +52,11 @@ export default {
   plugins: [
     json(),
     //Added cleaner to clean the chunk files on changes
-    cleaner({
-    	targets: [
-    		'public/build/'
-    	]
-    }),
+    // cleaner({
+    // 	targets: [
+    // 		'public/build/'
+    // 	]
+    // }),
 
     svelte({
       preprocess: sveltePreprocess({ sourceMap: !production }),

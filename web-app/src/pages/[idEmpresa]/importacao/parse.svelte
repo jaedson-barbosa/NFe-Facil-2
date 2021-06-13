@@ -87,7 +87,7 @@
     {/each}
   </div>
   {#if showActions}
-    <a class="button" href={$url('./index')}> Voltar </a>
+    <a class="button is-danger" href={$url('../')}> Cancelar </a>
     <a
       class="button is-primary"
       href={$url(scoped.getNext())}

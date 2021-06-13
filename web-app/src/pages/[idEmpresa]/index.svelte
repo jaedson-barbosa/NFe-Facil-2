@@ -36,7 +36,7 @@
     }
   }
 
-  $: NFCeHabilitado = $empresa.serieNFCe && $empresa.IDCSC && $empresa.CSC
+  $: NFCeHabilitado = $empresa?.serieNFCe && $empresa?.IDCSC && $empresa?.CSC
 </script>
 
 <div class="columns is-multiline">
@@ -96,11 +96,12 @@
       addUrl="./nfe/nova"
       placeholder="Número da NFe salva"
       wherePath="infNFe.ide.nNF"
-      headers={['Número', 'Série', 'Emissão']}
+      headers={['Número', 'Série', 'Emissão', 'Ambiente']}
       itemRender={(v) => [
         v.get('infNFe.ide.nNF'),
         v.get('infNFe.ide.serie'),
         v.get('dhEmi').toDate().toLocaleString(),
+        v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
       ]}
     />
   </div>
@@ -111,11 +112,12 @@
       addUrl="./nfe/nova"
       placeholder="Número da NFe emitida"
       wherePath="infNFe.ide.nNF"
-      headers={['Número', 'Série', 'Emissão']}
+      headers={['Número', 'Série', 'Emissão', 'Ambiente']}
       itemRender={(v) => [
         v.get('infNFe.ide.nNF'),
         v.get('infNFe.ide.serie'),
         v.get('dhEmi').toDate().toLocaleString(),
+        v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
       ]}
     />
   </div>
@@ -127,11 +129,12 @@
         addUrl="./nfe/cnova"
         placeholder="Número da NFCe salva"
         wherePath="infNFe.ide.nNF"
-        headers={['Número', 'Série', 'Emissão']}
+        headers={['Número', 'Série', 'Emissão', 'Ambiente']}
         itemRender={(v) => [
           v.get('infNFe.ide.nNF'),
           v.get('infNFe.ide.serie'),
           v.get('dhEmi').toDate().toLocaleString(),
+          v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
         ]}
       />
     </div>
@@ -142,11 +145,12 @@
         addUrl="./nfe/cnova"
         placeholder="Número da NFCe emitida"
         wherePath="infNFe.ide.nNF"
-        headers={['Número', 'Série', 'Emissão']}
+        headers={['Número', 'Série', 'Emissão', 'Ambiente']}
         itemRender={(v) => [
           v.get('infNFe.ide.nNF'),
           v.get('infNFe.ide.serie'),
           v.get('dhEmi').toDate().toLocaleString(),
+          v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
         ]}
       />
     </div>

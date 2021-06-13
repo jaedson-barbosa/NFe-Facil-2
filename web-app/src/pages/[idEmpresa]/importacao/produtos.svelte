@@ -46,6 +46,8 @@
         } else if (await exists(cProd)) {
           throw new Error('Já registrado.')
         }
+        if (!det.prod.cEAN) det.prod.cEAN = 'SEM GTIN'
+        if (!det.prod.cEANTrib) det.prod.cEANTrib = 'SEM GTIN'
         await detsColumn.doc(cProd).set({ det })
         update(status.aceito)
       } catch (error) {

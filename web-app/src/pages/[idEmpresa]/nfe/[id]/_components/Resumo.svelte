@@ -17,6 +17,7 @@
   let loading = false
   let root: {
     status: number
+    nNF: string
     dhEmi: string
     nota: TDocument
   }
@@ -33,6 +34,7 @@
       }
       root = {
         status,
+        nNF: nota.get('infNFe.ide.nNF'),
         dhEmi: nota.get('dhEmi').toDate().toLocaleString(),
         nota,
       }
@@ -128,7 +130,7 @@
 
 {#if root}
   <Container label="Informações da NFe">
-    <ReadonlyV label="Número" value={root.nota.get('infNFe.ide.nNF')} />
+    <ReadonlyV label="Número" value={root.nNF} />
     <ReadonlyV label="Data e hora" value={root.dhEmi} />
     <ReadonlyV
       label="Cliente"

@@ -16,6 +16,6 @@
   previusUrl="./total"
   placeholder="Nome do transportador"
   root={scoped}
-  updateRoot={(data) => scoped.transp.transporta = data.transp.transporta}
+  updateRoot={(data) => scoped.transp.transporta = data.transporta}
   wherePath="transporta.xNome"
 />

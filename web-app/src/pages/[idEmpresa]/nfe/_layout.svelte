@@ -18,12 +18,4 @@
   }
 </script>
 
-{@debug isInitial}
-{@debug scoped}
-
-{#if scoped.ide || isInitial}
-  <slot {scoped} />
-{:else}
-  Raiz inválida!
-  <a href={$url('../')}>Retornar</a>
-{/if}
+<slot {scoped} />

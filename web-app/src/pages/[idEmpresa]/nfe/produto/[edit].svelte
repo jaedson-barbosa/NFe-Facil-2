@@ -15,7 +15,7 @@
     $goto('../produtos')
   }
 
-  const detUnico = det as any
+  const detUnico = {...det} as any
   detUnico.maxOccurs = 1
   detUnico.annotation.label = 'Informações do produto'
 </script>

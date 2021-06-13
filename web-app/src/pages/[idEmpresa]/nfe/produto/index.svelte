@@ -8,7 +8,7 @@
 
   let root: any = { det: {} }
 
-  const detUnico = det as any
+  const detUnico = { ...det } as any
   detUnico.maxOccurs = 1
   detUnico.annotation.label = 'Informações do produto'
 </script>
@@ -22,7 +22,7 @@
   previusUrl="../produtos"
   placeholder="Descrição"
   {root}
-  updateRoot={(data) => root = data}
+  updateRoot={(data) => (root = data)}
   onSubmit={() => scoped.det.push(root.det)}
   wherePath="det.prod.xProd"
 />

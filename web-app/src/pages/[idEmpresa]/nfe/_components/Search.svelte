@@ -95,6 +95,8 @@
         </button>
       </p>
     </div>
-    <AutoForm {el} {root} />
+    {#if !busca}
+      <AutoForm {el} {root} />
+    {/if}
   </form>
 </div>
