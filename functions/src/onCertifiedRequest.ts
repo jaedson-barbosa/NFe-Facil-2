@@ -1,6 +1,6 @@
 import { firestore } from 'firebase-admin'
-import { ILoggedParams, onLoggedRequest } from "./onLoggedRequest"
-import { Response, HttpsFunction } from 'firebase-functions'
+import { ILoggedParams, onLoggedRequest } from './onLoggedRequest'
+import { HttpsFunction, https } from 'firebase-functions'
 import { ICertificate } from './assinatura/ICertificate'
 import { pki } from 'node-forge'
 
@@ -11,32 +11,37 @@ interface ICertifiedParams extends ILoggedParams {
 const db = firestore()
 
 export function onCertifiedRequest(
-  handler: (
-    params: ICertifiedParams,
-    resp: Response<any>
-  ) => Promise<void>,
+  handler: (params: ICertifiedParams) => Promise<any>,
   needWritePermission: boolean
 ): HttpsFunction {
-  return onLoggedRequest(async (p, r) => {
-    const senha = p.body.senha
+  return onLoggedRequest(async ({ body, empRef, UF }) => {
+    const senha = body.senha
     if (!senha) {
-      r.status(400).send('Não foi informada a senha.')
-      return
+      throw new https.HttpsError(
+        'failed-precondition',
+        'Campo "senha" (senha do certificado) ausente.'
+      )
     }
-    const cnpj = p.empRef.id
-    const dataCertComplete = await db.collection('certificados').doc(cnpj).get()
+    const dataCertComplete = await db
+      .collection('certificados')
+      .doc(empRef.id)
+      .get()
     if (!dataCertComplete.exists) {
-      r.status(400).send('Certificado não encontrado.')
-      return
+      throw new https.HttpsError(
+        'not-found',
+        'O certificado da empresa não foi encontrado.'
+      )
     }
     const stored = dataCertComplete.data() as ICertificate
     const encrypted = stored.privateCert
-    const decrypted = pki.decryptRsaPrivateKey(encrypted, cnpj + senha)
+    const decrypted = pki.decryptRsaPrivateKey(encrypted, empRef.id + senha)
     if (!decrypted) {
-      r.status(400).send('Senha errada.')
-      return
+      throw new https.HttpsError(
+        'invalid-argument',
+        'A senha do certificado informada está errada.'
+      )
     }
     stored.privateCert = pki.privateKeyToPem(decrypted)
-    await handler({ ...p, cert: stored }, r)
+    return await handler({ body, empRef, UF, cert: stored })
   }, needWritePermission)
 }

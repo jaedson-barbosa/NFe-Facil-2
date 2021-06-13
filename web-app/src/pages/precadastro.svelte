@@ -3,7 +3,7 @@
   import { createId } from '@form/helpers'
   import InputT from '@form/InputT.svelte'
   import { user } from '@app/store'
-  import { requisitar } from '@app/functions'
+  import { precadastro } from '@app/functions'
   import { get } from 'svelte/store'
 
   let loading = false
@@ -19,14 +19,10 @@
     loading = true
     const certArray = new Uint8Array(await files[0].arrayBuffer())
     requisicao.cert = btoa(String.fromCharCode(...certArray))
-    const idToken = await $user.getIdToken()
-    const resp = await requisitar('precadastro', requisicao, idToken)
-    if (resp.status == 201) {
+    const resp = await precadastro(requisicao)
+    if (resp) {
       $goto('./')
-    } else {
-      alert(resp.status == 401 ? 'Erro na autenticação.' : await resp.text())
-      loading = false
-    }
+    } else loading = false
   }
 
   const id = createId()

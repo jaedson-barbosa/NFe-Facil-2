@@ -6,10 +6,10 @@ import { ICertificate } from './assinatura/ICertificate'
 import { toJson } from 'xml2json'
 
 export const statusServico = onCertifiedRequest(
-  async ({ UF, cert }, res) => {
+  async ({ UF, cert }) => {
     const ambiente = TAmb.Homologacao
     const resp = await consultarStatusServico(UF, ambiente, cert)
-    res.status(200).send(resp.xMotivo)
+    return resp.xMotivo
   }, false
 )
 

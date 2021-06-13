@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { requisitar } from '@app/functions'
+  import { transmitirNFe } from '@app/functions'
   import { url, goto } from '@roxi/routify'
   import { dbColumns, idEmpresa } from '@app/store'
   import { preparateJSON, generateXML } from './finalizacao'
-  import { user } from '@app/store'
   import type INFeRoot from './INFeRoot'
 
   export let scoped: INFeRoot
@@ -32,19 +31,14 @@
     }
     loading = true
     const infNFe = preparateJSON(scoped)
-    const idToken = await $user.getIdToken()
-    const resp = await requisitar(
-      'transmitirNFe',
-      { idEmpresa, infNFe, oldId: scoped.Id },
-      idToken
-    )
-    const respText = await resp.text()
-    if (resp.status == 201) {
-      $goto('./:id', { id: respText })
-    } else {
-      alert(respText)
-      loading = false
-    }
+    const resp = await transmitirNFe({
+      idEmpresa: $idEmpresa,
+      infNFe,
+      oldId: scoped.Id,
+    })
+    if (typeof resp == 'string') {
+      $goto('./:id', { id: resp })
+    } else loading = false
   }
 </script>
 

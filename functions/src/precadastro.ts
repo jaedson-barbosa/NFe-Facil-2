@@ -3,23 +3,30 @@ import { onDefaultRequest } from './onDefaultRequest'
 import { consultarStatusServico } from './statusServico'
 import * as forge from 'node-forge'
 import { TAmb } from './TAmb'
+import { https } from 'firebase-functions'
 
 const pki = forge.pki
 
 const db = firestore()
 
-export const precadastro = onDefaultRequest(async ({ user, body }, res) => {
+export const precadastro = onDefaultRequest(async ({ uid, body }) => {
   if (!body.cert) {
-    res.status(400).send('Certificado inválido')
-    return
+    throw new https.HttpsError(
+      'failed-precondition',
+      'Campo "cert" (certificado do emitente) ausente.'
+    )
   }
   if (!body.senha) {
-    res.status(400).send('Senha inválida')
-    return
+    throw new https.HttpsError(
+      'failed-precondition',
+      'Campo "senha" (senha do certificado) ausente.'
+    )
   }
   if (!body.ident) {
-    res.status(400).send('Nome inválido')
-    return
+    throw new https.HttpsError(
+      'failed-precondition',
+      'Campo "ident" (identificação de usuário) ausente.'
+    )
   }
 
   const password = body.senha
@@ -39,13 +46,14 @@ export const precadastro = onDefaultRequest(async ({ user, body }, res) => {
   const certUser = cert.subject.getField('CN').value as string
   const certParts = certUser.split(':')
   if (certParts.length != 2) {
-    res.status(400).send('Certificado inválido')
-    return
+    throw new https.HttpsError('invalid-argument', 'Certificado inválido.')
   }
   const cnpj = certParts[1]
   if (cnpj.length != 14) {
-    res.status(400).send('CNPJ inválido')
-    return
+    throw new https.HttpsError(
+      'invalid-argument',
+      'Certificado com CNPJ inválido.'
+    )
   }
 
   // A melhor análise existente é a da SEFAZ
@@ -61,8 +69,14 @@ export const precadastro = onDefaultRequest(async ({ user, body }, res) => {
     valido = false
   }
   if (!valido) {
-    res.status(400).send('Certificado inválido')
-    return
+    throw new https.HttpsError(
+      'invalid-argument',
+      'Certificado possivelmente inválido.',
+      'Não foi possível se comunicar com a SEFAZ usando este certificado.' +
+        'É possível que os servidores da SEFAZ estejam com algum problema e ' +
+        'por isso ele não foi aceito. Por isso, por enquanto, este ' +
+        'certificado não será aceito para efetuar o seu cadastro.'
+    )
   }
 
   const empresaRef = db.collection('empresas').doc(cnpj)
@@ -86,13 +100,13 @@ export const precadastro = onDefaultRequest(async ({ user, body }, res) => {
       serieNFe: '1',
       serieNFCe: '1',
       IDCSC: '',
-      CSC: ''
+      CSC: '',
     })
   }
-  await empresaRef.collection('usuarios').doc(user.sub).set({
+  await empresaRef.collection('usuarios').doc(uid).set({
     status: 4,
     ident: body.ident,
-    id: user.sub,
+    id: uid,
   })
-  res.sendStatus(201)
+  return true
 })

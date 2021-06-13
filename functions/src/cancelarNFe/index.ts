@@ -5,28 +5,37 @@ import { INotaDB } from '../INotaDB'
 import { criarXML } from './criarXML'
 import { recepcaoEvento } from './recepcaoEvento'
 import { assinarEvento } from '../assinatura/assinarEvento'
+import { https } from 'firebase-functions'
 
 export const cancelarNFe = onCertifiedRequest(
-  async ({ body, UF, empRef, cert }, res) => {
+  async ({ body, UF, empRef, cert }) => {
     const idNota = body.idNota
     const justificativa = body.justificativa?.trim()
     const dhEvento = body.dhEvento
     if (!justificativa) {
-      res.status(400).send('É necessário informar o motivo do cancelamento')
-      return
+      throw new https.HttpsError(
+        'failed-precondition',
+        'Campo "justificativa" (justificativa do cancelamento) ausente.'
+      )
     }
     if (!dhEvento) {
-      res.status(400).send('Requisição sem informação da data e hora do evento')
-      return
+      throw new https.HttpsError(
+        'failed-precondition',
+        'Campo "dhEvento" (data e hora do evento) ausente.'
+      )
     }
     if (!idNota) {
-      res.status(400).send('Requisição sem id da nota')
-      return
+      throw new https.HttpsError(
+        'failed-precondition',
+        'Campo "idNota" (identificação da nota fiscal) ausente.'
+      )
     }
     const nota = await empRef.collection('notasEmitidas').doc(idNota).get()
     if (!nota.exists) {
-      res.status(400).send('Nota não existe')
-      return
+      throw new https.HttpsError(
+        'not-found',
+        'Nota fiscal não encontrada.'
+      )
     }
     const data = nota.data() as INotaDB
     const cOrgao = data.infNFe.ide.cUF
@@ -45,13 +54,19 @@ export const cancelarNFe = onCertifiedRequest(
     const signedXml = assinarEvento(cert, xml)
     const resp = await recepcaoEvento(UF, cert, ambiente, signedXml)
     if (resp.cStat.$t != '128') {
-      res.status(400).send(resp.xMotivo.$t)
-      return
+      throw new https.HttpsError(
+        'internal',
+        'Evento recusado.',
+        resp.xMotivo.$t
+      )
     }
     const cStat = resp.retEvento.infEvento.cStat.$t
     if (cStat != '135' && cStat != '155') {
-      res.status(400).send(resp.retEvento.infEvento.xMotivo.$t)
-      return
+      throw new https.HttpsError(
+        'invalid-argument',
+        'Cancelamento recusado.',
+        resp.retEvento.infEvento.xMotivo.$t
+      )
     }
     const procEventoNFe =
       '<procEventoNFe versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">' +
@@ -62,6 +77,6 @@ export const cancelarNFe = onCertifiedRequest(
       cancelada: true,
       xmlCancelamento: procEventoNFe,
     })
-    res.sendStatus(200)
+    return true
   }, true
 )

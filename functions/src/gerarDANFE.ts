@@ -1,16 +1,21 @@
 import { onLoggedRequest } from './onLoggedRequest'
 import { INotaDB } from './INotaDB'
 import axios from 'axios'
+import { https } from 'firebase-functions'
 
-export const gerarDANFENFe = onLoggedRequest(async ({ body, empRef }, res) => {
+export const gerarDANFENFe = onLoggedRequest(async ({ body, empRef }) => {
   const idNota = body.idNota
   if (!idNota) {
-    res.status(400).send('Requisição sem id da nota.')
-    return
+    throw new https.HttpsError(
+      'failed-precondition',
+      'Campo "idNota" (identificação da nota fiscal) ausente.'
+    )
   }
   if (!('emitida' in body)) {
-    res.status(400).send('Não foi informado se a nota foi emitida ou não.')
-    return
+    throw new https.HttpsError(
+      'failed-precondition',
+      'Campo "emitida" (identificação de emissão) ausente.'
+    )
   }
   const emitida = body.emitida
   const nota = await empRef
@@ -18,8 +23,10 @@ export const gerarDANFENFe = onLoggedRequest(async ({ body, empRef }, res) => {
     .doc(idNota)
     .get()
   if (!nota.exists) {
-    res.status(400).send('Nota não existe')
-    return
+    throw new https.HttpsError(
+      'not-found',
+      'Noda fiscal não encontrada'
+    )
   }
   const data = nota.data() as INotaDB
   const urlCloud =
@@ -33,5 +40,5 @@ export const gerarDANFENFe = onLoggedRequest(async ({ body, empRef }, res) => {
   const danfe = await axios.post(urlCloud, parametros, {
     responseType: 'arraybuffer', // Repassa as informações sem corrompê-las
   })
-  res.status(200).send(danfe.data)
+  return danfe.data
 }, false)

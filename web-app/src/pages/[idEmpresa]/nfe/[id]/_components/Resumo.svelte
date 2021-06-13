@@ -4,8 +4,8 @@
   import Container from '@form/Container.svelte'
   import ReadonlyV from '@form/ReadonlyV.svelte'
   import type INFeRoot from '../../INFeRoot'
-  import { requisitar } from '@app/functions'
-  import { user, empresa, idEmpresa, userStatus } from '@app/store'
+  import { gerarDANFENFe, cancelarNFe as _cancelarNFe } from '@app/functions'
+  import { empresa, idEmpresa, userStatus } from '@app/store'
   import type { TColumn, TDocument } from '@app/store'
   import type { IScoped } from '../IScoped'
   // import { generateXML, preparateJSON } from './finalizacao';
@@ -59,12 +59,13 @@
     }
     if (loading) return
     loading = true
-    const token = await $user.getIdToken()
-    const resp = await requisitar(
-      'gerarDANFENFe',
-      { idEmpresa, emitida, idNota: scoped.id },
-      token
-    )
+    const resp = await gerarDANFENFe({
+      idEmpresa: $idEmpresa,
+      emitida,
+      idNota: scoped.id,
+    })
+    console.log(resp)
+    return
     if (resp.status == 200) {
       let blob = await resp.blob()
       blob = new Blob([blob], { type: 'application/pdf' })
@@ -106,25 +107,16 @@
       loading = false
       return
     }
-    const token = await $user.getIdToken()
-    const resp = await requisitar(
-      'cancelarNFe',
-      {
-        idEmpresa,
-        idNota: scoped.id,
-        justificativa,
-        dhEvento: toNFeString(new Date()),
-      },
-      token
-    )
-    if (resp.status == 200) {
+    const resp = await _cancelarNFe({
+      idEmpresa: $idEmpresa,
+      idNota: scoped.id,
+      justificativa,
+      dhEvento: toNFeString(new Date()),
+    })
+    if (resp) {
       alert('Nota fiscal cancelada com sucesso')
       $goto('../../')
-    } else {
-      const text = await resp.text()
-      alert(text)
-    }
-    loading = false
+    } else loading = false
   }
 </script>
 

@@ -1,25 +1,72 @@
 import firebase from './firebase'
 
 const functions = firebase.app().functions('southamerica-east1')
+const _precadastro = functions.httpsCallable('precadastro')
+const _statusServico = functions.httpsCallable('statusServico')
+const _gerarDANFENFe = functions.httpsCallable('gerarDANFENFe')
+const _transmitirNFe = functions.httpsCallable('transmitirNFe')
+const _cancelarNFe = functions.httpsCallable('cancelarNFe')
 
-export function requisitar(name, requisicao, idToken) {
-  const cs = ['statusServico', 'transmitirNFe', 'cancelarNFe'].includes(name)
-  if (cs) {
-    let senha = ''
-    while (!senha) {
-      senha = prompt('Senha do certificado:')
-    }
-    requisicao.senha = sha256(senha)
+function defaultCatch(error: firebase.functions.HttpsError) {
+  let msg = error.message
+  if (error.details) msg += '\n' + error.details
+  alert(msg)
+  return false
+}
+
+export function precadastro(data: {
+  cert: string
+  ident: string
+  senha: string
+}) {
+  return _precadastro(data)
+    .then((res) => res.data as boolean)
+    .catch(defaultCatch)
+}
+
+export function statusServico(idEmpresa: string) {
+  return _statusServico({ idEmpresa, senha: getSenha() })
+    .then((res) => res.data as string)
+    .catch(defaultCatch)
+}
+
+export function gerarDANFENFe(data: {
+  idEmpresa: string
+  emitida: boolean
+  idNota: string
+}) {
+  return _gerarDANFENFe(data)
+    .then((res) => res.data)
+    .catch(defaultCatch)
+}
+
+export function transmitirNFe(data: {
+  idEmpresa: string
+  infNFe: { Id: string; versao: string }
+  oldId: string
+}) {
+  return _transmitirNFe({...data, senha: getSenha()})
+    .then((res) => res.data as string)
+    .catch(defaultCatch)
+}
+
+export function cancelarNFe(data: {
+  idEmpresa: string
+  idNota: string
+  justificativa: string
+  dhEvento: string
+}) {
+  return _cancelarNFe({...data, senha: getSenha()})
+    .then((res) => res.data as boolean)
+    .catch(defaultCatch)
+}
+
+function getSenha() {
+  let senha = ''
+  while (!senha) {
+    senha = prompt('Senha do certificado:')
   }
-  functions.httpsCallable('')
-  return fetch(
-    `http://localhost:5001/nfe-facil-980bc/southamerica-east1/${name}`,
-    {
-      method: 'POST',
-      body: JSON.stringify(requisicao),
-      headers: { Authorization: 'Bearer ' + idToken },
-    }
-  )
+  return sha256(senha)
 }
 
 const sha256 = function a(b) {

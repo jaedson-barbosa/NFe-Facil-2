@@ -1,52 +1,37 @@
-import { Response, HttpsFunction, region } from 'firebase-functions'
-import { auth } from 'firebase-admin'
-
-const cors = require('cors')({
-  origin: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
-})
-
-async function getUser(req: any): Promise<auth.DecodedIdToken | undefined> {
-  const authorizationHeader = req.headers.authorization || ''
-  const components = authorizationHeader.split(' ')
-  const idToken = components.length > 1 ? components[1] : ''
-  if (idToken && idToken != ' ') {
-    try {
-      const decodedClaims = await auth().verifyIdToken(idToken)
-      return decodedClaims
-    } catch (error) {}
-  }
-  return undefined
-}
+import { HttpsFunction, region, https } from 'firebase-functions'
 
 export interface IDefaultParams {
-  user: auth.DecodedIdToken
+  uid: string
   body: any
 }
 
 export function onDefaultRequest(
-  handler: (params: IDefaultParams, resp: Response<any>) => Promise<void>
+  handler: (params: IDefaultParams) => Promise<any>
 ): HttpsFunction {
-  return region('southamerica-east1').https.onRequest((req, res) =>
-    cors(req, res, async () => {
-      const user = await getUser(req)
-      if (!user) {
-        res.sendStatus(401)
-        return
+  return region('southamerica-east1').https.onCall(async (data, context) => {
+    if (!context.auth) {
+      throw new https.HttpsError(
+        'failed-precondition',
+        'A função apenas pode ser chamada por um usuário autenticado.'
+      )
+    }
+    try {
+      return await handler({ uid: context.auth.uid, body: data })
+    } catch(error) {
+      if (error instanceof https.HttpsError) {
+        throw error
+      } else if (error instanceof Error) {
+        throw new https.HttpsError(
+          'internal',
+          error.message,
+          error.stack
+        )
+      } else {
+        throw new https.HttpsError(
+          'unknown',
+          'Ocorreu um erro desconhecido durante a execução da função.'
+        )
       }
-      const body = req.body ? JSON.parse(req.body) : undefined
-      if (!body) {
-        res.status(400).send('Corpo de requisição não informado')
-        return
-      }
-      try {
-        await handler({ user, body }, res)
-      } catch (error) {
-        const e = error as Error
-        res
-          .status(400)
-          .send(`${e.name}: ${e.message}.\nCaminho: ${e.stack}`)
-      }
-    })
-  )
+    }
+  })
 }
