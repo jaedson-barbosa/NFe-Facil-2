@@ -4,3 +4,4 @@ functions/lib
 save-data
 .routify
 *.log
+*.cache

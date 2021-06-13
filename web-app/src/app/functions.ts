@@ -1,7 +1,7 @@
 import firebase from './firebase'
 
 const functions = firebase.app().functions('southamerica-east1')
-functions.useEmulator('localhost', 5001)
+// functions.useEmulator('localhost', 5001)
 const _precadastro = functions.httpsCallable('precadastro')
 const _statusServico = functions.httpsCallable('statusServico')
 const _gerarDANFENFe = functions.httpsCallable('gerarDANFENFe')
