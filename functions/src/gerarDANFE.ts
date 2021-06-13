@@ -40,5 +40,5 @@ export const gerarDANFENFe = onLoggedRequest(async ({ body, empRef }) => {
   const danfe = await axios.post(urlCloud, parametros, {
     responseType: 'arraybuffer', // Repassa as informações sem corrompê-las
   })
-  return danfe.data
+  return danfe.data.toString('base64')
 }, false)

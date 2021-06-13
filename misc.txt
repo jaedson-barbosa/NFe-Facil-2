@@ -85,9 +85,8 @@ OK    Adicionar grupo NFCe
 OK    Adicionar colunas de NFCe
 OK    Adicionar criação, edição e exibição de NFCe
 OK    Importação de NFCe
-+-  Adotar onCall no lugar de onRequest
+OK  Adotar onCall no lugar de onRequest
 OK  Ajustar funções pro server de São Paulo
-    Ajustar URLs no web-app pra produção
     Liberar a transmissão em produção
 
 REFINAMENTOS durante pré-alpha:

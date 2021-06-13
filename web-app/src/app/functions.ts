@@ -1,6 +1,7 @@
 import firebase from './firebase'
 
 const functions = firebase.app().functions('southamerica-east1')
+functions.useEmulator('localhost', 5001)
 const _precadastro = functions.httpsCallable('precadastro')
 const _statusServico = functions.httpsCallable('statusServico')
 const _gerarDANFENFe = functions.httpsCallable('gerarDANFENFe')
@@ -8,6 +9,7 @@ const _transmitirNFe = functions.httpsCallable('transmitirNFe')
 const _cancelarNFe = functions.httpsCallable('cancelarNFe')
 
 function defaultCatch(error: firebase.functions.HttpsError) {
+  console.log(error)
   let msg = error.message
   if (error.details) msg += '\n' + error.details
   alert(msg)

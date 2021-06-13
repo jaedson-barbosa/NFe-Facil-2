@@ -64,16 +64,20 @@
       emitida,
       idNota: scoped.id,
     })
-    console.log(resp)
-    return
-    if (resp.status == 200) {
-      let blob = await resp.blob()
-      blob = new Blob([blob], { type: 'application/pdf' })
+    if (resp) {
+      const byteCharacters = atob(resp)
+      const blob = new Blob(
+        [
+          new Uint8Array(
+            [...new Array(byteCharacters.length)].map((v, i) =>
+              byteCharacters.charCodeAt(i)
+            )
+          ),
+        ],
+        { type: 'application/pdf' }
+      )
       const url = window.URL.createObjectURL(blob)
       window.open(url)
-    } else {
-      const text = await resp.text()
-      alert(text)
     }
     loading = false
   }
