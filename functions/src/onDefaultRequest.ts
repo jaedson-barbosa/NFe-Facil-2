@@ -1,4 +1,4 @@
-import { Response, HttpsFunction, https } from 'firebase-functions'
+import { Response, HttpsFunction, region } from 'firebase-functions'
 import { auth } from 'firebase-admin'
 
 const cors = require('cors')({
@@ -27,7 +27,7 @@ export interface IDefaultParams {
 export function onDefaultRequest(
   handler: (params: IDefaultParams, resp: Response<any>) => Promise<void>
 ): HttpsFunction {
-  return https.onRequest((req, res) =>
+  return region('southamerica-east1').https.onRequest((req, res) =>
     cors(req, res, async () => {
       const user = await getUser(req)
       if (!user) {
