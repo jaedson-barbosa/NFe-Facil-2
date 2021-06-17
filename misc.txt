@@ -89,12 +89,12 @@ OK  Adotar onCall no lugar de onRequest
 OK  Ajustar funções pro server de São Paulo
 OK  Liberar a transmissão em produção
 
-Preparação para lançamento da versão 0.0.1:
-OK  Ajustar info.ts para a versão 0.0.1
-OK  Remover ?useEmulator=true de index.html
-OK  Comentar linha de useEmulator de functions.ts
-OK  Compilar pasta public como build
-OK  Fazer deploy para o Firebase com a identificação da versão
+Preparação de lançamento inicial:
+  Ajustar info.ts para a versão desejada
+  Remover ?useEmulator=true de index.html
+  Comentar linha de useEmulator de functions.ts
+  Compilar pasta public como build
+  Fazer deploy para o Firebase com a identificação da versão
 
 REFINAMENTOS durante pré-alpha:
     Adicionar análises de schema
