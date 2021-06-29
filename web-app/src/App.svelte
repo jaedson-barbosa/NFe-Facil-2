@@ -7,7 +7,7 @@
 
 <!-- NFe-Fácil-Web-App -->
 <!-- svelte-ignore missing-declaration -->
-<ins
+<!-- <ins
   on:load={() => (adsbygoogle = window.adsbygoogle || []).push({})}
   class="adsbygoogle"
   style="display:block"
@@ -15,6 +15,6 @@
   data-ad-slot="7472877927"
   data-ad-format="auto"
   data-full-width-responsive="true"
-/>
+/> -->
 
 <!-- Testar anúncios -->

@@ -8,7 +8,7 @@
   import { empresa, idEmpresa, userStatus } from '@app/store'
   import type { TColumn, TDocument } from '@app/store'
   import type { IScoped } from '../IScoped'
-  // import { generateXML, preparateJSON } from './finalizacao';
+  // import { generateXML, preparateJSON } from '../../finalizacao';
 
   export let scoped: IScoped
   export let coluna: TColumn

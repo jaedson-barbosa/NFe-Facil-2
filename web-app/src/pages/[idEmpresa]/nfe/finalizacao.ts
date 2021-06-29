@@ -32,6 +32,7 @@ export function preparateJSON(infNFe: INFeRoot) {
 
 export function generateXML(infNFe: INFeRoot) {
   const preparatedJSON = preparateJSON(infNFe)
+  console.log(preparatedJSON)
   return toXml({
     NFe: {
       xmlns: 'http://www.portalfiscal.inf.br/nfe',
@@ -67,11 +68,12 @@ function prepararParaXML(obj: any, ref: any, result: any) {
       } else {
         const selected = el.element.every((v: any) => {
           const value = cRoot[v.name]
+          let retorno = !!v.optional
           if (value) {
             const e = v.restriction?.enumeration
-            return !e || (typeof e == 'string' ? e == value : e.includes(value))
+            retorno = !e || (typeof e == 'string' ? e == value : e.includes(value))
           }
-          return !!v.optional
+          return retorno
         })
         if (selected) {
           prepararParaXML(cRoot, el, iResult)
@@ -79,7 +81,9 @@ function prepararParaXML(obj: any, ref: any, result: any) {
         }
       }
     }
-    if (name && Object.entries(iResult).length) result[name] = iResult
+    if (name && Object.entries(iResult).length) {
+      result[name] = iResult
+    }
   } else if (ref.element) {
     const iResult = name ? {} : result
     for (const el of ref.element as any[]) {

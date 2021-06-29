@@ -155,5 +155,5 @@ Adição do vServ no total do vNF não é feita automaticamente
 Na requisição de acesso não é feita a análise se a empresa já existe
 Ainda não há importação de eventos, então ainda notas já canceladas serão importadas como se ainda não estivessem canceladas
 
-firebase emulators:start --import save-data --export-on-exit --only firestore,functions,auth
+firebase emulators:start --import save-data --export-on-exit
 sudo kill $(sudo lsof -t -i:5000)

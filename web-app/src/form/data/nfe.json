@@ -569,54 +569,20 @@
             ]
           },
           {
-            "annotation": { "label": "Indicador da IE do destinatário" },
-            "choice": true,
-            "element": [
-              {
-                "annotation": { "label": "Contribuinte ICMS" },
-                "element": [
-                  {
-                    "name": "indIEDest",
-                    "annotation": {
-                      "label": "Indicador da IE do destinatário:"
-                    },
-                    "restriction": { "enumeration": "1" }
-                  },
-                  {
-                    "name": "IE",
-                    "annotation": { "label": "Inscrição Estadual" },
-                    "restriction": {
-                      "maxLength": "14",
-                      "pattern": "[0-9]{2,14}"
-                    }
-                  }
-                ]
-              },
-              {
-                "annotation": { "label": "Contribuinte isento de inscrição" },
-                "element": [
-                  {
-                    "name": "indIEDest",
-                    "annotation": {
-                      "label": "Indicador da IE do destinatário"
-                    },
-                    "restriction": { "enumeration": "2" }
-                  }
-                ]
-              },
-              {
-                "annotation": { "label": "Não Contribuinte" },
-                "element": [
-                  {
-                    "name": "indIEDest",
-                    "annotation": {
-                      "label": "Indicador da IE do destinatário"
-                    },
-                    "restriction": { "enumeration": "9" }
-                  }
-                ]
-              }
-            ]
+            "name": "indIEDest",
+            "annotation": {
+              "label": "Indicador da IE do destinatário:"
+            },
+            "restriction": { "enumeration": ["1", "2", "9"] }
+          },
+          {
+            "name": "IE",
+            "optional": true,
+            "annotation": { "label": "Inscrição Estadual" },
+            "restriction": {
+              "maxLength": "14",
+              "pattern": "[0-9]{2,14}"
+            }
           },
           {
             "name": "ISUF",
