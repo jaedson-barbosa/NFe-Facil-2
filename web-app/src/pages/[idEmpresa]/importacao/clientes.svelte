@@ -55,40 +55,27 @@
   let showActions = false
 </script>
 
-<div class="container is-fluid">
-  <section class="section">
-    <h1 class="title">Análise de clientes</h1>
-    <h2 class="subtitle">
+<div class="container">
+  <section>
+    <h1>Análise de clientes</h1>
+    <h2>
       Os clientes das notas fiscais são analisados e apenas aqueles que ainda
       não estão cadastrados serão registrados.
     </h2>
   </section>
-  <div class="content">
-    {#each filteredDests as dest}
-      <div class="icon-text">
-        {#if dest.status == status.recusado}
-          <span class="icon has-text-danger">
-            <i class="fas fa-ban" />
-          </span>
-          <span> Cliente não aceito </span>
-        {:else if dest.status == status.aceito}
-          <span class="icon has-text-success">
-            <i class="fas fa-check" />
-          </span>
-          <span> Cliente aceito </span>
-        {:else if dest.status == status.aguardando}
-          <span class="icon has-text-info">
-            <i class="fas fa-ellipsis-h" />
-          </span>
-          <span> Aguardando </span>
-        {/if}
-      </div>
-      <p class="block">{dest.dest.xNome} ({getDocumento(dest.dest, true)})</p>
-    {/each}
-  </div>
+  {#each filteredDests as dest}
+    <span>
+      {#if dest.status == status.recusado}
+        Cliente não aceito
+      {:else if dest.status == status.aceito}
+        Cliente aceito
+      {:else if dest.status == status.aguardando}
+        Aguardando
+      {/if}
+    </span>
+    <span>{dest.dest.xNome} ({getDocumento(dest.dest, true)})</span>
+  {/each}
   {#if showActions}
-    <a class="button is-primary" href={$url(scoped.getNext('./clientes'))}>
-      Continuar
-    </a>
+    <a class="button" href={$url(scoped.getNext('./clientes'))}> Continuar </a>
   {/if}
 </div>

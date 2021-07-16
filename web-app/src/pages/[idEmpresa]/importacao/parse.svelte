@@ -16,36 +16,38 @@
 
   const nfesColumn = $dbColumns.notasEmitidas
   const nfcesColumn = $dbColumns.notasCEmitidas
-  Promise.all(files.map(async (v, i) => {
-    let json = undefined
-    const update = (status: status) => {
-      nfes[i].json = json
-      nfes[i].status = status
-      nfes = nfes
-    }
-    try {
-      const xml = await v.text()
-      json = parser.xml2json(xml)
-      const infNFe = json.nfeProc.NFe.infNFe
-      if (!infNFe.Id) throw new Error('Sem identificação.')
-      const isNFCe = infNFe.ide.mod == 65
-      const nfeRef = (isNFCe ? nfcesColumn : nfesColumn).doc(infNFe.Id)
-      const salva = await nfeRef.get()
-      if (salva.exists) throw new Error('Já registrada.')
-      const nfeData = {
-        cancelada: false,
-        infNFe,
-        dhEmi: new Date(infNFe.ide.dhEmi),
-        nProt: json.nfeProc.protNFe.infProt.nProt,
-        xml
+  Promise.all(
+    files.map(async (v, i) => {
+      let json = undefined
+      const update = (status: status) => {
+        nfes[i].json = json
+        nfes[i].status = status
+        nfes = nfes
       }
-      await nfeRef.set(nfeData)
-      update(status.aceito)
-    } catch (error) {
-      console.log(error)
-      update(status.recusado)
-    }
-  })).then(() => {
+      try {
+        const xml = await v.text()
+        json = parser.xml2json(xml)
+        const infNFe = json.nfeProc.NFe.infNFe
+        if (!infNFe.Id) throw new Error('Sem identificação.')
+        const isNFCe = infNFe.ide.mod == 65
+        const nfeRef = (isNFCe ? nfcesColumn : nfesColumn).doc(infNFe.Id)
+        const salva = await nfeRef.get()
+        if (salva.exists) throw new Error('Já registrada.')
+        const nfeData = {
+          cancelada: false,
+          infNFe,
+          dhEmi: new Date(infNFe.ide.dhEmi),
+          nProt: json.nfeProc.protNFe.infProt.nProt,
+          xml,
+        }
+        await nfeRef.set(nfeData)
+        update(status.aceito)
+      } catch (error) {
+        console.log(error)
+        update(status.recusado)
+      }
+    })
+  ).then(() => {
     scoped.nfes = nfes
       .filter((v) => v.status == status.aceito)
       .map((v) => v.json.nfeProc.NFe.infNFe)
@@ -56,43 +58,27 @@
   let showActions = false
 </script>
 
-<div class="container is-fluid">
-  <section class="section">
-    <h1 class="title">Análise de NFes</h1>
-    <h2 class="subtitle">
+<div class="container">
+  <section>
+    <h1>Análise de NFes</h1>
+    <h2>
       Apenas notas válidas e que ainda não foram importadas podem prosseguir.
     </h2>
   </section>
-  <div class="content">
-    {#each nfes as nfe}
-      <div class="icon-text">
-        {#if nfe.status == status.recusado}
-          <span class="icon has-text-danger">
-            <i class="fas fa-ban" />
-          </span>
-          <span> NFe não aceita </span>
-        {:else if nfe.status == status.aceito}
-          <span class="icon has-text-success">
-            <i class="fas fa-check" />
-          </span>
-          <span> NFe aceita </span>
-        {:else if nfe.status == status.aguardando}
-          <span class="icon has-text-info">
-            <i class="fas fa-ellipsis-h" />
-          </span>
-          <span> Aguardando </span>
-        {/if}
-      </div>
-      <p class="block">{nfe.name}</p>
-    {/each}
-  </div>
+  {#each nfes as nfe}
+    <span>
+      {#if nfe.status == status.recusado}
+        NFe não aceita
+      {:else if nfe.status == status.aceito}
+        NFe aceita
+      {:else if nfe.status == status.aguardando}
+        Aguardando
+      {/if}
+    </span>
+    <span>{nfe.name}</span>
+  {/each}
   {#if showActions}
-    <a class="button is-danger" href={$url('../')}> Cancelar </a>
-    <a
-      class="button is-primary"
-      href={$url(scoped.getNext())}
-    >
-      Continuar
-    </a>
+    <a class="button" href={$url('../')}> Cancelar </a>
+    <a class="button" href={$url(scoped.getNext())}> Continuar </a>
   {/if}
 </div>
