@@ -30,15 +30,14 @@
 
 <form class="container" on:submit|preventDefault={precadastrar}>
   <fieldset disabled={loading}>
-    <label class="button" for={id}> Certificado </label>
-    <input {id} type="file" bind:files accept="application/x-pkcs12" required />
-    {#if files?.length}
-      <small>{files[0].name}</small>
-    {:else}
-      <small>
-        O certificado será validado com uma requisição de teste à SEFAZ.
-      </small>
-    {/if}
+    <label class="button">
+      {#if files?.length}
+        Alterar certificado
+      {:else}
+        Escolher certificado
+      {/if}
+      <input type="file" bind:files accept="application/x-pkcs12" required />
+    </label>
     <InputT
       label="Senha do certificado"
       aux="Necessária para assinatura e comunicação com a SEFAZ."

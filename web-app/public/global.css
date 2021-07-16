@@ -5,3 +5,7 @@ dialog::backdrop {
 input[type='file'] {
   display: none;
 }
+
+small {
+  font-weight: 300;
+}

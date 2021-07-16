@@ -27,30 +27,30 @@
   const id = createId()
 </script>
 
-<label for={id}>
+<label>
   {#if optional}
     <i>{label}</i>
   {:else}
     {label}
   {/if}
+  {#if aux || maskedValue}
+    <small>
+      {#if aux && maskedValue}
+        {maskedValue} - {aux}
+      {:else}
+        {maskedValue}{aux ?? ''}
+      {/if}
+    </small>
+  {/if}
+  <input
+    {id}
+    class="input"
+    required={!optional}
+    {pattern}
+    {minlength}
+    {maxlength}
+    type="text"
+    bind:this={input}
+    bind:value
+  />
 </label>
-<input
-  {id}
-  class="input"
-  required={!optional}
-  {pattern}
-  {minlength}
-  {maxlength}
-  type="text"
-  bind:this={input}
-  bind:value
-/>
-{#if aux || maskedValue}
-  <small>
-    {#if aux && maskedValue}
-      {maskedValue} - {aux}
-    {:else}
-      {maskedValue}{aux ?? ''}
-    {/if}
-  </small>
-{/if}
