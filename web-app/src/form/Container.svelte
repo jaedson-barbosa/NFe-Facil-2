@@ -4,17 +4,20 @@
   export let aux = ''
 </script>
 
-<div class="container content box">
-  <div class="field is-horizontal">
-    <div class="field-label" />
-    <div class="field-body">
-      <div class="field">
-        <h1 class="title is-{level}">{label}</h1>
-        {#if aux}
-          <h1 class="subtitle is-{level + 2}">{aux}</h1>
-        {/if}
-      </div>
-    </div>
-  </div>
+<div class="container">
+  {#if level == 1}
+    <h1>{label}</h1>
+  {:else if level == 2}
+    <h2>{label}</h2>
+  {:else if level == 3}
+    <h3>{label}</h3>
+  {:else if level == 4}
+    <h4>{label}</h4>
+  {:else if level == 5}
+    <h5>{label}</h5>
+  {:else}
+    <h6>{label}</h6>
+  {/if}
+  <p>{aux}</p>
   <slot />
 </div>

@@ -40,7 +40,7 @@
       if (el.name) {
         return root[el.name]
       }
-      return el.element.some(v => v.name && root[v.name])
+      return el.element.some((v) => v.name && root[v.name])
     }
   }
   $: showElements = getShow(root)
@@ -60,20 +60,9 @@
 
 {#if showElements}
   {#if el.optional}
-    <div class="field is-horizontal">
-      <div class="field-label" />
-      <div class="field-body">
-        <div class="field">
-          <button
-            type="button"
-            class="button"
-            on:click={() => (root[el.name] = '')}
-          >
-            Remover campo opcional
-          </button>
-        </div>
-      </div>
-    </div>
+    <button type="button" on:click={() => (root[el.name] = '')}>
+      Remover campo opcional
+    </button>
   {/if}
   {#each elements as childEl}
     {#if getIfUndefined(childEl, root[el.name] ?? root)}
@@ -90,18 +79,7 @@
     {/if}
   {/each}
 {:else if el.optional}
-  <div class="field is-horizontal">
-    <div class="field-label" />
-    <div class="field-body">
-      <div class="field">
-        <button
-          type="button"
-          class="button"
-          on:click={() => (root[el.name] = {})}
-        >
-          Informar campo opcional
-        </button>
-      </div>
-    </div>
-  </div>
+  <button type="button" on:click={() => (root[el.name] = {})}>
+    Informar campo opcional
+  </button>
 {/if}
