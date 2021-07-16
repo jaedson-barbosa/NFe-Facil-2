@@ -1,3 +1,9 @@
+# NFe Fácil
+
+O objetivo deste projeto é ser o emissor fiscal gratuito mais leve, fácil de entender e bem documentado já produzido.
+
+
+
 BANCO DE DADOS - FIRESTORE
 certificados: //completamente inacessivel, usar metodo para cadastra-los
 publicCert
