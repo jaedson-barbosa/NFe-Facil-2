@@ -28,7 +28,7 @@
   async function load() {
     if (loading) return
     loading = true
-    let query = coluna.limit(10)
+    let query = coluna.limit(10).orderBy(wherePath, 'desc')
     if (busca != lastBusca) {
       cadastros = []
       const end = busca.replace(/.$/, (c) =>

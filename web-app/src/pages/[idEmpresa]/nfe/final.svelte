@@ -37,7 +37,7 @@
       oldId: scoped.Id,
     })
     if (typeof resp == 'string') {
-      $goto('./:id', { id: resp })
+      $goto('./:id/emitida', { id: resp })
     } else loading = false
   }
 </script>

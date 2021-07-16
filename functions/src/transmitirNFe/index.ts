@@ -31,7 +31,7 @@ export const transmitirNFe = onCertifiedRequest(
     const maxNota = await notasEmitidasCol
       .where('infNFe.ide.serie', '==', serie)
       .where('infNFe.ide.tpAmb', '==', ambiente.toString())
-      .orderBy('infNFe.ide.nNF')
+      .orderBy('infNFe.ide.nNF', 'desc')
       .select('infNFe.ide.nNF')
       .limit(1)
       .get()

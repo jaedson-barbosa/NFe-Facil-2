@@ -145,8 +145,6 @@ REFINAMENTOS durante alplha:
       DANFE
         Testar impressão de PDF, caso dê errado devem ser usados apps para isso, pro Android tem alguns
 
-proj. mae: https://www.w3schools.com/code/tryit.asp?filename=GQQAXEQ5SSZ3
-
 Observações:  
 ISSQN limitado para endereço nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
 Retirada e entrega limitados para endereço nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
