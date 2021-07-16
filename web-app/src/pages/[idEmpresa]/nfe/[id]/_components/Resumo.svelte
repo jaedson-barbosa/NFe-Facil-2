@@ -140,36 +140,24 @@
         ? 'Emitida'
         : 'Cancelada'}
     />
-    <div class="buttons is-centralized">
-      <a class="button" href={$url('../../')}> Voltar </a>
-      {#if $userStatus >= 3}
-        <button class="button" on:click={() => editar(root)}>
-          {root.status == 0 ? 'Editar' : 'Clonar'}
-        </button>
-      {/if}
-      {#if root.status != 2}
-        <button
-          class="button"
-          class:is-loading={loading}
-          on:click={() => gerarDANFE(root.status > 0)}
-        >
-          Gerar DANFE
-        </button>
-      {/if}
-      <button class="button" on:click={() => XML(root)}> Abrir XML </button>
-      {#if root.status == 1 && $userStatus >= 3}
-        <button
-          class="button"
-          class:is-loading={loading}
-          on:click={cancelarNFe}
-        >
-          Cancelar
-        </button>
-      {:else if root.status == 2}
-        <button class="button" on:click={() => XMLCancelamento(root)}>
-          Abrir XML de cancelamento
-        </button>
-      {/if}
-    </div>
+    <a class="button" href={$url('../../')}> Voltar </a>
+    {#if $userStatus >= 3}
+      <button on:click={() => editar(root)}>
+        {root.status == 0 ? 'Editar' : 'Clonar'}
+      </button>
+    {/if}
+    {#if root.status != 2}
+      <button disabled={loading} on:click={() => gerarDANFE(root.status > 0)}>
+        Gerar DANFE
+      </button>
+    {/if}
+    <button on:click={() => XML(root)}> Abrir XML </button>
+    {#if root.status == 1 && $userStatus >= 3}
+      <button disabled={loading} on:click={cancelarNFe}> Cancelar </button>
+    {:else if root.status == 2}
+      <button on:click={() => XMLCancelamento(root)}>
+        Abrir XML de cancelamento
+      </button>
+    {/if}
   </Container>
 {/if}

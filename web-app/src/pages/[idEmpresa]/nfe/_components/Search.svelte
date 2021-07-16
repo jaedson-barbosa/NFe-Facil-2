@@ -14,7 +14,7 @@
   export let el: any
   export let root: any
   export let updateRoot: (data: TDocument) => void
-  export let onSubmit: () => void =  undefined
+  export let onSubmit: () => void = undefined
 
   let busca = ''
   let loading = false
@@ -58,43 +58,26 @@
   const listId = createId()
 </script>
 
-<div class="container content box">
+<div class="container">
   <form on:submit|preventDefault={submit}>
-    <div class="field">
-      <div class="control is-expanded">
-        <input
-          class="input"
-          type="text"
-          list={listId}
-          {placeholder}
-          bind:value={busca}
-        />
-        <datalist id={listId}>
-          {#each options as opt}
-            <option>{opt.label}</option>
-          {/each}
-        </datalist>
-      </div>
-    </div>
-    <div class="field is-grouped is-grouped-centered">
-      <p class="control">
-        <a href={$url(previusUrl)} class="button is-warning">
-          Voltar: {previusName}
-        </a>
-      </p>
-      <slot />
-      <p class="control">
-        <button class="button is-primary" class:is-loading={loading}>
-          {#if appliedValue}
-            Próximo: {nextName}
-          {:else if validValue}
-            Selecionar
-          {:else}
-            Buscar
-          {/if}
-        </button>
-      </p>
-    </div>
+    <input type="text" list={listId} {placeholder} bind:value={busca} />
+    <datalist id={listId}>
+      {#each options as opt}
+        <option>{opt.label}</option>
+      {/each}
+    </datalist>
+    <a href={$url(previusUrl)} class="button">
+      Voltar: {previusName}
+    </a>
+    <button disabled={loading}>
+      {#if appliedValue}
+        Próximo: {nextName}
+      {:else if validValue}
+        Selecionar
+      {:else}
+        Buscar
+      {/if}
+    </button>
     {#if !busca}
       <AutoForm {el} {root} />
     {/if}
