@@ -43,25 +43,7 @@
 <form on:submit|preventDefault={salvar}>
   <fieldset disabled={loading}>
     <AutoForm el={detUnico} {root}>
-      <div class="field is-grouped is-grouped-centered">
-        <p class="control">
-          <button class="button is-primary" class:is-loading={loading}>
-            Salvar
-          </button>
-        </p>
-        <p class="control">
-          <button
-            type="button"
-            class="button is-warning"
-            on:click={gerarCodigo}
-          >
-            Gerar código aleatório
-          </button>
-        </p>
-        <p class="control">
-          <a href={$url('../')} class="button is-danger"> Cancelar </a>
-        </p>
-      </div>
+      <input type="submit" class="button">
     </AutoForm>
   </fieldset>
 </form>

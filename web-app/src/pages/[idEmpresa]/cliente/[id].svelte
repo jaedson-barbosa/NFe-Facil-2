@@ -40,18 +40,7 @@
   <form on:submit|preventDefault={() => salvar(root)}>
     <fieldset disabled={loading}>
       <AutoForm el={dest} {root}>
-        <div class="field is-grouped is-grouped-centered">
-          {#if $userStatus >= 3}
-            <p class="control">
-              <button class="button is-primary" class:is-loading={loading}>
-                Salvar
-              </button>
-            </p>
-          {/if}
-          <p class="control">
-            <a href={$url('../')} class="button is-danger"> Cancelar </a>
-          </p>
-        </div>
+        <input type="submit" class="button">
       </AutoForm>
     </fieldset>
   </form>
