@@ -49,30 +49,26 @@
   load()
 </script>
 
-<div class="container content box">
+<div class="container">
   <form on:submit|preventDefault={load}>
-    <div class="field has-addons">
+    <div class="row">
       {#if $userStatus >= 3}
-        <div class="control">
-          <a class="button" href={$url(addUrl)}>
-            <span class="icon is-small">
-              <i class="fas fa-plus" />
-            </span>
-          </a>
+        <div class="column">
+          <a class="button" href={$url(addUrl)}>Adicionar</a>
         </div>
       {/if}
-      <div class="control is-expanded">
-        <input class="input" type="text" {placeholder} bind:value={busca} />
+      <div class="column">
+        <input type="text" {placeholder} bind:value={busca} />
       </div>
-      <div class="control">
-        <button class="button" disabled={!busca} class:is-loading={loading}>
+      <div class="column">
+        <button disabled={!busca} class:is-loading={loading}>
           Buscar
         </button>
       </div>
     </div>
   </form>
 
-  <table class="table is-hoverable is-fullwidth">
+  <table>
     <thead>
       <tr>
         {#each headers as h}
@@ -99,11 +95,9 @@
       <tfoot>
         <tr>
           <td colspan="6">
-            <div class="buttons is-centered">
-              <button class="button" class:is-loading={loading} on:click={load}>
-                Carregar mais
-              </button>
-            </div>
+            <button class="button" disabled={loading} on:click={load}>
+              Carregar mais
+            </button>
           </td>
         </tr>
       </tfoot>
