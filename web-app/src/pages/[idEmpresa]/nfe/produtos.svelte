@@ -1,54 +1,31 @@
 <script lang="ts">
-  import { url, goto } from '@roxi/routify'
+  import { url } from '@roxi/routify'
   import type INFeRoot from './INFeRoot'
 
   export let scoped: INFeRoot
+
   $: elements = scoped.det.map((v, i) => {
     v.nItem = (i + 1).toString()
     return v
   })
 
-  function submit() {
-    if (elements.length) {
-      $goto('./total')
-    } else {
-      $goto('./produto')
-    }
-  }
-
   $: isNFCe = scoped.ide.mod == 65
 </script>
 
-<div class="container content box">
-  <form on:submit|preventDefault={submit}>
-    <div class="field is-grouped is-grouped-centered">
-      <p class="control">
-        {#if !scoped.dest}
-          <a href={$url('./identificacao')} class="button is-danger">
-            Voltar: Identificação
-          </a>
-        {:else}
-          <a href={$url('./cliente')} class="button is-danger">
-            Voltar: Cliente
-          </a>
-        {/if}
-      </p>
-      {#if elements.length}
-        <p class="control">
-          <a href={$url('./produto')} class="button"> Adicionar produto </a>
-        </p>
-      {/if}
-      <p class="control">
-        <button class="button is-primary">
-          {#if elements.length}
-            Próximo: Totais
-          {:else}
-            Adicionar produto
-          {/if}
-        </button>
-      </p>
-    </div>
-  </form>
+<div class="container">
+  {#if !scoped.dest}
+    <a href={$url('./identificacao')} class="button">
+      Voltar: Identificação
+    </a>
+  {:else}
+    <a href={$url('./cliente')} class="button"> Voltar: Cliente </a>
+  {/if}
+  {#if elements.length}
+    <a class="button" href={$url('./produto')}> Adicionar produto </a>
+    <a class="button" href={$url('./total')}> Próximo: Totais </a>
+  {:else}
+    <a class="button" href={$url('./produto')}> Adicionar produto </a>
+  {/if}
   <table class="table is-hoverable is-fullwidth">
     <tr>
       <th>Código</th>

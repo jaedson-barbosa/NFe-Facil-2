@@ -12,7 +12,7 @@
     cana,
   } from '@form/data/nfe.json'
   import AutoForm from '@form/AutoForm.svelte'
-  import type INFeRoot from './INFeRoot';
+  import type INFeRoot from './INFeRoot'
 
   export let scoped: INFeRoot
 
@@ -34,15 +34,7 @@
 
 <form on:submit|preventDefault={$goto('./final')}>
   <AutoForm {el} root={scoped}>
-    <div class="field is-grouped is-grouped-centered">
-      <p class="control">
-        <a href={$url('./pagamento')} class="button is-danger">
-          Voltar: Pagamento
-        </a>
-      </p>
-      <p class="control">
-        <button class="button is-primary"> Finalizar </button>
-      </p>
-    </div>
+    <a href={$url('./pagamento')} class="button"> Voltar: Pagamento </a>
+    <button> Finalizar </button>
   </AutoForm>
 </form>

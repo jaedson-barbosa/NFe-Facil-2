@@ -43,7 +43,7 @@
 </script>
 
 {#if loading}
-  <progress class="progress is-large" />
+  <progress />
 {:else}
   <div class="container content box">
     <div class="field is-grouped is-grouped-centered">

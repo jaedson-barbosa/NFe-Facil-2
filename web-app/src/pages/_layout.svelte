@@ -2,20 +2,17 @@
   import { user } from '@app/store'
 </script>
 
-{#if $user}
-  <slot />
-{:else}
-  <main class="content">
+<main class="container">
+  {#if $user}
+    <slot />
+  {:else}
     <h1>Bem vindo ao NFe Fácil</h1>
-    <button on:click={user.signIn} class="button">Iniciar sessão</button>
-  </main>
-{/if}
+    <button on:click={user.signIn}> Iniciar sessão </button>
+  {/if}
+</main>
 
 <style>
-  h1 {
-    color: purple;
-  }
   main {
-    margin: 20px;
+    margin-top: 1.5rem;
   }
 </style>

@@ -4,7 +4,7 @@
   import { status } from './status'
   import { createId } from '@form/helpers'
   import type { IScoped } from './IScoped'
-  
+
   export let scoped: IScoped
 
   function getIdImport(det: any) {
@@ -60,44 +60,28 @@
   let showActions = false
 </script>
 
-<div class="container is-fluid">
-  <section class="section">
-    <h1 class="title">Análise de produtos</h1>
-    <h2 class="subtitle">
+<div class="container">
+  <section>
+    <h1>Análise de produtos</h1>
+    <h2>
       Os produtos das notas fiscais são analisados usando tanto o código quanto
       a descrição e apenas aqueles que ainda não estão cadastrados serão
       registrados.
     </h2>
   </section>
-  <div class="content">
-    {#each filteredDets as det}
-      <div class="icon-text">
-        {#if det.status == status.recusado}
-          <span class="icon has-text-danger">
-            <i class="fas fa-ban" />
-          </span>
-          <span> Produto não aceito </span>
-        {:else if det.status == status.aceito}
-          <span class="icon has-text-success">
-            <i class="fas fa-check" />
-          </span>
-          <span> Produto aceito </span>
-        {:else if det.status == status.aguardando}
-          <span class="icon has-text-info">
-            <i class="fas fa-ellipsis-h" />
-          </span>
-          <span> Aguardando </span>
-        {/if}
-      </div>
-      <p class="block">{getIdImport(det.det)}</p>
-    {/each}
-  </div>
+  {#each filteredDets as det}
+    <span>
+      {#if det.status == status.recusado}
+        Produto não aceito
+      {:else if det.status == status.aceito}
+        Produto aceito
+      {:else if det.status == status.aguardando}
+        Aguardando
+      {/if}
+    </span>
+    <span>{getIdImport(det.det)}</span>
+  {/each}
   {#if showActions}
-    <a
-      class="button is-primary"
-      href={$url(scoped.getNext('./produtos'))}
-    >
-      Continuar
-    </a>
+    <a class="button" href={$url(scoped.getNext('./produtos'))}> Continuar </a>
   {/if}
 </div>

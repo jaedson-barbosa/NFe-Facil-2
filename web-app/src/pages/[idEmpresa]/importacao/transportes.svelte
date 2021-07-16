@@ -53,45 +53,31 @@
   let showActions = false
 </script>
 
-<div class="container is-fluid">
-  <section class="section">
-    <h1 class="title">Análise de transportes</h1>
-    <h2 class="subtitle">
+<div class="container">
+  <section>
+    <h1>Análise de transportes</h1>
+    <h2>
       Os transportes (motoristas/transportadoras) das notas fiscais são
       analisados e apenas aqueles que ainda não estão cadastrados serão
       registrados.
     </h2>
   </section>
-  <div class="content">
-    {#each filteredTransportes as item}
-      <div class="icon-text">
-        {#if item.status == status.recusado}
-          <span class="icon has-text-danger">
-            <i class="fas fa-ban" />
-          </span>
-          <span> Transporte não aceito </span>
-        {:else if item.status == status.aceito}
-          <span class="icon has-text-success">
-            <i class="fas fa-check" />
-          </span>
-          <span> Transporte aceito </span>
-        {:else if item.status == status.aguardando}
-          <span class="icon has-text-info">
-            <i class="fas fa-ellipsis-h" />
-          </span>
-          <span> Aguardando </span>
-        {/if}
-      </div>
-      <p class="block">
-        {item.transporta.xNome} ({getDocumento(item.transporta, true)})
-      </p>
-    {/each}
-  </div>
+  {#each filteredTransportes as item}
+    <span>
+      {#if item.status == status.recusado}
+        Transporte não aceito
+      {:else if item.status == status.aceito}
+        Transporte aceito
+      {:else if item.status == status.aguardando}
+        Aguardando
+      {/if}
+    </span>
+    <span>
+      {item.transporta.xNome} ({getDocumento(item.transporta, true)})
+    </span>
+  {/each}
   {#if showActions}
-    <a
-      class="button is-primary"
-      href={$url(scoped.getNext('./transportes'))}
-    >
+    <a class="button" href={$url(scoped.getNext('./transportes'))}>
       Continuar
     </a>
   {/if}

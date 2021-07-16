@@ -49,64 +49,49 @@
   load()
 </script>
 
-<div class="container content box">
-  <form on:submit|preventDefault={load}>
-    <div class="field has-addons">
-      {#if $userStatus >= 3}
-        <div class="control">
-          <a class="button" href={$url(addUrl)}>
-            <span class="icon is-small">
-              <i class="fas fa-plus" />
-            </span>
-          </a>
-        </div>
-      {/if}
-      <div class="control is-expanded">
-        <input class="input" type="text" {placeholder} bind:value={busca} />
-      </div>
-      <div class="control">
-        <button class="button" disabled={!busca} class:is-loading={loading}>
-          Buscar
-        </button>
-      </div>
-    </div>
-  </form>
+<form on:submit|preventDefault={load}>
+  <label>
+    {placeholder}
+    <input type="text" bind:value={busca} />
+  </label>
+  {#if $userStatus >= 3}
+    <a class="button" href={$url(addUrl)}>Adicionar</a>
+  {/if}
+  <button disabled={!busca} class:is-loading={loading}> Buscar </button>
+</form>
 
-  <table class="table is-hoverable is-fullwidth">
-    <thead>
+<table>
+  <thead>
+    <tr>
+      {#each headers as h}
+        <th> {h} </th>
+      {/each}
+    </tr>
+  </thead>
+  <tbody>
+    {#each cadastros as cad}
       <tr>
-        {#each headers as h}
-          <th> {h} </th>
+        {#each itemRender(cad) as i, index}
+          <td>
+            {#if index == 0}
+              <a href={$url(editUrl, { id: cad.id })}> {i} </a>
+            {:else}
+              {i}
+            {/if}
+          </td>
         {/each}
       </tr>
-    </thead>
-    <tbody>
-      {#each cadastros as cad}
-        <tr>
-          {#each itemRender(cad) as i, index}
-            <td>
-              {#if index == 0}
-                <a href={$url(editUrl, { id: cad.id })}> {i} </a>
-              {:else}
-                {i}
-              {/if}
-            </td>
-          {/each}
-        </tr>
-      {/each}
-    </tbody>
-    {#if hasMore}
-      <tfoot>
-        <tr>
-          <td colspan="6">
-            <div class="buttons is-centered">
-              <button class="button" class:is-loading={loading} on:click={load}>
-                Carregar mais
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tfoot>
-    {/if}
-  </table>
-</div>
+    {/each}
+  </tbody>
+  {#if hasMore}
+    <tfoot>
+      <tr>
+        <td colspan="6">
+          <button class="button" disabled={loading} on:click={load}>
+            Carregar mais
+          </button>
+        </td>
+      </tr>
+    </tfoot>
+  {/if}
+</table>

@@ -15,7 +15,7 @@
     $goto('../produtos')
   }
 
-  const detUnico = {...det} as any
+  const detUnico = { ...det } as any
   detUnico.maxOccurs = 1
   detUnico.annotation.label = 'Informações do produto'
 </script>
@@ -33,9 +33,5 @@
   onSubmit={() => (scoped.det[+edit] = root.det)}
   wherePath="det.prod.xProd"
 >
-  <p class="control">
-    <button type="button" class="button is-danger" on:click={remover}>
-      Remover
-    </button>
-  </p>
+  <button type="button" on:click={remover}> Remover </button>
 </Search>

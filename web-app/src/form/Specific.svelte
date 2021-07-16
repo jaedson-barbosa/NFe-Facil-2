@@ -104,36 +104,25 @@
   $: required = !el.optional
 </script>
 
-<div class="field is-horizontal">
-  <div class="field-label is-normal">
-    <label class="label" for={id}>
-      {#if required}
-        {label}
-      {:else}
-        <i>{label}</i>
-      {/if}
-    </label>
-  </div>
-  <div class="field-body">
-    <div class="field">
-      <div class="control is-expanded">
-        <input
-          {id}
-          class="input"
-          type="text"
-          {required}
-          list={listId}
-          bind:value={internalValue}
-        />
-        <datalist id={listId}>
-          {#each options as opt}
-            <option>{opt.text}</option>
-          {/each}
-        </datalist>
-      </div>
-      {#if aux}
-        <p class="help">{aux}</p>
-      {/if}
-    </div>
-  </div>
-</div>
+<label for={id}>
+  {#if required}
+    {label}
+  {:else}
+    <i>{label}</i>
+  {/if}
+</label>
+<input
+  {id}
+  type="text"
+  {required}
+  list={listId}
+  bind:value={internalValue}
+/>
+<datalist id={listId}>
+  {#each options as opt}
+    <option>{opt.text}</option>
+  {/each}
+</datalist>
+{#if aux}
+  <small>{aux}</small>
+{/if}

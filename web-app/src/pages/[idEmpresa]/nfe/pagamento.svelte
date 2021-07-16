@@ -26,15 +26,9 @@
 <form on:submit|preventDefault={$goto('./opcionais')}>
   <AutoForm el={pag} root={scoped}>
     <Readonly el={infoRestante} root={rootRestante} />
-    <div class="field is-grouped is-grouped-centered">
-      <p class="control">
-        <a href={$url('./transporte')} class="button is-danger">
-          Voltar: Transporte
-        </a>
-      </p>
-      <p class="control">
-        <button class="button is-primary"> Próximo: Opcionais </button>
-      </p>
-    </div>
+    <a href={$url('./transporte')} class="button">
+      Voltar: Transporte
+    </a>
+    <button> Próximo: Opcionais </button>
   </AutoForm>
 </form>

@@ -27,40 +27,30 @@
   const id = createId()
 </script>
 
-<div class="field is-horizontal">
-  <div class="field-label is-normal">
-    <label class="label" for={id}>
-      {#if optional}
-        <i>{label}</i>
+<label>
+  {#if optional}
+    <i>{label}</i>
+  {:else}
+    {label}
+  {/if}
+  {#if aux || maskedValue}
+    <small>
+      {#if aux && maskedValue}
+        {maskedValue} - {aux}
       {:else}
-        {label}
+        {maskedValue}{aux ?? ''}
       {/if}
-    </label>
-  </div>
-  <div class="field-body">
-    <div class="field">
-      <div class="control is-expanded">
-        <input
-          {id}
-          class="input"
-          required={!optional}
-          {pattern}
-          {minlength}
-          {maxlength}
-          type="text"
-          bind:this={input}
-          bind:value
-        />
-      </div>
-      {#if aux || maskedValue}
-        <p class="help">
-          {#if aux && maskedValue}
-            {maskedValue} - {aux}
-          {:else}
-            {maskedValue}{aux ?? ''}
-          {/if}
-        </p>
-      {/if}
-    </div>
-  </div>
-</div>
+    </small>
+  {/if}
+  <input
+    {id}
+    class="input"
+    required={!optional}
+    {pattern}
+    {minlength}
+    {maxlength}
+    type="text"
+    bind:this={input}
+    bind:value
+  />
+</label>

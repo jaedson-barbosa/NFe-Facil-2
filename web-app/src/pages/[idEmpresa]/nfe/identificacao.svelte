@@ -56,19 +56,13 @@
         bind:value={tipoClienteNFCe}
       />
     {/if}
-    <div class="field is-grouped is-grouped-centered">
-      <p class="control">
-        <a href={$url('../')} class="button is-danger"> Voltar: Excluir </a>
-      </p>
-      <p class="control">
-        <button class="button is-primary">
-          {#if tipoClienteNFCe == '2'}
-            Próximo: Produtos
-          {:else}
-            Próximo: Cliente
-          {/if}
-        </button>
-      </p>
-    </div>
+    <a href={$url('../')} class="button"> Voltar: Excluir </a>
+    <button>
+      {#if tipoClienteNFCe == '2'}
+        Próximo: Produtos
+      {:else}
+        Próximo: Cliente
+      {/if}
+    </button>
   </AutoForm>
 </form>
