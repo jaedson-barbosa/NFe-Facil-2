@@ -36,19 +36,9 @@
 </script>
 
 {#await getCadastros() then cadastros}
-  <div class="container">
-    <div class="row">
-      <div class="column">
-        <a class="button" href={$url('./precadastro')}> Cadastrar </a>
-      </div>
-      <div class="column">
-        <a class="button" href={$url('./requisicao')}> Requisitar acesso </a>
-      </div>
-      <div class="column">
-        <button on:click={user.signOut}> Encerar sessão </button>
-      </div>
-    </div>
-  </div>
+  <a class="button" href={$url('./precadastro')}> Cadastrar </a>
+  <a class="button" href={$url('./requisicao')}> Requisitar acesso </a>
+  <button on:click={user.signOut}> Encerar sessão </button>
   {#if cadastros.length}
     <table>
       <thead>

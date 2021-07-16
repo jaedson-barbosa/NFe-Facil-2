@@ -29,26 +29,41 @@
   }
 
   $: NFCeHabilitado = $empresa?.serieNFCe && $empresa?.IDCSC && $empresa?.CSC
+
+  let exibicao:
+    | 'Nada'
+    | 'Clientes'
+    | 'Produtos'
+    | 'Transportes'
+    | 'NF-es salvas'
+    | 'NF-es emitidas'
+    | 'NFC-es salvas'
+    | 'NFC-es emitidas' = 'Nada'
 </script>
 
-<div class="columns is-multiline">
-  <div class="column is-half">
-    <div class="container content box">
-      <div class="buttons">
-        {#if $userStatus == 4}
-          <a class="button" href={$url('./cadastro')}> Atualizar cadastro </a>
-          <a class="button" href={$url('./importacao')}>
-            Importar notas fiscais
-          </a>
-        {/if}
-        <button class="button" on:click={consultar}>
-          Consultar status do serviço
-        </button>
-        <a class="button" href={$url('../')}> Trocar emitente </a>
-      </div>
-    </div>
-  </div>
-  <div class="column is-half">
+<div class="container">
+  {#if $userStatus == 4}
+    <a class="button" href={$url('./cadastro')}> Atualizar cadastro </a>
+    <a class="button" href={$url('./importacao')}> Importar notas fiscais </a>
+  {/if}
+  <button on:click={consultar}> Consultar status do serviço </button>
+  <a class="button" href={$url('../')}> Trocar emitente </a>
+  <label>
+    Visualizar
+    <select bind:value={exibicao}>
+      <option>Nada</option>
+      <option>Clientes</option>
+      <option>Produtos</option>
+      <option>Transportes</option>
+      <option>NF-es salvas</option>
+      <option>NF-es emitidas</option>
+      {#if NFCeHabilitado}
+        <option>NFC-es salvas</option>
+        <option>NFC-es emitidas</option>
+      {/if}
+    </select>
+  </label>
+  {#if exibicao == 'Clientes'}
     <Search
       coluna={$dbColumns.clientes}
       editUrl="./cliente/:id"
@@ -58,8 +73,7 @@
       headers={['Documento', 'Nome']}
       itemRender={(v) => [getDocDest(v), v.get('dest.xNome')]}
     />
-  </div>
-  <div class="column is-half">
+  {:else if exibicao == 'Produtos'}
     <Search
       coluna={$dbColumns.produtos}
       editUrl="./produto/:id"
@@ -69,8 +83,7 @@
       headers={['Código', 'Descrição']}
       itemRender={(v) => [v.get('det.prod.cProd'), v.get('det.prod.xProd')]}
     />
-  </div>
-  <div class="column is-half">
+  {:else if exibicao == 'Transportes'}
     <Search
       coluna={$dbColumns.transportes}
       editUrl="./transporte/:id"
@@ -80,8 +93,7 @@
       headers={['Documento', 'Nome']}
       itemRender={(v) => [getDocTransporta(v), v.get('transporta.xNome')]}
     />
-  </div>
-  <div class="column is-half">
+  {:else if exibicao == 'NF-es salvas'}
     <Search
       coluna={$dbColumns.notasSalvas}
       editUrl="./nfe/:id/salva"
@@ -96,8 +108,7 @@
         v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
       ]}
     />
-  </div>
-  <div class="column is-half">
+  {:else if exibicao == 'NF-es emitidas'}
     <Search
       coluna={$dbColumns.notasEmitidas}
       editUrl="./nfe/:id/emitida"
@@ -112,39 +123,35 @@
         v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
       ]}
     />
-  </div>
-  {#if NFCeHabilitado}
-    <div class="column is-half">
-      <Search
-        coluna={$dbColumns.notasCSalvas}
-        editUrl="./nfe/:id/csalva"
-        addUrl="./nfe/cnova"
-        placeholder="Número da NFCe salva"
-        wherePath="infNFe.ide.nNF"
-        headers={['Número', 'Série', 'Emissão', 'Ambiente']}
-        itemRender={(v) => [
-          v.get('infNFe.ide.nNF'),
-          v.get('infNFe.ide.serie'),
-          v.get('dhEmi').toDate().toLocaleString(),
-          v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
-        ]}
-      />
-    </div>
-    <div class="column is-half">
-      <Search
-        coluna={$dbColumns.notasCEmitidas}
-        editUrl="./nfe/:id/cemitida"
-        addUrl="./nfe/cnova"
-        placeholder="Número da NFCe emitida"
-        wherePath="infNFe.ide.nNF"
-        headers={['Número', 'Série', 'Emissão', 'Ambiente']}
-        itemRender={(v) => [
-          v.get('infNFe.ide.nNF'),
-          v.get('infNFe.ide.serie'),
-          v.get('dhEmi').toDate().toLocaleString(),
-          v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
-        ]}
-      />
-    </div>
+  {:else if exibicao == 'NFC-es salvas'}
+    <Search
+      coluna={$dbColumns.notasCSalvas}
+      editUrl="./nfe/:id/csalva"
+      addUrl="./nfe/cnova"
+      placeholder="Número da NFCe salva"
+      wherePath="infNFe.ide.nNF"
+      headers={['Número', 'Série', 'Emissão', 'Ambiente']}
+      itemRender={(v) => [
+        v.get('infNFe.ide.nNF'),
+        v.get('infNFe.ide.serie'),
+        v.get('dhEmi').toDate().toLocaleString(),
+        v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
+      ]}
+    />
+  {:else if exibicao == 'NFC-es emitidas'}
+    <Search
+      coluna={$dbColumns.notasCEmitidas}
+      editUrl="./nfe/:id/cemitida"
+      addUrl="./nfe/cnova"
+      placeholder="Número da NFCe emitida"
+      wherePath="infNFe.ide.nNF"
+      headers={['Número', 'Série', 'Emissão', 'Ambiente']}
+      itemRender={(v) => [
+        v.get('infNFe.ide.nNF'),
+        v.get('infNFe.ide.serie'),
+        v.get('dhEmi').toDate().toLocaleString(),
+        v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
+      ]}
+    />
   {/if}
 </div>
