@@ -28,43 +28,21 @@
   const id = createId()
 </script>
 
-<form class="container content box" on:submit|preventDefault={precadastrar}>
+<form class="container" on:submit|preventDefault={precadastrar}>
   <fieldset disabled={loading}>
-    <div class="field is-horizontal">
-      <div class="field-label is-normal">
-        <label class="label" for={id}> Certificado </label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <div class="control is-expanded">
-            <div class="file has-name is-fullwidth">
-              <label class="file-label">
-                <input
-                  {id}
-                  class="file-input"
-                  type="file"
-                  bind:files
-                  accept="application/x-pkcs12"
-                  required
-                />
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <i class="fas fa-upload" />
-                  </span>
-                  <span class="file-label"> Selecionar arquivo </span>
-                </span>
-                <span class="file-name">
-                  {#if files?.length}
-                    {files[0].name}
-                  {/if}
-                </span>
-              </label>
-            </div>
-          </div>
-          <p class="help">O certificado será validado com uma requisição de testes à SEFAZ.</p>
-        </div>
-      </div>
-    </div>
+    <label class="button" for={id}> Certificado </label>
+    <input
+      {id}
+      type="file"
+      bind:files
+      accept="application/x-pkcs12"
+      required
+    />
+    {#if files?.length}
+      <small>{files[0].name}</small>
+    {:else}
+      <small>O certificado será validado com uma requisição de teste à SEFAZ.</small>
+    {/if}
     <InputT
       label="Senha do certificado"
       aux="Necessária para assinatura e comunicação com a SEFAZ."
@@ -75,19 +53,12 @@
       aux="Sua identificação no registro de usuários da empresa, por exemplo, seu nome."
       bind:value={requisicao.ident}
     />
-    <div class="field is-grouped is-grouped-centered">
-      <p class="control">
-        <button
-          class="button is-primary"
-          class:is-loading={loading}
-          disabled={!files?.length}
-        >
-          Salvar
-        </button>
-      </p>
-      <p class="control">
-        <a href={$url('./')} class="button is-danger"> Cancelar </a>
-      </p>
-    </div>
+    <input type="submit" class="button">
   </fieldset>
 </form>
+
+<style>
+  input[type="file"] {
+    display: none;
+  }
+</style>

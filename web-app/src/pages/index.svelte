@@ -36,18 +36,29 @@
 </script>
 
 {#await getCadastros() then cadastros}
-  <nav>
-    <a class="button" href={$url('./precadastro')}>Cadastrar</a>
-    <a class="button" href={$url('./requisicao')}>Requisitar acesso</a>
-    <button class="button" on:click={user.signOut}>Encerar sessão</button>
-  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="column">
+        <a class="button" href={$url('./precadastro')}> Cadastrar </a>
+      </div>
+      <div class="column">
+        <a class="button" href={$url('./requisicao')}> Requisitar acesso </a>
+      </div>
+      <div class="column">
+        <button on:click={user.signOut}> Encerar sessão </button>
+      </div>
+    </div>
+  </div>
   {#if cadastros.length}
-    <table class="table is-hoverable is-fullwidth">
-      <tr>
-        <th>CNPJ</th>
-        <th>Status</th>
-      </tr>
-      {#each cadastros as { idEmpresa, status }}
+    <table>
+      <thead>
+        <tr>
+          <th>CNPJ</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each cadastros as { idEmpresa, status }}
         <tr>
           <td>
             {#if status >= 2}
@@ -59,6 +70,7 @@
           <td> {getDescricaoStatus(status)} </td>
         </tr>
       {/each}
+      </tbody>
     </table>
   {/if}
 {/await}
