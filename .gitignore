@@ -5,3 +5,4 @@ save-data
 .routify
 *.log
 *.cache
+web-app-1/public/build
