@@ -12,10 +12,9 @@ const googleProvider = new firebase.auth.GoogleAuthProvider()
 const db = firebase.firestore()
 
 export const user = {
-  subscribe: readable<firebase.User>(null, (set) => {
-    const unsubscribe = auth.onAuthStateChanged((u) => set(u))
-    return () => unsubscribe()
-  }).subscribe,
+  subscribe: readable<firebase.User>(undefined, (set) =>
+    auth.onAuthStateChanged((u) => set(u))
+  ).subscribe,
   signIn: () => auth.signInWithPopup(googleProvider),
   signOut: () => auth.signOut(),
 }

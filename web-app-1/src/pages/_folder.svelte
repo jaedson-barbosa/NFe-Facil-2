@@ -7,28 +7,31 @@
 
   const db = firebase.firestore()
 
-  db.collectionGroup('usuarios')
-    .where('id', '==', get(user).uid)
-    .get()
-    .then((registros) => {
-      cadastros = registros.docs.map((v) => ({
-        cnpj: v.ref.parent.parent.id,
-        status: v.get('status'),
-        ident: v.get('ident'),
-      }))
-      const logaveis = cadastros.filter((v) => v.status >= 2)
-      if (!logaveis.some((v) => v.cnpj == $idEmpresa)) {
-        $idEmpresa = '' // Usuario nao tem mais permissao
-      } else if (logaveis.length === 1) {
-        $idEmpresa = logaveis[0].cnpj // Usar o unico
-      }
-    })
+  function carregarEmitentes(u: firebase.User) {
+    if (!u) return
+    db.collectionGroup('usuarios')
+      .where('id', '==', u.uid)
+      .get()
+      .then((registros) => {
+        cadastros = registros.docs.map((v) => ({
+          cnpj: v.ref.parent.parent.id,
+          status: v.get('status'),
+          ident: v.get('ident'),
+        }))
+        const logaveis = cadastros.filter((v) => v.status >= 2)
+        if (!logaveis.some((v) => v.cnpj == $idEmpresa)) {
+          $idEmpresa = '' // Usuario nao tem mais permissao
+        } else if (logaveis.length === 1) {
+          $idEmpresa = logaveis[0].cnpj // Usar o unico
+        }
+      })
+  }
 
   let cadastrando = false
   const requisicao = {
     cert: undefined as FileList,
     cnpj: '',
-    ident: get(user).displayName,
+    ident: '',
     senha: '',
   }
 
@@ -59,8 +62,11 @@
       const envio = { ...requisicao, cert: btoa(String.fromCharCode(...cert)) }
       if (await precadastro(envio)) $idEmpresa = requisicao.cnpj
     }
+    carregarEmitentes($user)
     cadastrando = false
   }
+
+  $: carregarEmitentes($user)
 </script>
 
 <main class="container">
@@ -72,30 +78,49 @@
     {:else}
       {#if cadastros.length}
         <h3>Escolha de emitente</h3>
-        {#each cadastros as v}
-          <button>
-            {v.cnpj}<br />
-            <smal>{v.ident}</smal>
-            {#if v.status == 0}
-              Em análise
-            {:else if v.status == 1}
-              Rejeitado
-            {:else if v.status == 2}
-              Apenas leitura
-            {:else if v.status == 3}
-              Leitura e escrita
-            {:else if v.status == 4}
-              Administrador
-            {/if}
-          </button>
-        {/each}
+        <table>
+          <thead>
+            <tr>
+              <th>CNPJ</th>
+              <th>Identificação</th>
+              <th>Acesso</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {#each cadastros as v}
+              <tr>
+                <td>{v.cnpj}</td>
+                <td>{v.ident}</td>
+                <td>
+                  {#if v.status == 0}
+                    Em análise
+                  {:else if v.status == 1}
+                    Rejeitado
+                  {:else if v.status == 2}
+                    Apenas leitura
+                  {:else if v.status == 3}
+                    Leitura e escrita
+                  {:else if v.status == 4}
+                    Administrador
+                  {/if}
+                </td>
+                <td>
+                  <button on:click={() => ($idEmpresa = v.cnpj)}>
+                    Escolher
+                  </button>
+                </td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
         <br />
       {/if}
       <h3>Cadastro</h3>
       <form on:submit|preventDefault={cadastrar}>
         <fieldset disabled={cadastrando}>
-          {#if !requisicao.cert?.length}
-            {#if !requisicao.cnpj}
+          {#if !requisicao.cnpj}
+            {#if !requisicao.cert?.length}
               <label class="button">
                 Escolher certificado
                 <input
@@ -105,25 +130,51 @@
                   required
                 />
               </label>
+            {:else}
+              <label>
+                Senha do certificado
+                <input bind:value={requisicao.senha} required />
+              </label>
             {/if}
-            <label class="button">
+          {/if}
+          {#if !requisicao.cert?.length}
+            <label>
               CNPJ <small>da empresa já cadastrada.</small>
               <input bind:value={requisicao.cnpj} required />
             </label>
           {/if}
           <label>
-            Senha do certificado <small>para assinatura e comunicação.</small>
-            <input bind:value={requisicao.senha} required />
-          </label>
-          <label>
-            Identificação <small>no registro de usuários da empresa </small>
+            Identificação <small>no registro de usuários da empresa</small>
             <input bind:value={requisicao.ident} required />
           </label>
           <input type="submit" class="button" />
+          <details>
+            <summary>Ajuda</summary>
+            <p>Existem duas formas de obter acesso a um emitente:</p>
+            <ol>
+              <li>
+                <strong>Com certificado: </strong> usando o certificado da empresa
+                é possível acessar a aplicação como um administrador. Caso a empresa
+                ainda não esteja cadastrada na aplicação, esta é a única forma de
+                cadastro disponível.
+              </li>
+              <li>
+                <strong>Sem certificado: </strong> sem o certificado é possível pedir
+                para que um administrador liberesse o seu acesso, não sendo então
+                necessário possuir o certificado para poder usar o app.
+              </li>
+            </ol>
+            <p>
+              Quanto ao campo de identificação, ele tanto é o único campo que te
+              identifica na tabela de usuários da empresa quanto é o único
+              identificador da empresa na sua tabela de emitentes cadastrados,
+              por isso recomendo que o escolha com sabedoria.
+            </p>
+          </details>
         </fieldset>
       </form>
     {/if}
-  {:else if $user === undefined}
+  {:else if $user === null}
     <h1>Bem vindo ao NFe Fácil</h1>
     <button on:click={user.signIn}> Iniciar sessão </button>
   {:else}
