@@ -208,9 +208,9 @@
         {/each}
         <td>
           {#if isDadoSimples}
-            <button on:click={() => edit(cad, dadosAtual)}> Editar </button>
+            <button on:click|once={() => edit(cad, dadosAtual)}> Editar </button>
           {:else if writePermission}
-            <button on:click={() => edit(cad, dadosAtual)}>
+            <button on:click|once={() => edit(cad, dadosAtual)}>
               {#if dadosAtual == Dados.NFesSalvas || Dados.NFCesSalvas}
                 Editar
               {:else}
@@ -233,14 +233,14 @@
                 Baixar XML de cancelamento
               </a>
             {:else if cad.get('cancelada') === false}
-              <button on:click={() => danfeNFe($idEmpresa, cad.id, true)}>
+              <button on:click|once={() => danfeNFe($idEmpresa, cad.id, true)}>
                 Gerar DANFE
               </button>
-              <button on:click={() => cancelarNFe($idEmpresa, cad.id)}>
+              <button on:click|once={() => cancelarNFe($idEmpresa, cad.id)}>
                 Cancelar
               </button>
             {:else}
-              <button on:click={() => danfeNFe($idEmpresa, cad.id, false)}>
+              <button on:click|once={() => danfeNFe($idEmpresa, cad.id, false)}>
                 Gerar DANFE
               </button>
             {/if}
