@@ -6,6 +6,7 @@ import {
   writable,
   get,
 } from 'svelte/store'
+import { Dados } from './dados'
 
 const auth = firebase.auth()
 const googleProvider = new firebase.auth.GoogleAuthProvider()
@@ -99,3 +100,11 @@ export const dbColumns = derived<Readable<TReference>, IColumns>(
   },
   undefined
 )
+
+interface IEdicao {
+  tipo: Dados,
+  id: string,
+  dado: any
+}
+
+export const edicao = writable<IEdicao>(undefined)
