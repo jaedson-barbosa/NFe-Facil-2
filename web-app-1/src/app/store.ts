@@ -55,15 +55,8 @@ export const userStatus = derived<Readable<TReference>, number>(
 export const empresa = derived<Readable<TReference>, TEmpresa>(
   empresaRef,
   (ref, set) => {
-    if (ref) {
-      ref
-        .get()
-        .then((v) => {
-          if (v.exists) set(v.data() as TEmpresa)
-          else set(undefined)
-        })
-        .catch(() => set(undefined))
-    } else set(undefined)
+    if (ref) ref.onSnapshot(v => set(v.exists ? v.data() as TEmpresa : undefined))
+    else set(undefined)
   },
   undefined
 )

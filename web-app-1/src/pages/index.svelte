@@ -7,6 +7,7 @@
   import { Dados } from '../app/dados'
   import { debounce } from 'lodash-es'
   import { onMount } from 'svelte'
+import { options } from '../../.routify/routes'
 
   type TCadastro = firebase.firestore.QueryDocumentSnapshot<TDocument>
 
@@ -182,6 +183,21 @@
     return window.URL.createObjectURL(blob)
   }
 </script>
+
+<a class="button" href={$url('./emitente')}> Editar dados do emitente </a>
+
+<label>
+  Visualização
+  <select bind:value={dadosAtual}>
+    <option value={Dados.Clientes}>Clientes</option>
+    <option value={Dados.Produtos}>Produtos</option>
+    <option value={Dados.Transportes}>Transportes</option>
+    <option value={Dados.NFesSalvas}>NF-es salvas</option>
+    <option value={Dados.NFesEmitidas}>NF-es emitidas</option>
+    <option value={Dados.NFCesSalvas}>NFC-es salvas</option>
+    <option value={Dados.NFesEmitidas}>NFC-es emitidas</option>
+  </select>
+</label>
 
 <label>
   {rotulo}

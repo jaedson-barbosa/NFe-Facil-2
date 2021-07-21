@@ -49,6 +49,7 @@ export function isCnpjValid(cnpj: string): boolean {
 }
 
 function isValid(digits: string, correctDigitsLength: number, weights: number[]): boolean {
+  if (!digits) digits = ''
   const cleanDigits = getOnlyNumbers(digits);
   if (cleanDigits.length !== correctDigitsLength || isAllTheSameDigits(cleanDigits)) {
     return false;

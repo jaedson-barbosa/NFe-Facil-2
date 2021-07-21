@@ -1,4 +1,4 @@
-export const enum Dados {
+export enum Dados {
   Clientes,
   Produtos,
   Transportes,
