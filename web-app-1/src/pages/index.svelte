@@ -1,134 +1,123 @@
 <script lang="ts">
-  import { cancelarNFe, gerarDANFENFe as danfeNFe } from '../app/funcNFe'
-  import { userStatus, dbColumns, edicao, idEmpresa } from '../app/store'
-  import { applyMask } from '../app/documentUtils'
-  import type { TDocument } from '../app/store'
-  import { goto, url } from '@roxi/routify'
-  import { Dados } from '../app/dados'
-  import { debounce } from 'lodash-es'
-  import { onMount } from 'svelte'
-import { options } from '../../.routify/routes'
+  import { cancelarNFe, gerarDANFENFe as danfeNFe } from "../app/funcNFe";
+  import { userStatus, dbColumns, edicao, idEmpresa } from "../app/store";
+  import { applyMask } from "../app/documentUtils";
+  import type { TDocument } from "../app/store";
+  import { goto, url } from "@roxi/routify";
+  import { Dados } from "../app/dados";
+  import { debounce } from "lodash-es";
 
-  type TCadastro = firebase.firestore.QueryDocumentSnapshot<TDocument>
+  type TCadastro = firebase.firestore.QueryDocumentSnapshot<TDocument>;
+
+  $edicao = undefined;
 
   function getColuna() {
     switch (dadosAtual) {
       case Dados.Clientes:
-        return $dbColumns.clientes
+        return $dbColumns.clientes;
       case Dados.Produtos:
-        return $dbColumns.produtos
+        return $dbColumns.produtos;
       case Dados.Transportes:
-        return $dbColumns.transportes
+        return $dbColumns.transportes;
       case Dados.NFesSalvas:
-        return $dbColumns.notasSalvas
+        return $dbColumns.notasSalvas;
       case Dados.NFesEmitidas:
-        return $dbColumns.notasEmitidas
+        return $dbColumns.notasEmitidas;
       case Dados.NFCesSalvas:
-        return $dbColumns.notasCSalvas
+        return $dbColumns.notasCSalvas;
       case Dados.NFCesEmitidas:
-        return $dbColumns.notasCEmitidas
+        return $dbColumns.notasCEmitidas;
     }
   }
 
   function getRotulo(atual: Dados) {
     switch (atual) {
       case Dados.Clientes:
-        return 'Nome do cliente'
+        return "Nome do cliente";
       case Dados.Produtos:
-        return 'Descrição do produto'
+        return "Descrição do produto";
       case Dados.Transportes:
-        return 'Nome do transportador'
+        return "Nome do transportador";
       default:
-        return 'Número'
+        return "Número";
     }
   }
 
   function getAddUrl(atual: Dados) {
     switch (atual) {
       case Dados.Clientes:
-        return './cliente'
+        return "./cliente";
       case Dados.Produtos:
-        return './produto'
+        return "./produto";
       case Dados.Transportes:
-        return './transporte'
+        return "./transporte";
       default:
-        return './nfe'
+        return "./nfe";
     }
   }
 
   function getCampoBusca(atual: Dados) {
     switch (atual) {
       case Dados.Clientes:
-        return 'dest.xNome'
+        return "dest.xNome";
       case Dados.Produtos:
-        return 'det.prod.xProd'
+        return "det.prod.xProd";
       case Dados.Transportes:
-        return 'transporta.xNome'
+        return "transporta.xNome";
       default:
-        return 'infNFe.ide.nNF'
+        return "infNFe.ide.nNF";
     }
   }
 
   function getCabecalhos(atual: Dados) {
     switch (atual) {
       case Dados.Clientes:
-        return ['Documento', 'Nome']
+        return ["Documento", "Nome"];
       case Dados.Produtos:
-        return ['Código', 'Descrição']
+        return ["Código", "Descrição"];
       case Dados.Transportes:
-        return ['Documento', 'Nome']
+        return ["Documento", "Nome"];
       default:
-        return [
-          'Número',
-          'Série',
-          'Data e hora',
-          'Cliente',
-          'Status',
-          'Ambiente',
-        ]
+        return ["Número", "Série", "Data e hora", "Cliente", "Status", "Ambiente"];
     }
   }
 
   function getDocDest(v: TCadastro) {
-    const cpf = v.get('dest.CPF')
-    if (cpf) return applyMask(cpf, 'cpf')
-    const cnpj = v.get('dest.CNPJ')
-    if (cnpj) return applyMask(cnpj, 'cnpj')
-    const idEstrangeiro = v.get('dest.idEstrangeiro')
-    return idEstrangeiro
+    const cpf = v.get("dest.CPF");
+    if (cpf) return applyMask(cpf, "cpf");
+    const cnpj = v.get("dest.CNPJ");
+    if (cnpj) return applyMask(cnpj, "cnpj");
+    const idEstrangeiro = v.get("dest.idEstrangeiro");
+    return idEstrangeiro;
   }
 
   function getDocTransporta(v: TCadastro) {
-    const cpf = v.get('transporta.CPF')
-    if (cpf) return applyMask(cpf, 'cpf')
-    const cnpj = v.get('transporta.CNPJ')
-    return applyMask(cnpj, 'cnpj')
+    const cpf = v.get("transporta.CPF");
+    if (cpf) return applyMask(cpf, "cpf");
+    const cnpj = v.get("transporta.CNPJ");
+    return applyMask(cnpj, "cnpj");
   }
 
   function getItemRender(busca: Dados): (v: TCadastro) => string[] {
     switch (busca) {
       case Dados.Clientes:
-        return (v) => [getDocDest(v), v.get('dest.xNome')]
+        return (v) => [getDocDest(v), v.get("dest.xNome")];
       case Dados.Produtos:
-        return (v) => [v.get('det.prod.cProd'), v.get('det.prod.xProd')]
+        return (v) => [v.get("det.prod.cProd"), v.get("det.prod.xProd")];
       case Dados.Transportes:
-        return (v) => [getDocTransporta(v), v.get('transporta.xNome')]
+        return (v) => [getDocTransporta(v), v.get("transporta.xNome")];
       default:
         return (v) => {
-          const cancelada = v.get('cancelada')
+          const cancelada = v.get("cancelada");
           return [
-            v.get('infNFe.ide.nNF'),
-            v.get('infNFe.ide.serie'),
-            v.get('dhEmi').toDate().toLocaleString(),
-            v.get('infNFe.dest.xNome') ?? 'Não informado',
-            cancelada
-              ? 'Cancelada'
-              : cancelada === false
-              ? 'Emitida'
-              : 'Apenas salva',
-            v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
-          ]
-        }
+            v.get("infNFe.ide.nNF"),
+            v.get("infNFe.ide.serie"),
+            v.get("dhEmi").toDate().toLocaleString(),
+            v.get("infNFe.dest.xNome") ?? "Não informado",
+            cancelada ? "Cancelada" : cancelada === false ? "Emitida" : "Apenas salva",
+            v.get("infNFe.ide.tpAmb") == "1" ? "Produção" : "Homologação",
+          ];
+        };
     }
   }
 
@@ -137,54 +126,62 @@ import { options } from '../../.routify/routes'
       dado: cad.data(),
       id: cad.id,
       tipo,
-    }
-    $goto(addUrl)
+    };
+    $goto(addUrl);
   }
 
-  let dadosAtual: Dados = Dados.Clientes
+  function reset(atual: Dados) {
+    cadastros = [];
+    lastBusca = "";
+    hasMore = false;
+    buscar();
+  }
+
+  let dadosAtual: Dados = Dados.Clientes;
 
   $: isDadoSimples =
-    dadosAtual == Dados.Clientes ||
-    dadosAtual == Dados.Produtos ||
-    dadosAtual == Dados.Transportes
-  $: rotulo = getRotulo(dadosAtual)
-  $: addUrl = getAddUrl(dadosAtual)
-  $: campoBusca = getCampoBusca(dadosAtual)
-  $: cabecalhos = getCabecalhos(dadosAtual)
-  $: itemRender = getItemRender(dadosAtual)
-  $: writePermission = $userStatus >= 3
+    dadosAtual == Dados.Clientes || dadosAtual == Dados.Produtos || dadosAtual == Dados.Transportes;
+  $: rotulo = getRotulo(dadosAtual);
+  $: addUrl = getAddUrl(dadosAtual);
+  $: campoBusca = getCampoBusca(dadosAtual);
+  $: cabecalhos = getCabecalhos(dadosAtual);
+  $: itemRender = getItemRender(dadosAtual);
+  $: {
+    reset(dadosAtual);
+  }
+  $: writePermission = $userStatus >= 3;
 
-  let cadastros: TCadastro[] = []
-  let lastBusca = ''
-  let hasMore = false
+  let cadastros: TCadastro[] = [];
+  let lastBusca = "";
+  let hasMore = false;
 
   async function buscar(busca: string = lastBusca) {
-    hasMore = false
-    let query = getColuna().limit(10).orderBy(campoBusca, 'desc')
+    hasMore = false;
+    let query = getColuna().limit(10).orderBy(campoBusca, "desc");
     if (busca != lastBusca) {
-      cadastros = []
-      const next = (c: string) => String.fromCharCode(c.charCodeAt(0) + 1)
-      const end = busca.replace(/.$/, next)
-      query = query.where(campoBusca, '>=', busca).where(campoBusca, '<', end)
+      cadastros = [];
+      if (busca) {
+        const next = (c: string) => String.fromCharCode(c.charCodeAt(0) + 1);
+        const end = busca.replace(/.$/, next);
+        query = query.where(campoBusca, ">=", busca).where(campoBusca, "<", end);
+      }
     } else if (cadastros.length) {
-      const last = cadastros[cadastros.length - 1]
-      query = query.startAfter(last)
+      const last = cadastros[cadastros.length - 1];
+      query = query.startAfter(last);
     }
-    const docs = await query.get()
-    hasMore = docs.size == 10
-    cadastros = [...cadastros, ...docs.docs]
-    lastBusca = busca
+    const docs = await query.get();
+    hasMore = docs.size == 10;
+    cadastros = [...cadastros, ...docs.docs];
+    lastBusca = busca;
   }
 
-  onMount(() => buscar())
-
   function getDownloadLink(xml: string) {
-    const blob = new Blob([xml], { type: 'application/xml' })
-    return window.URL.createObjectURL(blob)
+    const blob = new Blob([xml], { type: "application/xml" });
+    return window.URL.createObjectURL(blob);
   }
 </script>
 
-<a class="button" href={$url('./emitente')}> Editar dados do emitente </a>
+<a class="button" href={$url("./emitente")}> Editar dados do emitente </a>
 
 <label>
   Visualização
@@ -233,28 +230,21 @@ import { options } from '../../.routify/routes'
                 Clonar
               {/if}
             </button>
-            <a
-              class="button"
-              href={getDownloadLink(cad.get('xml'))}
-              download={cad.id}
-            >
+            <a class="button" href={getDownloadLink(cad.get("xml"))} download={cad.id}>
               Baixar XML
             </a>
-            {#if cad.get('cancelada')}
+            {#if cad.get("cancelada")}
               <a
                 class="button"
-                href={getDownloadLink(cad.get('xmlCancelamento'))}
-                download={'cancel' + cad.id}
-              >
+                href={getDownloadLink(cad.get("xmlCancelamento"))}
+                download={"cancel" + cad.id}>
                 Baixar XML de cancelamento
               </a>
-            {:else if cad.get('cancelada') === false}
+            {:else if cad.get("cancelada") === false}
               <button on:click|once={() => danfeNFe($idEmpresa, cad.id, true)}>
                 Gerar DANFE
               </button>
-              <button on:click|once={() => cancelarNFe($idEmpresa, cad.id)}>
-                Cancelar
-              </button>
+              <button on:click|once={() => cancelarNFe($idEmpresa, cad.id)}> Cancelar </button>
             {:else}
               <button on:click|once={() => danfeNFe($idEmpresa, cad.id, false)}>
                 Gerar DANFE
@@ -269,9 +259,7 @@ import { options } from '../../.routify/routes'
     <tfoot>
       <tr>
         <td colspan="6">
-          <button class="button" on:click={() => buscar()}>
-            Carregar mais
-          </button>
+          <button class="button" on:click={() => buscar()}> Carregar mais </button>
         </td>
       </tr>
     </tfoot>

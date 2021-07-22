@@ -35,6 +35,7 @@
         return;
       }
       await docRef.set(raiz);
+      $edicao = undefined
       $goto('./');
     } catch (error) {
       alert(error.message);
@@ -46,5 +47,6 @@
 <form on:submit|preventDefault={() => salvar()}>
   <fieldset disabled={loading}>
     <Dest {raiz} />
+    <input type="submit" class="button" />
   </fieldset>
 </form>
