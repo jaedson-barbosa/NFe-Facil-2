@@ -14,7 +14,6 @@
 <InputT lab="CNPJ" mask="cnpj" bind:val={r['CNPJ']} />
 <InputT lab="Razão social ou nome do emitente" min={2} max={60} bind:val={r['xNome']} />
 <InputT lab="Nome fantasia" opt min={1} max={60} bind:val={r['xFant']} />
-<EnderEmit raiz={r} />
 <InputT lab="Inscrição Estadual" max={14} pat={'[0-9]{(2, 14)}|ISENTO'} bind:val={r['IE']} />
 <InputT lab="IE do Substituto Tributário" opt max={14} pat={'[0-9]{(2, 14)}'} bind:val={r['IEST']} />
 <InputT lab="Inscrição Municipal" opt={!r['CNAE']} min={1} max={15} bind:val={r['IM']} />
@@ -29,5 +28,6 @@
     ['3', 'Regime Normal'],
   ]}
   bind:val={r['CRT']} />
+<EnderEmit raiz={r} />
 
 <slot />

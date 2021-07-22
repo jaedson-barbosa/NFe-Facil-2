@@ -10,14 +10,14 @@
     if ($empresa && !raiz) raiz = { ...$empresa };
   }
 
-  async function salvar(root: any) {
+  async function salvar() {
     loading = true;
     try {
-      if (root.emit.CNPJ != $idEmpresa) {
+      if (raiz.emit.CNPJ != $idEmpresa) {
         alert('Não é permitida a alteração do CNPJ do emitente.');
         return;
       }
-      await $empresaRef.update(root);
+      await $empresaRef.update(raiz);
       $goto('./');
     } catch (error) {
       alert(error.message);
@@ -27,7 +27,7 @@
 </script>
 
 {#if raiz}
-  <form on:submit|preventDefault={() => salvar(raiz)}>
+  <form on:submit|preventDefault={() => salvar()}>
     <fieldset disabled={loading}>
       <Emit {raiz}>
         <label>
