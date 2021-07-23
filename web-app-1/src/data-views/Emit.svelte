@@ -11,7 +11,7 @@
 </script>
 
 <h3>Identificação do emitente</h3>
-<InputT lab="CNPJ" mask="cnpj" bind:val={r['CNPJ']} />
+<InputT lab="CNPJ" mask="cnpj" bind:val={r['CNPJ']} pat={"[0-9]{14}"} />
 <InputT lab="Razão social ou nome do emitente" min={2} max={60} bind:val={r['xNome']} />
 <InputT lab="Nome fantasia" opt min={1} max={60} bind:val={r['xFant']} />
 <InputT lab="Inscrição Estadual" max={14} pat={'[0-9]{(2, 14)}|ISENTO'} bind:val={r['IE']} />

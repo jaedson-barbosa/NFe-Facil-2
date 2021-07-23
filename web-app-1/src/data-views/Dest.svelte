@@ -16,7 +16,7 @@
 
 <h3>Identificação do Destinatário</h3>
 {#if !r['CPF'] && !r['idEstrangeiro']}
-  <InputT lab="CNPJ" mask="cnpj" bind:val={r['CNPJ']} />
+  <InputT lab="CNPJ" mask="cnpj" bind:val={r['CNPJ']} pat={"[0-9]{14}"} />
 {/if}
 {#if !r['CNPJ'] && !r['idEstrangeiro']}
   <InputT lab="CPF" mask="cpf" bind:val={r['CPF']} max={11} pat={'[0-9]{11}'} />
