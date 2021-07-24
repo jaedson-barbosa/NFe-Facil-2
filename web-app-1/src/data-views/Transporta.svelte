@@ -1,6 +1,5 @@
 <script lang="ts">
   import InputT from "../components/InputT.svelte";
-  import Select from "../components/Select.svelte";
   import Municipio from "../components/Municipio.svelte";
 
   export let raiz: any;
