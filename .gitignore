@@ -6,4 +6,3 @@ save-data
 *.log
 *.cache
 web-app-1/public/build
-parser.ts
