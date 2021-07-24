@@ -1,6 +1,7 @@
 <script lang="ts">
   import InputT from "../components/InputT.svelte";
   import Select from "../components/Select.svelte";
+  import Municipio from "../components/Municipio.svelte";
 
   export let raiz: any;
 
@@ -16,37 +17,18 @@
 {#if !r["CNPJ"]}
   <InputT lab="CPF" mask="cpf" bind:val={r["CPF"]} max={11} pat={"[0-9]{11}"} />
 {/if}
-
-<!-- 
-"element": [
-  {
-    "name": "xNome",
-    "annotation": { "label": "Razão Social ou nome do transportador" },
-    "restriction": { "maxLength": "60", "minLength": "2" }
-  },
-  {
-    "name": "IE",
-    "type": "TIeDest",
-    "optional": true,
-    "annotation": { "label": "Inscrição Estadual" }
-  },
-  {
-    "name": "xEnder",
-    "optional": true,
-    "annotation": { "label": "Endereço completo" },
-    "restriction": { "minLength": "1", "maxLength": "60" }
-  },
-  {
-    "name": "xMun",
-    "optional": true,
-    "annotation": { "label": "Nome do munícipio" },
-    "restriction": { "maxLength": "60", "minLength": "1" }
-  },
-  {
-    "name": "UF",
-    "type": "TUf",
-    "optional": true,
-    "annotation": { "label": "Sigla da UF" }
-  }
-]
- -->
+<InputT
+  lab="Razão Social ou nome do transportador"
+  min={2}
+  max={60}
+  bind:val={r["xNome"]}
+/>
+<InputT
+  opt
+  lab="Inscrição Estadual"
+  pat={"ISENTO|[0-9]{2,14}"}
+  max={14}
+  bind:val={r["IE"]}
+/>
+<InputT opt lab="Endereço completo" min={1} max={60} bind:val={r["xEnder"]} />
+<Municipio bind:xMun={r["xMun"]} bind:UF={r["UF"]} />

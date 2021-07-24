@@ -50,7 +50,7 @@
       case Dados.Produtos:
         return "./produto";
       case Dados.Transportes:
-        return "./transporte";
+        return "./transporta";
       default:
         return "./nfe";
     }
