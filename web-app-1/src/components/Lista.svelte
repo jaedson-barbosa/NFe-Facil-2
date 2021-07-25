@@ -23,8 +23,8 @@
 <button on:click={adicionarItem}> Adicionar item </button>
 {#each itens as item, i}
   <details open={exibirDetalhes == i}>
-    <summary> <slot name="item-summary" /> </summary>
-    <slot name="item-body" {i} />
+    <summary> <slot name="summary" {item} /> </summary>
+    <slot name="body" {i} />
     <button on:click={() => removerItem(i)}> Remover item </button>
   </details>
 {/each}

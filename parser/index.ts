@@ -302,17 +302,36 @@ const simpleType = [
   }
 ]
 
-export default function gt(...itens: any[]) {
-  const res: string[] = []
-  for (let el of itens) {
-    if (el.type) {
-      el.restriction = simpleType.find(v => v.name == el.type)?.restriction
+import clipboardy from 'clipboardy'
+
+const json = '[' + clipboardy.readSync() + ']'
+const itens = JSON.parse(json)
+const res: string[] = []
+for (let el of itens) {
+  if (el.type) {
+    const simple = simpleType.find(v => v.name == el.type)
+    if (simple) {
+      const itens = simple.annotation.itens
+      if (itens) el.annotation.itens = itens
+      el.restriction = simple.restriction
     }
-    const els: string[] = []
-    if (el.optional) els.push('opt')
-    els.push(`lab="${el.annotation.label}"`)
-    const aux = el.annotation.aux
-    if (aux) els.push(`aux="${aux}"`)
+  }
+  const enumeration = el.restriction.enumeration as string[]
+  const els: string[] = []
+  els.push(`bind:val={r["${el.name}"]}`)
+  if (el.optional) els.push('opt')
+  els.push(`lab="${el.annotation.label}"`)
+  const aux = el.annotation.aux
+  if (aux) els.push(`aux="${aux}"`)
+  if (enumeration) {
+    if (typeof enumeration == 'string') {
+      res.push(`<Select ${els.join(' ')} />`)
+      continue
+    }
+    const labels = el.annotation.itens as string[]
+    els.push(`els={[${enumeration.map((v, i) => `["${v}","${labels ? labels[i] : v}"]`).join(',')}]}`)
+    res.push(`<Select ${els.join(' ')} />`)
+  } else {
     const pat = el.restriction.pattern
     if (pat) els.push(`pat={"${pat}"}`)
     const min = el.restriction.minLength
@@ -322,8 +341,9 @@ export default function gt(...itens: any[]) {
     if (el.type == 'TCpf') els.push('mask="cpf"')
     if (el.type == 'TCnpj') els.push('mask="cnpj"')
     if (el.name == 'CEP') els.push('mask="zipcode"')
-    els.push(`bind:val={r["${el.name}"]}`)
     res.push(`<InputT ${els.join(' ')} />`)
   }
-  return res.join('')
 }
+const data = res.join(' ')
+clipboardy.writeSync(data);
+console.log('Convertido')

@@ -6,7 +6,6 @@
 
   export let xMun: string = "";
   export let cMun: string = "";
-  export let cMunFG: string = "";
   export let cUF: string = "";
   export let UF: string = "";
 
@@ -19,12 +18,10 @@
 
   if (xMun && !value) value = municipios.find((v) => v.Nome == xMun);
   if (cMun && !value) value = municipios.find((v) => v.Codigo == cMun);
-  if (cMunFG && !value) value = municipios.find((v) => v.Codigo == cMunFG);
 
   $: {
     xMun = value?.Nome;
     cMun = value?.Codigo;
-    cMunFG = value?.Codigo;
     cUF = value?.codUF;
     UF = value?.siglaUF;
   }
