@@ -19,7 +19,6 @@
   }
 </script>
 
-<slot name="header" />
 <button on:click={adicionarItem}> Adicionar item </button>
 {#each itens as item, i}
   <details open={exibirDetalhes == i}>

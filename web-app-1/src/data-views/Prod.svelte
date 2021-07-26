@@ -1,6 +1,13 @@
 <script lang="ts">
   import InputT from "../components/InputT.svelte";
   import Select from "../components/Select.svelte";
+  import Lista from "../components/Lista.svelte";
+  import DI from "./DI.svelte";
+  import DetExport from "./DetExport.svelte";
+  import VeicProd from "../components/VeicProd.svelte";
+  import Med from "./Med.svelte";
+  import Arma from "./Arma.svelte";
+  import Comb from "./Comb.svelte";
 
   export let raiz: any;
 
@@ -44,6 +51,32 @@
   lab="Nomenclatura de Valor aduaneio e Estatístico"
   pat={"[A-Z]{2}[0-9]{4}"}
 />
+<InputT
+  bind:val={r["CEST"]}
+  opt={!r["indEscala"] && !r["CNPJFab"]}
+  lab="CEST (Codigo especificador da Substuicao Tributaria)"
+  aux="Identifica a mercadoria sujeita aos regimes de substituicao tributária e de antecipação do recolhimento do imposto"
+  pat={"[0-9]{7}"}
+/>
+{#if r["CEST"]}
+  <Select
+    bind:val={r["indEscala"]}
+    opt
+    lab="Prozido em escala relevante"
+    els={[
+      ["S", "Sim"],
+      ["N", "Não"],
+    ]}
+  />
+  <InputT
+    bind:val={r["CNPJFab"]}
+    opt
+    lab="CNPJ do Fabricante da Mercadoria, obrigatório para produto em escala NÃO relevante."
+    pat={"[0-9]{14}"}
+    max={14}
+    mask="cnpj"
+  />
+{/if}
 <InputT
   bind:val={r["cBenef"]}
   opt
@@ -116,3 +149,85 @@
   ]}
 />
 <h5>Declaração de Importação</h5>
+<Lista {raiz} name="DI">
+  <svelte:fragment slot="summary" let:item>
+    {item["nDI"]}
+  </svelte:fragment>
+  <DI slot="body" let:i raiz={r["DI"][i]} />
+</Lista>
+<DetExport {raiz} />
+<InputT
+  bind:val={r["xPed"]}
+  opt
+  lab="Pedido de compra"
+  aux="Informação de interesse do emissor para controle do B2B"
+  min={1}
+  max={15}
+/>
+<InputT
+  bind:val={r["nItemPed"]}
+  opt
+  lab="Número do item do pedido de compra"
+  pat={"[0-9]{1,6}"}
+/>
+<InputT
+  bind:val={r["nFCI"]}
+  opt
+  lab="Número de controle da FCI (Ficha de Conteúdo de Importação)"
+  pat={"[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}"}
+/>
+<Lista {raiz} name="rastro">
+  <svelte:fragment slot="summary" let:item>
+    {item["nLote"]}
+  </svelte:fragment>
+  <svelte:fragment slot="body" let:i>
+    <InputT
+      bind:val={r["rastro"][i]["nLote"]}
+      lab="Número do lote do produto."
+      min={1}
+      max={20}
+    />
+    <InputT
+      bind:val={r["rastro"][i]["qLote"]}
+      lab="Quantidade de produto no lote."
+      pat={"0|0.[0-9]{3}|[1-9]{1}[0-9]{0,7}(.[0-9]{1,3})?"}
+    />
+    <InputT
+      bind:val={r["rastro"][i]["dFab"]}
+      lab="Data de fabricação/produção"
+      pat={"(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))"}
+    />
+    <InputT
+      bind:val={r["rastro"][i]["dVal"]}
+      lab="Data de validade"
+      aux="Informar o último dia do mês caso a validade não especifique o dia"
+      pat={"(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))"}
+    />
+    <InputT
+      bind:val={r["rastro"][i]["cAgreg"]}
+      opt
+      lab="Código de agregação"
+      pat={"[0-9]{1,20}"}
+    />
+  </svelte:fragment>
+</Lista>
+{#if !r["med"] && !r["arma"] && !r["comb"] && !r["nRECOPI"]}
+  <VeicProd {raiz} />
+{/if}
+{#if !r["veicProd"] && !r["arma"] && !r["comb"] && !r["nRECOPI"]}
+  <Med {raiz} />
+{/if}
+{#if !r["veicProd"] && !r["med"] && !r["comb"] && !r["nRECOPI"]}
+  <Arma {raiz} />
+{/if}
+{#if !r["veicProd"] && !r["med"] && !r["arma"] && !r["nRECOPI"]}
+  <Comb {raiz} />
+{/if}
+{#if !r["veicProd"] && !r["med"] && !r["arma"] && !r["comb"]}
+  <InputT
+    bind:val={r["nRECOPI"]}
+    lab="Número do RECOPI"
+    pat={"[0-9]{20}"}
+    max={20}
+  />
+{/if}

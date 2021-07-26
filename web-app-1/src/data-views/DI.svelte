@@ -1,7 +1,7 @@
 <script lang="ts">
   import InputT from "../components/InputT.svelte";
   import Select from "../components/Select.svelte";
-  import Estado from '../components/Estado.svelte'
+  import Estado from "../components/Estado.svelte";
   import Lista from "../components/Lista.svelte";
 
   export let raiz: any;
@@ -9,6 +9,9 @@
   const el = "DI";
   if (!raiz[el]) raiz[el] = {};
   let r = raiz[el];
+
+  if (!r['adi']) r['adi'] = []
+  const adi = r['adi']
 </script>
 
 <InputT
@@ -28,10 +31,7 @@
   min={1}
   max={60}
 />
-<Estado
-  bind:UF={r["UFDesemb"]}
-  lab="UF onde ocorreu o desembaraço aduaneiro"
-/>
+<Estado bind:UF={r["UFDesemb"]} lab="UF onde ocorreu o desembaraço aduaneiro" />
 <InputT
   bind:val={r["dDesemb"]}
   lab="Data do desembaraço aduaneiro"
@@ -88,11 +88,40 @@
   min={1}
   max={60}
 />
+<h6>Adições</h6>
 <Lista {raiz} name="adi">
-  <slot name="header">
-    <h6>Adições</h6>
-  </slot>
-  <slot name="body">
-
-  </slot>
+  <svelte:fragment slot="summary" let:item>
+    {item["nAdicao"]} - {item["nSeqAdic"]}
+  </svelte:fragment>
+  <svelte:fragment slot="body" let:i>
+    <InputT
+      bind:val={adi[i]["nAdicao"]}
+      lab="Número da adição"
+      pat={"[1-9]{1}[0-9]{0,2}"}
+    />
+    <InputT
+      bind:val={adi[i]["nSeqAdic"]}
+      lab="Número sequencial do item dentro da adição"
+      pat={"[1-9]{1}[0-9]{0,2}"}
+    />
+    <InputT
+      bind:val={adi[i]["cFabricante"]}
+      lab="Código do fabricante estrangeiro"
+      aux="Usado nos sistemas internos de informação do emitente"
+      min={1}
+      max={60}
+    />
+    <InputT
+      bind:val={adi[i]["vDescDI"]}
+      opt
+      lab="Valor do desconto do item da DI – adição"
+      pat={"0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?"}
+    />
+    <InputT
+      bind:val={adi[i]["nDraw"]}
+      opt
+      lab="Número do ato concessório de Drawback"
+      pat={"[0-9]{0,11}"}
+    />
+  </svelte:fragment>
 </Lista>

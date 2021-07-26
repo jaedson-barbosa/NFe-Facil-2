@@ -1065,6 +1065,39 @@
             "restriction": { "pattern": "[A-Z]{2}[0-9]{4}" }
           },
           {
+            "annotation": {
+              "label": "Código Especificador da Substituição Tributária"
+            },
+            "optional": true,
+            "element": [
+              {
+                "name": "CEST",
+                "annotation": {
+                  "label": "CEST (Codigo especificador da Substuicao Tributaria)",
+                  "aux": "Identifica a mercadoria sujeita aos regimes de substituicao tributária e de antecipação do recolhimento do imposto"
+                },
+                "restriction": { "pattern": "[0-9]{7}" }
+              },
+              {
+                "name": "indEscala",
+                "annotation": {
+                  "label": "Prozido em escala relevante",
+                  "itens": ["Sim", "Não"]
+                },
+                "optional": true,
+                "restriction": { "enumeration": ["S", "N"] }
+              },
+              {
+                "name": "CNPJFab",
+                "type": "TCnpj",
+                "optional": true,
+                "annotation": {
+                  "label": "CNPJ do Fabricante da Mercadoria, obrigatório para produto em escala NÃO relevante."
+                }
+              }
+            ]
+          },
+          {
             "name": "cBenef",
             "annotation": {
               "label": "Código de Benefício Fiscal na UF aplicado ao item"
@@ -1426,39 +1459,6 @@
                 "annotation": { "label": "Código de agregação" },
                 "optional": true,
                 "restriction": { "pattern": "[0-9]{1,20}" }
-              }
-            ]
-          },
-          {
-            "annotation": {
-              "label": "Código Especificador da Substituição Tributária"
-            },
-            "optional": true,
-            "element": [
-              {
-                "name": "CEST",
-                "annotation": {
-                  "label": "CEST (Codigo especificador da Substuicao Tributaria)",
-                  "aux": "Identifica a mercadoria sujeita aos regimes de substituicao tributária e de antecipação do recolhimento do imposto"
-                },
-                "restriction": { "pattern": "[0-9]{7}" }
-              },
-              {
-                "name": "indEscala",
-                "annotation": {
-                  "label": "Prozido em escala relevante",
-                  "itens": ["Sim", "Não"]
-                },
-                "optional": true,
-                "restriction": { "enumeration": ["S", "N"] }
-              },
-              {
-                "name": "CNPJFab",
-                "type": "TCnpj",
-                "optional": true,
-                "annotation": {
-                  "label": "CNPJ do Fabricante da Mercadoria, obrigatório para produto em escala NÃO relevante."
-                }
               }
             ]
           },
