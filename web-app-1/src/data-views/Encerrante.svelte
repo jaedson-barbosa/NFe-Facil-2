@@ -5,7 +5,6 @@
   export let raiz: any;
 
   const el = "encerrante";
-  if (!raiz[el]) raiz[el] = {};
   $: r = raiz[el];
 </script>
 

@@ -2,7 +2,6 @@
   import InputT from '../components/InputT.svelte'
   import Select from '../components/Select.svelte'
   import Estado from '../components/Estado.svelte'
-  import { includes } from 'lodash'
 
   export let raiz: any
 
