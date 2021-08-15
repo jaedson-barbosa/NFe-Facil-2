@@ -2,7 +2,6 @@
   import InputT from '../components/InputT.svelte'
   import Select from '../components/Select.svelte'
   import Lista from '../components/Lista.svelte'
-  import DI from './DI.svelte'
   import Opcional from '../components/Opcional.svelte'
   import Estado from '../components/Estado.svelte'
 
