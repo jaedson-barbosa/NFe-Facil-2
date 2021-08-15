@@ -13,7 +13,7 @@
   $: {
     prod['vProd'] = (+prod['qCom'] * +prod['vUnCom']).toFixed(2)
   }
-  
+
   $: detExport = prod['detExport']
   $: veicProd = prod['veicProd']
   $: med = prod['med']
@@ -23,10 +23,10 @@
   $: encerrante = comb?.['encerrante']
 </script>
 
-<h4>Dados dos produtos e serviços</h4>
+<h4>Dados do produto</h4>
 <InputT
   bind:val={prod['cProd']}
-  lab="Código do produto ou serviço"
+  lab="Código do produto"
   aux="Preencher com CFOP caso se trate de itens não relacionados com mercadorias/produto e que o contribuinte não possua codificação própria (Formato: CFOP9999)"
   min={1}
   max={60}
@@ -36,16 +36,11 @@
   lab="GTIN do produto, antigo código EAN ou código de barras"
   pat={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
 />
-<InputT
-  bind:val={prod['xProd']}
-  lab="Descrição do produto ou serviço"
-  min={1}
-  max={120}
-/>
+<InputT bind:val={prod['xProd']} lab="Descrição do produto" min={1} max={120} />
 <InputT
   bind:val={prod['NCM']}
   lab="Código NCM"
-  aux="É permitida a informação do gênero (posição do capítulo do NCM) quando a operação não for de comércio exterior (importação/exportação) ou o produto não seja tributado pelo IPI. Em caso de item de serviço ou item que não tenham produto (Ex. transferência de crédito, crédito do ativo imobilizado, etc.), informar o código 00"
+  aux="É permitida a informação do gênero (posição do capítulo do NCM) quando a operação não for de comércio exterior (importação/exportação) ou o produto não seja tributado pelo IPI."
   pat={'[0-9]{2}|[0-9]{8}'}
 />
 <InputT

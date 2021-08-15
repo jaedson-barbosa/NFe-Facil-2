@@ -50,6 +50,8 @@
       ICMSUFDest.vICMSUFRemet = '0.00'
     }
   }
+
+  $: IPI = imposto['IPI']
 </script>
 
 <h4>Tributos incidentes</h4>
@@ -407,7 +409,7 @@
 
 {#if regimeNormal}
   <h5>ICMS Interestadual</h5>
-  <Opcional raiz={imposto} name={'ICMSUFDest'}>
+  <Opcional raiz={imposto} name="ICMSUFDest">
     <InputT
       bind:val={ICMSUFDest['vBCUFDest']}
       lab="Valor da Base de Cálculo do ICMS na UF do destinatário."
@@ -455,3 +457,86 @@
     />
   </Opcional>
 {/if}
+
+<h5>Imposto sobre produtos industrializados</h5>
+<Opcional raiz={imposto} name="IPI">
+  <InputT
+    bind:val={IPI['CNPJProd']}
+    opt
+    lab="CNPJ do produtor da mercadoria"
+    aux="Informar se diferente do emitente e somente em exportação"
+    pat={'[0-9]{14}'}
+    max={14}
+    mask="cnpj"
+  />
+  <InputT
+    bind:val={IPI['cSelo']}
+    opt
+    lab="Código do selo de controle"
+    min={1}
+    max={60}
+  />
+  <InputT
+    bind:val={IPI['qSelo']}
+    opt
+    lab="Quantidade de selo de controle"
+    pat={'[0-9]{1,12}'}
+  />
+  <InputT
+    bind:val={IPI['cEnq']}
+    lab="Código de Enquadramento Legal"
+    min={1}
+    max={3}
+  />
+  <Select
+    bind:val={IPI['CST']}
+    lab="Código da Situação Tributária"
+    els={[
+      ['00', 'Entrada com recuperação de crédito'],
+      ['01', 'Entrada tributada com alíquota zero'],
+      ['02', 'Entrada isenta'],
+      ['03', 'Entrada não-tributada'],
+      ['04', 'Entrada imune'],
+      ['05', 'Entrada com suspensão'],
+      ['49', 'Outras entradas'],
+      ['50', 'Saída tributada'],
+      ['51', 'Saída tributada com alíquota zero'],
+      ['52', 'Saída isenta'],
+      ['53', 'Saída não-tributada'],
+      ['54', 'Saída imune'],
+      ['55', 'Saída com suspensão'],
+      ['99', 'Outras saídas'],
+    ]}
+  />
+  {#if ['00', '49', '50', '99'].includes(IPI['CST'])}
+    {#if !IPI['qUnid'] && !IPI['vUnid']}
+      <InputT
+        bind:val={IPI['vBC']}
+        lab="Valor da BC do IPI"
+        pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+      />
+      <InputT
+        bind:val={IPI['pIPI']}
+        lab="Alíquota do IPI"
+        pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
+      />
+    {/if}
+    {#if !IPI['vBC'] && !IPI['pIPI']}
+      <InputT
+        bind:val={IPI['qUnid']}
+        lab="Quantidade total na unidade padrão para tributação"
+        pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(.[0-9]{1,4})?'}
+      />
+      <InputT
+        bind:val={IPI['vUnid']}
+        lab="Valor por Unidade Tributável"
+        pat={'0|0.[0-9]{4}|[1-9]{1}[0-9]{0,10}(.[0-9]{4})?'}
+      />
+    {/if}
+    <InputT
+      bind:val={IPI['vIPI']}
+      lab="Valor do IPI"
+      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+    />
+  {/if}
+</Opcional>

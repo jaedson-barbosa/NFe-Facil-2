@@ -152,7 +152,8 @@ REFINAMENTOS durante alplha:
         Testar impressão de PDF, caso dê errado devem ser usados apps para isso, pro Android tem alguns
 
 Observações:  
-ISSQN limitado para endereço nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
+ISSQN completamente removido. Se necessário, basta pedir a implementação ao desenvolvedor.
+IPI contém apenas a implementação básica.
 Retirada e entrega limitados para endereço nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
 Obedecida apenas regra geral de cálculo do total (pag. 122)
 Adição do vServ no total do vNF não é feita automaticamente

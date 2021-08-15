@@ -4096,11 +4096,6 @@
                         }
                       },
                       {
-                        "name": "vIPI",
-                        "type": "TDec_1302",
-                        "annotation": { "label": "Valor do IPI" }
-                      },
-                      {
                         "choice": true,
                         "element": [
                           {
@@ -4140,6 +4135,11 @@
                             ]
                           }
                         ]
+                      },
+                      {
+                        "name": "vIPI",
+                        "type": "TDec_1302",
+                        "annotation": { "label": "Valor do IPI" }
                       }
                     ]
                   },
