@@ -1,7 +1,6 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
   import Select from '../components/Select.svelte'
-  import Lista from '../components/Lista.svelte'
   import Opcional from '../components/Opcional.svelte'
   import Estado from '../components/Estado.svelte'
 
@@ -17,13 +16,13 @@
       ? (imposto['ICMS']['ICMS00'] = { CST: '00' })
       : (imposto['ICMS']['ICMSSN101'] = { CSOSN: '101' })
 
-  let tipo = ICMS[regimeNormal ? 'CST' : 'CSOSN']
-  if (regimeNormal && imposto['ICMSPart']) tipo = 'Part' + tipo
-  if (regimeNormal && imposto['ICMSST']) tipo = 'ST' + tipo
+  let tipoICMS = ICMS[regimeNormal ? 'CST' : 'CSOSN']
+  if (regimeNormal && imposto['ICMSPart']) tipoICMS = 'Part' + tipoICMS
+  if (regimeNormal && imposto['ICMSST']) tipoICMS = 'ST' + tipoICMS
 
   $: {
     imposto['ICMS'] = {}
-    let t = tipo as string
+    let t = tipoICMS as string
     let c: string
     if (t === '41' || t === '50') {
       c = 'ICMS40'
@@ -54,23 +53,43 @@
   $: IPI = imposto['IPI']
   $: II = imposto['II']
 
-  if (!imposto['PIS']) imposto['PIS'] = {}
-  let PIS =
-    Object.values(imposto['PIS'])[0] ??
-    (imposto['PIS']['PISNT'] = { CST: '07' })
-
+  let PIS = Object.values(imposto['PIS'])[0]
+  let tipoPIS = PIS?.['CST'] ?? '00'
   $: {
-    let t = imposto['PIS']['CST']
-    let c = ['01', '02'].includes(t)
-      ? 'PISAliq'
-      : t == '03'
-      ? 'PISQtde'
-      : ['04', '05', '06', '07', '08', '09'].includes(t)
-      ? 'PISNT'
-      : 'PISOutr'
-    imposto['PIS'] = {}
-    imposto['PIS'][c] = { CST: t }
+    if (tipoPIS == '00') {
+      imposto['PIS'] = undefined
+    } else {
+      let c = ['01', '02'].includes(tipoPIS)
+        ? 'PISAliq'
+        : tipoPIS == '03'
+        ? 'PISQtde'
+        : ['04', '05', '06', '07', '08', '09'].includes(tipoPIS)
+        ? 'PISNT'
+        : 'PISOutr'
+      imposto['PIS'] = {}
+      PIS = imposto['PIS'][c] = { CST: tipoPIS }
+    }
   }
+  $: PISST = imposto['PISST']
+
+  let COFINS = Object.values(imposto['COFINS'])[0]
+  let tipoCOFINS = COFINS?.['CST'] ?? '00'
+  $: {
+    if (tipoCOFINS == '00') {
+      imposto['COFINS'] = undefined
+    } else {
+      let c = ['01', '02'].includes(tipoCOFINS)
+        ? 'COFINSAliq'
+        : tipoCOFINS == '03'
+        ? 'COFINSQtde'
+        : ['04', '05', '06', '07', '08', '09'].includes(tipoCOFINS)
+        ? 'COFINSNT'
+        : 'COFINSOutr'
+      imposto['COFINS'] = {}
+      COFINS = imposto['COFINS'][c] = { CST: tipoCOFINS }
+    }
+  }
+  $: COFINSST = imposto['COFINSST']
 </script>
 
 <h4>Tributos incidentes</h4>
@@ -83,7 +102,7 @@
 
 <h5>ICMS</h5>
 <Select
-  bind:val={tipo}
+  bind:val={tipoICMS}
   lab="Código de situação"
   els={regimeNormal
     ? [
@@ -135,10 +154,10 @@
     ['8', 'Nacional, importação superior a 70%'],
   ]}
 />
-{#if ['00', '10', '20', '51', '70', '90', 'Part10', 'Part90', '900'].includes(tipo)}
+{#if ['00', '10', '20', '51', '70', '90', 'Part10', 'Part90', '900'].includes(tipoICMS)}
   <Select
     bind:val={ICMS['modBC']}
-    opt={tipo == '51'}
+    opt={tipoICMS == '51'}
     lab="Modalidade de determinação da BC do ICMS"
     els={[
       ['0', 'Margem Valor Agregado (%)'],
@@ -147,27 +166,27 @@
       ['3', 'Valor da Operação'],
     ]}
   />
-  {#if ['20', '51', '70', '90', 'Part10', 'Part90', '900'].includes(tipo)}
+  {#if ['20', '51', '70', '90', 'Part10', 'Part90', '900'].includes(tipoICMS)}
     <InputT
       bind:val={ICMS['pRedBC']}
-      opt={tipo != '20'}
+      opt={tipoICMS != '20'}
       lab="Percentual de redução da BC"
       pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
     />
   {/if}
   <InputT
     bind:val={ICMS['vBC']}
-    opt={tipo == '51'}
+    opt={tipoICMS == '51'}
     lab="Valor da BC do ICMS"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <InputT
     bind:val={ICMS['pICMS']}
-    opt={tipo == '51'}
+    opt={tipoICMS == '51'}
     lab="Alíquota do ICMS"
     pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
   />
-  {#if tipo == '51'}
+  {#if tipoICMS == '51'}
     <InputT
       bind:val={ICMS['vICMSOp']}
       opt
@@ -189,13 +208,13 @@
   {/if}
   <InputT
     bind:val={ICMS['vICMS']}
-    opt={tipo == '51'}
+    opt={tipoICMS == '51'}
     lab="Valor do ICMS"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 {/if}
-{#if ['00', '10', '20', '51', '70', '90'].includes(tipo)}
-  {#if tipo != '00'}
+{#if ['00', '10', '20', '51', '70', '90'].includes(tipoICMS)}
+  {#if tipoICMS != '00'}
     <InputT
       bind:val={ICMS['vBCFCP']}
       opt={!ICMS['pFCP'] && !ICMS['vFCP']}
@@ -216,7 +235,7 @@
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 {/if}
-{#if ['10', '30', '70', '90', 'Part10', 'Part90', '201', '202', '203', '900'].includes(tipo)}
+{#if ['10', '30', '70', '90', 'Part10', 'Part90', '201', '202', '203', '900'].includes(tipoICMS)}
   <Select
     bind:val={ICMS['modBCST']}
     lab="Modalidade de determinação da BC do ICMS ST"
@@ -258,7 +277,7 @@
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 {/if}
-{#if ['10', '30', '60', '70', '90', '201', '202', '203', '900'].includes(tipo)}
+{#if ['10', '30', '60', '70', '90', '201', '202', '203', '900'].includes(tipoICMS)}
   <InputT
     bind:val={ICMS['vBCFCPST']}
     opt={!ICMS['pFCPST'] && !ICMS['vFCPST']}
@@ -278,7 +297,7 @@
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 {/if}
-{#if ['60', 'ST41', 'ST60', '500'].includes(tipo)}
+{#if ['60', 'ST41', 'ST60', '500'].includes(tipoICMS)}
   <InputT
     bind:val={ICMS['vBCSTRet']}
     opt={!['pST', 'vICMSSubstituto', 'vICMSSTRet'].some((v) => ICMS[v])}
@@ -287,7 +306,7 @@
   />
   <InputT
     bind:val={ICMS['pST']}
-    opt={['ST41', 'ST60'].includes(tipo) ||
+    opt={['ST41', 'ST60'].includes(tipoICMS) ||
       !['vBCSTRet', 'vICMSSubstituto', 'vICMSSTRet'].some((v) => ICMS[v])}
     lab="Aliquota suportada pelo consumidor final"
     pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
@@ -322,7 +341,7 @@
     lab="Valor"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
-  {#if ['ST41', 'ST60'].includes(tipo)}
+  {#if ['ST41', 'ST60'].includes(tipoICMS)}
     <InputT
       bind:val={ICMS['vBCSTDest']}
       lab="Informar o valor da BC do ICMS ST da UF destino"
@@ -359,7 +378,7 @@
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 {/if}
-{#if ['20', '30', '40', '41', '50', '70', '90'].includes(tipo)}
+{#if ['20', '30', '40', '41', '50', '70', '90'].includes(tipoICMS)}
   <InputT
     bind:val={ICMS['vICMSDeson']}
     opt={!ICMS['motDesICMS']}
@@ -370,13 +389,13 @@
     bind:val={ICMS['motDesICMS']}
     opt={!ICMS['vICMSDeson']}
     lab="Motivo da desoneração"
-    els={tipo === '30'
+    els={tipoICMS === '30'
       ? [
           ['6', 'Utilitários e motos da Amazônia Ocidental e ALC'],
           ['7', 'SUFRAMA'],
           ['9', 'Outros'],
         ]
-      : ['40', '41', '50'].includes(tipo)
+      : ['40', '41', '50'].includes(tipoICMS)
       ? [
           ['1', 'Táxi'],
           ['3', 'Uso na agropecuária'],
@@ -398,7 +417,7 @@
         ]}
   />
 {/if}
-{#if ['Part10', 'Part90'].includes(tipo)}
+{#if ['Part10', 'Part90'].includes(tipoICMS)}
   <InputT
     bind:val={ICMS['pBCOp']}
     lab="% para determinação do valor da BC da operação própria."
@@ -586,9 +605,10 @@
 
 <h5>PIS</h5>
 <Select
-  bind:val={PIS['CST']}
+  bind:val={tipoPIS}
   lab="Código de Situação Tributária"
   els={[
+    ['00', 'Não informar'],
     ['01', 'Alíquota Normal (Cumulativo/Não Cumulativo)'],
     ['02', 'Alíquota Diferenciada'],
     ['03', 'Tributado por quantidade'],
@@ -697,3 +717,184 @@
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 {/if}
+
+<h5>PIS ST</h5>
+<Opcional raiz={imposto} name="PISST">
+  {#if !PISST['qBCProd'] && !PISST['vAliqProd']}
+    <InputT
+      bind:val={PISST['vBC']}
+      lab="Valor da BC do PIS"
+      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+    />
+    <InputT
+      bind:val={PISST['pPIS']}
+      lab="Alíquota do PIS (em percentual)"
+      pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
+    />
+  {/if}
+  {#if !PISST['vBC'] && !PISST['pPIS']}
+    <InputT
+      bind:val={PISST['qBCProd']}
+      lab="Quantidade Vendida"
+      pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(.[0-9]{1,4})?'}
+    />
+    <InputT
+      bind:val={PISST['vAliqProd']}
+      lab="Alíquota do PIS (em reais)"
+      pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
+    />
+  {/if}
+  <InputT
+    bind:val={PISST['vPIS']}
+    lab="Valor do PIS"
+    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+  />
+</Opcional>
+
+<h5>COFINS</h5>
+<Select
+  bind:val={tipoCOFINS}
+  lab="Código de Situação Tributária"
+  els={[
+    ['00', 'Não informar'],
+    ['01', 'Alíquota Normal (Cumulativo/Não Cumulativo)'],
+    ['02', 'Alíquota Diferenciada'],
+    ['03', 'Tributado por quantidade'],
+    ['04', 'Operação com tributação monofásica (Alíquota Zero)'],
+    ['05', 'Operação Tributável (ST)'],
+    ['06', 'Operação Tributável - Alíquota Zero'],
+    ['07', 'Operação Isenta da contribuição'],
+    ['08', 'Operação sem incidência da contribuição'],
+    ['09', 'Operação com suspensão da contribuição'],
+    ['49', 'Outras Operações de Saída;'],
+    [
+      '50',
+      'Operação com Direito a Crédito - Vinculada Exclusivamente a Receita Tributada no Mercado Interno;',
+    ],
+    [
+      '51',
+      'Operação com Direito a Crédito - Vinculada Exclusivamente a Receita Não Tributada no Mercado Interno;',
+    ],
+    [
+      '52',
+      'Operação com Direito a Crédito – Vinculada Exclusivamente a Receita de Exportação;',
+    ],
+    [
+      '53',
+      'Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno;',
+    ],
+    [
+      '54',
+      'Operação com Direito a Crédito - Vinculada a Receitas Tributadas no Mercado Interno e de Exportação;',
+    ],
+    [
+      '55',
+      'Operação com Direito a Crédito - Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação;',
+    ],
+    [
+      '56',
+      'Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno, e de Exportação;',
+    ],
+    [
+      '60',
+      'Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Tributada no Mercado Interno;',
+    ],
+    [
+      '61',
+      'Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Não-Tributada no Mercado Interno;',
+    ],
+    [
+      '62',
+      'Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita de Exportação;',
+    ],
+    [
+      '63',
+      'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno;',
+    ],
+    [
+      '64',
+      'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas no Mercado Interno e de Exportação;',
+    ],
+    [
+      '65',
+      'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação;',
+    ],
+    [
+      '66',
+      'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno, e de Exportação;',
+    ],
+    ['67', 'Crédito Presumido - Outras Operações;'],
+    ['70', 'Operação de Aquisição sem Direito a Crédito;'],
+    ['71', 'Operação de Aquisição com Isenção;'],
+    ['72', 'Operação de Aquisição com Suspensão;'],
+    ['73', 'Operação de Aquisição a Alíquota Zero;'],
+    ['74', 'Operação de Aquisição; sem Incidência da Contribuição;'],
+    ['75', 'Operação de Aquisição por Substituição Tributária;'],
+    ['98', 'Outras Operações de Entrada;'],
+    ['99', 'Outras Operações;'],
+  ]}
+/>
+{#if !['04', '05', '06', '07', '08', '09'].includes(COFINS['CST'])}
+  {#if COFINS['CST'] != '03' && !COFINS['qBCProd'] && !COFINS['vAliqProd']}
+    <InputT
+      bind:val={COFINS['vBC']}
+      lab="Valor da BC do COFINS"
+      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+    />
+    <InputT
+      bind:val={COFINS['pCOFINS']}
+      lab="Alíquota do COFINS (em percentual)"
+      pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
+    />
+  {/if}
+  {#if COFINS['CST'] != '01' && COFINS['CST'] != '02' && !COFINS['vBC'] && !COFINS['pCOFINS']}
+    <InputT
+      bind:val={COFINS['qBCProd']}
+      lab="Quantidade Vendida"
+      pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(.[0-9]{1,4})?'}
+    />
+    <InputT
+      bind:val={COFINS['vAliqProd']}
+      lab="Alíquota do COFINS (em reais)"
+      pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
+    />
+  {/if}
+  <InputT
+    bind:val={COFINS['vCOFINS']}
+    lab="Valor do COFINS"
+    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+  />
+{/if}
+
+<h5>COFINS ST</h5>
+<Opcional raiz={imposto} name="COFINSST">
+  {#if !COFINSST['qBCProd'] && !COFINSST['vAliqProd']}
+    <InputT
+      bind:val={COFINSST['vBC']}
+      lab="Valor da BC do COFINS"
+      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+    />
+    <InputT
+      bind:val={COFINSST['pCOFINS']}
+      lab="Alíquota do COFINS (em percentual)"
+      pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
+    />
+  {/if}
+  {#if !COFINSST['vBC'] && !COFINSST['pCOFINS']}
+    <InputT
+      bind:val={COFINSST['qBCProd']}
+      lab="Quantidade Vendida"
+      pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(.[0-9]{1,4})?'}
+    />
+    <InputT
+      bind:val={COFINSST['vAliqProd']}
+      lab="Alíquota do COFINS (em reais)"
+      pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
+    />
+  {/if}
+  <InputT
+    bind:val={COFINSST['vCOFINS']}
+    lab="Valor do COFINS"
+    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+  />
+</Opcional>
