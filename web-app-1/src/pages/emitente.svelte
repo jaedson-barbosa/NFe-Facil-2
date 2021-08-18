@@ -1,7 +1,7 @@
 <script lang="ts">
   import { empresa, idEmpresa, empresaRef } from '../app/store';
   import Emit from '../data-views/Emit.svelte';
-  import { url, goto } from '@roxi/routify';
+  import { goto } from '@roxi/routify';
 
   let loading = false;
   let raiz = undefined;
@@ -29,7 +29,7 @@
 {#if raiz}
   <form on:submit|preventDefault={() => salvar()}>
     <fieldset disabled={loading}>
-      <Emit {raiz}>
+      <Emit bind:raiz>
         <label>
           Série da NF-e <small>Série atual de emissão das NF-es</small>
           <input bind:value={raiz.serieNFe} pattern={'0|[1-9]{1}[0-9]{0,2}'} />

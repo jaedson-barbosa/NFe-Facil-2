@@ -153,15 +153,16 @@
             <p>Existem duas formas de obter acesso a um emitente:</p>
             <ol>
               <li>
-                <strong>Com certificado: </strong> usando o certificado da empresa
-                é possível acessar a aplicação como um administrador. Caso a empresa
-                ainda não esteja cadastrada na aplicação, esta é a única forma de
-                cadastro disponível.
+                <strong>Com certificado:</strong>
+                 usando o certificado da empresa é possível acessar a aplicação como
+                um administrador. Caso a empresa ainda não esteja cadastrada na aplicação,
+                esta é a única forma de cadastro disponível.
               </li>
               <li>
-                <strong>Sem certificado: </strong> sem o certificado é possível pedir
-                para que um administrador liberesse o seu acesso, não sendo então
-                necessário possuir o certificado para poder usar o app.
+                <strong>Sem certificado:</strong>
+                 sem o certificado é possível pedir para que um administrador liberesse
+                o seu acesso, não sendo então necessário possuir o certificado para
+                poder usar o app.
               </li>
             </ol>
             <p>
@@ -176,7 +177,7 @@
     {/if}
   {:else if $user === null}
     <h1>Bem vindo ao NFe Fácil</h1>
-    <button on:click={user.signIn}> Iniciar sessão </button>
+    <button on:click={user.signIn}>Iniciar sessão</button>
   {:else}
     Aguardando serviço de autenticação...
   {/if}
