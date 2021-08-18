@@ -9,7 +9,10 @@
   export let min: number = undefined
   export let max: number = undefined
   export let mask: TMask = undefined
-  export let val: string
+  export let raiz: any = {}
+  export let name: string = ''
+  export let val = raiz[name]
+  $: raiz[name] = val
 
   $: maskedValue = mask ? applyMask(val, mask) : ''
 

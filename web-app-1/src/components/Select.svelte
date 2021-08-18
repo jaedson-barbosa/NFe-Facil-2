@@ -2,8 +2,11 @@
   export let opt = false
   export let lab: string
   export let aux = ''
-  export let val: string
   export let els: [string, string][]
+  export let raiz: any = {}
+  export let name: string = ''
+  export let val: string = raiz[name]
+  $: raiz[name] = val
 </script>
 
 <label>

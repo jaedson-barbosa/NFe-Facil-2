@@ -5435,63 +5435,6 @@
         ]
       },
       {
-        "name": "vol",
-        "optional": true,
-        "maxOccurs": "5000",
-        "annotation": { "label": "Dados dos volumes" },
-        "element": [
-          {
-            "name": "qVol",
-            "optional": true,
-            "annotation": { "label": "Quantidade de volumes transportados" },
-            "restriction": { "pattern": "[0-9]{1,15}" }
-          },
-          {
-            "name": "esp",
-            "optional": true,
-            "annotation": { "label": "Espécie dos volumes transportados" },
-            "restriction": { "minLength": "1", "maxLength": "60" }
-          },
-          {
-            "name": "marca",
-            "optional": true,
-            "annotation": { "label": "Marca dos volumes transportados" },
-            "restriction": { "minLength": "1", "maxLength": "60" }
-          },
-          {
-            "name": "nVol",
-            "optional": true,
-            "annotation": { "label": "Numeração dos volumes transportados" },
-            "restriction": { "minLength": "1", "maxLength": "60" }
-          },
-          {
-            "name": "pesoL",
-            "type": "TDec_1203",
-            "optional": true,
-            "annotation": { "label": "Peso líquido (em kg)" }
-          },
-          {
-            "name": "pesoB",
-            "type": "TDec_1203",
-            "optional": true,
-            "annotation": { "label": "Peso bruto (em kg)" }
-          },
-          {
-            "name": "lacres",
-            "annotation": { "label": "Lacres" },
-            "optional": true,
-            "maxOccurs": "5000",
-            "element": [
-              {
-                "name": "nLacre",
-                "annotation": { "label": "Número dos lacres" },
-                "restriction": { "minLength": "1", "maxLength": "60" }
-              }
-            ]
-          }
-        ]
-      },
-      {
         "annotation": { "label": "Meio de transporte" },
         "optional": true,
         "choice": true,
@@ -5565,6 +5508,63 @@
             "name": "balsa",
             "annotation": { "label": "Identificação da balsa" },
             "restriction": { "minLength": "1", "maxLength": "20" }
+          }
+        ]
+      },
+      {
+        "name": "vol",
+        "optional": true,
+        "maxOccurs": "5000",
+        "annotation": { "label": "Dados dos volumes" },
+        "element": [
+          {
+            "name": "qVol",
+            "optional": true,
+            "annotation": { "label": "Quantidade de volumes transportados" },
+            "restriction": { "pattern": "[0-9]{1,15}" }
+          },
+          {
+            "name": "esp",
+            "optional": true,
+            "annotation": { "label": "Espécie dos volumes transportados" },
+            "restriction": { "minLength": "1", "maxLength": "60" }
+          },
+          {
+            "name": "marca",
+            "optional": true,
+            "annotation": { "label": "Marca dos volumes transportados" },
+            "restriction": { "minLength": "1", "maxLength": "60" }
+          },
+          {
+            "name": "nVol",
+            "optional": true,
+            "annotation": { "label": "Numeração dos volumes transportados" },
+            "restriction": { "minLength": "1", "maxLength": "60" }
+          },
+          {
+            "name": "pesoL",
+            "type": "TDec_1203",
+            "optional": true,
+            "annotation": { "label": "Peso líquido (em kg)" }
+          },
+          {
+            "name": "pesoB",
+            "type": "TDec_1203",
+            "optional": true,
+            "annotation": { "label": "Peso bruto (em kg)" }
+          },
+          {
+            "name": "lacres",
+            "annotation": { "label": "Lacres" },
+            "optional": true,
+            "maxOccurs": "5000",
+            "element": [
+              {
+                "name": "nLacre",
+                "annotation": { "label": "Número dos lacres" },
+                "restriction": { "minLength": "1", "maxLength": "60" }
+              }
+            ]
           }
         ]
       }

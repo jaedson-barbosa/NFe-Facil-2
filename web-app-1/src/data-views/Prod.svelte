@@ -148,38 +148,44 @@
 />
 <h5>Declaração de Importação</h5>
 <Lista raiz={prod} name="DI">
-  <svelte:fragment slot="summary" let:item>
+  <svelte:fragment slot="h" let:item>
     {item['nDI']}
   </svelte:fragment>
-  <svelte:fragment slot="body" let:i>
+  <svelte:fragment slot="b" let:item>
     <InputT
-      bind:val={prod['DI'][i]['nDI']}
+      raiz={item}
+      name='nDI'
       lab="Numero do Documento de Importação (DI/DSI/DA/DRI-E)"
       min={1}
       max={12}
     />
     <InputT
-      bind:val={prod['DI'][i]['dDI']}
+      raiz={item}
+      name='dDI'
       lab="Data de registro da DI/DSI/DA"
       pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
     />
     <InputT
-      bind:val={prod['DI'][i]['xLocDesemb']}
+      raiz={item}
+      name='xLocDesemb'
       lab="Local do desembaraço aduaneiro"
       min={1}
       max={60}
     />
     <Estado
-      bind:UF={prod['DI'][i]['UFDesemb']}
+      raiz={item}
+      UFName='UFDesemb'
       lab="UF onde ocorreu o desembaraço aduaneiro"
     />
     <InputT
-      bind:val={prod['DI'][i]['dDesemb']}
+      raiz={item}
+      name='dDesemb'
       lab="Data do desembaraço aduaneiro"
       pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
     />
     <Select
-      bind:val={prod['DI'][i]['tpViaTransp']}
+      raiz={item}
+      name='tpViaTransp'
       lab="Via de transporte internacional informada na DI"
       els={[
         ['1', 'Maritima'],
@@ -195,13 +201,15 @@
       ]}
     />
     <InputT
-      bind:val={prod['DI'][i]['vAFRMM']}
+      raiz={item}
+      name='vAFRMM'
       opt
       lab="Valor Adicional ao frete para renovação de marinha mercante"
       pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
     />
     <Select
-      bind:val={prod['DI'][i]['tpIntermedio']}
+      raiz={item}
+      name='tpIntermedio'
       lab="Forma de Importação quanto a intermediação"
       els={[
         ['1', 'Por conta propria'],
@@ -210,7 +218,8 @@
       ]}
     />
     <InputT
-      bind:val={prod['DI'][i]['CNPJ']}
+      raiz={item}
+      name='CNPJ'
       opt
       lab="CNPJ do adquirente ou do encomendante"
       pat={'[0-9]{14}'}
@@ -218,48 +227,55 @@
       mask="cnpj"
     />
     <Estado
-      bind:UF={prod['DI'][i]['UFTerceiro']}
+      raiz={item}
+      UFName='UFTerceiro'
       opt
       lab="UF do adquirente ou do encomendante"
     />
     <InputT
-      bind:val={prod['DI'][i]['cExportador']}
+      raiz={item}
+      name='cExportador'
       lab="Código do exportador"
       aux="Usado nos sistemas internos de informação do emitente"
       min={1}
       max={60}
     />
     <h6>Adições</h6>
-    <Lista raiz={prod['DI'][i]} name="adi">
-      <svelte:fragment slot="summary" let:item>
-        {item['nAdicao']} - {item['nSeqAdic']}
+    <Lista raiz={item} name="adi">
+      <svelte:fragment slot="h" let:item={subitem}>
+        {subitem['nAdicao']} - {subitem['nSeqAdic']}
       </svelte:fragment>
-      <svelte:fragment slot="body" let:i={j}>
+      <svelte:fragment slot="b" let:item={subitem}>
         <InputT
-          bind:val={prod['DI'][i]['adi'][j]['nAdicao']}
+          raiz={subitem}
+          name='nAdicao'
           lab="Número da adição"
           pat={'[1-9]{1}[0-9]{0,2}'}
         />
         <InputT
-          bind:val={prod['DI'][i]['adi'][j]['nSeqAdic']}
+          raiz={subitem}
+          name='nSeqAdic'
           lab="Número sequencial do item dentro da adição"
           pat={'[1-9]{1}[0-9]{0,2}'}
         />
         <InputT
-          bind:val={prod['DI'][i]['adi'][j]['cFabricante']}
+          raiz={subitem}
+          name='cFabricante'
           lab="Código do fabricante estrangeiro"
           aux="Usado nos sistemas internos de informação do emitente"
           min={1}
           max={60}
         />
         <InputT
-          bind:val={prod['DI'][i]['adi'][j]['vDescDI']}
+          raiz={subitem}
+          name='vDescDI'
           opt
           lab="Valor do desconto do item da DI – adição"
           pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
         />
         <InputT
-          bind:val={prod['DI'][i]['adi'][j]['nDraw']}
+          raiz={subitem}
+          name='nDraw'
           opt
           lab="Número do ato concessório de Drawback"
           pat={'[0-9]{0,11}'}
@@ -322,34 +338,39 @@
   pat={'[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}'}
 />
 <Lista raiz={prod} name="rastro">
-  <svelte:fragment slot="summary" let:item>
+  <svelte:fragment slot="h" let:item>
     {item['nLote']}
   </svelte:fragment>
-  <svelte:fragment slot="body" let:i>
+  <svelte:fragment slot="b" let:item>
     <InputT
-      bind:val={prod['rastro'][i]['nLote']}
+      raiz={item}
+      name='nLote'
       lab="Número do lote do produto."
       min={1}
       max={20}
     />
     <InputT
-      bind:val={prod['rastro'][i]['qLote']}
+      raiz={item}
+      name='qLote'
       lab="Quantidade de produto no lote."
       pat={'0|0.[0-9]{3}|[1-9]{1}[0-9]{0,7}(.[0-9]{1,3})?'}
     />
     <InputT
-      bind:val={prod['rastro'][i]['dFab']}
+      raiz={item}
+      name='dFab'
       lab="Data de fabricação/produção"
       pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
     />
     <InputT
-      bind:val={prod['rastro'][i]['dVal']}
+      raiz={item}
+      name='dVal'
       lab="Data de validade"
       aux="Informar o último dia do mês caso a validade não especifique o dia"
       pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
     />
     <InputT
-      bind:val={prod['rastro'][i]['cAgreg']}
+      raiz={item}
+      name='cAgreg'
       opt
       lab="Código de agregação"
       pat={'[0-9]{1,20}'}

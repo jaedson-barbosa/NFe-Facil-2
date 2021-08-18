@@ -4,9 +4,16 @@
   export let lab: string = "Estado";
   export let opt: boolean = false;
   export let incluirEX = false
+  export let raiz: any = {}
 
   export let cUF: string = "";
   export let UF: string = "";
+
+  export let cUFName: string = ''
+  export let UFName: string = ''
+
+  $: raiz[cUFName] = cUF
+  $: raiz[UFName] = UF
 
   const estados = IBGE.map((v) => ({
     Nome: v.Nome,
