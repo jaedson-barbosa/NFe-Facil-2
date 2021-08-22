@@ -64,6 +64,7 @@ export const empresa = derived<Readable<TReference>, TEmpresa>(
 export type TDocument = firebase.firestore.DocumentData
 export type TReference = firebase.firestore.DocumentReference<TDocument>
 export type TColumn = firebase.firestore.CollectionReference<TDocument>
+export type TCadastro = firebase.firestore.QueryDocumentSnapshot<TDocument>
 
 interface IColumns {
   clientes: TColumn

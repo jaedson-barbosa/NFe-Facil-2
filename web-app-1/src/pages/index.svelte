@@ -2,12 +2,10 @@
   import { cancelarNFe, gerarDANFENFe as danfeNFe } from '../app/funcNFe'
   import { userStatus, dbColumns, edicao, idEmpresa } from '../app/store'
   import { applyMask } from '../app/documentUtils'
-  import type { TDocument } from '../app/store'
+  import type { TCadastro } from '../app/store'
   import { goto, url } from '@roxi/routify'
   import { Dados } from '../app/dados'
   import { debounce } from 'lodash-es'
-
-  type TCadastro = firebase.firestore.QueryDocumentSnapshot<TDocument>
 
   $edicao = undefined
 

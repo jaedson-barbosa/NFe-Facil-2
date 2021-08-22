@@ -6,6 +6,9 @@
   import Estado from '../components/Estado.svelte'
 
   export let raiz: any
+  // Melhor criar uma versão personalizável da simplificação (mais tarde)
+  export let simplificado: boolean
+  $: completo = !simplificado
 
   if (!raiz['prod']) raiz['prod'] = {}
   let prod = raiz['prod']
@@ -24,70 +27,84 @@
 </script>
 
 <h4>Dados do produto</h4>
-<InputT
-  bind:val={prod['cProd']}
-  lab="Código do produto"
-  aux="Preencher com CFOP caso se trate de itens não relacionados com mercadorias/produto e que o contribuinte não possua codificação própria (Formato: CFOP9999)"
-  min={1}
-  max={60}
-/>
-<InputT
-  bind:val={prod['cEAN']}
-  lab="GTIN do produto, antigo código EAN ou código de barras"
-  pat={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
-/>
-<InputT bind:val={prod['xProd']} lab="Descrição do produto" min={1} max={120} />
-<InputT
-  bind:val={prod['NCM']}
-  lab="Código NCM"
-  aux="É permitida a informação do gênero (posição do capítulo do NCM) quando a operação não for de comércio exterior (importação/exportação) ou o produto não seja tributado pelo IPI."
-  pat={'[0-9]{2}|[0-9]{8}'}
-/>
-<InputT
-  bind:val={prod['NVE']}
-  opt
-  lab="Nomenclatura de Valor aduaneio e Estatístico"
-  pat={'[A-Z]{2}[0-9]{4}'}
-/>
-<InputT
-  bind:val={prod['CEST']}
-  opt={!prod['indEscala'] && !prod['CNPJFab']}
-  lab="CEST (Codigo especificador da Substuicao Tributaria)"
-  aux="Identifica a mercadoria sujeita aos regimes de substituicao tributária e de antecipação do recolhimento do imposto"
-  pat={'[0-9]{7}'}
-/>
-{#if prod['CEST']}
-  <Select
-    bind:val={prod['indEscala']}
-    opt
-    lab="Prozido em escala relevante"
-    els={[
-      ['S', 'Sim'],
-      ['N', 'Não'],
-    ]}
+{#if completo}
+  <InputT
+    bind:val={prod['cProd']}
+    lab="Código do produto"
+    aux="Preencher com CFOP caso se trate de itens não relacionados com mercadorias/produto e que o contribuinte não possua codificação própria (Formato: CFOP9999)"
+    min={1}
+    max={60}
   />
   <InputT
-    bind:val={prod['CNPJFab']}
+    bind:val={prod['cEAN']}
+    lab="GTIN do produto, antigo código EAN ou código de barras"
+    pat={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
+  />
+  <InputT
+    bind:val={prod['xProd']}
+    lab="Descrição do produto"
+    min={1}
+    max={120}
+  />
+  <InputT
+    bind:val={prod['NCM']}
+    lab="Código NCM"
+    aux="É permitida a informação do gênero (posição do capítulo do NCM) quando a operação não for de comércio exterior (importação/exportação) ou o produto não seja tributado pelo IPI."
+    pat={'[0-9]{2}|[0-9]{8}'}
+  />
+  <InputT
+    bind:val={prod['NVE']}
     opt
-    lab="CNPJ do Fabricante da Mercadoria, obrigatório para produto em escala NÃO relevante."
-    pat={'[0-9]{14}'}
-    max={14}
-    mask="cnpj"
+    lab="Nomenclatura de Valor aduaneio e Estatístico"
+    pat={'[A-Z]{2}[0-9]{4}'}
+  />
+  <InputT
+    bind:val={prod['CEST']}
+    opt={!prod['indEscala'] && !prod['CNPJFab']}
+    lab="CEST (Codigo especificador da Substuicao Tributaria)"
+    aux="Identifica a mercadoria sujeita aos regimes de substituicao tributária e de antecipação do recolhimento do imposto"
+    pat={'[0-9]{7}'}
+  />
+  {#if prod['CEST']}
+    <Select
+      bind:val={prod['indEscala']}
+      opt
+      lab="Prozido em escala relevante"
+      els={[
+        ['S', 'Sim'],
+        ['N', 'Não'],
+      ]}
+    />
+    <InputT
+      bind:val={prod['CNPJFab']}
+      opt
+      lab="CNPJ do Fabricante da Mercadoria, obrigatório para produto em escala NÃO relevante."
+      pat={'[0-9]{14}'}
+      max={14}
+      mask="cnpj"
+    />
+  {/if}
+  <InputT
+    bind:val={prod['cBenef']}
+    opt
+    lab="Código de Benefício Fiscal na UF aplicado ao item"
+    pat={'([!-ÿ]{8}|[!-ÿ]{10}|SEM CBENEF)?'}
+  />
+  <InputT
+    bind:val={prod['EXTIPI']}
+    opt
+    lab="Código EX TIPI"
+    pat={'[0-9]{2,3}'}
   />
 {/if}
-<InputT
-  bind:val={prod['cBenef']}
-  opt
-  lab="Código de Benefício Fiscal na UF aplicado ao item"
-  pat={'([!-ÿ]{8}|[!-ÿ]{10}|SEM CBENEF)?'}
-/>
-<InputT bind:val={prod['EXTIPI']} opt lab="Código EX TIPI" pat={'[0-9]{2,3}'} />
 <InputT
   bind:val={prod['CFOP']}
   lab="CFOP (Código Fiscal de Operações e Prestações)"
   pat={'[1,2,3,5,6,7]{1}[0-9]{3}'}
 />
-<InputT bind:val={prod['uCom']} lab="Unidade comercial" min={1} max={6} />
+{#if completo}
+  <InputT bind:val={prod['uCom']} lab="Unidade comercial" min={1} max={6} />
+{/if}
 <InputT
   bind:val={prod['qCom']}
   lab="Quantidade Comercial  do produto"
@@ -98,12 +115,14 @@
   lab="Valor unitário de comercialização"
   pat={'0|0.[0-9]{1,10}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,10})?'}
 />
-<InputT
-  bind:val={prod['cEANTrib']}
-  lab="GTIN da unidade tributável, antigo código EAN ou código de barras"
-  pat={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
-/>
-<InputT bind:val={prod['uTrib']} lab="Unidade Tributável" min={1} max={6} />
+{#if completo}
+  <InputT
+    bind:val={prod['cEANTrib']}
+    lab="GTIN da unidade tributável, antigo código EAN ou código de barras"
+    pat={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
+  />
+  <InputT bind:val={prod['uTrib']} lab="Unidade Tributável" min={1} max={6} />
+{/if}
 <InputT
   bind:val={prod['qTrib']}
   lab="Quantidade Tributável"
@@ -146,197 +165,199 @@
     ['0', 'Não'],
   ]}
 />
-<h5>Declaração de Importação</h5>
-<Lista raiz={prod} name="DI">
-  <svelte:fragment slot="h" let:item>
-    {item['nDI']}
-  </svelte:fragment>
-  <svelte:fragment slot="b" let:item>
-    <InputT
-      raiz={item}
-      name='nDI'
-      lab="Numero do Documento de Importação (DI/DSI/DA/DRI-E)"
-      min={1}
-      max={12}
-    />
-    <InputT
-      raiz={item}
-      name='dDI'
-      lab="Data de registro da DI/DSI/DA"
-      pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
-    />
-    <InputT
-      raiz={item}
-      name='xLocDesemb'
-      lab="Local do desembaraço aduaneiro"
-      min={1}
-      max={60}
-    />
-    <Estado
-      raiz={item}
-      UFName='UFDesemb'
-      lab="UF onde ocorreu o desembaraço aduaneiro"
-    />
-    <InputT
-      raiz={item}
-      name='dDesemb'
-      lab="Data do desembaraço aduaneiro"
-      pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
-    />
-    <Select
-      raiz={item}
-      name='tpViaTransp'
-      lab="Via de transporte internacional informada na DI"
-      els={[
-        ['1', 'Maritima'],
-        ['2', 'Fluvial'],
-        ['3', 'Lacustre'],
-        ['4', 'Aerea'],
-        ['5', 'Postal'],
-        ['6', 'Ferroviaria'],
-        ['7', 'Rodoviaria'],
-        ['8', 'Conduto'],
-        ['9', 'Meios Proprios'],
-        ['10', 'Entrada/Saida Ficta'],
-      ]}
-    />
-    <InputT
-      raiz={item}
-      name='vAFRMM'
-      opt
-      lab="Valor Adicional ao frete para renovação de marinha mercante"
-      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-    />
-    <Select
-      raiz={item}
-      name='tpIntermedio'
-      lab="Forma de Importação quanto a intermediação"
-      els={[
-        ['1', 'Por conta propria'],
-        ['2', 'Por conta e ordem'],
-        ['3', 'Encomenda'],
-      ]}
-    />
-    <InputT
-      raiz={item}
-      name='CNPJ'
-      opt
-      lab="CNPJ do adquirente ou do encomendante"
-      pat={'[0-9]{14}'}
-      max={14}
-      mask="cnpj"
-    />
-    <Estado
-      raiz={item}
-      UFName='UFTerceiro'
-      opt
-      lab="UF do adquirente ou do encomendante"
-    />
-    <InputT
-      raiz={item}
-      name='cExportador'
-      lab="Código do exportador"
-      aux="Usado nos sistemas internos de informação do emitente"
-      min={1}
-      max={60}
-    />
-    <h6>Adições</h6>
-    <Lista raiz={item} name="adi">
-      <svelte:fragment slot="h" let:item={subitem}>
-        {subitem['nAdicao']} - {subitem['nSeqAdic']}
-      </svelte:fragment>
-      <svelte:fragment slot="b" let:item={subitem}>
-        <InputT
-          raiz={subitem}
-          name='nAdicao'
-          lab="Número da adição"
-          pat={'[1-9]{1}[0-9]{0,2}'}
-        />
-        <InputT
-          raiz={subitem}
-          name='nSeqAdic'
-          lab="Número sequencial do item dentro da adição"
-          pat={'[1-9]{1}[0-9]{0,2}'}
-        />
-        <InputT
-          raiz={subitem}
-          name='cFabricante'
-          lab="Código do fabricante estrangeiro"
-          aux="Usado nos sistemas internos de informação do emitente"
-          min={1}
-          max={60}
-        />
-        <InputT
-          raiz={subitem}
-          name='vDescDI'
-          opt
-          lab="Valor do desconto do item da DI – adição"
-          pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-        />
-        <InputT
-          raiz={subitem}
-          name='nDraw'
-          opt
-          lab="Número do ato concessório de Drawback"
-          pat={'[0-9]{0,11}'}
-        />
-      </svelte:fragment>
-    </Lista>
-  </svelte:fragment>
-</Lista>
-<h5>Detalhe da exportação</h5>
-<Lista {raiz} name="detExport">
-  <svelte:fragment slot="summary" let:item>
-    {item['nDraw']}
-  </svelte:fragment>
-  <svelte:fragment slot="body" let:i>
-    <InputT
-      bind:val={detExport[i]['nDraw']}
-      opt
-      lab="Número do ato concessório de Drawback"
-      pat={'[0-9]{0,11}'}
-    />
-    <h6>Exportação indireta</h6>
-    <Opcional {raiz} name="exportInd">
+{#if false}
+  <h5>Declaração de Importação</h5>
+  <Lista raiz={prod} name="DI">
+    <svelte:fragment slot="h" let:item>
+      {item['nDI']}
+    </svelte:fragment>
+    <svelte:fragment slot="b" let:item>
       <InputT
-        bind:val={detExport[i]['exportInd']['nRE']}
-        lab="Registro de exportação"
-        pat={'[0-9]{0,12}'}
+        raiz={item}
+        name="nDI"
+        lab="Numero do Documento de Importação (DI/DSI/DA/DRI-E)"
+        min={1}
+        max={12}
       />
       <InputT
-        bind:val={detExport[i]['exportInd']['chNFe']}
-        lab="Chave de acesso da NF-e recebida para exportação"
-        pat={'[0-9]{44}'}
-        max={44}
+        raiz={item}
+        name="dDI"
+        lab="Data de registro da DI/DSI/DA"
+        pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
       />
       <InputT
-        bind:val={detExport[i]['exportInd']['qExport']}
-        lab="Quantidade do item efetivamente exportado"
-        pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
+        raiz={item}
+        name="xLocDesemb"
+        lab="Local do desembaraço aduaneiro"
+        min={1}
+        max={60}
       />
-    </Opcional>
-  </svelte:fragment>
-</Lista>
-<InputT
-  bind:val={prod['xPed']}
-  opt
-  lab="Pedido de compra"
-  aux="Informação de interesse do emissor para controle do B2B"
-  min={1}
-  max={15}
-/>
-<InputT
-  bind:val={prod['nItemPed']}
-  opt
-  lab="Número do item do pedido de compra"
-  pat={'[0-9]{1,6}'}
-/>
-<InputT
-  bind:val={prod['nFCI']}
-  opt
-  lab="Número de controle da FCI (Ficha de Conteúdo de Importação)"
-  pat={'[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}'}
-/>
+      <Estado
+        raiz={item}
+        UFName="UFDesemb"
+        lab="UF onde ocorreu o desembaraço aduaneiro"
+      />
+      <InputT
+        raiz={item}
+        name="dDesemb"
+        lab="Data do desembaraço aduaneiro"
+        pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
+      />
+      <Select
+        raiz={item}
+        name="tpViaTransp"
+        lab="Via de transporte internacional informada na DI"
+        els={[
+          ['1', 'Maritima'],
+          ['2', 'Fluvial'],
+          ['3', 'Lacustre'],
+          ['4', 'Aerea'],
+          ['5', 'Postal'],
+          ['6', 'Ferroviaria'],
+          ['7', 'Rodoviaria'],
+          ['8', 'Conduto'],
+          ['9', 'Meios Proprios'],
+          ['10', 'Entrada/Saida Ficta'],
+        ]}
+      />
+      <InputT
+        raiz={item}
+        name="vAFRMM"
+        opt
+        lab="Valor Adicional ao frete para renovação de marinha mercante"
+        pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+      />
+      <Select
+        raiz={item}
+        name="tpIntermedio"
+        lab="Forma de Importação quanto a intermediação"
+        els={[
+          ['1', 'Por conta propria'],
+          ['2', 'Por conta e ordem'],
+          ['3', 'Encomenda'],
+        ]}
+      />
+      <InputT
+        raiz={item}
+        name="CNPJ"
+        opt
+        lab="CNPJ do adquirente ou do encomendante"
+        pat={'[0-9]{14}'}
+        max={14}
+        mask="cnpj"
+      />
+      <Estado
+        raiz={item}
+        UFName="UFTerceiro"
+        opt
+        lab="UF do adquirente ou do encomendante"
+      />
+      <InputT
+        raiz={item}
+        name="cExportador"
+        lab="Código do exportador"
+        aux="Usado nos sistemas internos de informação do emitente"
+        min={1}
+        max={60}
+      />
+      <h6>Adições</h6>
+      <Lista raiz={item} name="adi">
+        <svelte:fragment slot="h" let:item={subitem}>
+          {subitem['nAdicao']} - {subitem['nSeqAdic']}
+        </svelte:fragment>
+        <svelte:fragment slot="b" let:item={subitem}>
+          <InputT
+            raiz={subitem}
+            name="nAdicao"
+            lab="Número da adição"
+            pat={'[1-9]{1}[0-9]{0,2}'}
+          />
+          <InputT
+            raiz={subitem}
+            name="nSeqAdic"
+            lab="Número sequencial do item dentro da adição"
+            pat={'[1-9]{1}[0-9]{0,2}'}
+          />
+          <InputT
+            raiz={subitem}
+            name="cFabricante"
+            lab="Código do fabricante estrangeiro"
+            aux="Usado nos sistemas internos de informação do emitente"
+            min={1}
+            max={60}
+          />
+          <InputT
+            raiz={subitem}
+            name="vDescDI"
+            opt
+            lab="Valor do desconto do item da DI – adição"
+            pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+          />
+          <InputT
+            raiz={subitem}
+            name="nDraw"
+            opt
+            lab="Número do ato concessório de Drawback"
+            pat={'[0-9]{0,11}'}
+          />
+        </svelte:fragment>
+      </Lista>
+    </svelte:fragment>
+  </Lista>
+  <h5>Detalhe da exportação</h5>
+  <Lista {raiz} name="detExport">
+    <svelte:fragment slot="summary" let:item>
+      {item['nDraw']}
+    </svelte:fragment>
+    <svelte:fragment slot="body" let:i>
+      <InputT
+        bind:val={detExport[i]['nDraw']}
+        opt
+        lab="Número do ato concessório de Drawback"
+        pat={'[0-9]{0,11}'}
+      />
+      <h6>Exportação indireta</h6>
+      <Opcional {raiz} name="exportInd">
+        <InputT
+          bind:val={detExport[i]['exportInd']['nRE']}
+          lab="Registro de exportação"
+          pat={'[0-9]{0,12}'}
+        />
+        <InputT
+          bind:val={detExport[i]['exportInd']['chNFe']}
+          lab="Chave de acesso da NF-e recebida para exportação"
+          pat={'[0-9]{44}'}
+          max={44}
+        />
+        <InputT
+          bind:val={detExport[i]['exportInd']['qExport']}
+          lab="Quantidade do item efetivamente exportado"
+          pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
+        />
+      </Opcional>
+    </svelte:fragment>
+  </Lista>
+  <InputT
+    bind:val={prod['xPed']}
+    opt
+    lab="Pedido de compra"
+    aux="Informação de interesse do emissor para controle do B2B"
+    min={1}
+    max={15}
+  />
+  <InputT
+    bind:val={prod['nItemPed']}
+    opt
+    lab="Número do item do pedido de compra"
+    pat={'[0-9]{1,6}'}
+  />
+  <InputT
+    bind:val={prod['nFCI']}
+    opt
+    lab="Número de controle da FCI (Ficha de Conteúdo de Importação)"
+    pat={'[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}'}
+  />
+{/if}
 <Lista raiz={prod} name="rastro">
   <svelte:fragment slot="h" let:item>
     {item['nLote']}
@@ -344,33 +365,33 @@
   <svelte:fragment slot="b" let:item>
     <InputT
       raiz={item}
-      name='nLote'
+      name="nLote"
       lab="Número do lote do produto."
       min={1}
       max={20}
     />
     <InputT
       raiz={item}
-      name='qLote'
+      name="qLote"
       lab="Quantidade de produto no lote."
       pat={'0|0.[0-9]{3}|[1-9]{1}[0-9]{0,7}(.[0-9]{1,3})?'}
     />
     <InputT
       raiz={item}
-      name='dFab'
+      name="dFab"
       lab="Data de fabricação/produção"
       pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
     />
     <InputT
       raiz={item}
-      name='dVal'
+      name="dVal"
       lab="Data de validade"
       aux="Informar o último dia do mês caso a validade não especifique o dia"
       pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
     />
     <InputT
       raiz={item}
-      name='cAgreg'
+      name="cAgreg"
       opt
       lab="Código de agregação"
       pat={'[0-9]{1,20}'}

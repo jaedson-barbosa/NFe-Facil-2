@@ -4,7 +4,9 @@
   import Lista from '../components/Lista.svelte'
   import Opcional from '../components/Opcional.svelte'
   import Estado from '../components/Estado.svelte'
-  import Municipio from '../components/Municipio.svelte'
+  import { dbColumns } from '../app/store'
+  import type { TCadastro } from '../app/store'
+  import ExibDoc from './ExibDoc.svelte'
 
   export let raiz: any
 
@@ -15,7 +17,19 @@
   $: retTransp = transp['retTransp']
   $: veicTransp = transp['veicTransp']
   $: reboque = transp['reboque']
-  $: vol = transp['vol']
+
+  let buscaTransportador = ''
+  let transportadores = [] as TCadastro[]
+  async function buscarTransportador() {
+    const busca = buscaTransportador
+    buscaTransportador = ''
+    const res = await $dbColumns.produtos
+      .where('det.prod.xProd', '>=', busca)
+      .orderBy('det.prod.xProd', 'asc')
+      .limit(10)
+      .get()
+    transportadores = res.docs
+  }
 </script>
 
 <h3>Transporte</h3>
@@ -33,46 +47,37 @@
 />
 
 <h4>Transportador</h4>
-<Opcional raiz={transp} name="transporta">
-  {#if !transporta['CPF']}
-    <InputT
-      lab="CNPJ"
-      mask="cnpj"
-      bind:val={transporta['CNPJ']}
-      pat={'[0-9]{14}'}
-    />
-  {/if}
-  {#if !transporta['CNPJ']}
-    <InputT
-      lab="CPF"
-      mask="cpf"
-      bind:val={transporta['CPF']}
-      max={11}
-      pat={'[0-9]{11}'}
-    />
-  {/if}
-  <InputT
-    lab="Razão Social ou nome do transportador"
-    min={2}
-    max={60}
-    bind:val={transporta['xNome']}
-  />
-  <InputT
-    opt
-    lab="Inscrição Estadual"
-    pat={'ISENTO|[0-9]{2,14}'}
-    max={14}
-    bind:val={transporta['IE']}
-  />
-  <InputT
-    opt
-    lab="Endereço completo"
-    min={1}
-    max={60}
-    bind:val={transporta['xEnder']}
-  />
-  <Municipio bind:xMun={transporta['xMun']} bind:UF={transporta['UF']} />
-</Opcional>
+<label>
+  Buscar por nome
+  <input bind:value={buscaTransportador} />
+</label>
+{#if buscaTransportador}
+  <button on:click={buscarTransportador}>Buscar transportador</button>
+{/if}
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Documento</th>
+    </tr>
+  </thead>
+  <tbody>
+    {#each transportadores as t}
+      <tr
+        class:marcado={transporta?.xNome == t.get('transporta.xNome')}
+        on:click={() => (transporta = t.data())}
+      >
+        <td>{t.get('transporta.xNome')}</td>
+        <td>
+          <ExibDoc
+            CPF={t.get('transporta.CPF')}
+            CNPJ={t.get('transporta.CNPJ')}
+          />
+        </td>
+      </tr>
+    {/each}
+  </tbody>
+</table>
 
 <h4>Retenção ICMS</h4>
 <Opcional raiz={transp} name="retTransp">
@@ -109,7 +114,7 @@
 </Opcional>
 
 <h4>Meio de transporte</h4>
-{#if !transp['veicTransp'] && !transp['reboque']}
+{#if !transp['veicTransp'] && !reboque}
   {#if !transp['balsa']}
     <h5>Vagão</h5>
     <InputT
@@ -154,14 +159,14 @@
     <svelte:fragment slot="b" let:item>
       <InputT
         raiz={item}
-        name='placa'
+        name="placa"
         lab="Placa do veículo"
         pat={'[A-Z]{2,3}[0-9]{4}|[A-Z]{3,4}[0-9]{3}|[A-Z0-9]{7}'}
       />
-      <Estado raiz={item} UFName='UF' incluirEX />
+      <Estado raiz={item} UFName="UF" incluirEX />
       <InputT
         raiz={item}
-        name='RNTC'
+        name="RNTC"
         opt
         lab="Registro Nacional de Transportador de Carga (ANTT)"
         min={1}
@@ -179,14 +184,14 @@
   <svelte:fragment slot="b" let:item>
     <InputT
       raiz={item}
-      name='qVol'
+      name="qVol"
       opt
       lab="Quantidade de volumes transportados"
       pat={'[0-9]{1,15}'}
     />
     <InputT
       raiz={item}
-      name='esp'
+      name="esp"
       opt
       lab="Espécie dos volumes transportados"
       min={1}
@@ -194,7 +199,7 @@
     />
     <InputT
       raiz={item}
-      name='marca'
+      name="marca"
       opt
       lab="Marca dos volumes transportados"
       min={1}
@@ -202,7 +207,7 @@
     />
     <InputT
       raiz={item}
-      name='nVol'
+      name="nVol"
       opt
       lab="Numeração dos volumes transportados"
       min={1}
@@ -210,14 +215,14 @@
     />
     <InputT
       raiz={item}
-      name='pesoL'
+      name="pesoL"
       opt
       lab="Peso líquido (em kg)"
       pat={'0|0.[0-9]{3}|[1-9]{1}[0-9]{0,11}(.[0-9]{3})?'}
     />
     <InputT
       raiz={item}
-      name='pesoB'
+      name="pesoB"
       opt
       lab="Peso bruto (em kg)"
       pat={'0|0.[0-9]{3}|[1-9]{1}[0-9]{0,11}(.[0-9]{3})?'}
@@ -231,7 +236,7 @@
         slot="b"
         let:item={subitem}
         raiz={subitem}
-        name='nLacre'
+        name="nLacre"
         lab="Número"
         min={1}
         max={60}

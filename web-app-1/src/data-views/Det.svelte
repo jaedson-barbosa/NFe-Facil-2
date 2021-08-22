@@ -6,6 +6,7 @@
 
   export let raiz: any
   export let regimeNormal: boolean
+  export let simplificado = false
 
   if (!raiz) raiz = {}
   $: impostoDevol = raiz['impostoDevol']
@@ -14,7 +15,7 @@
   }
 </script>
 
-<Prod {raiz} />
+<Prod {raiz} {simplificado} />
 <Imposto {raiz} {regimeNormal} />
 
 <h4>Imposto devolvido</h4>

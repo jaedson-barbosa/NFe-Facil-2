@@ -3,6 +3,7 @@
   import Select from '../components/Select.svelte'
   import Municipio from '../components/Municipio.svelte'
   import Pais from '../components/Pais.svelte'
+  import Doc from './Doc.svelte'
 
   export let raiz: any
 
@@ -29,26 +30,8 @@
   }
 </script>
 
-<h3>Identificação do Destinatário</h3>
-{#if !dest['CPF'] && !dest['idEstrangeiro']}
-  <InputT lab="CNPJ" mask="cnpj" bind:val={dest['CNPJ']} pat={'[0-9]{14}'} />
-{/if}
-{#if !dest['CNPJ'] && !dest['idEstrangeiro']}
-  <InputT
-    lab="CPF"
-    mask="cpf"
-    bind:val={dest['CPF']}
-    max={11}
-    pat={'[0-9]{11}'}
-  />
-{/if}
-{#if !dest['CPF'] && !dest['CNPJ']}
-  <InputT
-    lab="Id estrangeiro"
-    bind:val={dest['idEstrangeiro']}
-    pat={'([!-ÿ]{0}|[!-ÿ]{5,20})?'}
-  />
-{/if}
+<h3>Destinatário</h3>
+<Doc raiz={dest} />
 <InputT
   lab="Razão Social ou nome do destinatário"
   bind:val={dest['xNome']}
