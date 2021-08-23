@@ -1,6 +1,4 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
-  import Opcional from '../components/Opcional.svelte'
   import Ide from './Ide.svelte'
   import Local from './Local.svelte'
   import Doc from './Doc.svelte'
@@ -15,14 +13,18 @@
   import InfAdic from './InfAdic.svelte'
 
   export let raiz: any
-  export let regimeNormal: boolean
-  export let isHomolog: boolean
   export let isNFCe: boolean
 
-  const problemaNota = !raiz
-  if (!raiz) raiz = {}
+  let regimeNormal = raiz.emit.CRT == '3'
+
   if (!raiz.dest) raiz.dest = {}
   if (!raiz.det) raiz.det = []
+  raiz.infRespTec = {
+    CNPJ: '12931158000164',
+    xContato: 'Jaedson Barbosa Serafim',
+    email: 'jaedson33@gmail.com',
+    fone: '83988856440',
+  }
 
   $: dest = raiz['dest']
   $: destComDoc = dest?.CPF || dest?.CNPJ || dest?.idEstrangeiro
@@ -74,15 +76,9 @@
   }
 </script>
 
-{#if problemaNota}
-  <h3>Nota fiscal com problema</h3>
-  <p>
-    Não foi fornecida a esta página uma nota fiscal válida, portanto recomendo
-    que retorne à tela inicial e gere a nota que desejas de forma correta.
-  </p>
-{/if}
+<h2>Emissão de {isNFCe ? 'NF-e' : 'NFC-e'}</h2>
 
-<Ide {raiz} {isHomolog} {isNFCe} />
+<Ide {raiz} {isNFCe} />
 
 <h3>Destinatário</h3>
 {#if isNFCe && destSemNome}

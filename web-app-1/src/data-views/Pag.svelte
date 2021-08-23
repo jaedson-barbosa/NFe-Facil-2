@@ -6,8 +6,10 @@
   export let raiz: any
   export let total: number
 
-  if (!raiz['pag']) raiz['pag'] = []
-  const pag = raiz['pag'] as any[]
+  if (!raiz['pag']) raiz['pag'] = {}
+  const pag = raiz['pag']
+  if (!pag.detPag) pag.detPag = []
+  const detPag = pag.detPag
 
   function calcularTroco() {
     pag['vTroco'] = pag.reduce((p, c) => p + c.vPag ?? 0) - total
@@ -15,7 +17,7 @@
 </script>
 
 <h3>Pagamento</h3>
-<Lista {raiz} name="pag" newItem={() => ({ detPag: {} })}>
+<Lista raiz={pag} name="detPag">
   <svelte:fragment slot="h" let:item>
     {(+(item['vPag'] ?? '0')).toLocaleString('pt-BR', {
       style: 'currency',

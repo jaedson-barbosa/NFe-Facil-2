@@ -11,8 +11,10 @@
 
   const ed = get(edicao)
   if (ed) {
-    if (ed.tipo != Dados.Clientes) $edicao = undefined
-    else raiz = { ...ed.dado }
+    if (ed.tipo != Dados.Clientes) {
+      $edicao = undefined
+      raiz = {}
+    } else raiz = { ...ed.dado }
   } else raiz = {}
 
   async function salvar() {
@@ -20,10 +22,12 @@
     try {
       const dest = raiz.dest
       if (dest.CPF && !isCpfValid(dest.CPF)) {
+        loading = false
         alert('CPF inválido.')
         return
       }
       if (dest.CNPJ && !isCnpjValid(dest.CNPJ)) {
+        loading = false
         alert('CNPJ inválido.')
         return
       }
@@ -33,21 +37,17 @@
         ? dest.CNPJ
         : dest.idEstrangeiro
       const docRef = $dbColumns.clientes.doc(id)
-      if (ed) {
-        if (ed.id != id) {
-          alert('Não é permitido alterar o documento.')
-          loading = false
-          return
-        }
-      } else {
-        const doc = await docRef.get()
-        const msg =
-          'Já existe um cliente cadastrado com este documento. ' +
-          'Deseja substituí-lo?'
-        if (doc.exists && !confirm(msg)) {
-          loading = false
-          return
-        }
+      if (ed && ed.id != id) {
+        alert('Não é permitido alterar o documento.')
+        loading = false
+        return
+      } else if (
+        !ed &&
+        (await docRef.get()).exists &&
+        !confirm('Já existe um cliente com este documento. Substituir?')
+      ) {
+        loading = false
+        return
       }
       await docRef.set(raiz)
       $edicao = undefined
@@ -60,9 +60,11 @@
   }
 </script>
 
-<form on:submit|preventDefault={() => salvar()}>
-  <fieldset disabled={loading}>
+{#if loading}
+  Carregando...
+{:else}
+  <form on:submit|preventDefault={() => salvar()}>
     <Dest bind:raiz />
     <input type="submit" class="button" />
-  </fieldset>
-</form>
+  </form>
+{/if}

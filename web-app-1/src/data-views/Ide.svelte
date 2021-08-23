@@ -11,7 +11,6 @@
 
   export let raiz: any
   export let isNFCe: boolean
-  export let isHomolog: boolean
 
   function getCodigoEstado(sigla: string) {
     return IBGE.find((v) => v.Sigla == sigla)?.Codigo
@@ -34,13 +33,19 @@
   ide['cMunFG'] = emit.enderEmit.cMun
   ide['tpEmis'] = '1'
   ide['tpImp'] = '1'
-  ide['tpAmb'] = isHomolog ? '2' : '1'
+  let isHomolog = ide['tpAmb'] == '2'
+  $: ide['tpAmb'] = isHomolog ? '2' : '1'
   ide['verProc'] = VERSAO
 
   if (!ide['NFref']) ide['NFref'] = []
 </script>
 
 <h3>Identificação</h3>
+<label>
+  <input type="checkbox" bind:checked={isHomolog} />
+  Ambiente de homologação
+  <small>Emitir nota sem valor fiscal</small>
+</label>
 <InputT bind:val={ide['natOp']} lab="Natureza da Operação" min={1} max={60} />
 <InputT
   bind:val={ide['serie']}
