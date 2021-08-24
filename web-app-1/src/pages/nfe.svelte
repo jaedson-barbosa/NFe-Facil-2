@@ -12,7 +12,7 @@
   const ed = get(edicao)
   let problemaNota = !ed
   let raiz: INFeRoot = ed ? { ...ed.dado } : {}
-  const isNFCe = [Dados.NFCesSalvas, Dados.NFCesEmitidas].includes(ed?.tipo)
+  const isNFCe = ed?.tipo == Dados.NFCes
 
   async function salvar() {
     loading = true
@@ -30,9 +30,9 @@
       $edicao = {
         dado: newRegister,
         id: raiz.Id,
-        tipo: isNFCe ? Dados.NFCesSalvas : Dados.NFesSalvas
+        tipo: isNFCe ? Dados.NFCes : Dados.NFes
       }
-      $goto('./exibNFe')
+      $goto(isNFCe ? './nfces' : 'nfes')
     } catch (error) {
       console.error(error)
       alert(error.message)
@@ -57,6 +57,8 @@
       loading = false
     }
   }
+
+  $: isProd = raiz['ide']['tpAmb'] == '1'
 </script>
 
 {#if loading}
@@ -67,8 +69,7 @@
     <p>
       Não foi fornecida a esta página informações sobre se deveria ser criada
       uma NF-e ou uma NFC-e, por isso foi criada uma NF-e padrão, se isso for o
-      desejado então podes clicar em "Fechar", caso contrário, volte para a tela
-      principal clicando em "Voltar".
+      desejado então clique em "Fechar", caso contrário, clique em "Voltar".
     </p>
     <a class="button" href={$url('./')}>Voltar</a>
     <button on:click={() => problemaNota = false}>Fechar</button>
@@ -77,6 +78,8 @@
   <NFe bind:raiz {isNFCe} />
   <hr />
   <a href={$url('./')}>Cancelar</a>
-  <button on:click={salvar}>Salvar</button>
+  {#if isProd}
+    <button on:click={salvar}>Salvar</button>
+  {/if}
   <button on:click={transmitir}>Transmitir</button>
 {/if}

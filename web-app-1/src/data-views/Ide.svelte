@@ -44,7 +44,7 @@
 <label>
   <input type="checkbox" bind:checked={isHomolog} />
   Ambiente de homologação
-  <small>Emitir nota sem valor fiscal</small>
+  <small>Testar emissão com nota sem valor fiscal</small>
 </label>
 <InputT bind:val={ide['natOp']} lab="Natureza da Operação" min={1} max={60} />
 <InputT

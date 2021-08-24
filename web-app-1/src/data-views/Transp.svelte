@@ -64,6 +64,7 @@
   <tbody>
     {#each transportadores as t}
       <tr
+        class="clicavel"
         class:marcado={transporta?.xNome == t.get('transporta.xNome')}
         on:click={() => (transporta = t.data())}
       >

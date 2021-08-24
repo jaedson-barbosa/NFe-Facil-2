@@ -102,6 +102,7 @@
     <tbody>
       {#each clientes as c}
         <tr
+          class="clicavel"
           class:marcado={dest?.xNome == c.get('dest.xNome')}
           on:click={() => (dest = c.data())}
         >
@@ -141,7 +142,7 @@
   </thead>
   <tbody>
     {#each produtos as p}
-      <tr on:click={() => escolherProduto(p)}>
+      <tr class="clicavel" on:click={() => escolherProduto(p)}>
         <td>{p.get('det.prod.cProd')}</td>
         <td>{p.get('det.prod.xProd')}</td>
       </tr>
@@ -181,13 +182,3 @@
 <Transp {raiz} />
 <Pag {raiz} total={raiz.total?.ICMSTot?.vNF ?? 0} />
 <InfAdic {raiz} />
-
-<style>
-  tbody > tr {
-    cursor: pointer;
-  }
-
-  tbody > tr.marcado {
-    background-color: #e1e1e1;
-  }
-</style>
