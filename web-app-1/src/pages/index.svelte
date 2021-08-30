@@ -1,40 +1,35 @@
 <script lang="ts">
-  import { cancelarNFe, gerarDANFENFe as danfeNFe } from '../app/funcNFe'
-  import { userStatus, dbColumns, edicao, idEmpresa } from '../app/store'
-  import { applyMask } from '../app/documentUtils'
-  import type { TCadastro } from '../app/store'
+  import { gerarDANFENFe } from '../code/nfe/geracaoDANFE'
+  import { userStatus, dbColumns, edicao, idEmpresa } from '../code/store'
+  import { aplicarMascara } from '../code/mascaracaoDoc'
+  import type { TCadastro, Dados } from '../code/store'
   import { goto, url } from '@roxi/routify'
-  import { Dados } from '../app/dados'
   import { debounce } from 'lodash-es'
 
   $edicao = undefined
 
   function getColuna() {
     switch (dadosAtual) {
-      case Dados.Clientes:
+      case 'Clientes':
         return $dbColumns.clientes
-      case Dados.Produtos:
+      case 'Produtos':
         return $dbColumns.produtos
-      case Dados.Transportes:
+      case 'Transportes':
         return $dbColumns.transportes
-      case Dados.NFesSalvas:
-        return $dbColumns.notasSalvas
-      case Dados.NFesEmitidas:
-        return $dbColumns.notasEmitidas
-      case Dados.NFCesSalvas:
-        return $dbColumns.notasCSalvas
-      case Dados.NFCesEmitidas:
-        return $dbColumns.notasCEmitidas
+      case 'NFes':
+        return $dbColumns.nfes
+      case 'NFCes':
+        return $dbColumns.nfces
     }
   }
 
   function getRotulo(atual: Dados) {
     switch (atual) {
-      case Dados.Clientes:
+      case 'Clientes':
         return 'Nome do cliente'
-      case Dados.Produtos:
+      case 'Produtos':
         return 'Descrição do produto'
-      case Dados.Transportes:
+      case 'Transportes':
         return 'Nome do transportador'
       default:
         return 'Número'
@@ -43,11 +38,11 @@
 
   function getAddUrl(atual: Dados) {
     switch (atual) {
-      case Dados.Clientes:
+      case 'Clientes':
         return './cliente'
-      case Dados.Produtos:
+      case 'Produtos':
         return './produto'
-      case Dados.Transportes:
+      case 'Transportes':
         return './transporta'
       default:
         return './nfe'
@@ -56,11 +51,11 @@
 
   function getCampoBusca(atual: Dados) {
     switch (atual) {
-      case Dados.Clientes:
+      case 'Clientes':
         return 'dest.xNome'
-      case Dados.Produtos:
+      case 'Produtos':
         return 'det.prod.xProd'
-      case Dados.Transportes:
+      case 'Transportes':
         return 'transporta.xNome'
       default:
         return 'infNFe.ide.nNF'
@@ -69,11 +64,11 @@
 
   function getCabecalhos(atual: Dados) {
     switch (atual) {
-      case Dados.Clientes:
+      case 'Clientes':
         return ['Documento', 'Nome']
-      case Dados.Produtos:
+      case 'Produtos':
         return ['Código', 'Descrição']
-      case Dados.Transportes:
+      case 'Transportes':
         return ['Documento', 'Nome']
       default:
         return [
@@ -89,27 +84,27 @@
 
   function getDocDest(v: TCadastro) {
     const cpf = v.get('dest.CPF')
-    if (cpf) return applyMask(cpf, 'cpf')
+    if (cpf) return aplicarMascara(cpf, 'cpf')
     const cnpj = v.get('dest.CNPJ')
-    if (cnpj) return applyMask(cnpj, 'cnpj')
+    if (cnpj) return aplicarMascara(cnpj, 'cnpj')
     const idEstrangeiro = v.get('dest.idEstrangeiro')
     return idEstrangeiro
   }
 
   function getDocTransporta(v: TCadastro) {
     const cpf = v.get('transporta.CPF')
-    if (cpf) return applyMask(cpf, 'cpf')
+    if (cpf) return aplicarMascara(cpf, 'cpf')
     const cnpj = v.get('transporta.CNPJ')
-    return applyMask(cnpj, 'cnpj')
+    return aplicarMascara(cnpj, 'cnpj')
   }
 
   function getItemRender(busca: Dados): (v: TCadastro) => string[] {
     switch (busca) {
-      case Dados.Clientes:
+      case 'Clientes':
         return (v) => [getDocDest(v), v.get('dest.xNome')]
-      case Dados.Produtos:
+      case 'Produtos':
         return (v) => [v.get('det.prod.cProd'), v.get('det.prod.xProd')]
-      case Dados.Transportes:
+      case 'Transportes':
         return (v) => [getDocTransporta(v), v.get('transporta.xNome')]
       default:
         return (v) => {
@@ -146,12 +141,9 @@
     buscar()
   }
 
-  let dadosAtual: Dados = Dados.Clientes
+  let dadosAtual: Dados = 'Clientes'
 
-  $: isDadoSimples =
-    dadosAtual == Dados.Clientes ||
-    dadosAtual == Dados.Produtos ||
-    dadosAtual == Dados.Transportes
+  $: isDadoSimples = ['Clientes', 'Produtos', 'Transportes'].includes(dadosAtual)
   $: rotulo = getRotulo(dadosAtual)
   $: addUrl = getAddUrl(dadosAtual)
   $: campoBusca = getCampoBusca(dadosAtual)
@@ -195,13 +187,11 @@
 <label>
   Visualização
   <select bind:value={dadosAtual}>
-    <option value={Dados.Clientes}>Clientes</option>
-    <option value={Dados.Produtos}>Produtos</option>
-    <option value={Dados.Transportes}>Transportes</option>
-    <option value={Dados.NFesSalvas}>NF-es salvas</option>
-    <option value={Dados.NFesEmitidas}>NF-es emitidas</option>
-    <option value={Dados.NFCesSalvas}>NFC-es salvas</option>
-    <option value={Dados.NFesEmitidas}>NFC-es emitidas</option>
+    <option value={'Clientes'}>Clientes</option>
+    <option value={'Produtos'}>Produtos</option>
+    <option value={'Transportes'}>Transportes</option>
+    <option value={'NFes'}>NF-es</option>
+    <option value={'NFCes'}>NFC-es</option>
   </select>
 </label>
 
@@ -233,7 +223,7 @@
             <button on:click|once={() => edit(cad, dadosAtual)}>Editar</button>
           {:else if writePermission}
             <button on:click|once={() => edit(cad, dadosAtual)}>
-              {#if dadosAtual == Dados.NFesSalvas || Dados.NFCesSalvas}
+              {#if dadosAtual == 'NFesSalvas' || Dados.NFCesSalvas}
                 Editar
               {:else}
                 Clonar

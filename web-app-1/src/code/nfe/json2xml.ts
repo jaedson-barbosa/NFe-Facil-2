@@ -125,8 +125,8 @@ class ToXml {
 var charsEscape = {
   '&': '&amp;',
   '<': '&lt;',
-  '>': '&gt;'
-};
+  '>': '&gt;',
+}
 
 var charsUnescape = {
   '&amp;': '&',
@@ -137,8 +137,8 @@ var charsUnescape = {
   '&#41;': ')',
   '&quot;': '"',
   '&apos;': "'",
-  "&#31;": "\u001F"
-};
+  '&#31;': '\u001F',
+}
 
 // used in attribute values
 var charsAttrEscape = {
@@ -146,25 +146,29 @@ var charsAttrEscape = {
   '<': '&lt;',
   '>': '&gt;',
   '"': '&quot;',
-  "'": '&apos;'
-};
+  "'": '&apos;',
+}
 
 function escapeRegExp(string) {
-  return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+  return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1')
 }
 
 // sanitize body text
 export function sanitize(value, reverse = undefined, attribute = undefined) {
   if (typeof value !== 'string') {
-      return value;
+    return value
   }
 
-  var chars = reverse ? charsUnescape : (attribute ? charsAttrEscape : charsEscape);
-  var keys = Object.keys(chars);
-  
-  keys.forEach(function(key) {
-      value = value.replace(new RegExp(escapeRegExp(key), 'g'), chars[key]);
-  });
+  var chars = reverse
+    ? charsUnescape
+    : attribute
+    ? charsAttrEscape
+    : charsEscape
+  var keys = Object.keys(chars)
 
-  return value;
-};
+  keys.forEach(function (key) {
+    value = value.replace(new RegExp(escapeRegExp(key), 'g'), chars[key])
+  })
+
+  return value
+}

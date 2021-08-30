@@ -1,48 +1,10 @@
-const config = {
-  cpf: [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/],
-  cnpj: [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/],
-  date: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/],
-  datetime: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/, ':', /\d/, /\d/],
-  time: [/\d/, /\d/, ':', /\d/, /\d/, ':', /\d/, /\d/],
-  zipcode: [/\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
-};
-
-function exec(text: string, mask: string, placeholder = '') {
-  const regexp = config[mask];
-  const chars = text.split('');
-  const formated = [];
-
-  for (let index = 0, indexChars = 0; index < regexp.length; index += 1, indexChars += 1) {
-    if (regexp[index] instanceof RegExp) {
-      const isValid = regexp[index].test(chars[indexChars]);
-      if (isValid && chars[indexChars]) {
-        formated.push(chars[indexChars]);
-      } else if (chars[indexChars]) {
-        index -= 1;
-      } else {
-        formated.push(placeholder);
-      }
-    } else if (chars[indexChars] || placeholder) {
-      formated.push(regexp[index]);
-      indexChars -= 1;
-    }
-  }
-  return formated.join('');
-}
-
-export type TMask = 'cpf' | 'cnpj' | 'zipcode'
-
-export function applyMask(text: string, maskName: TMask) {
-  return text ? exec(text, maskName, '_') : ''
-}
-
-export function isCpfValid(cpf: string): boolean {
+export function validaCPF(cpf: string): boolean {
   const cpfLength = 11;
   const weights = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   return isValid(cpf, cpfLength, weights);
 }
 
-export function isCnpjValid(cnpj: string): boolean {
+export function validaCNPJ(cnpj: string): boolean {
   const cpfLength = 14;
   const weights = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6];
   return isValid(cnpj, cpfLength, weights);

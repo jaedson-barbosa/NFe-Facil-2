@@ -1,17 +1,16 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { Dados } from '../app/dados'
-  import { isCnpjValid, isCpfValid } from '../app/documentUtils'
-  import { edicao, dbColumns } from '../app/store'
-  import Dest from '../data-views/Dest.svelte'
+  import { validaCNPJ, validaCPF } from '../code/validacaoDoc'
+  import { edicao, dbColumns } from '../code/store'
+  import Dest from '../nfe-parts/Dest.svelte'
 
   let loading = false
   let raiz = undefined
 
   const ed = get(edicao)
   if (ed) {
-    if (ed.tipo != Dados.Clientes) {
+    if (ed.tipo != 'Clientes') {
       $edicao = undefined
       raiz = {}
     } else raiz = { ...ed.dado }
@@ -21,12 +20,12 @@
     loading = true
     try {
       const dest = raiz.dest
-      if (dest.CPF && !isCpfValid(dest.CPF)) {
+      if (dest.CPF && !validaCPF(dest.CPF)) {
         loading = false
         alert('CPF inválido.')
         return
       }
-      if (dest.CNPJ && !isCnpjValid(dest.CNPJ)) {
+      if (dest.CNPJ && !validaCNPJ(dest.CNPJ)) {
         loading = false
         alert('CNPJ inválido.')
         return

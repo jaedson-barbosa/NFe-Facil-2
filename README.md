@@ -28,7 +28,6 @@ CSC
 -notasSalvas:
   infNFe
   dhEmi
-  xml
 -notasEmitidas:
   cancelada
   infNFe

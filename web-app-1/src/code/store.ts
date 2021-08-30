@@ -6,7 +6,6 @@ import {
   writable,
   get,
 } from 'svelte/store'
-import { Dados } from './dados'
 
 const auth = firebase.auth()
 const googleProvider = new firebase.auth.GoogleAuthProvider()
@@ -70,10 +69,8 @@ interface IColumns {
   clientes: TColumn
   transportes: TColumn
   produtos: TColumn
-  notasSalvas: TColumn
-  notasEmitidas: TColumn
-  notasCSalvas: TColumn
-  notasCEmitidas: TColumn
+  nfes: TColumn
+  nfces: TColumn
   usuarios: TColumn
 }
 
@@ -85,15 +82,15 @@ export const dbColumns = derived<Readable<TReference>, IColumns>(
       clientes: ref.collection('clientes'),
       transportes: ref.collection('transportes'),
       produtos: ref.collection('produtos'),
-      notasSalvas: ref.collection('notasSalvas'),
-      notasEmitidas: ref.collection('notasEmitidas'),
-      notasCSalvas: ref.collection('notasCSalvas'),
-      notasCEmitidas: ref.collection('notasCEmitidas'),
+      nfes: ref.collection('nfes'),
+      nfces: ref.collection('nfces'),
       usuarios: ref.collection('usuarios'),
     } as IColumns
   },
   undefined
 )
+
+export type Dados = 'Clientes' | 'Produtos' | 'Transportes' | 'NFes' | 'NFCes'
 
 interface IEdicao {
   tipo: Dados,

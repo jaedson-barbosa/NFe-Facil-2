@@ -1,7 +1,6 @@
-import IBGE from '../app/IBGE'
-import refInfNFe from './nfe'
+import IBGE from '../IBGE'
+import refInfNFe from './estrutura'
 import toXml from './json2xml'
-import type INFeRoot from './INFeRoot'
 
 export function preparateJSON(infNFe: INFeRoot) {
   const cUF = IBGE.find(

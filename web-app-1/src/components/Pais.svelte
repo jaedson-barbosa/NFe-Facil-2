@@ -1,5 +1,5 @@
 <script lang="ts">
-  import paises from '../app/paises'
+  import paises from '../code/paises'
 
   export let lab = 'País'
   export let opt = false

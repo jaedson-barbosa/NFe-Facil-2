@@ -4,7 +4,7 @@
   import { Dados } from '../app/dados'
   import { edicao, dbColumns } from '../app/store'
   import { preparateJSON, generateXML } from '../nfe/finalizacao'
-  import NFe from '../data-views/NFe.svelte'
+  import NFe from '../nfe-parts/NFe.svelte'
   import INFeRoot from '../nfe/INFeRoot';
 
   let loading = false
@@ -83,3 +83,5 @@
   {/if}
   <button on:click={transmitir}>Transmitir</button>
 {/if}
+
+// estudar união de notas numa única tabela, uma pra nfes e outra pra nfces, onde aquelas apenas salvas teriam o numero 0, para a união rodar um script no servidor que vai fazer a mudança, sorte que por enquanto só o Areal usa

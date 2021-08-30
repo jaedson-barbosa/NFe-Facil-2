@@ -4,7 +4,7 @@
   import { Dados } from '../app/dados'
   import { isCnpjValid, isCpfValid } from '../app/documentUtils'
   import { edicao, dbColumns } from '../app/store'
-  import Transporta from '../data-views/Transporta.svelte'
+  import Transporta from '../nfe-parts/Transporta.svelte'
 
   let loading = false
   let raiz = undefined

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { applyMask, isCnpjValid, isCpfValid } from '../app/documentUtils'
-  import type { TMask } from '../app/documentUtils'
+  import { validaCNPJ, validaCPF } from '../code/validacaoDoc'
+  import { aplicarMascara, mascaras } from '../code/mascaracaoDoc'
 
   export let opt = false
   export let lab: string
@@ -8,21 +8,21 @@
   export let pat = undefined
   export let min: number = undefined
   export let max: number = undefined
-  export let mask: TMask = undefined
+  export let mask: mascaras = undefined
   export let raiz: any = {}
   export let name: string = ''
   export let val = raiz[name]
   $: raiz[name] = val
 
-  $: maskedValue = mask ? applyMask(val, mask) : ''
+  $: maskedValue = mask ? aplicarMascara(val, mask) : ''
 
   let input: HTMLInputElement
 
   $: {
     if (mask == 'cpf') {
-      input?.setCustomValidity(isCpfValid(val) ? '' : 'CPF inválido.')
+      input?.setCustomValidity(validaCPF(val) ? '' : 'CPF inválido.')
     } else if (mask == 'cnpj') {
-      input?.setCustomValidity(isCnpjValid(val) ? '' : 'CNPJ inválido.')
+      input?.setCustomValidity(validaCNPJ(val) ? '' : 'CNPJ inválido.')
     }
   }
 </script>

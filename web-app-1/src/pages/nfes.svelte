@@ -5,10 +5,10 @@
   import { Dados } from '../app/dados'
   import { goto } from '@roxi/routify'
 
-  let naoEmitidas = [] as TCadastro[]
-  const caixasNaoEmitidas: HTMLDialogElement[] = []
   let emitidas = [] as TCadastro[]
+  let naoEmitidas = [] as TCadastro[]
   const caixasEmitidas: HTMLDialogElement[] = []
+  const caixasNaoEmitidas: HTMLDialogElement[] = []
 
   function criarNFe(dado = {} as any) {
     const id = dado.Id

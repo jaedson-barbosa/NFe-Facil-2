@@ -1,5 +1,16 @@
+<script context="module">
+  function createId(length = 20) {
+    const AUTO_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    return [...Array(length)]
+      .map(() => {
+        const index = Math.floor(Math.random() * AUTO_ID_CHARS.length);
+        return AUTO_ID_CHARS.charAt(index);
+      })
+      .join('');
+  }
+</script>
 <script lang="ts">
-  import { createId } from '../app/helpers'
+  import { toNFeString } from '../code/getDataString'
   import Opcional from './Opcional.svelte'
 
   export let raiz: any
@@ -10,34 +21,6 @@
 
   if (!raiz[name] && !opt) raiz[name] = toNFeString(new Date())
   let val = raiz[name]
-
-  function toNFeString(data: Date) {
-    const tzo = -data.getTimezoneOffset()
-    const dif = tzo >= 0 ? '+' : '-'
-
-    function pad(num: number) {
-      var norm = Math.floor(Math.abs(num))
-      return (norm < 10 ? '0' : '') + norm
-    }
-
-    return (
-      data.getFullYear() +
-      '-' +
-      pad(data.getMonth() + 1) +
-      '-' +
-      pad(data.getDate()) +
-      'T' +
-      pad(data.getHours()) +
-      ':' +
-      pad(data.getMinutes()) +
-      ':' +
-      pad(data.getSeconds()) +
-      dif +
-      pad(tzo / 60) +
-      ':' +
-      pad(tzo % 60)
-    )
-  }
 
   $: raiz[name] = toNFeString(new Date(val))
   const id = createId()

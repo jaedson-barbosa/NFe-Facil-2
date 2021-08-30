@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { empresa, idEmpresa, empresaRef } from '../app/store';
-  import Emit from '../data-views/Emit.svelte';
+  import { empresa, idEmpresa, empresaRef } from '../code/store';
+  import Emit from '../nfe-parts/Emit.svelte';
   import { goto } from '@roxi/routify';
 
   let loading = false;

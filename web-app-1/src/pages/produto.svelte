@@ -3,7 +3,7 @@
   import { get } from 'svelte/store'
   import { Dados } from '../app/dados'
   import { edicao, dbColumns, empresa } from '../app/store'
-  import Det from '../data-views/Det.svelte'
+  import Det from '../nfe-parts/Det.svelte'
 
   let loading = false
   let raiz = undefined

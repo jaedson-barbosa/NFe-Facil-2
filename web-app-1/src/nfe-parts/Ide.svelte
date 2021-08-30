@@ -3,10 +3,10 @@
   import InputD from '../components/InputD.svelte'
   import Select from '../components/Select.svelte'
   import Municipio from '../components/Municipio.svelte'
-  import { empresa } from '../app/store'
+  import { empresa } from '../code/store'
   import { get } from 'svelte/store'
-  import IBGE from '../app/IBGE'
-  import { VERSAO } from '../app/info'
+  import IBGE from '../code/IBGE'
+  import { VERSAO } from '../code/app'
   import Lista from '../components/Lista.svelte'
 
   export let raiz: any

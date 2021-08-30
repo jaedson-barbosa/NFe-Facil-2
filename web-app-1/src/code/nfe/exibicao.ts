@@ -1,4 +1,4 @@
-import type { TCadastro } from "../app/store"
+import type { TCadastro } from "../store"
 
 function abrirXML(xml: string) {
   const blob = new Blob([xml], { type: 'application/xml' })

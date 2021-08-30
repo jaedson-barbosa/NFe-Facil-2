@@ -73,9 +73,7 @@
   {#if $user}
     {#if !cadastros}
       Aguardando análise de empresas cadastradas...
-    {:else if $idEmpresa}
-      <slot />
-    {:else}
+    {:else if !$idEmpresa}
       {#if cadastros.length}
         <h3>Escolha de emitente</h3>
         <table>
@@ -181,6 +179,7 @@
   {:else}
     Aguardando serviço de autenticação...
   {/if}
+  <slot />
 </main>
 
 <style>

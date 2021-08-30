@@ -1,5 +1,5 @@
 <script lang="ts">
-  import IBGE from "../app/IBGE";
+  import IBGE from "../code/IBGE";
 
   export let lab: string = "Estado";
   export let opt: boolean = false;
