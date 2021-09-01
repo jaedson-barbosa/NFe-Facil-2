@@ -1,12 +1,11 @@
 <script lang="ts">
-  import type { TCadastro } from '../app/store'
-  import { XML, XMLC } from '../nfe/exibicao'
-  import { edicao } from '../app/store'
-  import { Dados } from '../app/dados'
+  import { XML, XMLC } from '../code/nfe/exibicao'
+  import { Dados, edicao } from '../code/store'
   import { goto } from '@roxi/routify'
+  import { DocumentSnapshot } from '@firebase/firestore'
 
-  let emitidas = [] as TCadastro[]
-  let naoEmitidas = [] as TCadastro[]
+  let emitidas = [] as DocumentSnapshot[]
+  let naoEmitidas = [] as DocumentSnapshot[]
   const caixasEmitidas: HTMLDialogElement[] = []
   const caixasNaoEmitidas: HTMLDialogElement[] = []
 
@@ -16,7 +15,7 @@
     $goto('./nfe')
   }
 
-  async function DANFE(nfe: TCadastro) {
+  async function DANFE(nfe: DocumentSnapshot) {
     const idEmpresa = nfe.get('emit.CNPJ')
     const idNota = nfe.get('Id')
     // const resp = await gerarDANFENFe({
@@ -41,7 +40,7 @@
     // }
   }
 
-  async function Cancelar(nfe: TCadastro) {}
+  async function cancelar(nfe: DocumentSnapshot) {}
 </script>
 
 <h1>Notas fiscais</h1>
@@ -76,7 +75,7 @@
           {#if n.get('cancelada')}
             <button on:click={() => XMLC(n)}>XML de cancelamento</button>
           {:else}
-            <button on:click={() => Cancelar(n)}>Cancelar</button>
+            <button on:click={() => cancelar(n)}>Cancelar</button>
           {/if}
         </dialog>
       {/each}

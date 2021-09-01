@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { applyMask } from '../app/documentUtils'
+  import { aplicarMascara } from '../code/mascaracaoDoc'
 
   export let CPF: string
   export let CNPJ: string
   export let idEstrangeiro = ''
 
   $: value = CPF
-    ? applyMask(CPF, 'cpf')
+    ? aplicarMascara(CPF, 'cpf')
     : CNPJ
-    ? applyMask(CNPJ, 'cnpj')
+    ? aplicarMascara(CNPJ, 'cnpj')
     : idEstrangeiro
 </script>
 

@@ -4,8 +4,8 @@
   import Lista from '../components/Lista.svelte'
   import Opcional from '../components/Opcional.svelte'
   import Estado from '../components/Estado.svelte'
-  import { dbColumns } from '../app/store'
-  import type { TCadastro } from '../app/store'
+  import { dbColumns } from '../code/store'
+  import type { TCadastro } from '../code/store'
   import ExibDoc from './ExibDoc.svelte'
 
   export let raiz: any

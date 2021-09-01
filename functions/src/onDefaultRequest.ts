@@ -1,12 +1,7 @@
 import { HttpsFunction, region, https } from 'firebase-functions'
 
-export interface IDefaultParams {
-  uid: string
-  body: any
-}
-
 export function onDefaultRequest(
-  handler: (params: IDefaultParams) => Promise<any>
+  handler: (data: any, context: https.CallableContext) => Promise<any>
 ): HttpsFunction {
   return region('southamerica-east1').https.onCall(async (data, context) => {
     if (!context.auth) {
@@ -16,7 +11,7 @@ export function onDefaultRequest(
       )
     }
     try {
-      return await handler({ uid: context.auth.uid, body: data })
+      return await handler(data, context)
     } catch(error) {
       if (error instanceof https.HttpsError) {
         throw error

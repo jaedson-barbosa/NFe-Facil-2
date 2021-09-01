@@ -1,11 +1,16 @@
 <script lang="ts">
   import { goto, url } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { Dados } from '../app/dados'
-  import { edicao, dbColumns } from '../app/store'
-  import { preparateJSON, generateXML } from '../nfe/finalizacao'
+  import { edicao, Dados, refEmpresa } from '../code/store'
+  import { preparateJSON, generateXML } from '../code/nfe/finalizacao'
   import NFe from '../nfe-parts/NFe.svelte'
-  import INFeRoot from '../nfe/INFeRoot';
+  import {
+    collection,
+    doc,
+    getDoc,
+    deleteDoc,
+    setDoc,
+  } from '@firebase/firestore'
 
   let loading = false
 
@@ -17,22 +22,23 @@
   async function salvar() {
     loading = true
     try {
-      const notasCol = isNFCe ? $dbColumns.notasCSalvas : $dbColumns.notasSalvas
+      const notasCol = collection(
+        $refEmpresa,
+        isNFCe ? Dados.NFCes : Dados.NFes
+      )
       if (raiz.Id) {
-        const docRef = notasCol.doc(raiz.Id)
-        const doc = await docRef.get()
-        if (doc.exists) await docRef.delete()
+        const docRef = doc(notasCol, raiz.Id)
+        const docObj = await getDoc(docRef)
+        if (docObj.exists) await deleteDoc(docRef)
       }
       const xml = generateXML(raiz)
       const dhEmi = new Date(raiz.ide.dhEmi)
-      const newRegister = { infNFe: raiz, dhEmi, xml }
-      await notasCol.doc(raiz.Id).set(newRegister)
-      $edicao = {
-        dado: newRegister,
-        id: raiz.Id,
-        tipo: isNFCe ? Dados.NFCes : Dados.NFes
-      }
-      $goto(isNFCe ? './nfces' : 'nfes')
+      const dado = { infNFe: raiz, dhEmi, xml }
+      const docRef = doc(notasCol, raiz.Id)
+      await setDoc(docRef, dado)
+      const tipo = isNFCe ? Dados.NFCes : Dados.NFes
+      $edicao = { dado: dado, id: raiz.Id, tipo }
+      $goto(tipo)
     } catch (error) {
       console.error(error)
       alert(error.message)
@@ -72,7 +78,7 @@
       desejado então clique em "Fechar", caso contrário, clique em "Voltar".
     </p>
     <a class="button" href={$url('./')}>Voltar</a>
-    <button on:click={() => problemaNota = false}>Fechar</button>
+    <button on:click={() => (problemaNota = false)}>Fechar</button>
     <hr />
   {/if}
   <NFe bind:raiz {isNFCe} />
@@ -84,4 +90,6 @@
   <button on:click={transmitir}>Transmitir</button>
 {/if}
 
-// estudar união de notas numa única tabela, uma pra nfes e outra pra nfces, onde aquelas apenas salvas teriam o numero 0, para a união rodar um script no servidor que vai fazer a mudança, sorte que por enquanto só o Areal usa
+// estudar união de notas numa única tabela, uma pra nfes e outra pra nfces,
+onde aquelas apenas salvas teriam o numero 0, para a união rodar um script no
+servidor que vai fazer a mudança, sorte que por enquanto só o Areal usa

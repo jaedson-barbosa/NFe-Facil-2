@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { Dados } from '../app/dados'
-  import { isCnpjValid, isCpfValid } from '../app/documentUtils'
-  import { edicao, dbColumns } from '../app/store'
+  import { validaCPF, validaCNPJ } from '../code/validacaoDoc'
+  import { Dados, edicao, refEmpresa } from '../code/store'
+  import { doc, getDoc, setDoc } from 'firebase/firestore'
   import Transporta from '../nfe-parts/Transporta.svelte'
 
   let loading = false
@@ -19,16 +19,16 @@
     loading = true
     try {
       const transporta = raiz.transporta
-      if (transporta.CPF && !isCpfValid(transporta.CPF)) {
+      if (transporta.CPF && !validaCPF(transporta.CPF)) {
         alert('CPF inválido.')
         return
       }
-      if (transporta.CNPJ && !isCnpjValid(transporta.CNPJ)) {
+      if (transporta.CNPJ && !validaCNPJ(transporta.CNPJ)) {
         alert('CNPJ inválido.')
         return
       }
       const id = transporta.CPF ? transporta.CPF : transporta.CNPJ
-      const docRef = $dbColumns.transportes.doc(id)
+      const docRef = doc($refEmpresa, Dados.Transportes, id)
       if (ed) {
         if (ed.id != id) {
           alert('Não é permitido alterar o documento.')
@@ -36,7 +36,7 @@
           return
         }
       } else {
-        const doc = await docRef.get()
+        const doc = await getDoc(docRef)
         const msg =
           'Já existe um transportador cadastrado com este documento. ' +
           'Deseja substituí-lo?'
@@ -45,7 +45,7 @@
           return
         }
       }
-      await docRef.set(raiz)
+      await setDoc(docRef, raiz)
       $edicao = undefined
       $goto('./')
     } catch (error) {

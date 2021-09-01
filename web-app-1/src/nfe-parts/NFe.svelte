@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { dbColumns } from '../code/store'
+  import type { TCadastro } from '../code/store'
+  
   import Ide from './Ide.svelte'
   import Local from './Local.svelte'
   import Doc from './Doc.svelte'
   import ExibDoc from './ExibDoc.svelte'
-  import { dbColumns } from '../app/store'
-  import type { TCadastro } from '../app/store'
   import AutXml from './AutXML.svelte'
   import Det from './Det.svelte'
   import Total from './Total.svelte'

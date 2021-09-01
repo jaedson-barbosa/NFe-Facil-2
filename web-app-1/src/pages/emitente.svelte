@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { empresa, idEmpresa, empresaRef } from '../code/store';
+  import { updateDoc } from 'firebase/firestore'
+  import { empresa, idEmpresa, refEmpresa } from '../code/store';
   import Emit from '../nfe-parts/Emit.svelte';
   import { goto } from '@roxi/routify';
 
@@ -17,7 +18,7 @@
         alert('Não é permitida a alteração do CNPJ do emitente.');
         return;
       }
-      await $empresaRef.update(raiz);
+      await updateDoc($refEmpresa, raiz);
       $goto('./');
     } catch (error) {
       alert(error.message);

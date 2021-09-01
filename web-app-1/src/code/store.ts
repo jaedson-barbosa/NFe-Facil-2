@@ -1,23 +1,48 @@
+import { derived, Readable, readable, Writable, writable } from 'svelte/store'
+import { getFirestore, doc, getDoc } from 'firebase/firestore'
+import type { DocumentReference } from 'firebase/firestore'
 import {
-  derived,
-  Readable,
-  readable,
-  Writable,
-  writable,
-  get,
-} from 'svelte/store'
+  getAuth,
+  GoogleAuthProvider,
+  User,
+  signInWithPopup,
+  signOut,
+  getIdTokenResult,
+} from 'firebase/auth'
 
-const auth = firebase.auth()
-const googleProvider = new firebase.auth.GoogleAuthProvider()
-const db = firebase.firestore()
+const auth = getAuth()
+const googleProvider = new GoogleAuthProvider()
+const db = getFirestore()
 
 export const user = {
-  subscribe: readable<firebase.User>(undefined, (set) =>
+  subscribe: readable<User>(undefined, (set) =>
     auth.onAuthStateChanged((u) => set(u))
   ).subscribe,
-  signIn: () => auth.signInWithPopup(googleProvider),
-  signOut: () => auth.signOut(),
+  signIn: () => signInWithPopup(auth, googleProvider),
+  signOut: () => signOut(auth),
 }
+
+export const liberacoes = derived<
+  Readable<User>,
+  { cnpj: string; nivel: NiveisAcesso }[]
+>(
+  user,
+  (ref, set) => {
+    if (ref) {
+      getIdTokenResult(ref, true)
+        .then(({ claims }) => {
+          const liberacoes = Object.entries(claims)
+          const empresas = liberacoes.map(([cnpj, nivel]) => ({
+            cnpj,
+            nivel: nivel as unknown as NiveisAcesso,
+          }))
+          set(empresas)
+        })
+        .catch(() => set([]))
+    } else set([])
+  },
+  []
+)
 
 export const idEmpresa = writable(localStorage.getItem('idEmpresa'))
 idEmpresa.subscribe((v) => localStorage.setItem('idEmpresa', v))
@@ -30,71 +55,32 @@ type TEmpresa = {
   CSC: string
 }
 
-export const empresaRef = derived<Writable<string>, TReference>(
+export const refEmpresa = derived<Writable<string>, DocumentReference>(
   idEmpresa,
-  (id) => (id ? db.collection('empresas').doc(id) : undefined),
+  (id) => (id ? doc(db, 'empresas', id) : undefined),
   undefined
 )
 
-export const userStatus = derived<Readable<TReference>, number>(
-  empresaRef,
+export const empresa = derived<Readable<DocumentReference>, TEmpresa>(
+  refEmpresa,
   (ref, set) => {
-    if (ref) {
-      ref
-        .collection('usuarios')
-        .doc(get(user).uid)
-        .get()
-        .then((v) => set(v.exists ? v.get('status') : -1))
-        .catch(() => set(-1))
-    } else set(-1)
-  },
-  undefined
-)
-
-export const empresa = derived<Readable<TReference>, TEmpresa>(
-  empresaRef,
-  (ref, set) => {
-    if (ref) return ref.onSnapshot(v => set(v.exists ? v.data() as TEmpresa : undefined))
+    if (ref) getDoc(ref).then((v) => set(v.data() as TEmpresa))
     else set(undefined)
   },
   undefined
 )
 
-export type TDocument = firebase.firestore.DocumentData
-export type TReference = firebase.firestore.DocumentReference<TDocument>
-export type TColumn = firebase.firestore.CollectionReference<TDocument>
-export type TCadastro = firebase.firestore.QueryDocumentSnapshot<TDocument>
-
-interface IColumns {
-  clientes: TColumn
-  transportes: TColumn
-  produtos: TColumn
-  nfes: TColumn
-  nfces: TColumn
-  usuarios: TColumn
+export enum Dados {
+  Clientes = 'clientes',
+  Produtos = 'produtos',
+  Transportes = 'transportes',
+  NFes = 'nfes',
+  NFCes = 'nfces',
 }
 
-export const dbColumns = derived<Readable<TReference>, IColumns>(
-  empresaRef,
-  (ref) => {
-    if (!ref) return undefined
-    return {
-      clientes: ref.collection('clientes'),
-      transportes: ref.collection('transportes'),
-      produtos: ref.collection('produtos'),
-      nfes: ref.collection('nfes'),
-      nfces: ref.collection('nfces'),
-      usuarios: ref.collection('usuarios'),
-    } as IColumns
-  },
-  undefined
-)
-
-export type Dados = 'Clientes' | 'Produtos' | 'Transportes' | 'NFes' | 'NFCes'
-
 interface IEdicao {
-  tipo: Dados,
-  id: string,
+  tipo: Dados
+  id: string
   dado: any
 }
 

@@ -1,13 +1,14 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { Dados } from '../app/dados'
-  import { edicao, dbColumns, empresa } from '../app/store'
+  import { edicao, empresa, Dados, refEmpresa } from '../code/store'
+  import { doc, getDoc, setDoc } from 'firebase/firestore'
   import Det from '../nfe-parts/Det.svelte'
 
   let loading = false
   let raiz = undefined
-  let regimeNormal = get(empresa).emit.CRT == '3'
+  
+  const regimeNormal = get(empresa).emit.CRT == '3'
 
   const ed = get(edicao)
   if (ed) {
@@ -20,7 +21,7 @@
     try {
       const det = raiz.det
       const id = det.prod.cProd
-      const prodRef = $dbColumns.produtos.doc(id)
+      const prodRef = doc($refEmpresa, Dados.Produtos, id)
       if (ed) {
         if (ed.id != id) {
           alert('Não é permitido alterar o código.')
@@ -28,7 +29,7 @@
           return
         }
       } else {
-        const doc = await prodRef.get()
+        const doc = await getDoc(prodRef)
         const msg =
           'Já existe um produto cadastrado com este código. ' +
           'Deseja substituí-lo?'
@@ -37,7 +38,7 @@
           return
         }
       }
-      await prodRef.set(raiz)
+      await setDoc(prodRef, raiz)
       $goto('../')
     } catch (error) {
       alert(error.message)

@@ -15,10 +15,6 @@ serieNFe
 serieNFCe
 IDCSC
 CSC
--usuarios:
-  id
-  status //0-Em análise/1-Rejeitado/2-Apenas leitura/3-Leitura e escrita/4-Administrador
-  ident
 -clientes:
   dest: ...
 -transportes:
