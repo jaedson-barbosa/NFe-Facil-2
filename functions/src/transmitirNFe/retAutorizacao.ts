@@ -1,8 +1,5 @@
 import { toJson } from "xml2json"
-import { ICertificate } from "../assinatura/ICertificate"
 import { enviarRequisicao } from "../requisicoes"
-import { TAmb } from "../TAmb"
-import { TRetConsReciNFe } from "./TRetConsReciNFe"
 
 export async function retAutorizacao(
   UF: string,

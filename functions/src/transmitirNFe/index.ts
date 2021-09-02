@@ -1,12 +1,9 @@
 import { onCertifiedRequest } from '../onCertifiedRequest'
 import { toXml } from 'xml2json'
-import { TAmb } from '../TAmb'
 import { getXml } from './getXml'
-import { TRetConsReciNFe } from './TRetConsReciNFe'
 import { autorizacao } from './autorizacao'
 import { retAutorizacao } from './retAutorizacao'
 import { removePrefix } from './removePrefix'
-import { sleep } from './sleep'
 import { assinarNFe } from '../assinatura/assinarNFe'
 import { https } from 'firebase-functions'
 
@@ -53,7 +50,8 @@ export const transmitirNFe = onCertifiedRequest(
       }
       let respRet: TRetConsReciNFe | undefined = undefined
       do {
-        await sleep(Number(resp.infRec.tMed) * 1000)
+        const intervalo = Number(resp.infRec.tMed) * 1000
+        await new Promise((resolve) => setTimeout(resolve, intervalo))
         respRet = await retAutorizacao(UF, cert, ambiente, resp.infRec.nRec)
         if (respRet.cStat.$t == '105') {
           // Lote em processamento (78)

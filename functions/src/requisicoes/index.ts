@@ -2,8 +2,6 @@ import * as https from 'https'
 import * as axios from 'axios'
 import * as servicos from './servicos.json'
 import * as webservicesNFe from './webservicesNFe.json'
-import { ICertificate } from '../assinatura/ICertificate'
-import { TAmb } from '../TAmb'
 
 type nomesServicos = keyof typeof servicos &
   keyof typeof webservicesNFe.SVRS.servicos

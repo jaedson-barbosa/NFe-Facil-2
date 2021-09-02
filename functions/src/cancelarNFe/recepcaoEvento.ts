@@ -1,9 +1,6 @@
 import { toJson } from 'xml2json'
 import { getRandomNumber } from '../getRandomNumber'
 import { enviarRequisicao } from '../requisicoes'
-import {retEnvEvento} from './retEnvEvento'
-import { ICertificate } from '../assinatura/ICertificate'
-import { TAmb } from '../TAmb'
 
 export async function recepcaoEvento(
   UF: string,

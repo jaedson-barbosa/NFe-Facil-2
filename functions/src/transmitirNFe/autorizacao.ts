@@ -1,9 +1,6 @@
 import { toJson } from "xml2json"
-import { ICertificate } from "../assinatura/ICertificate"
 import { getRandomNumber } from "../getRandomNumber"
 import { enviarRequisicao } from "../requisicoes"
-import { TRetEnviNFe } from "./TRetEnviNFe"
-import { TAmb } from "../TAmb"
 
 export async function autorizacao(
   UF: string,

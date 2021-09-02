@@ -1,8 +1,11 @@
 <script lang="ts">
   import { XML, XMLC } from '../code/nfe/exibicao'
-  import { Dados, edicao } from '../code/store'
+  import { Dados, edicao, idEmpresa } from '../code/store'
   import { goto } from '@roxi/routify'
   import { DocumentSnapshot } from '@firebase/firestore'
+  import { gerarDANFENFe } from '../code/nfe/geracaoDANFE'
+  import { cancelarNFe } from '../code/functions'
+  import { toNFeString } from '../code/getDataString';
 
   let emitidas = [] as DocumentSnapshot[]
   let naoEmitidas = [] as DocumentSnapshot[]
@@ -15,32 +18,20 @@
     $goto('./nfe')
   }
 
-  async function DANFE(nfe: DocumentSnapshot) {
-    const idEmpresa = nfe.get('emit.CNPJ')
-    const idNota = nfe.get('Id')
-    // const resp = await gerarDANFENFe({
-    //   idEmpresa,
-    //   emitida,
-    //   idNota,
-    // })
-    // if (resp) {
-    //   const byteCharacters = atob(resp)
-    //   const blob = new Blob(
-    //     [
-    //       new Uint8Array(
-    //         [...new Array(byteCharacters.length)].map((v, i) =>
-    //           byteCharacters.charCodeAt(i)
-    //         )
-    //       ),
-    //     ],
-    //     { type: 'application/pdf' }
-    //   )
-    //   const url = window.URL.createObjectURL(blob)
-    //   window.open(url)
-    // }
+  async function cancelar(nfe: DocumentSnapshot) {
+    const justificativa = prompt('Motivação do cancelamento:')
+    if (!justificativa) {
+      alert('Operação cancelada pelo usuário')
+      return
+    }
+    const res = await cancelarNFe({
+      idEmpresa: $idEmpresa,
+      idNota: nfe.id,
+      justificativa,
+      dhEvento: toNFeString(new Date()),
+    })
+    if (res.data.cancelada) alert('Nota fiscal cancelada com sucesso.')
   }
-
-  async function cancelar(nfe: DocumentSnapshot) {}
 </script>
 
 <h1>Notas fiscais</h1>
@@ -70,7 +61,7 @@
         </tr>
         <dialog bind:this={caixasEmitidas[i]}>
           <button on:click={() => criarNFe(n.get('infNFe'))}>Clonar</button>
-          <button on:click={() => DANFE(n)}>DANFE</button>
+          <button on:click={() => gerarDANFENFe(n.get('xml'))}>DANFE</button>
           <button on:click={() => XML(n)}>XML</button>
           {#if n.get('cancelada')}
             <button on:click={() => XMLC(n)}>XML de cancelamento</button>
@@ -100,7 +91,7 @@
         </tr>
         <dialog bind:this={caixasNaoEmitidas[i]}>
           <button on:click={() => criarNFe(n.get('infNFe'))}>Editar</button>
-          <button on:click={() => DANFE(n)}>DANFE</button>
+          <button on:click={() => gerarDANFENFe(n.get('xml'))}>DANFE</button>
           <button on:click={() => XML(n)}>XML</button>
         </dialog>
       {/each}

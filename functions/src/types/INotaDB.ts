@@ -1,4 +1,4 @@
-export interface INotaDB {
+interface INotaDB {
   cancelada?: boolean
   infNFe: any
   dhEmi: FirebaseFirestore.Timestamp

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto, url } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { edicao, Dados, refEmpresa } from '../code/store'
+  import { edicao, Dados, refEmpresa, idEmpresa } from '../code/store'
   import { preparateJSON, generateXML } from '../code/nfe/finalizacao'
   import NFe from '../nfe-parts/NFe.svelte'
   import {
@@ -11,6 +11,7 @@
     deleteDoc,
     setDoc,
   } from '@firebase/firestore'
+  import { transmitirNFe } from '../code/functions'
 
   let loading = false
 
@@ -49,12 +50,11 @@
   async function transmitir() {
     loading = true
     try {
+      const oldId = raiz.Id
       const infNFe = preparateJSON(raiz)
-      // const resp = await transmitirNFe({
-      //   idEmpresa: $idEmpresa,
-      //   infNFe,
-      //   oldId: scoped.Id,
-      // })
+      const dadosTransmissao = { idEmpresa: $idEmpresa, infNFe, oldId }
+      const respTransmissao = await transmitirNFe(dadosTransmissao)
+      // Implementar também a exibição da nota
       // implementar continuação, tem que implementar a transmissão de NFCe também
       loading = false
     } catch (error) {

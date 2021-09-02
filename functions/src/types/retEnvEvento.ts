@@ -1,4 +1,4 @@
-export interface retEnvEvento {
+interface retEnvEvento {
   versao: string
   idLote: { $t: string }
   tpAmb: { $t: string }

@@ -1,7 +1,5 @@
 import { toXml } from 'xml2json'
 import { onCertifiedRequest } from '../onCertifiedRequest'
-import { TAmb } from '../TAmb'
-import { INotaDB } from '../INotaDB'
 import { criarXML } from './criarXML'
 import { recepcaoEvento } from './recepcaoEvento'
 import { assinarEvento } from '../assinatura/assinarEvento'
@@ -77,6 +75,6 @@ export const cancelarNFe = onCertifiedRequest(
       cancelada: true,
       xmlCancelamento: procEventoNFe,
     })
-    return true
+    return { cancelada: true}
   }, true
 )

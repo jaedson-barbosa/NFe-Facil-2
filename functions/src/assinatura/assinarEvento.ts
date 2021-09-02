@@ -1,5 +1,4 @@
 import { SignedXml } from 'xml-crypto'
-import { ICertificate } from "./ICertificate"
 import { keyProvider } from "./keyProvider"
 
 export function assinarEvento(cert: ICertificate, unsignedXml: string) {

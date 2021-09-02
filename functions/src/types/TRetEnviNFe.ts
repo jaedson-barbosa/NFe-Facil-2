@@ -1,4 +1,4 @@
-export interface TRetEnviNFe {
+interface TRetEnviNFe {
   versao: string
   tpAmb: string
   verAplic: string

@@ -1,4 +1,4 @@
-export interface ICertificate {
+interface ICertificate {
   publicCert: string
   privateCert: string
 }

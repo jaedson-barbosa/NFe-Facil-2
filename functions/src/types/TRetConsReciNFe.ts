@@ -1,4 +1,4 @@
-export interface TRetConsReciNFe {
+interface TRetConsReciNFe {
   versao: string
   tpAmb: { $t: string }
   verAplic: { $t: string }

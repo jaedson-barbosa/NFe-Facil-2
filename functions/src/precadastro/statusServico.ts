@@ -1,17 +1,6 @@
-import { onCertifiedRequest } from './onCertifiedRequest'
-import { enviarRequisicao } from './requisicoes'
-import { TAmb } from './TAmb'
-import { IBGE } from './IBGE.json'
-import { ICertificate } from './assinatura/ICertificate'
+import { enviarRequisicao } from '../requisicoes'
+import { IBGE } from '../IBGE.json'
 import { toJson } from 'xml2json'
-
-export const statusServico = onCertifiedRequest(
-  async ({ UF, cert }) => {
-    const ambiente = TAmb.Producao
-    const resp = await consultarStatusServico(UF, ambiente, cert)
-    return resp.xMotivo
-  }, false
-)
 
 export async function consultarStatusServico(
   uf: string,

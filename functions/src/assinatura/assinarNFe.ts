@@ -1,5 +1,4 @@
 import { SignedXml } from "xml-crypto"
-import { ICertificate } from "./ICertificate"
 import { keyProvider } from "./keyProvider"
 
 export async function assinarNFe(cert: ICertificate, unsignedXml: string) {

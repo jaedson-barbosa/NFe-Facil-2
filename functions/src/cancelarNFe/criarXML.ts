@@ -1,5 +1,3 @@
-import { TAmb } from "../TAmb"
-
 export function criarXML(
   cnpj: string,
   cOrgao: number,

@@ -1,9 +1,8 @@
 import { firestore, auth } from 'firebase-admin'
-import { onDefaultRequest } from './onDefaultRequest'
+import { onDefaultRequest } from '../onDefaultRequest'
 import { consultarStatusServico } from './statusServico'
-import * as forge from 'node-forge'
-import { TAmb } from './TAmb'
 import { https } from 'firebase-functions'
+import * as forge from 'node-forge'
 
 const pki = forge.pki
 
@@ -26,8 +25,12 @@ export const precadastro = onDefaultRequest(
 
     const p12Der = forge.util.decode64(cert)
     const p12Asn1 = forge.asn1.fromDer(p12Der)
-    const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, senha)
-    // Dá erro quando a senha está errada
+    let p12;
+    try {
+      p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, senha)
+    } catch (error) {
+      throw new https.HttpsError('invalid-argument', 'Senha errada.')
+    }
     const certBags = p12.getBags({ bagType: pki.oids.certBag })
     const pkeyBags = p12.getBags({ bagType: pki.oids.pkcs8ShroudedKeyBag })
     const certBag = certBags[pki.oids.certBag]![0]
@@ -76,17 +79,8 @@ export const precadastro = onDefaultRequest(
     const empresaRef = db.collection('empresas').doc(cnpj)
     const empresa = await empresaRef.get()
     if (!empresa.exists) {
-      const sha256 = forge.md.sha256.create()
-      sha256.update(senha)
-      const encryptedPassword = sha256.digest().toHex()
-      const endPass = cnpj + encryptedPassword
-      const encryptedPrivateKey = pki.encryptRsaPrivateKey(privateKey, endPass)
-
-      await db.collection('certificados').doc(cnpj).set({
-        publicCert,
-        privateCert: encryptedPrivateKey,
-      })
-      await empresaRef.set({
+      const certDoc = { publicCert, privateCert }
+      const empresaDoc = {
         emit: {
           CNPJ: cnpj,
           xNome: certParts[0],
@@ -95,7 +89,9 @@ export const precadastro = onDefaultRequest(
         serieNFCe: '1',
         IDCSC: '',
         CSC: '',
-      })
+      }
+      await db.collection('certificados').doc(cnpj).set(certDoc)
+      await empresaRef.set(empresaDoc)
     }
 
     const niveis = [NiveisAcesso.R, NiveisAcesso.RW, NiveisAcesso.A]
