@@ -1,7 +1,7 @@
 import * as https from 'https'
 import * as axios from 'axios'
-import * as servicos from './servicos.json'
-import * as webservicesNFe from './webservicesNFe.json'
+import servicos from './servicos'
+import webservicesNFe from './webservicesNFe'
 
 type nomesServicos = keyof typeof servicos &
   keyof typeof webservicesNFe.SVRS.servicos
@@ -11,7 +11,7 @@ export async function enviarRequisicao(
   servico: nomesServicos,
   amb: TAmb,
   UF: string,
-  cert: ICertificate,
+  cert: ICertificate
 ): Promise<string> {
   return (
     await axios.default.post(

@@ -8,7 +8,7 @@ const pki = forge.pki
 
 const db = firestore()
 
-export const precadastro = onDefaultRequest(
+export const cadastrar = onDefaultRequest(
   async ({ cert, senha }, context) => {
     if (!cert) {
       throw new https.HttpsError(

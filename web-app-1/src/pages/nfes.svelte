@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { XML, XMLC } from '../code/nfe/exibicao'
+  import { abrirXML } from '../code/nfe/exibicao'
   import { Dados, edicao, idEmpresa } from '../code/store'
   import { goto } from '@roxi/routify'
   import { DocumentSnapshot } from '@firebase/firestore'
   import { gerarDANFENFe } from '../code/nfe/geracaoDANFE'
   import { cancelarNFe } from '../code/functions'
-  import { toNFeString } from '../code/getDataString';
+  import { toNFeString } from '../code/getDataString'
 
   let emitidas = [] as DocumentSnapshot[]
   let naoEmitidas = [] as DocumentSnapshot[]
@@ -62,9 +62,11 @@
         <dialog bind:this={caixasEmitidas[i]}>
           <button on:click={() => criarNFe(n.get('infNFe'))}>Clonar</button>
           <button on:click={() => gerarDANFENFe(n.get('xml'))}>DANFE</button>
-          <button on:click={() => XML(n)}>XML</button>
+          <button on:click={() => abrirXML(n.get('xml'))}>XML</button>
           {#if n.get('cancelada')}
-            <button on:click={() => XMLC(n)}>XML de cancelamento</button>
+            <button on:click={() => abrirXML(n.get('xmlCancelamento'))}>
+              XML de cancelamento
+            </button>
           {:else}
             <button on:click={() => cancelar(n)}>Cancelar</button>
           {/if}
@@ -92,7 +94,7 @@
         <dialog bind:this={caixasNaoEmitidas[i]}>
           <button on:click={() => criarNFe(n.get('infNFe'))}>Editar</button>
           <button on:click={() => gerarDANFENFe(n.get('xml'))}>DANFE</button>
-          <button on:click={() => XML(n)}>XML</button>
+          <button on:click={() => abrirXML(n.get('xml'))}>XML</button>
         </dialog>
       {/each}
     </tbody>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { user, idEmpresa } from '../code/store'
-  import { precadastro, defaultCatch } from '../code/functions'
+  import { cadastrar as _cadastrar, defaultCatch } from '../code/functions'
 
   let cadastrando = false
   let certificado = undefined as FileList
@@ -16,7 +16,8 @@
       return
     }
     try {
-      const res = await precadastro({ cert: certificadoBase64, senha })
+      const req = { cert: certificadoBase64, senha }
+      const res = await _cadastrar()
       const { cnpj } = res.data as { cnpj: string }
       $idEmpresa = cnpj
     } catch (error) {

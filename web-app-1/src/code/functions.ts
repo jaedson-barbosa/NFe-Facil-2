@@ -6,9 +6,18 @@ import {
 } from 'firebase/functions'
 
 const functions = getFunctions(undefined, 'southamerica-east1')
+
 connectFunctionsEmulator(functions, 'localhost', 5001)
-export const precadastro = httpsCallable(functions, 'precadastro')
-export const transmitirNFe = httpsCallable(functions, 'transmitirNFe')
+
+export const cadastrar = httpsCallable<IReqCadastrar, IResCadastrar>(
+  functions,
+  'cadastrar'
+)
+
+export const transmitirNFe = httpsCallable<IReqTransmitir, IResTransmitir>(
+  functions,
+  'transmitirNFe'
+)
 
 export const cancelarNFe = httpsCallable<IReqCancelar, IResCancelar>(
   functions,

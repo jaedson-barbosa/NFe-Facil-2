@@ -2,6 +2,6 @@ import { initializeApp } from 'firebase-admin'
 
 initializeApp()
 
-export { precadastro } from './precadastro'
+export { cadastrar } from './cadastrar'
 export { transmitirNFe } from './transmitirNFe'
 export { cancelarNFe } from './cancelarNFe'

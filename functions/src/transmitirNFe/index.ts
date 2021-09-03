@@ -92,14 +92,15 @@ export const transmitirNFe = onCertifiedRequest(
       if (oldDoc.exists) await oldDocRef.delete()
     }
     const dhEmi = new Date(infNFe.ide.dhEmi.$t)
-    await notasEmitidasCol.doc(infNFe.Id).set({
+    const novoRegistro = {
       cancelada: false,
       infNFe: removePrefix(infNFe),
       dhEmi,
       nProt,
       xml: nfeProc,
-    })
-    return infNFe.Id
+    }
+    await notasEmitidasCol.doc(infNFe.Id).set(novoRegistro)
+    return novoRegistro
   },
   true
 )

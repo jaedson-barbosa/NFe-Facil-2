@@ -38,7 +38,7 @@
       const docRef = doc(notasCol, raiz.Id)
       await setDoc(docRef, dado)
       const tipo = isNFCe ? Dados.NFCes : Dados.NFes
-      $edicao = { dado: dado, id: raiz.Id, tipo }
+      $edicao = { dado, id: raiz.Id, tipo }
       $goto(tipo)
     } catch (error) {
       console.error(error)
@@ -48,14 +48,17 @@
   }
 
   async function transmitir() {
+    if (isNFCe) return
     loading = true
     try {
       const oldId = raiz.Id
       const infNFe = preparateJSON(raiz)
       const dadosTransmissao = { idEmpresa: $idEmpresa, infNFe, oldId }
       const respTransmissao = await transmitirNFe(dadosTransmissao)
-      // Implementar também a exibição da nota
-      // implementar continuação, tem que implementar a transmissão de NFCe também
+      const dado = respTransmissao.data
+      const tipo = Dados.NFes
+      $edicao = { dado, id: dado.infNFe.Id, tipo }
+      $goto(tipo)
       loading = false
     } catch (error) {
       console.error(error)
