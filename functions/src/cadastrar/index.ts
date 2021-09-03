@@ -1,107 +1,131 @@
 import { firestore, auth } from 'firebase-admin'
-import { onDefaultRequest } from '../onDefaultRequest'
 import { consultarStatusServico } from './statusServico'
 import { https } from 'firebase-functions'
 import * as forge from 'node-forge'
+import validarAutenticacao from '../commom/validarAutenticacao'
 
-const pki = forge.pki
+export default async function (
+  req: IReqCadastrar,
+  context: https.CallableContext
+) {
+  validarAutenticacao(context)
+  validarRequisicao(req)
+  const certificado = carregarCertificado(req)
+  const { CNPJ, UF, xNome } = getInfosCertificado(certificado)
+  const certificadoDB = getCertificadoDB(certificado)
+  await validarCertificado(certificadoDB, UF)
+  await verificarRegistrarEmpresa(CNPJ, xNome, certificadoDB)
+  await registrarUsuario(CNPJ, context.auth!.token)
+}
 
-const db = firestore()
+function validarRequisicao(req: IReqCadastrar) {
+  if (!req.cert) {
+    throw new https.HttpsError(
+      'failed-precondition',
+      'Campo "cert" (certificado do emitente) ausente.'
+    )
+  }
+  if (!req.senha) {
+    throw new https.HttpsError(
+      'failed-precondition',
+      'Campo "senha" (senha do certificado) ausente.'
+    )
+  }
+}
 
-export const cadastrar = onDefaultRequest(
-  async ({ cert, senha }, context) => {
-    if (!cert) {
-      throw new https.HttpsError(
-        'failed-precondition',
-        'Campo "cert" (certificado do emitente) ausente.'
-      )
-    }
-    if (!senha) {
-      throw new https.HttpsError(
-        'failed-precondition',
-        'Campo "senha" (senha do certificado) ausente.'
-      )
-    }
+interface ICertificado {
+  chavePublica: forge.pki.Certificate
+  chavePrivada: forge.pki.PrivateKey
+}
 
-    const p12Der = forge.util.decode64(cert)
-    const p12Asn1 = forge.asn1.fromDer(p12Der)
-    let p12;
-    try {
-      p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, senha)
-    } catch (error) {
-      throw new https.HttpsError('invalid-argument', 'Senha errada.')
-    }
-    const certBags = p12.getBags({ bagType: pki.oids.certBag })
-    const pkeyBags = p12.getBags({ bagType: pki.oids.pkcs8ShroudedKeyBag })
-    const certBag = certBags[pki.oids.certBag]![0]
-    const keybag = pkeyBags[pki.oids.pkcs8ShroudedKeyBag]![0]
-    const privateKey = keybag.key!
-    const privateCert = pki.privateKeyToPem(privateKey)
-    const certificado = certBag.cert!
-    const publicCert = pki.certificateToPem(certificado)
+function carregarCertificado(req: IReqCadastrar): ICertificado {
+  const p12Der = forge.util.decode64(req.cert)
+  const p12Asn1 = forge.asn1.fromDer(p12Der)
+  let p12
+  try {
+    p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, req.senha)
+  } catch (error) {
+    throw new https.HttpsError('invalid-argument', 'Senha errada.')
+  }
+  const certBags = p12.getBags({ bagType: forge.pki.oids.certBag })
+  const pkeyBags = p12.getBags({ bagType: forge.pki.oids.pkcs8ShroudedKeyBag })
+  const certBag = certBags[forge.pki.oids.certBag]![0]
+  const keybag = pkeyBags[forge.pki.oids.pkcs8ShroudedKeyBag]![0]
+  const chavePrivada = keybag.key!
+  const chavePublica = certBag.cert!
+  return { chavePublica, chavePrivada }
+}
 
-    const certUser = certificado.subject.getField('CN').value as string
-    const certParts = certUser.split(':')
-    if (certParts.length != 2) {
-      throw new https.HttpsError('invalid-argument', 'Certificado inválido.')
-    }
-    const cnpj = certParts[1]
-    if (cnpj.length != 14) {
-      throw new https.HttpsError(
-        'invalid-argument',
-        'Certificado com CNPJ inválido.'
-      )
-    }
+function getInfosCertificado({ chavePublica }: ICertificado) {
+  const certUser = chavePublica.subject.getField('CN').value as string
+  const certParts = certUser.split(':')
+  if (certParts.length != 2) {
+    throw new https.HttpsError('invalid-argument', 'Certificado inválido.')
+  }
+  const CNPJ = certParts[1]
+  if (CNPJ.length != 14) {
+    throw new https.HttpsError(
+      'invalid-argument',
+      'Certificado com CNPJ inválido.'
+    )
+  }
+  const UF = chavePublica.subject.getField('ST').value as string
+  return { CNPJ, UF, xNome: certParts[0] }
+}
 
-    // A melhor análise existente é a da SEFAZ
-    const UF = certificado.subject.getField('ST').value as string
-    let valido = true
-    try {
-      const resp = await consultarStatusServico(UF, TAmb.Producao, {
-        privateCert,
-        publicCert,
-      })
-      valido = resp.cStat == '107' || resp.cStat == '108' || resp.cStat == '109'
-    } catch (error) {
-      valido = false
-    }
+function getCertificadoDB(certificado: ICertificado): ICertificadoDB {
+  return {
+    publicCert: forge.pki.certificateToPem(certificado.chavePublica),
+    privateCert: forge.pki.privateKeyToPem(certificado.chavePrivada),
+  }
+}
+
+async function validarCertificado(certificado: ICertificadoDB, UF: string) {
+  try {
+    const resp = await consultarStatusServico(UF, TAmb.Producao, certificado)
+    const valido =
+      resp.cStat == '107' || resp.cStat == '108' || resp.cStat == '109'
     if (!valido) {
       throw new https.HttpsError(
         'invalid-argument',
-        'Certificado possivelmente inválido.',
-        'Não foi possível se comunicar com a SEFAZ usando este certificado.' +
-          'É possível que os servidores da SEFAZ estejam com algum problema e ' +
-          'por isso ele não foi aceito. Por isso, por enquanto, este ' +
-          'certificado não será aceito para efetuar o seu cadastro.'
+        'No momento, não foi possível consultar a SEFAZ usando este certificado.'
       )
     }
-
-    const empresaRef = db.collection('empresas').doc(cnpj)
-    const empresa = await empresaRef.get()
-    if (!empresa.exists) {
-      const certDoc = { publicCert, privateCert }
-      const empresaDoc = {
-        emit: {
-          CNPJ: cnpj,
-          xNome: certParts[0],
-        },
-        serieNFe: '1',
-        serieNFCe: '1',
-        IDCSC: '',
-        CSC: '',
-      }
-      await db.collection('certificados').doc(cnpj).set(certDoc)
-      await empresaRef.set(empresaDoc)
-    }
-
-    const niveis = [NiveisAcesso.R, NiveisAcesso.RW, NiveisAcesso.A]
-    const liberacoes = { [cnpj]: NiveisAcesso.A }
-    Object.entries(context.auth!.token)
-      .filter(([_, v]) => niveis.includes(v))
-      .forEach(([key, v]) => (liberacoes[key] = v))
-    await auth().setCustomUserClaims(context.auth!.uid, liberacoes)
-    return { cnpj }
+  } catch (error) {
+    throw new https.HttpsError(
+      'internal',
+      'Erro ao tentar se conectar à SEFAZ com este certificado.'
+    )
   }
-)
+}
 
+async function verificarRegistrarEmpresa(
+  CNPJ: string,
+  xNome: string,
+  certificado: ICertificadoDB
+) {
+  const db = firestore()
+  const empresaRef = db.collection('empresas').doc(CNPJ)
+  const empresa = await empresaRef.get()
+  if (!empresa.exists) {
+    const empresaDoc = {
+      emit: { CNPJ, xNome },
+      serieNFe: '1',
+      serieNFCe: '1',
+      IDCSC: '',
+      CSC: '',
+    }
+    await db.collection('certificados').doc(CNPJ).set(certificado)
+    await empresaRef.set(empresaDoc)
+  }
+}
 
+async function registrarUsuario(CNPJ: string, token: auth.DecodedIdToken) {
+  const niveis = [NiveisAcesso.R, NiveisAcesso.RW, NiveisAcesso.A]
+  const liberacoes = { [CNPJ]: NiveisAcesso.A }
+  Object.entries(token)
+    .filter(([_, v]) => niveis.includes(v))
+    .forEach(([key, v]) => (liberacoes[key] = v))
+  await auth().setCustomUserClaims(token.uid, liberacoes)
+  return { cnpj: CNPJ }
+}
