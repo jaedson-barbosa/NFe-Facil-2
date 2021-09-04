@@ -2,9 +2,10 @@
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
   import { validaCPF, validaCNPJ } from '../code/validacaoDoc'
-  import { Dados, edicao, refEmpresa } from '../code/store'
+  import { edicao, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import Transporta from '../nfe-parts/Transporta.svelte'
+  import { Dados } from '../code/tipos';
 
   let loading = false
   let raiz = undefined

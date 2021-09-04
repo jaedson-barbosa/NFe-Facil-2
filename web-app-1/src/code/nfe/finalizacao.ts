@@ -1,4 +1,5 @@
 import IBGE from '../IBGE'
+import type { INFeRoot } from '../tipos'
 import refInfNFe from './estrutura'
 import toXml from './json2xml'
 

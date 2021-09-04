@@ -19,6 +19,7 @@
     where,
   } from 'firebase/firestore'
   import { refEmpresa } from '../code/store'
+  import { Dados } from '../code/tipos'
 
   export let raiz: any
 

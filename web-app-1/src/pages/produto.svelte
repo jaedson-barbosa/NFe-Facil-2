@@ -1,9 +1,10 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { edicao, empresa, Dados, refEmpresa } from '../code/store'
+  import { edicao, empresa, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import Det from '../nfe-parts/Det.svelte'
+  import { Dados } from '../code/tipos';
 
   let loading = false
   let raiz = undefined

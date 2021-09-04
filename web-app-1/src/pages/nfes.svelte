@@ -2,10 +2,11 @@
   import { abrirXML } from '../code/nfe/exibicao'
   import { edicao, idEmpresa } from '../code/store'
   import { goto } from '@roxi/routify'
-  import { DocumentSnapshot } from '@firebase/firestore'
+  import type { DocumentSnapshot } from '@firebase/firestore'
   import { gerarDANFENFe } from '../code/nfe/geracaoDANFE'
   import { cancelarNFe } from '../code/functions'
   import { toNFeString } from '../code/getDataString'
+  import { Dados } from '../code/tipos';
 
   let emitidas = [] as DocumentSnapshot[]
   let naoEmitidas = [] as DocumentSnapshot[]
@@ -25,7 +26,6 @@
       return
     }
     const res = await cancelarNFe({
-      idEmpresa: $idEmpresa,
       idNota: nfe.id,
       justificativa: justificativa.trim(),
       dhEvento: toNFeString(new Date()),

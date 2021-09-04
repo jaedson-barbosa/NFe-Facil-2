@@ -9,6 +9,7 @@ import {
   signOut,
   getIdTokenResult,
 } from 'firebase/auth'
+import type { Dados, NiveisAcesso } from './tipos'
 
 const auth = getAuth()
 const googleProvider = new GoogleAuthProvider()

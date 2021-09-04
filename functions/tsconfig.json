@@ -8,6 +8,5 @@
     "target": "ES2019",
     "rootDir": "src",
     "sourceMap": true
-  },
-  "references": [{ "path": "../commom-code" }]
+  }
 }

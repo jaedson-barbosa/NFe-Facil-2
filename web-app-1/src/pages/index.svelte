@@ -1,8 +1,6 @@
 <script lang="ts">
   import { gerarDANFENFe } from '../code/nfe/geracaoDANFE'
-  import { cancelarNFe } from '../code/nfe/cancelamento'
   import {
-    Dados,
     edicao,
     idEmpresa,
     liberacoes,
@@ -21,7 +19,8 @@
     startAfter,
     getDocs,
   } from '@firebase/firestore'
-  import { QueryConstraint } from 'firebase/firestore'
+  import type { QueryConstraint } from 'firebase/firestore'
+import { Dados, NiveisAcesso } from '../code/tipos';
 
   $edicao = undefined
 
@@ -245,16 +244,13 @@
               </a>
             {:else if cad.get('cancelada') === false}
               <button
-                on:click|once={() => gerarDANFENFe($idEmpresa, cad.id, true)}
+                on:click|once={() => gerarDANFENFe(cad.get('xml'))}
               >
                 Gerar DANFE
               </button>
-              <button on:click|once={() => cancelarNFe($idEmpresa, cad.id)}>
-                Cancelar
-              </button>
             {:else}
               <button
-                on:click|once={() => gerarDANFENFe($idEmpresa, cad.id, false)}
+                on:click|once={() => gerarDANFENFe(cad.get('xml'))}
               >
                 Gerar DANFE
               </button>

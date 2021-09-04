@@ -1,6 +1,7 @@
 <script lang="ts">
   import { validaCNPJ, validaCPF } from '../code/validacaoDoc'
-  import { aplicarMascara, mascaras } from '../code/mascaracaoDoc'
+  import { aplicarMascara } from '../code/mascaracaoDoc'
+  import type { mascaras } from '../code/mascaracaoDoc'
 
   export let opt = false
   export let lab: string

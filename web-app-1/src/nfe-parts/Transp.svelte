@@ -4,9 +4,18 @@
   import Lista from '../components/Lista.svelte'
   import Opcional from '../components/Opcional.svelte'
   import Estado from '../components/Estado.svelte'
-  import { dbColumns } from '../code/store'
-  import type { TCadastro } from '../code/store'
+  import { refEmpresa } from '../code/store'
   import ExibDoc from './ExibDoc.svelte'
+  import {
+    collection,
+    DocumentSnapshot,
+    getDocs,
+    limit,
+    orderBy,
+    query,
+    where,
+  } from 'firebase/firestore'
+import { Dados } from '../code/tipos';
 
   export let raiz: any
 
@@ -19,15 +28,18 @@
   $: reboque = transp['reboque']
 
   let buscaTransportador = ''
-  let transportadores = [] as TCadastro[]
+  let transportadores = [] as DocumentSnapshot[]
   async function buscarTransportador() {
     const busca = buscaTransportador
     buscaTransportador = ''
-    const res = await $dbColumns.produtos
-      .where('det.prod.xProd', '>=', busca)
-      .orderBy('det.prod.xProd', 'asc')
-      .limit(10)
-      .get()
+    const coluna = collection($refEmpresa, Dados.Transportes)
+    const consulta = query(
+      coluna,
+      where('transporta.xNome', '>=', busca),
+      orderBy('transporta.xNome', 'asc'),
+      limit(10)
+    )
+    const res = await getDocs(consulta)
     transportadores = res.docs
   }
 </script>

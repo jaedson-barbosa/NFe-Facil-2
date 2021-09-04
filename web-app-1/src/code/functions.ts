@@ -4,6 +4,14 @@ import {
   httpsCallable,
   FunctionsError,
 } from 'firebase/functions'
+import type {
+  IReqCadastrar,
+  IReqCancelar,
+  IReqTransmitir,
+  IResCadastrar,
+  IResCancelar,
+  IResTransmitir,
+} from './tipos'
 
 const functions = getFunctions(undefined, 'southamerica-east1')
 

@@ -12,6 +12,8 @@
     setDoc,
   } from '@firebase/firestore'
   import { transmitirNFe } from '../code/functions'
+  import { Dados } from '../code/tipos'
+  import type { INFeRoot } from '../code/tipos'
 
   let loading = false
 
