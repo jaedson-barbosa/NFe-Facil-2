@@ -7,3 +7,4 @@ save-data
 *.cache
 web-app-1/public/build
 *.tsbuildinfo
+commom-code/out
