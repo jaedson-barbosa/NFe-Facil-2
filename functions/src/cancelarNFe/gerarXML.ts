@@ -1,9 +1,9 @@
-import { assinarEvento } from '../assinatura/assinarEvento'
+import assinar from "../assinar"
 
-export function criarXML(
+export default function(
   nota: INotaDB,
   cnpj: string,
-  ambiente: TAmb,
+  ambiente: Ambientes,
   { justificativa, dhEvento }: IReqCancelar,
   certificado: ICertificado
 ) {
@@ -27,6 +27,6 @@ export function criarXML(
     </detEvento>
   </infEvento>
   </evento>`.replace(/>\s+</g, '><')
-  const xmlAssinado = assinarEvento(certificado, xml)
+  const xmlAssinado = assinar(certificado, xml, 'infEvento')
   return xmlAssinado
 }

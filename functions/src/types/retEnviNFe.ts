@@ -1,4 +1,4 @@
-interface TRetConsStatServ {
+interface retEnviNFe {
   versao: string
   tpAmb: string
   verAplic: string
@@ -6,7 +6,8 @@ interface TRetConsStatServ {
   xMotivo: string
   cUF: string
   dhRecbto: string
-  tMed: string
-  dhRetorno: string
-  xObs: string
+  infRec: {
+    nRec: string
+    tMed: string
+  }
 }

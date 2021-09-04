@@ -8,7 +8,7 @@ export default async function (
   certificado: ICertificado,
   numeroRecibo: string
 ) {
-  let respRet: TRetConsReciNFe | undefined = undefined
+  let respRet: retConsReciNFe | undefined = undefined
   do {
     respRet = await consultarResposta(
       infos.UF,
@@ -43,9 +43,9 @@ export default async function (
 async function consultarResposta(
   UF: string,
   cert: ICertificado,
-  ambiente: TAmb,
+  ambiente: Ambientes,
   nRec: string
-): Promise<TRetConsReciNFe> {
+): Promise<retConsReciNFe> {
   const respRetAutorizacao = await enviarRequisicao(
     `<consReciNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
       <tpAmb>${ambiente}</tpAmb>
@@ -62,5 +62,5 @@ async function consultarResposta(
       reversible: true,
     }) as any
   )['soap:Envelope']['soap:Body'].nfeResultMsg.retConsReciNFe
-  return retConsReciNFe as TRetConsReciNFe
+  return retConsReciNFe as retConsReciNFe
 }

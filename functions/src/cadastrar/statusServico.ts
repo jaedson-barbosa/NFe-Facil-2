@@ -4,12 +4,12 @@ import estados from './estados'
 
 export async function consultarStatusServico(
   uf: string,
-  ambiente: TAmb,
+  ambiente: Ambientes,
   cert: ICertificado
 ) {
   const cUF = estados.find((v) => v[0] === uf)?.[1]
   if (!cUF) throw new Error()
-  const resp = await enviarRequisicao(
+  const res = await enviarRequisicao(
     `<consStatServ versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
       <tpAmb>${ambiente}</tpAmb>
       <cUF>${cUF}</cUF>
@@ -20,11 +20,11 @@ export async function consultarStatusServico(
     uf,
     cert
   )
-  const retConsStatServ = (
-    toJson(resp, {
-      object: true,
-      reversible: false,
-    }) as any
-  )['soap:Envelope']['soap:Body'].nfeResultMsg.retConsStatServ
-  return retConsStatServ as TRetConsStatServ
+  const resJson: any = toJson(res, {
+    object: true,
+    reversible: false,
+  })
+  const retConsStatServ =
+    resJson['soap:Envelope']['soap:Body'].nfeResultMsg.retConsStatServ
+  return retConsStatServ as retConsStatServ
 }

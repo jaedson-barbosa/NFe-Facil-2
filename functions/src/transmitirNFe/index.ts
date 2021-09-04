@@ -29,7 +29,7 @@ export default async function (
   let adicionalNumero = 0
   while (adicionalNumero < 3) {
     const numero = numeroInicial + adicionalNumero++
-    const xml = await gerarXml(infNFe, certificado, numero)
+    const xml = gerarXml(infNFe, certificado, numero)
     const numeroRecibo = await solicitar(infos, certificado, xml)
     const resultado = await consultarResposta(infos, certificado, numeroRecibo)
     if (resultado) return finalizar(coluna, infNFe, xml, resultado, req.oldId)
@@ -54,15 +54,15 @@ function validarRequisicao(infNFe: any) {
 function getInfos(infNFe: any): IInfos {
   const serie: string = infNFe.ide.serie.$t
   const numero: number = +infNFe.ide.nNF.$t
-  const ambiente: TAmb = infNFe.ide.tpAmb.$t
+  const ambiente: Ambientes = infNFe.ide.tpAmb.$t
   const modelo: '55' | '65' = infNFe.ide.mod.$t
   const UF: string = infNFe.emit.enderEmit.UF.$t
   return { serie, numero, ambiente, modelo, UF }
 }
 
-function corrigirDestinatario(infNFe: any, ambiente: TAmb) {
+function corrigirDestinatario(infNFe: any, ambiente: Ambientes) {
   const xNome = infNFe.dest.xNome
-  if (ambiente == TAmb.Homologacao && xNome?.$t) {
+  if (ambiente == Ambientes.Homologacao && xNome?.$t) {
     const clienteHomologacao =
       'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
     xNome.$t = clienteHomologacao
@@ -98,7 +98,7 @@ async function finalizar(
   coluna: firestore.CollectionReference,
   infNFe: any,
   xmlAssinado: string,
-  respostaAutorizacao: TRetConsReciNFe,
+  respostaAutorizacao: retConsReciNFe,
   idAntigo: string
 ) {
   const nfeProc =

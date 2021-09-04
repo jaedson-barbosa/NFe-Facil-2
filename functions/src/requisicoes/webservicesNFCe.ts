@@ -1,299 +1,211 @@
-export default {
-  AM: {
-    nome: 'Amazonas',
-    servicos: {
-      autorizacao: {
-        url_producao:
-          'https://nfce.sefaz.am.gov.br/nfce-services/services/NfeAutorizacao4',
-        url_homologacao:
-          'https://homnfce.sefaz.am.gov.br/nfce-services/services/NfeAutorizacao4.asmx?wsdl',
-      },
-      retAutorizacao: {
-        url_producao:
-          'https://nfce.sefaz.am.gov.br/nfce-services/services/NfeRetAutorizacao4',
-        url_homologacao:
-          'https://homnfce.sefaz.am.gov.br/nfce-services/services/NfeRetAutorizacao4.asmx?wsdl',
-      },
-      consultarStatusServico: {
-        url_producao:
-          'https://nfce.sefaz.am.gov.br/nfce-services/services/NfeStatusServico4',
-        url_homologacao:
-          'https://homnfce.sefaz.am.gov.br/nfce-services/services/NfeStatusServico4.asmx?wsdl',
-      },
-      inutilizacao: {
-        url_producao:
-          'https://nfce.sefaz.am.gov.br/nfce-services/services/NFeInutilizacao4',
-        url_homologacao:
-          'https://homnfce.sefaz.am.gov.br/nfce-services/services/NFeInutilizacao4.asmx?wsdl',
-      },
-    },
+const AMP = 'https://nfce.sefaz.am.gov.br/nfce-services/services/'
+const AMH = 'https://homnfce.sefaz.am.gov.br/nfce-services/services/'
+const AM = {
+  autorizacao: {
+    producao: AMP + 'NfeAutorizacao4',
+    homologacao: AMH + 'NfeAutorizacao4.asmx?wsdl',
   },
-  CE: {
-    nome: 'Ceará',
-    servicos: {
-      autorizacao: {
-        url_producao:
-          'https://nfce.sefaz.ce.gov.br/nfce4/services/NFeAutorizacao4?WSDL',
-        url_homologacao:
-          'https://nfceh.sefaz.ce.gov.br/nfce4/services/NFeAutorizacao4?WSDL',
-      },
-      retAutorizacao: {
-        url_producao:
-          'https://nfce.sefaz.ce.gov.br/nfce4/services/NFeRetAutorizacao4?WSDL',
-        url_homologacao:
-          'https://nfceh.sefaz.ce.gov.br/nfce4/services/NFeRetAutorizacao4?WSDL',
-      },
-      consultarStatusServico: {
-        url_producao:
-          'https://nfce.sefaz.ce.gov.br/nfce4/services/NFeStatusServico4?WSDL',
-        url_homologacao:
-          'https://nfceh.sefaz.ce.gov.br/nfce4/services/NFeStatusServico4?WSDL',
-      },
-      inutilizacao: {
-        url_producao:
-          'https://nfce.sefaz.ce.gov.br/nfce4/services/NFeInutilizacao4?WSDL',
-        url_homologacao:
-          'https://nfceh.sefaz.ce.gov.br/nfce4/services/NFeInutilizacao4?WSDL',
-      },
-    },
+  retAutorizacao: {
+    producao: AMP + 'NfeRetAutorizacao4',
+    homologacao: AMH + 'NfeRetAutorizacao4.asmx?wsdl',
   },
-  GO: {
-    nome: 'Goiás',
-    servicos: {
-      autorizacao: {
-        url_producao:
-          'https://nfe.sefaz.go.gov.br/nfe/services/NFeAutorizacao4?wsdl',
-        url_homologacao:
-          'https://homolog.sefaz.go.gov.br/nfe/services/NFeAutorizacao4?wsdl',
-      },
-      retAutorizacao: {
-        url_producao:
-          'https://nfe.sefaz.go.gov.br/nfe/services/NFeRetAutorizacao4?wsdl',
-        url_homologacao:
-          'https://homolog.sefaz.go.gov.br/nfe/services/NFeRetAutorizacao4?wsdl',
-      },
-      consultarStatusServico: {
-        url_producao:
-          'https://nfe.sefaz.go.gov.br/nfe/services/NFeStatusServico4?wsdl',
-        url_homologacao:
-          'https://homolog.sefaz.go.gov.br/nfe/services/NFeStatusServico4?wsdl',
-      },
-      inutilizacao: {
-        url_producao:
-          'https://nfe.sefaz.go.gov.br/nfe/services/NFeInutilizacao4',
-        url_homologacao:
-          'https://homolog.sefaz.go.gov.br/nfe/services/Nfeinutilizacao4.asmx',
-      },
-    },
+  consultarStatusServico: {
+    producao: AMP + 'NfeStatusServico4',
+    homologacao: AMH + 'NfeStatusServico4.asmx?wsdl',
   },
-  MT: {
-    nome: 'Mato Grosso',
-    servicos: {
-      autorizacao: {
-        url_producao:
-          'https://nfce.sefaz.mt.gov.br/nfcews/services/NfeAutorizacao4',
-        url_homologacao:
-          'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeAutorizacao4',
-      },
-      retAutorizacao: {
-        url_producao:
-          'https://nfce.sefaz.mt.gov.br/nfcews/services/NfeRetAutorizacao4',
-        url_homologacao:
-          'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeRetAutorizacao4',
-      },
-      consultarStatusServico: {
-        url_producao:
-          'https://nfce.sefaz.mt.gov.br/nfcews/services/NfeStatusServico4',
-        url_homologacao:
-          'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeStatusServico4',
-      },
-      inutilizacao: {
-        url_producao:
-          'https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao4',
-        url_homologacao:
-          'https://homologacao.sefaz.mt.gov.br/nfcews/services/Nfeinutilizacao4.asmx',
-      },
-    },
-  },
-  MS: {
-    nome: 'Mato Grosso do Sul',
-    servicos: {
-      autorizacao: {
-        url_producao: 'https://nfce.sefaz.ms.gov.br/ws/NFeAutorizacao4',
-        url_homologacao: 'https://hom.nfce.sefaz.ms.gov.br/ws/NFeAutorizacao4',
-      },
-      retAutorizacao: {
-        url_producao: 'https://nfce.sefaz.ms.gov.br/ws/NFeRetAutorizacao4',
-        url_homologacao:
-          'https://hom.nfce.sefaz.ms.gov.br/ws/NFeRetAutorizacao4',
-      },
-      consultarStatusServico: {
-        url_producao: 'https://nfce.sefaz.ms.gov.br/ws/NFeStatusServico4',
-        url_homologacao:
-          'https://hom.nfce.sefaz.ms.gov.br/ws/NFeStatusServico4',
-      },
-      inutilizacao: {
-        url_producao: 'https://nfe.sefaz.ms.gov.br/ws/NFeInutilizacao4',
-        url_homologacao:
-          'https://hom.nfce.sefaz.ms.gov.br/ws/Nfeinutilizacao4.asmx',
-      },
-    },
-  },
-  MG: {
-    nome: 'Minas Gerais',
-    servicos: {
-      autorizacao: {
-        url_producao:
-          'https://nfce.fazenda.mg.gov.br/nfce/services/NFeAutorizacao4',
-        url_homologacao:
-          'https://hnfce.fazenda.mg.gov.br/nfce/services/NFeAutorizacao4',
-      },
-      retAutorizacao: {
-        url_producao:
-          'https://nfce.fazenda.mg.gov.br/nfce/services/NFeRetAutorizacao4',
-        url_homologacao:
-          'https://hnfce.fazenda.mg.gov.br/nfce/services/NFeRetAutorizacao4',
-      },
-      consultarStatusServico: {
-        url_producao:
-          'https://nfce.fazenda.mg.gov.br/nfce/services/NFeStatusServico4',
-        url_homologacao:
-          'https://hnfce.fazenda.mg.gov.br/nfce/services/NFeStatusServico4',
-      },
-      inutilizacao: {
-        url_producao:
-          'https://nfe.fazenda.mg.gov.br/nfe2/services/NFeInutilizacao4',
-        url_homologacao:
-          'https://hnfce.fazenda.mg.gov.br/nfce/services/Nfeinutilizacao4.asmx',
-      },
-    },
-  },
-  PR: {
-    nome: 'Paraná',
-    servicos: {
-      autorizacao: {
-        url_producao: 'https://nfce.sefa.pr.gov.br/nfce/NFeAutorizacao4',
-        url_homologacao:
-          'https://homologacao.nfce.sefa.pr.gov.br/nfce/NFeAutorizacao4',
-      },
-      retAutorizacao: {
-        url_producao: 'https://nfce.sefa.pr.gov.br/nfce/NFeRetAutorizacao4',
-        url_homologacao:
-          'https://homologacao.nfce.sefa.pr.gov.br/nfce/NFeRetAutorizacao4',
-      },
-      consultarStatusServico: {
-        url_producao: 'https://nfce.sefa.pr.gov.br/nfce/NFeStatusServico4',
-        url_homologacao:
-          'https://homologacao.nfce.sefa.pr.gov.br/nfce/NFeStatusServico4',
-      },
-      inutilizacao: {
-        url_producao: 'https://nfe.sefa.pr.gov.br/nfe/NFeInutilizacao4',
-        url_homologacao:
-          'https://homologacao.nfce.sefa.pr.gov.br/nfce/Nfeinutilizacao4.asmx',
-      },
-    },
-  },
-  RS: {
-    nome: 'Rio Grande do Sul',
-    servicos: {
-      autorizacao: {
-        url_producao:
-          'https://nfce.sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx',
-        url_homologacao:
-          'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx?wsdl',
-      },
-      retAutorizacao: {
-        url_producao:
-          'https://nfce.sefazrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
-        url_homologacao:
-          'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao4.asmx?wsdl',
-      },
-      consultarStatusServico: {
-        url_producao:
-          'https://nfce.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
-        url_homologacao:
-          'https://nfce-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx?wsdl',
-      },
-      inutilizacao: {
-        url_producao:
-          'https://nfe.sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx',
-        url_homologacao:
-          'https://nfce-homologacao.sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx',
-      },
-    },
-  },
-  SVRS: {
-    nome: 'SEFAZ Virtual – SVRS',
-    servicos: {
-      autorizacao: {
-        url_producao:
-          'https://nfce.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx',
-        url_homologacao:
-          'https://nfce-homologacao.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx',
-      },
-      retAutorizacao: {
-        url_producao:
-          'https://nfce.svrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
-        url_homologacao:
-          'https://nfce-homologacao.svrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
-      },
-      consultarStatusServico: {
-        url_producao:
-          'https://nfce.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
-        url_homologacao:
-          'https://nfce-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
-      },
-      inutilizacao: {
-        url_producao:
-          'https://nfe.svrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx',
-        url_homologacao:
-          'https://nfce-homologacao.svrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx',
-      },
-    },
-  },
-  SP: {
-    nome: 'São Paulo',
-    servicos: {
-      autorizacao: {
-        url_producao: 'https://nfce.fazenda.sp.gov.br/ws/NFeAutorizacao4.asmx',
-        url_homologacao:
-          'https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeAutorizacao4.asmx',
-      },
-      retAutorizacao: {
-        url_producao:
-          'https://nfce.fazenda.sp.gov.br/ws/NFeRetAutorizacao4.asmx',
-        url_homologacao:
-          'https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeRetAutorizacao4.asmx',
-      },
-      consultarStatusServico: {
-        url_producao:
-          'https://nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx',
-        url_homologacao:
-          'https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx',
-      },
-      inutilizacao: {
-        url_producao: 'https://nfe.fazenda.sp.gov.br/ws/nfeinutilizacao4.asmx',
-        url_homologacao:
-          'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeinutilizacao4.asmx',
-      },
-      consultarProtocolo: {
-        url_producao:
-          'https://nfe.fazenda.sp.gov.br/ws/nfeconsultaprotocolo4.asmx',
-        url_homologacao:
-          'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeconsultaprotocolo4.asmx',
-      },
-      consultarCadastro: {
-        url_producao:
-          'https://nfe.fazenda.sp.gov.br/ws/cadconsultacadastro4.asmx',
-        url_homologacao:
-          'https://homologacao.nfe.fazenda.sp.gov.br/ws/cadconsultacadastro4.asmx',
-      },
-      recepcaoEvento: {
-        url_producao:
-          'https://nfe.fazenda.sp.gov.br/ws/nferecepcaoevento4.asmx',
-        url_homologacao:
-          'https://homologacao.nfe.fazenda.sp.gov.br/ws/nferecepcaoevento4.asmx',
-      },
-    },
+  inutilizacao: {
+    producao: AMP + 'NFeInutilizacao4',
+    homologacao: AMH + 'NFeInutilizacao4.asmx?wsdl',
   },
 }
+
+const CEP = 'https://nfce.sefaz.ce.gov.br/nfce4/services/'
+const CEH = 'https://nfceh.sefaz.ce.gov.br/nfce4/services/'
+const CE = {
+  autorizacao: {
+    producao: CEP + 'NFeAutorizacao4?WSDL',
+    homologacao: CEH + 'NFeAutorizacao4?WSDL',
+  },
+  retAutorizacao: {
+    producao: CEP + 'NFeRetAutorizacao4?WSDL',
+    homologacao: CEH + 'NFeRetAutorizacao4?WSDL',
+  },
+  consultarStatusServico: {
+    producao: CEP + 'NFeStatusServico4?WSDL',
+    homologacao: CEH + 'NFeStatusServico4?WSDL',
+  },
+  inutilizacao: {
+    producao: CEP + 'NFeInutilizacao4?WSDL',
+    homologacao: CEH + 'NFeInutilizacao4?WSDL',
+  },
+}
+
+const GOP = 'https://nfe.sefaz.go.gov.br/nfe/services/'
+const GOH = 'https://homolog.sefaz.go.gov.br/nfe/services/'
+const GO = {
+  autorizacao: {
+    producao: GOP + 'NFeAutorizacao4?wsdl',
+    homologacao: GOH + 'NFeAutorizacao4?wsdl',
+  },
+  retAutorizacao: {
+    producao: GOP + 'NFeRetAutorizacao4?wsdl',
+    homologacao: GOH + 'NFeRetAutorizacao4?wsdl',
+  },
+  consultarStatusServico: {
+    producao: GOP + 'NFeStatusServico4?wsdl',
+    homologacao: GOH + 'NFeStatusServico4?wsdl',
+  },
+  inutilizacao: {
+    producao: GOP + 'NFeInutilizacao4',
+    homologacao: GOH + 'Nfeinutilizacao4.asmx',
+  },
+}
+
+const MTP = 'https://nfce.sefaz.mt.gov.br/nfcews/services/'
+const MTH = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/'
+const MT = {
+  autorizacao: {
+    producao: MTP + 'NfeAutorizacao4',
+    homologacao: MTH + 'NfeAutorizacao4',
+  },
+  retAutorizacao: {
+    producao: MTP + 'NfeRetAutorizacao4',
+    homologacao: MTH + 'NfeRetAutorizacao4',
+  },
+  consultarStatusServico: {
+    producao: MTP + 'NfeStatusServico4',
+    homologacao: MTH + 'NfeStatusServico4',
+  },
+  inutilizacao: {
+    producao: MTP + 'NfeInutilizacao4',
+    homologacao: MTH + 'Nfeinutilizacao4.asmx',
+  },
+}
+
+const MSP = 'https://nfce.sefaz.ms.gov.br/ws/'
+const MSH = 'https://hom.nfce.sefaz.ms.gov.br/ws/'
+const MS = {
+  autorizacao: {
+    producao: MSP + 'NFeAutorizacao4',
+    homologacao: MSH + 'NFeAutorizacao4',
+  },
+  retAutorizacao: {
+    producao: MSP + 'NFeRetAutorizacao4',
+    homologacao: MSH + 'NFeRetAutorizacao4',
+  },
+  consultarStatusServico: {
+    producao: MSP + 'NFeStatusServico4',
+    homologacao: MSH + 'NFeStatusServico4',
+  },
+  inutilizacao: {
+    producao: MSP + 'NFeInutilizacao4',
+    homologacao: MSH + 'Nfeinutilizacao4.asmx',
+  },
+}
+
+const MGP = 'https://nfce.fazenda.mg.gov.br/nfce/services/'
+const MGH = 'https://hnfce.fazenda.mg.gov.br/nfce/services/'
+const MG = {
+  autorizacao: {
+    producao: MGP + 'NFeAutorizacao4',
+    homologacao: MGH + 'NFeAutorizacao4',
+  },
+  retAutorizacao: {
+    producao: MGP + 'NFeRetAutorizacao4',
+    homologacao: MGH + 'NFeRetAutorizacao4',
+  },
+  consultarStatusServico: {
+    producao: MGP + 'NFeStatusServico4',
+    homologacao: MGH + 'NFeStatusServico4',
+  },
+  inutilizacao: {
+    producao: MGP + 'NFeInutilizacao4',
+    homologacao: MGH + 'Nfeinutilizacao4.asmx',
+  },
+}
+
+const PRP = 'https://nfce.sefa.pr.gov.br/nfce/'
+const PRH = 'https://homologacao.nfce.sefa.pr.gov.br/nfce/'
+const PR = {
+  autorizacao: {
+    producao: PRP + 'NFeAutorizacao4',
+    homologacao: PRH + 'NFeAutorizacao4',
+  },
+  retAutorizacao: {
+    producao: PRP + 'NFeRetAutorizacao4',
+    homologacao: PRH + 'NFeRetAutorizacao4',
+  },
+  consultarStatusServico: {
+    producao: PRP + 'NFeStatusServico4',
+    homologacao: PRH + 'NFeStatusServico4',
+  },
+  inutilizacao: {
+    producao: PRP + 'NFeInutilizacao4',
+    homologacao: PRH + 'Nfeinutilizacao4.asmx',
+  },
+}
+
+const RSP = 'https://nfce.sefazrs.rs.gov.br/ws/'
+const RSH = 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/'
+const RS = {
+  autorizacao: {
+    producao: RSP + 'NfeAutorizacao/NFeAutorizacao4.asmx',
+    homologacao: RSH + '/NfeAutorizacao/NFeAutorizacao4.asmx?wsdl',
+  },
+  retAutorizacao: {
+    producao: RSP + 'NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
+    homologacao: RSH + '/NfeRetAutorizacao/NFeRetAutorizacao4.asmx?wsdl',
+  },
+  consultarStatusServico: {
+    producao: RSP + 'NfeStatusServico/NfeStatusServico4.asmx',
+    homologacao: RSH + '/NfeStatusServico/NfeStatusServico4.asmx?wsdl',
+  },
+  inutilizacao: {
+    producao: RSP + 'nfeinutilizacao/nfeinutilizacao4.asmx',
+    homologacao: RSH + '/nfeinutilizacao/nfeinutilizacao4.asmx',
+  },
+}
+
+const SVRSP = 'https://nfce.svrs.rs.gov.br/ws/'
+const SVRSH = 'https://nfce-homologacao.svrs.rs.gov.br/ws/'
+const SVRS = {
+  autorizacao: {
+    producao: SVRSP + 'NfeAutorizacao/NFeAutorizacao4.asmx',
+    homologacao: SVRSH + 'NfeAutorizacao/NFeAutorizacao4.asmx',
+  },
+  retAutorizacao: {
+    producao: SVRSP + 'NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
+    homologacao: SVRSH + 'NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
+  },
+  consultarStatusServico: {
+    producao: SVRSP + 'NfeStatusServico/NfeStatusServico4.asmx',
+    homologacao: SVRSH + 'NfeStatusServico/NfeStatusServico4.asmx',
+  },
+  inutilizacao: {
+    producao: SVRSP + 'nfeinutilizacao/nfeinutilizacao4.asmx',
+    homologacao: SVRSH + 'nfeinutilizacao/nfeinutilizacao4.asmx',
+  },
+}
+
+const SPP = 'https://nfce.fazenda.sp.gov.br/ws/'
+const SPH = 'https://homologacao.nfce.fazenda.sp.gov.br/ws/'
+const SP = {
+  autorizacao: {
+    producao: SPP + 'NFeAutorizacao4.asmx',
+    homologacao: SPH + 'NFeAutorizacao4.asmx',
+  },
+  retAutorizacao: {
+    producao: SPP + 'NFeRetAutorizacao4.asmx',
+    homologacao: SPH + 'NFeRetAutorizacao4.asmx',
+  },
+  consultarStatusServico: {
+    producao: SPP + 'NFeStatusServico4.asmx',
+    homologacao: SPH + 'NFeStatusServico4.asmx',
+  },
+  inutilizacao: {
+    producao: SPP + 'NFeInutilizacao4.asmx',
+    homologacao: SPH + 'NFeInutilizacao4.asmx',
+  },
+}
+
+export default { AM, CE, GO, MT, MS, MG, PR, RS, SVRS, SP }

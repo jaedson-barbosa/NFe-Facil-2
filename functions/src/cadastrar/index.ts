@@ -83,7 +83,11 @@ function getCertificadoDB(certificado: INovoCertificado): ICertificado {
 
 async function validarCertificado(certificado: ICertificado, UF: string) {
   try {
-    const resp = await consultarStatusServico(UF, TAmb.Producao, certificado)
+    const resp = await consultarStatusServico(
+      UF,
+      Ambientes.Producao,
+      certificado
+    )
     const valido =
       resp.cStat == '107' || resp.cStat == '108' || resp.cStat == '109'
     if (!valido) {

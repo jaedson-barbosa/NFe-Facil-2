@@ -1,10 +1,10 @@
 import { toXml } from 'xml2json'
-import { criarXML } from './criarXML'
 import { recepcaoEvento } from './recepcaoEvento'
 import { https } from 'firebase-functions'
 import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
 import carregarEmpresa from '../commom/carregarEmpresa'
+import gerarXML from './gerarXML'
 
 export default async function (
   req: IReqCancelar,
@@ -18,17 +18,11 @@ export default async function (
   const { certificado, refEmpresa } = await carregarEmpresa(CNPJ)
   const coluna = refEmpresa.collection(Dados.NFes)
   const nota = await carregarNota(coluna, req.idNota)
-  const ambiente: TAmb = nota.infNFe.ide.tpAmb
-  const xml = criarXML(nota, CNPJ, ambiente, req, certificado)
+  const ambiente: Ambientes = nota.infNFe.ide.tpAmb
+  const xml = gerarXML(nota, CNPJ, ambiente, req, certificado)
   const UF: string = nota.infNFe.emit.enderEmit.UF
   const resp = await recepcaoEvento(UF, certificado, ambiente, xml)
-  const xmlCancelamento =
-    '<procEventoNFe versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">' +
-    xml +
-    toXml({ retEvento: resp.retEvento }) +
-    '</procEventoNFe>'
-  const atualizacao = { cancelada: true, xmlCancelamento }
-  await coluna.doc(req.idNota).update(atualizacao)
+  await registrarCancelamento(coluna, xml, req.idNota, resp)
   return { cancelada: true }
 }
 
@@ -63,4 +57,19 @@ async function carregarNota(
     throw new https.HttpsError('not-found', motivo)
   }
   return nota.data() as INotaDB
+}
+
+async function registrarCancelamento(
+  coluna: FirebaseFirestore.CollectionReference,
+  xml: string,
+  idNota: string,
+  evento: retEnvEvento
+) {
+  const xmlCancelamento =
+    '<procEventoNFe versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">' +
+    xml +
+    toXml({ retEvento: evento.retEvento }) +
+    '</procEventoNFe>'
+  const atualizacao = { cancelada: true, xmlCancelamento }
+  await coluna.doc(idNota).update(atualizacao)
 }

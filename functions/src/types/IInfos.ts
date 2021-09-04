@@ -1,7 +1,7 @@
 interface IInfos {
   serie: string
   numero: number
-  ambiente: TAmb
+  ambiente: Ambientes
   modelo: '55' | '65'
   UF: string
 }

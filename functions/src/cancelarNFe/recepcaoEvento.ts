@@ -1,16 +1,16 @@
 import { toJson } from 'xml2json'
 import { https } from 'firebase-functions'
-import { getRandomNumber } from '../getRandomNumber'
 import { enviarRequisicao } from '../requisicoes'
+import gerarNumero from '../commom/gerarNumero'
 
 export async function recepcaoEvento(
   UF: string,
   cert: ICertificado,
-  ambiente: TAmb,
+  ambiente: Ambientes,
   xml: string
 ) {
   const envio = `<envEvento versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">
-    <idLote>${getRandomNumber(1, 999999999999999)}</idLote>
+    <idLote>${gerarNumero(1, 999999999999999)}</idLote>
     ${xml}
   </envEvento>`
   const respRecepcaoEvento = await enviarRequisicao(

@@ -1,7 +1,7 @@
 import { https } from 'firebase-functions'
 import { toJson } from 'xml2json'
-import { getRandomNumber } from '../getRandomNumber'
 import { enviarRequisicao } from '../requisicoes'
+import gerarNumero from '../commom/gerarNumero'
 
 /** @returns Número do recibo */
 export default async function (
@@ -11,7 +11,7 @@ export default async function (
 ): Promise<string> {
   const respAutorizacao = await enviarRequisicao(
     `<enviNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
-      <idLote>${getRandomNumber(1, 999999999999999)}</idLote>
+      <idLote>${gerarNumero(1, 999999999999999)}</idLote>
       <indSinc>0</indSinc>
       ${xmls.join('')}
     </enviNFe>`,
@@ -20,7 +20,7 @@ export default async function (
     UF,
     cert
   )
-  const retEnviNFe: TRetEnviNFe = (
+  const retEnviNFe: retEnviNFe = (
     toJson(respAutorizacao, {
       object: true,
     }) as any
@@ -31,7 +31,7 @@ export default async function (
   return numeroRecibo
 }
 
-function validarResposta(res: TRetEnviNFe) {
+function validarResposta(res: retEnviNFe) {
   if (res.cStat != '103') {
     throw new https.HttpsError(
       'internal',
@@ -41,7 +41,7 @@ function validarResposta(res: TRetEnviNFe) {
   }
 }
 
-async function esperarProcessamento(res: TRetEnviNFe) {
+async function esperarProcessamento(res: retEnviNFe) {
   const tempoMedioResposta = res.infRec.tMed
   const intervalo = Number(tempoMedioResposta) * 1000
   await new Promise((res) => setTimeout(res, intervalo))

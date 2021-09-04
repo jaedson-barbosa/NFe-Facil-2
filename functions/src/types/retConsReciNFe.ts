@@ -1,4 +1,4 @@
-interface TRetConsReciNFe {
+interface retConsReciNFe {
   versao: string
   tpAmb: { $t: string }
   verAplic: { $t: string }

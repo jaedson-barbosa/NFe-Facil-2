@@ -3,38 +3,31 @@ import * as axios from 'axios'
 import servicos from './servicos'
 import webservicesNFe from './webservicesNFe'
 
-type nomesServicos = keyof typeof servicos &
-  keyof typeof webservicesNFe.SVRS.servicos
+type nomesServicos = keyof typeof servicos & keyof typeof webservicesNFe.SVRS
 
 export async function enviarRequisicao(
-  body: string,
+  corpo: string,
   servico: nomesServicos,
-  amb: TAmb,
+  ambiente: Ambientes,
   UF: string,
   cert: ICertificado
 ): Promise<string> {
-  return (
-    await axios.default.post(
-      getWebServiceByUF(UF).servicos[servico][
-        amb == TAmb.Producao ? 'url_producao' : 'url_homologacao'
-      ],
-      `<Envelope xmlns="http://www.w3.org/2003/05/soap-envelope">
-        <Body>
-          <nfeDadosMsg xmlns="${servicos[servico].method}">
-            ${body}
-          </nfeDadosMsg>
-        </Body>
-        </Envelope>`.replace(/>\s+</g, '><'),
-      {
-        httpsAgent: new https.Agent({
-          rejectUnauthorized: false,
-          cert: cert.chavePublica,
-          key: cert.chavePrivada,
-        }),
-        headers: { 'Content-Type': 'application/soap+xml' },
-      }
-    )
-  ).data as string
+  const endereco = getWebServiceByUF(UF)[servico][ambiente]
+  const metodo = servicos[servico].metodo
+  corpo = corpo.replace(/>\s+</g, '><')
+  const xml =
+    '<Envelope xmlns="http://www.w3.org/2003/05/soap-envelope"><Body>' +
+    `<nfeDadosMsg xmlns="${metodo}">${corpo}</nfeDadosMsg>` +
+    '</Body></Envelope>'
+  const httpsAgent = new https.Agent({
+    rejectUnauthorized: false,
+    cert: cert.chavePublica,
+    key: cert.chavePrivada,
+  })
+  const headers = { 'Content-Type': 'application/soap+xml' }
+  const parametros = { httpsAgent, headers }
+  const res = await axios.default.post(endereco, xml, parametros)
+  return res.data as string
 }
 
 function getWebServiceByUF(uf: string) {
