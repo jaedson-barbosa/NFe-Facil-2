@@ -3,6 +3,13 @@ import { consultarStatusServico } from './statusServico'
 import { https } from 'firebase-functions'
 import * as forge from 'node-forge'
 import validarAutenticacao from '../commom/validarAutenticacao'
+import {
+  Ambientes,
+  ICertificado,
+  IReqCadastrar,
+  IResCadastrar,
+  NiveisAcesso,
+} from '../commom/tipos'
 
 export default async function (
   req: IReqCadastrar,

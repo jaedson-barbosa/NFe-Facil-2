@@ -1,6 +1,7 @@
-import assinar from "../assinar"
+import assinar from '../commom/assinar'
+import { Ambientes, ICertificado, INotaDB, IReqCancelar } from '../commom/tipos'
 
-export default function(
+export default function (
   nota: INotaDB,
   cnpj: string,
   ambiente: Ambientes,

@@ -1,4 +1,5 @@
 import { SignedXml } from 'xml-crypto'
+import { ICertificado } from './tipos'
 
 export default function (
   cert: ICertificado,

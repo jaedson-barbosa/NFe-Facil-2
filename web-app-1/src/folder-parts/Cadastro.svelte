@@ -17,7 +17,7 @@
     }
     try {
       const req = { cert: certificadoBase64, senha }
-      const res = await _cadastrar()
+      const res = await _cadastrar(req)
       const { cnpj } = res.data as { cnpj: string }
       $idEmpresa = cnpj
     } catch (error) {

@@ -1,5 +1,6 @@
 import { toXml } from 'xml2json'
-import assinar from '../assinar'
+import assinar from '../commom/assinar'
+import { ICertificado } from '../commom/tipos'
 
 export default function (
   infNFe: any,

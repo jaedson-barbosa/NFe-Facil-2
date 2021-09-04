@@ -7,7 +7,7 @@ import _cadastrar from './cadastrar'
 import _transmitirNFe from './transmitirNFe'
 import _cancelarNFe from './cancelarNFe'
 
-const regiao = region('southamerica-east1').https
-export const cadastrar = regiao.onCall(_cadastrar)
-export const transmitirNFe = regiao.onCall(_transmitirNFe)
-export const cancelarNFe = regiao.onCall(_cancelarNFe)
+const https = region('southamerica-east1').https
+export const cadastrar = https.onCall(_cadastrar)
+export const transmitirNFe = https.onCall(_transmitirNFe)
+export const cancelarNFe = https.onCall(_cancelarNFe)

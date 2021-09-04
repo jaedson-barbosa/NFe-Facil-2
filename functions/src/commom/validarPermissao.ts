@@ -1,5 +1,6 @@
 import { auth } from 'firebase-admin'
 import { https } from 'firebase-functions'
+import { NiveisAcesso } from './tipos'
 
 export default function (token: auth.DecodedIdToken, CNPJ: string) {
   if (!CNPJ) {

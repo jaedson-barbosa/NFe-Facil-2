@@ -2,6 +2,7 @@ import { https } from 'firebase-functions'
 import { toJson } from 'xml2json'
 import { enviarRequisicao } from '../requisicoes'
 import gerarNumero from '../commom/gerarNumero'
+import { ICertificado, IInfos } from '../commom/tipos'
 
 /** @returns Número do recibo */
 export default async function (
@@ -45,4 +46,18 @@ async function esperarProcessamento(res: retEnviNFe) {
   const tempoMedioResposta = res.infRec.tMed
   const intervalo = Number(tempoMedioResposta) * 1000
   await new Promise((res) => setTimeout(res, intervalo))
+}
+
+export interface retEnviNFe {
+  versao: string
+  tpAmb: string
+  verAplic: string
+  cStat: string
+  xMotivo: string
+  cUF: string
+  dhRecbto: string
+  infRec: {
+    nRec: string
+    tMed: string
+  }
 }

@@ -1,10 +1,17 @@
 import { toXml } from 'xml2json'
-import { recepcaoEvento } from './recepcaoEvento'
+import { recepcaoEvento, retEnvEvento } from './recepcaoEvento'
 import { https } from 'firebase-functions'
 import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
 import carregarEmpresa from '../commom/carregarEmpresa'
 import gerarXML from './gerarXML'
+import {
+  Ambientes,
+  Dados,
+  INotaDB,
+  IReqCancelar,
+  IResCancelar,
+} from '../commom/tipos'
 
 export default async function (
   req: IReqCancelar,

@@ -1,6 +1,7 @@
 import { enviarRequisicao } from '../requisicoes'
 import { toJson } from 'xml2json'
 import estados from './estados'
+import { Ambientes, ICertificado } from '../commom/tipos'
 
 export async function consultarStatusServico(
   uf: string,
@@ -27,4 +28,17 @@ export async function consultarStatusServico(
   const retConsStatServ =
     resJson['soap:Envelope']['soap:Body'].nfeResultMsg.retConsStatServ
   return retConsStatServ as retConsStatServ
+}
+
+export interface retConsStatServ {
+  versao: string
+  tpAmb: string
+  verAplic: string
+  cStat: string
+  xMotivo: string
+  cUF: string
+  dhRecbto: string
+  tMed: string
+  dhRetorno: string
+  xObs: string
 }

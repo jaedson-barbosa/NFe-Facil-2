@@ -5,8 +5,9 @@
     "noUnusedLocals": true,
     "outDir": "lib",
     "strict": true,
-    "target": "ES2018"
+    "target": "ES2019",
+    "rootDir": "src",
+    "sourceMap": true
   },
-  "compileOnSave": true,
-  "include": ["src", "../commom-code"]
+  "references": [{ "path": "../commom-code" }]
 }

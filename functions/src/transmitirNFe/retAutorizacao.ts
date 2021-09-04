@@ -1,5 +1,6 @@
 import { https } from 'firebase-functions'
 import { toJson } from 'xml2json'
+import { Ambientes, ICertificado, IInfos } from '../commom/tipos'
 import { enviarRequisicao } from '../requisicoes'
 
 /** @returns Retorna undefined caso o número já esteja registrado */
@@ -63,4 +64,18 @@ async function consultarResposta(
     }) as any
   )['soap:Envelope']['soap:Body'].nfeResultMsg.retConsReciNFe
   return retConsReciNFe as retConsReciNFe
+}
+
+export interface retConsReciNFe {
+  versao: string
+  tpAmb: { $t: string }
+  verAplic: { $t: string }
+  nRec: { $t: string }
+  cStat: { $t: string }
+  xMotivo: { $t: string }
+  cUF: { $t: string }
+  dhRecbto: { $t: string }
+  cMsg: { $t: string }
+  xMsg: { $t: string }
+  protNFe: any
 }

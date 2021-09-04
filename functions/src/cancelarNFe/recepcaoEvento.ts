@@ -2,6 +2,7 @@ import { toJson } from 'xml2json'
 import { https } from 'firebase-functions'
 import { enviarRequisicao } from '../requisicoes'
 import gerarNumero from '../commom/gerarNumero'
+import { Ambientes, ICertificado } from '../commom/tipos'
 
 export async function recepcaoEvento(
   UF: string,
@@ -36,4 +37,20 @@ export async function recepcaoEvento(
     throw new https.HttpsError('invalid-argument', motivo)
   }
   return retEnvEvento
+}
+
+export interface retEnvEvento {
+  versao: string
+  idLote: { $t: string }
+  tpAmb: { $t: string }
+  verAplic: { $t: string }
+  cOrgao: { $t: string }
+  cStat: { $t: string }
+  xMotivo: { $t: string }
+  retEvento: {
+    infEvento: {
+      cStat: { $t: string }
+      xMotivo: { $t: string }
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import { firestore } from 'firebase-admin'
 import { https } from 'firebase-functions'
+import { ICertificado } from './tipos'
 
 export default async function (CNPJ: string) {
   const db = firestore()

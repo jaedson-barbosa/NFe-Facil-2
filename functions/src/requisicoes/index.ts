@@ -2,6 +2,7 @@ import * as https from 'https'
 import * as axios from 'axios'
 import servicos from './servicos'
 import webservicesNFe from './webservicesNFe'
+import { Ambientes, ICertificado } from '../commom/tipos'
 
 type nomesServicos = keyof typeof servicos & keyof typeof webservicesNFe.SVRS
 

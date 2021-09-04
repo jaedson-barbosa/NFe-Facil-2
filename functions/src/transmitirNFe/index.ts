@@ -3,10 +3,11 @@ import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import gerarXml from './gerarXml'
 import solicitar from './autorizacao'
-import consultarResposta from './retAutorizacao'
+import consultarResposta, { retConsReciNFe } from './retAutorizacao'
 import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
 import carregarEmpresa from '../commom/carregarEmpresa'
+import { Ambientes, Dados, IInfos, IReqTransmitir, IResTransmitir } from '../commom/tipos'
 
 export default async function (
   req: IReqTransmitir,
