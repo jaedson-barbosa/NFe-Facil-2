@@ -1,4 +1,5 @@
 import { toJson } from 'xml2json'
+import { https } from 'firebase-functions'
 import { getRandomNumber } from '../getRandomNumber'
 import { enviarRequisicao } from '../requisicoes'
 
@@ -19,11 +20,20 @@ export async function recepcaoEvento(
     UF,
     cert
   )
-  const retEnvEvento = (
+  const retEnvEvento: retEnvEvento = (
     toJson(respRecepcaoEvento, {
       object: true,
       reversible: true,
     }) as any
   )['soap:Envelope']['soap:Body'].nfeResultMsg.retEnvEvento
-  return retEnvEvento as retEnvEvento
+  if (retEnvEvento.cStat.$t != '128') {
+    const motivo = retEnvEvento.xMotivo.$t
+    throw new https.HttpsError('internal', motivo)
+  }
+  const cStat = retEnvEvento.retEvento.infEvento.cStat.$t
+  if (cStat != '135' && cStat != '155') {
+    const motivo = retEnvEvento.retEvento.infEvento.xMotivo.$t
+    throw new https.HttpsError('invalid-argument', motivo)
+  }
+  return retEnvEvento
 }

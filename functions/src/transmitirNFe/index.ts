@@ -11,7 +11,7 @@ import carregarEmpresa from '../commom/carregarEmpresa'
 export default async function (
   req: IReqTransmitir,
   context: https.CallableContext
-) {
+): Promise<IResTransmitir> {
   validarAutenticacao(context)
   const infNFe = req.infNFe
   validarRequisicao(infNFe)
@@ -22,10 +22,9 @@ export default async function (
   const infos = getInfos(infNFe)
   corrigirDestinatario(infNFe, infos.ambiente)
   const coluna = refEmpresa.collection(Dados.NFes)
-  const numeroSolicitado = +infNFe.ide.nNF.$t
   const numeroInicial =
-    numeroSolicitado > 0 //Devemos usar o preenchimento manual
-      ? numeroSolicitado //Então devemos usar o valor manual
+    infos.numero > 0 //Devemos usar o preenchimento manual
+      ? infos.numero //Então devemos usar o valor manual
       : await calcularNovoNumero(coluna, infos) //Se não, calculamos
   let adicionalNumero = 0
   while (adicionalNumero < 3) {
@@ -54,11 +53,11 @@ function validarRequisicao(infNFe: any) {
 
 function getInfos(infNFe: any): IInfos {
   const serie: string = infNFe.ide.serie.$t
-
+  const numero: number = +infNFe.ide.nNF.$t
   const ambiente: TAmb = infNFe.ide.tpAmb.$t
   const modelo: '55' | '65' = infNFe.ide.mod.$t
   const UF: string = infNFe.emit.enderEmit.UF.$t
-  return { serie, ambiente, modelo, UF }
+  return { serie, numero, ambiente, modelo, UF }
 }
 
 function corrigirDestinatario(infNFe: any, ambiente: TAmb) {

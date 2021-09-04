@@ -1,16 +1,13 @@
 import { initializeApp } from 'firebase-admin'
-import { region, https } from 'firebase-functions'
+import { region } from 'firebase-functions'
 
 initializeApp()
 
 import _cadastrar from './cadastrar'
 import _transmitirNFe from './transmitirNFe'
-export { cancelarNFe } from './cancelarNFe'
+import _cancelarNFe from './cancelarNFe'
 
-type genericFunc = (data: any, context: https.CallableContext) => Promise<any>
-function create(func: genericFunc) {
-  return region('southamerica-east1').https.onCall(func)
-}
-
-export const cadastrar = create(_cadastrar)
-export const transmitirNFe = create(_transmitirNFe)
+const regiao = region('southamerica-east1').https
+export const cadastrar = regiao.onCall(_cadastrar)
+export const transmitirNFe = regiao.onCall(_transmitirNFe)
+export const cancelarNFe = regiao.onCall(_cancelarNFe)

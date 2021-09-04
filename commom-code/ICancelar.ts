@@ -1,5 +1,4 @@
 interface IReqCancelar {
-  idEmpresa: string
   idNota: string
   justificativa: string
   dhEvento: string

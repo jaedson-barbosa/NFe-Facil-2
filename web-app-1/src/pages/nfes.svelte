@@ -27,7 +27,7 @@
     const res = await cancelarNFe({
       idEmpresa: $idEmpresa,
       idNota: nfe.id,
-      justificativa,
+      justificativa: justificativa.trim(),
       dhEvento: toNFeString(new Date()),
     })
     if (res.data.cancelada) alert('Nota fiscal cancelada com sucesso.')
