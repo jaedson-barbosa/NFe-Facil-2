@@ -3,7 +3,7 @@ import { ILoggedParams, onLoggedRequest } from './onLoggedRequest'
 import { HttpsFunction, https } from 'firebase-functions'
 
 interface ICertifiedParams extends ILoggedParams {
-  cert: ICertificate
+  cert: ICertificado
 }
 
 const db = firestore()
@@ -23,7 +23,7 @@ export function onCertifiedRequest(
         'O certificado da empresa não foi encontrado.'
       )
     }
-    const cert = dataCertComplete.data() as ICertificate
+    const cert = dataCertComplete.data() as ICertificado
     return await handler({ body, empRef, UF, cert })
   }, needWritePermission)
 }

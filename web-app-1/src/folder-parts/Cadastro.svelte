@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { user, idEmpresa } from '../code/store'
+  import { idEmpresa } from '../code/store'
   import { cadastrar as _cadastrar, defaultCatch } from '../code/functions'
 
   let cadastrando = false

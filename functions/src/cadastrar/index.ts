@@ -7,7 +7,7 @@ import validarAutenticacao from '../commom/validarAutenticacao'
 export default async function (
   req: IReqCadastrar,
   context: https.CallableContext
-) {
+): Promise<IResCadastrar> {
   validarAutenticacao(context)
   validarRequisicao(req)
   const certificado = carregarCertificado(req)
@@ -16,6 +16,7 @@ export default async function (
   await validarCertificado(certificadoDB, UF)
   await verificarRegistrarEmpresa(CNPJ, xNome, certificadoDB)
   await registrarUsuario(CNPJ, context.auth!.token)
+  return { cnpj: CNPJ }
 }
 
 function validarRequisicao(req: IReqCadastrar) {
@@ -33,12 +34,12 @@ function validarRequisicao(req: IReqCadastrar) {
   }
 }
 
-interface ICertificado {
+interface INovoCertificado {
   chavePublica: forge.pki.Certificate
   chavePrivada: forge.pki.PrivateKey
 }
 
-function carregarCertificado(req: IReqCadastrar): ICertificado {
+function carregarCertificado(req: IReqCadastrar): INovoCertificado {
   const p12Der = forge.util.decode64(req.cert)
   const p12Asn1 = forge.asn1.fromDer(p12Der)
   let p12
@@ -56,7 +57,7 @@ function carregarCertificado(req: IReqCadastrar): ICertificado {
   return { chavePublica, chavePrivada }
 }
 
-function getInfosCertificado({ chavePublica }: ICertificado) {
+function getInfosCertificado({ chavePublica }: INovoCertificado) {
   const certUser = chavePublica.subject.getField('CN').value as string
   const certParts = certUser.split(':')
   if (certParts.length != 2) {
@@ -73,14 +74,14 @@ function getInfosCertificado({ chavePublica }: ICertificado) {
   return { CNPJ, UF, xNome: certParts[0] }
 }
 
-function getCertificadoDB(certificado: ICertificado): ICertificadoDB {
+function getCertificadoDB(certificado: INovoCertificado): ICertificado {
   return {
-    publicCert: forge.pki.certificateToPem(certificado.chavePublica),
-    privateCert: forge.pki.privateKeyToPem(certificado.chavePrivada),
+    chavePublica: forge.pki.certificateToPem(certificado.chavePublica),
+    chavePrivada: forge.pki.privateKeyToPem(certificado.chavePrivada),
   }
 }
 
-async function validarCertificado(certificado: ICertificadoDB, UF: string) {
+async function validarCertificado(certificado: ICertificado, UF: string) {
   try {
     const resp = await consultarStatusServico(UF, TAmb.Producao, certificado)
     const valido =
@@ -102,7 +103,7 @@ async function validarCertificado(certificado: ICertificadoDB, UF: string) {
 async function verificarRegistrarEmpresa(
   CNPJ: string,
   xNome: string,
-  certificado: ICertificadoDB
+  certificado: ICertificado
 ) {
   const db = firestore()
   const empresaRef = db.collection('empresas').doc(CNPJ)

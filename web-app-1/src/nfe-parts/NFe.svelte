@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { dbColumns } from '../code/store'
-  import type { TCadastro } from '../code/store'
-  
   import Ide from './Ide.svelte'
   import Local from './Local.svelte'
   import Doc from './Doc.svelte'
@@ -12,9 +9,18 @@
   import Transp from './Transp.svelte'
   import Pag from './Pag.svelte'
   import InfAdic from './InfAdic.svelte'
+  import {
+    collection,
+    DocumentSnapshot,
+    getDocs,
+    limit,
+    orderBy,
+    query,
+    where,
+  } from 'firebase/firestore'
+  import { refEmpresa } from '../code/store'
 
   export let raiz: any
-  export let isNFCe: boolean
 
   let regimeNormal = raiz.emit.CRT == '3'
 
@@ -32,35 +38,41 @@
   $: destSemNome = !dest?.xNome
 
   let buscaCliente = ''
-  let clientes = [] as TCadastro[]
+  let clientes = [] as DocumentSnapshot[]
 
   async function buscarCliente() {
     const busca = buscaCliente
     buscaCliente = ''
-    const res = await $dbColumns.clientes
-      .where('dest.xNome', '>=', busca)
-      .orderBy('dest.xNome', 'asc')
-      .limit(10)
-      .get()
+    const coluna = collection($refEmpresa, Dados.Clientes)
+    const consulta = query(
+      coluna,
+      where('dest.xNome', '>=', busca),
+      orderBy('dest.xNome', 'asc'),
+      limit(10)
+    )
+    const res = await getDocs(consulta)
     raiz['dest'] = {}
     clientes = res.docs
   }
 
   let buscaProduto = ''
-  let produtos = [] as TCadastro[]
+  let produtos = [] as DocumentSnapshot[]
   async function buscarProduto() {
     const busca = buscaProduto
     buscaProduto = ''
-    const res = await $dbColumns.produtos
-      .where('det.prod.xProd', '>=', busca)
-      .orderBy('det.prod.xProd', 'asc')
-      .limit(10)
-      .get()
+    const coluna = collection($refEmpresa, Dados.Produtos)
+    const consulta = query(
+      coluna,
+      where('det.prod.xProd', '>=', busca),
+      orderBy('det.prod.xProd', 'asc'),
+      limit(10)
+    )
+    const res = await getDocs(consulta)
     produtos = res.docs
   }
 
   let produtoExibido = -1
-  function escolherProduto(cad: TCadastro) {
+  function escolherProduto(cad: DocumentSnapshot) {
     raiz.det = [cad.data(), ...raiz.det]
     produtoExibido = 0
   }
@@ -75,11 +87,13 @@
     raiz.det.splice(produtoExibido, 1)
     raiz = raiz
   }
+
+  $: isNFCe = raiz['ide']?.['mod'] === '65'
 </script>
 
-<h2>Emissão de {isNFCe ? 'NF-e' : 'NFC-e'}</h2>
+<h2>Emissão de nota fiscal</h2>
 
-<Ide {raiz} {isNFCe} />
+<Ide {raiz} />
 
 <h3>Destinatário</h3>
 {#if isNFCe && destSemNome}

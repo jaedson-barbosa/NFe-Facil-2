@@ -21,24 +21,11 @@ CSC
   transporta: ...
 -produtos:
   det: ...
--notasSalvas:
+-nfes:
   infNFe
   dhEmi
--notasEmitidas:
+  //caso emitida
   cancelada
-  infNFe
-  dhEmi
-  nProt
-  xml
-  xmlCancelamento
--notasCSalvas:
-  infNFe
-  dhEmi
-  xml
--notasCEmitidas:
-  cancelada
-  infNFe
-  dhEmi
   nProt
   xml
   xmlCancelamento

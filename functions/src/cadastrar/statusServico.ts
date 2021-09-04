@@ -34,7 +34,7 @@ const Estados: [string, number][] = [
 export async function consultarStatusServico(
   uf: string,
   ambiente: TAmb,
-  cert: ICertificate
+  cert: ICertificado
 ) {
   const cUF = Estados.find((v) => v[0] === uf)?.[1]
   if (!cUF) throw new Error()

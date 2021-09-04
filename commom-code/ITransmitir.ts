@@ -1,5 +1,4 @@
 interface IReqTransmitir {
-  idEmpresa: string;
   infNFe: any;
   oldId: string;
 }

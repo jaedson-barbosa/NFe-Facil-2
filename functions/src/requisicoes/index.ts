@@ -11,7 +11,7 @@ export async function enviarRequisicao(
   servico: nomesServicos,
   amb: TAmb,
   UF: string,
-  cert: ICertificate
+  cert: ICertificado
 ): Promise<string> {
   return (
     await axios.default.post(
@@ -28,8 +28,8 @@ export async function enviarRequisicao(
       {
         httpsAgent: new https.Agent({
           rejectUnauthorized: false,
-          cert: cert.publicCert,
-          key: cert.privateCert,
+          cert: cert.chavePublica,
+          key: cert.chavePrivada,
         }),
         headers: { 'Content-Type': 'application/soap+xml' },
       }

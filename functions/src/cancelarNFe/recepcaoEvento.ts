@@ -4,7 +4,7 @@ import { enviarRequisicao } from '../requisicoes'
 
 export async function recepcaoEvento(
   UF: string,
-  cert: ICertificate,
+  cert: ICertificado,
   ambiente: TAmb,
   xml: string
 ) {

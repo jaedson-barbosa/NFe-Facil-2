@@ -10,7 +10,6 @@
   import Lista from '../components/Lista.svelte'
 
   export let raiz: any
-  export let isNFCe: boolean
 
   function getCodigoEstado(sigla: string) {
     return IBGE.find((v) => v.Sigla == sigla)?.Codigo
@@ -28,8 +27,9 @@
   const emit = emp.emit
   ide['cUF'] = getCodigoEstado(emit.enderEmit.UF)
   ide['cNF'] = getRandomNumber().toString()
-  ide['mod'] = isNFCe ? '65' : '55'
-  ide['serie'] = isNFCe ? emp.serieNFCe : emp.serieNFe
+  ide['serie'] = emp.serieNFe
+  $: ide['serie'] = ide['mod'] == '65' ? emp.serieNFCe : emp.serieNFe
+  ide['nNF'] = '0'
   ide['cMunFG'] = emit.enderEmit.cMun
   ide['tpEmis'] = '1'
   ide['tpImp'] = '1'
@@ -46,6 +46,14 @@
   Ambiente de homologação
   <small>Testar emissão com nota sem valor fiscal</small>
 </label>
+<Select
+  bind:val={ide['mod']}
+  lab="Modelo"
+  els={[
+    ['55', 'NF-e'],
+    ['65', 'NFC-e'],
+  ]}
+/>
 <InputT bind:val={ide['natOp']} lab="Natureza da Operação" min={1} max={60} />
 <InputT
   bind:val={ide['serie']}
@@ -55,7 +63,7 @@
 <InputT
   bind:val={ide['nNF']}
   lab="Número do Documento Fiscal"
-  aux="Preecher com 1 para cálculo automático pelo servidor."
+  aux="Deixar com 0 para cálculo automático pelo servidor."
   pat={'[1-9]{1}[0-9]{0,8}'}
 />
 <InputD raiz={ide} name="dhEmi" lab="Data e Hora de emissão" />

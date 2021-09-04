@@ -1,6 +1,6 @@
 <script lang="ts">
   import { abrirXML } from '../code/nfe/exibicao'
-  import { Dados, edicao, idEmpresa } from '../code/store'
+  import { edicao, idEmpresa } from '../code/store'
   import { goto } from '@roxi/routify'
   import { DocumentSnapshot } from '@firebase/firestore'
   import { gerarDANFENFe } from '../code/nfe/geracaoDANFE'

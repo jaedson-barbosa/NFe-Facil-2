@@ -70,14 +70,6 @@ export const empresa = derived<Readable<DocumentReference>, TEmpresa>(
   undefined
 )
 
-export enum Dados {
-  Clientes = 'clientes',
-  Produtos = 'produtos',
-  Transportes = 'transportes',
-  NFes = 'nfes',
-  NFCes = 'nfces',
-}
-
 interface IEdicao {
   tipo: Dados
   id: string

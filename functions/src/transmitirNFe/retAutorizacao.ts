@@ -1,9 +1,48 @@
-import { toJson } from "xml2json"
-import { enviarRequisicao } from "../requisicoes"
+import { https } from 'firebase-functions'
+import { toJson } from 'xml2json'
+import { enviarRequisicao } from '../requisicoes'
 
-export async function retAutorizacao(
+/** @returns Retorna undefined caso o número já esteja registrado */
+export default async function (
+  infos: IInfos,
+  certificado: ICertificado,
+  numeroRecibo: string
+) {
+  let respRet: TRetConsReciNFe | undefined = undefined
+  do {
+    respRet = await consultarResposta(
+      infos.UF,
+      certificado,
+      infos.ambiente,
+      numeroRecibo
+    )
+    if (respRet.cStat.$t == '105') {
+      // Lote em processamento (78)
+      respRet = undefined
+      await new Promise((res) => setTimeout(res, 3000))
+    }
+  } while (!respRet)
+  if (respRet.cStat.$t != '104') {
+    throw new https.HttpsError(
+      'internal',
+      'Falha no lote de notas fiscais.',
+      respRet.xMotivo.$t
+    )
+  }
+  const cStat = respRet.protNFe.infProt.cStat.$t
+  // Rejeição: Duplicidade de NF-e com diferença na Chave de Acesso (148)
+  // Rejeição: NF-e já está inutilizada na Base de Dados da SEFAZ
+  if (cStat == '539' || cStat == '206') return undefined
+  if (cStat != '100') {
+    const motivoRecusa = respRet.protNFe.infProt.xMotivo.$t
+    throw new https.HttpsError('invalid-argument', motivoRecusa)
+  }
+  return respRet
+}
+
+async function consultarResposta(
   UF: string,
-  cert: ICertificate,
+  cert: ICertificado,
   ambiente: TAmb,
   nRec: string
 ): Promise<TRetConsReciNFe> {

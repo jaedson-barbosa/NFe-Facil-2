@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto, url } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { edicao, Dados, refEmpresa, idEmpresa } from '../code/store'
+  import { edicao, refEmpresa } from '../code/store'
   import { preparateJSON, generateXML } from '../code/nfe/finalizacao'
   import NFe from '../nfe-parts/NFe.svelte'
   import {
@@ -16,30 +16,24 @@
   let loading = false
 
   const ed = get(edicao)
-  let problemaNota = !ed
   let raiz: INFeRoot = ed ? { ...ed.dado } : {}
-  const isNFCe = ed?.tipo == Dados.NFCes
 
   async function salvar() {
     loading = true
     try {
-      const notasCol = collection(
-        $refEmpresa,
-        isNFCe ? Dados.NFCes : Dados.NFes
-      )
+      const coluna = collection($refEmpresa, Dados.NFes)
       if (raiz.Id) {
-        const docRef = doc(notasCol, raiz.Id)
+        const docRef = doc(coluna, raiz.Id)
         const docObj = await getDoc(docRef)
         if (docObj.exists) await deleteDoc(docRef)
       }
       const xml = generateXML(raiz)
       const dhEmi = new Date(raiz.ide.dhEmi)
       const dado = { infNFe: raiz, dhEmi, xml }
-      const docRef = doc(notasCol, raiz.Id)
+      const docRef = doc(coluna, raiz.Id)
       await setDoc(docRef, dado)
-      const tipo = isNFCe ? Dados.NFCes : Dados.NFes
-      $edicao = { dado, id: raiz.Id, tipo }
-      $goto(tipo)
+      $edicao = { dado, id: raiz.Id, tipo: Dados.NFes }
+      $goto(Dados.NFes)
     } catch (error) {
       console.error(error)
       alert(error.message)
@@ -48,12 +42,11 @@
   }
 
   async function transmitir() {
-    if (isNFCe) return
     loading = true
     try {
       const oldId = raiz.Id
       const infNFe = preparateJSON(raiz)
-      const dadosTransmissao = { idEmpresa: $idEmpresa, infNFe, oldId }
+      const dadosTransmissao = { infNFe, oldId }
       const respTransmissao = await transmitirNFe(dadosTransmissao)
       const dado = respTransmissao.data
       const tipo = Dados.NFes
@@ -73,18 +66,7 @@
 {#if loading}
   Carregando...
 {:else}
-  {#if problemaNota}
-    <h3>Aviso</h3>
-    <p>
-      Não foi fornecida a esta página informações sobre se deveria ser criada
-      uma NF-e ou uma NFC-e, por isso foi criada uma NF-e padrão, se isso for o
-      desejado então clique em "Fechar", caso contrário, clique em "Voltar".
-    </p>
-    <a class="button" href={$url('./')}>Voltar</a>
-    <button on:click={() => (problemaNota = false)}>Fechar</button>
-    <hr />
-  {/if}
-  <NFe bind:raiz {isNFCe} />
+  <NFe bind:raiz />
   <hr />
   <a href={$url('./')}>Cancelar</a>
   {#if isProd}

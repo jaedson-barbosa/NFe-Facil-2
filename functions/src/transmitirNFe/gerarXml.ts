@@ -1,4 +1,5 @@
 import { toXml } from 'xml2json'
+import { assinarNFe } from '../assinatura/assinarNFe'
 
 function calcularDV(chave: string) {
   let soma = 0 // Vai guardar a Soma
@@ -15,14 +16,21 @@ function calcularDV(chave: string) {
   return resto == 0 || resto == 1 ? 0 : 11 - resto
 }
 
-export function getXml(infNFe: any, numero: string) {
-  infNFe.ide.nNF.$t = numero
+export default async function (
+  infNFe: any,
+  certificado: ICertificado,
+  numero: number
+) {
+  const numeroStr = numero.toString()
+  infNFe.ide.nNF.$t = numeroStr
   const oldChave = infNFe.Id.substr(3, 43)
   const novaChave =
-    oldChave.substr(0, 25) + numero.padStart(9, '0') + oldChave.substr(34)
+    oldChave.substr(0, 25) + numeroStr.padStart(9, '0') + oldChave.substr(34)
   const cDV = calcularDV(novaChave).toString()
   infNFe.ide.cDV.$t = cDV
   infNFe.Id = `NFe${novaChave}${cDV}`
   const NFe = { xmlns: 'http://www.portalfiscal.inf.br/nfe', infNFe }
-  return toXml({ NFe })
+  const xml = toXml({ NFe })
+  const xmlAssinado = await assinarNFe(certificado, xml)
+  return xmlAssinado
 }
