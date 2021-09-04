@@ -4,7 +4,7 @@
   import { goto } from '@roxi/routify'
   import type { DocumentSnapshot } from '@firebase/firestore'
   import { gerarDANFENFe } from '../code/nfe/geracaoDANFE'
-  import { cancelarNFe } from '../code/functions'
+  import { cancelarNFe } from '../code/firebase'
   import { toNFeString } from '../code/getDataString'
   import { Dados } from '../code/tipos';
 

@@ -6,10 +6,6 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    match /{path=**}/usuarios/{usuario} {
-      allow read: if request.auth != null && request.auth.uid == resource.data.id;
-    }
-
     match /empresas/{empresa} {
       allow read: if readEnabled();
       allow create, delete: if false;
@@ -20,26 +16,19 @@ service cloud.firestore {
       }
 
       function getStatus() {
-        return get(/databases/$(database)/documents/empresas/$(empresa)/usuarios/$(request.auth.uid)).data.status;
+        return request.auth.token[$(empresa)];
       }
 
       function readEnabled() {
-        return isSignedIn() && getStatus() in [2, 3, 4];
+        return isSignedIn() && getStatus() in ['R', 'RW', 'A'];
       }
 
       function writeEnabled() {
-        return isSignedIn() && getStatus() in [3, 4];
+        return isSignedIn() && getStatus() in ['RW', 'A'];
       }
 
       function isAdmin() {
-        return isSignedIn() && getStatus() == 4;
-      }
-
-      match /usuarios/{usuario} {
-        allow read: if isAdmin() || request.auth.uid == usuario;
-        allow create: if request.resource.data.status == 0;
-        allow update: if isAdmin();
-        allow delete: if false;
+        return isSignedIn() && getStatus() == 'A';
       }
 
       match /clientes/{nota} {
@@ -57,24 +46,9 @@ service cloud.firestore {
         allow write: if writeEnabled();
       }
 
-      match /notasSalvas/{nota} {
+      match /nfes/{nota} {
         allow read: if readEnabled();
         allow write: if writeEnabled();
-      }
-
-      match /notasEmitidas/{nota} {
-        allow read: if readEnabled();
-        allow write: if isAdmin();
-      }
-
-      match /notasCSalvas/{nota} {
-        allow read: if readEnabled();
-        allow write: if writeEnabled();
-      }
-
-      match /notasCEmitidas/{nota} {
-        allow read: if readEnabled();
-        allow write: if isAdmin();
       }
     }
   }

@@ -1,8 +1,7 @@
 import { derived, Readable, readable, Writable, writable } from 'svelte/store'
-import { getFirestore, doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore'
 import type { DocumentReference } from 'firebase/firestore'
 import {
-  getAuth,
   GoogleAuthProvider,
   User,
   signInWithPopup,
@@ -10,10 +9,9 @@ import {
   getIdTokenResult,
 } from 'firebase/auth'
 import type { Dados, NiveisAcesso } from './tipos'
+import { auth, db } from './firebase'
 
-const auth = getAuth()
 const googleProvider = new GoogleAuthProvider()
-const db = getFirestore()
 
 export const user = {
   subscribe: readable<User>(undefined, (set) =>

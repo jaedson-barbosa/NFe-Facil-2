@@ -1,6 +1,6 @@
 <script lang="ts">
   import { idEmpresa } from '../code/store'
-  import { cadastrar as _cadastrar, defaultCatch } from '../code/functions'
+  import { cadastrar as _cadastrar, defaultCatch } from '../code/firebase'
 
   let cadastrando = false
   let certificado = undefined as FileList

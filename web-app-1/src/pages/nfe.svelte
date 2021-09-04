@@ -11,7 +11,7 @@
     deleteDoc,
     setDoc,
   } from '@firebase/firestore'
-  import { transmitirNFe } from '../code/functions'
+  import { transmitirNFe } from '../code/firebase'
   import { Dados } from '../code/tipos'
   import type { INFeRoot } from '../code/tipos'
 
@@ -23,6 +23,7 @@
   async function salvar() {
     loading = true
     try {
+      raiz.ide.nNF = '0'
       const coluna = collection($refEmpresa, Dados.NFes)
       if (raiz.Id) {
         const docRef = doc(coluna, raiz.Id)
