@@ -46,12 +46,14 @@
 {:else}
   {#if finalizar}
     <a class="button" href={$url('./index')}>Continuar</a>
-    <br />
+    <hr />
   {/if}
   <p>
-    Analisando arquivos e salvando novas notas, não saia nem feche esta janela.
+    Analisando arquivos e salvando...
+    <br />
+    Não saia nem feche esta janela!
   </p>
-  <br />
+  <hr />
   {#each logs as log (log)}
     <p>{log}</p>
   {/each}

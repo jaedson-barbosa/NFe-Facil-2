@@ -5,6 +5,9 @@
   import Opcional from '../components/Opcional.svelte'
   import Estado from '../components/Estado.svelte'
   import idAleatorio from '../code/idAleatorio'
+  import { refEmpresa } from '../code/store'
+  import { collection, doc, getDoc } from '@firebase/firestore'
+  import { Dados } from '../code/tipos'
 
   export let raiz: any
   // Melhor criar uma versão personalizável da simplificação (mais tarde)
@@ -25,14 +28,26 @@
   $: comb = prod['comb']
   $: CIDE = comb?.['CIDE']
   $: encerrante = comb?.['encerrante']
+
+  async function gerarCodigo() {
+    prod['cProd'] = 'Gerando...'
+    let novoId = ''
+    const coluna = collection($refEmpresa, Dados.Produtos)
+    do {
+      novoId = idAleatorio(6)
+      const ref = doc(coluna, novoId)
+      const registro = await getDoc(ref)
+      const existe = registro.exists()
+      if (!existe) break
+    } while (true)
+    prod['cProd'] = novoId
+  }
 </script>
 
 <h4>Dados do produto</h4>
 {#if completo}
   <InputT bind:val={prod['cProd']} lab="Código do produto" min={1} max={60} />
-  <button type="button" on:click={() => (prod['cProd'] = idAleatorio(6))}>
-    Gerar código aleatório
-  </button>
+  <button type="button" on:click={gerarCodigo}>Gerar código aleatório</button>
   <InputT
     bind:val={prod['cEAN']}
     lab="GTIN do produto, antigo código EAN ou código de barras"
