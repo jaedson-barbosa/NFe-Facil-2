@@ -1,3 +1,5 @@
+import type { Timestamp } from "firebase/firestore";
+
 //#region Região comum
 
 export enum Dados {
@@ -43,6 +45,15 @@ export enum NiveisAcesso {
   R = 'R',
   RW = 'RW',
   A = 'A',
+}
+
+export interface INotaDB {
+  infNFe: any
+  dhEmi: Timestamp
+  cancelada?: boolean
+  nProt?: number
+  xml?: string
+  xmlCancelamento?: string
 }
 
 //#endregion

@@ -45,6 +45,15 @@ export enum NiveisAcesso {
   A = 'A',
 }
 
+export interface INotaDB {
+  infNFe: any
+  dhEmi: FirebaseFirestore.Timestamp
+  cancelada?: boolean
+  nProt?: number
+  xml?: string
+  xmlCancelamento?: string
+}
+
 //#endregion
 
 export enum Ambientes {
@@ -63,13 +72,4 @@ export interface IInfos {
   ambiente: Ambientes
   modelo: '55' | '65'
   UF: string
-}
-
-export interface INotaDB {
-  infNFe: any
-  dhEmi: FirebaseFirestore.Timestamp
-  cancelada?: boolean
-  nProt?: number
-  xml?: string
-  xmlCancelamento?: string
 }

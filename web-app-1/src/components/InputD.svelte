@@ -1,16 +1,6 @@
-<script context="module">
-  function createId(length = 20) {
-    const AUTO_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    return [...Array(length)]
-      .map(() => {
-        const index = Math.floor(Math.random() * AUTO_ID_CHARS.length);
-        return AUTO_ID_CHARS.charAt(index);
-      })
-      .join('');
-  }
-</script>
 <script lang="ts">
   import { toNFeString } from '../code/getDataString'
+  import idAleatorio from '../code/idAleatorio'
   import Opcional from './Opcional.svelte'
 
   export let raiz: any
@@ -23,7 +13,7 @@
   let val = raiz[name]
 
   $: raiz[name] = toNFeString(new Date(val))
-  const id = createId()
+  const id = idAleatorio()
 </script>
 
 <label for={id}>

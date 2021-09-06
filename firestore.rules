@@ -33,22 +33,26 @@ service cloud.firestore {
 
       match /clientes/{nota} {
         allow read: if readEnabled();
-        allow write: if writeEnabled();
+        allow create, update: if writeEnabled();
+        allow delete: if isAdmin();
       }
 
       match /transportes/{nota} {
         allow read: if readEnabled();
-        allow write: if writeEnabled();
+        allow create, update: if writeEnabled();
+        allow delete: if isAdmin();
       }
 
       match /produtos/{nota} {
         allow read: if readEnabled();
-        allow write: if writeEnabled();
+        allow create, update: if writeEnabled();
+        allow delete: if isAdmin();
       }
 
       match /nfes/{nota} {
         allow read: if readEnabled();
-        allow write: if writeEnabled();
+        allow create, update: if writeEnabled();
+        allow delete: if isAdmin();
       }
     }
   }

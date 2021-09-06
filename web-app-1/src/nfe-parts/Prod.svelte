@@ -4,6 +4,7 @@
   import Lista from '../components/Lista.svelte'
   import Opcional from '../components/Opcional.svelte'
   import Estado from '../components/Estado.svelte'
+  import idAleatorio from '../code/idAleatorio'
 
   export let raiz: any
   // Melhor criar uma versão personalizável da simplificação (mais tarde)
@@ -28,13 +29,10 @@
 
 <h4>Dados do produto</h4>
 {#if completo}
-  <InputT
-    bind:val={prod['cProd']}
-    lab="Código do produto"
-    aux="Preencher com CFOP caso se trate de itens não relacionados com mercadorias/produto e que o contribuinte não possua codificação própria (Formato: CFOP9999)"
-    min={1}
-    max={60}
-  />
+  <InputT bind:val={prod['cProd']} lab="Código do produto" min={1} max={60} />
+  <button type="button" on:click={() => (prod['cProd'] = idAleatorio(6))}>
+    Gerar código aleatório
+  </button>
   <InputT
     bind:val={prod['cEAN']}
     lab="GTIN do produto, antigo código EAN ou código de barras"
