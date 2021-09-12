@@ -4,7 +4,7 @@
 
   let cadastrando = false
   let certificado = undefined as FileList
-  $: certificado.length && cadastrar()
+  $: certificado?.length && cadastrar()
 
   async function cadastrar() {
     cadastrando = true
@@ -35,7 +35,7 @@
     <input
       type="file"
       bind:files={certificado}
-      accept="application/x-pkcs12"
+      accept=".pfx"
       required
     />
   </label>

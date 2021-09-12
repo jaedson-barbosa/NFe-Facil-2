@@ -6,7 +6,7 @@
 
 <main class="container">
   {#if $user}
-    {#if idEmpresa}
+    {#if $idEmpresa}
       <slot />
     {:else}
       <Escolha />

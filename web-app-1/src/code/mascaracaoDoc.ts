@@ -23,7 +23,7 @@ export function aplicarMascara(text: string, mask: mascaras) {
         formated.push('_');
       }
     } else if (chars[indexChars] || '_') {
-      formated.push(require);
+      formated.push(regexp[index]);
       indexChars -= 1;
     }
   }

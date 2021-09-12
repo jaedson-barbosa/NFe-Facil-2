@@ -4,7 +4,7 @@
 
 {#if $liberacoes?.length}
   <label>
-    Empresa
+    Escolher empresa
     <select bind:value={$idEmpresa}>
       {#each $liberacoes as liberacao}
         <option>{liberacao.cnpj}</option>

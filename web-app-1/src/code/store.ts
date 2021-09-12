@@ -8,7 +8,7 @@ import {
   signOut,
   getIdTokenResult,
 } from 'firebase/auth'
-import type { Dados, NiveisAcesso } from './tipos'
+import { Dados, NiveisAcesso } from './tipos'
 import { auth, db } from './firebase'
 
 const googleProvider = new GoogleAuthProvider()
@@ -30,11 +30,11 @@ export const liberacoes = derived<
     if (ref) {
       getIdTokenResult(ref, true)
         .then(({ claims }) => {
+          const niveis = [NiveisAcesso.R, NiveisAcesso.RW, NiveisAcesso.A]
           const liberacoes = Object.entries(claims)
-          const empresas = liberacoes.map(([cnpj, nivel]) => ({
-            cnpj,
-            nivel: nivel as unknown as NiveisAcesso,
-          }))
+          const empresas = liberacoes
+            .filter(([_, v]) => niveis.includes(v as NiveisAcesso))
+            .map(([cnpj, v]) => ({ cnpj, nivel: v as NiveisAcesso }))
           set(empresas)
         })
         .catch(() => set([]))
@@ -44,7 +44,17 @@ export const liberacoes = derived<
 )
 
 export const idEmpresa = writable(localStorage.getItem('idEmpresa'))
-idEmpresa.subscribe((v) => localStorage.setItem('idEmpresa', v))
+idEmpresa.subscribe((v) =>
+  v
+    ? localStorage.setItem('idEmpresa', v)
+    : localStorage.removeItem('idEmpresa')
+)
+
+export const liberacao = derived(
+  [liberacoes, idEmpresa],
+  ([$liberacoes, $idEmpresa]) =>
+    $liberacoes?.find((v) => v.cnpj == $idEmpresa)?.nivel
+)
 
 type TEmpresa = {
   emit: any

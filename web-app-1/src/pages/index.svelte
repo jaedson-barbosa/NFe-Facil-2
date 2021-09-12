@@ -1,11 +1,6 @@
 <script lang="ts">
   import { gerarDANFENFe } from '../code/nfe/geracaoDANFE'
-  import {
-    edicao,
-    idEmpresa,
-    liberacoes,
-    refEmpresa,
-  } from '../code/store'
+  import { edicao, liberacao, refEmpresa } from '../code/store'
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import { goto, url } from '@roxi/routify'
   import { debounce } from 'lodash-es'
@@ -20,7 +15,7 @@
     getDocs,
   } from '@firebase/firestore'
   import type { QueryConstraint } from 'firebase/firestore'
-import { Dados, NiveisAcesso } from '../code/tipos';
+  import { Dados, NiveisAcesso } from '../code/tipos'
 
   $edicao = undefined
 
@@ -154,7 +149,7 @@ import { Dados, NiveisAcesso } from '../code/tipos';
   $: itemRender = getItemRender(dadosAtual)
   $: reset(dadosAtual)
   const niveisEscrita = [NiveisAcesso.RW, NiveisAcesso.A]
-  $: writePermission = niveisEscrita.includes($liberacoes[$idEmpresa])
+  $: writePermission = niveisEscrita.includes($liberacao)
 
   let cadastros: DocumentSnapshot[] = []
   let lastBusca = ''
@@ -189,11 +184,10 @@ import { Dados, NiveisAcesso } from '../code/tipos';
 <label>
   Visualização
   <select bind:value={dadosAtual}>
-    <option value={'Clientes'}>Clientes</option>
-    <option value={'Produtos'}>Produtos</option>
-    <option value={'Transportes'}>Transportes</option>
-    <option value={'NFes'}>NF-es</option>
-    <option value={'NFCes'}>NFC-es</option>
+    <option value={Dados.Clientes}>Clientes</option>
+    <option value={Dados.Produtos}>Produtos</option>
+    <option value={Dados.Transportes}>Transportes</option>
+    <option value={Dados.NFes}>Notas</option>
   </select>
 </label>
 
@@ -243,15 +237,11 @@ import { Dados, NiveisAcesso } from '../code/tipos';
                 Baixar XML de cancelamento
               </a>
             {:else if cad.get('cancelada') === false}
-              <button
-                on:click|once={() => gerarDANFENFe(cad.get('xml'))}
-              >
+              <button on:click|once={() => gerarDANFENFe(cad.get('xml'))}>
                 Gerar DANFE
               </button>
             {:else}
-              <button
-                on:click|once={() => gerarDANFENFe(cad.get('xml'))}
-              >
+              <button on:click|once={() => gerarDANFENFe(cad.get('xml'))}>
                 Gerar DANFE
               </button>
             {/if}

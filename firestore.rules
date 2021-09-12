@@ -16,7 +16,7 @@ service cloud.firestore {
       }
 
       function getStatus() {
-        return request.auth.token[$(empresa)];
+        return request.auth.token[empresa];
       }
 
       function readEnabled() {

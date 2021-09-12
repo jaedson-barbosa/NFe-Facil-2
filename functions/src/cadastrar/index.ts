@@ -11,6 +11,8 @@ import {
   NiveisAcesso,
 } from '../commom/tipos'
 
+const db = firestore()
+
 export default async function (
   req: IReqCadastrar,
   context: https.CallableContext
@@ -116,20 +118,18 @@ async function verificarRegistrarEmpresa(
   xNome: string,
   certificado: ICertificado
 ) {
-  const db = firestore()
   const empresaRef = db.collection('empresas').doc(CNPJ)
   const empresa = await empresaRef.get()
-  if (!empresa.exists) {
-    const empresaDoc = {
-      emit: { CNPJ, xNome },
-      serieNFe: '1',
-      serieNFCe: '1',
-      IDCSC: '',
-      CSC: '',
-    }
-    await db.collection('certificados').doc(CNPJ).set(certificado)
-    await empresaRef.set(empresaDoc)
+  if (empresa.exists) return
+  await db.collection('certificados').doc(CNPJ).set(certificado)
+  const empresaDoc = {
+    emit: { CNPJ, xNome },
+    serieNFe: '1',
+    serieNFCe: '1',
+    IDCSC: '',
+    CSC: '',
   }
+  await empresaRef.set(empresaDoc)
 }
 
 async function registrarUsuario(CNPJ: string, token: auth.DecodedIdToken) {
