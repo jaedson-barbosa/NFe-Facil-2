@@ -26,6 +26,7 @@ export async function processarArquivos(
     const produtos = await processarProdutos(ref, dataNotas, log)
     if (produtos) produtos.forEach((v) => lote.set(v.ref, v.data))
 
+    log('Enviando alterações ao banco de dados...')
     await lote.commit()
   } else alert('Nenhuma mudança.')
 }

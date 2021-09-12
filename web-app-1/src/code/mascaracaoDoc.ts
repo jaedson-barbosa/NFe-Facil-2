@@ -7,6 +7,7 @@ const config = {
 };
 
 export function aplicarMascara(text: string, mask: mascaras) {
+  if (!text) text = ''
   const regexp = config[mask];
   const chars = text.split('');
   const formated = [];

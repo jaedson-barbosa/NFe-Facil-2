@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto, url } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { edicao, refEmpresa } from '../code/store'
+  import { edicao, refEmpresa, empresa } from '../code/store'
   import { preparateJSON, generateXML } from '../code/nfe/finalizacao'
   import NFe from '../nfe-parts/NFe.svelte'
   import {
@@ -19,6 +19,7 @@
 
   const ed = get(edicao)
   let raiz: INFeRoot = ed ? { ...ed.dado } : {}
+  raiz.emit = get(empresa).emit
 
   async function salvar() {
     loading = true
@@ -63,7 +64,7 @@
     }
   }
 
-  $: isProd = raiz['ide']['tpAmb'] == '1'
+  $: isProd = raiz['ide']?.['tpAmb'] == '1'
 </script>
 
 {#if loading}
@@ -77,7 +78,3 @@
   {/if}
   <button on:click={transmitir}>Transmitir</button>
 {/if}
-
-// estudar união de notas numa única tabela, uma pra nfes e outra pra nfces,
-onde aquelas apenas salvas teriam o numero 0, para a união rodar um script no
-servidor que vai fazer a mudança, sorte que por enquanto só o Areal usa
