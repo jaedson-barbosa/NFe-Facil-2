@@ -15,7 +15,7 @@
   enderEmit.xPais = 'BRASIL'
 </script>
 
-<h3>Identificação do emitente</h3>
+<h3>Emitente</h3>
 <InputT lab="CNPJ" mask="cnpj" bind:val={emit['CNPJ']} pat={'[0-9]{14}'} />
 <InputT
   lab="Razão social ou nome do emitente"
@@ -75,5 +75,3 @@
   aux={'DDD + número do telefone'}
   pat={'[0-9]{6,14}'}
 />
-
-<slot />

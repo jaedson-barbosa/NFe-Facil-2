@@ -1,264 +1,56 @@
 <script lang="ts">
-  import { gerarDANFENFe } from '../code/nfe/geracaoDANFE'
-  import { edicao, liberacao, refEmpresa } from '../code/store'
-  import { aplicarMascara } from '../code/mascaracaoDoc'
-  import { goto, url } from '@roxi/routify'
-  import { debounce } from 'lodash-es'
-  import {
-    collection,
-    DocumentSnapshot,
-    limit,
-    orderBy,
-    query,
-    where,
-    startAfter,
-    getDocs,
-  } from '@firebase/firestore'
-  import type { QueryConstraint } from 'firebase/firestore'
-  import { Dados, NiveisAcesso } from '../code/tipos'
+  import { url } from '@roxi/routify'
+  import { edicao, permissaoAdministracao } from '../code/store'
 
   $edicao = undefined
-
-  function getRotulo(atual: Dados) {
-    switch (atual) {
-      case Dados.Clientes:
-        return 'Nome do cliente'
-      case Dados.Produtos:
-        return 'Descrição do produto'
-      case Dados.Transportes:
-        return 'Nome do transportador'
-      default:
-        return 'Número'
-    }
-  }
-
-  function getAddUrl(atual: Dados) {
-    switch (atual) {
-      case Dados.Clientes:
-        return './cliente'
-      case Dados.Produtos:
-        return './produto'
-      case Dados.Transportes:
-        return './transporta'
-      default:
-        return './nfe'
-    }
-  }
-
-  function getCampoBusca(atual: Dados) {
-    switch (atual) {
-      case Dados.Clientes:
-        return 'dest.xNome'
-      case Dados.Produtos:
-        return 'det.prod.xProd'
-      case Dados.Transportes:
-        return 'transporta.xNome'
-      default:
-        return 'infNFe.ide.nNF'
-    }
-  }
-
-  function getCabecalhos(atual: Dados) {
-    switch (atual) {
-      case Dados.Clientes:
-        return ['Documento', 'Nome']
-      case Dados.Produtos:
-        return ['Código', 'Descrição']
-      case Dados.Transportes:
-        return ['Documento', 'Nome']
-      default:
-        return [
-          'Número',
-          'Série',
-          'Data e hora',
-          'Cliente',
-          'Status',
-          'Ambiente',
-        ]
-    }
-  }
-
-  function getDocDest(v: DocumentSnapshot) {
-    const cpf = v.get('dest.CPF')
-    if (cpf) return aplicarMascara(cpf, 'cpf')
-    const cnpj = v.get('dest.CNPJ')
-    if (cnpj) return aplicarMascara(cnpj, 'cnpj')
-    const idEstrangeiro = v.get('dest.idEstrangeiro')
-    return idEstrangeiro
-  }
-
-  function getDocTransporta(v: DocumentSnapshot) {
-    const cpf = v.get('transporta.CPF')
-    if (cpf) return aplicarMascara(cpf, 'cpf')
-    const cnpj = v.get('transporta.CNPJ')
-    return aplicarMascara(cnpj, 'cnpj')
-  }
-
-  function getItemRender(busca: Dados): (v: DocumentSnapshot) => string[] {
-    switch (busca) {
-      case Dados.Clientes:
-        return (v) => [getDocDest(v), v.get('dest.xNome')]
-      case Dados.Produtos:
-        return (v) => [v.get('det.prod.cProd'), v.get('det.prod.xProd')]
-      case Dados.Transportes:
-        return (v) => [getDocTransporta(v), v.get('transporta.xNome')]
-      default:
-        return (v) => {
-          const cancelada = v.get('cancelada')
-          return [
-            v.get('infNFe.ide.nNF'),
-            v.get('infNFe.ide.serie'),
-            v.get('dhEmi').toDate().toLocaleString(),
-            v.get('infNFe.dest.xNome') ?? 'Não informado',
-            cancelada
-              ? 'Cancelada'
-              : cancelada === false
-              ? 'Emitida'
-              : 'Apenas salva',
-            v.get('infNFe.ide.tpAmb') == '1' ? 'Produção' : 'Homologação',
-          ]
-        }
-    }
-  }
-
-  function edit(cad: DocumentSnapshot, tipo: Dados) {
-    $edicao = {
-      dado: cad.data(),
-      id: cad.id,
-      tipo,
-    }
-    $goto(addUrl)
-  }
-
-  function reset(_atual: Dados) {
-    cadastros = []
-    lastBusca = ''
-    hasMore = false
-    buscar()
-  }
-
-  let dadosAtual: Dados = Dados.Clientes
-
-  $: isDadoSimples = ['Clientes', 'Produtos', 'Transportes'].includes(
-    dadosAtual
-  )
-  $: rotulo = getRotulo(dadosAtual)
-  $: addUrl = getAddUrl(dadosAtual)
-  $: campoBusca = getCampoBusca(dadosAtual)
-  $: cabecalhos = getCabecalhos(dadosAtual)
-  $: itemRender = getItemRender(dadosAtual)
-  $: reset(dadosAtual)
-  const niveisEscrita = [NiveisAcesso.RW, NiveisAcesso.A]
-  $: writePermission = niveisEscrita.includes($liberacao)
-
-  let cadastros: DocumentSnapshot[] = []
-  let lastBusca = ''
-  let hasMore = false
-
-  async function buscar(busca: string = lastBusca) {
-    hasMore = false
-    const coluna = collection($refEmpresa, dadosAtual)
-    const limites: QueryConstraint[] = [limit(10), orderBy(campoBusca, 'desc')]
-    if (busca != lastBusca) {
-      cadastros = []
-      limites.push(where(campoBusca, '>=', busca))
-    } else if (cadastros.length) {
-      const ultimo = cadastros[cadastros.length - 1]
-      limites.push(startAfter(ultimo))
-    }
-    const consulta = query(coluna, ...limites)
-    const docs = await getDocs(consulta)
-    hasMore = docs.size == 10
-    cadastros = [...cadastros, ...docs.docs]
-    lastBusca = busca
-  }
-
-  function getDownloadLink(xml: string) {
-    const blob = new Blob([xml], { type: 'application/xml' })
-    return window.URL.createObjectURL(blob)
-  }
 </script>
 
-<a class="button" href={$url('./emitente')}>Editar dados do emitente</a>
-
-<label>
-  Visualização
-  <select bind:value={dadosAtual}>
-    <option value={Dados.Clientes}>Clientes</option>
-    <option value={Dados.Produtos}>Produtos</option>
-    <option value={Dados.Transportes}>Transportes</option>
-    <option value={Dados.NFes}>Notas</option>
-  </select>
-</label>
-
-<label>
-  {rotulo}
-  <input type="text" on:input={debounce((e) => buscar(e.target.value), 300)} />
-</label>
-{#if writePermission}
-  <a class="button" href={$url(addUrl)}>Adicionar</a>
+<h1>Início</h1>
+{#if permissaoAdministracao}
+  <h3>Área do administrador</h3>
+  <a class="button" href={$url('./emitente')}>Atualizar emitente</a>
+  <a class="button" href={$url('./configuracoes')}>Configurações</a>
+  <p>
+    Mantenha todos os dados do emitente atualizados e personalize tudo de acordo
+    com as suas necessidades e preferências.
+  </p>
 {/if}
 
-<table>
-  <thead>
-    <tr>
-      {#each cabecalhos as h}
-        <th>{h}</th>
-      {/each}
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each cadastros as cad}
-      <tr>
-        {#each itemRender(cad) as i}
-          <td>{i}</td>
-        {/each}
-        <td>
-          {#if isDadoSimples}
-            <button on:click|once={() => edit(cad, dadosAtual)}>Editar</button>
-          {:else if writePermission}
-            <button on:click|once={() => edit(cad, dadosAtual)}>
-              {cad.get('nProt') ? 'Clonar' : 'Editar'}
-            </button>
-            <a
-              class="button"
-              href={getDownloadLink(cad.get('xml'))}
-              download={cad.id}
-            >
-              Baixar XML
-            </a>
-            {#if cad.get('cancelada')}
-              <a
-                class="button"
-                href={getDownloadLink(cad.get('xmlCancelamento'))}
-                download={'cancel' + cad.id}
-              >
-                Baixar XML de cancelamento
-              </a>
-            {:else if cad.get('cancelada') === false}
-              <button on:click|once={() => gerarDANFENFe(cad.get('xml'))}>
-                Gerar DANFE
-              </button>
-            {:else}
-              <button on:click|once={() => gerarDANFENFe(cad.get('xml'))}>
-                Gerar DANFE
-              </button>
-            {/if}
-          {/if}
-        </td>
-      </tr>
-    {/each}
-  </tbody>
-  {#if hasMore}
-    <tfoot>
-      <tr>
-        <td colspan="6">
-          <button class="button" on:click={() => buscar()}>
-            Carregar mais
-          </button>
-        </td>
-      </tr>
-    </tfoot>
-  {/if}
-</table>
+<h3>NF-es e NFC-es</h3>
+<a class="button" href={$url('./nfe')}>Adicionar</a>
+<a class="button" href={$url('./nfes')}>Gerenciar</a>
+<p>
+  Emita notas fiscais em produção, aprenda emitindo em homologação e passe
+  orçamentos com notas sem valor fiscal.
+</p>
+
+<h3>Clientes</h3>
+<a class="button" href={$url('./cliente')}>Adicionar</a>
+<a class="button" href={$url('./clientes')}>Gerenciar</a>
+<p>
+  Para garantir boas práticas, para a emissão de NF-es só é possível inserir
+  clientes previamente cadastrados.
+</p>
+
+<h3>Produtos</h3>
+<a class="button" href={$url('./produto')}>Adicionar</a>
+<a class="button" href={$url('./produtos')}>Gerenciar</a>
+<p>
+  Os produtos junto com os impostos são uma das partes mais complexas do
+  emissor, então crie quantas cópias forem necessárias.
+</p>
+
+<h3>Transportadores</h3>
+<a class="button" href={$url('./transporta')}>Adicionar</a>
+<a class="button" href={$url('./transportes')}>Gerenciar</a>
+<p>
+  Aqui também é seguida a boa prática somente permitir a inserção de
+  transportadores previamente cadastrados.
+</p>
+
+<h3>Importação</h3>
+<a class="button" href={$url('./importacao')}>Importar notas de saída</a>
+<p>
+  Sempre que emitir uma ou mais notas fiscais em outros emissores, importe-as
+  aqui assim que possível.
+</p>

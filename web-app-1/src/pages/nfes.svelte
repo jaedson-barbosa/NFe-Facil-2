@@ -1,44 +1,34 @@
 <script lang="ts">
-  import { abrirXML } from '../code/nfe/exibicao'
-  import { edicao, idEmpresa } from '../code/store'
-  import { goto } from '@roxi/routify'
-  import type { DocumentSnapshot } from '@firebase/firestore'
-  import { gerarDANFENFe } from '../code/nfe/geracaoDANFE'
-  import { cancelarNFe } from '../code/firebase'
-  import { toNFeString } from '../code/getDataString'
-  import { Dados } from '../code/tipos';
+  import { refEmpresa, permissaoEscrita, edicao } from '../code/store'
+  import { goto, url } from '@roxi/routify'
+  import { Dados } from '../code/tipos'
+  import { Buscador } from '../code/buscador'
+  import { DocumentSnapshot } from 'firebase/firestore'
 
-  let emitidas = [] as DocumentSnapshot[]
-  let naoEmitidas = [] as DocumentSnapshot[]
-  const caixasEmitidas: HTMLDialogElement[] = []
-  const caixasNaoEmitidas: HTMLDialogElement[] = []
+  const buscador = new Buscador($refEmpresa, Dados.NFes, 'infNFe.ide.nNF')
+  $: cadastros = buscador.cadastros
 
-  function criarNFe(dado = {} as any) {
-    const id = dado.Id
-    $edicao = { dado, id, tipo: Dados.NFes }
-    $goto('./nfe')
-  }
-
-  async function cancelar(nfe: DocumentSnapshot) {
-    const justificativa = prompt('Motivação do cancelamento:')
-    if (!justificativa) {
-      alert('Operação cancelada pelo usuário')
-      return
+  $edicao = undefined
+  function exibir(cad: DocumentSnapshot) {
+    $edicao = {
+      dado: cad.data(),
+      id: cad.id,
+      tipo: Dados.NFes,
     }
-    const res = await cancelarNFe({
-      idNota: nfe.id,
-      justificativa: justificativa.trim(),
-      dhEvento: toNFeString(new Date()),
-    })
-    if (res.data.cancelada) alert('Nota fiscal cancelada com sucesso.')
+    $goto('./nfeExib')
   }
 </script>
 
 <h1>Notas fiscais</h1>
-<button on:click={() => criarNFe()}>Criar NF-e</button>
+<label>
+  Buscar nota fiscal pelo número
+  <input bind:value={buscador.busca} />
+</label>
+{#if $permissaoEscrita}
+  <a class="button" href={$url('./nfe')}>Adicionar</a>
+{/if}
 
-{#if emitidas.length}
-  <h2>Emitidas</h2>
+{#if cadastros.length}
   <table>
     <thead>
       <tr>
@@ -48,57 +38,23 @@
       </tr>
     </thead>
     <tbody>
-      {#each emitidas as n, i}
+      {#each cadastros as n}
         <tr
           class="clicavel"
           class:homologacao={n.get('infNFe.ide.tpAmb') == '1'}
           class:cancelado={n.get('cancelada')}
-          on:click={caixasEmitidas[i].showModal}
+          on:click={() => exibir(n)}
         >
           <td>{n.get('infNFe.ide.nNF')}</td>
           <td>{n.get('dhEmi').toDate().toLocaleString()}</td>
           <td>{n.get('infNFe.dest.xNome')}</td>
         </tr>
-        <dialog bind:this={caixasEmitidas[i]}>
-          <button on:click={() => criarNFe(n.get('infNFe'))}>Clonar</button>
-          <button on:click={() => gerarDANFENFe(n.get('xml'))}>DANFE</button>
-          <button on:click={() => abrirXML(n.get('xml'))}>XML</button>
-          {#if n.get('cancelada')}
-            <button on:click={() => abrirXML(n.get('xmlCancelamento'))}>
-              XML de cancelamento
-            </button>
-          {:else}
-            <button on:click={() => cancelar(n)}>Cancelar</button>
-          {/if}
-        </dialog>
       {/each}
     </tbody>
   </table>
-{/if}
-
-{#if naoEmitidas.length}
-  <h2>Não emitidas</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Data e hora</th>
-        <th>Destinatário</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each naoEmitidas as n, i}
-        <tr class="clicavel" on:click={caixasNaoEmitidas[i].showModal}>
-          <td>{n.get('dhEmi').toDate().toLocaleString()}</td>
-          <td>{n.get('infNFe.dest.xNome')}</td>
-        </tr>
-        <dialog bind:this={caixasNaoEmitidas[i]}>
-          <button on:click={() => criarNFe(n.get('infNFe'))}>Editar</button>
-          <button on:click={() => gerarDANFENFe(n.get('xml'))}>DANFE</button>
-          <button on:click={() => abrirXML(n.get('xml'))}>XML</button>
-        </dialog>
-      {/each}
-    </tbody>
-  </table>
+  {#if buscador.hasMore}
+    <button on:click={buscador.carregarMais}>Carregar mais</button>
+  {/if}
 {/if}
 
 <style>

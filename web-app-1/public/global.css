@@ -25,3 +25,7 @@ tbody > tr.clicavel {
 tbody > tr.marcado {
   background-color: #e1e1e1;
 }
+
+p {
+  max-width: 600px;
+}

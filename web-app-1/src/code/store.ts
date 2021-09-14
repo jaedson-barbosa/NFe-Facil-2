@@ -56,6 +56,15 @@ export const liberacao = derived(
     $liberacoes?.find((v) => v.cnpj == $idEmpresa)?.nivel
 )
 
+const niveisEscrita = [NiveisAcesso.RW, NiveisAcesso.A]
+export const permissaoEscrita = derived(liberacao, ($liberacao) =>
+  niveisEscrita.includes($liberacao)
+)
+export const permissaoAdministracao = derived(
+  liberacao,
+  ($liberacao) => $liberacao == NiveisAcesso.A
+)
+
 type TEmpresa = {
   emit: any
   serieNFe: string

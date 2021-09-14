@@ -1,0 +1,61 @@
+<script lang="ts">
+  import { refEmpresa, permissaoEscrita, edicao } from '../code/store'
+  import { goto, url } from '@roxi/routify'
+  import { Dados } from '../code/tipos'
+  import { Buscador } from '../code/buscador'
+  import { DocumentSnapshot } from 'firebase/firestore'
+  import ExibDoc from '../nfe-parts/ExibDoc.svelte'
+
+  const buscador = new Buscador(
+    $refEmpresa,
+    Dados.Transportes,
+    'transporta.xNome'
+  )
+  $: cadastros = buscador.cadastros
+
+  $edicao = undefined
+  function editar(cad: DocumentSnapshot) {
+    $edicao = {
+      dado: cad.data(),
+      id: cad.id,
+      tipo: Dados.Transportes,
+    }
+    $goto('./transporta')
+  }
+</script>
+
+<h1>Transportadores</h1>
+<label>
+  Buscar transportador pelo nome
+  <input bind:value={buscador.busca} />
+</label>
+{#if $permissaoEscrita}
+  <a class="button" href={$url('./transporta')}>Adicionar</a>
+{/if}
+
+{#if cadastros.length}
+  <table>
+    <thead>
+      <tr>
+        <th>Documento</th>
+        <th>Nome</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each cadastros as n}
+        <tr class="clicavel" on:click={() => editar(n)}>
+          <td>
+            <ExibDoc
+              CPF={n.get('transporta.CPF')}
+              CNPJ={n.get('transporta.CNPJ')}
+            />
+          </td>
+          <td>{n.get('transporta.xNome')}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+  {#if buscador.hasMore}
+    <button on:click={buscador.carregarMais}>Carregar mais</button>
+  {/if}
+{/if}
