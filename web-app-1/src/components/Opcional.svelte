@@ -1,6 +1,7 @@
 <script lang="ts">
   export let name: string
   export let raiz: any
+  export let titulo: string
 
   let informar = !!raiz[name]
 
@@ -11,9 +12,9 @@
 </script>
 
 <label>
-  Informar campo opcional
   <input type="checkbox" bind:checked={informar} />
+  Informar campo {titulo}
 </label>
 {#if raiz[name]}
-  <slot />
+  <slot r={raiz[name]} />
 {/if}

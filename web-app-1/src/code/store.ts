@@ -79,13 +79,9 @@ export const refEmpresa = derived<Writable<string>, DocumentReference>(
   undefined
 )
 
-export const empresa = derived<Readable<DocumentReference>, TEmpresa>(
-  refEmpresa,
-  (ref, set) => {
-    if (ref) getDoc(ref).then((v) => set(v.data() as TEmpresa))
-    else set(undefined)
-  },
-  undefined
+export const empresa = writable<TEmpresa>(undefined)
+refEmpresa.subscribe(
+  (ref) => ref && getDoc(ref).then((v) => empresa.set(v.data() as TEmpresa))
 )
 
 interface IEdicao {

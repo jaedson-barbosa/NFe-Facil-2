@@ -4,11 +4,12 @@
   import { edicao, empresa, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import Det from '../nfe-parts/Det.svelte'
-  import { Dados } from '../code/tipos';
+  import { Dados } from '../code/tipos'
+  import Voltar from '../components/Voltar.svelte'
 
   let loading = false
   let raiz = undefined
-  
+
   const regimeNormal = get(empresa).emit.CRT == '3'
 
   const ed = get(edicao)
@@ -48,9 +49,12 @@
   }
 </script>
 
-<form on:submit|preventDefault={() => salvar()}>
-  <fieldset disabled={loading}>
+<h1><Voltar /> {$edicao ? 'Atualização' : 'Adição'} cadastral</h1>
+{#if loading}
+  Carregando...
+{:else}
+  <form on:submit|preventDefault={() => salvar()}>
     <Det bind:raiz {regimeNormal} />
     <input type="submit" class="button" />
-  </fieldset>
-</form>
+  </form>
+{/if}

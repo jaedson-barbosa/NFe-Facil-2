@@ -3,6 +3,7 @@
   import { empresa, idEmpresa, refEmpresa } from '../code/store'
   import Emit from '../nfe-parts/Emit.svelte'
   import { goto } from '@roxi/routify'
+  import Voltar from '../components/Voltar.svelte'
 
   let raiz = undefined
   $: $empresa && !raiz && (raiz = { ...$empresa })
@@ -22,7 +23,7 @@
 </script>
 
 {#if raiz}
-  <h1>Atualização cadastral</h1>
+  <h1><Voltar /> Atualização cadastral</h1>
   <form on:submit|preventDefault={() => salvar()}>
     <Emit bind:raiz />
     <input type="submit" class="button" value="Salvar" />

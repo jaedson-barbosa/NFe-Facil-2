@@ -20,11 +20,13 @@
   }
 </script>
 
-<button type="button" on:click={adicionarItem}> Adicionar item </button>
+<button type="button" on:click={adicionarItem}>Adicionar item</button>
 {#each itens as item, i}
   <details open={exibirDetalhes == i}>
-    <summary> <slot name="h" {item} /> </summary>
+    <summary><slot name="h" {item} /></summary>
     <slot name="b" {item} />
-    <button on:click={() => removerItem(i)}> Remover item </button>
+    <button on:click={() => removerItem(i)}>Remover item</button>
   </details>
 {/each}
+<br />
+<br />

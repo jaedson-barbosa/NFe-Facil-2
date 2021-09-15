@@ -42,57 +42,46 @@
     ICMS = imposto['ICMS'][c] = regimeNormal ? { CST: t } : { CSOSN: t }
   }
 
-  $: ICMSUFDest = imposto['ICMSUFDest']
   $: {
+    const ICMSUFDest = imposto['ICMSUFDest']
     if (ICMSUFDest) {
       ICMSUFDest.pICMSInterPart = '100.00'
       ICMSUFDest.vICMSUFRemet = '0.00'
     }
   }
 
-  $: IPI = imposto['IPI']
-  $: II = imposto['II']
-
+  if (!imposto['PIS']) imposto['PIS'] = { CST: '01' }
   let PIS = Object.values(imposto['PIS'])[0]
-  let tipoPIS = PIS?.['CST'] ?? '00'
+  let tipoPIS = PIS['CST']
   $: {
-    if (tipoPIS == '00') {
-      imposto['PIS'] = undefined
-    } else {
-      let c = ['01', '02'].includes(tipoPIS)
-        ? 'PISAliq'
-        : tipoPIS == '03'
-        ? 'PISQtde'
-        : ['04', '05', '06', '07', '08', '09'].includes(tipoPIS)
-        ? 'PISNT'
-        : 'PISOutr'
-      imposto['PIS'] = {}
-      PIS = imposto['PIS'][c] = { CST: tipoPIS }
-    }
+    let c = ['01', '02'].includes(tipoPIS)
+      ? 'PISAliq'
+      : tipoPIS == '03'
+      ? 'PISQtde'
+      : ['04', '05', '06', '07', '08', '09'].includes(tipoPIS)
+      ? 'PISNT'
+      : 'PISOutr'
+    imposto['PIS'] = {}
+    PIS = imposto['PIS'][c] = { CST: tipoPIS }
   }
-  $: PISST = imposto['PISST']
 
+  if (!imposto['COFINS']) imposto['COFINS'] = { CST: '01' }
   let COFINS = Object.values(imposto['COFINS'])[0]
-  let tipoCOFINS = COFINS?.['CST'] ?? '00'
+  let tipoCOFINS = COFINS['CST']
   $: {
-    if (tipoCOFINS == '00') {
-      imposto['COFINS'] = undefined
-    } else {
-      let c = ['01', '02'].includes(tipoCOFINS)
-        ? 'COFINSAliq'
-        : tipoCOFINS == '03'
-        ? 'COFINSQtde'
-        : ['04', '05', '06', '07', '08', '09'].includes(tipoCOFINS)
-        ? 'COFINSNT'
-        : 'COFINSOutr'
-      imposto['COFINS'] = {}
-      COFINS = imposto['COFINS'][c] = { CST: tipoCOFINS }
-    }
+    let c = ['01', '02'].includes(tipoCOFINS)
+      ? 'COFINSAliq'
+      : tipoCOFINS == '03'
+      ? 'COFINSQtde'
+      : ['04', '05', '06', '07', '08', '09'].includes(tipoCOFINS)
+      ? 'COFINSNT'
+      : 'COFINSOutr'
+    imposto['COFINS'] = {}
+    COFINS = imposto['COFINS'][c] = { CST: tipoCOFINS }
   }
-  $: COFINSST = imposto['COFINSST']
 </script>
 
-<h4>Tributos incidentes</h4>
+<h3>Impostos</h3>
 <InputT
   bind:val={imposto['vTotTrib']}
   opt
@@ -100,7 +89,7 @@
   pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 
-<h5>ICMS</h5>
+<h4>ICMS</h4>
 <Select
   bind:val={tipoICMS}
   lab="Código de situação"
@@ -446,32 +435,37 @@
 {/if}
 
 {#if regimeNormal}
-  <h5>ICMS Interestadual</h5>
-  <Opcional raiz={imposto} name="ICMSUFDest">
+  <Opcional raiz={imposto} name="ICMSUFDest" titulo="ICMS Interestadual" let:r>
+    <h4>ICMS Interestadual</h4>
     <InputT
-      bind:val={ICMSUFDest['vBCUFDest']}
+      name="vBCUFDest"
+      raiz={r}
       lab="Valor da Base de Cálculo do ICMS na UF do destinatário."
       pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
     />
     <InputT
-      bind:val={ICMSUFDest['vBCFCPUFDest']}
+      name="vBCFCPUFDest"
+      raiz={r}
       opt
       lab="Valor da Base de Cálculo do FCP na UF do destinatário."
       pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
     />
     <InputT
-      bind:val={ICMSUFDest['pFCPUFDest']}
+      name="pFCPUFDest"
+      raiz={r}
       opt
       lab="Percentual adicional inserido na alíquota interna da UF de destino, relativo ao FCP naquela UF."
       pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
     />
     <InputT
-      bind:val={ICMSUFDest['pICMSUFDest']}
+      name="pICMSUFDest"
+      raiz={r}
       lab="Alíquota adotada nas operações internas na UF do destinatário para o produto / mercadoria."
       pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
     />
     <Select
-      bind:val={ICMSUFDest['pICMSInter']}
+      name="pICMSInter"
+      raiz={r}
       lab="Alíquota interestadual das UF envolvidas"
       els={[
         ['4.00', 'Alíquota interestadual para produtos importados'],
@@ -483,23 +477,26 @@
       ]}
     />
     <InputT
-      bind:val={ICMSUFDest['vFCPUFDest']}
+      name="vFCPUFDest"
+      raiz={r}
       opt
       lab="Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) da UF de destino."
       pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
     />
     <InputT
-      bind:val={ICMSUFDest['vICMSUFDest']}
+      name="vICMSUFDest"
+      raiz={r}
       lab="Valor do ICMS de partilha para a UF do destinatário."
       pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
     />
   </Opcional>
 {/if}
 
-<h5>Imposto sobre produtos industrializados</h5>
-<Opcional raiz={imposto} name="IPI">
+<Opcional raiz={imposto} name="IPI" titulo="IPI" let:r>
+  <h4>Imposto sobre produtos industrializados</h4>
   <InputT
-    bind:val={IPI['CNPJProd']}
+    raiz={r}
+    name="CNPJProd"
     opt
     lab="CNPJ do produtor da mercadoria"
     aux="Informar se diferente do emitente e somente em exportação"
@@ -508,26 +505,30 @@
     mask="cnpj"
   />
   <InputT
-    bind:val={IPI['cSelo']}
+    raiz={r}
+    name="cSelo"
     opt
     lab="Código do selo de controle"
     min={1}
     max={60}
   />
   <InputT
-    bind:val={IPI['qSelo']}
+    raiz={r}
+    name="qSelo"
     opt
     lab="Quantidade de selo de controle"
     pat={'[0-9]{1,12}'}
   />
   <InputT
-    bind:val={IPI['cEnq']}
+    raiz={r}
+    name="cEnq"
     lab="Código de Enquadramento Legal"
     min={1}
     max={3}
   />
   <Select
-    bind:val={IPI['CST']}
+    raiz={r}
+    name="CST"
     lab="Código da Situação Tributária"
     els={[
       ['00', 'Entrada com recuperação de crédito'],
@@ -546,69 +547,77 @@
       ['99', 'Outras saídas'],
     ]}
   />
-  {#if ['00', '49', '50', '99'].includes(IPI['CST'])}
-    {#if !IPI['qUnid'] && !IPI['vUnid']}
+  {#if ['00', '49', '50', '99'].includes(r['CST'])}
+    {#if !r['qUnid'] && !r['vUnid']}
       <InputT
-        bind:val={IPI['vBC']}
+        raiz={r}
+        name="vBC"
         lab="Valor da BC do IPI"
         pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
       />
       <InputT
-        bind:val={IPI['pIPI']}
+        raiz={r}
+        name="pIPI"
         lab="Alíquota do IPI"
         pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
       />
     {/if}
-    {#if !IPI['vBC'] && !IPI['pIPI']}
+    {#if !r['vBC'] && !r['pIPI']}
       <InputT
-        bind:val={IPI['qUnid']}
+        raiz={r}
+        name="qUnid"
         lab="Quantidade total na unidade padrão para tributação"
         pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(.[0-9]{1,4})?'}
       />
       <InputT
-        bind:val={IPI['vUnid']}
+        raiz={r}
+        name="vUnid"
         lab="Valor por Unidade Tributável"
         pat={'0|0.[0-9]{4}|[1-9]{1}[0-9]{0,10}(.[0-9]{4})?'}
       />
     {/if}
     <InputT
-      bind:val={IPI['vIPI']}
+      raiz={r}
+      name="vIPI"
       lab="Valor do IPI"
       pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
     />
   {/if}
 </Opcional>
 
-<h5>Imposto de Importação</h5>
-<Opcional raiz={imposto} name="II">
+<Opcional raiz={imposto} name="II" titulo="II" let:r>
+  <h4>Imposto de Importação</h4>
   <InputT
-    bind:val={II['vBC']}
+    raiz={r}
+    name="vBC"
     lab="Base da BC do Imposto de Importação"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <InputT
-    bind:val={II['vDespAdu']}
+    raiz={r}
+    name="vDespAdu"
     lab="Valor das despesas aduaneiras"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <InputT
-    bind:val={II['vII']}
+    raiz={r}
+    name="vII"
     lab="Valor do Imposto de Importação"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <InputT
-    bind:val={II['vIOF']}
+    raiz={r}
+    name="vIOF"
     lab="Valor do Imposto sobre Operações Financeiras"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 </Opcional>
 
-<h5>PIS</h5>
+<h4>PIS</h4>
 <Select
   bind:val={tipoPIS}
   lab="Código de Situação Tributária"
   els={[
-    ['00', 'Não informar'],
     ['01', 'Alíquota Normal (Cumulativo/Não Cumulativo)'],
     ['02', 'Alíquota Diferenciada'],
     ['03', 'Tributado por quantidade'],
@@ -718,45 +727,49 @@
   />
 {/if}
 
-<h5>PIS ST</h5>
-<Opcional raiz={imposto} name="PISST">
-  {#if !PISST['qBCProd'] && !PISST['vAliqProd']}
+<Opcional raiz={imposto} name="PISST" titulo="PIS ST" let:r>
+  <h4>PIS ST</h4>
+  {#if !r['qBCProd'] && !r['vAliqProd']}
     <InputT
-      bind:val={PISST['vBC']}
+      name='vBC'
+      raiz={r}
       lab="Valor da BC do PIS"
       pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
     />
     <InputT
-      bind:val={PISST['pPIS']}
+      name='pPIS'
+      raiz={r}
       lab="Alíquota do PIS (em percentual)"
       pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
     />
   {/if}
-  {#if !PISST['vBC'] && !PISST['pPIS']}
+  {#if !r['vBC'] && !r['pPIS']}
     <InputT
-      bind:val={PISST['qBCProd']}
+      name='qBCProd'
+      raiz={r}
       lab="Quantidade Vendida"
       pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(.[0-9]{1,4})?'}
     />
     <InputT
-      bind:val={PISST['vAliqProd']}
+      name='vAliqProd'
+      raiz={r}
       lab="Alíquota do PIS (em reais)"
       pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
     />
   {/if}
   <InputT
-    bind:val={PISST['vPIS']}
+    name='vPIS'
+    raiz={r}
     lab="Valor do PIS"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 </Opcional>
 
-<h5>COFINS</h5>
+<h4>COFINS</h4>
 <Select
   bind:val={tipoCOFINS}
   lab="Código de Situação Tributária"
   els={[
-    ['00', 'Não informar'],
     ['01', 'Alíquota Normal (Cumulativo/Não Cumulativo)'],
     ['02', 'Alíquota Diferenciada'],
     ['03', 'Tributado por quantidade'],
@@ -866,34 +879,39 @@
   />
 {/if}
 
-<h5>COFINS ST</h5>
-<Opcional raiz={imposto} name="COFINSST">
-  {#if !COFINSST['qBCProd'] && !COFINSST['vAliqProd']}
+<Opcional raiz={imposto} name="COFINSST" titulo="COFINS ST" let:r>
+  <h4>COFINS ST</h4>
+  {#if !r['qBCProd'] && !r['vAliqProd']}
     <InputT
-      bind:val={COFINSST['vBC']}
+      name='vBC'
+      raiz={r}
       lab="Valor da BC do COFINS"
       pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
     />
     <InputT
-      bind:val={COFINSST['pCOFINS']}
+      name='pCOFINS'
+      raiz={r}
       lab="Alíquota do COFINS (em percentual)"
       pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
     />
   {/if}
-  {#if !COFINSST['vBC'] && !COFINSST['pCOFINS']}
+  {#if !r['vBC'] && !r['pCOFINS']}
     <InputT
-      bind:val={COFINSST['qBCProd']}
+      name='qBCProd'
+      raiz={r}
       lab="Quantidade Vendida"
       pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(.[0-9]{1,4})?'}
     />
     <InputT
-      bind:val={COFINSST['vAliqProd']}
+      name='vAliqProd'
+      raiz={r}
       lab="Alíquota do COFINS (em reais)"
       pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
     />
   {/if}
   <InputT
-    bind:val={COFINSST['vCOFINS']}
+    name='vCOFINS'
+    raiz={r}
     lab="Valor do COFINS"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />

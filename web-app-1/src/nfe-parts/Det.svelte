@@ -9,17 +9,19 @@
   export let simplificado = false
 
   if (!raiz) raiz = {}
-  $: impostoDevol = raiz['impostoDevol']
+  $: impostoDevol = raiz['impostoDevol'] ?? {}
   $: {
     if (impostoDevol && !impostoDevol.IPI) impostoDevol.IPI = {}
   }
 </script>
 
 <Prod {raiz} {simplificado} />
+<hr />
 <Imposto {raiz} {regimeNormal} />
-
-<h4>Imposto devolvido</h4>
-<Opcional {raiz} name="impostoDevol">
+<hr />
+<h3>Extras</h3>
+<Opcional {raiz} name="impostoDevol" titulo="imposto devolvido">
+  <h4>Imposto devolvido</h4>
   <InputT
     raiz={impostoDevol}
     name="pDevol"

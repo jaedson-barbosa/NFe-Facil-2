@@ -5,9 +5,16 @@
   import { Buscador } from '../code/buscador'
   import { DocumentSnapshot } from 'firebase/firestore'
   import ExibDoc from '../nfe-parts/ExibDoc.svelte'
+  import Voltar from '../components/Voltar.svelte'
 
-  const buscador = new Buscador($refEmpresa, Dados.Clientes, 'dest.xNome')
-  $: cadastros = buscador.cadastros
+  let cadastros: DocumentSnapshot[] = []
+  const buscador = new Buscador(
+    $refEmpresa,
+    Dados.Clientes,
+    'dest.xNome',
+    'asc',
+    (v) => (cadastros = v)
+  )
 
   $edicao = undefined
   function editar(cad: DocumentSnapshot) {
@@ -20,10 +27,10 @@
   }
 </script>
 
-<h1>Clientes</h1>
+<h1><Voltar /> Clientes</h1>
 <label>
   Buscar cliente pelo nome
-  <input bind:value={buscador.busca} />
+  <input on:input={buscador.buscar} />
 </label>
 {#if $permissaoEscrita}
   <a class="button" href={$url('./cliente')}>Adicionar</a>

@@ -6,12 +6,14 @@
   import { DocumentSnapshot } from 'firebase/firestore'
   import ExibDoc from '../nfe-parts/ExibDoc.svelte'
 
+  let cadastros: DocumentSnapshot[] = []
   const buscador = new Buscador(
     $refEmpresa,
     Dados.Transportes,
-    'transporta.xNome'
+    'transporta.xNome',
+    'asc',
+    (v) => (cadastros = v)
   )
-  $: cadastros = buscador.cadastros
 
   $edicao = undefined
   function editar(cad: DocumentSnapshot) {
@@ -27,7 +29,7 @@
 <h1>Transportadores</h1>
 <label>
   Buscar transportador pelo nome
-  <input bind:value={buscador.busca} />
+  <input on:input={buscador.buscar} />
 </label>
 {#if $permissaoEscrita}
   <a class="button" href={$url('./transporta')}>Adicionar</a>

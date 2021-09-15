@@ -5,7 +5,8 @@
   import { edicao, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import Transporta from '../nfe-parts/Transporta.svelte'
-  import { Dados } from '../code/tipos';
+  import { Dados } from '../code/tipos'
+  import Voltar from '../components/Voltar.svelte'
 
   let loading = false
   let raiz = undefined
@@ -56,9 +57,12 @@
   }
 </script>
 
-<form on:submit|preventDefault={() => salvar()}>
-  <fieldset disabled={loading}>
+<h1><Voltar /> {$edicao ? 'Atualização' : 'Adição'} cadastral</h1>
+{#if loading}
+  Carregando...
+{:else}
+  <form on:submit|preventDefault={() => salvar()}>
     <Transporta bind:raiz />
     <input type="submit" class="button" />
-  </fieldset>
-</form>
+  </form>
+{/if}

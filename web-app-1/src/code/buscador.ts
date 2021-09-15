@@ -5,6 +5,7 @@ import {
   getDocs,
   limit,
   orderBy,
+  OrderByDirection,
   query,
   QueryConstraint,
   startAfter,
@@ -14,17 +15,8 @@ import { debounce } from 'lodash-es'
 import { Dados } from './tipos'
 
 export class Buscador {
-  cadastros: DocumentSnapshot[] = []
-
-  private _lastBusca = ''
-
-  get lastBusca() {
-    return this._lastBusca
-  }
-
-  private set lastBusca(value: string) {
-    this._lastBusca = value
-  }
+  private cadastros: DocumentSnapshot[] = []
+  private lastBusca = ''
 
   private _hasMore = false
 
@@ -36,48 +28,41 @@ export class Buscador {
     this._hasMore = value
   }
 
-  private _busca = ''
-
-  get busca() {
-    return this._busca
-  }
-
-  set busca(value: string) {
-    this._busca = value
-    debounce(() => this.buscar(value), 300)
-  }
+  readonly buscar = debounce((e: any) => this._buscar(e.target.value), 300)
+  readonly carregarMais = () => this.hasMore && this._buscar()
+  readonly operadorBusca: '>=' | '<='
 
   constructor(
     private readonly refEmpresa: DocumentReference,
     private readonly dados: Dados,
-    private readonly campoPrincipal: string
+    private readonly campoPrincipal: string,
+    private readonly direcao: OrderByDirection,
+    private readonly onUpdateCadastros: (cadastros: DocumentSnapshot[]) => void
   ) {
-    this.buscar()
+    this.operadorBusca = direcao == 'asc' ? '>=' : '<='
+    this._buscar()
   }
 
-  carregarMais() {
-    if (!this.hasMore) return
-    this.buscar()
-  }
-
-  private async buscar(busca: string = this.lastBusca) {
+  private async _buscar(busca: string = this.lastBusca) {
     this.hasMore = false
     const coluna = collection(this.refEmpresa, this.dados)
     const limites: QueryConstraint[] = [
       limit(10),
-      orderBy(this.campoPrincipal, 'desc'),
+      orderBy(this.campoPrincipal, this.direcao),
     ]
     if (busca != this.lastBusca) {
       this.cadastros = []
-      limites.push(where(this.campoPrincipal, '>=', busca))
+      limites.push(where(this.campoPrincipal, this.operadorBusca, busca))
     } else if (this.cadastros.length) {
       const ultimo = this.cadastros[this.cadastros.length - 1]
-      limites.push(startAfter(ultimo))
+      limites.push(startAfter(ultimo.get(this.campoPrincipal)))
     }
     const consulta = query(coluna, ...limites)
     const docs = await getDocs(consulta)
     this.hasMore = docs.size == 10
-    this.cadastros = [...this.cadastros, ...docs.docs]
+    const cadastros = [...this.cadastros, ...docs.docs]
+    this.cadastros = cadastros
+    this.onUpdateCadastros(cadastros)
     this.lastBusca = busca
   }
 }

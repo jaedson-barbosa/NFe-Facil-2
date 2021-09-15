@@ -21,14 +21,6 @@
     prod['vProd'] = (+prod['qCom'] * +prod['vUnCom']).toFixed(2)
   }
 
-  $: detExport = prod['detExport']
-  $: veicProd = prod['veicProd']
-  $: med = prod['med']
-  $: arma = prod['arma']
-  $: comb = prod['comb']
-  $: CIDE = comb?.['CIDE']
-  $: encerrante = comb?.['encerrante']
-
   async function gerarCodigo() {
     prod['cProd'] = 'Gerando...'
     let novoId = ''
@@ -44,7 +36,7 @@
   }
 </script>
 
-<h4>Dados do produto</h4>
+<h3>Dados do produto</h3>
 {#if completo}
   <InputT bind:val={prod['cProd']} lab="Código do produto" min={1} max={60} />
   <button type="button" on:click={gerarCodigo}>Gerar código aleatório</button>
@@ -178,199 +170,204 @@
     ['0', 'Não'],
   ]}
 />
-{#if false}
-  <h5>Declaração de Importação</h5>
-  <Lista raiz={prod} name="DI">
-    <svelte:fragment slot="h" let:item>
-      {item['nDI']}
-    </svelte:fragment>
-    <svelte:fragment slot="b" let:item>
-      <InputT
-        raiz={item}
-        name="nDI"
-        lab="Numero do Documento de Importação (DI/DSI/DA/DRI-E)"
-        min={1}
-        max={12}
-      />
-      <InputT
-        raiz={item}
-        name="dDI"
-        lab="Data de registro da DI/DSI/DA"
-        pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
-      />
-      <InputT
-        raiz={item}
-        name="xLocDesemb"
-        lab="Local do desembaraço aduaneiro"
-        min={1}
-        max={60}
-      />
-      <Estado
-        raiz={item}
-        UFName="UFDesemb"
-        lab="UF onde ocorreu o desembaraço aduaneiro"
-      />
-      <InputT
-        raiz={item}
-        name="dDesemb"
-        lab="Data do desembaraço aduaneiro"
-        pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
-      />
-      <Select
-        raiz={item}
-        name="tpViaTransp"
-        lab="Via de transporte internacional informada na DI"
-        els={[
-          ['1', 'Maritima'],
-          ['2', 'Fluvial'],
-          ['3', 'Lacustre'],
-          ['4', 'Aerea'],
-          ['5', 'Postal'],
-          ['6', 'Ferroviaria'],
-          ['7', 'Rodoviaria'],
-          ['8', 'Conduto'],
-          ['9', 'Meios Proprios'],
-          ['10', 'Entrada/Saida Ficta'],
-        ]}
-      />
-      <InputT
-        raiz={item}
-        name="vAFRMM"
-        opt
-        lab="Valor Adicional ao frete para renovação de marinha mercante"
-        pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-      />
-      <Select
-        raiz={item}
-        name="tpIntermedio"
-        lab="Forma de Importação quanto a intermediação"
-        els={[
-          ['1', 'Por conta propria'],
-          ['2', 'Por conta e ordem'],
-          ['3', 'Encomenda'],
-        ]}
-      />
-      <InputT
-        raiz={item}
-        name="CNPJ"
-        opt
-        lab="CNPJ do adquirente ou do encomendante"
-        pat={'[0-9]{14}'}
-        max={14}
-        mask="cnpj"
-      />
-      <Estado
-        raiz={item}
-        UFName="UFTerceiro"
-        opt
-        lab="UF do adquirente ou do encomendante"
-      />
-      <InputT
-        raiz={item}
-        name="cExportador"
-        lab="Código do exportador"
-        aux="Usado nos sistemas internos de informação do emitente"
-        min={1}
-        max={60}
-      />
-      <h6>Adições</h6>
-      <Lista raiz={item} name="adi">
-        <svelte:fragment slot="h" let:item={subitem}>
-          {subitem['nAdicao']} - {subitem['nSeqAdic']}
-        </svelte:fragment>
-        <svelte:fragment slot="b" let:item={subitem}>
-          <InputT
-            raiz={subitem}
-            name="nAdicao"
-            lab="Número da adição"
-            pat={'[1-9]{1}[0-9]{0,2}'}
-          />
-          <InputT
-            raiz={subitem}
-            name="nSeqAdic"
-            lab="Número sequencial do item dentro da adição"
-            pat={'[1-9]{1}[0-9]{0,2}'}
-          />
-          <InputT
-            raiz={subitem}
-            name="cFabricante"
-            lab="Código do fabricante estrangeiro"
-            aux="Usado nos sistemas internos de informação do emitente"
-            min={1}
-            max={60}
-          />
-          <InputT
-            raiz={subitem}
-            name="vDescDI"
-            opt
-            lab="Valor do desconto do item da DI – adição"
-            pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-          />
-          <InputT
-            raiz={subitem}
-            name="nDraw"
-            opt
-            lab="Número do ato concessório de Drawback"
-            pat={'[0-9]{0,11}'}
-          />
-        </svelte:fragment>
-      </Lista>
-    </svelte:fragment>
-  </Lista>
-  <h5>Detalhe da exportação</h5>
-  <Lista {raiz} name="detExport">
-    <svelte:fragment slot="summary" let:item>
-      {item['nDraw']}
-    </svelte:fragment>
-    <svelte:fragment slot="body" let:i>
-      <InputT
-        bind:val={detExport[i]['nDraw']}
-        opt
-        lab="Número do ato concessório de Drawback"
-        pat={'[0-9]{0,11}'}
-      />
-      <h6>Exportação indireta</h6>
-      <Opcional {raiz} name="exportInd">
+
+<h4>Declaração de Importação</h4>
+<Lista raiz={prod} name="DI">
+  <svelte:fragment slot="h" let:item>
+    {item['nDI']}
+  </svelte:fragment>
+  <svelte:fragment slot="b" let:item>
+    <InputT
+      raiz={item}
+      name="nDI"
+      lab="Numero do Documento de Importação (DI/DSI/DA/DRI-E)"
+      min={1}
+      max={12}
+    />
+    <InputT
+      raiz={item}
+      name="dDI"
+      lab="Data de registro da DI/DSI/DA"
+      pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
+    />
+    <InputT
+      raiz={item}
+      name="xLocDesemb"
+      lab="Local do desembaraço aduaneiro"
+      min={1}
+      max={60}
+    />
+    <Estado
+      raiz={item}
+      UFName="UFDesemb"
+      lab="UF onde ocorreu o desembaraço aduaneiro"
+    />
+    <InputT
+      raiz={item}
+      name="dDesemb"
+      lab="Data do desembaraço aduaneiro"
+      pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
+    />
+    <Select
+      raiz={item}
+      name="tpViaTransp"
+      lab="Via de transporte internacional informada na DI"
+      els={[
+        ['1', 'Maritima'],
+        ['2', 'Fluvial'],
+        ['3', 'Lacustre'],
+        ['4', 'Aerea'],
+        ['5', 'Postal'],
+        ['6', 'Ferroviaria'],
+        ['7', 'Rodoviaria'],
+        ['8', 'Conduto'],
+        ['9', 'Meios Proprios'],
+        ['10', 'Entrada/Saida Ficta'],
+      ]}
+    />
+    <InputT
+      raiz={item}
+      name="vAFRMM"
+      opt
+      lab="Valor Adicional ao frete para renovação de marinha mercante"
+      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+    />
+    <Select
+      raiz={item}
+      name="tpIntermedio"
+      lab="Forma de Importação quanto a intermediação"
+      els={[
+        ['1', 'Por conta propria'],
+        ['2', 'Por conta e ordem'],
+        ['3', 'Encomenda'],
+      ]}
+    />
+    <InputT
+      raiz={item}
+      name="CNPJ"
+      opt
+      lab="CNPJ do adquirente ou do encomendante"
+      pat={'[0-9]{14}'}
+      max={14}
+      mask="cnpj"
+    />
+    <Estado
+      raiz={item}
+      UFName="UFTerceiro"
+      opt
+      lab="UF do adquirente ou do encomendante"
+    />
+    <InputT
+      raiz={item}
+      name="cExportador"
+      lab="Código do exportador"
+      aux="Usado nos sistemas internos de informação do emitente"
+      min={1}
+      max={60}
+    />
+    <h5>Adições</h5>
+    <Lista raiz={item} name="adi">
+      <svelte:fragment slot="h" let:item={subitem}>
+        {subitem['nAdicao']} - {subitem['nSeqAdic']}
+      </svelte:fragment>
+      <svelte:fragment slot="b" let:item={subitem}>
         <InputT
-          bind:val={detExport[i]['exportInd']['nRE']}
-          lab="Registro de exportação"
-          pat={'[0-9]{0,12}'}
+          raiz={subitem}
+          name="nAdicao"
+          lab="Número da adição"
+          pat={'[1-9]{1}[0-9]{0,2}'}
         />
         <InputT
-          bind:val={detExport[i]['exportInd']['chNFe']}
-          lab="Chave de acesso da NF-e recebida para exportação"
-          pat={'[0-9]{44}'}
-          max={44}
+          raiz={subitem}
+          name="nSeqAdic"
+          lab="Número sequencial do item dentro da adição"
+          pat={'[1-9]{1}[0-9]{0,2}'}
         />
         <InputT
-          bind:val={detExport[i]['exportInd']['qExport']}
-          lab="Quantidade do item efetivamente exportado"
-          pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
+          raiz={subitem}
+          name="cFabricante"
+          lab="Código do fabricante estrangeiro"
+          aux="Usado nos sistemas internos de informação do emitente"
+          min={1}
+          max={60}
         />
-      </Opcional>
-    </svelte:fragment>
-  </Lista>
-  <InputT
-    bind:val={prod['xPed']}
-    opt
-    lab="Pedido de compra"
-    aux="Informação de interesse do emissor para controle do B2B"
-    min={1}
-    max={15}
-  />
-  <InputT
-    bind:val={prod['nItemPed']}
-    opt
-    lab="Número do item do pedido de compra"
-    pat={'[0-9]{1,6}'}
-  />
-  <InputT
-    bind:val={prod['nFCI']}
-    opt
-    lab="Número de controle da FCI (Ficha de Conteúdo de Importação)"
-    pat={'[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}'}
-  />
-{/if}
+        <InputT
+          raiz={subitem}
+          name="vDescDI"
+          opt
+          lab="Valor do desconto do item da DI – adição"
+          pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+        />
+        <InputT
+          raiz={subitem}
+          name="nDraw"
+          opt
+          lab="Número do ato concessório de Drawback"
+          pat={'[0-9]{0,11}'}
+        />
+      </svelte:fragment>
+    </Lista>
+  </svelte:fragment>
+</Lista>
+<h4>Detalhe da exportação</h4>
+<Lista {raiz} name="detExport">
+  <svelte:fragment slot="h" let:item>
+    {item['nDraw']}
+  </svelte:fragment>
+  <svelte:fragment slot="b" let:item>
+    <InputT
+      raiz={item}
+      name="nDraw"
+      opt
+      lab="Número do ato concessório de Drawback"
+      pat={'[0-9]{0,11}'}
+    />
+    <Opcional raiz={item} name="exportInd" titulo="exportação indireta" let:r>
+      <h5>Exportação indireta</h5>
+      <InputT
+        raiz={r}
+        name="nRE"
+        lab="Registro de exportação"
+        pat={'[0-9]{0,12}'}
+      />
+      <InputT
+        name="chNFe"
+        raiz={r}
+        lab="Chave de acesso da NF-e recebida para exportação"
+        pat={'[0-9]{44}'}
+        max={44}
+      />
+      <InputT
+        name="qExport"
+        raiz={r}
+        lab="Quantidade do item efetivamente exportado"
+        pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
+      />
+    </Opcional>
+  </svelte:fragment>
+</Lista>
+<InputT
+  bind:val={prod['xPed']}
+  opt
+  lab="Pedido de compra"
+  aux="Informação de interesse do emissor para controle do B2B"
+  min={1}
+  max={15}
+/>
+<InputT
+  bind:val={prod['nItemPed']}
+  opt
+  lab="Número do item do pedido de compra"
+  pat={'[0-9]{1,6}'}
+/>
+<InputT
+  bind:val={prod['nFCI']}
+  opt
+  lab="Número de controle da FCI (Ficha de Conteúdo de Importação)"
+  pat={'[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}'}
+/>
+
+<h4>Detalhamento de rastreabilidade</h4>
 <Lista raiz={prod} name="rastro">
   <svelte:fragment slot="h" let:item>
     {item['nLote']}
@@ -412,10 +409,11 @@
   </svelte:fragment>
 </Lista>
 {#if !prod['med'] && !prod['arma'] && !prod['comb'] && !prod['nRECOPI']}
-  <h5>Veículo novo</h5>
-  <Opcional raiz={prod} name="veicProd">
+  <Opcional raiz={prod} name="veicProd" titulo="veículo novo" let:r>
+    <h4>Veículo novo</h4>
     <Select
-      bind:val={veicProd['tpOp']}
+      name="tpOp"
+      raiz={r}
       lab="Tipo da Operação"
       els={[
         ['0', 'Venda concessionária'],
@@ -425,39 +423,33 @@
       ]}
     />
     <InputT
-      bind:val={veicProd['chassi']}
+      name="chassi"
+      raiz={r}
       lab="Chassi do veículo (VIN)"
       pat={'[A-Z0-9]+'}
     />
-    <InputT bind:val={veicProd['cCor']} lab="Cor do veículo" min={1} max={4} />
+    <InputT raiz={r} name="cCor" lab="Cor do veículo" min={1} max={4} />
+    <InputT name="xCor" raiz={r} lab="Descrição da cor" min={1} max={40} />
     <InputT
-      bind:val={veicProd['xCor']}
-      lab="Descrição da cor"
-      min={1}
-      max={40}
-    />
-    <InputT
-      bind:val={veicProd['pot']}
+      name="pot"
+      raiz={r}
       lab="Potência máxima do motor do veículo em CV (cavalo vapor)"
       min={1}
       max={4}
     />
     <InputT
-      bind:val={veicProd['cilin']}
+      name="cilin"
+      raiz={r}
       lab="Capacidade voluntária do motor expressa em CC (cilindradas)"
       min={1}
       max={4}
     />
-    <InputT bind:val={veicProd['pesoL']} lab="Peso líquido" min={1} max={9} />
-    <InputT bind:val={veicProd['pesoB']} lab="Peso bruto" min={1} max={9} />
-    <InputT
-      bind:val={veicProd['nSerie']}
-      lab="Serial (série)"
-      min={1}
-      max={9}
-    />
+    <InputT raiz={r} name="pesoL" lab="Peso líquido" min={1} max={9} />
+    <InputT raiz={r} name="pesoB" lab="Peso bruto" min={1} max={9} />
+    <InputT name="nSerie" raiz={r} lab="Serial (série)" min={1} max={9} />
     <Select
-      bind:val={veicProd['tpComb']}
+      name="tpComb"
+      raiz={r}
       lab="Tipo de combustível"
       els={[
         ['01', 'Álcool'],
@@ -480,37 +472,31 @@
         ['18', 'Gasolina/Elétrico'],
       ]}
     />
+    <InputT name="nMotor" raiz={r} lab="Número do motor" min={1} max={21} />
     <InputT
-      bind:val={veicProd['nMotor']}
-      lab="Número do motor"
-      min={1}
-      max={21}
-    />
-    <InputT
-      bind:val={veicProd['CMT']}
+      name="CMT"
+      raiz={r}
       lab="CMT (Capacidade Máxima de Tração) em toneladas"
       min={1}
       max={9}
     />
+    <InputT name="dist" raiz={r} lab="Distância entre eixos" min={1} max={4} />
     <InputT
-      bind:val={veicProd['dist']}
-      lab="Distância entre eixos"
-      min={1}
-      max={4}
-    />
-    <InputT
-      bind:val={veicProd['anoMod']}
+      name="anoMod"
+      raiz={r}
       lab="Ano do modelo_Formato: AAAA"
       pat={'[0-9]{4}'}
     />
     <InputT
-      bind:val={veicProd['anoFab']}
+      name="anoFab"
+      raiz={r}
       lab="Ano de fabricação_Formato: AAAA"
       pat={'[0-9]{4}'}
     />
-    <InputT bind:val={veicProd['tpPint']} lab="Tipo de pintura" />
+    <InputT name="tpPint" raiz={r} lab="Tipo de pintura" />
     <Select
-      bind:val={veicProd['tpVeic']}
+      name="tpVeic"
+      raiz={r}
       lab="Tipo de veículo"
       els={[
         ['02', 'Ciclomotor'],
@@ -536,7 +522,8 @@
       ]}
     />
     <Select
-      bind:val={veicProd['espVeic']}
+      name="espVeic"
+      raiz={r}
       lab="Espécie de veículo"
       els={[
         ['1', 'Passageiro'],
@@ -548,7 +535,8 @@
       ]}
     />
     <Select
-      bind:val={veicProd['VIN']}
+      name="VIN"
+      raiz={r}
       lab="Chassi remarcado"
       els={[
         ['R', 'Sim'],
@@ -556,7 +544,8 @@
       ]}
     />
     <Select
-      bind:val={veicProd['condVeic']}
+      name="condVeic"
+      raiz={r}
       lab="Condição do veículo"
       els={[
         ['1', 'Acabado'],
@@ -565,12 +554,14 @@
       ]}
     />
     <InputT
-      bind:val={veicProd['cMod']}
+      name="cMod"
+      raiz={r}
       lab="Código Marca Modelo (utilizar tabela RENAVAM)"
       pat={'[0-9]{1,6}'}
     />
     <Select
-      bind:val={veicProd['cCorDENATRAN']}
+      name="cCorDENATRAN"
+      raiz={r}
       lab="Cor"
       els={[
         ['01', 'Amarelo'],
@@ -592,14 +583,16 @@
       ]}
     />
     <InputT
-      bind:val={veicProd['lota']}
+      name="lota"
+      raiz={r}
       lab="Lotação máxima (passageiros sentados, inclusive motorista)"
       pat={'[0-9]{1,3}'}
       min={1}
       max={3}
     />
     <Select
-      bind:val={veicProd['tpRest']}
+      name="tpRest"
+      raiz={r}
       lab="Restrição"
       els={[
         ['0', 'Não há'],
@@ -613,16 +606,18 @@
   </Opcional>
 {/if}
 {#if !prod['veicProd'] && !prod['arma'] && !prod['comb'] && !prod['nRECOPI']}
-  <h5>Medicamento</h5>
-  <Opcional raiz={prod} name="med">
+  <Opcional raiz={prod} name="med" titulo="medicamento" let:r>
+    <h4>Medicamento</h4>
     <InputT
-      bind:val={med['cProdANVISA']}
+      name="cProdANVISA"
+      raiz={r}
       lab="Registro ANVISA (usar literal ISENTO no caso de medicamento isento de registro na ANVISA"
       pat={'[0-9]{13}|ISENTO'}
     />
-    {#if med['cProdANVISA'] == 'ISENTO'}
+    {#if r['cProdANVISA'] == 'ISENTO'}
       <InputT
-        bind:val={med['xMotivoIsencao']}
+        name="xMotivoIsencao"
+        raiz={r}
         opt
         lab="Motivo da isenção"
         aux="Para medicamento isento de registro na ANVISA, informar o número da decisão que o isenta, como por exemplo o número da Resolução da Diretoria Colegiada da ANVISA (RDC)"
@@ -631,17 +626,19 @@
       />
     {/if}
     <InputT
-      bind:val={med['vPMC']}
+      name="vPMC"
+      raiz={r}
       lab="Preço máximo ao consumidor."
       pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
     />
   </Opcional>
 {/if}
 {#if !prod['veicProd'] && !prod['med'] && !prod['comb'] && !prod['nRECOPI']}
-  <h5>Armamento</h5>
-  <Opcional raiz={prod} name="arma">
+  <Opcional raiz={prod} name="arma" titulo="armamento" let:r>
+    <h4>Armamento</h4>
     <Select
-      bind:val={arma['tpArma']}
+      name="tpArma"
+      raiz={r}
       lab="Tipo de arma de fogo"
       els={[
         ['0', 'Uso permitido'],
@@ -649,19 +646,22 @@
       ]}
     />
     <InputT
-      bind:val={arma['nSerie']}
+      name="nSerie"
+      raiz={r}
       lab="Número de série da arma"
       min={1}
       max={15}
     />
     <InputT
-      bind:val={arma['nCano']}
+      name="nCano"
+      raiz={r}
       lab="Número de série do cano"
       min={1}
       max={15}
     />
     <InputT
-      bind:val={arma['descr']}
+      name="descr"
+      raiz={r}
       lab="Descrição completa da arma"
       aux="Compreendendo: calibre, marca, capacidade, tipo de funcionamento, comprimento e demais elementos que permitam a sua perfeita identificação"
       min={1}
@@ -670,109 +670,124 @@
   </Opcional>
 {/if}
 {#if !prod['veicProd'] && !prod['med'] && !prod['arma'] && !prod['nRECOPI']}
-  <h5>Combustível</h5>
-  <Opcional raiz={prod} name="comb">
+  <Opcional raiz={prod} name="comb" titulo="combustível" let:r>
+    <h4>Combustível</h4>
     <InputT
-      bind:val={comb['cProdANP']}
+      name="cProdANP"
+      raiz={r}
       lab="Código de produto da ANP"
       pat={'[0-9]{9}'}
     />
     <InputT
-      bind:val={comb['descANP']}
+      name="descANP"
+      raiz={r}
       lab="Descrição do Produto conforme ANP"
       aux="Utilizar a descrição de produtos do SIMP (Sistema de Informações de Movimentação de Produtos)"
       min={2}
       max={95}
     />
-    {#if comb['cProdANP'] == 210203001}
+    {#if r['cProdANP'] == 210203001}
       <InputT
-        bind:val={comb['pGLP']}
+        name="pGLP"
+        raiz={r}
         opt
         lab="Percentual do GLP derivado do petróleo no produto GLP"
         aux="Valores de 0 a 100"
         pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
       />
       <InputT
-        bind:val={comb['pGNn']}
+        name="pGNn"
+        raiz={r}
         opt
         lab="Percentual de gás natural nacional GLGNn para o produto GLP"
         aux="Valores de 0 a 100"
         pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
       />
       <InputT
-        bind:val={comb['pGNi']}
+        name="pGNi"
+        raiz={r}
         opt
         lab="Percentual de gás natural importado GLGNi para o produto GLP"
         aux="Valores de 0 a 100"
         pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
       />
       <InputT
-        bind:val={comb['vPart']}
+        name="vPart"
+        raiz={r}
         opt
         lab="Valor de partida (por quilograma sem ICMS)"
         pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
       />
     {/if}
     <InputT
-      bind:val={comb['CODIF']}
+      name="CODIF"
+      raiz={r}
       opt
       lab="Código de autorização / registro do CODIF"
       aux="Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com Álcool Etílico Anidro Combustível)"
       pat={'[0-9]{1,21}'}
     />
     <InputT
-      bind:val={comb['qTemp']}
+      name="qTemp"
+      raiz={r}
       opt
       lab="Quantidade de combustível faturada à temperatura ambiente"
       aux="Informar quando a quantidade faturada informada no campo de quantidade comercial tiver sido ajustada para uma temperatura diferente da ambiente"
       pat={'0.[1-9]{1}[0-9]{3}|0.[0-9]{3}[1-9]{1}|0.[0-9]{2}[1-9]{1}[0-9]{1}|0.[0-9]{1}[1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{0,11}(.[0-9]{4})?'}
     />
-    <Estado bind:UF={comb['UFCons']} incluirEX lab="UF de consumo" />
+    <Estado raiz={r} UFName="UFCons" incluirEX lab="UF de consumo" />
 
-    <h6>CIDE (Contribuição de Intervenção no Domínio Econômico)</h6>
-    <Opcional raiz={comb} name="CIDE">
+    <Opcional raiz={r} name="CIDE" titulo="CIDE" let:r={CIDE}>
+      <h5>Contribuição de Intervenção no Domínio Econômico</h5>
       <InputT
-        bind:val={CIDE['qBCProd']}
+        raiz={CIDE}
+        name="qBCProd"
         lab="BC do CIDE ( Quantidade comercializada)"
         pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(.[0-9]{1,4})?'}
       />
       <InputT
-        bind:val={CIDE['vAliqProd']}
+        name="vAliqProd"
+        raiz={CIDE}
         lab="Alíquota do CIDE  (em reais)"
         pat={'0|0.[0-9]{4}|[1-9]{1}[0-9]{0,10}(.[0-9]{4})?'}
       />
       <InputT
-        bind:val={CIDE['vCIDE']}
+        name="vCIDE"
+        raiz={CIDE}
         lab="Valor do CIDE"
         pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
       />
     </Opcional>
-
-    <h6>Encerrante</h6>
-    <Opcional raiz={comb} name="encerrante">
+    <Opcional raiz={r} name="encerrante" titulo="encerrante" let:r={encerrante}>
+      <h5>Encerrante</h5>
       <InputT
-        bind:val={encerrante['nBico']}
+        name="nBico"
+        raiz={encerrante}
         lab="Numero do bico utilizado no abastecimento"
         pat={'[0-9]{1,3}'}
       />
       <InputT
-        bind:val={encerrante['nBomba']}
+        name="nBomba"
+        raiz={encerrante}
         opt
         lab="Numero da bomba, caso exista"
         pat={'[0-9]{1,3}'}
       />
       <InputT
-        bind:val={encerrante['nTanque']}
+        name="nTanque"
+        raiz={encerrante}
         lab="Numero de identificação do tanque"
         pat={'[0-9]{1,3}'}
       />
       <InputT
-        bind:val={encerrante['vEncIni']}
+        name="vEncIni"
+        raiz={encerrante}
         lab="Valor do Encerrante no ínicio do abastecimento"
         pat={'0|0.[0-9]{3}|[1-9]{1}[0-9]{0,11}(.[0-9]{3})?'}
       />
       <InputT
-        bind:val={encerrante['vEncFin']}
+        name="vEncFin"
+        raiz={encerrante}
         lab="Valor do Encerrante no final do abastecimento"
         pat={'0|0.[0-9]{3}|[1-9]{1}[0-9]{0,11}(.[0-9]{3})?'}
       />

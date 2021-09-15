@@ -4,8 +4,9 @@
   import { validaCNPJ, validaCPF } from '../code/validacaoDoc'
   import { edicao, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
+  import { Dados } from '../code/tipos'
   import Dest from '../nfe-parts/Dest.svelte'
-  import { Dados } from '../code/tipos';
+  import Voltar from '../components/Voltar.svelte'
 
   let loading = false
   let raiz = undefined
@@ -61,6 +62,7 @@
   }
 </script>
 
+<h1><Voltar /> {$edicao ? 'Atualização' : 'Adição'} cadastral</h1>
 {#if loading}
   Carregando...
 {:else}

@@ -2,6 +2,7 @@
   import { refEmpresa } from '../code/store'
   import { processarArquivos } from '../code/importacao'
   import { url } from '@roxi/routify'
+  import Voltar from '../components/Voltar.svelte'
 
   let arquivos: FileList
 
@@ -18,7 +19,7 @@
   }
 </script>
 
-<h2>Importação de notas fiscais</h2>
+<h1><Voltar /> Importação de notas fiscais</h1>
 
 {#if !arquivos?.length}
   <label class="button" for="selecionar">

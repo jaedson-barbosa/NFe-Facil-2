@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { user, idEmpresa } from '../code/store'
+  import { user, idEmpresa, empresa } from '../code/store'
   import Cadastro from '../folder-parts/Cadastro.svelte'
   import Escolha from '../folder-parts/Escolha.svelte'
 </script>
@@ -7,7 +7,11 @@
 <main class="container">
   {#if $user}
     {#if $idEmpresa}
-      <slot />
+      {#if $empresa}
+        <slot />
+      {:else}
+        Carregando dados da empresa...
+      {/if}
     {:else}
       <Escolha />
       <Cadastro />
@@ -22,7 +26,7 @@
 
 <style>
   main {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
   }
 
   button {

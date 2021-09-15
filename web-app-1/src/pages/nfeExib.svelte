@@ -5,6 +5,7 @@
   import { toNFeString } from '../code/getDataString'
   import { Dados } from '../code/tipos'
   import { get } from 'svelte/store'
+  import Voltar from '../components/Voltar.svelte'
 
   const ed = get(edicao)
   if (!ed || ed.tipo != Dados.NFes) {
@@ -60,7 +61,7 @@
   }
 </script>
 
-<h1>Detalhes da nota fiscal</h1>
+<h1><Voltar /> Detalhes da nota fiscal</h1>
 <p>
   <strong>ID:</strong>
   {ed.id}

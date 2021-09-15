@@ -5,8 +5,14 @@
   import { Buscador } from '../code/buscador'
   import { DocumentSnapshot } from 'firebase/firestore'
 
-  const buscador = new Buscador($refEmpresa, Dados.Produtos, 'det.prod.xProd')
-  $: cadastros = buscador.cadastros
+  let cadastros: DocumentSnapshot[] = []
+  const buscador = new Buscador(
+    $refEmpresa,
+    Dados.Produtos,
+    'det.prod.xProd',
+    'asc',
+    (v) => (cadastros = v)
+  )
 
   $edicao = undefined
   function editar(cad: DocumentSnapshot) {
@@ -22,7 +28,7 @@
 <h1>Produtos</h1>
 <label>
   Buscar produto pela descrição
-  <input bind:value={buscador.busca} />
+  <input on:input={buscador.buscar} />
 </label>
 {#if $permissaoEscrita}
   <a class="button" href={$url('./produto')}>Adicionar</a>

@@ -4,9 +4,16 @@
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { DocumentSnapshot } from 'firebase/firestore'
+  import Voltar from '../components/Voltar.svelte'
 
-  const buscador = new Buscador($refEmpresa, Dados.NFes, 'infNFe.ide.nNF')
-  $: cadastros = buscador.cadastros
+  let cadastros: DocumentSnapshot[] = []
+  const buscador = new Buscador(
+    $refEmpresa,
+    Dados.NFes,
+    'infNFe.ide.nNF',
+    'desc',
+    (v) => (cadastros = v)
+  )
 
   $edicao = undefined
   function exibir(cad: DocumentSnapshot) {
@@ -19,14 +26,16 @@
   }
 </script>
 
-<h1>Notas fiscais</h1>
-<label>
-  Buscar nota fiscal pelo número
-  <input bind:value={buscador.busca} />
-</label>
+<h1><Voltar /> Notas fiscais</h1>
 {#if $permissaoEscrita}
   <a class="button" href={$url('./nfe')}>Adicionar</a>
+  <a class="button" href={$url('./importacao')}>Importar</a>
+  <hr />
 {/if}
+<label>
+  Buscar nota fiscal pelo número
+  <input on:input={buscador.buscar} />
+</label>
 
 {#if cadastros.length}
   <table>
@@ -41,7 +50,7 @@
       {#each cadastros as n}
         <tr
           class="clicavel"
-          class:homologacao={n.get('infNFe.ide.tpAmb') == '1'}
+          class:homologacao={n.get('infNFe.ide.tpAmb') == '2'}
           class:cancelado={n.get('cancelada')}
           on:click={() => exibir(n)}
         >
@@ -59,14 +68,14 @@
 
 <style>
   .homologacao {
-    background-color: #8888e1;
+    color: hsl(240, 100%, 50%);
   }
 
   .cancelado {
-    background-color: #e18888;
+    color: hsl(0, 100%, 50%);
   }
 
   .cancelado.homologacao {
-    background-color: #e188e1;
+    color: hsl(300, 100%, 50%);
   }
 </style>
