@@ -1,44 +1,33 @@
 <script lang="ts">
+  import { calcular } from '../code/imposto/PISCOFINS';
+  import { getMoeda } from '../code/numero'
   import InputT from '../components/InputT.svelte'
-  import Opcional from '../components/Opcional.svelte'
 
   export let raiz: any
+  export let prod: any
+
+  raiz['vPIS'] = calcular(prod, raiz, 'PIS')
+  $: raiz['vPIS'] = calcular(prod, raiz, 'PIS')
 </script>
 
-<Opcional {raiz} name="PISST" titulo="PIS ST" let:r>
-  <h4>PIS ST</h4>
-  {#if !r['qBCProd'] && !r['vAliqProd']}
-    <InputT
-      name='vBC'
-      raiz={r}
-      lab="Valor da BC do PIS"
-      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-    />
-    <InputT
-      name='pPIS'
-      raiz={r}
-      lab="Alíquota do PIS (em percentual)"
-      pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
-    />
-  {/if}
-  {#if !r['vBC'] && !r['pPIS']}
-    <InputT
-      name='qBCProd'
-      raiz={r}
-      lab="Quantidade Vendida"
-      pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,11}|[1-9]{1}[0-9]{0,11}(.[0-9]{1,4})?'}
-    />
-    <InputT
-      name='vAliqProd'
-      raiz={r}
-      lab="Alíquota do PIS (em reais)"
-      pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
-    />
-  {/if}
+<h4>PIS ST</h4>
+{#if !raiz['vAliqProd']}
+  <p>A base de cálculo considerada é o valor total bruto do produto.</p>
   <InputT
-    name='vPIS'
-    raiz={r}
-    lab="Valor do PIS"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+    bind:val={raiz['pPIS']}
+    lab="Alíquota do PIS (em percentual)"
+    pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
   />
-</Opcional>
+{/if}
+{#if !raiz['pPIS']}
+  <p>A quantidade considerada é a quantidade tributável.</p>
+  <InputT
+    bind:val={raiz['vAliqProd']}
+    lab="Alíquota do PIS (em reais)"
+    pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
+  />
+{/if}
+{#if raiz['vPIS']}
+  <strong>PIS ST calculado:</strong>
+  {getMoeda(raiz['vPIS'])}
+{/if}

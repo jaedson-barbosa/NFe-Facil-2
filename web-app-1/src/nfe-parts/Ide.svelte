@@ -30,6 +30,7 @@
   ide['serie'] = emp.serieNFe
   $: ide['serie'] = ide['mod'] == '65' ? emp.serieNFCe : emp.serieNFe
   ide['nNF'] = '0'
+  ide['idDest'] = '1'
   ide['cMunFG'] = emit.enderEmit.cMun
   ide['tpEmis'] = '1'
   ide['tpImp'] = '1'
@@ -39,6 +40,7 @@
   ide['verProc'] = VERSAO
 
   if (!ide['NFref']) ide['NFref'] = []
+  $: ide['mod'] == '65' && (ide['tpNF'] = ide['idDest'] = ide['finNFe'] = ide['indFinal'] = '1')
 </script>
 
 <h3>Identificação</h3>
@@ -69,42 +71,44 @@
 />
 <InputD raiz={ide} name="dhEmi" lab="Data e Hora de emissão" />
 <InputD raiz={ide} name="dhSaiEnt" lab="Data e Hora de saída/entrada" opt />
-<Select
-  bind:val={ide['tpNF']}
-  lab="Tipo do Documento Fiscal"
-  els={[
-    ['1', 'Saída'],
-    ['0', 'Entrada'],
-  ]}
-/>
-<Select
-  bind:val={ide['idDest']}
-  lab="Identificador de Local de destino da operação"
-  els={[
-    ['1', 'Interna'],
-    ['2', 'Interestadual'],
-    ['3', 'Exterior'],
-  ]}
-/>
+{#if ide['mod'] == 55}
+  <Select
+    bind:val={ide['tpNF']}
+    lab="Tipo do Documento Fiscal"
+    els={[
+      ['1', 'Saída'],
+      ['0', 'Entrada'],
+    ]}
+  />
+  <Select
+    bind:val={ide['idDest']}
+    lab="Identificador de Local de destino da operação"
+    els={[
+      ['1', 'Interna'],
+      ['2', 'Interestadual'],
+      ['3', 'Exterior'],
+    ]}
+  />
+  <Select
+    bind:val={ide['finNFe']}
+    lab="Finalidade da emissão"
+    els={[
+      ['1', 'Normal'],
+      ['2', 'Complementar'],
+      ['3', 'Ajuste'],
+      ['4', 'Devolução/Retorno'],
+    ]}
+  />
+  <Select
+    bind:val={ide['indFinal']}
+    lab="Consumidor final"
+    els={[
+      ['1', 'Sim'],
+      ['0', 'Não'],
+    ]}
+  />
+{/if}
 <Municipio bind:cMun={ide['cMunFG']} lab="Município de ocorrência" />
-<Select
-  bind:val={ide['finNFe']}
-  lab="Finalidade da emissão"
-  els={[
-    ['1', 'Normal'],
-    ['2', 'Complementar'],
-    ['3', 'Ajuste'],
-    ['4', 'Devolução/Retorno'],
-  ]}
-/>
-<Select
-  bind:val={ide['indFinal']}
-  lab="Consumidor final"
-  els={[
-    ['1', 'Sim'],
-    ['0', 'Não'],
-  ]}
-/>
 <Select
   bind:val={ide['indPres']}
   lab="Presença do comprador"

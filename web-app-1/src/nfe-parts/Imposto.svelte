@@ -1,5 +1,6 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
+  import Opcional from '../components/Opcional.svelte'
   import ICMS from '../imposto-parts/ICMS.svelte'
   import ICMSUFDest from '../imposto-parts/ICMSUFDest.svelte'
   import IPI from '../imposto-parts/IPI.svelte'
@@ -14,6 +15,8 @@
 
   if (!raiz['imposto']) raiz['imposto'] = {}
   const imposto = raiz['imposto']
+
+  $: prod = raiz['prod']
 </script>
 
 <h3>Impostos</h3>
@@ -25,10 +28,20 @@
 />
 
 <ICMS raiz={imposto} {regimeNormal} />
-<ICMSUFDest raiz={imposto} {regimeNormal} />
-<IPI raiz={imposto} />
+{#if regimeNormal}
+  <Opcional raiz={imposto} name="ICMSUFDest" titulo="ICMS Interestadual" let:r>
+    <ICMSUFDest raiz={r} />
+  </Opcional>
+{/if}
+<Opcional raiz={imposto} name="IPI" titulo="IPI" let:r>
+  <IPI raiz={r} {prod} />
+</Opcional>
 <II raiz={imposto} />
-<PIS raiz={imposto} />
-<PISST raiz={imposto} />
-<COFINS raiz={imposto} />
-<COFINSST raiz={imposto} />
+<PIS raiz={imposto} {prod} />
+<Opcional raiz={imposto} name="PISST" titulo="PIS ST" let:r>
+  <PISST raiz={r} {prod} />
+</Opcional>
+<COFINS raiz={imposto} {prod} />
+<Opcional raiz={imposto} name="COFINSST" titulo="COFINS ST" let:r>
+  <COFINSST raiz={r} {prod} />
+</Opcional>
