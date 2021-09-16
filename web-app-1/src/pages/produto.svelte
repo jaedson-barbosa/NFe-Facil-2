@@ -3,7 +3,7 @@
   import { get } from 'svelte/store'
   import { edicao, empresa, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
-  import Det from '../nfe-parts/Det.svelte'
+  import ProdCadastro from '../nfe-parts/ProdCadastro.svelte'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
 
@@ -54,7 +54,7 @@
   Carregando...
 {:else}
   <form on:submit|preventDefault={() => salvar()}>
-    <Det bind:raiz {regimeNormal} />
+    <ProdCadastro {raiz} />
     <input type="submit" class="button" />
   </form>
 {/if}

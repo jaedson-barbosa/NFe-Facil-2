@@ -33,6 +33,7 @@
   ide['cMunFG'] = emit.enderEmit.cMun
   ide['tpEmis'] = '1'
   ide['tpImp'] = '1'
+  ide['procEmi'] = '0'
   let isHomolog = ide['tpAmb'] == '2'
   $: ide['tpAmb'] = isHomolog ? '2' : '1'
   ide['verProc'] = VERSAO
@@ -85,7 +86,7 @@
     ['3', 'Exterior'],
   ]}
 />
-<Municipio bind:cMun={ide['cMunFG']} lab="Código do município de ocorrência" />
+<Municipio bind:cMun={ide['cMunFG']} lab="Município de ocorrência" />
 <Select
   bind:val={ide['finNFe']}
   lab="Finalidade da emissão"
@@ -98,7 +99,7 @@
 />
 <Select
   bind:val={ide['indFinal']}
-  lab="Operação com consumidor final"
+  lab="Consumidor final"
   els={[
     ['1', 'Sim'],
     ['0', 'Não'],
@@ -117,26 +118,17 @@
     ['9', 'Não presencial, outros'],
   ]}
 />
-<Select
-  bind:val={ide['indIntermed']}
-  opt
-  lab="Indicador de intermediador ou marketplace"
-  aux="Só deve ser informado em operações não presenciais."
-  els={[
-    ['0', 'Operação em site ou plataforma própria'],
-    ['1', 'Operação em site ou plataforma de terceiros'],
-  ]}
-/>
-<Select
-  bind:val={ide['procEmi']}
-  lab="Processo de emissão"
-  els={[
-    ['0', 'Com aplicativo do contribuinte'],
-    ['1', 'Avulsa pelo Fisco'],
-    ['2', 'Avulsa através do site do Fisco'],
-    ['3', 'Com aplicativo fornecido pelo Fisco'],
-  ]}
-/>
+{#if ide['indPres'] != '1'}
+  <Select
+    bind:val={ide['indIntermed']}
+    opt
+    lab="Indicador de intermediador ou marketplace"
+    els={[
+      ['0', 'Operação em site ou plataforma própria'],
+      ['1', 'Operação em site ou plataforma de terceiros'],
+    ]}
+  />
+{/if}
 
 <h4>NF-es referenciadas</h4>
 <Lista raiz={ide} name="NFref">

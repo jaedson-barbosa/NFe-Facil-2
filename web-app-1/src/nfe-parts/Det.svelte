@@ -1,12 +1,11 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
   import Opcional from '../components/Opcional.svelte'
-  import Prod from './Prod.svelte'
+  import ProdUso from './ProdUso.svelte'
   import Imposto from './Imposto.svelte'
 
   export let raiz: any
   export let regimeNormal: boolean
-  export let simplificado = false
 
   if (!raiz) raiz = {}
   $: impostoDevol = raiz['impostoDevol'] ?? {}
@@ -15,7 +14,7 @@
   }
 </script>
 
-<Prod {raiz} {simplificado} />
+<ProdUso {raiz} />
 <hr />
 <Imposto {raiz} {regimeNormal} />
 <hr />

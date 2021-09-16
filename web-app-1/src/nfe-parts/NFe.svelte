@@ -187,7 +187,7 @@
 {#if produtoExibido != -1}
   <dialog on:load={exibirProduto} on:close={() => (produtoExibido = -1)}>
     <form method="dialog">
-      <Det raiz={raiz.det[produtoExibido]} {regimeNormal} simplificado />
+      <Det raiz={raiz.det[produtoExibido]} {regimeNormal} />
       <button type="button" on:click={removerExibido}>Remover</button>
       <input type="submit" value="Salvar" />
     </form>
