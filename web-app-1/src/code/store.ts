@@ -71,6 +71,7 @@ type TEmpresa = {
   serieNFCe: string
   IDCSC: string
   CSC: string
+  tokenIBPT?: string
 }
 
 export const refEmpresa = derived<Writable<string>, DocumentReference>(

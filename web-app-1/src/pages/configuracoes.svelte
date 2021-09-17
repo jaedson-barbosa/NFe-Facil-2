@@ -39,6 +39,12 @@
       CSC <small>Código de Segurança do Contribuinte</small>
       <input bind:value={raiz.CSC} />
     </label>
-    <input type="submit" class="button" />
+
+    <h3>Acesso ao IBPT</h3>
+    <label>
+      Token de acesso
+      <input bind:value={raiz.tokenIBPT} />
+    </label>
+    <input type="submit" class="button" value="Salvar" />
   </form>
 {/if}

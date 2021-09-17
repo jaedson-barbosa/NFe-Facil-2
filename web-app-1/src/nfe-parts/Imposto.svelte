@@ -15,7 +15,7 @@
   export let consumidorFinal: boolean = false
 
   if (!raiz['imposto']) raiz['imposto'] = {}
-  const imposto = raiz['imposto']
+  let imposto = raiz['imposto']
 
   $: prod = raiz['prod']
   $: ipi = imposto.IPI
@@ -29,21 +29,21 @@
   pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 
-<ICMS raiz={imposto} {regimeNormal} {prod} {ipi} {consumidorFinal} />
+<ICMS bind:raiz={imposto} {regimeNormal} {prod} {ipi} {consumidorFinal} />
 {#if regimeNormal}
-  <Opcional raiz={imposto} name="ICMSUFDest" titulo="ICMS Interestadual" let:r>
+  <Opcional bind:raiz={imposto} name="ICMSUFDest" titulo="ICMS Interestadual" let:r>
     <ICMSUFDest raiz={r} />
   </Opcional>
 {/if}
-<Opcional raiz={imposto} name="IPI" titulo="IPI" let:r>
+<Opcional bind:raiz={imposto} name="IPI" titulo="IPI" let:r>
   <IPI raiz={r} {prod} />
 </Opcional>
-<II raiz={imposto} />
-<PIS raiz={imposto} {prod} />
-<Opcional raiz={imposto} name="PISST" titulo="PIS ST" let:r>
+<II bind:raiz={imposto} />
+<PIS bind:raiz={imposto} {prod} />
+<Opcional bind:raiz={imposto} name="PISST" titulo="PIS ST" let:r>
   <PISST raiz={r} {prod} />
 </Opcional>
-<COFINS raiz={imposto} {prod} />
-<Opcional raiz={imposto} name="COFINSST" titulo="COFINS ST" let:r>
+<COFINS bind:raiz={imposto} {prod} />
+<Opcional bind:raiz={imposto} name="COFINSST" titulo="COFINS ST" let:r>
   <COFINSST raiz={r} {prod} />
 </Opcional>

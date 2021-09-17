@@ -15,12 +15,20 @@ serieNFe
 serieNFCe
 IDCSC
 CSC
+tokenIBPT
 -clientes:
   dest: ...
 -transportes:
   transporta: ...
 -produtos:
   det: ...
+  ibpt:
+    ex
+    isNacional
+    federal
+    estadual
+    municipal
+    validade
 -nfes:
   infNFe
   dhEmi
@@ -144,7 +152,6 @@ Ainda não há importação de eventos, então ainda notas já canceladas serão
 
 Para o cálculo de impostos, temos a API do IBPT, onde será cadastrado o Token nas configurações e as requisições serão feitas no formato https://apidoni.ibpt.org.br/api/v1/produtos?token=5XRSnRi-S2rNih2bbhA0zkOSNvN3ZrHhGnScmPcfpSdX8NHfzAQGPubqYgbJ53Ln&cnpj=12931158000164&codigo=25059000&uf=PB&ex=0&descricao=Areia%20lavada&unidadeMedida=MT%20CUB&valor=30&gtin=SEM%20GTIN
   Lembrando que o access-control-allow-origin: *, assim é possível fazer a consulta totalmente do lado do cliente
-  Com o resultado será possível determinar também quando deve ser atualizado os valores, o que será feito sozinho pelo servidor
 
 firebase emulators:start --import .save-data --export-on-exit
 sudo kill $(sudo lsof -t -i:5000)
