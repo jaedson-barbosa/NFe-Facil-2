@@ -6,6 +6,7 @@
 
   export let raiz: any
   export let regimeNormal: boolean
+  export let consumidorFinal: boolean
 
   if (!raiz) raiz = {}
   $: impostoDevol = raiz['impostoDevol'] ?? {}
@@ -16,7 +17,7 @@
 
 <ProdUso {raiz} />
 <hr />
-<Imposto {raiz} {regimeNormal} />
+<Imposto {raiz} {regimeNormal} {consumidorFinal} />
 <hr />
 <h3>Extras</h3>
 <Opcional {raiz} name="impostoDevol" titulo="imposto devolvido">
@@ -34,8 +35,6 @@
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 </Opcional>
-
-<h4>Informações adicionais</h4>
 <InputT
   {raiz}
   name="infAdProd"

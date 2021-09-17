@@ -1,4 +1,4 @@
-export function calcular(prod: string, imposto: any, tipo: 'PIS' | 'COFINS') {
+export function calcular(prod: any, imposto: any, tipo: 'PIS' | 'COFINS') {
   const vProd = +(prod['vProd'] ?? 0)
   const pName = 'p' + tipo
   if (imposto[pName]) {

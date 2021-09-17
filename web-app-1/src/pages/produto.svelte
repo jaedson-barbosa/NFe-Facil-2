@@ -6,6 +6,7 @@
   import ProdCadastro from '../nfe-parts/ProdCadastro.svelte'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
+  import Imposto from './Imposto.svelte'
 
   let loading = false
   let raiz = undefined
@@ -55,6 +56,8 @@
 {:else}
   <form on:submit|preventDefault={() => salvar()}>
     <ProdCadastro {raiz} />
+    <hr />
+    <Imposto {raiz} {regimeNormal} />
     <input type="submit" class="button" />
   </form>
 {/if}

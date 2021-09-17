@@ -12,11 +12,13 @@
 
   export let raiz: any
   export let regimeNormal: boolean
+  export let consumidorFinal: boolean = false
 
   if (!raiz['imposto']) raiz['imposto'] = {}
   const imposto = raiz['imposto']
 
   $: prod = raiz['prod']
+  $: ipi = imposto.IPI
 </script>
 
 <h3>Impostos</h3>
@@ -27,7 +29,7 @@
   pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 
-<ICMS raiz={imposto} {regimeNormal} />
+<ICMS raiz={imposto} {regimeNormal} {prod} {ipi} {consumidorFinal} />
 {#if regimeNormal}
   <Opcional raiz={imposto} name="ICMSUFDest" titulo="ICMS Interestadual" let:r>
     <ICMSUFDest raiz={r} />

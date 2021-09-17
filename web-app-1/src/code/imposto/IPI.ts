@@ -1,4 +1,4 @@
-export function calcular(prod: string, imposto: any) {
+export function calcular(prod: any, imposto: any) {
   const vProd = +(prod['vProd'] ?? 0)
   const vFrete = +(prod['vFrete'] ?? 0)
   const vSeg = +(prod['vSeg'] ?? 0)
