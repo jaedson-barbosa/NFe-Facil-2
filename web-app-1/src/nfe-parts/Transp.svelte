@@ -92,8 +92,8 @@ import { Dados } from '../code/tipos';
   </tbody>
 </table>
 
-<h4>Retenção ICMS</h4>
-<Opcional raiz={transp} name="retTransp">
+<Opcional raiz={transp} name="retTransp" titulo="retenção ICMS">
+  <h4>Retenção ICMS</h4>
   <InputT
     bind:val={retTransp['vServ']}
     lab="Valor do Serviço"
@@ -148,8 +148,8 @@ import { Dados } from '../code/tipos';
   {/if}
 {/if}
 {#if !transp['balsa'] && !transp['vagao']}
-  <h5>Veículo</h5>
-  <Opcional raiz={transp} name="veicTransp">
+  <Opcional raiz={transp} name="veicTransp" titulo="veículo">
+    <h5>Veículo</h5>
     <InputT
       bind:val={veicTransp['placa']}
       lab="Placa do veículo"

@@ -5,26 +5,18 @@
 
   export let raiz: any
   export let name: 'retirada' | 'entrega'
-
-  $: local = raiz[name]
 </script>
 
-<h3>
-  {#if name == 'retirada'}
-    Local de retirada
-  {:else}
-    Local de entrega
+<Opcional {raiz} {name} titulo="local de {name}">
+  <h3>Local de {name}</h3>
+  {#if !raiz[name]['CPF']}
+    <InputT lab="CNPJ" mask="cnpj" bind:val={raiz[name]['CNPJ']} pat={'[0-9]{14}'} />
   {/if}
-</h3>
-<Opcional {raiz} {name}>
-  {#if !local['CPF']}
-    <InputT lab="CNPJ" mask="cnpj" bind:val={local['CNPJ']} pat={'[0-9]{14}'} />
-  {/if}
-  {#if !local['CNPJ']}
+  {#if !raiz[name]['CNPJ']}
     <InputT
       lab="CPF"
       mask="cpf"
-      bind:val={local['CPF']}
+      bind:val={raiz[name]['CPF']}
       max={11}
       pat={'[0-9]{11}'}
     />
@@ -32,44 +24,44 @@
   <InputT
     lab="Razão Social ou nome do destinatário"
     opt
-    bind:val={local['xNome']}
+    bind:val={raiz[name]['xNome']}
     min={2}
     max={60}
   />
-  <InputT lab="Logradouro" bind:val={local['xLgr']} min={2} max={60} />
-  <InputT lab="Número" bind:val={local['nro']} min={1} max={60} />
-  <InputT lab="Complemento" bind:val={local['xCpl']} opt min={1} max={60} />
-  <InputT lab="Bairro" bind:val={local['xBairro']} min={2} max={60} />
+  <InputT lab="Logradouro" bind:val={raiz[name]['xLgr']} min={2} max={60} />
+  <InputT lab="Número" bind:val={raiz[name]['nro']} min={1} max={60} />
+  <InputT lab="Complemento" bind:val={raiz[name]['xCpl']} opt min={1} max={60} />
+  <InputT lab="Bairro" bind:val={raiz[name]['xBairro']} min={2} max={60} />
   <Municipio
-    bind:cMun={local['cMun']}
-    bind:xMun={local['xMun']}
-    bind:UF={local['UF']}
+    bind:cMun={raiz[name]['cMun']}
+    bind:xMun={raiz[name]['xMun']}
+    bind:UF={raiz[name]['UF']}
   />
   <InputT
     lab="CEP"
     mask="zipcode"
     opt
-    bind:val={local['CEP']}
+    bind:val={raiz[name]['CEP']}
     pat={'[0-9]{8}'}
   />
   <InputT
     lab="Telefone"
-    bind:val={local['fone']}
+    bind:val={raiz[name]['fone']}
     opt
     aux={'DDD + número do telefone'}
     pat={'[0-9]{6,14}'}
   />
   <InputT
     lab="E-mail do destinatário"
-    bind:val={local['email']}
+    bind:val={raiz[name]['email']}
     opt
     min={1}
     max={60}
   />
-  {#if local['CNPJ']}
+  {#if raiz[name]['CNPJ']}
     <InputT
       lab="Inscrição Estadual"
-      bind:val={local['IE']}
+      bind:val={raiz[name]['IE']}
       opt
       max={14}
       pat={'[0-9]{2,14}'}

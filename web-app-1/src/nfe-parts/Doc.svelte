@@ -4,10 +4,10 @@
   export let raiz: any
   export let apenasBR: boolean = false
 
-  let br: string = raiz['CPF'] ? raiz['CPF'] : raiz['CNPJ']
+  let br: string = raiz['CPF'] ? raiz['CPF'] : raiz['CNPJ'] ?? ''
   $: {
-    raiz['CPF'] = br.length == 11 ? br : ''
-    raiz['CNPJ'] = br.length == 14 ? br : ''
+    raiz['CPF'] = br.length <= 11 ? br : ''
+    raiz['CNPJ'] = br.length > 11 ? br : ''
   }
 </script>
 

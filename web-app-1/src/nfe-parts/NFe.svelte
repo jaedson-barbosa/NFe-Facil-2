@@ -70,15 +70,38 @@
   $: isNFCe = raiz['ide']?.['mod'] === '65'
 </script>
 
+{@debug raiz}
+
 <h2>Emissão de nota fiscal</h2>
 
-<Ide {raiz} />
+<Ide bind:raiz />
 
 <h3>Destinatário</h3>
 {#if isNFCe && destSemNome}
-  <Doc raiz={dest} />
+  <p>Numa NFC-e é possível informar apenas o documento do cliente.</p>
+  <Doc bind:raiz={dest} />
 {/if}
-{#if !isNFCe && !(destComDoc && destSemNome)}
+{#if destComDoc && !isNFCe}
+  <p>
+    Cliente escolhido: <br />
+    Nome:
+    <em>{dest.xNome}</em>
+    <br />
+    Documento:
+    <em>
+      <ExibDoc
+        CPF={dest.CPF}
+        CNPJ={dest.CNPJ}
+        idEstrangeiro={dest.idEstrangeiro}
+      />
+    </em>
+  </p>
+  <button type="button" on:click={() => (raiz.dest = {})}>Trocar</button>
+{/if}
+{#if !destComDoc}
+  {#if isNFCe}
+    <p>Como também é possível informar todos os dados do cliente.</p>
+  {/if}
   <label>
     Buscar por nome
     <input on:input={buscadorCliente.buscar} />
@@ -95,7 +118,7 @@
         <tr
           class="clicavel"
           class:marcado={dest?.xNome == c.get('dest.xNome')}
-          on:click={() => (dest = c.data())}
+          on:click={() => (raiz.dest = c.data().dest)}
         >
           <td>
             <ExibDoc
@@ -110,12 +133,13 @@
     </tbody>
   </table>
 {/if}
-
+<br />
 <Local {raiz} name="retirada" />
+<br />
 <Local {raiz} name="entrega" />
-
+<br />
 <AutXml {raiz} />
-
+<br />
 <h3>Produtos</h3>
 <label>
   Buscar produto pela descrição
@@ -137,25 +161,27 @@
     {/each}
   </tbody>
 </table>
-<h4>Produtos adicionados</h4>
-<table>
-  <thead>
-    <tr>
-      <th>Código</th>
-      <th>Descrição</th>
-      <th>Valor bruto</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each raiz.det as p, i}
-      <tr on:click={() => (produtoExibido = i)}>
-        <td>{p['prod']['cProd']}</td>
-        <td>{p['prod']['xProd']}</td>
-        <td>{p['prod']['vProd']}</td>
+{#if raiz.det.length}
+  <h4>Produtos adicionados</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Descrição</th>
+        <th>Valor bruto</th>
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#each raiz.det as p, i}
+        <tr on:click={() => (produtoExibido = i)}>
+          <td>{p['prod']['cProd']}</td>
+          <td>{p['prod']['xProd']}</td>
+          <td>{p['prod']['vProd']}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+{/if}
 {#if produtoExibido != -1}
   <dialog on:load={exibirProduto} on:close={() => (produtoExibido = -1)}>
     <form method="dialog">

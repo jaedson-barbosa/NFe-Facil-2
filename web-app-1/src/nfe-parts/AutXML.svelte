@@ -11,19 +11,22 @@
 <button type="button" on:click={() => (autXML = [{}, ...autXML])}>
   Adicionar
 </button>
-<table>
-  <thead>
-    <tr>
-      <th>Documento</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each autXML as v}
+<br />
+{#if autXML.length}
+  <table>
+    <thead>
       <tr>
-        <td>
-          <Doc raiz={v} apenasBR />
-        </td>
+        <th>Documento</th>
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#each autXML as v}
+        <tr>
+          <td>
+            <Doc raiz={v} apenasBR />
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+{/if}
