@@ -48,7 +48,7 @@
   <InputT lab="CNAE Fiscal" pat={'[0-9]{7}'} bind:val={emit['CNAE']} />
 {/if}
 <Select
-  lab="Código de Regime Tributário"
+  lab="Regime Tributário"
   els={[
     ['1', 'Simples Nacional'],
     ['2', 'Simples Nacional, excesso de sublimite de receita bruta'],

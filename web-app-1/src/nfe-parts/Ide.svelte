@@ -24,6 +24,7 @@
   if (!raiz['ide']) raiz['ide'] = {}
   const ide = raiz['ide']
   const emp = get(empresa)
+  console.log(emp)
   const emit = emp.emit
   ide['cUF'] = getCodigoEstado(emit.enderEmit.UF)
   ide['cNF'] = getRandomNumber().toString()

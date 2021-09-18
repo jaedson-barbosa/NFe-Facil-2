@@ -20,7 +20,7 @@
   {/if}
   <select bind:value={val} required={!opt}>
     {#each els as e}
-      <option value={e[0]}>{e[1]}</option>
+      <option value={e[0]}>{e[0]} - {e[1]}</option>
     {/each}
   </select>
 </label>

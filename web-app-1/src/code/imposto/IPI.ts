@@ -8,14 +8,14 @@ export function calcular(prod: any, imposto: any) {
     const vBC = vProd + vFrete + vSeg + vOutro
     imposto['vBC'] = vBC
     return pIPI * vBC / 100
-  } else imposto['vBC'] = undefined
+  } else imposto['vBC'] = ''
   if (imposto['vUnid']) {
     const vUnid = +imposto['vUnid']
     const qUnid = +(prod['qTrib'] ?? 0)
     imposto['qUnid'] = qUnid
     return vUnid * qUnid
-  } else imposto['qBCProd'] = undefined
-  if (!imposto['pIPI'] && !imposto['vUnid']) return undefined
+  } else imposto['qBCProd'] = ''
+  return ''
 }
 
 export const CST: [string, string][] = [

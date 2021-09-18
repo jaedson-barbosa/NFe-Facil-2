@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { refEmpresa, permissaoEscrita, edicao } from '../code/store'
-  import { goto, url } from '@roxi/routify'
+  import { refEmpresa, edicao } from '../code/store'
+  import { goto } from '@roxi/routify'
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { DocumentSnapshot } from 'firebase/firestore'
   import ExibDoc from '../nfe-parts/ExibDoc.svelte'
+  import Voltar from '../components/Voltar.svelte'
 
   let cadastros: DocumentSnapshot[] = []
   const buscador = new Buscador(
@@ -26,14 +27,11 @@
   }
 </script>
 
-<h1>Transportadores</h1>
+<h1><Voltar /> Transportadores</h1>
 <label>
   Buscar transportador pelo nome
   <input on:input={buscador.buscar} />
 </label>
-{#if $permissaoEscrita}
-  <a class="button" href={$url('./transporta')}>Adicionar</a>
-{/if}
 
 {#if cadastros.length}
   <table>

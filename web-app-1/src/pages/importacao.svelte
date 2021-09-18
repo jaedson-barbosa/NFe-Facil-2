@@ -19,7 +19,10 @@
   }
 </script>
 
-<h1><Voltar /> Importação de notas fiscais</h1>
+<h1>
+  {#if !arquivos?.length} <Voltar /> {/if}
+  Importação de notas fiscais
+</h1>
 
 {#if !arquivos?.length}
   <label class="button" for="selecionar">

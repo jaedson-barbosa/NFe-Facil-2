@@ -9,4 +9,5 @@
   lab="Número do RECOPI"
   pat={'[0-9]{20}'}
   max={20}
+  opt
 />

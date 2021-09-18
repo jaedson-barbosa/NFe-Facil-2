@@ -3,21 +3,25 @@
 
   export let raiz: any
   export let apenasBR: boolean = false
+
+  let br: string = raiz['CPF'] ? raiz['CPF'] : raiz['CNPJ']
+  $: {
+    raiz['CPF'] = br.length == 11 ? br : ''
+    raiz['CNPJ'] = br.length == 14 ? br : ''
+  }
 </script>
 
-{#if !raiz['CPF'] && !raiz['idEstrangeiro']}
-  <InputT lab="CNPJ" mask="cnpj" bind:val={raiz['CNPJ']} pat={'[0-9]{14}'} />
-{/if}
-{#if !raiz['CNPJ'] && !raiz['idEstrangeiro']}
+{#if !raiz['idEstrangeiro']}
   <InputT
-    lab="CPF"
-    mask="cpf"
-    bind:val={raiz['CPF']}
-    max={11}
-    pat={'[0-9]{11}'}
+    lab="CPF/CNPJ"
+    mask={br.length <= 11 ? 'cpf' : 'cnpj'}
+    min={11}
+    max={14}
+    bind:val={br}
+    pat={'[0-9]{11}|[0-9]{14}'}
   />
 {/if}
-{#if !apenasBR && !raiz['CPF'] && !raiz['CNPJ']}
+{#if !apenasBR && !br}
   <InputT
     lab="Id estrangeiro"
     bind:val={raiz['idEstrangeiro']}

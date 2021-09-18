@@ -2,7 +2,7 @@
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
   import { validaCPF, validaCNPJ } from '../code/validacaoDoc'
-  import { edicao, refEmpresa } from '../code/store'
+  import { edicao, permissaoEscrita, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import Transporta from '../nfe-parts/Transporta.svelte'
   import { Dados } from '../code/tipos'
@@ -18,6 +18,10 @@
   } else raiz = {}
 
   async function salvar() {
+    if (!$permissaoEscrita) {
+      $goto('./')
+      return
+    }
     loading = true
     try {
       const transporta = raiz.transporta
@@ -63,6 +67,8 @@
 {:else}
   <form on:submit|preventDefault={() => salvar()}>
     <Transporta bind:raiz />
-    <input type="submit" class="button" />
+    {#if permissaoEscrita}
+      <input type="submit" class="button" />
+    {/if}
   </form>
 {/if}

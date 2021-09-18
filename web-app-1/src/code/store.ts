@@ -1,5 +1,5 @@
 import { derived, Readable, readable, Writable, writable } from 'svelte/store'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, onSnapshot } from 'firebase/firestore'
 import type { DocumentReference } from 'firebase/firestore'
 import {
   GoogleAuthProvider,
@@ -81,8 +81,17 @@ export const refEmpresa = derived<Writable<string>, DocumentReference>(
 )
 
 export const empresa = writable<TEmpresa>(undefined)
-refEmpresa.subscribe(
-  (ref) => ref && getDoc(ref).then((v) => empresa.set(v.data() as TEmpresa))
+let terminarEmpesa = undefined
+user.subscribe(($user) =>
+  $user
+    ? refEmpresa.subscribe((ref) =>
+        ref
+          ? (terminarEmpesa = onSnapshot(ref, (v) =>
+              empresa.set(v.data() as TEmpresa)
+            ))
+          : terminarEmpesa?.() && empresa.set(undefined)
+      )
+    : terminarEmpesa?.() && empresa.set(undefined)
 )
 
 interface IEdicao {

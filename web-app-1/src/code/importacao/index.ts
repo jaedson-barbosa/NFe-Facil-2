@@ -28,5 +28,6 @@ export async function processarArquivos(
 
     log('Enviando alterações ao banco de dados...')
     await lote.commit()
+    log('Importação concluída.')
   } else alert('Nenhuma mudança.')
 }

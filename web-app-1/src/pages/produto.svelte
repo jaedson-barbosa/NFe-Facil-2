@@ -1,12 +1,12 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { edicao, empresa, refEmpresa } from '../code/store'
+  import { edicao, empresa, permissaoEscrita, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
   import ProdCadastro from '../nfe-parts/ProdCadastro.svelte'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
-  import Imposto from './Imposto.svelte'
+  import Imposto from '../nfe-parts/Imposto.svelte'
 
   let loading = false
   let raiz = undefined
@@ -23,7 +23,7 @@
   if (!raiz['det']) raiz['det'] = {}
   let det = raiz['det']
 
-  if (!raiz['ibpt']) raiz['ibpt'] = { ex: 0 }
+  if (!raiz['ibpt']) raiz['ibpt'] = { ex: 0, isNacional: true }
   let ibpt = raiz['ibpt']
 
   async function carregarImpostos() {
@@ -56,6 +56,10 @@
   }
 
   async function salvar() {
+    if (!$permissaoEscrita) {
+      $goto('./')
+      return
+    }
     loading = true
     try {
       const det = raiz.det
@@ -78,7 +82,7 @@
         }
       }
       await setDoc(prodRef, raiz)
-      $goto('../')
+      $goto('./')
     } catch (error) {
       alert(error.message)
       loading = false
@@ -86,15 +90,14 @@
   }
 </script>
 
+{@debug raiz}
 <h1><Voltar /> {$edicao ? 'Atualização' : 'Adição'} cadastral</h1>
 {#if loading}
   Carregando...
 {:else}
   <form on:submit|preventDefault={() => salvar()}>
     <ProdCadastro bind:raiz={det} />
-    <hr />
     <Imposto bind:raiz={det} {regimeNormal} />
-    <hr />
     {#if empresaCarregada.tokenIBPT}
       <h3>Imposto aproximado</h3>
       <label>
@@ -103,10 +106,10 @@
         <input bind:value={ibpt.ex} />
       </label>
       <label>
-        Produto nacional
         <input type="checkbox" bind:checked={ibpt.isNacional} />
+        Produto nacional
       </label>
-      {#if ibpt.importado}
+      {#if ibpt.validade}
         <p>
           Aproximação válida até {ibpt.validade.toDate().toLocaleDateString()}:
           <br />
@@ -125,6 +128,8 @@
         </button>
       {/if}
     {/if}
-    <input type="submit" class="button" />
+    {#if permissaoEscrita}
+      <input type="submit" class="button" />
+    {/if}
   </form>
 {/if}

@@ -5,14 +5,14 @@ export function calcular(prod: any, imposto: any, tipo: 'PIS' | 'COFINS') {
     const percentual = +imposto[pName]
     imposto['vBC'] = vProd
     return percentual * vProd / 100
-  } else imposto['vBC'] = undefined
+  } else imposto['vBC'] = ''
   if (imposto['vAliqProd']) {
     const vAliqProd = +imposto['vAliqProd']
     const qBCProd = +(prod['qTrib'] ?? 0)
     imposto['qBCProd'] = qBCProd
     return vAliqProd * qBCProd
-  } else imposto['qBCProd'] = undefined
-  if (!imposto[pName] && !imposto['vAliqProd']) return undefined
+  } else imposto['qBCProd'] = ''
+  return ''
 }
 
 export const CST: [string, string][] = [

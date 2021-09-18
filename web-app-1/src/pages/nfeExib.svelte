@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { edicao } from '../code/store'
+  import { edicao, permissaoEscrita } from '../code/store'
   import { goto, url } from '@roxi/routify'
   import { cancelarNFe } from '../code/firebase'
   import { toNFeString } from '../code/getDataString'
@@ -12,7 +12,7 @@
     alert('Abertura inválida de página.')
     $goto('/index')
   }
-  const chave = ed.id.substring(3)
+  const chave = ed?.id.substring(3)
 
   async function cancelar() {
     const justificativa = prompt('Motivação do cancelamento:')
@@ -49,52 +49,52 @@
       body: JSON.stringify(parametros),
     }
     const danfe = await fetch(enderecoAPI, corpoRequisicao)
-    const pdf = danfe.blob()
+    const pdf = await danfe.blob()
     linkDANFE = window.URL.createObjectURL(pdf)
   }
   let linkDANFE = undefined
 </script>
 
-<h1><Voltar /> Detalhes da nota fiscal</h1>
-<p>
-  <strong>Chave:</strong>
-  {chave}
-</p>
+{#if ed}
+  <h1><Voltar /> Detalhes da nota fiscal</h1>
+  <p>
+    <strong>Chave:</strong>
+    {chave}
+  </p>
 
-{#if linkDANFE}
-  <a class="button" href={gerarLinkXML(ed.dado.xml)}>Abrir DANFE</a>
+  {#if linkDANFE}
+    <a class="button" href={linkDANFE} target="_blank">Abrir DANFE</a>
+    <a class="button" href={linkDANFE} download="{chave}-DANFE.pdf">
+      Baixar DANFE
+    </a>
+  {:else if linkDANFE === undefined}
+    <button on:click={gerarDANFE}>Carregar DANFE</button>
+  {/if}
+
   <a
     class="button"
     href={gerarLinkXML(ed.dado.xml)}
-    download="{chave}-DANFE.pdf"
+    download="{chave}-procNFe.xml"
   >
-    Baixar DANFE
+    Baixar XML da NFe
   </a>
-{:else if linkDANFE === undefined}
-  <button on:click={gerarDANFE}>Carregar DANFE</button>
-{/if}
 
-<a
-  class="button"
-  href={gerarLinkXML(ed.dado.xml)}
-  download="{chave}-procNFe.xml"
->
-  Baixar XML da NFe
-</a>
-
-{#if ed.dado.nProt}
-  <a class="button" href={$url('./nfe')}>Clonar</a>
-  {#if ed.dado.cancelada}
-    <a
-      class="button"
-      href={gerarLinkXML(ed.dado.xmlCancelamento)}
-      download="{chave}-procEventoNFe.xml"
-    >
-      Baixar XML do cancelamento
-    </a>
-  {:else}
-    <button on:click={cancelar}>Solicitar cancelamento</button>
+  {#if ed.dado.nProt}
+    {#if permissaoEscrita}
+      <a class="button" href={$url('./nfe')}>Clonar</a>
+    {/if}
+    {#if ed.dado.cancelada}
+      <a
+        class="button"
+        href={gerarLinkXML(ed.dado.xmlCancelamento)}
+        download="{chave}-procEventoNFe.xml"
+      >
+        Baixar XML do cancelamento
+      </a>
+    {:else if permissaoEscrita}
+      <button on:click={cancelar}>Solicitar cancelamento</button>
+    {/if}
+  {:else if permissaoEscrita}
+    <a class="button" href={$url('./nfe')}>Editar</a>
   {/if}
-{:else}
-  <a class="button" href={$url('./nfe')}>Editar</a>
 {/if}

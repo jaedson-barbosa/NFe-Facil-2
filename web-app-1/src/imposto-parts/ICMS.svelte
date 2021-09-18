@@ -22,9 +22,10 @@
 
   if (!raiz['ICMS']) raiz['ICMS'] = {}
   let ICMS: any =
-    Object.values(raiz['ICMS'])[0] ?? regimeNormal
+    Object.values(raiz['ICMS'])[0] ??
+    (regimeNormal
       ? (raiz['ICMS']['ICMS00'] = { CST: '00' })
-      : (raiz['ICMS']['ICMSSN101'] = { CSOSN: '101' })
+      : (raiz['ICMS']['ICMSSN101'] = { CSOSN: '101' }))
 
   let tipoICMS = ICMS[regimeNormal ? 'CST' : 'CSOSN']
   if (regimeNormal && raiz['ICMSPart']) tipoICMS = 'Part' + tipoICMS
@@ -60,13 +61,13 @@
     if (res.vICMSOp) {
       ICMS.vICMSOp = res.vICMSOp
       ICMS.vICMSDif = res.vICMSDif
-    }
+    } else ICMS.vICMSOp = ICMS.vICMSDif = ''
     if (res.vBCST) {
       ICMS.vBCST = res.vBCST
       ICMS.vICMSST = res.vICMSST
-    }
-    ICMS.vBC = res.vBC
-    ICMS.vICMS = res.vICMS
+    } else ICMS.vBCST = ICMS.vICMSST = ''
+    ICMS.vBC = res.vBC ? res.vBC : ''
+    ICMS.vICMS = res.vICMS ? res.vICMS : ''
     usarCalculoAutomatico = true
   }
   prod && calculoAdaptado(prod, ICMS, ipi)

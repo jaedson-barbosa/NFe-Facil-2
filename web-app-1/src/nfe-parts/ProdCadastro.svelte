@@ -1,11 +1,7 @@
 <script lang="ts">
-  import { refEmpresa } from '../code/store'
-  import { collection, doc, getDoc } from '@firebase/firestore'
-  import { Dados } from '../code/tipos'
   import InputT from '../components/InputT.svelte'
   import Select from '../components/Select.svelte'
   import Opcional from '../components/Opcional.svelte'
-  import idAleatorio from '../code/idAleatorio'
   import VeicProd from '../prod-parts/VeicProd.svelte'
   import Med from '../prod-parts/Med.svelte'
   import Arma from '../prod-parts/Arma.svelte'
@@ -17,26 +13,11 @@
   if (!raiz['prod']) raiz['prod'] = {}
   let prod = raiz['prod']
 
-  async function gerarCodigo() {
-    prod['cProd'] = 'Gerando...'
-    let novoId = ''
-    const coluna = collection($refEmpresa, Dados.Produtos)
-    do {
-      novoId = idAleatorio(6)
-      const ref = doc(coluna, novoId)
-      const registro = await getDoc(ref)
-      const existe = registro.exists()
-      if (!existe) break
-    } while (true)
-    prod['cProd'] = novoId
-  }
-
-  $: !prod['CEST'] && (prod['indEscala'] = prod['CNPJFab'] = undefined)
+  $: !prod['CEST'] && (prod['indEscala'] = prod['CNPJFab'] = '')
 </script>
 
 <h3>Dados do produto</h3>
 <InputT bind:val={prod['cProd']} lab="Código do produto" min={1} max={60} />
-<button type="button" on:click={gerarCodigo}>Gerar código aleatório</button>
 <InputT bind:val={prod['xProd']} lab="Descrição" min={1} max={120} />
 <InputT bind:val={prod['NCM']} lab="Código NCM" pat={'[0-9]{2}|[0-9]{8}'} />
 <InputT bind:val={prod['CFOP']} lab="CFOP" pat={'[1,2,3,5,6,7]{1}[0-9]{3}'} />

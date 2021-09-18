@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { refEmpresa, permissaoEscrita, edicao } from '../code/store'
-  import { goto, url } from '@roxi/routify'
+  import { refEmpresa, edicao } from '../code/store'
+  import { goto } from '@roxi/routify'
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { DocumentSnapshot } from 'firebase/firestore'
+  import Voltar from '../components/Voltar.svelte'
 
   let cadastros: DocumentSnapshot[] = []
   const buscador = new Buscador(
@@ -25,14 +26,11 @@
   }
 </script>
 
-<h1>Produtos</h1>
+<h1><Voltar /> Produtos</h1>
 <label>
   Buscar produto pela descrição
   <input on:input={buscador.buscar} />
 </label>
-{#if $permissaoEscrita}
-  <a class="button" href={$url('./produto')}>Adicionar</a>
-{/if}
 
 {#if cadastros.length}
   <table>

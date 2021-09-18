@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { refEmpresa, permissaoEscrita, edicao } from '../code/store'
-  import { goto, url } from '@roxi/routify'
+  import { refEmpresa, edicao } from '../code/store'
+  import { goto } from '@roxi/routify'
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { DocumentSnapshot } from 'firebase/firestore'
@@ -27,11 +27,6 @@
 </script>
 
 <h1><Voltar /> Notas fiscais</h1>
-{#if $permissaoEscrita}
-  <a class="button" href={$url('./nfe')}>Adicionar</a>
-  <a class="button" href={$url('./importacao')}>Importar</a>
-  <hr />
-{/if}
 <label>
   Buscar nota fiscal pelo número
   <input on:input={buscador.buscar} />

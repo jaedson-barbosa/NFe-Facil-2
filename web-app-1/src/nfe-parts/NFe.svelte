@@ -9,20 +9,14 @@
   import Transp from './Transp.svelte'
   import Pag from './Pag.svelte'
   import InfAdic from './InfAdic.svelte'
-  import {
-    collection,
-    DocumentSnapshot,
-    getDocs,
-    limit,
-    orderBy,
-    query,
-    where,
-  } from 'firebase/firestore'
-  import { refEmpresa } from '../code/store'
+  import { DocumentSnapshot } from 'firebase/firestore'
+  import { empresa, refEmpresa } from '../code/store'
   import { Dados } from '../code/tipos'
+  import { Buscador } from '../code/buscador'
+  import { get } from 'svelte/store'
 
   export let raiz: any
-
+  if (!raiz.emit) raiz.emit = get(empresa).emit
   let regimeNormal = raiz.emit.CRT == '3'
 
   if (!raiz.dest) raiz.dest = {}
@@ -38,39 +32,23 @@
   $: destComDoc = dest?.CPF || dest?.CNPJ || dest?.idEstrangeiro
   $: destSemNome = !dest?.xNome
 
-  let buscaCliente = ''
   let clientes = [] as DocumentSnapshot[]
+  const buscadorCliente = new Buscador(
+    $refEmpresa,
+    Dados.Clientes,
+    'dest.xNome',
+    'asc',
+    (v) => (clientes = v)
+  )
 
-  async function buscarCliente() {
-    const busca = buscaCliente
-    buscaCliente = ''
-    const coluna = collection($refEmpresa, Dados.Clientes)
-    const consulta = query(
-      coluna,
-      where('dest.xNome', '>=', busca),
-      orderBy('dest.xNome', 'asc'),
-      limit(10)
-    )
-    const res = await getDocs(consulta)
-    raiz['dest'] = {}
-    clientes = res.docs
-  }
-
-  let buscaProduto = ''
   let produtos = [] as DocumentSnapshot[]
-  async function buscarProduto() {
-    const busca = buscaProduto
-    buscaProduto = ''
-    const coluna = collection($refEmpresa, Dados.Produtos)
-    const consulta = query(
-      coluna,
-      where('det.prod.xProd', '>=', busca),
-      orderBy('det.prod.xProd', 'asc'),
-      limit(10)
-    )
-    const res = await getDocs(consulta)
-    produtos = res.docs
-  }
+  const buscadorProduto = new Buscador(
+    $refEmpresa,
+    Dados.Produtos,
+    'det.prod.xProd',
+    'asc',
+    (v) => (produtos = v)
+  )
 
   let produtoExibido = -1
   function escolherProduto(cad: DocumentSnapshot) {
@@ -79,7 +57,7 @@
   }
 
   function exibirProduto(e: Event) {
-    const dialog = e.target as HTMLDialogElement
+    const dialog: any = e.target as HTMLDialogElement
     dialog.showModal()
   }
 
@@ -103,11 +81,8 @@
 {#if !isNFCe && !(destComDoc && destSemNome)}
   <label>
     Buscar por nome
-    <input bind:value={buscaCliente} />
+    <input on:input={buscadorCliente.buscar} />
   </label>
-  {#if buscaCliente}
-    <button on:click={buscarCliente}>Buscar clientes</button>
-  {/if}
   <table>
     <thead>
       <tr>
@@ -143,12 +118,9 @@
 
 <h3>Produtos</h3>
 <label>
-  Buscar por descrição
-  <input bind:value={buscaProduto} />
+  Buscar produto pela descrição
+  <input on:input={buscadorProduto.buscar} />
 </label>
-{#if buscaProduto}
-  <button on:click={buscarProduto}>Buscar produtos</button>
-{/if}
 <table>
   <thead>
     <tr>
@@ -187,7 +159,11 @@
 {#if produtoExibido != -1}
   <dialog on:load={exibirProduto} on:close={() => (produtoExibido = -1)}>
     <form method="dialog">
-      <Det raiz={raiz.det[produtoExibido]} {regimeNormal} />
+      <Det
+        raiz={raiz.det[produtoExibido]}
+        {regimeNormal}
+        consumidorFinal={raiz.ide.indFinal == '1'}
+      />
       <button type="button" on:click={removerExibido}>Remover</button>
       <input type="submit" value="Salvar" />
     </form>
