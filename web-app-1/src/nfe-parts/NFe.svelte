@@ -9,11 +9,13 @@
   import Pag from './Pag.svelte'
   import InfAdic from './InfAdic.svelte'
   import ProdutoSimples from './ProdutoSimples.svelte'
+  import Voltar from '../components/Voltar.svelte'
   import { DocumentSnapshot } from 'firebase/firestore'
   import { empresa, refEmpresa } from '../code/store'
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { get } from 'svelte/store'
+  import { getMoeda } from '../code/numero'
 
   export let raiz: any
   if (!raiz.emit) raiz.emit = get(empresa).emit
@@ -49,20 +51,30 @@
     (v) => (produtos = v)
   )
 
-  function escolherProduto(cad: DocumentSnapshot) {
-    raiz.det = [cad.data().det, ...raiz.det]
-  }
-
   $: isNFCe = raiz['ide']?.['mod'] === '65'
+
+  function ratear(titulo: string, campo: string) {
+    return () => {
+      const valor = +prompt(`Valor total do ${titulo}:`)
+      if (isNaN(valor)) return
+      const prods: any[] = raiz.det
+      const total = prods.reduce((p, c) => +c.prod.vProd + p, 0)
+      prods.forEach((v) => {
+        const novo = (valor * v.prod.vProd) / total
+        v.prod[campo] = +novo.toFixed(2)
+      })
+      raiz.det = raiz.det
+    }
+  }
 </script>
 
 {@debug raiz}
 
-<h2>Emissão de nota fiscal</h2>
+<h1><Voltar /> Nota fiscal</h1>
 
 <Ide bind:raiz />
 
-<h3>Destinatário</h3>
+<h2>Destinatário</h2>
 {#if isNFCe && destSemNome}
   <p>Numa NFC-e é possível informar apenas o documento do cliente.</p>
   <Doc bind:raiz={raiz.dest} />
@@ -117,13 +129,8 @@
   </table>
 {/if}
 <br />
-<Local bind:raiz name="retirada" />
-<br />
-<Local bind:raiz name="entrega" />
-<br />
-<AutXml bind:raiz />
-<br />
-<h3>Produtos</h3>
+
+<h2>Produtos</h2>
 <label>
   Buscar produto pela descrição
   <input on:input={buscadorProduto.buscar} />
@@ -133,26 +140,33 @@
     <tr>
       <th>Código</th>
       <th>Descrição</th>
+      <th>Valor unitário</th>
     </tr>
   </thead>
   <tbody>
     {#each produtos as p}
-      <tr class="clicavel" on:click={() => escolherProduto(p)}>
+      <tr
+        class="clicavel"
+        on:click={() => (raiz.det = [p.data().det, ...raiz.det])}
+      >
         <td>{p.get('det.prod.cProd')}</td>
         <td>{p.get('det.prod.xProd')}</td>
+        <td>{getMoeda(p.get('det.prod.vUnCom'))}</td>
       </tr>
     {/each}
   </tbody>
 </table>
 {#if raiz.det.length}
-  <h4>Produtos adicionados</h4>
+  <h3>Produtos adicionados</h3>
   <table>
     <thead>
       <tr>
         <th>Código</th>
-        <th>Descrição</th>
         <th>Quantidade</th>
-        <th>Valor bruto</th>
+        <th>Frete</th>
+        <th>Seguro</th>
+        <th>Desconto</th>
+        <th>Adicionais</th>
       </tr>
     </thead>
     <tbody>
@@ -161,10 +175,26 @@
       {/each}
     </tbody>
   </table>
-  <button>Ratear frete</button>
+  <button type="button" on:click={ratear('frete', 'vFrete')}>
+    Ratear frete
+  </button>
+  <button type="button" on:click={ratear('seguro', 'vSeg')}>
+    Ratear seguro
+  </button>
+  <button type="button" on:click={ratear('desconto', 'vDesc')}>
+    Ratear desconto
+  </button>
+  <button type="button" on:click={ratear('adicionais', 'vOutro')}>
+    Ratear adicionais
+  </button>
+  <br />
 {/if}
+<br />
 
 <Total bind:raiz />
 <Transp bind:raiz />
 <Pag bind:raiz total={raiz.total?.ICMSTot?.vNF ?? 0} />
 <InfAdic bind:raiz />
+<Local bind:raiz name="retirada" />
+<Local bind:raiz name="entrega" />
+<AutXml bind:raiz />

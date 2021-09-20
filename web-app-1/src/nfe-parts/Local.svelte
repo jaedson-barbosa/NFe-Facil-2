@@ -9,7 +9,7 @@
 </script>
 
 <Opcional {raiz} {name} titulo="local de {name}">
-  <h3>Local de {name}</h3>
+  <h2>Local de {name}</h2>
   <Doc bind:raiz={raiz[name]} apenasBR />
   <InputT
     lab="Razão Social ou nome do destinatário"
@@ -20,7 +20,13 @@
   />
   <InputT lab="Logradouro" bind:val={raiz[name]['xLgr']} min={2} max={60} />
   <InputT lab="Número" bind:val={raiz[name]['nro']} min={1} max={60} />
-  <InputT lab="Complemento" bind:val={raiz[name]['xCpl']} opt min={1} max={60} />
+  <InputT
+    lab="Complemento"
+    bind:val={raiz[name]['xCpl']}
+    opt
+    min={1}
+    max={60}
+  />
   <InputT lab="Bairro" bind:val={raiz[name]['xBairro']} min={2} max={60} />
   <Municipio
     bind:cMun={raiz[name]['cMun']}
@@ -58,3 +64,4 @@
     />
   {/if}
 </Opcional>
+<br />

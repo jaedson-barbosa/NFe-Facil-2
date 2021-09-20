@@ -9,12 +9,9 @@
 
   if (!total['ICMSTot']) total['ICMSTot'] = {}
   const ICMSTot = total['ICMSTot']
-
-  $: retTrib = total['retTrib']
 </script>
 
-<h3>Totais</h3>
-<h4>Referentes ao ICMS</h4>
+<h2>Totais</h2>
 <InputT
   bind:val={ICMSTot['vBC']}
   lab="BC do ICMS"
@@ -126,7 +123,6 @@
 <InputT
   bind:val={ICMSTot['vNF']}
   lab="Total da NF-e"
-  aux="Caso informado, o total dos serviços sob não-incidência ou não tributados pelo ICMS deve ser somado a este campo."
   pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 <InputT
@@ -136,48 +132,49 @@
   pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 
-<h4>Retenção de tributos</h4>
-<Opcional raiz={total} name="retTrib">
+<Opcional raiz={total} name="retTrib" titulo="retenção de tributos">
+  <h3>Retenção de tributos</h3>
   <InputT
-    bind:val={retTrib['vRetPIS']}
+    bind:val={total.retTrib['vRetPIS']}
     opt
     lab="Valor Retido de PIS"
     pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <InputT
-    bind:val={retTrib['vRetCOFINS']}
+    bind:val={total.retTrib['vRetCOFINS']}
     opt
     lab="Valor Retido de COFINS"
     pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <InputT
-    bind:val={retTrib['vRetCSLL']}
+    bind:val={total.retTrib['vRetCSLL']}
     opt
     lab="Valor Retido de CSLL"
     pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <InputT
-    bind:val={retTrib['vBCIRRF']}
+    bind:val={total.retTrib['vBCIRRF']}
     opt
     lab="Base de Cálculo do IRRF"
     pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <InputT
-    bind:val={retTrib['vIRRF']}
+    bind:val={total.retTrib['vIRRF']}
     opt
     lab="Valor Retido de IRRF"
     pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <InputT
-    bind:val={retTrib['vBCRetPrev']}
+    bind:val={total.retTrib['vBCRetPrev']}
     opt
     lab="Base de Cálculo da Retenção da Previdêncica Social"
     pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <InputT
-    bind:val={retTrib['vRetPrev']}
+    bind:val={total.retTrib['vRetPrev']}
     opt
     lab="Valor da Retenção da Previdêncica Social"
     pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 </Opcional>
+<br />

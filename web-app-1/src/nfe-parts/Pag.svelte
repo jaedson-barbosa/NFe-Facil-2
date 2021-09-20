@@ -16,7 +16,7 @@
   }
 </script>
 
-<h3>Pagamento</h3>
+<h2>Pagamento</h2>
 <Lista raiz={pag} name="detPag">
   <svelte:fragment slot="h" let:item>
     {(+(item['vPag'] ?? '0')).toLocaleString('pt-BR', {
@@ -27,7 +27,7 @@
   <svelte:fragment slot="b" let:item>
     <Select
       raiz={item.detPag}
-      name='indPag'
+      name="indPag"
       opt
       lab="Indicador da Forma de Pagamento"
       els={[
@@ -37,7 +37,7 @@
     />
     <Select
       raiz={item.detPag}
-      name='tPag'
+      name="tPag"
       lab="Forma de Pagamento"
       els={[
         ['01', 'Dinheiro'],
@@ -62,7 +62,7 @@
     {#if item.detPag['tPag'] == '99'}
       <InputT
         raiz={item.detPag}
-        name='xPag'
+        name="xPag"
         opt
         lab="Descrição do Meio de Pagamento"
         min={2}
@@ -72,7 +72,7 @@
     {#if item.detPag['tPag'] != 90}
       <InputT
         raiz={item.detPag}
-        name='vPag'
+        name="vPag"
         lab="Valor do Pagamento"
         pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
       />
@@ -86,3 +86,5 @@
   pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 <button on:click={calcularTroco}>Calcular troco</button>
+<br />
+<br />

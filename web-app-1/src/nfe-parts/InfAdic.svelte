@@ -7,8 +7,8 @@
   $: infAdic = raiz['infAdic']
 </script>
 
-<h3>Informações adicionais</h3>
-<Opcional {raiz} name="infAdic">
+<Opcional {raiz} name="infAdic" titulo="informações adicionais">
+  <h2>Informações adicionais</h2>
   <InputT
     bind:val={infAdic['infAdFisco']}
     opt

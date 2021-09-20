@@ -14,7 +14,7 @@
   }
 </script>
 
-<h3>Autorizações de acesso ao XML</h3>
+<h2>Autorizações de acesso ao XML</h2>
 <button type="button" on:click={() => (autXML = [{}, ...autXML])}>
   Adicionar
 </button>

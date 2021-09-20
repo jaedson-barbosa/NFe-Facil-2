@@ -4,12 +4,17 @@
   import { validaCPF, validaCNPJ } from '../code/validacaoDoc'
   import { edicao, permissaoEscrita, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
-  import Transporta from '../nfe-parts/Transporta.svelte'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
+  import InputT from '../components/InputT.svelte'
+  import Municipio from '../components/Municipio.svelte'
+  import Doc from '../nfe-parts/Doc.svelte'
 
   let loading = false
   let raiz = undefined
+
+  if (!raiz['transporta']) raiz['transporta'] = {}
+  let transporta = raiz['transporta']
 
   const ed = get(edicao)
   if (ed) {
@@ -66,9 +71,29 @@
   Carregando...
 {:else}
   <form on:submit|preventDefault={() => salvar()}>
-    <Transporta bind:raiz />
-    {#if permissaoEscrita}
-      <input type="submit" class="button" />
-    {/if}
+    <h2>Transportador</h2>
+    <Doc bind:raiz={transporta} apenasBR />
+    <InputT
+      lab="Razão Social ou nome do transportador"
+      min={2}
+      max={60}
+      bind:val={transporta['xNome']}
+    />
+    <InputT
+      opt
+      lab="Inscrição Estadual"
+      pat={'ISENTO|[0-9]{2,14}'}
+      max={14}
+      bind:val={transporta['IE']}
+    />
+    <InputT
+      opt
+      lab="Endereço completo"
+      min={1}
+      max={60}
+      bind:val={transporta['xEnder']}
+    />
+    <Municipio bind:xMun={transporta['xMun']} bind:UF={transporta['UF']} />
+    <input type="submit" class="button" value="Salvar" />
   </form>
 {/if}

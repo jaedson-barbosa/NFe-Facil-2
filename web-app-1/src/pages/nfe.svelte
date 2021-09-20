@@ -74,7 +74,6 @@
 {:else}
   <NFe bind:raiz />
   <hr />
-  <a href={$url('./')}>Cancelar</a>
   {#if isProd}
     <button on:click={salvar}>Salvar</button>
   {/if}

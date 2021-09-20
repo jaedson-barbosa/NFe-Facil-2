@@ -47,7 +47,7 @@ export class Buscador {
     this.hasMore = false
     const coluna = collection(this.refEmpresa, this.dados)
     const limites: QueryConstraint[] = [
-      limit(10),
+      limit(5),
       orderBy(this.campoPrincipal, this.direcao),
     ]
     if (busca != this.lastBusca) {

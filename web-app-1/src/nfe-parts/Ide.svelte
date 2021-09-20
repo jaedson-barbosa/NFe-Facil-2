@@ -7,7 +7,6 @@
   import IBGE from '../code/IBGE'
   import { VERSAO } from '../code/app'
   import { toNFeString } from '../code/getDataString'
-  import Lista from '../components/Lista.svelte'
 
   export let raiz: any
 
@@ -42,6 +41,7 @@
   ide['verProc'] = VERSAO
 
   if (!ide['NFref']) ide['NFref'] = []
+
   $: ide['mod'] == '65' &&
     (ide['tpNF'] = ide['idDest'] = ide['finNFe'] = ide['indFinal'] = '1')
 
@@ -49,9 +49,17 @@
   $: ide.dhSaiEnt = informarSaidaEntrada ? toNFeString(new Date()) : ''
   let saidaEntrada = ide.dhSaiEnt?.slice(0, 16) || ''
   $: ide.dhSaiEnt = saidaEntrada ? toNFeString(new Date(saidaEntrada)) : ''
+
+  function analisar(index: number) {
+    return () => {
+      if (ide.NFref[index].refNFe.length == 44) return
+      ide.NFref.splice(index, 1)
+      ide = ide
+    }
+  }
 </script>
 
-<h3>Identificação</h3>
+<h2>Identificação</h2>
 <div class="row">
   <div class="column">
     <label>
@@ -163,18 +171,32 @@
   </div>
 </div>
 
-<h4>NF-es referenciadas</h4>
-<Lista raiz={ide} name="NFref">
-  <svelte:fragment slot="h" let:item>
-    {item['refNFe']}
-  </svelte:fragment>
-  <InputT
-    slot="b"
-    let:item
-    raiz={item}
-    name="refNFe"
-    lab="Chave de acesso da NF-e"
-    pat={'[0-9]{44}'}
-    max={44}
-  />
-</Lista>
+<h3>NF-es referenciadas</h3>
+<button type="button" on:click={() => (ide.NFref = [{}, ...ide.NFref])}>
+  Adicionar
+</button>
+<br />
+{#if ide.NFref.length}
+  <table>
+    <thead>
+      <tr>
+        <td>Chave de acesso da NF-e</td>
+      </tr>
+    </thead>
+    <tbody>
+      {#each ide.NFref as _, i}
+        <tr>
+          <td>
+            <input
+              bind:value={ide.NFref[i].refNFe}
+              pattern="[0-9]{44}"
+              on:blur={analisar(i)}
+              required
+            />
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+{/if}
+<br />
