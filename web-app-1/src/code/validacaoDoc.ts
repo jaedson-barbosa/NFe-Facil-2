@@ -1,3 +1,9 @@
+export function validaDoc(doc: string) {
+  if (doc.length == 11) return validaCPF(doc)
+  if (doc.length == 14) return validaCNPJ(doc)
+  return false
+}
+
 export function validaCPF(cpf: string): boolean {
   const cpfLength = 11;
   const weights = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];

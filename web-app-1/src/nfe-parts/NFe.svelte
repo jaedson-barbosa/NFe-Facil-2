@@ -4,11 +4,11 @@
   import Doc from './Doc.svelte'
   import ExibDoc from './ExibDoc.svelte'
   import AutXml from './AutXML.svelte'
-  import Det from './Det.svelte'
   import Total from './Total.svelte'
   import Transp from './Transp.svelte'
   import Pag from './Pag.svelte'
   import InfAdic from './InfAdic.svelte'
+  import ProdutoSimples from './ProdutoSimples.svelte'
   import { DocumentSnapshot } from 'firebase/firestore'
   import { empresa, refEmpresa } from '../code/store'
   import { Dados } from '../code/tipos'
@@ -17,7 +17,6 @@
 
   export let raiz: any
   if (!raiz.emit) raiz.emit = get(empresa).emit
-  let regimeNormal = raiz.emit.CRT == '3'
 
   if (!raiz.dest) raiz.dest = {}
   if (!raiz.det) raiz.det = []
@@ -50,21 +49,8 @@
     (v) => (produtos = v)
   )
 
-  let produtoExibido = -1
   function escolherProduto(cad: DocumentSnapshot) {
-    raiz.det = [cad.data(), ...raiz.det]
-    produtoExibido = 0
-  }
-
-  function exibirProduto(e: Event) {
-    const dialog: any = e.target as HTMLDialogElement
-    dialog.showModal()
-  }
-
-  function removerExibido() {
-    produtoExibido = -1
-    raiz.det.splice(produtoExibido, 1)
-    raiz = raiz
+    raiz.det = [cad.data().det, ...raiz.det]
   }
 
   $: isNFCe = raiz['ide']?.['mod'] === '65'
@@ -79,7 +65,7 @@
 <h3>Destinatário</h3>
 {#if isNFCe && destSemNome}
   <p>Numa NFC-e é possível informar apenas o documento do cliente.</p>
-  <Doc bind:raiz={dest} />
+  <Doc bind:raiz={raiz.dest} />
 {/if}
 {#if destComDoc && !isNFCe}
   <p>
@@ -97,6 +83,7 @@
     </em>
   </p>
   <button type="button" on:click={() => (raiz.dest = {})}>Trocar</button>
+  <br />
 {/if}
 {#if !destComDoc}
   {#if isNFCe}
@@ -115,11 +102,7 @@
     </thead>
     <tbody>
       {#each clientes as c}
-        <tr
-          class="clicavel"
-          class:marcado={dest?.xNome == c.get('dest.xNome')}
-          on:click={() => (raiz.dest = c.data().dest)}
-        >
+        <tr class="clicavel" on:click={() => (raiz.dest = c.data().dest)}>
           <td>
             <ExibDoc
               CPF={c.get('dest.CPF')}
@@ -134,11 +117,11 @@
   </table>
 {/if}
 <br />
-<Local {raiz} name="retirada" />
+<Local bind:raiz name="retirada" />
 <br />
-<Local {raiz} name="entrega" />
+<Local bind:raiz name="entrega" />
 <br />
-<AutXml {raiz} />
+<AutXml bind:raiz />
 <br />
 <h3>Produtos</h3>
 <label>
@@ -168,35 +151,20 @@
       <tr>
         <th>Código</th>
         <th>Descrição</th>
+        <th>Quantidade</th>
         <th>Valor bruto</th>
       </tr>
     </thead>
     <tbody>
-      {#each raiz.det as p, i}
-        <tr on:click={() => (produtoExibido = i)}>
-          <td>{p['prod']['cProd']}</td>
-          <td>{p['prod']['xProd']}</td>
-          <td>{p['prod']['vProd']}</td>
-        </tr>
+      {#each raiz.det as _, i}
+        <ProdutoSimples bind:raiz index={i} />
       {/each}
     </tbody>
   </table>
-{/if}
-{#if produtoExibido != -1}
-  <dialog on:load={exibirProduto} on:close={() => (produtoExibido = -1)}>
-    <form method="dialog">
-      <Det
-        raiz={raiz.det[produtoExibido]}
-        {regimeNormal}
-        consumidorFinal={raiz.ide.indFinal == '1'}
-      />
-      <button type="button" on:click={removerExibido}>Remover</button>
-      <input type="submit" value="Salvar" />
-    </form>
-  </dialog>
+  <button>Ratear frete</button>
 {/if}
 
-<Total {raiz} />
-<Transp {raiz} />
-<Pag {raiz} total={raiz.total?.ICMSTot?.vNF ?? 0} />
-<InfAdic {raiz} />
+<Total bind:raiz />
+<Transp bind:raiz />
+<Pag bind:raiz total={raiz.total?.ICMSTot?.vNF ?? 0} />
+<InfAdic bind:raiz />

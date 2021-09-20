@@ -16,9 +16,7 @@
 </script>
 
 <ProdUso {raiz} />
-<hr />
 <Imposto {raiz} {regimeNormal} {consumidorFinal} />
-<hr />
 <h3>Extras</h3>
 <Opcional {raiz} name="impostoDevol" titulo="imposto devolvido">
   <h4>Imposto devolvido</h4>

@@ -29,11 +29,6 @@
 
 <h3>Dados de {prod['xProd']}</h3>
 <InputT
-  bind:val={prod['qCom']}
-  lab="Quantidade"
-  pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
-/>
-<InputT
   bind:val={prod['vFrete']}
   opt
   lab="Frete"

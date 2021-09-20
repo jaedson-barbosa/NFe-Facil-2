@@ -18,7 +18,9 @@
   let loading = false
 
   const ed = get(edicao)
-  let raiz: INFeRoot = ed ? { ...ed.dado } : {}
+  let raiz: INFeRoot = {} as any
+  if (ed?.tipo == Dados.NFes) raiz = ed.dado
+  else $edicao = { tipo: Dados.NFes, dado: raiz, id: '' }
   raiz.emit = get(empresa).emit
 
   async function salvar() {

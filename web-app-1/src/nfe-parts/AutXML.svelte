@@ -4,7 +4,14 @@
   export let raiz: any
 
   if (!raiz['autXML']) raiz['autXML'] = []
-  let autXML = raiz['autXML']
+  let autXML: any[] = raiz['autXML']
+
+  function removerItem(i: number) {
+    return () => {
+      autXML.splice(i, 1)
+      autXML = autXML
+    }
+  }
 </script>
 
 <h3>Autorizações de acesso ao XML</h3>
@@ -16,14 +23,14 @@
   <table>
     <thead>
       <tr>
-        <th>Documento</th>
+        <th>CPF/CNPJ</th>
       </tr>
     </thead>
     <tbody>
-      {#each autXML as v}
+      {#each autXML as v, i}
         <tr>
           <td>
-            <Doc raiz={v} apenasBR />
+            <Doc raiz={v} on:invalido={removerItem(i)} apenasBR simplificado />
           </td>
         </tr>
       {/each}

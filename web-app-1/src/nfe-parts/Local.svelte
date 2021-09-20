@@ -2,6 +2,7 @@
   import InputT from '../components/InputT.svelte'
   import Municipio from '../components/Municipio.svelte'
   import Opcional from '../components/Opcional.svelte'
+  import Doc from './Doc.svelte'
 
   export let raiz: any
   export let name: 'retirada' | 'entrega'
@@ -9,18 +10,7 @@
 
 <Opcional {raiz} {name} titulo="local de {name}">
   <h3>Local de {name}</h3>
-  {#if !raiz[name]['CPF']}
-    <InputT lab="CNPJ" mask="cnpj" bind:val={raiz[name]['CNPJ']} pat={'[0-9]{14}'} />
-  {/if}
-  {#if !raiz[name]['CNPJ']}
-    <InputT
-      lab="CPF"
-      mask="cpf"
-      bind:val={raiz[name]['CPF']}
-      max={11}
-      pat={'[0-9]{11}'}
-    />
-  {/if}
+  <Doc bind:raiz={raiz[name]} apenasBR />
   <InputT
     lab="Razão Social ou nome do destinatário"
     opt
