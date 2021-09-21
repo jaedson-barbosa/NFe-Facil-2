@@ -1,20 +1,17 @@
 <script lang="ts">
+  import paises from '../code/paises'
   import InputT from '../components/InputT.svelte'
   import Select from '../components/Select.svelte'
   import Municipio from '../components/Municipio.svelte'
-  import Pais from '../components/Pais.svelte'
   import Doc from './Doc.svelte'
 
   export let raiz: any
 
-  if (!raiz['dest']) raiz['dest'] = {}
-  let dest = raiz['dest']
+  if (!raiz.dest) raiz.dest = {}
+  if (!raiz.dest.enderDest) raiz.dest.enderDest = { cPais: '1058' }
 
-  if (!dest['enderDest']) dest['enderDest'] = {}
-  let enderDest = dest['enderDest']
-
-  enderDest.cPais = '1058'
-  enderDest.xPais = 'BRASIL'
+  $: dest = raiz.dest
+  $: enderDest = raiz.dest.enderDest
 
   $: {
     if (dest['idEstrangeiro']) {
@@ -24,14 +21,17 @@
     } else {
       enderDest.UF = enderDest.xMun = enderDest.cMun = ''
       enderDest.cPais = '1058'
-      enderDest.xPais = 'BRASIL'
     }
+    const cPais = enderDest['cPais']
+    const pais = paises.find((v) => v.codigo == cPais)
+    enderDest['xPais'] = pais.nome
     if (dest['CPF'] || dest['idEstrangeiro']) dest['indIEDest'] = '9'
   }
 </script>
 
+{@debug dest}
 <h3>Destinatário</h3>
-<Doc raiz={dest} />
+<Doc bind:raiz={raiz.dest} />
 <InputT
   lab="Razão Social ou nome do destinatário"
   bind:val={dest['xNome']}
@@ -93,7 +93,14 @@
 {/if}
 <InputT lab="CEP" mask="zipcode" bind:val={enderDest['CEP']} pat={'[0-9]{8}'} />
 {#if dest['idEstrangeiro']}
-  <Pais bind:cPais={enderDest['cPais']} bind:xPais={enderDest['xPais']} />
+  <label>
+    País
+    <select bind:value={enderDest['cPais']} required>
+      {#each paises as v}
+        <option value={v.codigo}>{v.nome}</option>
+      {/each}
+    </select>
+  </label>
 {/if}
 <InputT
   lab="Telefone"

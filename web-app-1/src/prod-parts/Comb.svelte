@@ -8,14 +8,12 @@
 
 <h4>Combustível</h4>
 <InputT
-  name="cProdANP"
-  {raiz}
+  bind:val={raiz.cProdANP}
   lab="Código de produto da ANP"
   pat={'[0-9]{9}'}
 />
 <InputT
-  name="descANP"
-  {raiz}
+  bind:val={raiz.descANP}
   lab="Descrição do Produto conforme ANP"
   aux="Utilizar a descrição de produtos do SIMP (Sistema de Informações de Movimentação de Produtos)"
   min={2}
@@ -23,54 +21,48 @@
 />
 {#if raiz['cProdANP'] == 210203001}
   <InputT
-    name="pGLP"
-    {raiz}
+    bind:val={raiz.pGLP}
     opt
     lab="Percentual do GLP derivado do petróleo no produto GLP"
     aux="Valores de 0 a 100"
     pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
   />
   <InputT
-    name="pGNn"
-    {raiz}
+    bind:val={raiz.pGNn}
     opt
     lab="Percentual de gás natural nacional GLGNn para o produto GLP"
     aux="Valores de 0 a 100"
     pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
   />
   <InputT
-    name="pGNi"
-    {raiz}
+    bind:val={raiz.pGNi}
     opt
     lab="Percentual de gás natural importado GLGNi para o produto GLP"
     aux="Valores de 0 a 100"
     pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
   />
   <InputT
-    name="vPart"
-    {raiz}
+    bind:val={raiz.vPart}
     opt
     lab="Valor de partida (por quilograma sem ICMS)"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
 {/if}
 <InputT
-  name="CODIF"
-  {raiz}
+  bind:val={raiz.CODIF}
   opt
   lab="Código de autorização / registro do CODIF"
   aux="Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com Álcool Etílico Anidro Combustível)"
   pat={'[0-9]{1,21}'}
 />
 <InputT
-  name="qTemp"
-  {raiz}
+  bind:val={raiz.qTemp}
   opt
   lab="Quantidade de combustível faturada à temperatura ambiente"
   aux="Informar quando a quantidade faturada informada no campo de quantidade comercial tiver sido ajustada para uma temperatura diferente da ambiente"
   pat={'0.[1-9]{1}[0-9]{3}|0.[0-9]{3}[1-9]{1}|0.[0-9]{2}[1-9]{1}[0-9]{1}|0.[0-9]{1}[1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{0,11}(.[0-9]{4})?'}
 />
-<Estado {raiz} UFName="UFCons" incluirEX lab="UF de consumo" />
+<Estado bind:UF={raiz.UFCons} incluirEX lab="UF de consumo" />
 
 <Opcional {raiz} name="CIDE" titulo="CIDE" let:r={CIDE}>
   <h5>Contribuição de Intervenção no Domínio Econômico</h5>
