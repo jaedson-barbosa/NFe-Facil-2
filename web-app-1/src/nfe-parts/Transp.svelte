@@ -1,7 +1,6 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
   import Select from '../components/Select.svelte'
-  import Lista from '../components/Lista.svelte'
   import Opcional from '../components/Opcional.svelte'
   import Estado from '../components/Estado.svelte'
   import { refEmpresa } from '../code/store'
@@ -29,6 +28,14 @@
     'asc',
     (v) => (transportadores = v)
   )
+
+  function analisar(index: number) {
+    return () => {
+      if (transp.reboque[index].placa) return
+      transp.reboque.splice(index, 1)
+      transp.reboque = transp.reboque
+    }
+  }
 </script>
 
 <h2>Transporte</h2>
@@ -105,28 +112,43 @@
     />
   </Opcional>
   <h4>Reboque</h4>
-  <Lista raiz={transp} name="reboque">
-    <svelte:fragment slot="h" let:item>
-      {item.placa} ({item.UF})
-    </svelte:fragment>
-    <svelte:fragment slot="b" let:item>
-      <InputT
-        raiz={item}
-        name="placa"
-        lab="Placa do veículo"
-        pat={'[A-Z]{2,3}[0-9]{4}|[A-Z]{3,4}[0-9]{3}|[A-Z0-9]{7}'}
-      />
-      <Estado raiz={item} UFName="UF" incluirEX />
-      <InputT
-        raiz={item}
-        name="RNTC"
-        opt
-        lab="Registro Nacional de Transportador de Carga (ANTT)"
-        min={1}
-        max={20}
-      />
-    </svelte:fragment>
-  </Lista>
+  <button
+    type="button"
+    on:click={() => (transp.reboque = [{}, ...transp.reboque])}
+  >
+    Adicionar
+  </button>
+  {#if transp.reboque.length}
+    <table>
+      <thead>
+        <tr>
+          <th>Placa</th>
+          <th>Estado</th>
+          <th><i>RNTC</i></th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each transp.reboque as _, i}
+          <tr>
+            <td>
+              <input
+                bind:value={transp.reboque[i].placa}
+                on:blur={analisar(i)}
+                pattern={'[A-Z]{2,3}[0-9]{4}|[A-Z]{3,4}[0-9]{3}|[A-Z0-9]{7}'}
+                required
+              />
+            </td>
+            <td>
+              <Estado bind:UF={transp.reboque[i].UF} incluirEX />
+            </td>
+            <td>
+              <input bind:value={transp.reboque[i].RNTC} min="1" max="20" />
+            </td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  {/if}
 {/if}
 
 <h3>Volumes</h3>

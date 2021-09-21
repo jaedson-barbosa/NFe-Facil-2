@@ -1,45 +1,99 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
-  import Lista from '../components/Lista.svelte'
-  import Opcional from '../components/Opcional.svelte'
-
   export let raiz: any
+  if (!raiz.detExport) raiz.detExport = []
+
+  function analisarDireto(index: number) {
+    return () => {
+      if (raiz.detExport[index].nDraw > 0) return
+      remover(index)
+    }
+  }
+
+  function analisarIndireto(index: number) {
+    return () => {
+      const v = raiz.detExport[index].exportInd
+      if (v.nRE || v.chNFe || v.qExport) return
+      remover(index)
+    }
+  }
+
+  function remover(index: number) {
+    raiz.detExport.splice(index, 1)
+    raiz.detExport = raiz.detExport
+  }
 </script>
 
 <h4>Detalhe da exportação</h4>
-<Lista {raiz} name="detExport">
-  <svelte:fragment slot="h" let:item>
-    {item['nDraw']}
-  </svelte:fragment>
-  <svelte:fragment slot="b" let:item>
-    <InputT
-      raiz={item}
-      name="nDraw"
-      opt
-      lab="Número do ato concessório de Drawback"
-      pat={'[0-9]{0,11}'}
-    />
-    <Opcional raiz={item} name="exportInd" titulo="exportação indireta" let:r>
-      <h5>Exportação indireta</h5>
-      <InputT
-        raiz={r}
-        name="nRE"
-        lab="Registro de exportação"
-        pat={'[0-9]{0,12}'}
-      />
-      <InputT
-        name="chNFe"
-        raiz={r}
-        lab="Chave de acesso da NF-e recebida para exportação"
-        pat={'[0-9]{44}'}
-        max={44}
-      />
-      <InputT
-        name="qExport"
-        raiz={r}
-        lab="Quantidade do item efetivamente exportado"
-        pat={'0|0.[0-9]{1,4}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,4})?'}
-      />
-    </Opcional>
-  </svelte:fragment>
-</Lista>
+<button
+  type="button"
+  on:click={() => (raiz.detExport = [{}, ...raiz.detExport])}
+>
+  Adicionar direta
+</button>
+<button
+  type="button"
+  on:click={() => (raiz.detExport = [{ exportInd: {} }, ...raiz.detExport])}
+>
+  Adicionar indireta
+</button>
+{#if raiz.detExport.length}
+  <table>
+    <thead>
+      <tr>
+        <th><i>Nº ato concessório</i></th>
+        <th>Nº registro de exportação</th>
+        <th>Chave NF-e para exportação</th>
+        <th>Quant. realmente exportada</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each raiz.detExport as _, i}
+        <tr>
+          {#if raiz.detExport[i].exportInd}
+            <td>
+              <input
+                bind:value={raiz.detExport[i].nDraw}
+                pattern={'[0-9]{0,11}'}
+              />
+            </td>
+            <td>
+              <input
+                bind:value={raiz.detExport[i].exportInd.nRE}
+                on:blur={analisarIndireto(i)}
+                pattern={'[0-9]{0,12}'}
+                required
+              />
+            </td>
+            <td>
+              <input
+                bind:value={raiz.detExport[i].exportInd.chNFe}
+                on:blur={analisarIndireto(i)}
+                pattern={'[0-9]{44}'}
+                required
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                step="0.0001"
+                bind:value={raiz.detExport[i].exportInd.qExport}
+                on:blur={analisarIndireto(i)}
+                required
+              />
+            </td>
+          {:else}
+            <td>
+              <input
+                bind:value={raiz.detExport[i].nDraw}
+                on:blur={analisarDireto(i)}
+                pattern={'[0-9]{0,11}'}
+                required
+              />
+            </td>
+            <td colspan="3">Não informado</td>
+          {/if}
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+{/if}

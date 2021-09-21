@@ -1,90 +1,99 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
-  import Select from '../components/Select.svelte'
-  import Lista from '../components/Lista.svelte'
+  import { getMoeda } from '../code/numero'
 
   export let raiz: any
   export let total: number
 
   if (!raiz['pag']) raiz['pag'] = {}
-  const pag = raiz['pag']
+  let pag = raiz['pag']
   if (!pag.detPag) pag.detPag = []
-  const detPag = pag.detPag
 
-  function calcularTroco() {
-    pag['vTroco'] = pag.reduce((p, c) => p + c.vPag ?? 0) - total
+  $: {
+    const detPag = pag.detPag as any[]
+    pag['vTroco'] = detPag.reduce((p, c) => p + c.vPag ?? 0) - total || ''
+    detPag.forEach((v) => {
+      v.card = v.tPag == '03' || v.tPag == '04' ? { tpIntegra: '2' } : undefined
+    })
+  }
+
+  function analisar(index: number) {
+    return () => {
+      if (pag.detPag[index].vPag) return
+      pag.detPag.splice(index, 1)
+      pag.detPag = pag.detPag
+    }
   }
 </script>
 
 <h2>Pagamento</h2>
-<Lista raiz={pag} name="detPag">
-  <svelte:fragment slot="h" let:item>
-    {(+(item['vPag'] ?? '0')).toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    })} ({item['tPag']})
-  </svelte:fragment>
-  <svelte:fragment slot="b" let:item>
-    <Select
-      raiz={item.detPag}
-      name="indPag"
-      opt
-      lab="Indicador da Forma de Pagamento"
-      els={[
-        ['0', 'Pagamento à Vista'],
-        ['1', 'Pagamento à Prazo'],
-      ]}
-    />
-    <Select
-      raiz={item.detPag}
-      name="tPag"
-      lab="Forma de Pagamento"
-      els={[
-        ['01', 'Dinheiro'],
-        ['02', 'Cheque'],
-        ['03', 'Cartão de crédito'],
-        ['04', 'Cartão de débito'],
-        ['05', 'Crédito Loja'],
-        ['10', 'Vale Alimentação'],
-        ['11', 'Vale Refeição'],
-        ['12', 'Vale Presente'],
-        ['13', 'Vale Combustível'],
-        ['14', 'Duplicata Mercantil'],
-        ['15', 'Boleto Bancario'],
-        ['16', 'Depósito Bancário'],
-        ['17', 'Pagamento Instantâneo (PIX)'],
-        ['18', 'Transferência bancária, Carteira Digital'],
-        ['19', 'Programa de fidelidade, Cashback, Crédito Virtual'],
-        ['90', 'Sem Pagamento'],
-        ['99', 'Outros'],
-      ]}
-    />
-    {#if item.detPag['tPag'] == '99'}
-      <InputT
-        raiz={item.detPag}
-        name="xPag"
-        opt
-        lab="Descrição do Meio de Pagamento"
-        min={2}
-        max={60}
-      />
-    {/if}
-    {#if item.detPag['tPag'] != 90}
-      <InputT
-        raiz={item.detPag}
-        name="vPag"
-        lab="Valor do Pagamento"
-        pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-      />
-    {/if}
-  </svelte:fragment>
-</Lista>
-<InputT
-  bind:val={pag['vTroco']}
-  opt
-  lab="Valor do Troco"
-  pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-/>
-<button on:click={calcularTroco}>Calcular troco</button>
-<br />
+<button type="button" on:click={() => (pag.detPag = [{}, ...pag.detPag])}>
+  Adicionar
+</button>
+{#if pag.detPag.length}
+  <table>
+    <thead>
+      <tr>
+        <th>Indicador</th>
+        <th>Forma</th>
+        <th>Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each pag.detPag as _, i}
+        <tr>
+          <td>
+            <select bind:value={pag.detPag[i].indPag} required>
+              <option value="0">À vista</option>
+              <option value="1">À Prazo</option>
+            </select>
+          </td>
+          <td>
+            <select bind:value={pag.detPag[i].tPag} required>
+              <option value="01">Dinheiro</option>
+              <option value="02">Cheque</option>
+              <option value="03">Cartão de crédito</option>
+              <option value="04">Cartão de débito</option>
+              <option value="05">Crédito Loja</option>
+              <option value="10">Vale Alimentação</option>
+              <option value="11">Vale Refeição</option>
+              <option value="12">Vale Presente</option>
+              <option value="13">Vale Combustível</option>
+              <option value="14">Duplicata Mercantil</option>
+              <option value="15">Boleto Bancario</option>
+              <option value="16">Depósito Bancário</option>
+              <option value="17">Pagamento Instantâneo (PIX)</option>
+              <option value="18">
+                Transferência bancária, Carteira Digital
+              </option>
+              <option value="19">
+                Programa de fidelidade, Cashback, Crédito Virtual
+              </option>
+              {#if !pag.detPag[i].vPag}
+                <option value="90">Sem Pagamento</option>
+              {/if}
+            </select>
+          </td>
+          <td>
+            {#if pag.detPag[i].tPag != 90}
+              <input
+                type="number"
+                step="0.01"
+                bind:value={pag.detPag[i].vPag}
+                on:blur={analisar(i)}
+                required
+              />
+            {:else}
+              Sem valor
+            {/if}
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+{/if}
+{#if pag['vTroco']}
+  <p>
+    Valor do troco: <em>{getMoeda(pag['vTroco'])}</em>
+  </p>
+{/if}
 <br />
