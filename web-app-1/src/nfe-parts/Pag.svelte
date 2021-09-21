@@ -10,7 +10,7 @@
 
   $: {
     const detPag = pag.detPag as any[]
-    pag['vTroco'] = detPag.reduce((p, c) => p + c.vPag ?? 0) - total || ''
+    pag['vTroco'] = detPag.reduce((p, c) => p + c.vPag ?? 0, 0) - total || ''
     detPag.forEach((v) => {
       v.card = v.tPag == '03' || v.tPag == '04' ? { tpIntegra: '2' } : undefined
     })

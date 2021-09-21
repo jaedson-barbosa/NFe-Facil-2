@@ -1,12 +1,13 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
+  import { params } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { edicao } from '../code/store'
-  import { Dados, INFeRoot } from '../code/tipos'
-  import Imposto from '../nfe-parts/Imposto.svelte'
-  import ProdutoDetalhes from '../nfe-parts/ProdutoDetalhes.svelte'
+  import { edicao } from '../../code/store'
+  import { Dados, INFeRoot } from '../../code/tipos'
+  import Imposto from '../../nfe-parts/Imposto.svelte'
+  import ProdutoDetalhes from '../../nfe-parts/ProdutoDetalhes.svelte'
 
-  export let produto: string
+  const { produto } = get(params)
 
   const ed = get(edicao)
   const raizNFe: INFeRoot = ed?.tipo == Dados.NFes ? { ...ed.dado } : {}
@@ -16,7 +17,7 @@
   let raiz = raizNFe.det[+produto]
 </script>
 
-<form on:submit|preventDefault={() => $goto('./nfe')}>
+<form on:submit|preventDefault={() => $goto('../nfe')}>
   <ProdutoDetalhes bind:raiz />
   <Imposto bind:raiz {regimeNormal} {consumidorFinal} />
   <input type="submit" value="Salvar" />

@@ -16,7 +16,7 @@
 
   function analisar(index: number) {
     return () => {
-      if (raiz.lacres[index].nLacre.length > 0) return
+      if (raiz.lacres[index].nLacre) return
       raiz.lacres.splice(index, 1)
       raiz.lacres = raiz.lacres
     }
@@ -24,7 +24,7 @@
 
   function salvar() {
     if (isAdd) raizNFe.transp.vol.unshift(raiz)
-    $goto('./nfe')
+    $goto('../nfe')
   }
 </script>
 

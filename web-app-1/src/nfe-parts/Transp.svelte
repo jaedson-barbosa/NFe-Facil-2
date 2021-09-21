@@ -12,13 +12,14 @@
 
   export let raiz: any
 
-  if (!raiz['transp']) raiz['transp'] = {}
-  if (!raiz['transp']['vol']) raiz['transp']['vol'] = []
+  if (!raiz.transp) raiz.transp = {}
+  if (!raiz.transp.vol) raiz.transp.vol = []
+  if (!raiz.transp.reboque) raiz.transp.reboque = []
 
-  $: transp = raiz['transp']
-  $: volumes = transp['vol'] as any[]
-  $: transporta = transp['transporta']
-  $: reboque = transp['reboque']
+  $: transp = raiz.transp
+  $: volumes = transp.vol as any[]
+  $: transporta = transp.transporta
+  $: reboque = transp.reboque
 
   let transportadores = [] as DocumentSnapshot[]
   const buscador = new Buscador(

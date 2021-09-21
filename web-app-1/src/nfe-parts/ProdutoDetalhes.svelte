@@ -1,7 +1,6 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
   import Opcional from '../components/Opcional.svelte'
-  import DI from '../prod-parts/DI.svelte'
   import DE from '../prod-parts/DE.svelte'
   import Rastro from '../prod-parts/Rastro.svelte'
   import VeicProd from '../prod-parts/VeicProd.svelte'
@@ -9,6 +8,7 @@
   import Arma from '../prod-parts/Arma.svelte'
   import Comb from '../prod-parts/Comb.svelte'
   import NRECOPI from '../prod-parts/NRECOPI.svelte'
+  import { goto, url } from '@roxi/routify'
 
   export let raiz: any
 
@@ -16,6 +16,7 @@
   const prod = raiz['prod']
 
   if (!raiz.rastro) raiz.rastro = []
+  if (!raiz.DI) raiz.DI = []
 
   $: impostoDevol = raiz['impostoDevol'] ?? {}
   $: impostoDevol && !impostoDevol.IPI && (impostoDevol.IPI = {})
@@ -29,7 +30,27 @@
   pat={'[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}'}
 />
 
-<DI raiz={prod} />
+<h4>Declaração de Importação</h4>
+<a class="button" href={$url('./:di', { di: '-1' })}>Adicionar</a>
+<br />
+{#if raiz.DI.length}
+  <table>
+    <thead>
+      <tr>
+        <th>Nº do Documento de Importação</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each raiz.DI as _, i}
+        <tr on:click={$goto('./:di', { di: i })}>
+          <td>{raiz.DI[i].nDI}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+{/if}
+<br />
+
 <DE raiz={prod} />
 
 <Opcional {raiz} name="impostoDevol" titulo="imposto devolvido">

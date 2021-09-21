@@ -36,6 +36,7 @@
 >
   Adicionar indireta
 </button>
+<br />
 {#if raiz.detExport.length}
   <table>
     <thead>
@@ -97,3 +98,4 @@
     </tbody>
   </table>
 {/if}
+<br />
