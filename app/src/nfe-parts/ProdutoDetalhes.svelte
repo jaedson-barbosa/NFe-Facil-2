@@ -17,8 +17,8 @@
 
   if (!prod.rastro) prod.rastro = []
   if (!prod.DI) prod.DI = []
-  if (!prod.impostoDevol) prod.impostoDevol = {}
-  if (!prod.impostoDevol.IPI) prod.impostoDevol.IPI = {}
+  if (!raiz.impostoDevol) raiz.impostoDevol = {}
+  if (!raiz.impostoDevol.IPI) raiz.impostoDevol.IPI = {}
 </script>
 
 <h3>Detalhes adicionais de {prod['xProd']}</h3>

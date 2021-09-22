@@ -202,7 +202,7 @@
     <tbody>
       {#each raiz.det as _, i}
         <ProdutoSimples
-          bind:raiz
+          bind:raiz={raiz.det[i]}
           {consumidorFinal}
           ibpt={ibpt[i]}
           on:invalido={removerProd(i)}

@@ -7,9 +7,10 @@
   export let raiz: any
 
   if (!raiz['total']) raiz['total'] = {}
-  const total = raiz['total']
-  $: ICMSTot = calcularICMSTot(raiz.det)
-  $: total.ICMSTot = ICMSTot
+  if (!raiz.total.retTrib) raiz.total.retTrib = {}
+
+  $: raiz.total.ICMSTot = calcularICMSTot(raiz.det)
+  $: ICMSTot = raiz.total.ICMSTot
 </script>
 
 <h2>Totais</h2>
@@ -165,43 +166,43 @@
 
 <h3>Retenção de tributos</h3>
 <InputT
-  bind:val={total.retTrib['vRetPIS']}
+  bind:val={raiz.total.retTrib['vRetPIS']}
   opt
   lab="Valor Retido de PIS"
   pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 <InputT
-  bind:val={total.retTrib['vRetCOFINS']}
+  bind:val={raiz.total.retTrib['vRetCOFINS']}
   opt
   lab="Valor Retido de COFINS"
   pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 <InputT
-  bind:val={total.retTrib['vRetCSLL']}
+  bind:val={raiz.total.retTrib['vRetCSLL']}
   opt
   lab="Valor Retido de CSLL"
   pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 <InputT
-  bind:val={total.retTrib['vBCIRRF']}
+  bind:val={raiz.total.retTrib['vBCIRRF']}
   opt
   lab="Base de Cálculo do IRRF"
   pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 <InputT
-  bind:val={total.retTrib['vIRRF']}
+  bind:val={raiz.total.retTrib['vIRRF']}
   opt
   lab="Valor Retido de IRRF"
   pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 <InputT
-  bind:val={total.retTrib['vBCRetPrev']}
+  bind:val={raiz.total.retTrib['vBCRetPrev']}
   opt
   lab="Base de Cálculo da Retenção da Previdêncica Social"
   pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 <InputT
-  bind:val={total.retTrib['vRetPrev']}
+  bind:val={raiz.total.retTrib['vRetPrev']}
   opt
   lab="Valor da Retenção da Previdêncica Social"
   pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
