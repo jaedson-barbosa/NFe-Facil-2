@@ -4,4 +4,4 @@ functions/lib
 .routify
 *.log
 app/public/build
-app/.save-data
+**/.save-data

@@ -9,7 +9,7 @@
     ]
   },
   "hosting": {
-    "public": "web-app-1/public",
+    "public": "app/public",
     "rewrites": [
       {
         "source": "**",

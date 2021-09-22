@@ -1,0 +1,22 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Firebase",
+      "type": "shell",
+      "command": "firebase emulators:start --import .save-data --export-on-exit --inspect-functions",
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Builder",
+      "type": "shell",
+      "command": "npm run dev",
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}/app"
+      }
+    }
+  ]
+}
