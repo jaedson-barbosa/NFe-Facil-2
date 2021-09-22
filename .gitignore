@@ -1,10 +1,7 @@
 **/node_modules
 DANFE/vendor
 functions/lib
-save-data
 .routify
 *.log
-*.cache
-web-app-1/public/build
-*.tsbuildinfo
-commom-code/out
+app/public/build
+app/.save-data
