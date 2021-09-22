@@ -25,9 +25,7 @@
   $: comAliquota = !['04', '05', '06', '07', '08', '09'].includes(tipoPIS)
   $: aliquotaEmPercentual = tipoPIS != '03' && !PIS['vAliqProd']
   $: aliquotaEmReais = tipoPIS != '01' && tipoPIS != '02' && !PIS['pPIS']
-
-  PIS['vPIS'] = calcular(prod, PIS, 'PIS')
-  $: PIS['vPIS'] = calcular(prod, PIS, 'PIS')
+  $: PIS = calcular(prod, PIS, 'PIS')
 </script>
 
 <h4>PIS</h4>

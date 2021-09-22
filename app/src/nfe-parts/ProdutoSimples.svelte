@@ -1,5 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
+  import { atualizarICMS } from '../code/imposto/ICMS'
+  import { atualizarIPI } from '../code/imposto/IPI'
+  import { atualizarPISCOFINS } from '../code/imposto/PISCOFINS'
   import type { IIBPT } from '../code/tipos'
 
   export let raiz: any
@@ -19,6 +22,10 @@
       const imposto = ibpt.federal + ibpt.estadual + ibpt.municipal
       raiz.imposto.vTotTrib = vProd * imposto
     } else delete raiz.imposto.vTotTrib
+    atualizarICMS(raiz, consumidorFinal)
+    atualizarIPI(raiz)
+    atualizarPISCOFINS(raiz)
+    console.log('Calculados impostos')
   }
 </script>
 

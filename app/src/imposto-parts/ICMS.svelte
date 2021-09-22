@@ -55,23 +55,7 @@
 
   let usarCalculoAutomatico = true
 
-  function calculoAdaptado(prod: any, imposto: any, ipi: any) {
-    usarCalculoAutomatico = false
-    const res = calcular(prod, imposto, ipi, consumidorFinal)
-    if (res.vICMSOp) {
-      ICMS.vICMSOp = res.vICMSOp
-      ICMS.vICMSDif = res.vICMSDif
-    } else ICMS.vICMSOp = ICMS.vICMSDif = ''
-    if (res.vBCST) {
-      ICMS.vBCST = res.vBCST
-      ICMS.vICMSST = res.vICMSST
-    } else ICMS.vBCST = ICMS.vICMSST = ''
-    ICMS.vBC = res.vBC ? res.vBC : ''
-    ICMS.vICMS = res.vICMS ? res.vICMS : ''
-    usarCalculoAutomatico = true
-  }
-  prod && calculoAdaptado(prod, ICMS, ipi)
-  $: prod && usarCalculoAutomatico && calculoAdaptado(prod, ICMS, ipi)
+  $: usarCalculoAutomatico && (ICMS = calcular(prod, ICMS, ipi, consumidorFinal))
 </script>
 
 <h4>ICMS</h4>

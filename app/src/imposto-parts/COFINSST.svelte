@@ -6,8 +6,7 @@
   export let raiz: any
   export let prod: any
 
-  raiz['vCOFINS'] = calcular(prod, raiz, 'COFINS')
-  $: raiz['vCOFINS'] = calcular(prod, raiz, 'COFINS')
+  $: raiz = calcular(prod, raiz, 'COFINS')
 </script>
 
 <h4>COFINS ST</h4>

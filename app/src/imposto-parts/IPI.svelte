@@ -21,8 +21,7 @@
     }
   }
 
-  IPI['vIPI'] = calcular(prod, IPI)
-  $: IPI['vIPI'] = calcular(prod, IPI)
+  $: IPI = calcular(prod, IPI)
 </script>
 
 <h4>Imposto sobre produtos industrializados</h4>

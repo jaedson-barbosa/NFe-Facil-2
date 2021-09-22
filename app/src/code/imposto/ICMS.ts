@@ -1,4 +1,32 @@
+export function atualizarICMS(det: any, consumidorFinal: boolean) {
+  const prod = det.prod
+  const ICMS = det.imposto.ICMS
+  const icms = Object.values(ICMS)[0]
+  const IPI = det.imposto.IPI
+  calcular(prod, icms, IPI, consumidorFinal)
+}
+
 export function calcular(
+  prod: any,
+  ICMS: any,
+  ipi: any,
+  consumidorFinal: boolean
+) {
+  const res = _calcular(prod, ICMS, ipi, consumidorFinal)
+  if (res.vICMSOp) {
+    ICMS.vICMSOp = res.vICMSOp
+    ICMS.vICMSDif = res.vICMSDif
+  } else ICMS.vICMSOp = ICMS.vICMSDif = ''
+  if (res.vBCST) {
+    ICMS.vBCST = res.vBCST
+    ICMS.vICMSST = res.vICMSST
+  } else ICMS.vBCST = ICMS.vICMSST = ''
+  ICMS.vBC = res.vBC ? res.vBC : ''
+  ICMS.vICMS = res.vICMS ? res.vICMS : ''
+  return ICMS
+}
+
+function _calcular(
   prod: any,
   imposto: any,
   ipi: any,

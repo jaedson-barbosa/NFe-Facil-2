@@ -1,3 +1,12 @@
+export function atualizarIPI(det: any) {
+  const IPI = det.imposto.IPI
+  if (IPI) {
+    const prod = det.prod
+    const ipi = IPI['IPITrib'] ?? IPI['IPINT']
+    calcular(prod, ipi)
+  }
+}
+
 export function calcular(prod: any, imposto: any) {
   const vProd = +(prod['vProd'] ?? 0)
   const vFrete = +(prod['vFrete'] ?? 0)
@@ -7,15 +16,16 @@ export function calcular(prod: any, imposto: any) {
     const pIPI = +imposto['pIPI']
     const vBC = vProd + vFrete + vSeg + vOutro
     imposto['vBC'] = vBC
-    return pIPI * vBC / 100
+    imposto.vIPI = pIPI * vBC / 100
   } else imposto['vBC'] = ''
   if (imposto['vUnid']) {
     const vUnid = +imposto['vUnid']
     const qUnid = +(prod['qTrib'] ?? 0)
     imposto['qUnid'] = qUnid
-    return vUnid * qUnid
+    imposto.vIPI = vUnid * qUnid
   } else imposto['qBCProd'] = ''
-  return ''
+  if (!imposto['pIPI'] && !imposto['vUnid']) imposto.vIPI = ''
+  return imposto
 }
 
 export const CST: [string, string][] = [

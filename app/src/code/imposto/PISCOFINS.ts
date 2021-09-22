@@ -1,18 +1,49 @@
+function atualizarPIS(prod: any, imposto: any) {
+  const PIS = imposto.PIS
+  const pis = Object.values(PIS)[0]
+  calcular(prod, pis, 'PIS')
+}
+
+function atualizarPISST(prod: any, imposto: any) {
+  const PISST = imposto.PISST
+  if (PISST) calcular(prod, PISST, 'PIS')
+}
+
+function atualizarCOFINS(prod: any, imposto: any) {
+  const COFINS = imposto.COFINS
+  const cofins = Object.values(COFINS)[0]
+  calcular(prod, cofins, 'COFINS')
+}
+
+function atualizarCOFINSST(prod: any, imposto: any) {
+  const COFINSST = imposto.COFINSST
+  if (COFINSST) calcular(prod, COFINSST, 'COFINS')
+}
+
+export function atualizarPISCOFINS(det: any) {
+  const prod = det.prod
+  const imposto = det.imposto
+  atualizarPIS(prod, imposto)
+  atualizarPISST(prod, imposto)
+  atualizarCOFINS(prod, imposto)
+  atualizarCOFINSST(prod, imposto)
+}
+
 export function calcular(prod: any, imposto: any, tipo: 'PIS' | 'COFINS') {
-  const vProd = +(prod['vProd'] ?? 0)
-  const pName = 'p' + tipo
-  if (imposto[pName]) {
-    const percentual = +imposto[pName]
+  const vProd = +prod['vProd'] || 0
+  if (imposto['p' + tipo]) {
+    const percentual = +imposto['p' + tipo]
     imposto['vBC'] = vProd
-    return percentual * vProd / 100
+    imposto['v' + tipo] = (percentual * vProd) / 100
   } else imposto['vBC'] = ''
   if (imposto['vAliqProd']) {
     const vAliqProd = +imposto['vAliqProd']
-    const qBCProd = +(prod['qTrib'] ?? 0)
+    const qBCProd = +prod['qTrib'] || 0
     imposto['qBCProd'] = qBCProd
-    return vAliqProd * qBCProd
+    imposto['v' + tipo] = vAliqProd * qBCProd
   } else imposto['qBCProd'] = ''
-  return ''
+  if (!imposto['p' + tipo] && !imposto['vAliqProd']) imposto['v' + tipo] = ''
+  return imposto
 }
 
 export const CST: [string, string][] = [
