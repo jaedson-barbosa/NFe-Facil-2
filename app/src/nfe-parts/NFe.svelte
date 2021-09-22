@@ -10,23 +10,39 @@
   import InfAdic from './InfAdic.svelte'
   import ProdutoSimples from './ProdutoSimples.svelte'
   import Voltar from '../components/Voltar.svelte'
-  import { DocumentSnapshot } from 'firebase/firestore'
+  import { doc, DocumentSnapshot, getDoc } from 'firebase/firestore'
   import { empresa, refEmpresa } from '../code/store'
-  import { Dados } from '../code/tipos'
+  import { Dados, IIBPT } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { get } from 'svelte/store'
   import { getMoeda } from '../code/numero'
+  import { goto, ready } from '@roxi/routify'
 
   export let raiz: any
+
   if (!raiz.emit) raiz.emit = get(empresa).emit
 
   if (!raiz.dest) raiz.dest = {}
-  if (!raiz.det) raiz.det = []
+
   raiz.infRespTec = {
     CNPJ: '12931158000164',
     xContato: 'Jaedson Barbosa Serafim',
     email: 'jaedson33@gmail.com',
     fone: '83988856440',
+  }
+
+  let ibpt: IIBPT[] = []
+
+  if (raiz.det?.length) {
+    const cods: string[] = raiz.det.map((v) => v.prod.cProd)
+    const refs = cods.map((v) => doc(get(refEmpresa), Dados.Produtos, v))
+    Promise.all(refs.map((v) => getDoc(v))).then((v) => {
+      ibpt = v.map((k) => k.get('ibpt'))
+      $ready()
+    })
+  } else {
+    raiz.det = []
+    $ready()
   }
 
   $: dest = raiz['dest']
@@ -51,7 +67,8 @@
     (v) => (produtos = v)
   )
 
-  $: isNFCe = raiz['ide']?.['mod'] === '65'
+  $: consumidorFinal = raiz.ide?.indFinal == '1'
+  $: isNFCe = raiz.ide?.['mod'] === '65'
 
   function ratear(titulo: string, campo: string) {
     return () => {
@@ -64,6 +81,22 @@
         v.prod[campo] = +novo.toFixed(2)
       })
       raiz.det = raiz.det
+    }
+  }
+
+  function addProd(p: DocumentSnapshot) {
+    return () => {
+      const data = p.data()
+      raiz.det = [data.det, ...raiz.det]
+      ibpt.unshift(data.ibpt)
+    }
+  }
+
+  function removerProd(index: number) {
+    return () => {
+      raiz.det.splice(index, 1)
+      raiz.det = raiz.det
+      ibpt.splice(index, 1)
     }
   }
 </script>
@@ -145,10 +178,7 @@
   </thead>
   <tbody>
     {#each produtos as p}
-      <tr
-        class="clicavel"
-        on:click={() => (raiz.det = [p.data().det, ...raiz.det])}
-      >
+      <tr class="clicavel" on:click={addProd(p)}>
         <td>{p.get('det.prod.cProd')}</td>
         <td>{p.get('det.prod.xProd')}</td>
         <td>{getMoeda(p.get('det.prod.vUnCom'))}</td>
@@ -171,7 +201,13 @@
     </thead>
     <tbody>
       {#each raiz.det as _, i}
-        <ProdutoSimples bind:raiz index={i} />
+        <ProdutoSimples
+          bind:raiz
+          {consumidorFinal}
+          ibpt={ibpt[i]}
+          on:invalido={removerProd(i)}
+          on:click={() => $goto('/:produto', { produto: i.toString() })}
+        />
       {/each}
     </tbody>
   </table>

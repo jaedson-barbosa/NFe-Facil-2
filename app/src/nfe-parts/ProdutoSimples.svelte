@@ -1,38 +1,37 @@
 <script lang="ts">
-  import { goto } from '@roxi/routify'
+  import { createEventDispatcher } from 'svelte'
+  import type { IIBPT } from '../code/tipos'
 
   export let raiz: any
-  export let index: number
+  export let ibpt: IIBPT
+  export let consumidorFinal: boolean
 
-  $: prod = raiz.det[index].prod
-  $: prod['vProd'] = (+prod['qCom'] * +prod['vUnCom']).toFixed(2)
+  const dispatch = createEventDispatcher()
 
   $: {
-    const qCom = +(prod['qCom'] ?? 1)
-    const vUnCom = +prod['vUnCom']
-    const vUnTrib = +prod['vUnTrib']
-    prod.qTrib = (qCom * vUnCom) / vUnTrib
-  }
-
-  function remover() {
-    raiz.det.splice(index, 1)
-    raiz.det = raiz.det
+    const qCom = +raiz.prod.qCom || 1
+    const vUnCom = +raiz.prod.vUnCom
+    const vProd = qCom * vUnCom
+    raiz.prod.vProd = vProd
+    const vUnTrib = +raiz.prod.vUnTrib
+    raiz.prod.qTrib = vProd / vUnTrib
+    if (consumidorFinal) {
+      const imposto = ibpt.federal + ibpt.estadual + ibpt.municipal
+      raiz.imposto.vTotTrib = vProd * imposto
+    } else delete raiz.imposto.vTotTrib
   }
 </script>
 
-<tr
-  class="clicavel"
-  on:click={() => $goto('/:produto', { produto: index.toString() })}
->
-  <td>{prod.cProd}</td>
+<tr class="clicavel" on:click>
+  <td>{raiz.prod.cProd}</td>
   <td>
     <input
       type="number"
       step="0.0001"
       min="0"
-      on:click|stopPropagation
-      on:blur={() => prod.qCom == 0 && remover()}
-      bind:value={prod.qCom}
+      on:click|stopPropagation={() => {}}
+      on:blur={() => raiz.prod.qCom == 0 && dispatch('invalido')}
+      bind:value={raiz.prod.qCom}
       required
     />
   </td>
@@ -41,8 +40,8 @@
       type="number"
       step="0.01"
       min="0"
-      on:click|stopPropagation
-      bind:value={prod.vFrete}
+      on:click|stopPropagation={() => {}}
+      bind:value={raiz.prod.vFrete}
     />
   </td>
   <td>
@@ -50,8 +49,8 @@
       type="number"
       step="0.01"
       min="0"
-      on:click|stopPropagation
-      bind:value={prod.vSeg}
+      on:click|stopPropagation={() => {}}
+      bind:value={raiz.prod.vSeg}
     />
   </td>
   <td>
@@ -59,8 +58,8 @@
       type="number"
       step="0.01"
       min="0"
-      on:click|stopPropagation
-      bind:value={prod.vDesc}
+      on:click|stopPropagation={() => {}}
+      bind:value={raiz.prod.vDesc}
     />
   </td>
   <td>
@@ -68,8 +67,8 @@
       type="number"
       step="0.01"
       min="0"
-      on:click|stopPropagation
-      bind:value={prod.vOutro}
+      on:click|stopPropagation={() => {}}
+      bind:value={raiz.prod.vOutro}
     />
   </td>
 </tr>
