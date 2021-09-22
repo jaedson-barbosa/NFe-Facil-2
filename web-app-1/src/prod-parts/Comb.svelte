@@ -15,7 +15,7 @@
 <InputT
   bind:val={raiz.descANP}
   lab="Descrição do Produto conforme ANP"
-  aux="Utilizar a descrição de produtos do SIMP (Sistema de Informações de Movimentação de Produtos)"
+  aux="Utilizar a descrição de produtos do SIMP"
   min={2}
   max={95}
 />
@@ -52,14 +52,14 @@
   bind:val={raiz.CODIF}
   opt
   lab="Código de autorização / registro do CODIF"
-  aux="Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com Álcool Etílico Anidro Combustível)"
+  aux="Informar quando a UF utilizar o CODIF"
   pat={'[0-9]{1,21}'}
 />
 <InputT
   bind:val={raiz.qTemp}
   opt
   lab="Quantidade de combustível faturada à temperatura ambiente"
-  aux="Informar quando a quantidade faturada informada no campo de quantidade comercial tiver sido ajustada para uma temperatura diferente da ambiente"
+  aux="Informar quando a quantidade tiver sido ajustada para uma temperatura diferente da ambiente"
   pat={'0.[1-9]{1}[0-9]{3}|0.[0-9]{3}[1-9]{1}|0.[0-9]{2}[1-9]{1}[0-9]{1}|0.[0-9]{1}[1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{0,11}(.[0-9]{4})?'}
 />
 <Estado bind:UF={raiz.UFCons} incluirEX lab="UF de consumo" />
@@ -94,13 +94,6 @@
     pat={'[0-9]{1,3}'}
   />
   <InputT
-    name="nBomba"
-    raiz={encerrante}
-    opt
-    lab="Numero da bomba, caso exista"
-    pat={'[0-9]{1,3}'}
-  />
-  <InputT
     name="nTanque"
     raiz={encerrante}
     lab="Numero de identificação do tanque"
@@ -117,5 +110,12 @@
     raiz={encerrante}
     lab="Valor do Encerrante no final do abastecimento"
     pat={'0|0.[0-9]{3}|[1-9]{1}[0-9]{0,11}(.[0-9]{3})?'}
+  />
+  <InputT
+    name="nBomba"
+    raiz={encerrante}
+    opt
+    lab="Numero da bomba"
+    pat={'[0-9]{1,3}'}
   />
 </Opcional>

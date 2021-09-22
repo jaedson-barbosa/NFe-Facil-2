@@ -1,6 +1,5 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
-  import Opcional from '../components/Opcional.svelte'
   import DE from '../prod-parts/DE.svelte'
   import Rastro from '../prod-parts/Rastro.svelte'
   import VeicProd from '../prod-parts/VeicProd.svelte'
@@ -13,13 +12,13 @@
   export let raiz: any
 
   if (!raiz['prod']) raiz['prod'] = {}
-  const prod = raiz['prod']
+  let prod = raiz.prod
+  $: raiz.prod = prod
 
-  if (!raiz.rastro) raiz.rastro = []
-  if (!raiz.DI) raiz.DI = []
-
-  $: impostoDevol = raiz['impostoDevol'] ?? {}
-  $: impostoDevol && !impostoDevol.IPI && (impostoDevol.IPI = {})
+  if (!prod.rastro) prod.rastro = []
+  if (!prod.DI) prod.DI = []
+  if (!prod.impostoDevol) prod.impostoDevol = {}
+  if (!prod.impostoDevol.IPI) prod.impostoDevol.IPI = {}
 </script>
 
 <h3>Detalhes adicionais de {prod['xProd']}</h3>
@@ -33,7 +32,7 @@
 <h4>Declaração de Importação</h4>
 <a class="button" href={$url('./:di', { di: '-1' })}>Adicionar</a>
 <br />
-{#if raiz.DI.length}
+{#if prod.DI.length}
   <table>
     <thead>
       <tr>
@@ -41,9 +40,9 @@
       </tr>
     </thead>
     <tbody>
-      {#each raiz.DI as _, i}
+      {#each prod.DI as _, i}
         <tr on:click={$goto('./:di', { di: i })}>
-          <td>{raiz.DI[i].nDI}</td>
+          <td>{prod.DI[i].nDI}</td>
         </tr>
       {/each}
     </tbody>
@@ -51,23 +50,22 @@
 {/if}
 <br />
 
-<DE raiz={prod} />
+<DE bind:raiz={prod} />
 
-<Opcional {raiz} name="impostoDevol" titulo="imposto devolvido">
-  <h4>Imposto devolvido</h4>
-  <InputT
-    raiz={impostoDevol}
-    name="pDevol"
-    lab="Percentual de mercadoria devolvida"
-    pat={'0(.[0-9]{2})?|100(.00)?|[1-9]{1}[0-9]{0,1}(.[0-9]{2})?'}
-  />
-  <InputT
-    raiz={impostoDevol.IPI}
-    name="vIPIDevol"
-    lab="Valor do IPI devolvido"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-</Opcional>
+<h4>Imposto devolvido</h4>
+<InputT
+  bind:val={raiz.impostoDevol.pDevol}
+  opt={!raiz.impostoDevol.IPI.vIPIDevol}
+  lab="Percentual de mercadoria devolvida"
+  pat={'0(.[0-9]{2})?|100(.00)?|[1-9]{1}[0-9]{0,1}(.[0-9]{2})?'}
+/>
+<InputT
+  bind:val={raiz.impostoDevol.IPI.vIPIDevol}
+  opt={!raiz.impostoDevol.pDevol}
+  lab="Valor do IPI devolvido"
+  pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+/>
+
 <InputT
   bind:val={raiz['infAdProd']}
   opt
@@ -80,15 +78,15 @@
 {#if ['veicProd', 'med', 'arma', 'comb', 'nRECOPI'].some((v) => !!v[prod])}
   <h3>Detalhamento específico</h3>
   {#if prod['veicProd']}
-    <VeicProd raiz={prod['veicProd']} />
+    <VeicProd bind:raiz={prod['veicProd']} />
   {/if}
   {#if prod['med']}
-    <Med raiz={prod['med']} />
+    <Med bind:raiz={prod['med']} />
     <h4>Rastreabilidade</h4>
-    <button type="button" on:click={() => (raiz.rastro = [{}, ...raiz.rastro])}>
+    <button type="button" on:click={() => (prod.rastro = [{}, ...prod.rastro])}>
       Adicionar
     </button>
-    {#if raiz.rastro.length}
+    {#if prod.rastro.length}
       <table>
         <thead>
           <tr>
@@ -100,20 +98,20 @@
           </tr>
         </thead>
         <tbody>
-          {#each raiz.rastro as _, i}
-            <Rastro raiz={raiz.rastro[i]} />
+          {#each prod.rastro as _, i}
+            <Rastro bind:raiz={prod.rastro[i]} />
           {/each}
         </tbody>
       </table>
     {/if}
   {/if}
   {#if prod['arma']}
-    <Arma raiz={prod['arma']} />
+    <Arma bind:raiz={prod['arma']} />
   {/if}
   {#if prod['comb']}
-    <Comb raiz={prod['comb']} />
+    <Comb bind:raiz={prod['comb']} />
   {/if}
   {#if prod['nRECOPI']}
-    <NRECOPI raiz={prod} />
+    <NRECOPI bind:raiz={prod} />
   {/if}
 {/if}

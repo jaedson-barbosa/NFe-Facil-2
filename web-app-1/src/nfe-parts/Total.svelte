@@ -1,6 +1,5 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
-  import Opcional from '../components/Opcional.svelte'
 
   export let raiz: any
 
@@ -132,49 +131,47 @@
   pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 
-<Opcional raiz={total} name="retTrib" titulo="retenção de tributos">
-  <h3>Retenção de tributos</h3>
-  <InputT
-    bind:val={total.retTrib['vRetPIS']}
-    opt
-    lab="Valor Retido de PIS"
-    pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <InputT
-    bind:val={total.retTrib['vRetCOFINS']}
-    opt
-    lab="Valor Retido de COFINS"
-    pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <InputT
-    bind:val={total.retTrib['vRetCSLL']}
-    opt
-    lab="Valor Retido de CSLL"
-    pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <InputT
-    bind:val={total.retTrib['vBCIRRF']}
-    opt
-    lab="Base de Cálculo do IRRF"
-    pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <InputT
-    bind:val={total.retTrib['vIRRF']}
-    opt
-    lab="Valor Retido de IRRF"
-    pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <InputT
-    bind:val={total.retTrib['vBCRetPrev']}
-    opt
-    lab="Base de Cálculo da Retenção da Previdêncica Social"
-    pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <InputT
-    bind:val={total.retTrib['vRetPrev']}
-    opt
-    lab="Valor da Retenção da Previdêncica Social"
-    pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-</Opcional>
+<h3>Retenção de tributos</h3>
+<InputT
+  bind:val={total.retTrib['vRetPIS']}
+  opt
+  lab="Valor Retido de PIS"
+  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+/>
+<InputT
+  bind:val={total.retTrib['vRetCOFINS']}
+  opt
+  lab="Valor Retido de COFINS"
+  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+/>
+<InputT
+  bind:val={total.retTrib['vRetCSLL']}
+  opt
+  lab="Valor Retido de CSLL"
+  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+/>
+<InputT
+  bind:val={total.retTrib['vBCIRRF']}
+  opt
+  lab="Base de Cálculo do IRRF"
+  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+/>
+<InputT
+  bind:val={total.retTrib['vIRRF']}
+  opt
+  lab="Valor Retido de IRRF"
+  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+/>
+<InputT
+  bind:val={total.retTrib['vBCRetPrev']}
+  opt
+  lab="Base de Cálculo da Retenção da Previdêncica Social"
+  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+/>
+<InputT
+  bind:val={total.retTrib['vRetPrev']}
+  opt
+  lab="Valor da Retenção da Previdêncica Social"
+  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+/>
 <br />
