@@ -7,10 +7,6 @@
   $: prod = raiz.det[index].prod
   $: prod['vProd'] = (+prod['qCom'] * +prod['vUnCom']).toFixed(2)
 
-  function calcularQuantidadeEValorTributavel(qCom: string) {
-    
-  }
-
   $: {
     const qCom = +(prod['qCom'] ?? 1)
     const vUnCom = +prod['vUnCom']
