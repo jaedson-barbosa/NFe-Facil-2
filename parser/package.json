@@ -1,8 +1,0 @@
-{
-  "scripts": {
-    "parse": "ts-node index.ts"
-  },
-  "dependencies": {
-    "clipboardy": "^2.3.0"
-  }
-}
