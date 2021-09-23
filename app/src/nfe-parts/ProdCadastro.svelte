@@ -99,8 +99,8 @@
   </Opcional>
 {/if}
 {#if !raiz['veicProd'] && !raiz['med'] && !raiz['arma'] && !raiz['nRECOPI']}
-  <Opcional {raiz} name="comb" titulo="combustível" let:r>
-    <Comb raiz={r} />
+  <Opcional {raiz} name="comb" titulo="combustível">
+    <Comb bind:raiz />
   </Opcional>
 {/if}
 {#if !raiz['veicProd'] && !raiz['med'] && !raiz['arma'] && !raiz['comb']}

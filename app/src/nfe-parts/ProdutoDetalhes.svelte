@@ -109,7 +109,7 @@
     <Arma bind:raiz={prod['arma']} />
   {/if}
   {#if prod['comb']}
-    <Comb bind:raiz={prod['comb']} />
+    <Comb bind:raiz={prod} />
   {/if}
   {#if prod['nRECOPI']}
     <NRECOPI bind:raiz={prod} />

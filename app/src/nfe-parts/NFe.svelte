@@ -223,10 +223,11 @@
     Ratear adicionais
   </button>
   <br />
+  <br />
+  <Total bind:raiz />
 {/if}
 <br />
 
-<Total bind:raiz />
 <Transp bind:raiz />
 <Pag bind:raiz total={raiz.total?.ICMSTot?.vNF ?? 0} />
 <InfAdic bind:raiz />

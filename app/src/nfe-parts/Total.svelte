@@ -90,7 +90,7 @@
     {/if}
     {#if ICMSTot.vFCP}
       <tr>
-        <td>Valor Total do FCP</td>
+        <td>Valor total do FCP</td>
         <td>{getMoeda(ICMSTot.vFCP)}</td>
       </tr>
     {/if}
@@ -102,37 +102,37 @@
     {/if}
     {#if ICMSTot.vST}
       <tr>
-        <td>Valor Total do ICMS ST</td>
+        <td>Valor total do ICMS ST</td>
         <td>{getMoeda(ICMSTot.vST)}</td>
       </tr>
     {/if}
     {#if ICMSTot.vFCPST}
       <tr>
-        <td>Valor Total do FCP retido por ST</td>
+        <td>Valor total do FCP retido por ST</td>
         <td>{getMoeda(ICMSTot.vFCPST)}</td>
       </tr>
     {/if}
     {#if ICMSTot.vFCPSTRet}
       <tr>
-        <td>Valor Total do FCP retido anteriormente por ST</td>
+        <td>Valor total do FCP retido anteriormente por ST</td>
         <td>{getMoeda(ICMSTot.vFCPSTRet)}</td>
       </tr>
     {/if}
     {#if ICMSTot.vII}
       <tr>
-        <td>Valor Total do II</td>
+        <td>Valor total do II</td>
         <td>{getMoeda(ICMSTot.vII)}</td>
       </tr>
     {/if}
     {#if ICMSTot.vIPI}
       <tr>
-        <td>Valor Total do IPI</td>
+        <td>Valor total do IPI</td>
         <td>{getMoeda(ICMSTot.vIPI)}</td>
       </tr>
     {/if}
     {#if ICMSTot.vIPIDevol}
       <tr>
-        <td>Valor Total do IPI devolvido</td>
+        <td>Valor total do IPI devolvido</td>
         <td>{getMoeda(ICMSTot.vIPIDevol)}</td>
       </tr>
     {/if}
@@ -150,7 +150,7 @@
     {/if}
     {#if ICMSTot.vNF}
       <tr>
-        <td>Valor Total da NF-e</td>
+        <td>Valor total da NF-e</td>
         <td>{getMoeda(ICMSTot.vNF)}</td>
       </tr>
     {/if}
@@ -207,4 +207,3 @@
   lab="Valor da Retenção da Previdêncica Social"
   pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
-<br />

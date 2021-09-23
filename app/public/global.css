@@ -35,6 +35,10 @@ td > input {
   margin-bottom: 0;
 }
 
+td > select {
+  margin-bottom: 0;
+}
+
 p {
   max-width: 600px;
 }

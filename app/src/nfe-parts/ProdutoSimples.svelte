@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   import { calcularAproximacao } from '../code/imposto/aproximado'
+  import { calcularCIDE } from '../code/imposto/CIDE'
   import { atualizarICMS } from '../code/imposto/ICMS'
   import { atualizarIPI } from '../code/imposto/IPI'
   import { atualizarPISCOFINS } from '../code/imposto/PISCOFINS'
@@ -30,6 +31,7 @@
     atualizarIPI(prod, imposto)
     atualizarPISCOFINS(prod, imposto)
     calcularAproximacao(prod, imposto, consumidorFinal, ibpt)
+    calcularCIDE(prod)
     return imposto
   }
   $: raiz.imposto = atualizarImpostos(prod)
