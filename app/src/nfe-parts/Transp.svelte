@@ -9,6 +9,7 @@
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { goto, url } from '@roxi/routify'
+  import Municipio from '../components/Municipio.svelte'
 
   export let raiz: any
 
@@ -205,13 +206,12 @@
   />
   <InputT
     bind:val={transp.retTransp['CFOP']}
-    lab="Código Fiscal de Operações e Prestações"
+    lab="CFOP de serviço de transporte"
     pat={'[1,2,3,5,6,7]{1}[0-9]{3}'}
   />
-  <InputT
-    bind:val={transp.retTransp['cMunFG']}
-    lab="Código do Município de Ocorrência do Fato Gerador"
-    pat={'[0-9]{7}'}
+  <Municipio
+    bind:cMun={transp.retTransp['cMunFG']}
+    lab="Município do fato gerador do ICMS do transporte"
   />
 </Opcional>
 

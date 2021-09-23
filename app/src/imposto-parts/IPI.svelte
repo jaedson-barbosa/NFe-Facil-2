@@ -24,7 +24,7 @@
   $: IPI = calcular(prod, IPI)
 </script>
 
-<h4>Imposto sobre produtos industrializados</h4>
+<h3>Imposto sobre produtos industrializados</h3>
 <InputT
   {raiz}
   name="CNPJProd"

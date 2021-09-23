@@ -21,7 +21,7 @@
   if (!raiz.impostoDevol.IPI) raiz.impostoDevol.IPI = {}
 </script>
 
-<h3>Detalhes adicionais de {prod['xProd']}</h3>
+<h2>Detalhes adicionais de {prod['xProd']}</h2>
 <InputT
   bind:val={prod['nFCI']}
   opt
@@ -29,7 +29,7 @@
   pat={'[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}'}
 />
 
-<h4>Declaração de Importação</h4>
+<h3>Declaração de Importação</h3>
 <a class="button" href={$url('./:di', { di: '-1' })}>Adicionar</a>
 <br />
 {#if prod.DI.length}
@@ -52,7 +52,7 @@
 
 <DE bind:raiz={prod} />
 
-<h4>Imposto devolvido</h4>
+<h3>Imposto devolvido</h3>
 <InputT
   bind:val={raiz.impostoDevol.pDevol}
   opt={!raiz.impostoDevol.IPI.vIPIDevol}
@@ -76,13 +76,13 @@
 />
 
 {#if ['veicProd', 'med', 'arma', 'comb', 'nRECOPI'].some((v) => !!v[prod])}
-  <h3>Detalhamento específico</h3>
+  <h2>Detalhamento específico</h2>
   {#if prod['veicProd']}
     <VeicProd bind:raiz={prod['veicProd']} />
   {/if}
   {#if prod['med']}
     <Med bind:raiz={prod['med']} />
-    <h4>Rastreabilidade</h4>
+    <h3>Rastreabilidade</h3>
     <button type="button" on:click={() => (prod.rastro = [{}, ...prod.rastro])}>
       Adicionar
     </button>

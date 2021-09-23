@@ -42,3 +42,7 @@ td > select {
 p {
   max-width: 600px;
 }
+
+.opt {
+  font-style: italic;
+}

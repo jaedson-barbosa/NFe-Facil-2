@@ -1,9 +1,15 @@
 export function calcularCIDE(prod: any) {
   const comb = prod.comb
-  if (!comb) return
+  if (!comb) return prod
   const cide = comb.CIDE
-  if (!cide) return
-  cide.qBCProd = prod.qCom
-  cide.vCIDE = +prod.qCom * +cide.vAliqProd || 0
-  return comb
+  if (!cide) return prod
+  const vAliqProd = +cide.vAliqProd
+  if (cide.vAliqProd == '' || isNaN(vAliqProd)) {
+    cide.qBCProd = cide.vCIDE = ''
+    return prod
+  }
+  const qCom = +prod.qCom
+  cide.qBCProd = qCom
+  cide.vCIDE = qCom * vAliqProd
+  return prod
 }

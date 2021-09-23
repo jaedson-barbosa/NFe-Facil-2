@@ -21,7 +21,7 @@
   $: ipi = imposto.IPI
 </script>
 
-<h3>Impostos</h3>
+<h2>Impostos</h2>
 <InputT
   bind:val={imposto['vTotTrib']}
   opt
@@ -32,7 +32,6 @@
 <Opcional bind:raiz={imposto} name="IPI" titulo="IPI" let:r>
   <IPI raiz={r} {prod} />
 </Opcional>
-<II bind:raiz={imposto} />
 <PIS bind:raiz={imposto} {prod} />
 <Opcional bind:raiz={imposto} name="PISST" titulo="PIS ST" let:r>
   <PISST raiz={r} {prod} />
@@ -53,3 +52,4 @@
     <ICMSUFDest raiz={r} />
   </Opcional>
 {/if}
+<II bind:raiz={imposto} />

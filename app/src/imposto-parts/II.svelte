@@ -1,34 +1,50 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
-  import Opcional from '../components/Opcional.svelte'
-
   export let raiz: any
+  if (!raiz.II) raiz.II = {}
+
+  const campos = ['vBC', 'vDespAdu', 'vII', 'vIOF']
+  $: required = campos.some((v) => raiz.II[v])
 </script>
 
-<Opcional {raiz} name="II" titulo="II" let:r>
-  <h4>Imposto de Importação</h4>
-  <InputT
-    raiz={r}
-    name="vBC"
-    lab="Base da BC do Imposto de Importação"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+<h3 class:opt={!required}>Imposto de Importação</h3>
+<label>
+  Base de cálculo
+  <input
+    type="number"
+    step="0.01"
+    min="0"
+    bind:value={raiz.II.vBC}
+    {required}
   />
-  <InputT
-    raiz={r}
-    name="vDespAdu"
-    lab="Valor das despesas aduaneiras"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+</label>
+<label>
+  Valor das despesas aduaneiras
+  <input
+    type="number"
+    step="0.01"
+    min="0"
+    bind:value={raiz.II.vDespAdu}
+    {required}
   />
-  <InputT
-    raiz={r}
-    name="vII"
-    lab="Valor do Imposto de Importação"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+</label>
+<label>
+  Valor do II
+  <input
+    type="number"
+    step="0.01"
+    min="0"
+    bind:value={raiz.II.vII}
+    {required}
   />
-  <InputT
-    raiz={r}
-    name="vIOF"
-    lab="Valor do Imposto sobre Operações Financeiras"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
+</label>
+<label>
+  Valor do IOF
+  <input
+    type="number"
+    step="0.01"
+    min="0"
+    bind:value={raiz.II.vIOF}
+    {required}
   />
-</Opcional>
+</label>
+<br />

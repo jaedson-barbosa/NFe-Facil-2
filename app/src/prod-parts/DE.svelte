@@ -23,7 +23,7 @@
   }
 </script>
 
-<h4>Detalhe da exportação</h4>
+<h3>Detalhe da exportação</h3>
 <button
   type="button"
   on:click={() => (raiz.detExport = [{}, ...raiz.detExport])}

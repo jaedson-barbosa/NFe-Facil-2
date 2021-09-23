@@ -57,11 +57,11 @@
   $: ICMS = calcular(prod, ICMS, ipi, consumidorFinal)
 </script>
 
-<h4>ICMS</h4>
+<h3>ICMS</h3>
 <Select bind:val={tipoICMS} lab="Código de situação" els={CS} />
 <Select bind:val={ICMS['orig']} lab="Origem da mercadoria" els={origem} />
 {#if ['00', '10', '20', '51', '70', '90', 'Part10', 'Part90', '900'].includes(tipoICMS)}
-  <h5>ICMS próprio</h5>
+  <h4>ICMS próprio</h4>
   <Select
     bind:val={ICMS['modBC']}
     opt={tipoICMS == '51'}
@@ -120,7 +120,7 @@
   </p>
   <br />
   {#if !['Part10', 'Part90', '900'].includes(tipoICMS)}
-    <h5>Fundo de Combate à Pobreza</h5>
+    <h4>Fundo de Combate à Pobreza</h4>
     {#if ICMS['vBCFCP']}
       <p>
         <strong>Base de cálculo:</strong>
@@ -143,7 +143,7 @@
   {/if}
 {/if}
 {#if ['10', '30', '70', '90', 'Part10', 'Part90', '201', '202', '203', '900'].includes(tipoICMS)}
-  <h5>ICMS - Substituição tributária</h5>
+  <h4>ICMS - Substituição tributária</h4>
   <Select
     bind:val={ICMS['modBCST']}
     lab="Modalidade de determinação da BC do ICMS ST"
@@ -192,7 +192,7 @@
   {/if}
   <br />
   {#if !['Part10', 'Part90'].includes(tipoICMS)}
-    <h5>FCP - Substituição Tributária</h5>
+    <h4>FCP - Substituição Tributária</h4>
     {#if ICMS['vBCFCPST']}
       <p>
         <strong>Base de cálculo:</strong>
@@ -221,7 +221,7 @@
   </p>
 {/if}
 {#if ['60', 'ST41', 'ST60', '500'].includes(tipoICMS)}
-  <h5>ICMS cobrado anteriormente por ST</h5>
+  <h4>ICMS cobrado anteriormente por ST</h4>
   <InputT
     bind:val={ICMS['vBCSTRet']}
     opt={!['pST', 'vICMSSubstituto', 'vICMSSTRet'].some((v) => ICMS[v])}
@@ -249,7 +249,7 @@
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
   <br />
-  <h5>FCP retido anteriormente por ST</h5>
+  <h4>FCP retido anteriormente por ST</h4>
   <InputT
     bind:val={ICMS['vBCFCPSTRet']}
     opt={!ICMS['pFCPSTRet'] && !ICMS['vFCPSTRet']}
@@ -270,7 +270,7 @@
   />
   <br />
   {#if ['ST41', 'ST60'].includes(tipoICMS)}
-    <h5>ICMS ST da UF destino</h5>
+    <h4>ICMS ST da UF destino</h4>
     <InputT
       bind:val={ICMS['vBCSTDest']}
       lab="Base de cálculo"
@@ -283,7 +283,7 @@
     />
     <br />
   {/if}
-  <h5>ICMS efetivo</h5>
+  <h4>ICMS efetivo</h4>
   <InputT
     bind:val={ICMS['pRedBCEfet']}
     opt={!['vBCEfet', 'pICMSEfet', 'vICMSEfet'].some((v) => ICMS[v])}
@@ -311,7 +311,7 @@
   <br />
 {/if}
 {#if ['20', '30', '40', '41', '50', '70', '90'].includes(tipoICMS)}
-  <h5>ICMS desonerado</h5>
+  <h4>ICMS desonerado</h4>
   <InputT
     bind:val={ICMS['vICMSDeson']}
     opt={!ICMS['motDesICMS']}
@@ -327,7 +327,7 @@
   <br />
 {/if}
 {#if ['101', '201', '900'].includes(ICMS['CSOSN'])}
-  <h5>Crédito do ICMS</h5>
+  <h4>Crédito do ICMS</h4>
   <InputT
     bind:val={ICMS['pCredSN']}
     opt={ICMS['CSOSN'] == '900'}

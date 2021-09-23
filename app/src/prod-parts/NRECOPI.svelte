@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte'
   import InputT from '../components/InputT.svelte'
 
   export let raiz: any
+  onDestroy(() => (raiz.nRECOPI = ''))
 </script>
 
 <InputT

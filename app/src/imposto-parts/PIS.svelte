@@ -28,7 +28,7 @@
   $: PIS = calcular(prod, PIS, 'PIS')
 </script>
 
-<h4>PIS</h4>
+<h3>PIS</h3>
 <Select bind:val={tipoPIS} lab="CST" els={CST} />
 {#if comAliquota}
   {#if aliquotaEmPercentual}

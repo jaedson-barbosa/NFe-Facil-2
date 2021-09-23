@@ -8,7 +8,7 @@
   raiz.vICMSUFRemet = '0.00'
 </script>
 
-<h4>ICMS Interestadual</h4>
+<h3>ICMS Interestadual</h3>
 <p>
   Deve ser preenchido apenas nas vendas interestaduais para consumidor final não
   contribuinte do ICMS.

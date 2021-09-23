@@ -9,7 +9,7 @@
   $: raiz = calcular(prod, raiz, 'PIS')
 </script>
 
-<h4>PIS ST</h4>
+<h3>PIS ST</h3>
 {#if !raiz['vAliqProd']}
   <p>A base de cálculo considerada é o valor total bruto do produto.</p>
   <InputT

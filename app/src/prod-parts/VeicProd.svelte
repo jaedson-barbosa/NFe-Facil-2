@@ -1,14 +1,16 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte'
   import InputT from '../components/InputT.svelte'
   import Select from '../components/Select.svelte'
 
   export let raiz: any
+  if (!raiz.veicProd) raiz.veicProd = {}
+  onDestroy(() => (raiz.veicProd = undefined))
 </script>
 
-<h4>Veículo novo</h4>
+<h3>Veículo novo</h3>
 <Select
-  name="tpOp"
-  {raiz}
+  bind:val={raiz.veicProd.tpOp}
   lab="Tipo da Operação"
   els={[
     ['0', 'Venda concessionária'],
@@ -17,29 +19,30 @@
     ['3', 'Outros'],
   ]}
 />
-<InputT name="chassi" {raiz} lab="Chassi do veículo (VIN)" pat={'[A-Z0-9]+'} />
-<InputT {raiz} name="cCor" lab="Cor do veículo" min={1} max={4} />
-<InputT name="xCor" {raiz} lab="Descrição da cor" min={1} max={40} />
 <InputT
-  name="pot"
-  {raiz}
+  bind:val={raiz.veicProd.chassi}
+  lab="Chassi do veículo (VIN)"
+  pat={'[A-Z0-9]+'}
+/>
+<InputT bind:val={raiz.veicProd.cCor} lab="Cor do veículo" min={1} max={4} />
+<InputT bind:val={raiz.veicProd.xCor} lab="Descrição da cor" min={1} max={40} />
+<InputT
+  bind:val={raiz.veicProd.pot}
   lab="Potência máxima do motor do veículo em CV (cavalo vapor)"
   min={1}
   max={4}
 />
 <InputT
-  name="cilin"
-  {raiz}
+  bind:val={raiz.veicProd.cilin}
   lab="Capacidade voluntária do motor expressa em CC (cilindradas)"
   min={1}
   max={4}
 />
-<InputT {raiz} name="pesoL" lab="Peso líquido" min={1} max={9} />
-<InputT {raiz} name="pesoB" lab="Peso bruto" min={1} max={9} />
-<InputT name="nSerie" {raiz} lab="Serial (série)" min={1} max={9} />
+<InputT bind:val={raiz.veicProd.pesoL} lab="Peso líquido" min={1} max={9} />
+<InputT bind:val={raiz.veicProd.pesoB} lab="Peso bruto" min={1} max={9} />
+<InputT bind:val={raiz.veicProd.nSerie} lab="Serial (série)" min={1} max={9} />
 <Select
-  name="tpComb"
-  {raiz}
+  bind:val={raiz.veicProd.tpComb}
   lab="Tipo de combustível"
   els={[
     ['01', 'Álcool'],
@@ -62,31 +65,37 @@
     ['18', 'Gasolina/Elétrico'],
   ]}
 />
-<InputT name="nMotor" {raiz} lab="Número do motor" min={1} max={21} />
 <InputT
-  name="CMT"
-  {raiz}
+  bind:val={raiz.veicProd.nMotor}
+  lab="Número do motor"
+  min={1}
+  max={21}
+/>
+<InputT
+  bind:val={raiz.veicProd.CMT}
   lab="CMT (Capacidade Máxima de Tração) em toneladas"
   min={1}
   max={9}
 />
-<InputT name="dist" {raiz} lab="Distância entre eixos" min={1} max={4} />
 <InputT
-  name="anoMod"
-  {raiz}
+  bind:val={raiz.veicProd.dist}
+  lab="Distância entre eixos"
+  min={1}
+  max={4}
+/>
+<InputT
+  bind:val={raiz.veicProd.anoMod}
   lab="Ano do modelo_Formato: AAAA"
   pat={'[0-9]{4}'}
 />
 <InputT
-  name="anoFab"
-  {raiz}
+  bind:val={raiz.veicProd.anoFab}
   lab="Ano de fabricação_Formato: AAAA"
   pat={'[0-9]{4}'}
 />
-<InputT name="tpPint" {raiz} lab="Tipo de pintura" />
+<InputT bind:val={raiz.veicProd.tpPint} lab="Tipo de pintura" />
 <Select
-  name="tpVeic"
-  {raiz}
+  bind:val={raiz.veicProd.tpVeic}
   lab="Tipo de veículo"
   els={[
     ['02', 'Ciclomotor'],
@@ -112,8 +121,7 @@
   ]}
 />
 <Select
-  name="espVeic"
-  {raiz}
+  bind:val={raiz.veicProd.espVeic}
   lab="Espécie de veículo"
   els={[
     ['1', 'Passageiro'],
@@ -125,8 +133,7 @@
   ]}
 />
 <Select
-  name="VIN"
-  {raiz}
+  bind:val={raiz.veicProd.VIN}
   lab="Chassi remarcado"
   els={[
     ['R', 'Sim'],
@@ -134,8 +141,7 @@
   ]}
 />
 <Select
-  name="condVeic"
-  {raiz}
+  bind:val={raiz.veicProd.condVeic}
   lab="Condição do veículo"
   els={[
     ['1', 'Acabado'],
@@ -144,14 +150,12 @@
   ]}
 />
 <InputT
-  name="cMod"
-  {raiz}
+  bind:val={raiz.veicProd.cMod}
   lab="Código Marca Modelo (utilizar tabela RENAVAM)"
   pat={'[0-9]{1,6}'}
 />
 <Select
-  name="cCorDENATRAN"
-  {raiz}
+  bind:val={raiz.veicProd.cCorDENATRAN}
   lab="Cor"
   els={[
     ['01', 'Amarelo'],
@@ -173,16 +177,14 @@
   ]}
 />
 <InputT
-  name="lota"
-  {raiz}
+  bind:val={raiz.veicProd.lota}
   lab="Lotação máxima (passageiros sentados, inclusive motorista)"
   pat={'[0-9]{1,3}'}
   min={1}
   max={3}
 />
 <Select
-  name="tpRest"
-  {raiz}
+  bind:val={raiz.veicProd.tpRest}
   lab="Restrição"
   els={[
     ['0', 'Não há'],

@@ -1,7 +1,6 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
   import Select from '../components/Select.svelte'
-  import Opcional from '../components/Opcional.svelte'
   import VeicProd from '../prod-parts/VeicProd.svelte'
   import Med from '../prod-parts/Med.svelte'
   import Arma from '../prod-parts/Arma.svelte'
@@ -12,11 +11,15 @@
 
   if (!raiz['prod']) raiz['prod'] = {}
   let prod = raiz['prod']
-
+  $: raiz.prod = prod
   $: !prod['CEST'] && (prod['indEscala'] = prod['CNPJFab'] = '')
+
+  const detsComplexos = ['veicProd', 'med', 'arma', 'comb']
+  const detsEspecificos = [...detsComplexos, 'nRECOPI']
+  let detEspecifico = detsEspecificos.find((v) => prod[v]) ?? 'normal'
 </script>
 
-<h3>Dados do produto</h3>
+<h2>Dados do produto</h2>
 <InputT bind:val={prod['cProd']} lab="Código do produto" min={1} max={60} />
 <InputT bind:val={prod['xProd']} lab="Descrição" min={1} max={120} />
 <InputT bind:val={prod['NCM']} lab="Código NCM" pat={'[0-9]{2}|[0-9]{8}'} />
@@ -81,28 +84,25 @@
     ['0', 'Não'],
   ]}
 />
-
-<h3>Detalhamento específico</h3>
-{#if !raiz['med'] && !raiz['arma'] && !raiz['comb'] && !raiz['nRECOPI']}
-  <Opcional {raiz} name="veicProd" titulo="veículo novo" let:r>
-    <VeicProd raiz={r} />
-  </Opcional>
-{/if}
-{#if !raiz['veicProd'] && !raiz['arma'] && !raiz['comb'] && !raiz['nRECOPI']}
-  <Opcional {raiz} name="med" titulo="medicamento" let:r>
-    <Med raiz={r} />
-  </Opcional>
-{/if}
-{#if !raiz['veicProd'] && !raiz['med'] && !raiz['comb'] && !raiz['nRECOPI']}
-  <Opcional {raiz} name="arma" titulo="armamento" let:r>
-    <Arma raiz={r} />
-  </Opcional>
-{/if}
-{#if !raiz['veicProd'] && !raiz['med'] && !raiz['arma'] && !raiz['nRECOPI']}
-  <Opcional {raiz} name="comb" titulo="combustível">
-    <Comb bind:raiz />
-  </Opcional>
-{/if}
-{#if !raiz['veicProd'] && !raiz['med'] && !raiz['arma'] && !raiz['comb']}
-  <NRECOPI raiz={prod} />
+<label>
+  Detalhamento específico
+  <select bind:value={detEspecifico} required>
+    <option value="normal">Produto comum</option>
+    <option value="veicProd">Veículo</option>
+    <option value="med">Medicamento</option>
+    <option value="arma">Armamento</option>
+    <option value="comb">Combustível</option>
+    <option value="nRECOPI">Papel imune</option>
+  </select>
+</label>
+{#if detEspecifico == 'veicProd'}
+  <VeicProd bind:raiz={prod} />
+{:else if detEspecifico == 'med'}
+  <Med bind:raiz={prod} />
+{:else if detEspecifico == 'arma'}
+  <Arma bind:raiz={prod} />
+{:else if detEspecifico == 'comb'}
+  <Comb bind:raiz={prod} />
+{:else if detEspecifico == 'nRECOPI'}
+  <NRECOPI bind:raiz={prod} />
 {/if}

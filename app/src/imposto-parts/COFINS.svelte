@@ -29,7 +29,7 @@
   $: COFINS = calcular(prod, COFINS, 'COFINS')
 </script>
 
-<h4>COFINS</h4>
+<h3>COFINS</h3>
 <Select bind:val={tipoCOFINS} lab="CST" els={CST} />
 {#if comAliquota}
   {#if aliquotaEmPercentual}
