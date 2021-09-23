@@ -48,7 +48,9 @@
     />
   {/if}
   {#if PIS['vPIS']}
-    <strong>PIS calculado:</strong>
-    {getMoeda(PIS['vPIS'])}
+    <p>
+      <strong>PIS calculado:</strong>
+      {getMoeda(PIS['vPIS'])}
+    </p>
   {/if}
 {/if}

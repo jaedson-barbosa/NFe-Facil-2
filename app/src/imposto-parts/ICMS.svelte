@@ -11,6 +11,7 @@
     modBCST,
     calcular,
   } from '../code/imposto/ICMS'
+  import { getMoeda } from '../code/numero'
 
   export let raiz: any
   export let regimeNormal: boolean
@@ -53,18 +54,10 @@
     ICMS = raiz['ICMS'][c] = regimeNormal ? { CST: t } : { CSOSN: t }
   }
 
-  let usarCalculoAutomatico = true
-
-  $: usarCalculoAutomatico && (ICMS = calcular(prod, ICMS, ipi, consumidorFinal))
+  $: ICMS = calcular(prod, ICMS, ipi, consumidorFinal)
 </script>
 
 <h4>ICMS</h4>
-{#if prod}
-  <label>
-    <input type="checkbox" bind:checked={usarCalculoAutomatico} />
-    Usar cálculo semi-automático padrão
-  </label>
-{/if}
 <Select bind:val={tipoICMS} lab="Código de situação" els={CS} />
 <Select bind:val={ICMS['orig']} lab="Origem da mercadoria" els={origem} />
 {#if ['00', '10', '20', '51', '70', '90', 'Part10', 'Part90', '900'].includes(tipoICMS)}
@@ -83,6 +76,18 @@
       pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
     />
   {/if}
+  {#if ICMS['vBC']}
+    <p>
+      <strong>Valor da BC do ICMS</strong>
+      {getMoeda(ICMS['vBC'])}
+      <br />
+      <small>
+        Aqui é usada a fórmula mais comum, valor do produto + frete + seguro +
+        adicionais - desconto {consumidorFinal ? '+ ipi' : ''}. Caso aplicável,
+        o resultado deste somatório é multiplicado por 1 - redução / 100.
+      </small>
+    </p>
+  {/if}
   <InputT
     bind:val={ICMS['pICMS']}
     opt={tipoICMS == '51'}
@@ -90,41 +95,37 @@
     pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
   />
   {#if tipoICMS == '51'}
-    <InputT
-      bind:val={ICMS['vICMSOp']}
-      opt
-      lab="Valor do ICMS da Operação"
-      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-    />
+    {#if ICMS['vICMSOp']}
+      <p>
+        <strong>Valor do ICMS da Operação:</strong>
+        {getMoeda(ICMS['vICMSOp'])}
+      </p>
+    {/if}
     <InputT
       bind:val={ICMS['pDif']}
       opt
       lab="Percentual do diferemento"
       pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
     />
-    <InputT
-      bind:val={ICMS['vICMSDif']}
-      opt
-      lab="Valor do ICMS diferido"
-      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-    />
+    {#if ICMS['vICMSDif']}
+      <p>
+        <strong>Valor do ICMS diferido:</strong>
+        {getMoeda(ICMS['vICMSDif'])}
+      </p>
+    {/if}
   {/if}
-  <InputT
-    bind:val={ICMS['vICMS']}
-    opt={tipoICMS == '51'}
-    lab="Valor do ICMS"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
+  <p>
+    <strong>Valor do ICMS</strong>
+    {getMoeda(ICMS['vICMS'])}
+  </p>
   <br />
   {#if !['Part10', 'Part90', '900'].includes(tipoICMS)}
     <h5>Fundo de Combate à Pobreza</h5>
-    {#if tipoICMS != '00'}
-      <InputT
-        bind:val={ICMS['vBCFCP']}
-        opt={!ICMS['pFCP'] && !ICMS['vFCP']}
-        lab="Base de cálculo"
-        pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-      />
+    {#if ICMS['vBCFCP']}
+      <p>
+        <strong>Base de cálculo:</strong>
+        {getMoeda(ICMS['vBCFCP'])}
+      </p>
     {/if}
     <InputT
       bind:val={ICMS['pFCP']}
@@ -132,12 +133,12 @@
       lab="Percentual"
       pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
     />
-    <InputT
-      bind:val={ICMS['vFCP']}
-      opt={!ICMS['vBCFCP'] && !ICMS['pFCP']}
-      lab="Valor"
-      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-    />
+    {#if ICMS['vFCP']}
+      <p>
+        <strong>Valor:</strong>
+        {getMoeda(ICMS['vFCP'])}
+      </p>
+    {/if}
     <br />
   {/if}
 {/if}
@@ -160,21 +161,23 @@
     lab="Percentual de redução da BC ST"
     pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
   />
-  <InputT
-    bind:val={ICMS['vBCST']}
-    lab="Base de cálculo do ST"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
+  {#if ICMS['vBCST']}
+    <p>
+      <strong>Base de cálculo do ST:</strong>
+      {getMoeda(ICMS['vBCST'])}
+    </p>
+  {/if}
   <InputT
     bind:val={ICMS['pICMSST']}
     lab="Alíquota do ST"
     pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
   />
-  <InputT
-    bind:val={ICMS['vICMSST']}
-    lab="Valor do ST"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
+  {#if ICMS['vICMSST']}
+    <p>
+      <strong>Valor do ST:</strong>
+      {getMoeda(ICMS['vICMSST'])}
+    </p>
+  {/if}
   {#if ['Part10', 'Part90'].includes(tipoICMS)}
     <InputT
       bind:val={ICMS['pBCOp']}
@@ -188,28 +191,34 @@
     />
   {/if}
   <br />
+  {#if !['Part10', 'Part90'].includes(tipoICMS)}
+    <h5>FCP - Substituição Tributária</h5>
+    {#if ICMS['vBCFCPST']}
+      <p>
+        <strong>Base de cálculo:</strong>
+        {getMoeda(ICMS['vBCFCPST'])}
+      </p>
+    {/if}
+    <InputT
+      bind:val={ICMS['pFCPST']}
+      opt={!ICMS['vBCFCPST'] && !ICMS['vFCPST']}
+      lab="Percentual do FCP ST"
+      pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
+    />
+    {#if ICMS['vFCPST']}
+      <p>
+        <strong>Valor:</strong>
+        {getMoeda(ICMS['vFCPST'])}
+      </p>
+    {/if}
+    <br />
+  {/if}
 {/if}
-{#if ['10', '30', '60', '70', '90', '201', '202', '203', '900'].includes(tipoICMS)}
-  <h5>FCP - Substituição Tributária</h5>
-  <InputT
-    bind:val={ICMS['vBCFCPST']}
-    opt={!ICMS['pFCPST'] && !ICMS['vFCPST']}
-    lab="Base de cálculo do FCP ST"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <InputT
-    bind:val={ICMS['pFCPST']}
-    opt={!ICMS['vBCFCPST'] && !ICMS['vFCPST']}
-    lab="Percentual do FCP ST"
-    pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
-  />
-  <InputT
-    bind:val={ICMS['vFCPST']}
-    opt={!ICMS['vBCFCPST'] && !ICMS['pFCPST']}
-    lab="Valor do FCP ST"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <br />
+{#if ['20', '30', '40', '41', '50', '60', '70', '90', 'ST41', 'ST60', '101', '201', '500', '900'].includes(tipoICMS)}
+  <p>
+    Aviso: Deste ponto em diante os campos do ICMS não tem nenhum tipo de
+    automação.
+  </p>
 {/if}
 {#if ['60', 'ST41', 'ST60', '500'].includes(tipoICMS)}
   <h5>ICMS cobrado anteriormente por ST</h5>

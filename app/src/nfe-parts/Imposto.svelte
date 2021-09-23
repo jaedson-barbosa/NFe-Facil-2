@@ -29,12 +29,6 @@
   pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
 />
 
-<ICMS bind:raiz={imposto} {regimeNormal} {prod} {ipi} {consumidorFinal} />
-{#if regimeNormal}
-  <Opcional bind:raiz={imposto} name="ICMSUFDest" titulo="ICMS Interestadual" let:r>
-    <ICMSUFDest raiz={r} />
-  </Opcional>
-{/if}
 <Opcional bind:raiz={imposto} name="IPI" titulo="IPI" let:r>
   <IPI raiz={r} {prod} />
 </Opcional>
@@ -47,3 +41,15 @@
 <Opcional bind:raiz={imposto} name="COFINSST" titulo="COFINS ST" let:r>
   <COFINSST raiz={r} {prod} />
 </Opcional>
+<ICMS bind:raiz={imposto} {regimeNormal} {prod} {ipi} {consumidorFinal} />
+<!-- É bom melhorar essa validação usando como base a validação, da pra ficar mais especifico e remover o Opcional -->
+{#if regimeNormal}
+  <Opcional
+    bind:raiz={imposto}
+    name="ICMSUFDest"
+    titulo="ICMS Interestadual"
+    let:r
+  >
+    <ICMSUFDest raiz={r} />
+  </Opcional>
+{/if}

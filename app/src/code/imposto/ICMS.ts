@@ -1,9 +1,9 @@
-export function atualizarICMS(det: any, consumidorFinal: boolean) {
-  const prod = det.prod
-  const ICMS = det.imposto.ICMS
-  const icms = Object.values(ICMS)[0]
-  const IPI = det.imposto.IPI
-  calcular(prod, icms, IPI, consumidorFinal)
+export function atualizarICMS(
+  prod: any,
+  { ICMS, IPI }: any,
+  consumidorFinal: boolean
+) {
+  calcular(prod, Object.values(ICMS)[0], IPI, consumidorFinal)
 }
 
 export function calcular(
@@ -13,16 +13,16 @@ export function calcular(
   consumidorFinal: boolean
 ) {
   const res = _calcular(prod, ICMS, ipi, consumidorFinal)
-  if (res.vICMSOp) {
-    ICMS.vICMSOp = res.vICMSOp
-    ICMS.vICMSDif = res.vICMSDif
-  } else ICMS.vICMSOp = ICMS.vICMSDif = ''
-  if (res.vBCST) {
-    ICMS.vBCST = res.vBCST
-    ICMS.vICMSST = res.vICMSST
-  } else ICMS.vBCST = ICMS.vICMSST = ''
+  ICMS.vICMSOp = res.vICMSOp ? res.vICMSOp : ''
+  ICMS.vICMSDif = res.vICMSDif ? res.vICMSDif : ''
+  ICMS.vBCST = res.vBCST ? res.vBCST : ''
+  ICMS.vICMSST = res.vICMSST ? res.vICMSST : ''
+  ICMS.vBCFCP = res.vBCFCP ? res.vBCFCP : ''
+  ICMS.vFCP = res.vFCP ? res.vFCP : ''
   ICMS.vBC = res.vBC ? res.vBC : ''
   ICMS.vICMS = res.vICMS ? res.vICMS : ''
+  ICMS.vBCFCPST = res.vBCFCPST ? res.vBCFCPST : ''
+  ICMS.vFCPST = res.vFCPST ? res.vFCPST : ''
   return ICMS
 }
 
@@ -32,20 +32,20 @@ function _calcular(
   ipi: any,
   consumidorFinal: boolean
 ) {
-  const vProd = +(prod.vProd ?? 0)
-  const vFrete = +(prod.vFrete ?? 0)
-  const vSeg = +(prod.vSeg ?? 0)
-  const vOutro = +(prod.vOutro ?? 0)
-  const vDesc = +(prod.vDesc ?? 0)
-  const vIPI = consumidorFinal ? +(ipi?.IPITrib?.vIPI ?? 0) : 0
-  const pRedBC = +(imposto.pRedBC ?? 0)
+  const vProd = +prod.vProd || 0
+  const vFrete = +prod.vFrete || 0
+  const vSeg = +prod.vSeg || 0
+  const vOutro = +prod.vOutro || 0
+  const vDesc = +prod.vDesc || 0
+  const vIPI = consumidorFinal ? +ipi?.IPITrib?.vIPI || 0 : 0
+  const pRedBC = +imposto.pRedBC || 0
   const vBCOriginal = vProd + vFrete + vSeg + vOutro - vDesc + vIPI
   const vBC = vBCOriginal * (1 - pRedBC / 100)
   let retorno: any = {}
   if (imposto.pICMS) {
-    const pICMS = +(imposto.pICMS ?? 0)
-    const pDif = +(imposto.pDif ?? 0)
-    if (pDif) {
+    const pICMS = +imposto.pICMS || 0
+    if (imposto.pDif) {
+      const pDif = +imposto.pDif || 0
       const vICMSOp = vBC * (pICMS / 100)
       const vICMSDif = vICMSOp * (pDif / 100)
       const vICMS = vICMSOp - vICMSDif
@@ -55,13 +55,27 @@ function _calcular(
       retorno = { ...retorno, vBC, vICMS }
     }
   }
+  if (imposto.pFCP) {
+    if (imposto.CST != '00') retorno['vBCFCP'] = vBC
+    const pFCP = +imposto.pFCP || 0
+    const vFCP = vBC * (pFCP / 100)
+    retorno = { ...retorno, vFCP }
+  }
   if (imposto.pICMSST) {
-    const pMVAST = +(imposto.pMVAST ?? 0)
-    const pRedBCST = +(imposto.pRedBCST ?? 0)
+    const pMVAST = +imposto.pMVAST || 0
+    const pRedBCST = +imposto.pRedBCST || 0
     const vBCST = vBCOriginal * (1 + pMVAST / 100) * (1 - pRedBCST / 100)
-    const pICMSST = +(imposto.pICMSST ?? 0)
-    const vICMSST = vBCST * (pICMSST / 100)
+    const pICMSST = +imposto.pICMSST || 0
+    const vICMS = retorno.vICMS ?? 0
+    const vICMSST = vBCST * (pICMSST / 100) - vICMS
     retorno = { ...retorno, vBCST, vICMSST }
+  }
+  if (imposto.pFCPST) {
+    const vBCFCPST = retorno.vBCST ?? vBC
+    const pFCPST = +imposto.pFCPST || 0
+    const vFCP = retorno.vFCP ?? 0
+    const vFCPST = vBCFCPST * (pFCPST / 100) - vFCP
+    retorno = { ...retorno, vBCFCPST, vFCPST }
   }
   return retorno
 }

@@ -1,32 +1,11 @@
-function atualizarPIS(prod: any, imposto: any) {
-  const PIS = imposto.PIS
-  const pis = Object.values(PIS)[0]
-  calcular(prod, pis, 'PIS')
-}
-
-function atualizarPISST(prod: any, imposto: any) {
-  const PISST = imposto.PISST
+export function atualizarPISCOFINS(
+  prod: any,
+  { PIS, COFINS, PISST, COFINSST }: any
+) {
+  calcular(prod, Object.values(PIS)[0], 'PIS')
+  calcular(prod, Object.values(COFINS)[0], 'COFINS')
   if (PISST) calcular(prod, PISST, 'PIS')
-}
-
-function atualizarCOFINS(prod: any, imposto: any) {
-  const COFINS = imposto.COFINS
-  const cofins = Object.values(COFINS)[0]
-  calcular(prod, cofins, 'COFINS')
-}
-
-function atualizarCOFINSST(prod: any, imposto: any) {
-  const COFINSST = imposto.COFINSST
   if (COFINSST) calcular(prod, COFINSST, 'COFINS')
-}
-
-export function atualizarPISCOFINS(det: any) {
-  const prod = det.prod
-  const imposto = det.imposto
-  atualizarPIS(prod, imposto)
-  atualizarPISST(prod, imposto)
-  atualizarCOFINS(prod, imposto)
-  atualizarCOFINSST(prod, imposto)
 }
 
 export function calcular(prod: any, imposto: any, tipo: 'PIS' | 'COFINS') {

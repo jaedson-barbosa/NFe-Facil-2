@@ -88,7 +88,7 @@
     return () => {
       const data = p.data()
       raiz.det = [data.det, ...raiz.det]
-      ibpt.unshift(data.ibpt)
+      ibpt = [data.ibpt, ...ibpt]
     }
   }
 
@@ -97,11 +97,10 @@
       raiz.det.splice(index, 1)
       raiz.det = raiz.det
       ibpt.splice(index, 1)
+      ibpt = ibpt
     }
   }
 </script>
-
-{@debug raiz}
 
 <h1><Voltar /> Nota fiscal</h1>
 

@@ -24,7 +24,8 @@
 
   $: comAliquota = !['04', '05', '06', '07', '08', '09'].includes(tipoCOFINS)
   $: aliquotaEmPercentual = tipoCOFINS != '03' && !COFINS['vAliqProd']
-  $: aliquotaEmReais = tipoCOFINS != '01' && tipoCOFINS != '02' && !COFINS['pCOFINS']
+  $: aliquotaEmReais =
+    tipoCOFINS != '01' && tipoCOFINS != '02' && !COFINS['pCOFINS']
   $: COFINS = calcular(prod, COFINS, 'COFINS')
 </script>
 
@@ -48,7 +49,9 @@
     />
   {/if}
   {#if COFINS['vCOFINS']}
-    <strong>COFINS calculado:</strong>
-    {getMoeda(COFINS['vCOFINS'])}
+    <p>
+      <strong>COFINS calculado:</strong>
+      {getMoeda(COFINS['vCOFINS'])}
+    </p>
   {/if}
 {/if}

@@ -81,7 +81,9 @@
     />
   {/if}
   {#if IPI['vIPI']}
-    <strong>IPI calculado:</strong>
-    {getMoeda(IPI['vIPI'])}
+    <p>
+      <strong>IPI calculado:</strong>
+      {getMoeda(IPI['vIPI'])}
+    </p>
   {/if}
 {/if}

@@ -90,7 +90,6 @@
   }
 </script>
 
-{@debug raiz}
 <h1><Voltar /> {$edicao ? 'Atualização' : 'Adição'} cadastral</h1>
 {#if loading}
   Carregando...

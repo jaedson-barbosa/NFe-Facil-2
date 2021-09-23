@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { calcular } from '../code/imposto/PISCOFINS';
+  import { calcular } from '../code/imposto/PISCOFINS'
   import { getMoeda } from '../code/numero'
   import InputT from '../components/InputT.svelte'
 
@@ -27,6 +27,8 @@
   />
 {/if}
 {#if raiz['vCOFINS']}
-  <strong>COFINS ST calculado:</strong>
-  {getMoeda(raiz['vCOFINS'])}
+  <p>
+    <strong>COFINS ST calculado:</strong>
+    {getMoeda(raiz['vCOFINS'])}
+  </p>
 {/if}

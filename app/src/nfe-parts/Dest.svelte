@@ -29,7 +29,6 @@
   }
 </script>
 
-{@debug dest}
 <h3>Destinatário</h3>
 <Doc bind:raiz={raiz.dest} />
 <InputT
