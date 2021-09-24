@@ -1,12 +1,12 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
-  import DE from '../prod-parts/DE.svelte'
-  import Rastro from '../prod-parts/Rastro.svelte'
-  import VeicProd from '../prod-parts/VeicProd.svelte'
-  import Med from '../prod-parts/Med.svelte'
-  import Arma from '../prod-parts/Arma.svelte'
-  import Comb from '../prod-parts/Comb.svelte'
-  import NRECOPI from '../prod-parts/NRECOPI.svelte'
+  import DE from '../parts-prod/DE.svelte'
+  import Rastro from '../parts-prod/Rastro.svelte'
+  import VeicProd from '../parts-prod/VeicProd.svelte'
+  import Med from '../parts-prod/Med.svelte'
+  import Arma from '../parts-prod/Arma.svelte'
+  import Comb from '../parts-prod/Comb.svelte'
+  import NRECOPI from '../parts-prod/NRECOPI.svelte'
   import { goto, url } from '@roxi/routify'
 
   export let raiz: any

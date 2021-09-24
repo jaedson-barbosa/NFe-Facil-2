@@ -1,7 +1,7 @@
 <script lang="ts">
   import { user, idEmpresa, empresa } from '../code/store'
-  import Cadastro from '../folder-parts/Cadastro.svelte'
-  import Escolha from '../folder-parts/Escolha.svelte'
+  import Cadastro from '../parts-folder/Cadastro.svelte'
+  import Escolha from '../parts-folder/Escolha.svelte'
 </script>
 
 <main class="container">

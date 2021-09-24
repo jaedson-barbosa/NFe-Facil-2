@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { goto, url } from '@roxi/routify'
+  import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
   import { edicao, refEmpresa, empresa } from '../code/store'
   import { preparateJSON, generateXML } from '../code/nfe/finalizacao'
-  import NFe from '../nfe-parts/NFe.svelte'
+  import NFe from '../parts-nfe/NFe.svelte'
   import {
     collection,
     doc,

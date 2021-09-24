@@ -1,13 +1,13 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
-  import ICMS from '../imposto-parts/ICMS.svelte'
-  import ICMSUFDest from '../imposto-parts/ICMSUFDest.svelte'
-  import IPI from '../imposto-parts/IPI.svelte'
-  import II from '../imposto-parts/II.svelte'
-  import PIS from '../imposto-parts/PIS.svelte'
-  import PISST from '../imposto-parts/PISST.svelte'
-  import COFINS from '../imposto-parts/COFINS.svelte'
-  import COFINSST from '../imposto-parts/COFINSST.svelte'
+  import ICMS from '../parts-imposto/ICMS.svelte'
+  import ICMSUFDest from '../parts-imposto/ICMSUFDest.svelte'
+  import IPI from '../parts-imposto/IPI.svelte'
+  import II from '../parts-imposto/II.svelte'
+  import PIS from '../parts-imposto/PIS.svelte'
+  import PISST from '../parts-imposto/PISST.svelte'
+  import COFINS from '../parts-imposto/COFINS.svelte'
+  import COFINSST from '../parts-imposto/COFINSST.svelte'
   import { possuiST } from '../code/imposto/PISCOFINS'
 
   export let raiz: any

@@ -3,10 +3,10 @@
   import { get } from 'svelte/store'
   import { edicao, empresa, permissaoEscrita, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
-  import ProdCadastro from '../nfe-parts/ProdCadastro.svelte'
+  import ProdCadastro from '../parts-nfe/ProdCadastro.svelte'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
-  import Imposto from '../nfe-parts/Imposto.svelte'
+  import Imposto from '../parts-nfe/Imposto.svelte'
 
   let loading = false
   let raiz = undefined

@@ -4,7 +4,7 @@
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { DocumentSnapshot } from 'firebase/firestore'
-  import ExibDoc from '../nfe-parts/ExibDoc.svelte'
+  import ExibDoc from '../parts-nfe/ExibDoc.svelte'
   import Voltar from '../components/Voltar.svelte'
 
   let cadastros: DocumentSnapshot[] = []

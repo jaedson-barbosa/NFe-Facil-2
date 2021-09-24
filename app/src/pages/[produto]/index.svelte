@@ -4,8 +4,8 @@
   import { get } from 'svelte/store'
   import { edicao } from '../../code/store'
   import { Dados, INFeRoot } from '../../code/tipos'
-  import Imposto from '../../nfe-parts/Imposto.svelte'
-  import ProdutoDetalhes from '../../nfe-parts/ProdutoDetalhes.svelte'
+  import Imposto from '../../parts-nfe/Imposto.svelte'
+  import ProdutoDetalhes from '../../parts-nfe/ProdutoDetalhes.svelte'
 
   const { produto } = get(params)
 

@@ -8,7 +8,7 @@
   import Voltar from '../components/Voltar.svelte'
   import InputT from '../components/InputT.svelte'
   import Municipio from '../components/Municipio.svelte'
-  import Doc from '../nfe-parts/Doc.svelte'
+  import Doc from '../parts-nfe/Doc.svelte'
 
   let loading = false
   let raiz = undefined
