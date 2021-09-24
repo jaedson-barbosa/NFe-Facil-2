@@ -1,28 +1,19 @@
 <script lang="ts">
   import Ide from './Ide.svelte'
   import Local from './Local.svelte'
-  import Doc from './Doc.svelte'
-  import ExibDoc from './ExibDoc.svelte'
+  import Destinatario from './Destinatario.svelte'
   import AutXml from './AutXML.svelte'
-  import Total from './Total.svelte'
   import Transp from './Transp.svelte'
   import Pag from './Pag.svelte'
   import InfAdic from './InfAdic.svelte'
-  import ProdutoSimples from './ProdutoSimples.svelte'
+  import Produtos from './Produtos.svelte'
   import Voltar from '../components/Voltar.svelte'
-  import { doc, DocumentSnapshot, getDoc } from 'firebase/firestore'
-  import { empresa, refEmpresa } from '../code/store'
-  import { Dados, IIBPT } from '../code/tipos'
-  import { Buscador } from '../code/buscador'
+  import { empresa } from '../code/store'
   import { get } from 'svelte/store'
-  import { getMoeda } from '../code/numero'
-  import { goto, ready } from '@roxi/routify'
 
   export let raiz: any
 
   if (!raiz.emit) raiz.emit = get(empresa).emit
-
-  if (!raiz.dest) raiz.dest = {}
 
   raiz.infRespTec = {
     CNPJ: '12931158000164',
@@ -31,203 +22,15 @@
     fone: '83988856440',
   }
 
-  let ibpt: IIBPT[] = []
-
-  if (raiz.det?.length) {
-    const cods: string[] = raiz.det.map((v) => v.prod.cProd)
-    const refs = cods.map((v) => doc(get(refEmpresa), Dados.Produtos, v))
-    Promise.all(refs.map((v) => getDoc(v))).then((v) => {
-      ibpt = v.map((k) => k.get('ibpt'))
-      $ready()
-    })
-  } else {
-    raiz.det = []
-    $ready()
-  }
-
-  $: dest = raiz['dest']
-  $: destComDoc = dest?.CPF || dest?.CNPJ || dest?.idEstrangeiro
-  $: destSemNome = !dest?.xNome
-
-  let clientes = [] as DocumentSnapshot[]
-  const buscadorCliente = new Buscador(
-    $refEmpresa,
-    Dados.Clientes,
-    'dest.xNome',
-    'asc',
-    (v) => (clientes = v)
-  )
-
-  let produtos = [] as DocumentSnapshot[]
-  const buscadorProduto = new Buscador(
-    $refEmpresa,
-    Dados.Produtos,
-    'det.prod.xProd',
-    'asc',
-    (v) => (produtos = v)
-  )
-
   $: consumidorFinal = raiz.ide?.indFinal == '1'
   $: isNFCe = raiz.ide?.['mod'] === '65'
-
-  function ratear(titulo: string, campo: string) {
-    return () => {
-      const valor = +prompt(`Valor total do ${titulo}:`)
-      if (isNaN(valor)) return
-      const prods: any[] = raiz.det
-      const total = prods.reduce((p, c) => +c.prod.vProd + p, 0)
-      prods.forEach((v) => {
-        const novo = (valor * v.prod.vProd) / total
-        v.prod[campo] = +novo.toFixed(2)
-      })
-      raiz.det = raiz.det
-    }
-  }
-
-  function addProd(p: DocumentSnapshot) {
-    return () => {
-      const data = p.data()
-      raiz.det = [data.det, ...raiz.det]
-      ibpt = [data.ibpt, ...ibpt]
-    }
-  }
-
-  function removerProd(index: number) {
-    return () => {
-      raiz.det.splice(index, 1)
-      raiz.det = raiz.det
-      ibpt.splice(index, 1)
-      ibpt = ibpt
-    }
-  }
 </script>
 
 <h1><Voltar /> Nota fiscal</h1>
 
 <Ide bind:raiz />
-
-<h2>Destinatário</h2>
-{#if isNFCe && destSemNome}
-  <p>Numa NFC-e é possível informar apenas o documento do cliente.</p>
-  <Doc bind:raiz={raiz.dest} />
-{/if}
-{#if destComDoc && !isNFCe}
-  <p>
-    Cliente escolhido: <br />
-    Nome:
-    <em>{dest.xNome}</em>
-    <br />
-    Documento:
-    <em>
-      <ExibDoc
-        CPF={dest.CPF}
-        CNPJ={dest.CNPJ}
-        idEstrangeiro={dest.idEstrangeiro}
-      />
-    </em>
-  </p>
-  <button type="button" on:click={() => (raiz.dest = {})}>Trocar</button>
-  <br />
-{/if}
-{#if !destComDoc}
-  {#if isNFCe}
-    <p>Como também é possível informar todos os dados do cliente.</p>
-  {/if}
-  <label>
-    Buscar por nome
-    <input on:input={buscadorCliente.buscar} />
-  </label>
-  <table>
-    <thead>
-      <tr>
-        <th>Documento</th>
-        <th>Nome</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each clientes as c}
-        <tr class="clicavel" on:click={() => (raiz.dest = c.data().dest)}>
-          <td>
-            <ExibDoc
-              CPF={c.get('dest.CPF')}
-              CNPJ={c.get('dest.CNPJ')}
-              idEstrangeiro={c.get('dest.idEstrangeiro')}
-            />
-          </td>
-          <td>{c.get('dest.xNome')}</td>
-        </tr>
-      {/each}
-    </tbody>
-  </table>
-{/if}
-<br />
-
-<h2>Produtos</h2>
-<label>
-  Buscar produto pela descrição
-  <input on:input={buscadorProduto.buscar} />
-</label>
-<table>
-  <thead>
-    <tr>
-      <th>Código</th>
-      <th>Descrição</th>
-      <th>Valor unitário</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each produtos as p}
-      <tr class="clicavel" on:click={addProd(p)}>
-        <td>{p.get('det.prod.cProd')}</td>
-        <td>{p.get('det.prod.xProd')}</td>
-        <td>{getMoeda(p.get('det.prod.vUnCom'))}</td>
-      </tr>
-    {/each}
-  </tbody>
-</table>
-{#if raiz.det.length}
-  <h3>Produtos adicionados</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Código</th>
-        <th>Quantidade</th>
-        <th>Frete</th>
-        <th>Seguro</th>
-        <th>Desconto</th>
-        <th>Adicionais</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each raiz.det as _, i}
-        <ProdutoSimples
-          bind:raiz={raiz.det[i]}
-          {consumidorFinal}
-          ibpt={ibpt[i]}
-          on:invalido={removerProd(i)}
-          on:click={() => $goto('/:produto', { produto: i.toString() })}
-        />
-      {/each}
-    </tbody>
-  </table>
-  <button type="button" on:click={ratear('frete', 'vFrete')}>
-    Ratear frete
-  </button>
-  <button type="button" on:click={ratear('seguro', 'vSeg')}>
-    Ratear seguro
-  </button>
-  <button type="button" on:click={ratear('desconto', 'vDesc')}>
-    Ratear desconto
-  </button>
-  <button type="button" on:click={ratear('adicionais', 'vOutro')}>
-    Ratear adicionais
-  </button>
-  <br />
-  <br />
-  <Total bind:raiz />
-{/if}
-<br />
-
+<Destinatario bind:dest={raiz.dest} {isNFCe} />
+<Produtos bind:det={raiz.det} bind:total={raiz.total} {consumidorFinal} />
 <Transp bind:raiz />
 <Pag bind:raiz total={raiz.total?.ICMSTot?.vNF ?? 0} />
 <InfAdic bind:raiz />

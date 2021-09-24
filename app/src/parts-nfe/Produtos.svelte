@@ -1,0 +1,132 @@
+<script lang="ts">
+  import Total from './Total.svelte'
+  import ProdutoSimples from './ProdutoSimples.svelte'
+  import { doc, DocumentSnapshot, getDoc } from 'firebase/firestore'
+  import { refEmpresa } from '../code/store'
+  import { Dados, IIBPT } from '../code/tipos'
+  import { Buscador } from '../code/buscador'
+  import { get } from 'svelte/store'
+  import { getMoeda } from '../code/numero'
+  import { goto } from '@roxi/routify'
+
+  export let det: any[]
+  export let total: any
+  export let consumidorFinal: boolean
+
+  let ibpt: IIBPT[] = []
+
+  if (det?.length) {
+    const cods: string[] = det.map((v) => v.prod.cProd)
+    const refs = cods.map((v) => doc(get(refEmpresa), Dados.Produtos, v))
+    Promise.all(refs.map((v) => getDoc(v))).then(
+      (v) => (ibpt = v.map((k) => k.get('ibpt')))
+    )
+  } else det = []
+
+  let produtos = [] as DocumentSnapshot[]
+  const buscadorProduto = new Buscador(
+    $refEmpresa,
+    Dados.Produtos,
+    'det.prod.xProd',
+    'asc',
+    (v) => (produtos = v)
+  )
+
+  function ratear(titulo: string, campo: string) {
+    return () => {
+      const valor = +prompt(`Valor total do ${titulo}:`)
+      if (isNaN(valor)) return
+      const total = det.reduce((p, c) => +c.prod.vProd + p, 0)
+      det.forEach((v) => {
+        const novo = (valor * v.prod.vProd) / total
+        v.prod[campo] = +novo.toFixed(2)
+      })
+      det = det
+    }
+  }
+
+  function addProd(p: DocumentSnapshot) {
+    return () => {
+      const data = p.data()
+      det = [data.det, ...det]
+      ibpt = [data.ibpt, ...ibpt]
+    }
+  }
+
+  function removerProd(index: number) {
+    return () => {
+      det.splice(index, 1)
+      det = det
+      ibpt.splice(index, 1)
+      ibpt = ibpt
+    }
+  }
+</script>
+
+{#if ibpt.length != det.length}
+  <h2>Produtos</h2>
+  <label>
+    Buscar produto pela descrição
+    <input on:input={buscadorProduto.buscar} />
+  </label>
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Descrição</th>
+        <th>Valor unitário</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each produtos as p}
+        <tr class="clicavel" on:click={addProd(p)}>
+          <td>{p.get('det.prod.cProd')}</td>
+          <td>{p.get('det.prod.xProd')}</td>
+          <td>{getMoeda(p.get('det.prod.vUnCom'))}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+  {#if det.length}
+    <h3>Produtos adicionados</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Quantidade</th>
+          <th>Frete</th>
+          <th>Seguro</th>
+          <th>Desconto</th>
+          <th>Adicionais</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each det as _, i}
+          <ProdutoSimples
+            bind:raiz={det[i]}
+            {consumidorFinal}
+            ibpt={ibpt[i]}
+            on:invalido={removerProd(i)}
+            on:click={() => $goto('/:produto', { produto: i.toString() })}
+          />
+        {/each}
+      </tbody>
+    </table>
+    <button type="button" on:click={ratear('frete', 'vFrete')}>
+      Ratear frete
+    </button>
+    <button type="button" on:click={ratear('seguro', 'vSeg')}>
+      Ratear seguro
+    </button>
+    <button type="button" on:click={ratear('desconto', 'vDesc')}>
+      Ratear desconto
+    </button>
+    <button type="button" on:click={ratear('adicionais', 'vOutro')}>
+      Ratear adicionais
+    </button>
+    <br />
+    <br />
+    <Total bind:det bind:total />
+  {/if}
+  <br />
+{/if}

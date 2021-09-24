@@ -1,9 +1,9 @@
 <script lang="ts">
   import { refEmpresa } from '../code/store'
-  import ExibDoc from './ExibDoc.svelte'
   import { DocumentSnapshot } from 'firebase/firestore'
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
+  import { mascararDocData, mascararDocSnapshot } from '../code/mascaracaoDoc'
 
   export let transporta: any
 
@@ -26,7 +26,7 @@
     <i>transporta.xNome</i>
     <br />
     Documento:
-    <i><ExibDoc CPF={transporta.CPF} CNPJ={transporta.CNPJ} /></i>
+    <i>{mascararDocData(transporta)}</i>
   </p>
 {:else}
   <label>
@@ -49,12 +49,7 @@
             on:click={() => (transporta = t.data())}
           >
             <td>{t.get('transporta.xNome')}</td>
-            <td>
-              <ExibDoc
-                CPF={t.get('transporta.CPF')}
-                CNPJ={t.get('transporta.CNPJ')}
-              />
-            </td>
+            <td>{mascararDocSnapshot(t, 'transporta')}</td>
           </tr>
         {/each}
       </tbody>

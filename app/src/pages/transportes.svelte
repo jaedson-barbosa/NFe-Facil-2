@@ -4,8 +4,8 @@
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { DocumentSnapshot } from 'firebase/firestore'
-  import ExibDoc from '../parts-nfe/ExibDoc.svelte'
   import Voltar from '../components/Voltar.svelte'
+  import { mascararDocSnapshot } from '../code/mascaracaoDoc'
 
   let cadastros: DocumentSnapshot[] = []
   const buscador = new Buscador(
@@ -44,12 +44,7 @@
     <tbody>
       {#each cadastros as n}
         <tr class="clicavel" on:click={() => editar(n)}>
-          <td>
-            <ExibDoc
-              CPF={n.get('transporta.CPF')}
-              CNPJ={n.get('transporta.CNPJ')}
-            />
-          </td>
+          <td>{mascararDocSnapshot(n, 'transporta')}</td>
           <td>{n.get('transporta.xNome')}</td>
         </tr>
       {/each}
