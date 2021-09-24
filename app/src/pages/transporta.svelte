@@ -13,14 +13,14 @@
   let loading = false
   let raiz = undefined
 
-  if (!raiz['transporta']) raiz['transporta'] = {}
-  let transporta = raiz['transporta']
-
   const ed = get(edicao)
   if (ed) {
     if (ed.tipo != Dados.Transportes) $edicao = undefined
     else raiz = { ...ed.dado }
   } else raiz = {}
+
+  if (!raiz['transporta']) raiz['transporta'] = {}
+  let transporta = raiz['transporta']
 
   async function salvar() {
     if (!$permissaoEscrita) {
@@ -94,6 +94,8 @@
       bind:val={transporta['xEnder']}
     />
     <Municipio bind:xMun={transporta['xMun']} bind:UF={transporta['UF']} />
-    <input type="submit" class="button" value="Salvar" />
+    {#if $permissaoEscrita}
+      <input type="submit" class="button" value="Salvar" />
+    {/if}
   </form>
 {/if}

@@ -25,6 +25,11 @@ export function calcular(prod: any, imposto: any, tipo: 'PIS' | 'COFINS') {
   return imposto
 }
 
+export function possuiST(imposto: any, tipo: 'PIS' | 'COFINS') {
+  let raiz: any = Object.values(imposto[tipo])[0]
+  return raiz.CST == '05'
+}
+
 export const CST: [string, string][] = [
   ['01', 'Alíquota Normal (Cumulativo/Não Cumulativo)'],
   ['02', 'Alíquota Diferenciada'],

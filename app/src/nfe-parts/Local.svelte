@@ -1,18 +1,29 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
   import Municipio from '../components/Municipio.svelte'
-  import Opcional from '../components/Opcional.svelte'
   import Doc from './Doc.svelte'
 
   export let raiz: any
   export let name: 'retirada' | 'entrega'
+
+  let informar = raiz[name]
+  $: raiz[name] = informar ? {} : undefined
+  $: texto =
+    name == 'entrega'
+      ? 'Endereço de entrega diferente do endereço do destinatário'
+      : 'Endereço de retirada diferente do endereço do remetente'
+  $: pessoa = name == 'entrega' ? 'destinatário' : 'expedidor'
 </script>
 
-<Opcional {raiz} {name} titulo="local de {name}">
+<label>
+  <input type="checkbox" bind:checked={informar} />
+  {texto}
+</label>
+{#if raiz[name]}
   <h2>Local de {name}</h2>
   <Doc bind:raiz={raiz[name]} apenasBR />
   <InputT
-    lab="Razão Social ou nome do destinatário"
+    lab="Razão Social ou nome do {pessoa}"
     opt
     bind:val={raiz[name]['xNome']}
     min={2}
@@ -48,7 +59,7 @@
     pat={'[0-9]{6,14}'}
   />
   <InputT
-    lab="E-mail do destinatário"
+    lab="E-mail do {pessoa}"
     bind:val={raiz[name]['email']}
     opt
     min={1}
@@ -63,5 +74,5 @@
       pat={'[0-9]{2,14}'}
     />
   {/if}
-</Opcional>
+{/if}
 <br />

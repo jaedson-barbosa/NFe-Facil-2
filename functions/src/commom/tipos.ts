@@ -1,12 +1,5 @@
 //#region Região comum
 
-export enum Dados {
-  Clientes = 'clientes',
-  Produtos = 'produtos',
-  Transportes = 'transportes',
-  NFes = 'nfes',
-}
-
 export interface IReqCadastrar {
   cert: string
   senha: string

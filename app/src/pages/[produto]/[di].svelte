@@ -6,7 +6,7 @@
   import { Dados, INFeRoot } from '../../code/tipos'
   import InputT from '../../components/InputT.svelte'
   import Select from '../../components/Select.svelte'
-  import Estado from '../../components/Estado.svelte'
+  import { Estados } from '../../code/IBGE'
 
   const { produto, di } = get(params)
 
@@ -53,10 +53,14 @@
     min={1}
     max={60}
   />
-  <Estado
-    bind:UF={raiz.UFDesemb}
-    lab="UF onde ocorreu o desembaraço aduaneiro"
-  />
+  <label>
+    UF onde ocorreu o desembaraço aduaneiro
+    <select bind:value={raiz.UFDesemb} required>
+      {#each Estados as uf}
+        <option value={uf.Sigla}>{uf.Nome}</option>
+      {/each}
+    </select>
+  </label>
   <InputT
     bind:val={raiz.dDesemb}
     lab="Data do desembaraço aduaneiro"
@@ -101,11 +105,14 @@
     max={14}
     mask="cnpj"
   />
-  <Estado
-    bind:UF={raiz.UFTerceiro}
-    opt
-    lab="UF do adquirente ou do encomendante"
-  />
+  <label>
+    UF do adquirente ou do encomendante
+    <select bind:value={raiz.UFTerceiro}>
+      {#each Estados as uf}
+        <option value={uf.Sigla}>{uf.Nome}</option>
+      {/each}
+    </select>
+  </label>
   <InputT
     bind:val={raiz.cExportador}
     lab="Código do exportador"

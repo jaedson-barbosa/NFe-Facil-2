@@ -1,7 +1,6 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
   import Select from '../components/Select.svelte'
-  import Estado from '../components/Estado.svelte'
   import {
     CSOSN,
     CST,
@@ -12,6 +11,7 @@
     calcular,
   } from '../code/imposto/ICMS'
   import { getMoeda } from '../code/numero'
+  import { EstadosEX } from '../code/IBGE'
 
   export let raiz: any
   export let regimeNormal: boolean
@@ -184,11 +184,14 @@
       lab="Percentual da BC da operação própria"
       pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
     />
-    <Estado
-      bind:UF={ICMS['UFST']}
-      lab="UF para qual é devido o ICMS ST"
-      incluirEX
-    />
+    <label>
+      UF para qual é devido o ICMS ST
+      <select bind:value={ICMS.UFST} required>
+        {#each EstadosEX as uf}
+          <option value={uf.Sigla}>{uf.Nome}</option>
+        {/each}
+      </select>
+    </label>
   {/if}
   <br />
   {#if !['Part10', 'Part90'].includes(tipoICMS)}

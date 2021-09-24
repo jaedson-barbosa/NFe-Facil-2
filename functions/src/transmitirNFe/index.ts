@@ -7,7 +7,7 @@ import consultarResposta, { retConsReciNFe } from './retAutorizacao'
 import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
 import carregarEmpresa from '../commom/carregarEmpresa'
-import { Ambientes, Dados, IInfos, IReqTransmitir, IResTransmitir } from '../commom/tipos'
+import { Ambientes, IInfos, IReqTransmitir, IResTransmitir } from '../commom/tipos'
 
 export default async function (
   req: IReqTransmitir,
@@ -22,7 +22,7 @@ export default async function (
   const { certificado, refEmpresa } = await carregarEmpresa(CNPJ)
   const infos = getInfos(infNFe)
   corrigirDestinatario(infNFe, infos.ambiente)
-  const coluna = refEmpresa.collection(Dados.NFes)
+  const coluna = refEmpresa.collection('NFes')
   const numeroInicial =
     infos.numero > 0 //Devemos usar o preenchimento manual
       ? infos.numero //Então devemos usar o valor manual

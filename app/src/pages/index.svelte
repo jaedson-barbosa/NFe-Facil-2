@@ -63,6 +63,16 @@
     Aqui também é seguida a boa prática somente permitir a inserção de
     transportadores previamente cadastrados.
   </p>
+
+  <h3>Veículos</h3>
+  {#if permissaoEscrita}
+    <a class="button" href={$url('./veiculo')}>Adicionar</a>
+  {/if}
+  <a class="button" href={$url('./veiculos')}>Gerenciar</a>
+  <p>
+    Guardando as placas de todos os veículos que passarem pela sua empresa é
+    possível diminuir a chance de erros de digitação.
+  </p>
 {:else}
   <strong>Cadastre as informações do emitente!</strong>
 {/if}

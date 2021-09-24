@@ -1,9 +1,9 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
-  import Estado from '../components/Estado.svelte'
   import { calcularCIDE } from '../code/imposto/CIDE'
   import { onDestroy } from 'svelte'
   import { getMoeda } from '../code/numero'
+  import { EstadosEX } from '../code/IBGE'
 
   export let raiz: any
   if (!raiz.comb) raiz.comb = {}
@@ -72,7 +72,14 @@
   pat={'0.[1-9]{1}[0-9]{3}|0.[0-9]{3}[1-9]{1}|0.[0-9]{2}[1-9]{1}[0-9]{1}|0.[0-9]{1}[1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{0,11}(.[0-9]{4})?'}
 />
 -->
-<Estado bind:UF={raiz.comb.UFCons} incluirEX lab="UF de consumo" />
+<label>
+  UF de consumo
+  <select bind:value={raiz.comb.UFCons} required>
+    {#each EstadosEX as uf}
+      <option value={uf.Sigla}>{uf.Nome}</option>
+    {/each}
+  </select>
+</label>
 <label>
   <i>Alíquota do CIDE</i>
   {#if raiz.comb.CIDE.vCIDE}

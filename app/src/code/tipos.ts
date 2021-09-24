@@ -2,13 +2,6 @@ import type { Timestamp } from 'firebase/firestore'
 
 //#region Região comum
 
-export enum Dados {
-  Clientes = 'clientes',
-  Produtos = 'produtos',
-  Transportes = 'transportes',
-  NFes = 'nfes',
-}
-
 export interface IReqCadastrar {
   cert: string
   senha: string
@@ -57,6 +50,14 @@ export interface INotaDB {
 }
 
 //#endregion
+
+export enum Dados {
+  Clientes = 'clientes',
+  Produtos = 'produtos',
+  Transportes = 'transportes',
+  NFes = 'nfes',
+  Veiculos = 'veiculos'
+}
 
 export interface INFeRoot {
   Id: string
