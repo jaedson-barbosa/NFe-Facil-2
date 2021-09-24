@@ -28,7 +28,7 @@ export class Buscador {
     this._hasMore = value
   }
 
-  readonly buscar = debounce((e: any) => this._buscar(e.target.value), 300)
+  readonly buscar = debounce((e: any) => this._buscar(e.target.value), 250)
   readonly carregarMais = () => this.hasMore && this._buscar()
   readonly operadorBusca: '>=' | '<='
 

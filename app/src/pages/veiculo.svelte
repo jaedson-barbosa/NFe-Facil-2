@@ -1,6 +1,6 @@
 <script lang="ts">
   import { deleteDoc, doc, setDoc } from '@firebase/firestore'
-  import { edicao, empresa, refEmpresa } from '../code/store'
+  import { edicao, empresa, permissaoEscrita, refEmpresa } from '../code/store'
   import { Dados } from '../code/tipos'
   import { EstadosEX } from '../code/IBGE'
   import Voltar from '../components/Voltar.svelte'
@@ -24,23 +24,24 @@
 
   async function salvar() {
     loading = true
-    if (ed.dado && ed.dado.placa != raiz.placa) {
-      const ref = doc($refEmpresa, Dados.Veiculos, ed.dado.placa)
-      await deleteDoc(ref)
+    if ($permissaoEscrita) {
+      if (ed.dado && ed.dado.placa != raiz.placa) {
+        const ref = doc($refEmpresa, Dados.Veiculos, ed.dado.placa)
+        await deleteDoc(ref)
+      }
+      const ref = doc($refEmpresa, Dados.Veiculos, raiz.placa)
+      await setDoc(ref, raiz)
     }
-    const ref = doc($refEmpresa, Dados.Veiculos, raiz.placa)
-    await setDoc(ref, raiz)
     $goto('./')
     loading = false
   }
 </script>
 
-<h1><Voltar /> {$edicao ? 'Atualização' : 'Adição'} cadastral</h1>
 {#if loading}
   Carregando...
 {:else}
   <form on:submit|preventDefault={salvar}>
-    <h2>Veículo</h2>
+    <h1><Voltar /> Veículo</h1>
     <label>
       Placa
       <input
@@ -61,5 +62,8 @@
       <i>RNTC</i>
       <input bind:value={raiz.RNTC} minlength="1" maxlength="20" required />
     </label>
+    {#if permissaoEscrita}
+      <input type="submit" value="Salvar" />
+    {/if}
   </form>
 {/if}

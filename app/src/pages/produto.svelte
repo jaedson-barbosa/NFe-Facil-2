@@ -90,11 +90,11 @@
   }
 </script>
 
-<h1><Voltar /> {$edicao ? 'Atualização' : 'Adição'} cadastral</h1>
 {#if loading}
   Carregando...
 {:else}
   <form on:submit|preventDefault={() => salvar()}>
+    <h1><Voltar /> Produto</h1>
     <ProdCadastro bind:raiz={det} />
     <Imposto bind:raiz={det} {regimeNormal} />
     {#if empresaCarregada.tokenIBPT}

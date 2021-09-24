@@ -29,7 +29,6 @@
   }
 </script>
 
-<h3>Destinatário</h3>
 <Doc bind:raiz={raiz.dest} />
 <InputT
   lab="Razão Social ou nome do destinatário"
@@ -78,7 +77,7 @@
   max={60}
 />
 
-<h4>Endereço</h4>
+<h2>Endereço</h2>
 <InputT lab="Logradouro" bind:val={enderDest['xLgr']} min={2} max={60} />
 <InputT lab="Número" bind:val={enderDest['nro']} min={1} max={60} />
 <InputT lab="Complemento" bind:val={enderDest['xCpl']} opt min={1} max={60} />

@@ -66,12 +66,11 @@
   }
 </script>
 
-<h1><Voltar /> {$edicao ? 'Atualização' : 'Adição'} cadastral</h1>
 {#if loading}
   Carregando...
 {:else}
   <form on:submit|preventDefault={() => salvar()}>
-    <h2>Transportador</h2>
+    <h1><Voltar /> Transportador</h1>
     <Doc bind:raiz={transporta} apenasBR />
     <InputT
       lab="Razão Social ou nome do transportador"

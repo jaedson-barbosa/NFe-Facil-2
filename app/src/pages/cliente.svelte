@@ -66,11 +66,11 @@
   }
 </script>
 
-<h1><Voltar /> {$edicao ? 'Atualização' : 'Adição'} cadastral</h1>
 {#if loading}
   Carregando...
 {:else}
   <form on:submit|preventDefault={() => salvar()}>
+    <h1><Voltar /> Destinatário</h1>
     <Dest bind:raiz />
     {#if permissaoEscrita}
       <input type="submit" class="button" />

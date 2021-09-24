@@ -15,7 +15,6 @@
   enderEmit.xPais = 'BRASIL'
 </script>
 
-<h3>Emitente</h3>
 <InputT lab="CNPJ" mask="cnpj" bind:val={emit['CNPJ']} pat={'[0-9]{14}'} />
 <InputT
   lab="Razão social ou nome do emitente"

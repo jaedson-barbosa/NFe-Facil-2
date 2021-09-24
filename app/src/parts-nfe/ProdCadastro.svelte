@@ -19,7 +19,6 @@
   let detEspecifico = detsEspecificos.find((v) => prod[v]) ?? 'normal'
 </script>
 
-<h2>Dados do produto</h2>
 <InputT bind:val={prod['cProd']} lab="Código do produto" min={1} max={60} />
 <InputT bind:val={prod['xProd']} lab="Descrição" min={1} max={120} />
 <InputT bind:val={prod['NCM']} lab="Código NCM" pat={'[0-9]{2}|[0-9]{8}'} />

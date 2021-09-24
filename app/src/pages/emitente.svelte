@@ -4,9 +4,9 @@
   import Emit from '../parts-nfe/Emit.svelte'
   import { goto } from '@roxi/routify'
   import Voltar from '../components/Voltar.svelte'
+  import { get } from 'svelte/store'
 
-  let raiz = undefined
-  $: $empresa && !raiz && (raiz = { ...$empresa })
+  let raiz = { ...get(empresa) }
 
   async function salvar() {
     try {
@@ -22,10 +22,8 @@
   }
 </script>
 
-{#if raiz}
-  <h1><Voltar /> Atualização cadastral</h1>
-  <form on:submit|preventDefault={() => salvar()}>
-    <Emit bind:raiz />
-    <input type="submit" class="button" value="Salvar" />
-  </form>
-{/if}
+<form on:submit|preventDefault={() => salvar()}>
+  <h1><Voltar /> Emitente</h1>
+  <Emit bind:raiz />
+  <input type="submit" class="button" value="Salvar" />
+</form>
