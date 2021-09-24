@@ -1,6 +1,5 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
-  import Select from '../components/Select.svelte'
   import { calcular, CST } from '../code/imposto/IPI'
   import { getMoeda } from '../code/numero'
 
@@ -57,7 +56,14 @@
   min={1}
   max={3}
 />
-<Select bind:val={tipoIPI} lab="Código da Situação Tributária" els={CST} />
+<label>
+  CST
+  <select bind:value={tipoIPI} required>
+    {#each CST as e}
+      <option value={e[0]}>{e[0]} - {e[1]}</option>
+    {/each}
+  </select>
+</label>
 {#if IPITributado}
   {#if !raiz['vUnid']}
     <p>

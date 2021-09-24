@@ -1,22 +1,20 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
   import InputT from '../components/InputT.svelte'
-  import Select from '../components/Select.svelte'
 
   export let raiz: any
   if (!raiz.arma) raiz.arma = {}
   onDestroy(() => (raiz.arma = undefined))
+
+  let usoRestrito = raiz.arma.tpArma == '1'
+  $: raiz.arma.tpArma = usoRestrito ? '1' : '0'
 </script>
 
 <h3>Armamento</h3>
-<Select
-  bind:val={raiz.arma.tpArma}
-  lab="Tipo de arma de fogo"
-  els={[
-    ['0', 'Uso permitido'],
-    ['1', 'Uso restrito'],
-  ]}
-/>
+<label>
+  <input type="checkbox" bind:checked={usoRestrito} />
+  Armamento de uso restrito
+</label>
 <InputT
   bind:val={raiz.arma.nSerie}
   lab="Número de série da arma"

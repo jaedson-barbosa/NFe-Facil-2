@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
   import InputT from '../components/InputT.svelte'
-  import Select from '../components/Select.svelte'
 
   export let raiz: any
   if (!raiz.veicProd) raiz.veicProd = {}
@@ -9,16 +8,15 @@
 </script>
 
 <h3>Veículo novo</h3>
-<Select
-  bind:val={raiz.veicProd.tpOp}
-  lab="Tipo da Operação"
-  els={[
-    ['0', 'Venda concessionária'],
-    ['1', 'Faturamento direto'],
-    ['2', 'Venda direta'],
-    ['3', 'Outros'],
-  ]}
-/>
+<label>
+  Tipo de operação
+  <select bind:value={raiz.veicProd.tpOp} required>
+    <option value="0">Venda concessionária</option>
+    <option value="1">Faturamento direto</option>
+    <option value="2">Venda direta</option>
+    <option value="3">Outros</option>
+  </select>
+</label>
 <InputT
   bind:val={raiz.veicProd.chassi}
   lab="Chassi do veículo (VIN)"
@@ -41,30 +39,29 @@
 <InputT bind:val={raiz.veicProd.pesoL} lab="Peso líquido" min={1} max={9} />
 <InputT bind:val={raiz.veicProd.pesoB} lab="Peso bruto" min={1} max={9} />
 <InputT bind:val={raiz.veicProd.nSerie} lab="Serial (série)" min={1} max={9} />
-<Select
-  bind:val={raiz.veicProd.tpComb}
-  lab="Tipo de combustível"
-  els={[
-    ['01', 'Álcool'],
-    ['02', 'Gasolina'],
-    ['03', 'Diesel'],
-    ['04', 'Gasogênio'],
-    ['05', 'Gás Metano'],
-    ['06', 'Elétrico/Fonte Interna'],
-    ['07', 'Elétrico/Fonte Externa'],
-    ['08', 'Gasolina/Gás Natural Combustível'],
-    ['09', 'Álcool/Gás Natural Combustível'],
-    ['10', 'Diesel/Gás Natural Combustível'],
-    ['11', 'Vide/Campo/Observação'],
-    ['12', 'Álcool/GNV'],
-    ['13', 'Gasolina/GNV'],
-    ['14', 'Diesel/GNV'],
-    ['15', 'GNV'],
-    ['16', 'Álcool/Gasolina'],
-    ['17', 'Gasolina/Álcool/GNV'],
-    ['18', 'Gasolina/Elétrico'],
-  ]}
-/>
+<label>
+  Tipo de combustível
+  <select bind:value={raiz.veicProd.tpComb} required>
+    <option value="01">Álcool</option>
+    <option value="02">Gasolina</option>
+    <option value="03">Diesel</option>
+    <option value="04">Gasogênio</option>
+    <option value="05">Gás Metano</option>
+    <option value="06">Elétrico/Fonte Interna</option>
+    <option value="07">Elétrico/Fonte Externa</option>
+    <option value="08">Gasolina/Gás Natural Combustível</option>
+    <option value="09">Álcool/Gás Natural Combustível</option>
+    <option value="10">Diesel/Gás Natural Combustível</option>
+    <option value="11">Vide/Campo/Observação</option>
+    <option value="12">Álcool/GNV</option>
+    <option value="13">Gasolina/GNV</option>
+    <option value="14">Diesel/GNV</option>
+    <option value="15">GNV</option>
+    <option value="16">Álcool/Gasolina</option>
+    <option value="17">Gasolina/Álcool/GNV</option>
+    <option value="18">Gasolina/Elétrico</option>
+  </select>
+</label>
 <InputT
   bind:val={raiz.veicProd.nMotor}
   lab="Número do motor"
@@ -94,88 +91,84 @@
   pat={'[0-9]{4}'}
 />
 <InputT bind:val={raiz.veicProd.tpPint} lab="Tipo de pintura" />
-<Select
-  bind:val={raiz.veicProd.tpVeic}
-  lab="Tipo de veículo"
-  els={[
-    ['02', 'Ciclomotor'],
-    ['03', 'Motoneta'],
-    ['04', 'Motocicleta'],
-    ['05', 'Triciclo'],
-    ['06', 'Automóvel'],
-    ['07', 'Micro-ônibus'],
-    ['08', 'Ônibus'],
-    ['10', 'Reboque'],
-    ['11', 'Semirreboque'],
-    ['13', 'Camioneta'],
-    ['14', 'Caminhão'],
-    ['17', 'Caminhão trator'],
-    ['18', 'Trator de rodas'],
-    ['19', 'Trador esteira'],
-    ['20', 'Trator misto'],
-    ['21', 'Quadriciclo'],
-    ['22', 'Chassi plataforma'],
-    ['23', 'Caminhonete'],
-    ['25', 'Utilitário'],
-    ['26', 'Motor-casa'],
-  ]}
-/>
-<Select
-  bind:val={raiz.veicProd.espVeic}
-  lab="Espécie de veículo"
-  els={[
-    ['1', 'Passageiro'],
-    ['2', 'Carga'],
-    ['3', 'Misto'],
-    ['4', 'Corrida'],
-    ['5', 'Tração'],
-    ['6', 'Especial'],
-  ]}
-/>
-<Select
-  bind:val={raiz.veicProd.VIN}
-  lab="Chassi remarcado"
-  els={[
-    ['R', 'Sim'],
-    ['N', 'Não'],
-  ]}
-/>
-<Select
-  bind:val={raiz.veicProd.condVeic}
-  lab="Condição do veículo"
-  els={[
-    ['1', 'Acabado'],
-    ['2', 'Inacabado'],
-    ['3', 'Semi-acabado'],
-  ]}
-/>
+<label>
+  Tipo de veículo
+  <select bind:value={raiz.veicProd.tpVeic} required>
+    <option value="02">Ciclomotor</option>
+    <option value="03">Motoneta</option>
+    <option value="04">Motocicleta</option>
+    <option value="05">Triciclo</option>
+    <option value="06">Automóvel</option>
+    <option value="07">Micro-ônibus</option>
+    <option value="08">Ônibus</option>
+    <option value="10">Reboque</option>
+    <option value="11">Semirreboque</option>
+    <option value="13">Camioneta</option>
+    <option value="14">Caminhão</option>
+    <option value="17">Caminhão trator</option>
+    <option value="18">Trator de rodas</option>
+    <option value="19">Trador esteira</option>
+    <option value="20">Trator misto</option>
+    <option value="21">Quadriciclo</option>
+    <option value="22">Chassi plataforma</option>
+    <option value="23">Caminhonete</option>
+    <option value="25">Utilitário</option>
+    <option value="26">Motor-casa</option>
+  </select>
+</label>
+<label>
+  Espécie de veículo
+  <select bind:value={raiz.veicProd.espVeic} required>
+    <option value="1">Passageiro</option>
+    <option value="2">Carga</option>
+    <option value="3">Misto</option>
+    <option value="4">Corrida</option>
+    <option value="5">Tração</option>
+    <option value="6">Especial</option>
+  </select>
+</label>
+<label>
+  Chassi remarcado
+  <select bind:value={raiz.veicProd.VIN} required>
+    <option value="R">Sim</option>
+    <option value="N">Não</option>
+  </select>
+</label>
+<label>
+  Condição do veículo
+  <select bind:value={raiz.veicProd.condVeic} required>
+    <option value="1">Acabado</option>
+    <option value="2">Inacabado</option>
+    <option value="3">Semi-acabado</option>
+  </select>
+</label>
 <InputT
   bind:val={raiz.veicProd.cMod}
   lab="Código Marca Modelo (utilizar tabela RENAVAM)"
   pat={'[0-9]{1,6}'}
 />
-<Select
-  bind:val={raiz.veicProd.cCorDENATRAN}
-  lab="Cor"
-  els={[
-    ['01', 'Amarelo'],
-    ['02', 'Azul'],
-    ['03', 'Bege'],
-    ['04', 'Branca'],
-    ['05', 'Cinza'],
-    ['06', 'Dourada'],
-    ['07', 'Grená'],
-    ['08', 'Laranja'],
-    ['09', 'Marrom'],
-    ['10', 'Prata'],
-    ['11', 'Preta'],
-    ['12', 'Rosa'],
-    ['13', 'Roxa'],
-    ['14', 'Verde'],
-    ['15', 'Vermelha'],
-    ['16', 'Fantasia'],
-  ]}
-/>
+<label>
+  Cor
+  <select bind:value={raiz.veicProd.cCorDENATRAN} required>
+    <option value="01">Amarelo</option>
+    <option value="02">Azul</option>
+    <option value="03">Bege</option>
+    <option value="04">Branca</option>
+    <option value="05">Cinza</option>
+    <option value="06">Dourada</option>
+    <option value="07">Grená</option>
+    <option value="08">Laranja</option>
+    <option value="09">Marrom</option>
+    <option value="10">Prata</option>
+    <option value="11">Preta</option>
+    <option value="12">Rosa</option>
+    <option value="13">Roxa</option>
+    <option value="14">Verde</option>
+    <option value="15">Vermelha</option>
+    <option value="16">Fantasia</option>
+  </select>
+</label>
+
 <InputT
   bind:val={raiz.veicProd.lota}
   lab="Lotação máxima (passageiros sentados, inclusive motorista)"
@@ -183,15 +176,14 @@
   min={1}
   max={3}
 />
-<Select
-  bind:val={raiz.veicProd.tpRest}
-  lab="Restrição"
-  els={[
-    ['0', 'Não há'],
-    ['1', 'Alienação Fiduciária'],
-    ['2', 'Arrendamento Mercantil'],
-    ['3', 'Reserva de Domínio'],
-    ['4', 'Penhor de Veículos'],
-    ['9', 'Outras'],
-  ]}
-/>
+<label>
+  Restrição
+  <select bind:value={raiz.veicProd.tpRest} required>
+    <option value="0">Não há</option>
+    <option value="1">Alienação Fiduciária</option>
+    <option value="2">Arrendamento Mercantil</option>
+    <option value="3">Reserva de Domínio</option>
+    <option value="4">Penhor de Veículos</option>
+    <option value="9">Outras</option>
+  </select>
+</label>

@@ -37,15 +37,14 @@
   max={60}
 />
 {#if dest['CNPJ']}
-  <Select
-    lab="Indicador da IE do destinatário"
-    bind:val={dest['indIEDest']}
-    els={[
-      ['1', 'Contribuinte ICMS'],
-      ['2', 'Contribuinte isento'],
-      ['9', 'Não contribuinte'],
-    ]}
-  />
+  <label>
+    Indicador da IE do destinatário
+    <select bind:value={dest.indIEDest} required>
+      <option value="1">Contribuinte ICMS</option>
+      <option value="2">Contribuinte isento</option>
+      <option value="9">Não contribuinte</option>
+    </select>
+  </label>
 {/if}
 {#if dest['indIEDest'] == '1'}
   <InputT

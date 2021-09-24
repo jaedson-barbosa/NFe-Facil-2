@@ -5,7 +5,6 @@
   import { edicao } from '../../code/store'
   import { Dados, INFeRoot } from '../../code/tipos'
   import InputT from '../../components/InputT.svelte'
-  import Select from '../../components/Select.svelte'
   import { Estados } from '../../code/IBGE'
 
   const { produto, di } = get(params)
@@ -66,37 +65,34 @@
     lab="Data do desembaraço aduaneiro"
     pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
   />
-  <Select
-    bind:val={raiz.tpViaTransp}
-    lab="Via de transporte internacional informada na DI"
-    els={[
-      ['1', 'Maritima'],
-      ['2', 'Fluvial'],
-      ['3', 'Lacustre'],
-      ['4', 'Aerea'],
-      ['5', 'Postal'],
-      ['6', 'Ferroviaria'],
-      ['7', 'Rodoviaria'],
-      ['8', 'Conduto'],
-      ['9', 'Meios Proprios'],
-      ['10', 'Entrada/Saida Ficta'],
-    ]}
-  />
+  <label>
+    Via de transporte internacional informada na DI
+    <select bind:value={raiz.tpViaTransp} required>
+      <option value="1">Maritima</option>
+      <option value="2">Fluvial</option>
+      <option value="3">Lacustre</option>
+      <option value="4">Aérea</option>
+      <option value="5">Postal</option>
+      <option value="6">Ferroviária</option>
+      <option value="7">Rodoviária</option>
+      <option value="8">Conduto</option>
+      <option value="9">Meios próprios</option>
+      <option value="10">Entrada ou saída ficta</option>
+    </select>
+  </label>
   <InputT
     bind:val={raiz.vAFRMM}
     opt
     lab="Valor Adicional ao frete para renovação de marinha mercante"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
-  <Select
-    bind:val={raiz.tpIntermedio}
-    lab="Forma de Importação quanto a intermediação"
-    els={[
-      ['1', 'Por conta propria'],
-      ['2', 'Por conta e ordem'],
-      ['3', 'Encomenda'],
-    ]}
-  />
+  <label>
+    <select bind:value={raiz.tpIntermedio} required>
+      <option value="1">Por conta própria</option>
+      <option value="2">Por conta e ordem</option>
+      <option value="3">Por encomenda</option>
+    </select>
+  </label>
   <InputT
     bind:val={raiz.CNPJ}
     opt

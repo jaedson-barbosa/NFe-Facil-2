@@ -1,6 +1,5 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
-  import Select from '../components/Select.svelte'
   import VeicProd from '../parts-prod/VeicProd.svelte'
   import Med from '../parts-prod/Med.svelte'
   import Arma from '../parts-prod/Arma.svelte'
@@ -17,6 +16,12 @@
   const detsComplexos = ['veicProd', 'med', 'arma', 'comb']
   const detsEspecificos = [...detsComplexos, 'nRECOPI']
   let detEspecifico = detsEspecificos.find((v) => prod[v]) ?? 'normal'
+
+  if (prod.indTot === undefined) prod.indTot = '1'
+  let indTot = prod.indTot == '1'
+  $: prod.indTot = indTot ? '1' : '0'
+
+  $: prod.CNPJFab = prod.indEscala == 'N' ? '' : undefined
 </script>
 
 <InputT bind:val={prod['cProd']} lab="Código do produto" min={1} max={60} />
@@ -50,23 +55,23 @@
 <InputT bind:val={prod['NVE']} opt lab="NVE" pat={'[A-Z]{2}[0-9]{4}'} />
 <InputT bind:val={prod['CEST']} opt lab="CEST" pat={'[0-9]{7}'} />
 {#if prod['CEST']}
-  <Select
-    bind:val={prod['indEscala']}
-    opt
-    lab="Escala relevante"
-    els={[
-      ['S', 'Sim'],
-      ['N', 'Não'],
-    ]}
-  />
-  <InputT
-    bind:val={prod['CNPJFab']}
-    opt
-    lab="CNPJ do Fabricante da Mercadoria, obrigatório para produto em escala NÃO relevante."
-    pat={'[0-9]{14}'}
-    max={14}
-    mask="cnpj"
-  />
+  <label>
+    Produzido em escala relevante
+    <select bind:value={prod.indEscala} required>
+      <option value="S">Sim</option>
+      <option value="N">Não</option>
+    </select>
+  </label>
+  {#if prod.indEscala == 'N'}
+    <InputT
+      bind:val={prod.CNPJFab}
+      lab="CNPJ do Fabricante da Mercadoria"
+      aux="obrigatório para produto em escala NÃO relevante"
+      pat={'[0-9]{14}'}
+      max={14}
+      mask="cnpj"
+    />
+  {/if}
 {/if}
 <InputT
   bind:val={prod['cBenef']}
@@ -75,14 +80,10 @@
   pat={'([!-ÿ]{8}|[!-ÿ]{10}|SEM CBENEF)?'}
 />
 <InputT bind:val={prod['EXTIPI']} opt lab="EX TIPI" pat={'[0-9]{2,3}'} />
-<Select
-  bind:val={prod['indTot']}
-  lab="O valor do item compõe o valor total da NF-e"
-  els={[
-    ['1', 'Sim'],
-    ['0', 'Não'],
-  ]}
-/>
+<label>
+  <input type="checkbox" bind:checked={indTot} />
+  O valor do item compõe o valor total da NF-e
+</label>
 <label>
   Detalhamento específico
   <select bind:value={detEspecifico} required>

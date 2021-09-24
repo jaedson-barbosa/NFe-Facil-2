@@ -46,15 +46,14 @@
 {#if emit['IM'] || emit['CNAE']}
   <InputT lab="CNAE Fiscal" pat={'[0-9]{7}'} bind:val={emit['CNAE']} />
 {/if}
-<Select
-  lab="Regime Tributário"
-  els={[
-    ['1', 'Simples Nacional'],
-    ['2', 'Simples Nacional, excesso de sublimite de receita bruta'],
-    ['3', 'Regime Normal'],
-  ]}
-  bind:val={emit['CRT']}
-/>
+<label>
+  Regime Tributário
+  <select bind:value={emit.CRT} required>
+    <option value="1">Simples Nacional</option>
+    <option value="2">Simples Nacional, excesso de sublimite de receita bruta</option>
+    <option value="3">Regime Normal</option>
+  </select>
+</label>
 
 <h4>Endereço</h4>
 <InputT lab="Logradouro" bind:val={enderEmit['xLgr']} min={2} max={60} />

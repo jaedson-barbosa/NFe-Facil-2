@@ -2,7 +2,6 @@
   import { calcular, CST } from '../code/imposto/PISCOFINS'
   import { getMoeda } from '../code/numero'
   import InputT from '../components/InputT.svelte'
-  import Select from '../components/Select.svelte'
 
   export let raiz: any
   export let prod: any
@@ -29,7 +28,14 @@
 </script>
 
 <h3>PIS</h3>
-<Select bind:val={tipoPIS} lab="CST" els={CST} />
+<label>
+  CST
+  <select bind:value={tipoPIS} required>
+    {#each CST as e}
+      <option value={e[0]}>{e[0]} - {e[1]}</option>
+    {/each}
+  </select>
+</label>
 {#if comAliquota}
   {#if aliquotaEmPercentual}
     <p>A base de cálculo considerada é o valor total bruto do produto.</p>

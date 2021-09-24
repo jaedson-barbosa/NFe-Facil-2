@@ -1,6 +1,5 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
-  import Select from '../components/Select.svelte'
 
   export let raiz: any
 
@@ -39,16 +38,14 @@
   lab="Alíquota adotada nas operações internas na UF do destinatário para o produto / mercadoria."
   pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
 />
-<Select
-  name="pICMSInter"
-  {raiz}
-  lab="Alíquota interestadual das UF envolvidas"
-  els={[
-    ['4.00', 'Alíquota interestadual para produtos importados'],
-    ['7.00', 'Sul e Sudeste (exceto ES) destinado ao Norte e Nordeste ou ES'],
-    ['12.00', 'Demais casos'],
-  ]}
-/>
+<label>
+  Alíquota interestadual das UF envolvidas
+  <select bind:value={raiz.pICMSInter} required>
+    <option value="4.00">4%: para produtos importados</option>
+    <option value="7.00">7%: Sul e Sudeste (exceto ES) destinado ao Norte e Nordeste ou ES</option>
+    <option value="12.00">12%: demais casos</option>
+  </select>
+</label>
 <InputT
   name="vFCPUFDest"
   {raiz}
