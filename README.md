@@ -23,7 +23,6 @@ tokenIBPT
 -produtos:
   det: ...
   ibpt:
-    ex
     isNacional
     federal
     estadual

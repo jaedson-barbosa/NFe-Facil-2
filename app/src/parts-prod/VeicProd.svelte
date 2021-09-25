@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import InputT from '../components/InputT.svelte'
 
   export let raiz: any
   if (!raiz.veicProd) raiz.veicProd = {}
@@ -17,28 +16,38 @@
     <option value="3">Outros</option>
   </select>
 </label>
-<InputT
-  bind:val={raiz.veicProd.chassi}
-  lab="Chassi do veículo (VIN)"
-  pat={'[A-Z0-9]+'}
-/>
-<InputT bind:val={raiz.veicProd.cCor} lab="Cor do veículo" min={1} max={4} />
-<InputT bind:val={raiz.veicProd.xCor} lab="Descrição da cor" min={1} max={40} />
-<InputT
-  bind:val={raiz.veicProd.pot}
-  lab="Potência máxima do motor do veículo em CV (cavalo vapor)"
-  min={1}
-  max={4}
-/>
-<InputT
-  bind:val={raiz.veicProd.cilin}
-  lab="Capacidade voluntária do motor expressa em CC (cilindradas)"
-  min={1}
-  max={4}
-/>
-<InputT bind:val={raiz.veicProd.pesoL} lab="Peso líquido" min={1} max={9} />
-<InputT bind:val={raiz.veicProd.pesoB} lab="Peso bruto" min={1} max={9} />
-<InputT bind:val={raiz.veicProd.nSerie} lab="Serial (série)" min={1} max={9} />
+<label>
+  Chassi do veículo (VIN)
+  <input pattern={'[A-Z0-9]+'} bind:value={raiz.veicProd.chassi} required />
+</label>
+<label>
+  Código da cor da montadora
+  <input maxlength="4" bind:value={raiz.veicProd.cCor} required />
+</label>
+<label>
+  Descrição da cor da montadora
+  <input maxlength="40" bind:value={raiz.veicProd.xCor} required />
+</label>
+<label>
+  Potência máxima do motor do veículo em CV
+  <input maxlength="4" bind:value={raiz.veicProd.pot} required />
+</label>
+<label>
+  Capacidade voluntária do motor expressa em CC
+  <input maxlength="4" bind:value={raiz.veicProd.cilin} required />
+</label>
+<label>
+  Peso líquido
+  <input maxlength="9" bind:value={raiz.veicProd.pesoL} required />
+</label>
+<label>
+  Peso bruto
+  <input maxlength="9" bind:value={raiz.veicProd.pesoB} required />
+</label>
+<label>
+  Série
+  <input maxlength="9" bind:value={raiz.veicProd.nSerie} required />
+</label>
 <label>
   Tipo de combustível
   <select bind:value={raiz.veicProd.tpComb} required>
@@ -62,35 +71,40 @@
     <option value="18">Gasolina/Elétrico</option>
   </select>
 </label>
-<InputT
-  bind:val={raiz.veicProd.nMotor}
-  lab="Número do motor"
-  min={1}
-  max={21}
-/>
-<InputT
-  bind:val={raiz.veicProd.CMT}
-  lab="CMT (Capacidade Máxima de Tração) em toneladas"
-  min={1}
-  max={9}
-/>
-<InputT
-  bind:val={raiz.veicProd.dist}
-  lab="Distância entre eixos"
-  min={1}
-  max={4}
-/>
-<InputT
-  bind:val={raiz.veicProd.anoMod}
-  lab="Ano do modelo_Formato: AAAA"
-  pat={'[0-9]{4}'}
-/>
-<InputT
-  bind:val={raiz.veicProd.anoFab}
-  lab="Ano de fabricação_Formato: AAAA"
-  pat={'[0-9]{4}'}
-/>
-<InputT bind:val={raiz.veicProd.tpPint} lab="Tipo de pintura" />
+<label>
+  Número do motor
+  <input maxlength="21" bind:value={raiz.veicProd.nMotor} required />
+</label>
+<label>
+  CMT (Capacidade Máxima de Tração) em toneladas
+  <input maxlength="9" bind:value={raiz.veicProd.CMT} required />
+</label>
+<label>
+  Distância entre eixos
+  <input maxlength="4" bind:value={raiz.veicProd.dist} required />
+</label>
+<label>
+  Ano do modelo
+  <input
+    minlength="4"
+    maxlength="4"
+    bind:value={raiz.veicProd.anoMod}
+    required
+  />
+</label>
+<label>
+  Ano de fabricação
+  <input
+    minlength="4"
+    maxlength="4"
+    bind:value={raiz.veicProd.anoFab}
+    required
+  />
+</label>
+<label>
+  Tipo de pintura
+  <input minlength="1" maxlength="1" bind:value={raiz.veicProd.tpPint} />
+</label>
 <label>
   Tipo de veículo
   <select bind:value={raiz.veicProd.tpVeic} required>
@@ -142,11 +156,11 @@
     <option value="3">Semi-acabado</option>
   </select>
 </label>
-<InputT
-  bind:val={raiz.veicProd.cMod}
-  lab="Código Marca Modelo (utilizar tabela RENAVAM)"
-  pat={'[0-9]{1,6}'}
-/>
+<label>
+  Código Marca Modelo
+  <small>utilizar tabela RENAVAM</small>
+  <input pattern={'[0-9]{1,6}'} bind:value={raiz.veicProd.cMod} required />
+</label>
 <label>
   Cor
   <select bind:value={raiz.veicProd.cCorDENATRAN} required>
@@ -168,14 +182,17 @@
     <option value="16">Fantasia</option>
   </select>
 </label>
-
-<InputT
-  bind:val={raiz.veicProd.lota}
-  lab="Lotação máxima (passageiros sentados, inclusive motorista)"
-  pat={'[0-9]{1,3}'}
-  min={1}
-  max={3}
-/>
+<label>
+  Lotação máxima
+  <small>passageiros sentados, inclusive motorista</small>
+  <input
+    type="number"
+    step="1"
+    max="999"
+    bind:value={raiz.veicProd.lota}
+    required
+  />
+</label>
 <label>
   Restrição
   <select bind:value={raiz.veicProd.tpRest} required>

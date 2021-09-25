@@ -23,18 +23,17 @@
   if (!raiz['det']) raiz['det'] = {}
   let det = raiz['det']
 
-  if (!raiz['ibpt']) raiz['ibpt'] = { ex: 0, isNacional: true }
+  if (!raiz['ibpt']) raiz['ibpt'] = { isNacional: true }
   let ibpt = raiz['ibpt']
 
   async function carregarImpostos() {
-    if (!ibpt.ex) ibpt.ex = 0
     const baseUrl = 'https://apidoni.ibpt.org.br/api/v1/produtos?'
     const parametros = new URLSearchParams()
     parametros.append('token', empresaCarregada.tokenIBPT)
     parametros.append('cnpj', empresaCarregada.emit.CNPJ)
     parametros.append('codigo', det.prod.NCM)
     parametros.append('uf', empresaCarregada.emit.enderEmit.UF)
-    parametros.append('ex', ibpt.ex)
+    parametros.append('ex', det.prod.EXTIPI || 0)
     parametros.append('descricao', det.prod.xProd)
     parametros.append('unidadeMedida', det.prod.uTrib)
     parametros.append('valor', det.prod.vUnTrib)
@@ -99,11 +98,6 @@
     <Imposto bind:raiz={det} {regimeNormal} />
     {#if empresaCarregada.tokenIBPT}
       <h3>Imposto aproximado</h3>
-      <label>
-        Código da exceção à regra aplicada na NCM
-        <small>Caso não haja informe 0</small>
-        <input bind:value={ibpt.ex} />
-      </label>
       <label>
         <input type="checkbox" bind:checked={ibpt.isNacional} />
         Produto nacional

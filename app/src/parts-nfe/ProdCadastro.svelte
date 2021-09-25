@@ -1,5 +1,5 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
+  import CNPJ from '../components/CNPJ.svelte'
   import VeicProd from '../parts-prod/VeicProd.svelte'
   import Med from '../parts-prod/Med.svelte'
   import Arma from '../parts-prod/Arma.svelte'
@@ -24,36 +24,72 @@
   $: prod.CNPJFab = prod.indEscala == 'N' ? '' : undefined
 </script>
 
-<InputT bind:val={prod['cProd']} lab="Código do produto" min={1} max={60} />
-<InputT bind:val={prod['xProd']} lab="Descrição" min={1} max={120} />
-<InputT bind:val={prod['NCM']} lab="Código NCM" pat={'[0-9]{2}|[0-9]{8}'} />
-<InputT bind:val={prod['CFOP']} lab="CFOP" pat={'[1,2,3,5,6,7]{1}[0-9]{3}'} />
-<InputT
-  bind:val={prod['cEAN']}
-  lab="GTIN do produto"
-  aux="antigo código EAN ou código de barras"
-  pat={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
-/>
-<InputT bind:val={prod['uCom']} lab="Unidade comercial" min={1} max={6} />
-<InputT
-  bind:val={prod['vUnCom']}
-  lab="Valor unitário de comercialização"
-  pat={'0|0.[0-9]{1,10}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,10})?'}
-/>
-<InputT
-  bind:val={prod['cEANTrib']}
-  lab="GTIN da unidade tributável"
-  aux="antigo código EAN ou código de barras"
-  pat={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
-/>
-<InputT bind:val={prod['uTrib']} lab="Unidade Tributável" min={1} max={6} />
-<InputT
-  bind:val={prod['vUnTrib']}
-  lab="Valor unitário de tributação"
-  pat={'0.[0-9]{1,10}|[1-9]{1}[0-9]{0,10}|[1-9]{1}[0-9]{0,10}(.[0-9]{1,10})?'}
-/>
-<InputT bind:val={prod['NVE']} opt lab="NVE" pat={'[A-Z]{2}[0-9]{4}'} />
-<InputT bind:val={prod['CEST']} opt lab="CEST" pat={'[0-9]{7}'} />
+<label>
+  Código
+  <input maxlength="60" bind:value={prod['cProd']} required />
+</label>
+<label>
+  Descrição
+  <input maxlength="120" bind:value={prod['xProd']} required />
+</label>
+<label>
+  Código NCM
+  <input bind:value={prod['NCM']} pattern={'[0-9]{2}|[0-9]{8}'} required />
+</label>
+<label>
+  CFOP
+  <input
+    bind:value={prod['CFOP']}
+    pattern={'[1,2,3,5,6,7]{1}[0-9]{3}'}
+    required
+  />
+</label>
+<label>
+  GTIN
+  <small>
+    antigo código EAN ou código de barras, usar literal 'SEM GTIN' caso não haja
+  </small>
+  <input
+    bind:value={prod['cEAN']}
+    pattern={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
+    required
+  />
+</label>
+<label>
+  Unidade comercial
+  <input maxlength="6" bind:value={prod['uCom']} required />
+</label>
+<label>
+  Valor unitário de comercialização
+  <input type="number" step="0.0001" bind:value={prod['vUnCom']} required />
+</label>
+<label>
+  GTIN da unidade tributável
+  <small>
+    antigo código EAN ou código de barras, usar literal 'SEM GTIN' caso não haja
+  </small>
+  <input
+    bind:value={prod['cEANTrib']}
+    pattern={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
+    required
+  />
+</label>
+<label>
+  Unidade tributável
+  <input maxlength="6" bind:value={prod['uTrib']} required />
+</label>
+<label>
+  Valor unitário de tributação
+  <input type="number" step="0.0001" bind:value={prod['vUnTrib']} required />
+</label>
+<label>
+  <i>NVE</i>
+  <input pattern={'[A-Z]{2}[0-9]{4}'} bind:value={prod['NVE']} />
+</label>
+<label>
+  <i>CEST</i>
+  <input type="number" min="1000000" max="9999999" bind:value={prod['CEST']} />
+</label>
 {#if prod['CEST']}
   <label>
     Produzido em escala relevante
@@ -63,23 +99,29 @@
     </select>
   </label>
   {#if prod.indEscala == 'N'}
-    <InputT
-      bind:val={prod.CNPJFab}
-      lab="CNPJ do Fabricante da Mercadoria"
+    <CNPJ
+      bind:CNPJ={prod.CNPJFab}
+      label="CNPJ do Fabricante da Mercadoria"
       aux="obrigatório para produto em escala NÃO relevante"
-      pat={'[0-9]{14}'}
-      max={14}
-      mask="cnpj"
+      required
     />
   {/if}
 {/if}
-<InputT
-  bind:val={prod['cBenef']}
-  opt
-  lab="Código de benefício fiscal"
-  pat={'([!-ÿ]{8}|[!-ÿ]{10}|SEM CBENEF)?'}
-/>
-<InputT bind:val={prod['EXTIPI']} opt lab="EX TIPI" pat={'[0-9]{2,3}'} />
+<label>
+  <i>Código de benefício fiscal</i>
+  <small>
+    Caso seja necessário preencher este campo e não haja um código, usar literal
+    'SEM CBENEF'
+  </small>
+  <input
+    pattern={'([!-ÿ]{8}|[!-ÿ]{10}|SEM CBENEF)?'}
+    bind:value={prod['cBenef']}
+  />
+</label>
+<label>
+  <i>Código EX da TIPI</i>
+  <input type="number" max="999" bind:value={prod['EXTIPI']} />
+</label>
 <label>
   <input type="checkbox" bind:checked={indTot} />
   O valor do item compõe o valor total da NF-e

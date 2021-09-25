@@ -104,7 +104,6 @@ export interface INFeRoot {
 }
 
 export interface IIBPT {
-  ex: string
   isNacional: boolean
   federal: number
   estadual: number
