@@ -1,5 +1,4 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
   import ICMS from '../parts-imposto/ICMS.svelte'
   import ICMSUFDest from '../parts-imposto/ICMSUFDest.svelte'
   import IPI from '../parts-imposto/IPI.svelte'
@@ -27,13 +26,6 @@
 </script>
 
 <h2>Impostos</h2>
-<InputT
-  bind:val={imposto['vTotTrib']}
-  opt
-  lab="Valor estimado total de impostos federais, estaduais e municipais"
-  pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-/>
-
 <label>
   <input type="checkbox" bind:checked={informarIPI} />
   Produto com incidência de IPI

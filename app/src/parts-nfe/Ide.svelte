@@ -1,5 +1,4 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
   import Municipio from '../components/Municipio.svelte'
   import { empresa } from '../code/store'
   import { get } from 'svelte/store'
@@ -79,17 +78,29 @@
         <option value="65">NFC-e</option>
       </select>
     </label>
-    <InputT
-      bind:val={ide['serie']}
-      lab="Série do Documento Fiscal"
-      pat={'0|[1-9]{1}[0-9]{0,2}'}
-    />
-    <InputT
-      bind:val={ide['nNF']}
-      lab="Número do Documento Fiscal"
-      aux="Deixar com 0 para cálculo automático pelo servidor."
-      pat={'[1-9]{1}[0-9]{0,8}'}
-    />
+    <label>
+      Série do documento fiscal
+      <input
+        type="number"
+        step="1"
+        min="0"
+        max="889"
+        bind:value={ide['serie']}
+        required
+      />
+    </label>
+    <label>
+      Número do Documento Fiscal
+      <small>Deixar com 0 para cálculo automático pelo servidor</small>
+      <input
+        type="number"
+        step="1"
+        min="0"
+        max="999999999"
+        bind:value={ide['nNF']}
+        required
+      />
+    </label>
     {#if ide['mod'] == 55}
       <label>
         Finalidade da emissão
@@ -124,12 +135,10 @@
         <input type="datetime-local" bind:value={saidaEntrada} required />
       </label>
     {/if}
-    <InputT
-      bind:val={ide['natOp']}
-      lab="Natureza da Operação"
-      min={1}
-      max={60}
-    />
+    <label>
+      Natureza da Operação
+      <input maxlength="60" bind:value={ide['natOp']} required />
+    </label>
     <Municipio bind:cMun={ide['cMunFG']} lab="Município de ocorrência" />
     <label>
       Presença do comprador

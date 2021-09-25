@@ -4,8 +4,8 @@
   import { get } from 'svelte/store'
   import { edicao } from '../../code/store'
   import { Dados, INFeRoot } from '../../code/tipos'
-  import InputT from '../../components/InputT.svelte'
   import { Estados } from '../../code/IBGE'
+  import CNPJ from '../../components/CNPJ.svelte'
 
   const { produto, di } = get(params)
 
@@ -35,23 +35,18 @@
 
 <form on:submit|preventDefault={salvar}>
   <h3>Declaração de Importação</h3>
-  <InputT
-    bind:val={raiz.nDI}
-    lab="Numero do Documento de Importação (DI/DSI/DA/DRI-E)"
-    min={1}
-    max={12}
-  />
-  <InputT
-    bind:val={raiz.dDI}
-    lab="Data de registro da DI/DSI/DA"
-    pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
-  />
-  <InputT
-    bind:val={raiz.xLocDesemb}
-    lab="Local do desembaraço aduaneiro"
-    min={1}
-    max={60}
-  />
+  <label>
+    Numero do Documento de Importação (DI/DSI/DA/DRI-E)
+    <input maxlength="12" bind:value={raiz.nDI} required />
+  </label>
+  <label>
+    Data de registro da DI/DSI/DA
+    <input type="date" bind:value={raiz.dDI} required />
+  </label>
+  <label>
+    Local do desembaraço aduaneiro
+    <input maxlength="60" bind:value={raiz.xLocDesemb} required />
+  </label>
   <label>
     UF onde ocorreu o desembaraço aduaneiro
     <select bind:value={raiz.UFDesemb} required>
@@ -60,11 +55,10 @@
       {/each}
     </select>
   </label>
-  <InputT
-    bind:val={raiz.dDesemb}
-    lab="Data do desembaraço aduaneiro"
-    pat={'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))'}
-  />
+  <label>
+    Data do desembaraço aduaneiro
+    <input type="date" bind:value={raiz.dDesemb} required />
+  </label>
   <label>
     Via de transporte internacional informada na DI
     <select bind:value={raiz.tpViaTransp} required>
@@ -80,12 +74,10 @@
       <option value="10">Entrada ou saída ficta</option>
     </select>
   </label>
-  <InputT
-    bind:val={raiz.vAFRMM}
-    opt
-    lab="Valor Adicional ao frete para renovação de marinha mercante"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
+  <label>
+    <i>Valor Adicional ao frete para renovação de marinha mercante</i>
+    <input type="number" step="0.01" bind:value={raiz.vAFRMM} />
+  </label>
   <label>
     <select bind:value={raiz.tpIntermedio} required>
       <option value="1">Por conta própria</option>
@@ -93,14 +85,7 @@
       <option value="3">Por encomenda</option>
     </select>
   </label>
-  <InputT
-    bind:val={raiz.CNPJ}
-    opt
-    lab="CNPJ do adquirente ou do encomendante"
-    pat={'[0-9]{14}'}
-    max={14}
-    mask="cnpj"
-  />
+  <CNPJ bind:CNPJ={raiz.CNPJ} label="CNPJ do adquirente ou do encomendante" />
   <label>
     UF do adquirente ou do encomendante
     <select bind:value={raiz.UFTerceiro}>
@@ -109,13 +94,10 @@
       {/each}
     </select>
   </label>
-  <InputT
-    bind:val={raiz.cExportador}
-    lab="Código do exportador"
-    aux="Usado nos sistemas internos de informação do emitente"
-    min={1}
-    max={60}
-  />
+  <label>
+    Código do exportador
+    <input maxlength="60" bind:value={raiz.cExportador} required />
+  </label>
   <h4>Adições</h4>
   <button type="button" on:click={() => (raiz.adi = [{}, ...raiz.adi])}>
     Adicionar

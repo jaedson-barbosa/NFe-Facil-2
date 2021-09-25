@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import InputT from '../components/InputT.svelte'
 
   export let raiz: any
   if (!raiz.arma) raiz.arma = {}
@@ -15,22 +14,19 @@
   <input type="checkbox" bind:checked={usoRestrito} />
   Armamento de uso restrito
 </label>
-<InputT
-  bind:val={raiz.arma.nSerie}
-  lab="Número de série da arma"
-  min={1}
-  max={15}
-/>
-<InputT
-  bind:val={raiz.arma.nCano}
-  lab="Número de série do cano"
-  min={1}
-  max={15}
-/>
-<InputT
-  bind:val={raiz.arma.descr}
-  lab="Descrição completa da arma"
-  aux="Compreendendo: calibre, marca, capacidade, tipo de funcionamento, comprimento e demais elementos que permitam a sua perfeita identificação"
-  min={1}
-  max={256}
-/>
+<label>
+  Número de série da arma
+  <input maxlength="15" bind:value={raiz.arma.nSerie} required />
+</label>
+<label>
+  Número de série do cano
+  <input maxlength="15" bind:value={raiz.arma.nCano} required />
+</label>
+<label>
+  Descrição completa da arma
+  <small>
+    Compreendendo: calibre, marca, capacidade, tipo de funcionamento,
+    comprimento e demais elementos que permitam a sua perfeita identificação
+  </small>
+  <input maxlength="256" bind:value={raiz.arma.descr} required />
+</label>

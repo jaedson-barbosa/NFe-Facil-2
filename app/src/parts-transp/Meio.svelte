@@ -1,5 +1,4 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
   import { refEmpresa } from '../code/store'
   import { DocumentSnapshot } from 'firebase/firestore'
   import { Dados } from '../code/tipos'
@@ -63,9 +62,15 @@
   </select>
 </label>
 {#if meio == 'vagao'}
-  <InputT bind:val={transp.vagao} lab="Vagão" min={1} max={20} />
+  <label>
+    Vagão
+    <input maxlength="20" bind:value={transp.vagao} required />
+  </label>
 {:else if meio == 'balsa'}
-  <InputT bind:val={transp.balsa} lab="Balsa" min={1} max={20} />
+  <label>
+    balsa
+    <input maxlength="20" bind:value={transp.balsa} required />
+  </label>
 {:else if meio == 'veicTransp'}
   <label>
     Buscar veículo pela placa

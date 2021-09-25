@@ -116,12 +116,10 @@
         {getMoeda(ICMS['vICMSOp'])}
       </p>
     {/if}
-    <InputT
-      bind:val={ICMS['pDif']}
-      opt
-      lab="Percentual do diferemento"
-      pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
-    />
+    <label>
+      <i>Percentual do diferemento</i>
+      <input type="number" step="0.0001" bind:value={ICMS['pDif']} />
+    </label>
     {#if ICMS['vICMSDif']}
       <p>
         <strong>Valor do ICMS diferido:</strong>
@@ -167,29 +165,24 @@
       {/each}
     </select>
   </label>
-  <InputT
-    bind:val={ICMS['pMVAST']}
-    opt
-    lab="Percentual MVA ST"
-    pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
-  />
-  <InputT
-    bind:val={ICMS['pRedBCST']}
-    opt
-    lab="Percentual de redução da BC ST"
-    pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
-  />
+  <label>
+    <i>Percentual MVA ST</i>
+    <input type="number" step="0.0001" bind:value={ICMS['pMVAST']} />
+  </label>
+  <label>
+    <i>Percentual de redução da BC ST</i>
+    <input type="number" step="0.0001" bind:value={ICMS['pRedBCST']} />
+  </label>
   {#if ICMS['vBCST']}
     <p>
       <strong>Base de cálculo do ST:</strong>
       {getMoeda(ICMS['vBCST'])}
     </p>
   {/if}
-  <InputT
-    bind:val={ICMS['pICMSST']}
-    lab="Alíquota do ST"
-    pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
-  />
+  <label>
+    Alíquota do ST"
+    <input type="number" step="0.0001" bind:value={ICMS['pICMSST']} required />
+  </label>
   {#if ICMS['vICMSST']}
     <p>
       <strong>Valor do ST:</strong>
@@ -197,11 +190,10 @@
     </p>
   {/if}
   {#if ['Part10', 'Part90'].includes(tipoICMS)}
-    <InputT
-      bind:val={ICMS['pBCOp']}
-      lab="Percentual da BC da operação própria"
-      pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
-    />
+    <label>
+      Percentual da BC da operação própria
+      <input type="number" step="0.0001" bind:value={ICMS['pBCOp']} required />
+    </label>
     <label>
       UF para qual é devido o ICMS ST
       <select bind:value={ICMS.UFST} required>
@@ -257,12 +249,10 @@
     aux="Alíquota do cálculo do ICMS-ST já incluso o FCP caso incida sobre a mercadoria"
     pat={'0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
   />
-  <InputT
-    bind:val={ICMS['vICMSSubstituto']}
-    opt
-    lab="ICMS próprio do substituto cobrado anteriormente"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
+  <label>
+    <i>ICMS próprio do substituto cobrado anteriormente</i>
+    <input type="number" step="0.01" bind:value={ICMS['vICMSSubstituto']} />
+  </label>
   <InputT
     bind:val={ICMS['vICMSSTRet']}
     opt={!['vBCSTRet', 'pST', 'vICMSSubstituto'].some((v) => ICMS[v])}
@@ -292,16 +282,14 @@
   <br />
   {#if ['ST41', 'ST60'].includes(tipoICMS)}
     <h4>ICMS ST da UF destino</h4>
-    <InputT
-      bind:val={ICMS['vBCSTDest']}
-      lab="Base de cálculo"
-      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-    />
-    <InputT
-      bind:val={ICMS['vICMSSTDest']}
-      lab="Valor"
-      pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-    />
+    <label>
+      Base de cálculo
+      <input type="number" step="0.01" bind:value={ICMS['vBCSTDest']} required />
+    </label>
+    <label>
+      Valor
+      <input type="number" step="0.01" bind:value={ICMS['vICMSSTDest']} required />
+    </label>
     <br />
   {/if}
   <h4>ICMS efetivo</h4>

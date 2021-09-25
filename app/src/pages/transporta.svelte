@@ -6,7 +6,6 @@
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
-  import InputT from '../components/InputT.svelte'
   import Municipio from '../components/Municipio.svelte'
   import Doc from '../parts-nfe/Doc.svelte'
 
@@ -72,26 +71,27 @@
   <form on:submit|preventDefault={() => salvar()}>
     <h1><Voltar /> Transportador</h1>
     <Doc bind:raiz={transporta} apenasBR />
-    <InputT
-      lab="Razão Social ou nome do transportador"
-      min={2}
-      max={60}
-      bind:val={transporta['xNome']}
-    />
-    <InputT
-      opt
-      lab="Inscrição Estadual"
-      pat={'ISENTO|[0-9]{2,14}'}
-      max={14}
-      bind:val={transporta['IE']}
-    />
-    <InputT
-      opt
-      lab="Endereço completo"
-      min={1}
-      max={60}
-      bind:val={transporta['xEnder']}
-    />
+    <label>
+      Razão Social ou nome do transportador
+      <input
+        minlength="2"
+        maxlength="60"
+        bind:value={transporta['xNome']}
+        required
+      />
+    </label>
+    <label>
+      <i>Inscrição Estadual</i>
+      <input
+        pattern={'ISENTO|[0-9]{2,14}'}
+        maxlength="14"
+        bind:value={transporta['IE']}
+      />
+    </label>
+    <label>
+      <i>Endereço completo</i>
+      <input maxlength="60" bind:value={transporta['xEnder']} />
+    </label>
     <Municipio bind:xMun={transporta['xMun']} bind:UF={transporta['UF']} />
     {#if $permissaoEscrita}
       <input type="submit" class="button" value="Salvar" />

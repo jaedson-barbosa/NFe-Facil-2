@@ -1,7 +1,7 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
   import { calcular, CST } from '../code/imposto/IPI'
   import { getMoeda } from '../code/numero'
+  import CNPJ from '../components/CNPJ.svelte'
 
   export let raiz: any
   export let prod: any
@@ -24,38 +24,23 @@
 </script>
 
 <h3>Imposto sobre produtos industrializados</h3>
-<InputT
-  {raiz}
-  name="CNPJProd"
-  opt
-  lab="CNPJ do produtor da mercadoria"
+<CNPJ
+  bind:CNPJ={raiz.CNPJProd}
+  label="CNPJ do produtor da mercadoria"
   aux="Informar se diferente do emitente e somente em exportação"
-  pat={'[0-9]{14}'}
-  max={14}
-  mask="cnpj"
 />
-<InputT
-  {raiz}
-  name="qSelo"
-  opt
-  lab="Quantidade de selos de controle"
-  pat={'[0-9]{1,12}'}
-/>
-<InputT
-  {raiz}
-  name="cSelo"
-  opt
-  lab="Códigos dos selos de controle"
-  min={1}
-  max={60}
-/>
-<InputT
-  {raiz}
-  name="cEnq"
-  lab="Código de Enquadramento Legal"
-  min={1}
-  max={3}
-/>
+<label>
+  <i>Quantidade de selos de controle</i>
+  <input type="number" step="1" bind:value={raiz.qSelo} />
+</label>
+<label>
+  <i>Códigos dos selos de controle</i>
+  <input maxlength="60" bind:value={raiz.cSelo} />
+</label>
+<label>
+  Código de Enquadramento Legal
+  <input type="number" step="1" min="1" max="999" bind:value={raiz.cEnq} required />
+</label>
 <label>
   CST
   <select bind:value={tipoIPI} required>
@@ -66,25 +51,16 @@
 </label>
 {#if IPITributado}
   {#if !raiz['vUnid']}
-    <p>
-      A base de cálculo considerada é igual ao somatório valor do produto +
-      frete + seguro + outras despesas acessórias.
-    </p>
-    <InputT
-      {raiz}
-      name="pIPI"
-      lab="Alíquota do IPI"
-      pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
-    />
+    <label>
+      Alíquota em percentual
+      <input type="number" step="0.0001" bind:value={raiz['pIPI']} required />
+    </label>
   {/if}
   {#if !raiz['pIPI']}
-    <p>A quantidade considerada é a quantidade tributável.</p>
-    <InputT
-      {raiz}
-      name="vUnid"
-      lab="Valor por Unidade Tributável"
-      pat={'0|0.[0-9]{4}|[1-9]{1}[0-9]{0,10}(.[0-9]{4})?'}
-    />
+    <label>
+      Alíquota em reais
+      <input type="number" step="0.0001" bind:value={raiz['vUnid']} required />
+    </label>
   {/if}
   {#if IPI['vIPI']}
     <p>
