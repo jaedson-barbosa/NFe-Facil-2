@@ -1,6 +1,5 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
-  import Select from '../components/Select.svelte'
   import {
     CSOSN,
     CST,
@@ -58,16 +57,32 @@
 </script>
 
 <h3>ICMS</h3>
-<Select bind:val={tipoICMS} lab="Código de situação" els={CS} />
-<Select bind:val={ICMS['orig']} lab="Origem da mercadoria" els={origem} />
+<label>
+  Código de situação
+  <select bind:value={tipoICMS} required>
+    {#each CS as e}
+      <option value={e[0]}>{e[0]} - {e[1]}</option>
+    {/each}
+  </select>
+</label>
+<label>
+  Origem da mercadoria
+  <select bind:value={ICMS['orig']} required>
+    {#each origem as e}
+      <option value={e[0]}>{e[0]} - {e[1]}</option>
+    {/each}
+  </select>
+</label>
 {#if ['00', '10', '20', '51', '70', '90', 'Part10', 'Part90', '900'].includes(tipoICMS)}
   <h4>ICMS próprio</h4>
-  <Select
-    bind:val={ICMS['modBC']}
-    opt={tipoICMS == '51'}
-    lab="Modalidade de determinação da BC"
-    els={modBC}
-  />
+  <label>
+    Modalidade de determinação da BC
+    <select bind:value={ICMS['modBC']} required={tipoICMS != '51'}>
+      {#each modBC as e}
+        <option value={e[0]}>{e[0]} - {e[1]}</option>
+      {/each}
+    </select>
+  </label>
   {#if !['00', '10'].includes(tipoICMS)}
     <InputT
       bind:val={ICMS['pRedBC']}
@@ -144,11 +159,14 @@
 {/if}
 {#if ['10', '30', '70', '90', 'Part10', 'Part90', '201', '202', '203', '900'].includes(tipoICMS)}
   <h4>ICMS - Substituição tributária</h4>
-  <Select
-    bind:val={ICMS['modBCST']}
-    lab="Modalidade de determinação da BC do ICMS ST"
-    els={modBCST}
-  />
+  <label>
+    Modalidade de determinação da BC do ICMS ST
+    <select bind:value={ICMS['modBCST']} required>
+      {#each modBCST as e}
+        <option value={e[0]}>{e[0]} - {e[1]}</option>
+      {/each}
+    </select>
+  </label>
   <InputT
     bind:val={ICMS['pMVAST']}
     opt
@@ -321,12 +339,14 @@
     lab="Valor do ICMS desonerado"
     pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
   />
-  <Select
-    bind:val={ICMS['motDesICMS']}
-    opt={!ICMS['vICMSDeson']}
-    lab="Motivo da desoneração"
-    els={getMotDes(tipoICMS)}
-  />
+  <label>
+    Motivo da desoneração
+    <select bind:value={ICMS['motDesICMS']} required={ICMS['vICMSDeson']}>
+      {#each getMotDes(tipoICMS) as e}
+        <option value={e[0]}>{e[0]} - {e[1]}</option>
+      {/each}
+    </select>
+  </label>
   <br />
 {/if}
 {#if ['101', '201', '900'].includes(ICMS['CSOSN'])}

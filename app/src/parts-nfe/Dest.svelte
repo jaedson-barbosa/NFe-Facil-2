@@ -1,7 +1,6 @@
 <script lang="ts">
   import paises from '../code/paises'
   import InputT from '../components/InputT.svelte'
-  import Select from '../components/Select.svelte'
   import Municipio from '../components/Municipio.svelte'
   import Doc from './Doc.svelte'
 

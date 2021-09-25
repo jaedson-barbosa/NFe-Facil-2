@@ -1,6 +1,5 @@
 <script lang="ts">
   import InputT from '../components/InputT.svelte'
-  import Select from '../components/Select.svelte'
   import Municipio from '../components/Municipio.svelte'
   import { empresa } from '../code/store'
   import { get } from 'svelte/store'
@@ -57,6 +56,12 @@
       ide = ide
     }
   }
+
+  let indFinal = ide.indFinal == '1'
+  $: ide.indFinal = indFinal ? '1' : '0'
+
+  let indIntermed = ide.indIntermed == '1'
+  $: ide.indIntermed = indIntermed ? '1' : '0'
 </script>
 
 <h2>Identificação</h2>
@@ -67,14 +72,13 @@
       Ambiente de homologação
       <small>Testar emissão com nota sem valor fiscal</small>
     </label>
-    <Select
-      bind:val={ide['mod']}
-      lab="Modelo"
-      els={[
-        ['55', 'NF-e'],
-        ['65', 'NFC-e'],
-      ]}
-    />
+    <label>
+      Modelo
+      <select bind:value={ide['mod']} required>
+        <option value="55">NF-e</option>
+        <option value="65">NFC-e</option>
+      </select>
+    </label>
     <InputT
       bind:val={ide['serie']}
       lab="Série do Documento Fiscal"
@@ -87,35 +91,26 @@
       pat={'[1-9]{1}[0-9]{0,8}'}
     />
     {#if ide['mod'] == 55}
-      <Select
-        bind:val={ide['finNFe']}
-        lab="Finalidade da emissão"
-        els={[
-          ['1', 'Normal'],
-          ['2', 'Complementar'],
-          ['3', 'Ajuste'],
-          ['4', 'Devolução/Retorno'],
-        ]}
-      />
-      <Select
-        bind:val={ide['indFinal']}
-        lab="Consumidor final"
-        els={[
-          ['1', 'Sim'],
-          ['0', 'Não'],
-        ]}
-      />
+      <label>
+        Finalidade da emissão
+        <select bind:value={ide['finNFe']} required>
+          <option value="1">Normal</option>
+          <option value="2">Complementar</option>
+          <option value="3">Ajuste</option>
+          <option value="4">Devolução/Retorno</option>
+        </select>
+      </label>
+      <label>
+        <input type="checkbox" bind:checked={indFinal} />
+        Consumidor final
+      </label>
     {/if}
-    {#if ide['indPres'] != '1'}
-      <Select
-        bind:val={ide['indIntermed']}
-        opt
-        lab="Indicador de intermediador ou marketplace"
-        els={[
-          ['0', 'Operação em site ou plataforma própria'],
-          ['1', 'Operação em site ou plataforma de terceiros'],
-        ]}
-      />
+    {#if ['2', '3', '4', '9'].includes(ide['indPres'])}
+      <label>
+        <input type="checkbox" bind:checked={indIntermed} />
+        Operação executada em site ou plataforma de terceiros
+        <small>intermediador ou marketplace</small>
+      </label>
     {/if}
   </div>
   <div class="column">
@@ -136,37 +131,34 @@
       max={60}
     />
     <Municipio bind:cMun={ide['cMunFG']} lab="Município de ocorrência" />
-    <Select
-      bind:val={ide['indPres']}
-      lab="Presença do comprador"
-      els={[
-        ['1', 'Operação presencial'],
-        ['0', 'Não se aplica (complementar ou ajuste)'],
-        ['2', 'Não presencial, internet'],
-        ['3', 'Não presencial, teleatendimento'],
-        ['4', 'NFC-e entrega em domicílio'],
-        ['5', 'Operação presencial, fora do estabelecimento'],
-        ['9', 'Não presencial, outros'],
-      ]}
-    />
+    <label>
+      Presença do comprador
+      <select bind:value={ide['indPres']} required>
+        <option value="0">Não se aplica (complementar ou ajuste)</option>
+        <option value="1">Operação presencial</option>
+        <option value="2">Não presencial, internet</option>
+        <option value="3">Não presencial, teleatendimento</option>
+        <option value="4">NFC-e entrega em domicílio</option>
+        <option value="5">Operação presencial, fora do estabelecimento</option>
+        <option value="9">Não presencial, outros</option>
+      </select>
+    </label>
     {#if ide['mod'] == 55}
-      <Select
-        bind:val={ide['tpNF']}
-        lab="Tipo do Documento Fiscal"
-        els={[
-          ['1', 'Saída'],
-          ['0', 'Entrada'],
-        ]}
-      />
-      <Select
-        bind:val={ide['idDest']}
-        lab="Identificador de Local de destino da operação"
-        els={[
-          ['1', 'Interna'],
-          ['2', 'Interestadual'],
-          ['3', 'Exterior'],
-        ]}
-      />
+      <label>
+        Tipo do documento fiscal
+        <select bind:value={ide['tpNF']} required>
+          <option value="0">Entrada</option>
+          <option value="1">Saída</option>
+        </select>
+      </label>
+      <label>
+        Identificador de local de destino da operação
+        <select bind:value={ide['idDest']} required>
+          <option value="1">Interna</option>
+          <option value="2">Interestadual</option>
+          <option value="3">Exterior</option>
+        </select>
+      </label>
     {/if}
   </div>
 </div>
