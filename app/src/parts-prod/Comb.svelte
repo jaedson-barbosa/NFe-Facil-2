@@ -1,77 +1,92 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
   import { calcularCIDE } from '../code/imposto/CIDE'
   import { onDestroy } from 'svelte'
   import { getMoeda } from '../code/numero'
   import { EstadosEX } from '../code/IBGE'
+  import ANP from '../code/ANP'
+  import Encerrante from './Encerrante.svelte'
 
   export let raiz: any
   if (!raiz.comb) raiz.comb = {}
   if (!raiz.comb.CIDE) raiz.comb.CIDE = {}
   if (!raiz.comb.encerrante) raiz.comb.encerrante = {}
+
   $: raiz = calcularCIDE(raiz)
+
   onDestroy(() => (raiz.comb = undefined))
+
+  function escolher(v: typeof ANP[0]) {
+    return () => {
+      const comb = raiz.comb
+      comb.cProdANP = v.codigo
+      comb.descANP = v.produto
+    }
+  }
+
+  let filtro = raiz.comb.cProdANP || ''
+  $: anpFiltrado = filtro
+    ? ANP.filter((v) => v.codigo.includes(filtro) || v.produto.includes(filtro))
+    : ANP
 </script>
 
 <h3>Combustível</h3>
-<InputT
-  bind:val={raiz.comb.cProdANP}
-  lab="Código de produto da ANP"
-  pat={'[0-9]{9}'}
-/>
-<InputT
-  bind:val={raiz.comb.descANP}
-  lab="Descrição do Produto conforme ANP"
-  aux="Utilizar a descrição de produtos do SIMP"
-  min={2}
-  max={95}
-/>
+<label>
+  Filtrar pelo código / descrição
+  <input bind:value={filtro} />
+</label>
+<table>
+  <thead>
+    <tr>
+      <th>Código</th>
+      <th>Produto</th>
+      <th>Unidade</th>
+      <th>Família</th>
+      <th>Grupo</th>
+      <th>Sub-grupo</th>
+      <th>Sub-subgrupo</th>
+    </tr>
+  </thead>
+  <tbody style="height: 300px; overflow-y: scroll;">
+    {#each anpFiltrado as v}
+      <tr
+        class="clicavel"
+        class:marcado={raiz.comb.cProdANP == v.codigo}
+        on:click={escolher(v)}
+      >
+        <td>{v.codigo}</td>
+        <td>{v.produto}</td>
+        <td>{v.unidadeSIMP}</td>
+        <td>{v.familia}</td>
+        <td>{v.grupo}</td>
+        <td>{v.subgrupo}</td>
+        <td>{v.subsubgrupo}</td>
+      </tr>
+    {/each}
+  </tbody>
+</table>
+
 {#if raiz.comb['cProdANP'] == 210203001}
-  <InputT
-    bind:val={raiz.comb.pGLP}
-    opt
-    lab="Percentual do GLP derivado do petróleo no produto GLP"
-    aux="Valores de 0 a 100"
-    pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
-  />
-  <InputT
-    bind:val={raiz.comb.pGNn}
-    opt
-    lab="Percentual de gás natural nacional GLGNn para o produto GLP"
-    aux="Valores de 0 a 100"
-    pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
-  />
-  <InputT
-    bind:val={raiz.comb.pGNi}
-    opt
-    lab="Percentual de gás natural importado GLGNi para o produto GLP"
-    aux="Valores de 0 a 100"
-    pat={'0(.[0-9]{2,4})?|[1-9]{1}[0-9]{0,1}(.[0-9]{2,4})?|100(.0{2,4})?'}
-  />
-  <InputT
-    bind:val={raiz.comb.vPart}
-    opt
-    lab="Valor de partida (por quilograma sem ICMS)"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
+  <label>
+    <i>Percentual do GLP derivado do petróleo</i>
+    <input type="number" step="0.0001" bind:value={raiz.comb.pGLP} />
+  </label>
+  <label>
+    <i>Percentual de gás natural nacional GLGNn</i>
+    <input type="number" step="0.0001" bind:value={raiz.comb.pGNn} />
+  </label>
+  <label>
+    <i>Percentual de gás natural importado GLGNi</i>
+    <input type="number" step="0.0001" bind:value={raiz.comb.pGNi} />
+  </label>
+  <label>
+    Valor de partida (por quilograma sem ICMS)
+    <input type="number" step="0.01" bind:value={raiz.comb.vPart} required />
+  </label>
 {/if}
-<InputT
-  bind:val={raiz.comb.CODIF}
-  opt
-  lab="Código de autorização / registro do CODIF"
-  aux="Informar quando a UF utilizar o CODIF"
-  pat={'[0-9]{1,21}'}
-/>
-<!--
-  Não acho que esse campo seja muito usado
-<InputT
-  bind:val={raiz.qTemp}
-  opt
-  lab="Quantidade de combustível faturada à temperatura ambiente"
-  aux="Informar quando a quantidade tiver sido ajustada para uma temperatura diferente da ambiente"
-  pat={'0.[1-9]{1}[0-9]{3}|0.[0-9]{3}[1-9]{1}|0.[0-9]{2}[1-9]{1}[0-9]{1}|0.[0-9]{1}[1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{0,11}(.[0-9]{4})?'}
-/>
--->
+<label>
+  <i>Código de autorização / registro do CODIF</i>
+  <input maxlength="21" bind:value={raiz.comb.CODIF} />
+</label>
 <label>
   UF de consumo
   <select bind:value={raiz.comb.UFCons} required>
@@ -90,36 +105,4 @@
   {/if}
   <input type="number" step="0.0001" bind:value={raiz.comb.CIDE.vAliqProd} />
 </label>
-
-<h4 class="opt">Encerrante</h4>
-<InputT
-  name="nBico"
-  raiz={raiz.comb.encerrante}
-  lab="Numero do bico utilizado no abastecimento"
-  pat={'[0-9]{1,3}'}
-/>
-<InputT
-  name="nTanque"
-  raiz={raiz.comb.encerrante}
-  lab="Numero de identificação do tanque"
-  pat={'[0-9]{1,3}'}
-/>
-<InputT
-  name="vEncIni"
-  raiz={raiz.comb.encerrante}
-  lab="Valor do Encerrante no ínicio do abastecimento"
-  pat={'0|0.[0-9]{3}|[1-9]{1}[0-9]{0,11}(.[0-9]{3})?'}
-/>
-<InputT
-  name="vEncFin"
-  raiz={raiz.comb.encerrante}
-  lab="Valor do Encerrante no final do abastecimento"
-  pat={'0|0.[0-9]{3}|[1-9]{1}[0-9]{0,11}(.[0-9]{3})?'}
-/>
-<InputT
-  name="nBomba"
-  raiz={raiz.comb.encerrante}
-  opt
-  lab="Numero da bomba"
-  pat={'[0-9]{1,3}'}
-/>
+<Encerrante bind:encerrante={raiz.comb.encerrante} />
