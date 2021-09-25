@@ -1,5 +1,4 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
   import Municipio from '../components/Municipio.svelte'
 
   export let retTransp: any
@@ -13,31 +12,26 @@
   Informar dados de Retenção do ICMS no Transporte
 </label>
 {#if retTransp}
-  <InputT
-    bind:val={retTransp['vServ']}
-    lab="Valor do Serviço"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <InputT
-    bind:val={retTransp['vBCRet']}
-    lab="BC da Retenção do ICMS"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <InputT
-    bind:val={retTransp['pICMSRet']}
-    lab="Alíquota da Retenção"
-    pat={'0|0.[0-9]{2,4}|[1-9]{1}[0-9]{0,2}(.[0-9]{2,4})?'}
-  />
-  <InputT
-    bind:val={retTransp['vICMSRet']}
-    lab="Valor do ICMS Retido"
-    pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-  />
-  <InputT
-    bind:val={retTransp['CFOP']}
-    lab="CFOP de serviço de transporte"
-    pat={'[1,2,3,5,6,7]{1}[0-9]{3}'}
-  />
+  <label>
+    Valor do Serviço
+    <input type="number" step="0.01" bind:value={retTransp['vServ']} required />
+  </label>
+  <label>
+    BC da Retenção do ICMS
+    <input type="number" step="0.01" bind:value={retTransp['vBCRet']} required />
+  </label>
+  <label>
+    Alíquota da Retenção
+    <input type="number" step="0.0001" bind:value={retTransp['pICMSRet']} required />
+  </label>
+  <label>
+    Valor do ICMS Retido
+    <input type="number" step="0.01" bind:value={retTransp['vICMSRet']} required />
+  </label>
+  <label>
+    CFOP de serviço de transporte
+    <input type="number" step="1" bind:value={retTransp['CFOP']} required />
+  </label>
   <Municipio
     bind:cMun={retTransp['cMunFG']}
     lab="Município do fato gerador do ICMS do transporte"

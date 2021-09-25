@@ -1,5 +1,4 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
   import DE from '../parts-prod/DE.svelte'
   import Rastro from '../parts-prod/Rastro.svelte'
   import VeicProd from '../parts-prod/VeicProd.svelte'
@@ -17,17 +16,20 @@
 
   if (!prod.rastro) prod.rastro = []
   if (!prod.DI) prod.DI = []
-  if (!raiz.impostoDevol) raiz.impostoDevol = {}
   if (!raiz.impostoDevol.IPI) raiz.impostoDevol.IPI = {}
+
+  let pDevol = raiz.impostoDevol?.pDevol ?? 0
+  $: raiz.impostoDevol = pDevol ? { pDevol, IPI: {} } : undefined
 </script>
 
 <h2>Detalhes adicionais de {prod['xProd']}</h2>
-<InputT
-  bind:val={prod['nFCI']}
-  opt
-  lab="Número da FCI (Ficha de Conteúdo de Importação)"
-  pat={'[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}'}
-/>
+<label>
+  <i>Número da FCI (Ficha de Conteúdo de Importação)</i>
+  <input
+    pattern={'[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}'}
+    bind:value={prod['nFCI']}
+  />
+</label>
 
 <h3>Declaração de Importação</h3>
 <a class="button" href={$url('./:di', { di: '-1' })}>Adicionar</a>
@@ -53,27 +55,27 @@
 <DE bind:raiz={prod} />
 
 <h3>Imposto devolvido</h3>
-<InputT
-  bind:val={raiz.impostoDevol.pDevol}
-  opt={!raiz.impostoDevol.IPI.vIPIDevol}
-  lab="Percentual de mercadoria devolvida"
-  pat={'0(.[0-9]{2})?|100(.00)?|[1-9]{1}[0-9]{0,1}(.[0-9]{2})?'}
-/>
-<InputT
-  bind:val={raiz.impostoDevol.IPI.vIPIDevol}
-  opt={!raiz.impostoDevol.pDevol}
-  lab="Valor do IPI devolvido"
-  pat={'0|0.[0-9]{2}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-/>
+<label>
+  <i>Percentual de mercadoria devolvida</i>
+  <input type="number" step="0.01" bind:value={pDevol} />
+</label>
+{#if raiz.impostoDevol?.IPI}
+  <label>
+    Valor do IPI devolvido
+    <input
+      type="number"
+      step="0.01"
+      bind:value={raiz.impostoDevol.IPI.vIPIDevol}
+      required
+    />
+  </label>
+{/if}
 
-<InputT
-  bind:val={raiz['infAdProd']}
-  opt
-  lab="Informações adicionais do produto"
-  aux="Norma referenciada, informações complementares, etc"
-  min={1}
-  max={500}
-/>
+<label>
+  <i>Informações adicionais do produto</i>
+  <small>Norma referenciada, informações complementares, etc</small>
+  <input maxlength="500" bind:value={raiz['infAdProd']} />
+</label>
 
 {#if ['veicProd', 'med', 'arma', 'comb', 'nRECOPI'].some((v) => !!v[prod])}
   <h2>Detalhamento específico</h2>

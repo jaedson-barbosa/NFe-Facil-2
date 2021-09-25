@@ -2,8 +2,6 @@
   import { calcularICMSTot } from '../code/nfe/total'
   import { getMoeda } from '../code/numero'
 
-  import InputT from '../components/InputT.svelte'
-
   export let det: any
   export let total: any
 
@@ -166,45 +164,31 @@
 <br />
 
 <h3>Retenção de tributos</h3>
-<InputT
-  bind:val={total.retTrib['vRetPIS']}
-  opt
-  lab="Valor Retido de PIS"
-  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-/>
-<InputT
-  bind:val={total.retTrib['vRetCOFINS']}
-  opt
-  lab="Valor Retido de COFINS"
-  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-/>
-<InputT
-  bind:val={total.retTrib['vRetCSLL']}
-  opt
-  lab="Valor Retido de CSLL"
-  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-/>
-<InputT
-  bind:val={total.retTrib['vBCIRRF']}
-  opt
-  lab="Base de Cálculo do IRRF"
-  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-/>
-<InputT
-  bind:val={total.retTrib['vIRRF']}
-  opt
-  lab="Valor Retido de IRRF"
-  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-/>
-<InputT
-  bind:val={total.retTrib['vBCRetPrev']}
-  opt
-  lab="Base de Cálculo da Retenção da Previdêncica Social"
-  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-/>
-<InputT
-  bind:val={total.retTrib['vRetPrev']}
-  opt
-  lab="Valor da Retenção da Previdêncica Social"
-  pat={'0.[0-9]{1}[1-9]{1}|0.[1-9]{1}[0-9]{1}|[1-9]{1}[0-9]{0,12}(.[0-9]{2})?'}
-/>
+<label>
+  <i>Valor Retido de PIS</i>
+  <input type="number" step="0.01" bind:value={total.retTrib['vRetPIS']} />
+</label>
+<label>
+  <i>Valor Retido de COFINS</i>
+  <input type="number" step="0.01" bind:value={total.retTrib['vRetCOFINS']} />
+</label>
+<label>
+  <i>Valor Retido de CSLL</i>
+  <input type="number" step="0.01" bind:value={total.retTrib['vRetCSLL']} />
+</label>
+<label>
+  <i>Base de Cálculo do IRRF</i>
+  <input type="number" step="0.01" bind:value={total.retTrib['vBCIRRF']} />
+</label>
+<label>
+  <i>Valor Retido de IRRF</i>
+  <input type="number" step="0.01" bind:value={total.retTrib['vIRRF']} />
+</label>
+<label>
+  <i>Base de Cálculo da Retenção da Previdêncica Social</i>
+  <input type="number" step="0.01" bind:value={total.retTrib['vBCRetPrev']} />
+</label>
+<label>
+  <i>Valor da Retenção da Previdêncica Social</i>
+  <input type="number" step="0.01" bind:value={total.retTrib['vRetPrev']} />
+</label>
