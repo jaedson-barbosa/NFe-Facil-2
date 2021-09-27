@@ -1,7 +1,8 @@
 <script lang="ts">
   import { calcular, CST } from '../code/imposto/IPI'
+  import { aplicarMascara } from '../code/mascaracaoDoc'
   import { getMoeda } from '../code/numero'
-  import CNPJ from '../components/CNPJ.svelte'
+  import { validaCNPJ } from '../code/validacaoDoc'
 
   export let raiz: any
   export let prod: any
@@ -24,11 +25,18 @@
 </script>
 
 <h3>Imposto sobre produtos industrializados</h3>
-<CNPJ
-  bind:CNPJ={raiz.CNPJProd}
-  label="CNPJ do produtor da mercadoria"
-  aux="Informar se diferente do emitente e somente em exportação"
-/>
+<label>
+  <i>CNPJ do produtor da mercadoria</i>
+  <small>
+    {aplicarMascara(raiz.CNPJProd, 'cnpj')} - Informar se diferente do emitente e
+    somente em exportação
+  </small>
+  <input
+    pattern="[0-9]{14}"
+    bind:value={raiz.CNPJProd}
+    on:blur={() => validaCNPJ(raiz.CNPJProd) || (raiz.CNPJProd = '')}
+  />
+</label>
 <label>
   <i>Quantidade de selos de controle</i>
   <input type="number" step="1" bind:value={raiz.qSelo} />
@@ -39,7 +47,14 @@
 </label>
 <label>
   Código de Enquadramento Legal
-  <input type="number" step="1" min="1" max="999" bind:value={raiz.cEnq} required />
+  <input
+    type="number"
+    step="1"
+    min="1"
+    max="999"
+    bind:value={raiz.cEnq}
+    required
+  />
 </label>
 <label>
   CST

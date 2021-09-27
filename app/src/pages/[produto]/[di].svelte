@@ -5,7 +5,8 @@
   import { edicao } from '../../code/store'
   import { Dados, INFeRoot } from '../../code/tipos'
   import { Estados } from '../../code/IBGE'
-  import CNPJ from '../../components/CNPJ.svelte'
+  import { aplicarMascara } from '../../code/mascaracaoDoc'
+  import { validaCNPJ } from '../../code/validacaoDoc'
 
   const { produto, di } = get(params)
 
@@ -85,7 +86,15 @@
       <option value="3">Por encomenda</option>
     </select>
   </label>
-  <CNPJ bind:CNPJ={raiz.CNPJ} label="CNPJ do adquirente ou do encomendante" />
+  <label>
+    <i>CNPJ do adquirente ou do encomendante</i>
+    <small>{aplicarMascara(raiz.CNPJ, 'cnpj')}</small>
+    <input
+      pattern="[0-9]{14}"
+      bind:value={raiz.CNPJ}
+      on:blur={() => validaCNPJ(raiz.CNPJ) || (raiz.CNPJ = '')}
+    />
+  </label>
   <label>
     UF do adquirente ou do encomendante
     <select bind:value={raiz.UFTerceiro}>

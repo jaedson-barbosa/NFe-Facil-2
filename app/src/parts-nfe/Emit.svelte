@@ -1,7 +1,7 @@
 <script lang="ts">
   import Municipio from '../components/Municipio.svelte'
-  import CNPJ from '../components/CNPJ.svelte'
   import { aplicarMascara } from '../code/mascaracaoDoc'
+  import { validaCNPJ } from '../code/validacaoDoc'
 
   export let raiz: any
 
@@ -17,7 +17,16 @@
   $: !emit.RM && delete emit.CNAE
 </script>
 
-<CNPJ bind:CNPJ={emit['CNPJ']} required />
+<label>
+  CNPJ
+  <small>{aplicarMascara(emit['CNPJ'], 'cnpj')}</small>
+  <input
+    required
+    pattern="[0-9]{14}"
+    bind:value={emit['CNPJ']}
+    on:blur={() => validaCNPJ(emit['CNPJ']) || (emit['CNPJ'] = '')}
+  />
+</label>
 <label>
   Razão social ou nome
   <input minlength="2" maxlength="60" bind:value={emit['xNome']} required />
@@ -76,12 +85,7 @@
 </label>
 <label>
   Bairro
-  <input
-    minlength="2"
-    maxlength="60"
-    bind:value={ender['xBairro']}
-    required
-  />
+  <input minlength="2" maxlength="60" bind:value={ender['xBairro']} required />
 </label>
 <Municipio
   bind:cMun={ender['cMun']}

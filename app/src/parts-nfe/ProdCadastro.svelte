@@ -1,10 +1,11 @@
 <script lang="ts">
-  import CNPJ from '../components/CNPJ.svelte'
   import VeicProd from '../parts-prod/VeicProd.svelte'
   import Med from '../parts-prod/Med.svelte'
   import Arma from '../parts-prod/Arma.svelte'
   import Comb from '../parts-prod/Comb.svelte'
   import NRECOPI from '../parts-prod/NRECOPI.svelte'
+  import { aplicarMascara } from '../code/mascaracaoDoc'
+  import { validaCNPJ } from '../code/validacaoDoc'
 
   export let raiz: any
 
@@ -99,12 +100,19 @@
     </select>
   </label>
   {#if prod.indEscala == 'N'}
-    <CNPJ
-      bind:CNPJ={prod.CNPJFab}
-      label="CNPJ do Fabricante da Mercadoria"
-      aux="obrigatório para produto em escala NÃO relevante"
-      required
-    />
+    <label>
+      CNPJ do Fabricante da Mercadoria
+      <small>
+        {aplicarMascara(prod.CNPJFab, 'cnpj')} - obrigatório para produto em escala
+        NÃO relevante
+      </small>
+      <input
+        required
+        pattern="[0-9]{14}"
+        bind:value={prod.CNPJFab}
+        on:blur={() => validaCNPJ(prod.CNPJFab) || (prod.CNPJFab = '')}
+      />
+    </label>
   {/if}
 {/if}
 <label>
