@@ -1,5 +1,5 @@
 <script lang="ts">
-  import InputT from '../components/InputT.svelte'
+  import { aplicarMascara } from '../code/mascaracaoDoc'
   import Municipio from '../components/Municipio.svelte'
   import Doc from './Doc.svelte'
 
@@ -22,57 +22,63 @@
 {#if raiz[name]}
   <h2>Local de {name}</h2>
   <Doc bind:raiz={raiz[name]} apenasBR />
-  <InputT
-    lab="Razão Social ou nome do {pessoa}"
-    opt
-    bind:val={raiz[name]['xNome']}
-    min={2}
-    max={60}
-  />
-  <InputT lab="Logradouro" bind:val={raiz[name]['xLgr']} min={2} max={60} />
-  <InputT lab="Número" bind:val={raiz[name]['nro']} min={1} max={60} />
-  <InputT
-    lab="Complemento"
-    bind:val={raiz[name]['xCpl']}
-    opt
-    min={1}
-    max={60}
-  />
-  <InputT lab="Bairro" bind:val={raiz[name]['xBairro']} min={2} max={60} />
+  <label>
+    <i>Razão social ou nome do {pessoa}</i>
+    <input minlength="2" maxlength="60" bind:value={raiz[name]['xNome']} />
+  </label>
+  {#if raiz[name]['CNPJ']}
+    <label>
+      <i>Inscrição estadual</i>
+      <small>Usar literal 'ISENTO' se necessário</small>
+      <input
+        maxlength="14"
+        pattern={'[0-9]{(2, 14)}|ISENTO'}
+        bind:value={raiz[name]['IE']}
+      />
+    </label>
+  {/if}
+  <label>
+    <i>E-mail</i>
+    <input maxlength="60" bind:value={raiz[name]['email']} />
+  </label>
+  <label>
+    Logradouro
+    <input
+      minlength="2"
+      maxlength="60"
+      bind:value={raiz[name]['xLgr']}
+      required
+    />
+  </label>
+  <label>
+    Número
+    <input maxlength="60" bind:value={raiz[name]['nro']} required />
+  </label>
+  <label>
+    <i>Complemento</i>
+    <input maxlength="60" bind:value={raiz[name]['xCpl']} />
+  </label>
+  <label>
+    Bairro
+    <input
+      minlength="2"
+      maxlength="60"
+      bind:value={raiz[name]['xBairro']}
+      required
+    />
+  </label>
   <Municipio
     bind:cMun={raiz[name]['cMun']}
     bind:xMun={raiz[name]['xMun']}
     bind:UF={raiz[name]['UF']}
   />
-  <InputT
-    lab="CEP"
-    mask="zipcode"
-    opt
-    bind:val={raiz[name]['CEP']}
-    pat={'[0-9]{8}'}
-  />
-  <InputT
-    lab="Telefone"
-    bind:val={raiz[name]['fone']}
-    opt
-    aux={'DDD + número do telefone'}
-    pat={'[0-9]{6,14}'}
-  />
-  <InputT
-    lab="E-mail do {pessoa}"
-    bind:val={raiz[name]['email']}
-    opt
-    min={1}
-    max={60}
-  />
-  {#if raiz[name]['CNPJ']}
-    <InputT
-      lab="Inscrição Estadual"
-      bind:val={raiz[name]['IE']}
-      opt
-      max={14}
-      pat={'[0-9]{2,14}'}
-    />
-  {/if}
+  <label>
+    <i>CEP {aplicarMascara(raiz[name]['CEP'], 'zipcode')}</i>
+    <input pattern={'[0-9]{8}'} bind:value={raiz[name]['CEP']} />
+  </label>
+  <label>
+    <i>Telefone</i>
+    <input pattern={'[0-9]{6,14}'} bind:value={raiz[name]['fone']} />
+  </label>
 {/if}
 <br />

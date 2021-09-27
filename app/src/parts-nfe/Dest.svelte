@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { aplicarMascara } from '../code/mascaracaoDoc'
   import paises from '../code/paises'
-  import InputT from '../components/InputT.svelte'
   import Municipio from '../components/Municipio.svelte'
   import Doc from './Doc.svelte'
 
@@ -10,31 +10,29 @@
   if (!raiz.dest.enderDest) raiz.dest.enderDest = { cPais: '1058' }
 
   $: dest = raiz.dest
-  $: enderDest = raiz.dest.enderDest
+  $: ender = raiz.dest.enderDest
 
   $: {
     if (dest['idEstrangeiro']) {
-      enderDest.cMun = '9999999'
-      enderDest.xMun = 'EXTERIOR'
-      enderDest.UF = 'EX'
+      ender.cMun = '9999999'
+      ender.xMun = 'EXTERIOR'
+      ender.UF = 'EX'
     } else {
-      enderDest.UF = enderDest.xMun = enderDest.cMun = ''
-      enderDest.cPais = '1058'
+      ender.UF = ender.xMun = ender.cMun = ''
+      ender.cPais = '1058'
     }
-    const cPais = enderDest['cPais']
+    const cPais = ender['cPais']
     const pais = paises.find((v) => v.codigo == cPais)
-    enderDest['xPais'] = pais.nome
+    ender['xPais'] = pais.nome
     if (dest['CPF'] || dest['idEstrangeiro']) dest['indIEDest'] = '9'
   }
 </script>
 
 <Doc bind:raiz={raiz.dest} />
-<InputT
-  lab="Razão Social ou nome do destinatário"
-  bind:val={dest['xNome']}
-  min={2}
-  max={60}
-/>
+<label>
+  Razão social ou nome
+  <input minlength="2" maxlength="60" bind:value={dest['xNome']} required />
+</label>
 {#if dest['CNPJ']}
   <label>
     Indicador da IE do destinatário
@@ -46,62 +44,69 @@
   </label>
 {/if}
 {#if dest['indIEDest'] == '1'}
-  <InputT
-    lab="Inscrição Estadual"
-    bind:val={dest['IE']}
-    opt
-    max={14}
-    pat={'[0-9]{2,14}'}
-  />
+  <label>
+    Inscrição Estadual
+    <small>Usar literal 'ISENTO' se necessário</small>
+    <input
+      maxlength="14"
+      pattern={'[0-9]{(2, 14)}|ISENTO'}
+      bind:value={dest['IE']}
+      required
+    />
+  </label>
 {/if}
-<InputT
-  lab="Inscrição na SUFRAMA"
-  bind:val={dest['ISUF']}
-  opt
-  pat={'[0-9]{8,9}'}
-/>
-<InputT
-  lab="Inscrição Municipal do tomador do serviço"
-  bind:val={dest['IM']}
-  opt
-  min={1}
-  max={15}
-/>
-<InputT
-  lab="E-mail do destinatário"
-  bind:val={dest['email']}
-  opt
-  min={1}
-  max={60}
-/>
+<label>
+  <i>Inscrição na SUFRAMA</i>
+  <input pattern={'[0-9]{8,9}'} bind:value={dest['ISUF']} />
+</label>
+<label>
+  <i>Inscrição Municipal</i>
+  <input maxlength="15" bind:value={dest['IM']} />
+</label>
+<label>
+  <i>E-mail</i>
+  <input maxlength="60" bind:value={dest['email']} />
+</label>
 
 <h2>Endereço</h2>
-<InputT lab="Logradouro" bind:val={enderDest['xLgr']} min={2} max={60} />
-<InputT lab="Número" bind:val={enderDest['nro']} min={1} max={60} />
-<InputT lab="Complemento" bind:val={enderDest['xCpl']} opt min={1} max={60} />
-<InputT lab="Bairro" bind:val={enderDest['xBairro']} min={2} max={60} />
+<label>
+  Logradouro
+  <input minlength="2" maxlength="60" bind:value={ender['xLgr']} required />
+</label>
+<label>
+  Número
+  <input maxlength="60" bind:value={ender['nro']} required />
+</label>
+<label>
+  <i>Complemento</i>
+  <input maxlength="60" bind:value={ender['xCpl']} />
+</label>
+<label>
+  Bairro
+  <input minlength="2" maxlength="60" bind:value={ender['xBairro']} required />
+</label>
 {#if !dest['idEstrangeiro']}
   <Municipio
-    bind:cMun={enderDest['cMun']}
-    bind:xMun={enderDest['xMun']}
-    bind:UF={enderDest['UF']}
+    bind:cMun={ender['cMun']}
+    bind:xMun={ender['xMun']}
+    bind:UF={ender['UF']}
   />
 {/if}
-<InputT lab="CEP" mask="zipcode" bind:val={enderDest['CEP']} pat={'[0-9]{8}'} />
+<label>
+  CEP {aplicarMascara(ender['CEP'], 'zipcode')}
+  <input pattern={'[0-9]{8}'} bind:value={ender['CEP']} required />
+</label>
 {#if dest['idEstrangeiro']}
   <label>
     País
-    <select bind:value={enderDest['cPais']} required>
+    <select bind:value={ender['cPais']} required>
       {#each paises as v}
         <option value={v.codigo}>{v.nome}</option>
       {/each}
     </select>
   </label>
 {/if}
-<InputT
-  lab="Telefone"
-  bind:val={enderDest['fone']}
-  opt
-  aux={'DDD + número do telefone'}
-  pat={'[0-9]{6,14}'}
-/>
+<label>
+  <i>Telefone</i>
+  <input pattern={'[0-9]{6,14}'} bind:value={ender['fone']} />
+</label>
