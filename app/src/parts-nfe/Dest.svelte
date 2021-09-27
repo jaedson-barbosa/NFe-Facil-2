@@ -2,7 +2,7 @@
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import paises from '../code/paises'
   import Municipio from '../components/Municipio.svelte'
-  import Doc from './Doc.svelte'
+  import Doc from '../components/Doc.svelte'
 
   export let raiz: any
 

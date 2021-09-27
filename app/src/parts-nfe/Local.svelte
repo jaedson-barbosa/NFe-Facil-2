@@ -1,7 +1,7 @@
 <script lang="ts">
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import Municipio from '../components/Municipio.svelte'
-  import Doc from './Doc.svelte'
+  import Doc from '../components/Doc.svelte'
 
   export let raiz: any
   export let name: 'retirada' | 'entrega'

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Doc from './Doc.svelte'
+  import Doc from '../components/Doc.svelte'
   import { DocumentSnapshot } from 'firebase/firestore'
   import { refEmpresa } from '../code/store'
   import { Dados } from '../code/tipos'

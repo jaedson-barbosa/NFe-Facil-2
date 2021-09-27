@@ -7,7 +7,7 @@
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
   import Municipio from '../components/Municipio.svelte'
-  import Doc from '../parts-nfe/Doc.svelte'
+  import Doc from '../components/Doc.svelte'
 
   let loading = false
   let raiz = undefined

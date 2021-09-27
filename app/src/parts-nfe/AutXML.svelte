@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Doc from './Doc.svelte'
+  import Doc from '../components/Doc.svelte'
 
   export let raiz: any
 
