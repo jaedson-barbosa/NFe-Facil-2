@@ -54,6 +54,15 @@
     }
   }
 
+  async function analisarIBPT() {
+    const existeToken = empresaCarregada.tokenIBPT
+    const aindaVazio = !ibpt.validade
+    const jaVenceu = ibpt.validade.toDate() < new Date()
+    if (existeToken && (aindaVazio || jaVenceu)) {
+      await carregarImpostos()
+    }
+  }
+
   async function salvar() {
     if (!$permissaoEscrita) {
       $goto('./')
@@ -61,7 +70,6 @@
     }
     loading = true
     try {
-      const det = raiz.det
       const id = det.prod.cProd
       const prodRef = doc($refEmpresa, Dados.Produtos, id)
       if (ed) {
@@ -80,6 +88,7 @@
           return
         }
       }
+      await analisarIBPT()
       await setDoc(prodRef, raiz)
       $goto('./')
     } catch (error) {
@@ -88,7 +97,7 @@
     }
   }
 </script>
-
+{@debug det}
 {#if loading}
   Carregando...
 {:else}
@@ -97,32 +106,13 @@
     <ProdCadastro bind:raiz={det} />
     <Imposto bind:raiz={det} {regimeNormal} />
     {#if empresaCarregada.tokenIBPT}
-      <h3>Imposto aproximado</h3>
       <label>
         <input type="checkbox" bind:checked={ibpt.isNacional} />
-        Produto nacional
+        Usar tributação aproximada para produto nacional
       </label>
-      {#if ibpt.validade}
-        <p>
-          Aproximação válida até {ibpt.validade.toDate().toLocaleDateString()}:
-          <br />
-          Federal:
-          <i>{ibpt.federal} %</i>
-          <br />
-          Estadual:
-          <i>{ibpt.estadual} %</i>
-          <br />
-          Municipal:
-          <i>{ibpt.municipal} %</i>
-        </p>
-      {:else}
-        <button type="button" on:click={carregarImpostos}>
-          Carregar impostos
-        </button>
-      {/if}
     {/if}
     {#if permissaoEscrita}
-      <input type="submit" class="button" />
+      <input type="submit" class="button" value="Salvar" />
     {/if}
   </form>
 {/if}

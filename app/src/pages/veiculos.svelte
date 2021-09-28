@@ -46,7 +46,7 @@
         <tr class="clicavel" on:click={() => editar(n)}>
           <td>{n.get('placa')}</td>
           <td>{n.get('UF')}</td>
-          <td>{n.get('RNTC')}</td>
+          <td>{n.get('RNTC') ?? ''}</td>
         </tr>
       {/each}
     </tbody>

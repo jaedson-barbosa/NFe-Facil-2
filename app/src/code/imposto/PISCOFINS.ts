@@ -26,6 +26,7 @@ export function calcular(prod: any, imposto: any, tipo: 'PIS' | 'COFINS') {
 }
 
 export function possuiST(imposto: any, tipo: 'PIS' | 'COFINS') {
+  if (!imposto[tipo]) return false
   let raiz: any = Object.values(imposto[tipo])[0]
   return raiz.CST == '05'
 }

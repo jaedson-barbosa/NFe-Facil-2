@@ -28,11 +28,17 @@
     }
   }
 
-  function remover(index: number) {
+  function removerReboque(index: number) {
     return () => {
       transp.reboque.splice(index, 1)
       transp.reboque = transp.reboque
     }
+  }
+
+  function removerVeicTransp() {
+    delete transp.veicTransp
+    transp.reboque = []
+    transp = transp
   }
 
   const meios = ['vagao', 'balsa', 'veicTransp']
@@ -63,12 +69,12 @@
 </label>
 {#if meio == 'vagao'}
   <label>
-    Vagão
+    Identificação do vagão
     <input maxlength="20" bind:value={transp.vagao} required />
   </label>
 {:else if meio == 'balsa'}
   <label>
-    balsa
+    Identificação da balsa
     <input maxlength="20" bind:value={transp.balsa} required />
   </label>
 {:else if meio == 'veicTransp'}
@@ -86,55 +92,33 @@
         </tr>
       </thead>
       <tbody>
-        {#each veiculos as n}
-          <tr class="clicavel" on:click={adicionar(n)} title={avisoAdd}>
-            <td>{n.get('placa')}</td>
-            <td>{n.get('UF')}</td>
-            <td>{n.get('RNTC')}</td>
+        {#if veicTransp}
+          <tr
+            class="clicavel marcado"
+            on:click={removerVeicTransp}
+            title="Clique para remover identificação de veículo trator"
+          >
+            <td>{veicTransp['placa']}</td>
+            <td>{veicTransp['UF']}</td>
+            <td>{veicTransp['RNTC'] ?? ''}</td>
           </tr>
-        {/each}
-      </tbody>
-    </table>
-  {/if}
-  {#if veicTransp}
-    <h4>Veículo trator</h4>
-    <p>
-      Placa:
-      <i>{veicTransp['placa']}</i>
-      <br />
-      Estado:
-      <i>{veicTransp['UF']}</i>
-      {#if veicTransp['RNTC']}
-        <br />
-        RNTC:
-        <i>{veicTransp['RNTC']}</i>
-      {/if}
-    </p>
-    <button type="button" on:click={() => delete transp.veicTransp}>
-      Trocar
-    </button>
-    <br />
-  {/if}
-  {#if reboque.length}
-    <h4>Reboques</h4>
-    <table>
-      <thead>
-        <tr>
-          <th>Placa</th>
-          <th>Estado</th>
-          <th><i>RNTC</i></th>
-        </tr>
-      </thead>
-      <tbody>
+        {/if}
         {#each reboque as v, i}
           <tr
-            class="clicavel"
-            on:click={remover(i)}
+            class="clicavel marcado"
+            on:click={removerReboque(i)}
             title="Clique para remover reboque"
           >
             <td>{v.placa}</td>
             <td>{v.UF}</td>
-            <td>{v.RNTC}</td>
+            <td>{v.RNTC ?? ''}</td>
+          </tr>
+        {/each}
+        {#each veiculos as n}
+          <tr class="clicavel" on:click={adicionar(n)} title={avisoAdd}>
+            <td>{n.get('placa')}</td>
+            <td>{n.get('UF')}</td>
+            <td>{n.get('RNTC') ?? ''}</td>
           </tr>
         {/each}
       </tbody>

@@ -24,6 +24,7 @@
   )
 </script>
 
+<!-- Botar de uma forma que caso digitado o documento corretamente no campo de busca, caso ele não seja encontrado então será usado apenas o documento caso seja uma NFC-e -->
 <h2>Destinatário</h2>
 {#if isNFCe && destSemNome}
   <p>Numa NFC-e é possível informar apenas o documento do cliente.</p>
@@ -41,29 +42,24 @@
   <button type="button" on:click={() => (dest = {})}>Trocar</button>
   <br />
 {/if}
-{#if !destComDoc}
-  {#if isNFCe}
-    <p>Como também é possível informar todos os dados do cliente.</p>
-  {/if}
-  <label>
-    Buscar por nome
-    <input on:input={buscadorCliente.buscar} />
-  </label>
-  <table>
-    <thead>
-      <tr>
-        <th>Documento</th>
-        <th>Nome</th>
+<label>
+  Buscar por nome
+  <input on:input={buscadorCliente.buscar} />
+</label>
+<table>
+  <thead>
+    <tr>
+      <th>Documento</th>
+      <th>Nome</th>
+    </tr>
+  </thead>
+  <tbody>
+    {#each clientes as c}
+      <tr class="clicavel" on:click={() => (dest = c.data().dest)}>
+        <td>{mascararDocSnapshot(c, 'dest')}</td>
+        <td>{c.get('dest.xNome')}</td>
       </tr>
-    </thead>
-    <tbody>
-      {#each clientes as c}
-        <tr class="clicavel" on:click={() => (dest = c.data().dest)}>
-          <td>{mascararDocSnapshot(c, 'dest')}</td>
-          <td>{c.get('dest.xNome')}</td>
-        </tr>
-      {/each}
-    </tbody>
-  </table>
-{/if}
+    {/each}
+  </tbody>
+</table>
 <br />

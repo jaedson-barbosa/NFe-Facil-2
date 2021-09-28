@@ -14,15 +14,14 @@
   export let consumidorFinal: boolean = false
 
   if (!raiz['imposto']) raiz['imposto'] = {}
-  let imposto = raiz['imposto']
-
+  $: imposto = raiz['imposto']
   $: prod = raiz['prod']
 
-  let informarIPI = !!imposto.IPI
-  $: imposto.IPI = informarIPI ? {} : undefined
+  let informarIPI = !!raiz.imposto.IPI
+  $: raiz.imposto.IPI = informarIPI ? {} : undefined
 
-  let informarICMSUFDest = !!imposto.ICMSUFDest
-  $: imposto.ICMSUFDest = informarICMSUFDest ? {} : undefined
+  let informarICMSUFDest = !!raiz.imposto.ICMSUFDest
+  $: raiz.imposto.ICMSUFDest = informarICMSUFDest ? {} : undefined
 </script>
 
 <h2>Impostos</h2>

@@ -68,8 +68,7 @@
   <div class="column">
     <label>
       <input type="checkbox" bind:checked={isHomolog} />
-      Ambiente de homologação
-      <small>Testar emissão com nota sem valor fiscal</small>
+      Usar ambiente de homologação
     </label>
     <label>
       Modelo

@@ -25,7 +25,7 @@
   async function salvar() {
     loading = true
     if ($permissaoEscrita) {
-      if (ed.dado && ed.dado.placa != raiz.placa) {
+      if (ed?.dado && ed.dado.placa != raiz.placa) {
         const ref = doc($refEmpresa, Dados.Veiculos, ed.dado.placa)
         await deleteDoc(ref)
       }
@@ -60,7 +60,7 @@
     </label>
     <label>
       <i>RNTC</i>
-      <input bind:value={raiz.RNTC} minlength="1" maxlength="20" required />
+      <input bind:value={raiz.RNTC} minlength="1" maxlength="20" />
     </label>
     {#if permissaoEscrita}
       <input type="submit" value="Salvar" />

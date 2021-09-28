@@ -156,3 +156,4 @@
 {:else if detEspecifico == 'nRECOPI'}
   <NRECOPI bind:raiz={prod} />
 {/if}
+<br />
