@@ -19,9 +19,9 @@
 {#if !['00', '10'].includes(tipoICMS)}
   <label>
     {#if tipoICMS == '20'}
-      <i>Percentual de redução da BC</i>
-    {:else}
       Percentual de redução da BC
+    {:else}
+      <i>Percentual de redução da BC</i>
     {/if}
     <input
       type="number"
@@ -43,11 +43,11 @@
     </small>
   </p>
 {/if}
+<label>
+  Alíquota
+  <input type="number" step="0.0001" bind:value={ICMS['pICMS']}  required />
+</label>
 {#if tipoICMS == '51'}
-  <label>
-    <i>Alíquota</i>
-    <input type="number" step="0.0001" bind:value={ICMS['pICMS']} />
-  </label>
   {#if ICMS['vICMSOp']}
     <p>
       <strong>Valor do ICMS da Operação:</strong>
@@ -55,8 +55,8 @@
     </p>
   {/if}
   <label>
-    <i>Percentual do diferemento</i>
-    <input type="number" step="0.0001" bind:value={ICMS['pDif']} />
+    Percentual do diferemento
+    <input type="number" step="0.0001" bind:value={ICMS['pDif']} required />
   </label>
   {#if ICMS['vICMSDif']}
     <p>
@@ -64,11 +64,6 @@
       {getMoeda(ICMS['vICMSDif'])}
     </p>
   {/if}
-{:else}
-  <label>
-    Alíquota
-    <input type="number" step="0.0001" bind:value={ICMS['pICMS']} required />
-  </label>
 {/if}
 <p>
   <strong>Valor do ICMS</strong>

@@ -18,41 +18,35 @@
 </script>
 
 <h3>Transportador</h3>
-{#if transporta}
-  <p>
-    Transportador escolhido:
-    <br />
-    Nome:
-    <i>transporta.xNome</i>
-    <br />
-    Documento:
-    <i>{mascararDocData(transporta)}</i>
-  </p>
-{:else}
-  <label>
-    Buscar transportador pelo nome
-    <input on:input={buscador.buscar} />
-  </label>
-  {#if transportadores.length}
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Documento</th>
+<label>
+  Buscar transportador pelo nome
+  <input on:input={buscador.buscar} />
+</label>
+{#if transportadores.length}
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Documento</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#if transporta}
+        <tr
+          class="clicavel marcado"
+          on:click={() => (transporta = undefined)}
+          title="Clique para remover transportador"
+        >
+          <td>{transporta.xNome}</td>
+          <td>{mascararDocData(transporta)}</td>
         </tr>
-      </thead>
-      <tbody>
-        {#each transportadores as t}
-          <tr
-            class="clicavel"
-            class:marcado={transporta?.xNome == t.get('transporta.xNome')}
-            on:click={() => (transporta = t.data())}
-          >
-            <td>{t.get('transporta.xNome')}</td>
-            <td>{mascararDocSnapshot(t, 'transporta')}</td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  {/if}
+      {/if}
+      {#each transportadores as t}
+        <tr class="clicavel" on:click={() => (transporta = t.data())}>
+          <td>{t.get('transporta.xNome')}</td>
+          <td>{mascararDocSnapshot(t, 'transporta')}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
 {/if}

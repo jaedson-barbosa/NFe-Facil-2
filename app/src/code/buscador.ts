@@ -35,7 +35,7 @@ export class Buscador {
   constructor(
     private readonly refEmpresa: DocumentReference,
     private readonly dados: Dados,
-    private readonly campoPrincipal: string,
+    public readonly campoPrincipal: string,
     private readonly direcao: OrderByDirection,
     private readonly onUpdateCadastros: (cadastros: DocumentSnapshot[]) => void
   ) {

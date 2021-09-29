@@ -1,18 +1,15 @@
 <script lang="ts">
-  import {
-    CSOSN,
-    CST,
-    origem,
-    getMotDes,
-    modBCST,
-    calcular,
-  } from '../code/imposto/ICMS'
-  import { getMoeda } from '../code/numero'
-  import { EstadosEX } from '../code/IBGE'
+  import { CSOSN, CST, origem, calcular } from '../code/imposto/ICMS'
   import FCPSTRet from './parts-ICMS/FCPSTRet.svelte'
-  import Proprio from './parts-ICMS/Proprio.svelte';
+  import Proprio from './parts-ICMS/Proprio.svelte'
   import STRet from './parts-ICMS/STRet.svelte'
   import Efet from './parts-ICMS/Efet.svelte'
+  import FCP from './parts-ICMS/FCP.svelte'
+  import FCPST from './parts-ICMS/FCPST.svelte'
+  import ST from './parts-ICMS/ST.svelte'
+  import STDest from './parts-ICMS/STDest.svelte'
+  import Cred from './parts-ICMS/Cred.svelte'
+  import Desonerado from './parts-ICMS/Desonerado.svelte'
 
   export let raiz: any
   export let regimeNormal: boolean
@@ -78,169 +75,26 @@
 {#if ['00', '10', '20', '51', '70', '90', 'Part10', 'Part90', '900'].includes(tipoICMS)}
   <Proprio bind:ICMS {consumidorFinal} {tipoICMS} />
   {#if !['Part10', 'Part90', '900'].includes(tipoICMS)}
-    <h4>Fundo de Combate à Pobreza</h4>
-    {#if ICMS['vBCFCP']}
-      <p>
-        <strong>Base de cálculo:</strong>
-        {getMoeda(ICMS['vBCFCP'])}
-      </p>
-    {/if}
-    <label>
-      Percentual
-      <input type="number" step="0.0001" bind:value={ICMS['pFCP']} />
-    </label>
-    {#if ICMS['vFCP']}
-      <p>
-        <strong>Valor:</strong>
-        {getMoeda(ICMS['vFCP'])}
-      </p>
-    {/if}
-    <br />
+    <FCP bind:ICMS />
   {/if}
 {/if}
 {#if ['10', '30', '70', '90', 'Part10', 'Part90', '201', '202', '203', '900'].includes(tipoICMS)}
-  <h4>ICMS - Substituição tributária</h4>
-  <label>
-    Modalidade de determinação da BC do ICMS ST
-    <select bind:value={ICMS['modBCST']} required>
-      {#each modBCST as e}
-        <option value={e[0]}>{e[0]} - {e[1]}</option>
-      {/each}
-    </select>
-  </label>
-  <label>
-    <i>Percentual MVA ST</i>
-    <input type="number" step="0.0001" bind:value={ICMS['pMVAST']} />
-  </label>
-  <label>
-    <i>Percentual de redução da BC ST</i>
-    <input type="number" step="0.0001" bind:value={ICMS['pRedBCST']} />
-  </label>
-  {#if ICMS['vBCST']}
-    <p>
-      <strong>Base de cálculo do ST:</strong>
-      {getMoeda(ICMS['vBCST'])}
-    </p>
-  {/if}
-  <label>
-    Alíquota do ST
-    <input type="number" step="0.0001" bind:value={ICMS['pICMSST']} required />
-  </label>
-  {#if ICMS['vICMSST']}
-    <p>
-      <strong>Valor do ST:</strong>
-      {getMoeda(ICMS['vICMSST'])}
-    </p>
-  {/if}
-  {#if ['Part10', 'Part90'].includes(tipoICMS)}
-    <label>
-      Percentual da BC da operação própria
-      <input type="number" step="0.0001" bind:value={ICMS['pBCOp']} required />
-    </label>
-    <label>
-      UF para qual é devido o ICMS ST
-      <select bind:value={ICMS.UFST} required>
-        {#each EstadosEX as uf}
-          <option value={uf.Sigla}>{uf.Nome}</option>
-        {/each}
-      </select>
-    </label>
-  {/if}
-  <br />
+  <ST bind:ICMS part={['Part10', 'Part90'].includes(tipoICMS)} />
   {#if !['Part10', 'Part90'].includes(tipoICMS)}
-    <h4>FCP - Substituição Tributária</h4>
-    {#if ICMS['vBCFCPST']}
-      <p>
-        <strong>Base de cálculo:</strong>
-        {getMoeda(ICMS['vBCFCPST'])}
-      </p>
-    {/if}
-    <label>
-      <i>Percentual do FCP ST</i>
-      <input type="number" step="0.0001" bind:value={ICMS['pFCPST']} />
-    </label>
-    {#if ICMS['vFCPST']}
-      <p>
-        <strong>Valor:</strong>
-        {getMoeda(ICMS['vFCPST'])}
-      </p>
-    {/if}
-    <br />
+    <FCPST bind:ICMS />
   {/if}
 {/if}
 {#if ['60', 'ST41', 'ST60', '500'].includes(tipoICMS)}
   <STRet bind:ICMS pSTRequired={!['ST41', 'ST60'].includes(tipoICMS)} />
   <FCPSTRet bind:ICMS />
   {#if ['ST41', 'ST60'].includes(tipoICMS)}
-    <h4>ICMS ST da UF destino</h4>
-    <label>
-      Base de cálculo
-      <input
-        type="number"
-        step="0.01"
-        bind:value={ICMS['vBCSTDest']}
-        required
-      />
-    </label>
-    <label>
-      Valor
-      <input
-        type="number"
-        step="0.01"
-        bind:value={ICMS['vICMSSTDest']}
-        required
-      />
-    </label>
-    <br />
+    <STDest bind:ICMS />
   {/if}
   <Efet bind:ICMS />
 {/if}
 {#if ['20', '30', '40', '41', '50', '70', '90'].includes(tipoICMS)}
-  <h4>ICMS desonerado</h4>
-  <label>
-    <i>Valor do ICMS desonerado</i>
-    <input type="number" step="0.01" bind:value={ICMS['vICMSDeson']} />
-  </label>
-  {#if ICMS['vICMSDeson']}
-    <label>
-      Motivo da desoneração
-      <select bind:value={ICMS['motDesICMS']} required>
-        {#each getMotDes(tipoICMS) as e}
-          <option value={e[0]}>{e[0]} - {e[1]}</option>
-        {/each}
-      </select>
-    </label>
-  {/if}
-  <br />
+  <Desonerado bind:ICMS {tipoICMS} />
 {/if}
-{#if ['101', '201', '900'].includes(ICMS['CSOSN'])}
-  <h4>Crédito do ICMS</h4>
-  <label>
-    {#if ICMS['CSOSN'] == '900'}
-      <i>Alíquota aplicável de cálculo do crédito</i>
-    {:else}
-      Alíquota aplicável de cálculo do crédito
-    {/if}
-    <input
-      type="number"
-      step="0.0001"
-      bind:value={ICMS['pCredSN']}
-      required={ICMS['CSOSN'] != '900'}
-    />
-  </label>
-  <label>
-    {#if ICMS['CSOSN'] == '900'}
-      <i>Valor do crédito que pode ser aproveitado</i>
-    {:else}
-      Valor do crédito que pode ser aproveitado
-    {/if}
-    <small>Aproveitado nos termos do art. 23 da LC 123</small>
-    <input
-      type="number"
-      step="0.0001"
-      bind:value={ICMS['vCredICMSSN']}
-      required={ICMS['CSOSN'] != '900'}
-    />
-  </label>
-  <br />
+{#if ['101', '201', '900'].includes(tipoICMS)}
+  <Cred bind:ICMS opcional={tipoICMS == '900'} />
 {/if}

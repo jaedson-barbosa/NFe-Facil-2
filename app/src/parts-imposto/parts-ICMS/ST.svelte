@@ -1,0 +1,57 @@
+<script lang="ts">
+  import { modBCST } from '../../code/imposto/ICMS'
+  import { EstadosEX } from '../../code/IBGE'
+  import { getMoeda } from '../../code/numero'
+
+  export let ICMS: any
+  export let part: boolean
+</script>
+
+<h4>ICMS - Substituição tributária</h4>
+<label>
+  Modalidade de determinação da BC do ICMS ST
+  <select bind:value={ICMS['modBCST']} required>
+    {#each modBCST as e}
+      <option value={e[0]}>{e[0]} - {e[1]}</option>
+    {/each}
+  </select>
+</label>
+<label>
+  <i>Percentual MVA ST</i>
+  <input type="number" step="0.0001" bind:value={ICMS['pMVAST']} />
+</label>
+<label>
+  <i>Percentual de redução da BC ST</i>
+  <input type="number" step="0.0001" bind:value={ICMS['pRedBCST']} />
+</label>
+{#if ICMS['vBCST']}
+  <p>
+    <strong>Base de cálculo do ST:</strong>
+    {getMoeda(ICMS['vBCST'])}
+  </p>
+{/if}
+<label>
+  Alíquota do ST
+  <input type="number" step="0.0001" bind:value={ICMS['pICMSST']} required />
+</label>
+{#if ICMS['vICMSST']}
+  <p>
+    <strong>Valor do ST:</strong>
+    {getMoeda(ICMS['vICMSST'])}
+  </p>
+{/if}
+{#if part}
+  <label>
+    Percentual da BC da operação própria
+    <input type="number" step="0.0001" bind:value={ICMS['pBCOp']} required />
+  </label>
+  <label>
+    UF para qual é devido o ICMS ST
+    <select bind:value={ICMS.UFST} required>
+      {#each EstadosEX as uf}
+        <option value={uf.Sigla}>{uf.Nome}</option>
+      {/each}
+    </select>
+  </label>
+{/if}
+<br />

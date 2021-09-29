@@ -26,40 +26,49 @@
 
 <!-- Botar de uma forma que caso digitado o documento corretamente no campo de busca, caso ele não seja encontrado então será usado apenas o documento caso seja uma NFC-e -->
 <h2>Destinatário</h2>
+<label>
+  Campo de busca
+  <select bind:value={buscadorCliente.campoPrincipal}>
+    <option value="dest.xNome">Nome</option>
+    <option value="dest.CPF">CPF</option>
+    <option value="dest.CNPJ">CNPJ</option>
+    <option value="dest.idEstrangeiro">Identificação estrangeira</option>
+  </select>
+</label>
 {#if isNFCe && destSemNome}
-  <p>Numa NFC-e é possível informar apenas o documento do cliente.</p>
+  <p>Numa NFC-e, caso queiras, podes informar apenas o documento do cliente.</p>
   <Doc bind:raiz={dest} />
 {/if}
-{#if destComDoc && !isNFCe}
-  <p>
-    Cliente escolhido: <br />
-    Nome:
-    <em>{dest.xNome}</em>
-    <br />
-    Documento:
-    <em>{mascararDocData(dest)}</em>
-  </p>
-  <button type="button" on:click={() => (dest = {})}>Trocar</button>
-  <br />
-{/if}
-<label>
-  Buscar por nome
-  <input on:input={buscadorCliente.buscar} />
-</label>
-<table>
-  <thead>
-    <tr>
-      <th>Documento</th>
-      <th>Nome</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each clientes as c}
-      <tr class="clicavel" on:click={() => (dest = c.data().dest)}>
-        <td>{mascararDocSnapshot(c, 'dest')}</td>
-        <td>{c.get('dest.xNome')}</td>
+{#if !(destComDoc && destSemNome)}
+  <label>
+    Buscar usando o campo selecionado
+    <input on:input={buscadorCliente.buscar} />
+  </label>
+  <table>
+    <thead>
+      <tr>
+        <th>Documento</th>
+        <th>Nome</th>
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#if dest.xNome}
+        <tr
+          class="marcado clicavel"
+          on:click={() => (dest = {})}
+          title="Trocar cliente"
+        >
+          <td>{mascararDocData(dest)}</td>
+          <td>{dest.xNome}</td>
+        </tr>
+      {/if}
+      {#each clientes as c}
+        <tr class="clicavel" on:click={() => (dest = c.data().dest)}>
+          <td>{mascararDocSnapshot(c, 'dest')}</td>
+          <td>{c.get('dest.xNome')}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+{/if}
 <br />
