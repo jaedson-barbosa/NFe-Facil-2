@@ -1,10 +1,8 @@
 <script lang="ts">
   import { modBCST } from '../../code/imposto/ICMS'
-  import { EstadosEX } from '../../code/IBGE'
   import { getMoeda } from '../../code/numero'
 
   export let ICMS: any
-  export let part: boolean
 </script>
 
 <h4>ICMS - Substituição tributária</h4>
@@ -40,18 +38,3 @@
     {getMoeda(ICMS['vICMSST'])}
   </p>
 {/if}
-{#if part}
-  <label>
-    Percentual da BC da operação própria
-    <input type="number" step="0.0001" bind:value={ICMS['pBCOp']} required />
-  </label>
-  <label>
-    UF para qual é devido o ICMS ST
-    <select bind:value={ICMS.UFST} required>
-      {#each EstadosEX as uf}
-        <option value={uf.Sigla}>{uf.Nome}</option>
-      {/each}
-    </select>
-  </label>
-{/if}
-<br />

@@ -3,22 +3,23 @@
   import { getMoeda } from '../../code/numero'
 
   export let ICMS: any
-  export let tipoICMS: string
+  export let incluirRedBC: boolean
+  export let obrigatorioRedBC: boolean
   export let consumidorFinal: boolean
 </script>
 
 <h4>ICMS próprio</h4>
 <label>
   Modalidade de determinação da BC
-  <select bind:value={ICMS['modBC']} required={tipoICMS != '51'}>
+  <select bind:value={ICMS['modBC']} required>
     {#each modBC as e}
       <option value={e[0]}>{e[0]} - {e[1]}</option>
     {/each}
   </select>
 </label>
-{#if !['00', '10'].includes(tipoICMS)}
+{#if incluirRedBC}
   <label>
-    {#if tipoICMS == '20'}
+    {#if obrigatorioRedBC}
       Percentual de redução da BC
     {:else}
       <i>Percentual de redução da BC</i>
@@ -27,7 +28,7 @@
       type="number"
       step="0.0001"
       bind:value={ICMS['pRedBC']}
-      required={tipoICMS == '20'}
+      required={obrigatorioRedBC}
     />
   </label>
 {/if}
@@ -47,24 +48,6 @@
   Alíquota
   <input type="number" step="0.0001" bind:value={ICMS['pICMS']}  required />
 </label>
-{#if tipoICMS == '51'}
-  {#if ICMS['vICMSOp']}
-    <p>
-      <strong>Valor do ICMS da Operação:</strong>
-      {getMoeda(ICMS['vICMSOp'])}
-    </p>
-  {/if}
-  <label>
-    Percentual do diferemento
-    <input type="number" step="0.0001" bind:value={ICMS['pDif']} required />
-  </label>
-  {#if ICMS['vICMSDif']}
-    <p>
-      <strong>Valor do ICMS diferido:</strong>
-      {getMoeda(ICMS['vICMSDif'])}
-    </p>
-  {/if}
-{/if}
 <p>
   <strong>Valor do ICMS</strong>
   {getMoeda(ICMS['vICMS'])}

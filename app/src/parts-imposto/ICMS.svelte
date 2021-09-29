@@ -2,11 +2,13 @@
   import { CSOSN, CST, origem, calcular } from '../code/imposto/ICMS'
   import FCPSTRet from './parts-ICMS/FCPSTRet.svelte'
   import Proprio from './parts-ICMS/Proprio.svelte'
+  import ProprioDif from './parts-ICMS/ProprioDif.svelte'
   import STRet from './parts-ICMS/STRet.svelte'
   import Efet from './parts-ICMS/Efet.svelte'
   import FCP from './parts-ICMS/FCP.svelte'
   import FCPST from './parts-ICMS/FCPST.svelte'
   import ST from './parts-ICMS/ST.svelte'
+  import STPart from './parts-ICMS/STPart.svelte'
   import STDest from './parts-ICMS/STDest.svelte'
   import Cred from './parts-ICMS/Cred.svelte'
   import Desonerado from './parts-ICMS/Desonerado.svelte'
@@ -73,13 +75,25 @@
   </select>
 </label>
 {#if ['00', '10', '20', '51', '70', '90', 'Part10', 'Part90', '900'].includes(tipoICMS)}
-  <Proprio bind:ICMS {consumidorFinal} {tipoICMS} />
+  {#if tipoICMS == '51'}
+    <ProprioDif bind:ICMS {consumidorFinal} />
+  {:else}
+    <Proprio
+      bind:ICMS
+      {consumidorFinal}
+      incluirRedBC={!['00', '10'].includes(tipoICMS)}
+      obrigatorioRedBC={['20', '70', '90'].includes(tipoICMS)}
+    />
+  {/if}
   {#if !['Part10', 'Part90', '900'].includes(tipoICMS)}
     <FCP bind:ICMS />
   {/if}
 {/if}
 {#if ['10', '30', '70', '90', 'Part10', 'Part90', '201', '202', '203', '900'].includes(tipoICMS)}
-  <ST bind:ICMS part={['Part10', 'Part90'].includes(tipoICMS)} />
+  <ST bind:ICMS />
+  {#if ['Part10', 'Part90'].includes(tipoICMS)}
+    <STPart bind:ICMS />
+  {/if}
   {#if !['Part10', 'Part90'].includes(tipoICMS)}
     <FCPST bind:ICMS />
   {/if}
