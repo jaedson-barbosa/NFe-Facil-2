@@ -3,7 +3,7 @@
   import ProdutoSimples from './ProdutoSimples.svelte'
   import { doc, DocumentSnapshot, getDoc } from 'firebase/firestore'
   import { refEmpresa } from '../code/store'
-  import { Dados, IIBPT } from '../code/tipos'
+  import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { get } from 'svelte/store'
   import { getMoeda } from '../code/numero'
@@ -13,15 +13,21 @@
   export let total: any
   export let consumidorFinal: boolean
 
-  let ibpt: IIBPT[] = []
+  let carregado = false
 
   if (det?.length) {
     const cods: string[] = det.map((v) => v.prod.cProd)
     const refs = cods.map((v) => doc(get(refEmpresa), Dados.Produtos, v))
     Promise.all(refs.map((v) => getDoc(v))).then(
-      (v) => (ibpt = v.map((k) => k.get('ibpt')))
+      (v) => {
+        v.forEach((k, i) => det[i].ibpt = k.get('ibpt'))
+        carregado = true
+      }
     )
-  } else det = []
+  } else {
+    det = []
+    carregado = true
+  }
 
   let produtos = [] as DocumentSnapshot[]
   const buscadorProduto = new Buscador(
@@ -48,8 +54,9 @@
   function addProd(p: DocumentSnapshot) {
     return () => {
       const data = p.data()
-      det = [data.det, ...det]
-      ibpt = [data.ibpt, ...ibpt]
+      const v = data.det
+      v.ibpt = data.ibpt
+      det = [v, ...det]
     }
   }
 
@@ -57,13 +64,11 @@
     return () => {
       det.splice(index, 1)
       det = det
-      ibpt.splice(index, 1)
-      ibpt = ibpt
     }
   }
 </script>
 
-{#if ibpt.length != det.length}
+{#if carregado}
   <h2>Produtos</h2>
   <label>
     Buscar produto pela descrição
@@ -105,7 +110,6 @@
           <ProdutoSimples
             bind:raiz={det[i]}
             {consumidorFinal}
-            ibpt={ibpt[i]}
             on:invalido={removerProd(i)}
             on:click={() => $goto('/:produto', { produto: i.toString() })}
           />

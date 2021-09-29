@@ -103,8 +103,8 @@
 {:else}
   <form on:submit|preventDefault={() => salvar()}>
     <h1><Voltar /> Produto</h1>
-    <ProdCadastro bind:raiz={det} />
-    <Imposto bind:raiz={det} {regimeNormal} />
+    <ProdCadastro bind:prod={det.prod} />
+    <Imposto bind:imposto={det.imposto} {regimeNormal} />
     {#if empresaCarregada.tokenIBPT}
       <label>
         <input type="checkbox" bind:checked={ibpt.isNacional} />

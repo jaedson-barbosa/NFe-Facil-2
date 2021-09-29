@@ -5,7 +5,6 @@
   export let ICMS: any
   export let incluirRedBC: boolean
   export let obrigatorioRedBC: boolean
-  export let consumidorFinal: boolean
 </script>
 
 <h4>ICMS próprio</h4>
@@ -36,12 +35,6 @@
   <p>
     <strong>Valor da BC do ICMS</strong>
     {getMoeda(ICMS['vBC'])}
-    <br />
-    <small>
-      Aqui é usada a fórmula mais comum, valor do produto + frete + seguro +
-      adicionais - desconto {#if consumidorFinal}+ ipi{/if}. Caso aplicável, o
-      resultado deste somatório é multiplicado por 1 - redução / 100.
-    </small>
   </p>
 {/if}
 <label>

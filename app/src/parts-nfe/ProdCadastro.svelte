@@ -7,11 +7,10 @@
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import { validaCNPJ } from '../code/validacaoDoc'
 
-  export let raiz: any
+  export let prod: any
 
-  if (!raiz['prod']) raiz['prod'] = {}
-  let prod = raiz['prod']
-  $: raiz.prod = prod
+  if (!prod) prod = {}
+  
   $: !prod['CEST'] && (prod['indEscala'] = prod['CNPJFab'] = '')
 
   const detsComplexos = ['veicProd', 'med', 'arma', 'comb']

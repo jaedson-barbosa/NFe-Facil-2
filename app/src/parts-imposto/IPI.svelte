@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { calcular, CST } from '../code/imposto/IPI'
+  import { CST } from '../code/imposto/IPI'
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import { getMoeda } from '../code/numero'
   import { validaCNPJ } from '../code/validacaoDoc'
 
   export let raiz: any
-  export let prod: any
 
   if (!raiz['IPITrib'] && !raiz['IPINT']) raiz['IPITrib'] = { CST: '00' }
   let IPI = raiz['IPITrib'] ?? raiz['IPINT']
@@ -20,8 +19,6 @@
       IPI = raiz['IPINT'] = { CST: tipoIPI }
     }
   }
-
-  $: IPI = calcular(prod, IPI)
 </script>
 
 <h3>Imposto sobre produtos industrializados</h3>

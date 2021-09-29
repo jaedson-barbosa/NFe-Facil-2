@@ -15,9 +15,6 @@
 
   export let raiz: any
   export let regimeNormal: boolean
-  export let prod: any
-  export let ipi: any
-  export let consumidorFinal: boolean
 
   const CS = regimeNormal ? CST : CSOSN
 
@@ -53,8 +50,6 @@
     }
     ICMS = raiz['ICMS'][c] = regimeNormal ? { CST: t } : { CSOSN: t }
   }
-
-  $: ICMS = calcular(prod, ICMS, ipi, consumidorFinal)
 </script>
 
 <h3>ICMS</h3>
@@ -76,11 +71,10 @@
 </label>
 {#if ['00', '10', '20', '51', '70', '90', 'Part10', 'Part90', '900'].includes(tipoICMS)}
   {#if tipoICMS == '51'}
-    <ProprioDif bind:ICMS {consumidorFinal} />
+    <ProprioDif bind:ICMS />
   {:else}
     <Proprio
       bind:ICMS
-      {consumidorFinal}
       incluirRedBC={!['00', '10'].includes(tipoICMS)}
       obrigatorioRedBC={['20', '70', '90'].includes(tipoICMS)}
     />

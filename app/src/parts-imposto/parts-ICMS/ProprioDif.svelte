@@ -3,7 +3,6 @@
   import { getMoeda } from '../../code/numero'
 
   export let ICMS: any
-  export let consumidorFinal: boolean
 
   let informar = !!ICMS['modBC']
   $: {
@@ -37,14 +36,8 @@
   </label>
   {#if ICMS['vBC']}
     <p>
-      <strong>Valor da BC do ICMS</strong>
+      <strong>Valor da BC do ICMS: </strong>
       {getMoeda(ICMS['vBC'])}
-      <br />
-      <small>
-        Aqui é usada a fórmula mais comum, valor do produto + frete + seguro +
-        adicionais - desconto {#if consumidorFinal}+ ipi{/if}. Caso aplicável, o
-        resultado deste somatório é multiplicado por 1 - redução / 100.
-      </small>
     </p>
   {/if}
   <label>

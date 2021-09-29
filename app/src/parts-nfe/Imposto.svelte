@@ -9,19 +9,25 @@
   import COFINSST from '../parts-imposto/COFINSST.svelte'
   import { possuiST } from '../code/imposto/PISCOFINS'
 
-  export let raiz: any
+  export let imposto: any
   export let regimeNormal: boolean
-  export let consumidorFinal: boolean = false
 
-  if (!raiz['imposto']) raiz['imposto'] = {}
-  $: imposto = raiz['imposto']
-  $: prod = raiz['prod']
+  if (!imposto) imposto = {}
 
-  let informarIPI = !!raiz.imposto.IPI
-  $: raiz.imposto.IPI = informarIPI ? {} : undefined
+  let informarIPI = !!imposto.IPI
+  $: imposto.IPI = informarIPI ? {} : undefined
 
-  let informarICMSUFDest = !!raiz.imposto.ICMSUFDest
-  $: raiz.imposto.ICMSUFDest = informarICMSUFDest ? {} : undefined
+  let informarICMSUFDest = !!imposto.ICMSUFDest
+  $: imposto.ICMSUFDest = informarICMSUFDest ? {} : undefined
+
+  $: {
+    const pisst = possuiST(imposto, 'PIS')
+    if (pisst && !imposto.PISST) imposto.PISST = {}
+    if (!pisst && imposto.PISST) imposto.PISST = undefined
+    const cofinsst = possuiST(imposto, 'COFINS')
+    if (cofinsst && !imposto.COFINSST) imposto.COFINSST = {}
+    if (!cofinsst && imposto.COFINSST) imposto.COFINSST = undefined
+  }
 </script>
 
 <h2>Impostos</h2>
@@ -30,22 +36,19 @@
   Produto com incidência de IPI
 </label>
 {#if imposto.IPI}
-  <IPI raiz={imposto.IPI} {prod} />
+  <IPI bind:raiz={imposto.IPI} />
 {/if}
-<PIS bind:raiz={imposto} {prod} />
-{#if possuiST(imposto, 'PIS')}
-  <PISST bind:raiz={imposto.PISST} {prod} />
+<PIS bind:raiz={imposto} />
+{#if imposto.PISST}
+  <PISST bind:raiz={imposto.PISST} />
 {/if}
-<COFINS bind:raiz={imposto} {prod} />
-{#if possuiST(imposto, 'COFINS')}
-  <COFINSST bind:raiz={imposto.COFINSST} {prod} />
+<COFINS bind:raiz={imposto} />
+{#if imposto.COFINSST}
+  <COFINSST bind:raiz={imposto.COFINSST} />
 {/if}
 <ICMS
   bind:raiz={imposto}
   {regimeNormal}
-  {prod}
-  ipi={imposto.IPI}
-  {consumidorFinal}
 />
 {#if regimeNormal}
   <label>

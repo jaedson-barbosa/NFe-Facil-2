@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { calcular, CST } from '../code/imposto/PISCOFINS'
+  import { CST } from '../code/imposto/PISCOFINS'
   import { getMoeda } from '../code/numero'
 
   export let raiz: any
-  export let prod: any
 
   if (!raiz['PIS']) raiz['PIS'] = { CST: '01' }
   let PIS = Object.values(raiz['PIS'])[0]
@@ -23,7 +22,6 @@
   $: comAliquota = !['04', '05', '06', '07', '08', '09'].includes(tipoPIS)
   $: aliquotaEmPercentual = tipoPIS != '03' && !PIS['vAliqProd']
   $: aliquotaEmReais = tipoPIS != '01' && tipoPIS != '02' && !PIS['pPIS']
-  $: PIS = calcular(prod, PIS, 'PIS')
 </script>
 
 <h3>PIS</h3>

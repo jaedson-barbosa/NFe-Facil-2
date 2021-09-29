@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { calcular, CST } from '../code/imposto/PISCOFINS'
+  import { CST } from '../code/imposto/PISCOFINS'
   import { getMoeda } from '../code/numero'
 
   export let raiz: any
-  export let prod: any
 
   if (!raiz['COFINS']) raiz['COFINS'] = { CST: '01' }
   let COFINS = Object.values(raiz['COFINS'])[0]
@@ -24,7 +23,6 @@
   $: aliquotaEmPercentual = tipoCOFINS != '03' && !COFINS['vAliqProd']
   $: aliquotaEmReais =
     tipoCOFINS != '01' && tipoCOFINS != '02' && !COFINS['pCOFINS']
-  $: COFINS = calcular(prod, COFINS, 'COFINS')
 </script>
 
 <h3>COFINS</h3>

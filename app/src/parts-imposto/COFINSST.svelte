@@ -1,11 +1,7 @@
 <script lang="ts">
-  import { calcular } from '../code/imposto/PISCOFINS'
   import { getMoeda } from '../code/numero'
 
   export let raiz: any
-  export let prod: any
-
-  $: raiz = calcular(prod, raiz, 'COFINS')
 </script>
 
 <h3>COFINS ST</h3>

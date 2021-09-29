@@ -1,14 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import { calcularAproximacao } from '../code/imposto/aproximado'
-  import { calcularCIDE } from '../code/imposto/CIDE'
-  import { atualizarICMS } from '../code/imposto/ICMS'
-  import { atualizarIPI } from '../code/imposto/IPI'
-  import { atualizarPISCOFINS } from '../code/imposto/PISCOFINS'
-  import type { IIBPT } from '../code/tipos'
+  import { atualizarImpostos as _atualizarImpostos } from '../code/imposto/geral'
 
   export let raiz: any
-  export let ibpt: IIBPT
   export let consumidorFinal: boolean
 
   let prod = raiz.prod
@@ -26,13 +20,7 @@
   }
 
   function atualizarImpostos(prod: any) {
-    const imposto = raiz.imposto
-    atualizarICMS(prod, imposto, consumidorFinal)
-    atualizarIPI(prod, imposto)
-    atualizarPISCOFINS(prod, imposto)
-    calcularAproximacao(prod, imposto, consumidorFinal, ibpt)
-    calcularCIDE(prod)
-    return imposto
+    _atualizarImpostos(prod, raiz.imposto, consumidorFinal, raiz.ibpt)
   }
   $: raiz.imposto = atualizarImpostos(prod)
 </script>
