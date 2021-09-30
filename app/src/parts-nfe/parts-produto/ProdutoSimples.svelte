@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import { atualizarImpostos as _atualizarImpostos } from '../code/imposto/geral'
+  import { atualizarImpostos as _atualizarImpostos } from '../../code/imposto/geral'
 
   export let raiz: any
   export let consumidorFinal: boolean

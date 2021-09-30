@@ -3,7 +3,6 @@
   import { get } from 'svelte/store'
   import { edicao, refEmpresa, empresa } from '../code/store'
   import { preparateJSON, generateXML } from '../code/nfe/finalizacao'
-  import NFe from '../parts-nfe/NFe.svelte'
   import {
     collection,
     doc,
@@ -14,6 +13,15 @@
   import { transmitirNFe } from '../code/firebase'
   import { Dados } from '../code/tipos'
   import type { INFeRoot } from '../code/tipos'
+  import AutXml from '../parts-nfe/AutXML.svelte'
+  import Destinatario from '../parts-nfe/Destinatario.svelte'
+  import Ide from '../parts-nfe/Ide.svelte'
+  import InfAdic from '../parts-nfe/InfAdic.svelte'
+  import Local from '../parts-nfe/Local.svelte'
+  import Pag from '../parts-nfe/Pag.svelte'
+  import Produtos from '../parts-nfe/Produtos.svelte'
+  import Transp from '../parts-nfe/Transp.svelte'
+  import Voltar from '../components/Voltar.svelte'
 
   let loading = false
 
@@ -22,6 +30,13 @@
   if (ed?.tipo == Dados.NFes) raiz = ed.dado
   else $edicao = { tipo: Dados.NFes, dado: raiz, id: '' }
   raiz.emit = get(empresa).emit
+
+  raiz.infRespTec = {
+    CNPJ: '12931158000164',
+    xContato: 'Jaedson Barbosa Serafim',
+    email: 'jaedson33@gmail.com',
+    fone: '83988856440',
+  }
 
   async function salvar() {
     loading = true
@@ -65,17 +80,26 @@
       loading = false
     }
   }
-
-  $: isProd = raiz['ide']?.['tpAmb'] == '1'
 </script>
 
 {#if loading}
   Carregando...
 {:else}
-  <NFe bind:raiz />
+  <h1><Voltar /> Nota fiscal</h1>
+  <Ide bind:raiz />
+  <Destinatario bind:dest={raiz.dest} isNFCe={raiz.ide?.['mod'] === '65'} />
+  <Produtos
+    bind:det={raiz.det}
+    bind:total={raiz.total}
+    consumidorFinal={raiz.ide?.indFinal == '1'}
+  />
+  <Transp bind:raiz />
+  <Pag bind:raiz total={raiz.total?.ICMSTot?.vNF ?? 0} />
+  <InfAdic bind:raiz />
+  <Local bind:raiz name="retirada" />
+  <Local bind:raiz name="entrega" />
+  <AutXml bind:raiz />
   <hr />
-  {#if isProd}
-    <button on:click={salvar}>Salvar</button>
-  {/if}
-  <button on:click={transmitir}>Transmitir</button>
+  <button on:click={salvar}>Apenas salvar</button>
+  <button on:click={transmitir}>Salvar e transmitir</button>
 {/if}

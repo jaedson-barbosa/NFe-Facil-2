@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { calcularICMSTot } from '../code/nfe/total'
-  import { getMoeda } from '../code/numero'
+  import { calcularICMSTot } from '../../code/nfe/total'
+  import { getMoeda } from '../../code/numero'
 
   export let det: any
   export let total: any

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Total from './Total.svelte'
-  import ProdutoSimples from './ProdutoSimples.svelte'
+  import Total from './parts-produto/Total.svelte'
+  import ProdutoSimples from './parts-produto/ProdutoSimples.svelte'
   import { doc, DocumentSnapshot, getDoc } from 'firebase/firestore'
   import { refEmpresa } from '../code/store'
   import { Dados } from '../code/tipos'

@@ -5,7 +5,7 @@
   import { edicao, permissaoEscrita, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import { Dados } from '../code/tipos'
-  import Dest from '../parts-nfe/Dest.svelte'
+  import Dest from '../parts-cliente.svelte/Dest.svelte'
   import Voltar from '../components/Voltar.svelte'
 
   let loading = false

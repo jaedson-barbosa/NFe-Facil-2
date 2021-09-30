@@ -5,8 +5,8 @@
   import { atualizarImpostos } from '../../code/imposto/geral'
   import { edicao } from '../../code/store'
   import { Dados, INFeRoot } from '../../code/tipos'
-  import Imposto from '../../parts-nfe/Imposto.svelte'
-  import ProdutoDetalhes from '../../parts-nfe/ProdutoDetalhes.svelte'
+  import Imposto from '../../parts-imposto/Imposto.svelte'
+  import ProdutoDetalhes from '../../parts-produto/ProdutoDetalhes.svelte'
 
   const { produto } = get(params)
 

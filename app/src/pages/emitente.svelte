@@ -1,7 +1,7 @@
 <script lang="ts">
   import { updateDoc } from 'firebase/firestore'
   import { empresa, idEmpresa, refEmpresa } from '../code/store'
-  import Emit from '../parts-nfe/Emit.svelte'
+  import Emit from '../parts-emitente/Emit.svelte'
   import { goto } from '@roxi/routify'
   import Voltar from '../components/Voltar.svelte'
   import { get } from 'svelte/store'

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import VeicProd from '../parts-prod/VeicProd.svelte'
-  import Med from '../parts-prod/Med.svelte'
-  import Arma from '../parts-prod/Arma.svelte'
-  import Comb from '../parts-prod/Comb.svelte'
-  import NRECOPI from '../parts-prod/NRECOPI.svelte'
+  import VeicProd from '../parts-produto/VeicProd.svelte'
+  import Med from '../parts-produto/Med.svelte'
+  import Arma from '../parts-produto/Arma.svelte'
+  import Comb from '../parts-produto/Comb.svelte'
+  import NRECOPI from '../parts-produto/NRECOPI.svelte'
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import { validaCNPJ } from '../code/validacaoDoc'
 

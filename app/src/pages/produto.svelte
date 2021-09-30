@@ -6,7 +6,7 @@
   import ProdCadastro from '../parts-nfe/ProdCadastro.svelte'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
-  import Imposto from '../parts-nfe/Imposto.svelte'
+  import Imposto from '../parts-imposto/Imposto.svelte'
 
   let loading = false
   let raiz = undefined

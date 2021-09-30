@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CSOSN, CST, origem, calcular } from '../code/imposto/ICMS'
+  import { CSOSN, CST, origem } from '../code/imposto/ICMS'
   import FCPSTRet from './parts-ICMS/FCPSTRet.svelte'
   import Proprio from './parts-ICMS/Proprio.svelte'
   import ProprioDif from './parts-ICMS/ProprioDif.svelte'

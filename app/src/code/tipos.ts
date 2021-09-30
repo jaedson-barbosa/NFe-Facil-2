@@ -65,7 +65,7 @@ export interface INFeRoot {
     cUF: string
     cNF: string
     natOp: string
-    mod: 55 | 65
+    mod: '55' | '65'
     serie: any
     nNF: string
     dhEmi: string
