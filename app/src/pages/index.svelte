@@ -1,13 +1,22 @@
 <script lang="ts">
   import { url } from '@roxi/routify'
+  import { addMembro as _addMembro, defaultCatch } from '../code/firebase'
   import {
     edicao,
     permissaoAdministracao,
     permissaoEscrita,
     empresa,
+    idEmpresa,
   } from '../code/store'
 
   $edicao = undefined
+
+  function addMembro(escrita: boolean) {
+    const idNovo = prompt('Id do novo membro')
+    _addMembro({ CNPJ: $idEmpresa, escrita, idNovo })
+      .then(() => alert('Registrado com sucesso.'))
+      .catch(defaultCatch)
+  }
 </script>
 
 <h1>Início</h1>
@@ -15,6 +24,12 @@
   <h3>Área do administrador</h3>
   <a class="button" href={$url('./emitente')}>Atualizar emitente</a>
   <a class="button" href={$url('./configuracoes')}>Configurações</a>
+  <button on:click={() => addMembro(false)}>
+    Adicionar membro somente leitura
+  </button>
+  <button on:click={() => addMembro(true)}>
+    Adicionar membro leitura e escrita
+  </button>
   <p>
     Mantenha todos os dados do emitente atualizados e personalize tudo de acordo
     com as suas necessidades e preferências.

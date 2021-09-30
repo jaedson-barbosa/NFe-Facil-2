@@ -41,53 +41,9 @@ SESSIONSTORAGE
 idEmpresa
 
 METAS:
-BASE para lançamento em pré-alpha:
-OK  Cadastro de emitentes
-OK  Cadastro e edição de dados base
-OK  Tipos de ICMS de acordo com o regime do emitente
-OK  Sistema de lista para ítens multiplos
-OK  Remover tag choice
-OK  Tela de NFe
-OK  Exibição de notas
-OK  Clonagem de NFe
-OK  Servidor básico (sem todas análises)
-OK    precadastro
-OK    transmitirNFe
-OK    gerarDANFENFe
-OK    cancelarNFe
-OK  Reorganizar todo o código do servidor (já que agora ele é bem mais simples)
-OK  Implementar cálculo de totais
-OK  Analise de certificado do precadastro
-OK  Proteger certificado com a senha atual
-OK  Indicar carregamento na geração de PDF e cancelamento no botão
-OK  Usar documento como Id e aplicar validação de CPF e CNPJ
-OK  Importação com análise de elementos já salvos
-OK  Excluir antigo public-src
-OK  Aplicar bloco de try-catch na entrada do servidor
-OK  User store para a pasta [idEmpresa]
-OK  Simplificar scoped da NFe
-OK  Corrigir exibição das páginas na NFe
-OK    Busca com edição de clientes, produtos e transportes
-OK    Botões na parte superior da tela
-OK  Remover botões limpar
-OK  Adicionar análise de CPF/CNPJ direto nos inputs destes campos
-OK  Adicionar análise de permissões
-OK    Banco de dados
-OK    Servidor
-OK    Web-app
-OK  Base da NFCe
-OK    Adicionar grupo NFCe
-OK    Adicionar colunas de NFCe
-OK    Adicionar criação, edição e exibição de NFCe
-OK    Importação de NFCe
-OK  Adotar onCall no lugar de onRequest
-OK  Ajustar funções pro server de São Paulo
-OK  Liberar a transmissão em produção
-
 Preparação de lançamento inicial:
   Ajustar info.ts para a versão desejada
-  Remover ?useEmulator=true de index.html
-  Comentar linha de useEmulator de functions.ts
+  Trocar true para false em firebase.ts
   Compilar pasta public como build
   Fazer deploy para o Firebase com a identificação da versão
 
@@ -142,15 +98,6 @@ REFINAMENTOS durante alplha:
 
 Observações:  
 ISSQN completamente removido. Se necessário, basta pedir a implementação ao desenvolvedor.
-IPI contém apenas a implementação básica.
 Retirada e entrega limitados para endereço nacional. Se necessário, basta pedir a implementação ao desenvolvedor.
 Obedecida apenas regra geral de cálculo do total (pag. 122)
-Adição do vServ no total do vNF não é feita automaticamente
-Na requisição de acesso não é feita a análise se a empresa já existe
 Ainda não há importação de eventos, então ainda notas já canceladas serão importadas como se ainda não estivessem canceladas
-
-Para o cálculo de impostos, temos a API do IBPT, onde será cadastrado o Token nas configurações e as requisições serão feitas no formato https://apidoni.ibpt.org.br/api/v1/produtos?token=5XRSnRi-S2rNih2bbhA0zkOSNvN3ZrHhGnScmPcfpSdX8NHfzAQGPubqYgbJ53Ln&cnpj=12931158000164&codigo=25059000&uf=PB&ex=0&descricao=Areia%20lavada&unidadeMedida=MT%20CUB&valor=30&gtin=SEM%20GTIN
-  Lembrando que o access-control-allow-origin: *, assim é possível fazer a consulta totalmente do lado do cliente
-
-firebase emulators:start --import .save-data --export-on-exit
-sudo kill $(sudo lsof -t -i:5000)

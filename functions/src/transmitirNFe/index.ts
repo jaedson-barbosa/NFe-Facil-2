@@ -7,7 +7,12 @@ import consultarResposta, { retConsReciNFe } from './retAutorizacao'
 import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
 import carregarEmpresa from '../commom/carregarEmpresa'
-import { Ambientes, IInfos, IReqTransmitir, IResTransmitir } from '../commom/tipos'
+import {
+  Ambientes,
+  IInfos,
+  IReqTransmitir,
+  IResTransmitir,
+} from '../commom/tipos'
 
 export default async function (
   req: IReqTransmitir,

@@ -10,7 +10,7 @@
   const buscador = new Buscador(
     $refEmpresa,
     Dados.NFes,
-    'infNFe.ide.nNF',
+    'dhEmi',
     'desc',
     (v) => (cadastros = v)
   )
@@ -29,7 +29,7 @@
 <h1><Voltar /> Notas fiscais</h1>
 <label>
   Buscar nota fiscal pelo número
-  <input on:input={buscador.buscar} />
+  <input type="date" on:input={buscador.buscar} />
 </label>
 
 {#if cadastros.length}

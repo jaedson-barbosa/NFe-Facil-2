@@ -3,7 +3,7 @@
   import { get } from 'svelte/store'
   import { edicao, empresa, permissaoEscrita, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
-  import ProdCadastro from '../parts-nfe/ProdCadastro.svelte'
+  import ProdCadastro from '../parts-produto/ProdCadastro.svelte'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
   import Imposto from '../parts-imposto/Imposto.svelte'
@@ -97,7 +97,7 @@
     }
   }
 </script>
-{@debug det}
+
 {#if loading}
   Carregando...
 {:else}

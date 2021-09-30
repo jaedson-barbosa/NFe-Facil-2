@@ -4,10 +4,12 @@ import {
   httpsCallable,
   FunctionsError,
 } from 'firebase/functions'
-import type {
+import {
+  IReqAddMembro,
   IReqCadastrar,
   IReqCancelar,
   IReqTransmitir,
+  IResAddMembro,
   IResCadastrar,
   IResCancelar,
   IResTransmitir,
@@ -65,6 +67,11 @@ export const transmitirNFe = httpsCallable<IReqTransmitir, IResTransmitir>(
 export const cancelarNFe = httpsCallable<IReqCancelar, IResCancelar>(
   functions,
   'cancelarNFe'
+)
+
+export const addMembro = httpsCallable<IReqAddMembro, IResAddMembro>(
+  functions,
+  'addMembro'
 )
 
 export function defaultCatch(error: FunctionsError) {

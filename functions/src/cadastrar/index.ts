@@ -139,5 +139,4 @@ async function registrarUsuario(CNPJ: string, token: auth.DecodedIdToken) {
     .filter(([_, v]) => niveis.includes(v))
     .forEach(([key, v]) => (liberacoes[key] = v))
   await auth().setCustomUserClaims(token.uid, liberacoes)
-  return { cnpj: CNPJ }
 }

@@ -81,7 +81,7 @@
     }
   }
 </script>
-
+{@debug raiz}
 {#if loading}
   Carregando...
 {:else}

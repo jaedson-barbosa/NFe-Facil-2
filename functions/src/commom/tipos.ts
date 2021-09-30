@@ -47,6 +47,16 @@ export interface INotaDB {
   xmlCancelamento?: string
 }
 
+export interface IReqAddMembro {
+  CNPJ: string
+  idNovo: string
+  escrita: boolean
+}
+
+export interface IResAddMembro {
+  sucesso: true
+}
+
 //#endregion
 
 export enum Ambientes {
