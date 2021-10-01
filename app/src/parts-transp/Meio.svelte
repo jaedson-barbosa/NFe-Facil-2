@@ -58,15 +58,12 @@
 </script>
 
 <h3>Meio</h3>
-<label>
-  Meio
-  <select bind:value={meio}>
-    <option value="nenhum">Sem informação</option>
-    <option value="vagao">Vagão</option>
-    <option value="balsa">Balsa</option>
-    <option value="veicTransp">Veículo</option>
-  </select>
-</label>
+<select bind:value={meio}>
+  <option value="nenhum">Sem informação</option>
+  <option value="vagao">Vagão</option>
+  <option value="balsa">Balsa</option>
+  <option value="veicTransp">Veículo</option>
+</select>
 {#if meio == 'vagao'}
   <label>
     Identificação do vagão

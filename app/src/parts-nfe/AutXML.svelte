@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Adicionar from '../components/Adicionar.svelte'
   import Doc from '../components/Doc.svelte'
 
   export let raiz: any
@@ -14,10 +15,10 @@
   }
 </script>
 
-<h2>Autorizações de acesso ao XML</h2>
-<button type="button" on:click={() => (autXML = [{}, ...autXML])}>
-  Adicionar
-</button>
+<h2>
+  Autorizações de acesso ao XML
+  <Adicionar on:click={() => (autXML = [{}, ...autXML])} />
+</h2>
 <br />
 {#if autXML.length}
   <table>

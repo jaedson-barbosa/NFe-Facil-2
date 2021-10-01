@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getMoeda } from '../code/numero'
+  import Adicionar from '../components/Adicionar.svelte'
 
   export let raiz: any
   export let total: number
@@ -25,10 +26,10 @@
   }
 </script>
 
-<h2>Pagamento</h2>
-<button type="button" on:click={() => (pag.detPag = [{}, ...pag.detPag])}>
-  Adicionar
-</button>
+<h2>
+  Pagamento
+  <Adicionar on:click={() => (pag.detPag = [{}, ...pag.detPag])} />
+</h2>
 {#if pag.detPag.length}
   <table>
     <thead>

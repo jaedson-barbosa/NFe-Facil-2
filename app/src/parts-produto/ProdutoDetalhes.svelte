@@ -6,6 +6,7 @@
   import Arma from '../parts-produto/Arma.svelte'
   import Comb from '../parts-produto/Comb.svelte'
   import NRECOPI from '../parts-produto/NRECOPI.svelte'
+  import Adicionar from '../components/Adicionar.svelte'
   import { goto, url } from '@roxi/routify'
 
   export let raiz: any
@@ -84,10 +85,10 @@
   {/if}
   {#if prod['med']}
     <Med bind:raiz={prod['med']} />
-    <h3>Rastreabilidade</h3>
-    <button type="button" on:click={() => (prod.rastro = [{}, ...prod.rastro])}>
-      Adicionar
-    </button>
+    <h3>
+      Rastreabilidade
+      <Adicionar on:click={() => (prod.rastro = [{}, ...prod.rastro])} />
+    </h3>
     {#if prod.rastro.length}
       <table>
         <thead>

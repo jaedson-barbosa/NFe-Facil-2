@@ -3,7 +3,7 @@ import type { INFeRoot } from '../tipos'
 import refInfNFe from './estrutura'
 import toXml from './json2xml'
 
-export function preparateJSON(infNFe: INFeRoot) {
+export function preparateJSON(infNFe: INFeRoot, addt = true) {
   const cUF = IBGE.find(
     (v) => v.Sigla == (infNFe.emit.enderEmit.UF as string)
   )!.Codigo
@@ -24,7 +24,7 @@ export function preparateJSON(infNFe: INFeRoot) {
   const prefixedInfNFe = { infNFe: { Id, versao: '4.00' } }
   Object.entries(refInfNFe).forEach(([key, value]) => {
     if (!infNFe[key] || key == 'default' || key == 'simpleType') return
-    prepararParaXML(infNFe, value, prefixedInfNFe.infNFe)
+    prepararParaXML(infNFe, value, prefixedInfNFe.infNFe, addt)
   })
   infNFe.Id = Id
   return prefixedInfNFe.infNFe
@@ -32,7 +32,6 @@ export function preparateJSON(infNFe: INFeRoot) {
 
 export function generateXML(infNFe: INFeRoot) {
   const preparatedJSON = preparateJSON(infNFe)
-  console.log(preparatedJSON)
   return toXml({
     NFe: {
       xmlns: 'http://www.portalfiscal.inf.br/nfe',
@@ -41,7 +40,7 @@ export function generateXML(infNFe: INFeRoot) {
   })
 }
 
-function prepararParaXML(obj: any, ref: any, result: any) {
+function prepararParaXML(obj: any, ref: any, result: any, addt: boolean) {
   const name = ref.name
   const cRoot = name ? obj[name] : obj
   if (!cRoot) return
@@ -53,7 +52,7 @@ function prepararParaXML(obj: any, ref: any, result: any) {
       const validEl: any = {}
       validEl[name] = el
       const item = {}
-      prepararParaXML(validEl, itemRef, item)
+      prepararParaXML(validEl, itemRef, item, addt)
       temp.push(item[name])
     }
     result[name] = temp
@@ -62,7 +61,7 @@ function prepararParaXML(obj: any, ref: any, result: any) {
     for (const el of ref.element as any[]) {
       if (el.name) {
         if (cRoot[el.name]) {
-          prepararParaXML(cRoot, el, iResult)
+          prepararParaXML(cRoot, el, iResult, addt)
           break
         }
       } else {
@@ -71,12 +70,13 @@ function prepararParaXML(obj: any, ref: any, result: any) {
           let retorno = !!v.optional
           if (value) {
             const e = v.restriction?.enumeration
-            retorno = !e || (typeof e == 'string' ? e == value : e.includes(value))
+            retorno =
+              !e || (typeof e == 'string' ? e == value : e.includes(value))
           }
           return retorno
         })
         if (selected) {
-          prepararParaXML(cRoot, el, iResult)
+          prepararParaXML(cRoot, el, iResult, addt)
           break
         }
       }
@@ -85,12 +85,13 @@ function prepararParaXML(obj: any, ref: any, result: any) {
   } else if (ref.element) {
     const iResult = name ? {} : result
     for (const el of ref.element as any[]) {
-      if (el.name && cRoot[el.name]) prepararParaXML(cRoot, el, iResult)
-      else if (!el.name) prepararParaXML(cRoot, el, iResult)
+      if (el.name && cRoot[el.name]) prepararParaXML(cRoot, el, iResult, addt)
+      else if (!el.name) prepararParaXML(cRoot, el, iResult, addt)
     }
     if (name && Object.entries(iResult).length) result[name] = iResult
   } else {
-    result[name] = ['nItem', 'dia'].includes(name) ? cRoot : { $t: cRoot }
+    result[name] =
+      (!addt || ['nItem', 'dia'].includes(name)) ? cRoot : { $t: cRoot }
   }
 }
 

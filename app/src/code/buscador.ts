@@ -37,7 +37,8 @@ export class Buscador {
     private readonly dados: Dados,
     public readonly campoPrincipal: string,
     private readonly direcao: OrderByDirection,
-    private readonly onUpdateCadastros: (cadastros: DocumentSnapshot[]) => void
+    private readonly onUpdateCadastros: (cadastros: DocumentSnapshot[]) => void,
+    private readonly campoOrdenacao = campoPrincipal
   ) {
     this.operadorBusca = direcao == 'asc' ? '>=' : '<='
     this._buscar()
@@ -47,8 +48,8 @@ export class Buscador {
     this.hasMore = false
     const coluna = collection(this.refEmpresa, this.dados)
     const limites: QueryConstraint[] = [
-      limit(5),
-      orderBy(this.campoPrincipal, this.direcao),
+      limit(4),
+      orderBy(this.campoOrdenacao, this.direcao),
     ]
     if (busca != this.lastBusca) {
       this.cadastros = []

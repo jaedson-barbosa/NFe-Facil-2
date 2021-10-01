@@ -20,7 +20,8 @@
   }
 
   function atualizarImpostos(prod: any) {
-    _atualizarImpostos(prod, raiz.imposto, consumidorFinal, raiz.ibpt)
+    const retorno = _atualizarImpostos(prod, raiz.imposto, consumidorFinal, raiz.ibpt)
+    return retorno
   }
   $: raiz.imposto = atualizarImpostos(prod)
 </script>

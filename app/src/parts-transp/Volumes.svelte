@@ -1,15 +1,16 @@
 <script lang="ts">
   import { goto, url } from '@roxi/routify'
+  import Adicionar from '../components/Adicionar.svelte'
 
   export let vol: any[]
 
   if (!vol) vol = []
 </script>
 
-<h3>Volumes</h3>
-<a class="button" href={$url('./volume/:volume', { volume: '-1' })}>
-  Adicionar
-</a>
+<h3>
+  Volumes
+  <Adicionar href={$url('./volume/:volume', { volume: '-1' })} />
+</h3>
 {#if vol.length}
   <table>
     <thead>

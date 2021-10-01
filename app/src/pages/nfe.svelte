@@ -48,13 +48,15 @@
         const docObj = await getDoc(docRef)
         if (docObj.exists) await deleteDoc(docRef)
       }
+      const infNFe: any = preparateJSON(raiz, false)
+      console.log(infNFe)
       const xml = generateXML(raiz)
-      const dhEmi = new Date(raiz.ide.dhEmi)
-      const dado = { infNFe: raiz, dhEmi, xml }
-      const docRef = doc(coluna, raiz.Id)
+      const dhEmi = new Date(infNFe.ide.dhEmi)
+      const dado = { infNFe, dhEmi, xml }
+      const docRef = doc(coluna, infNFe.Id)
       await setDoc(docRef, dado)
-      $edicao = { dado, id: raiz.Id, tipo: Dados.NFes }
-      $goto(Dados.NFes)
+      $edicao = { dado, id: infNFe.Id, tipo: Dados.NFes }
+      $goto('./' + Dados.NFes)
     } catch (error) {
       console.error(error)
       alert(error.message)
@@ -81,7 +83,7 @@
     }
   }
 </script>
-{@debug raiz}
+
 {#if loading}
   Carregando...
 {:else}

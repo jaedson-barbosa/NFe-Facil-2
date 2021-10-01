@@ -42,10 +42,12 @@
         </tr>
       {/if}
       {#each transportadores as t}
-        <tr class="clicavel" on:click={() => (transporta = t.data())}>
-          <td>{t.get('transporta.xNome')}</td>
-          <td>{mascararDocSnapshot(t, 'transporta')}</td>
-        </tr>
+        {#if transporta?.xNome != t.get('transporta.xNome')}
+          <tr class="clicavel" on:click={() => (transporta = t.data().transporta)}>
+            <td>{t.get('transporta.xNome')}</td>
+            <td>{mascararDocSnapshot(t, 'transporta')}</td>
+          </tr>
+        {/if}
       {/each}
     </tbody>
   </table>

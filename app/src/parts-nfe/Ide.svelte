@@ -5,6 +5,7 @@
   import IBGE from '../code/IBGE'
   import { VERSAO } from '../code/app'
   import { toNFeString } from '../code/getDataString'
+  import Adicionar from '../components/Adicionar.svelte'
 
   export let raiz: any
 
@@ -90,7 +91,7 @@
     </label>
     <label>
       Número do Documento Fiscal
-      <small>Deixar com 0 para cálculo automático pelo servidor</small>
+      <small>usar 0 para cálculo automático do número inicial</small>
       <input
         type="number"
         step="1"
@@ -111,6 +112,13 @@
         </select>
       </label>
       <label>
+        Tipo do documento fiscal
+        <select bind:value={ide['tpNF']} required>
+          <option value="1">Saída</option>
+          <option value="0">Entrada</option>
+        </select>
+      </label>
+      <label>
         <input type="checkbox" bind:checked={indFinal} />
         Consumidor final
       </label>
@@ -119,7 +127,6 @@
       <label>
         <input type="checkbox" bind:checked={indIntermed} />
         Operação executada em site ou plataforma de terceiros
-        <small>intermediador ou marketplace</small>
       </label>
     {/if}
   </div>
@@ -142,8 +149,8 @@
     <label>
       Presença do comprador
       <select bind:value={ide['indPres']} required>
-        <option value="0">Não se aplica (complementar ou ajuste)</option>
         <option value="1">Operação presencial</option>
+        <option value="0">Não se aplica (complementar ou ajuste)</option>
         <option value="2">Não presencial, internet</option>
         <option value="3">Não presencial, teleatendimento</option>
         <option value="4">NFC-e entrega em domicílio</option>
@@ -153,29 +160,21 @@
     </label>
     {#if ide['mod'] == 55}
       <label>
-        Tipo do documento fiscal
-        <select bind:value={ide['tpNF']} required>
-          <option value="0">Entrada</option>
-          <option value="1">Saída</option>
-        </select>
-      </label>
-      <label>
-        Identificador de local de destino da operação
+        Identificador de local de destino
         <select bind:value={ide['idDest']} required>
-          <option value="1">Interna</option>
-          <option value="2">Interestadual</option>
-          <option value="3">Exterior</option>
+          <option value="1">Operação interna</option>
+          <option value="2">Operação interestadual</option>
+          <option value="3">Operação exterior</option>
         </select>
       </label>
     {/if}
   </div>
 </div>
 
-<h3>NF-es referenciadas</h3>
-<button type="button" on:click={() => (ide.NFref = [{}, ...ide.NFref])}>
-  Adicionar
-</button>
-<br />
+<h3>
+  NF-es referenciadas
+  <Adicionar on:click={() => (ide.NFref = [{}, ...ide.NFref])} />
+</h3>
 {#if ide.NFref.length}
   <table>
     <thead>

@@ -7,6 +7,7 @@
   import { Estados } from '../../code/IBGE'
   import { aplicarMascara } from '../../code/mascaracaoDoc'
   import { validaCNPJ } from '../../code/validacaoDoc'
+  import Adicionar from '../../components/Adicionar.svelte'
 
   const { produto, di } = get(params)
 
@@ -107,10 +108,10 @@
     Código do exportador
     <input maxlength="60" bind:value={raiz.cExportador} required />
   </label>
-  <h4>Adições</h4>
-  <button type="button" on:click={() => (raiz.adi = [{}, ...raiz.adi])}>
-    Adicionar
-  </button>
+  <h4>
+    Adições
+    <Adicionar on:click={() => (raiz.adi = [{}, ...raiz.adi])} />
+  </h4>
   {#if raiz.adi}
     <table>
       <thead>

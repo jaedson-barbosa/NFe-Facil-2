@@ -161,34 +161,39 @@
     {/if}
   </tbody>
 </table>
-<br />
 
 <h3>Retenção de tributos</h3>
-<label>
-  <i>Valor Retido de PIS</i>
-  <input type="number" step="0.01" bind:value={total.retTrib['vRetPIS']} />
-</label>
-<label>
-  <i>Valor Retido de COFINS</i>
-  <input type="number" step="0.01" bind:value={total.retTrib['vRetCOFINS']} />
-</label>
-<label>
-  <i>Valor Retido de CSLL</i>
-  <input type="number" step="0.01" bind:value={total.retTrib['vRetCSLL']} />
-</label>
-<label>
-  <i>Base de Cálculo do IRRF</i>
-  <input type="number" step="0.01" bind:value={total.retTrib['vBCIRRF']} />
-</label>
-<label>
-  <i>Valor Retido de IRRF</i>
-  <input type="number" step="0.01" bind:value={total.retTrib['vIRRF']} />
-</label>
-<label>
-  <i>Base de Cálculo da Retenção da Previdêncica Social</i>
-  <input type="number" step="0.01" bind:value={total.retTrib['vBCRetPrev']} />
-</label>
-<label>
-  <i>Valor da Retenção da Previdêncica Social</i>
-  <input type="number" step="0.01" bind:value={total.retTrib['vRetPrev']} />
-</label>
+<div class="row">
+  <div class="column">
+    <label>
+      <i>Valor Retido de PIS</i>
+      <input type="number" step="0.01" bind:value={total.retTrib['vRetPIS']} />
+    </label>
+    <label>
+      <i>Valor Retido de COFINS</i>
+      <input type="number" step="0.01" bind:value={total.retTrib['vRetCOFINS']} />
+    </label>
+    <label>
+      <i>Valor Retido de CSLL</i>
+      <input type="number" step="0.01" bind:value={total.retTrib['vRetCSLL']} />
+    </label>
+    <label>
+      <i>Base de Cálculo do IRRF</i>
+      <input type="number" step="0.01" bind:value={total.retTrib['vBCIRRF']} />
+    </label>
+  </div>
+  <div class="column">
+    <label>
+      <i>Valor Retido de IRRF</i>
+      <input type="number" step="0.01" bind:value={total.retTrib['vIRRF']} />
+    </label>
+    <label>
+      <i>Base de Cálculo da Retenção da Previdêncica Social</i>
+      <input type="number" step="0.01" bind:value={total.retTrib['vBCRetPrev']} />
+    </label>
+    <label>
+      <i>Valor da Retenção da Previdêncica Social</i>
+      <input type="number" step="0.01" bind:value={total.retTrib['vRetPrev']} />
+    </label>
+  </div>
+</div>

@@ -3,6 +3,7 @@
   import { get } from 'svelte/store'
   import { edicao } from '../../code/store'
   import { Dados, INFeRoot } from '../../code/tipos'
+  import Adicionar from '../../components/Adicionar.svelte'
 
   export let index: string
 
@@ -53,10 +54,10 @@
     <i>Peso bruto (em kg)</i>
     <input type="number" step="0.001" bind:value={raiz.pesoB} />
   </label>
-  <h4>Lacres</h4>
-  <button type="button" on:click={() => (raiz.lacres = [{}, ...raiz.lacres])}>
-    Adicionar
-  </button>
+  <h4>
+    Lacres
+    <Adicionar on:click={() => (raiz.lacres = [{}, ...raiz.lacres])} />
+  </h4>
   <br />
   {#if raiz.lacres.length}
     <table>

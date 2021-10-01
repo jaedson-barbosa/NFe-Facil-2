@@ -93,7 +93,6 @@
     </tbody>
   </table>
   {#if det.length}
-    <h3>Produtos adicionados</h3>
     <table>
       <thead>
         <tr>

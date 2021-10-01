@@ -26,24 +26,30 @@
 
 <!-- Botar de uma forma que caso digitado o documento corretamente no campo de busca, caso ele não seja encontrado então será usado apenas o documento caso seja uma NFC-e -->
 <h2>Destinatário</h2>
-<label>
-  Campo de busca
-  <select bind:value={buscadorCliente.campoPrincipal}>
-    <option value="dest.xNome">Nome</option>
-    <option value="dest.CPF">CPF</option>
-    <option value="dest.CNPJ">CNPJ</option>
-    <option value="dest.idEstrangeiro">Identificação estrangeira</option>
-  </select>
-</label>
 {#if isNFCe && destSemNome}
   <p>Numa NFC-e, caso queiras, podes informar apenas o documento do cliente.</p>
   <Doc bind:raiz={dest} />
 {/if}
 {#if !(destComDoc && destSemNome)}
-  <label>
-    Buscar usando o campo selecionado
-    <input on:input={buscadorCliente.buscar} />
-  </label>
+  <div class="row">
+    <div class="column">
+      <label>
+        Campo de busca
+        <select bind:value={buscadorCliente.campoPrincipal}>
+          <option value="dest.xNome">Nome</option>
+          <option value="dest.CPF">CPF</option>
+          <option value="dest.CNPJ">CNPJ</option>
+          <option value="dest.idEstrangeiro">Identificação estrangeira</option>
+        </select>
+      </label>
+    </div>
+    <div class="column">
+      <label>
+        Buscar usando o campo selecionado
+        <input on:input={buscadorCliente.buscar} />
+      </label>
+    </div>
+  </div>
   <table>
     <thead>
       <tr>
@@ -63,10 +69,12 @@
         </tr>
       {/if}
       {#each clientes as c}
-        <tr class="clicavel" on:click={() => (dest = c.data().dest)}>
-          <td>{mascararDocSnapshot(c, 'dest')}</td>
-          <td>{c.get('dest.xNome')}</td>
-        </tr>
+        {#if dest?.xNome != c.get('dest.xNome')}
+          <tr class="clicavel" on:click={() => (dest = c.data().dest)}>
+            <td>{mascararDocSnapshot(c, 'dest')}</td>
+            <td>{c.get('dest.xNome')}</td>
+          </tr>
+        {/if}
       {/each}
     </tbody>
   </table>
