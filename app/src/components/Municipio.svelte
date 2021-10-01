@@ -1,37 +1,55 @@
 <script lang="ts">
-  import IBGE from "../code/IBGE";
+  import IBGE from '../code/IBGE'
 
-  export let lab: string = "Município";
-  export let opt: boolean = false;
+  export let lab: string = 'Município'
+  export let opt: boolean = false
 
-  export let xMun: string = "";
-  export let cMun: string = "";
-  export let cUF: string = "";
-  export let UF: string = "";
+  export let xMun: string = ''
+  export let cMun: string = ''
+  export let cUF: string = ''
+  export let UF: string = ''
 
-  const municipios = IBGE.flatMap((v) =>
-    v.Municipios.map((k) => ({ ...k, codUF: v.Codigo, siglaUF: v.Sigla }))
-  ).sort((a, b) => a.Nome.localeCompare(b.Nome));
-  type TMun = typeof municipios[0];
+  let uf: typeof IBGE[0]
+  let value: { Nome: string; Codigo: string }
 
-  let value: TMun;
-
-  if (xMun && !value) value = municipios.find((v) => v.Nome == xMun);
-  if (cMun && !value) value = municipios.find((v) => v.Codigo == cMun);
+  if (cMun) {
+    const cUF = cMun.substr(0, 2)
+    uf = IBGE.find(v => v.Codigo == cUF)
+    value = uf.Municipios.find(v => v.Codigo == cMun)
+  } else if (xMun && UF) {
+    uf = IBGE.find(v => v.Sigla == UF)
+    value = uf.Municipios.find(v => v.Nome == xMun)
+  } else {
+    uf = IBGE[0]
+    value = uf.Municipios[0]
+  }
 
   $: {
-    xMun = value?.Nome;
-    cMun = value?.Codigo;
-    cUF = value?.codUF;
-    UF = value?.siglaUF;
+    if (value) {
+      xMun = value.Nome
+      cMun = value.Codigo
+      cUF = value.Codigo.substr(0, 2)
+      UF = IBGE.find(v => v.Codigo == cUF).Sigla
+    } else {
+      xMun = cMun = cUF = UF = ''
+    }
   }
 </script>
 
 <label>
+  Estado
+  <select bind:value={uf} required={!opt}>
+    {#each IBGE as uf}
+      <option value={uf}>{uf.Nome}</option>
+    {/each}
+  </select>
+</label>
+
+<label>
   {lab}
   <select bind:value required={!opt}>
-    {#each municipios as mun}
-      <option value={mun}>{mun.Nome} - {mun.siglaUF}</option>
+    {#each uf.Municipios as mun}
+      <option value={mun}>{mun.Nome}</option>
     {/each}
   </select>
 </label>

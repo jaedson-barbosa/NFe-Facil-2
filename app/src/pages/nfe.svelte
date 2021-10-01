@@ -27,7 +27,7 @@
 
   const ed = get(edicao)
   let raiz: INFeRoot = {} as any
-  if (ed?.tipo == Dados.NFes) raiz = ed.dado
+  if (ed?.tipo == Dados.NFes) raiz = ed.dado.infNFe ?? ed.dado
   else $edicao = { tipo: Dados.NFes, dado: raiz, id: '' }
   raiz.emit = get(empresa).emit
 
@@ -49,14 +49,13 @@
         if (docObj.exists) await deleteDoc(docRef)
       }
       const infNFe: any = preparateJSON(raiz, false)
-      console.log(infNFe)
       const xml = generateXML(raiz)
       const dhEmi = new Date(infNFe.ide.dhEmi)
       const dado = { infNFe, dhEmi, xml }
       const docRef = doc(coluna, infNFe.Id)
       await setDoc(docRef, dado)
       $edicao = { dado, id: infNFe.Id, tipo: Dados.NFes }
-      $goto('./' + Dados.NFes)
+      $goto('./nfeExib')
     } catch (error) {
       console.error(error)
       alert(error.message)
@@ -72,9 +71,8 @@
       const dadosTransmissao = { infNFe, oldId }
       const respTransmissao = await transmitirNFe(dadosTransmissao)
       const dado = respTransmissao.data
-      const tipo = Dados.NFes
-      $edicao = { dado, id: dado.infNFe.Id, tipo }
-      $goto(tipo)
+      $edicao = { dado, id: dado.infNFe.Id, tipo: Dados.NFes }
+      $goto('./nfeExib')
       loading = false
     } catch (error) {
       console.error(error)

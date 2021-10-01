@@ -26,7 +26,7 @@
   $: raiz.imposto = atualizarImpostos(prod)
 </script>
 
-<tr class="clicavel" on:click>
+<tr class="clicavel" on:click title={prod.xProd}>
   <td>{prod.cProd}</td>
   <td>
     <input

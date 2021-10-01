@@ -5,6 +5,7 @@
   import { Buscador } from '../code/buscador'
   import { DocumentSnapshot } from 'firebase/firestore'
   import Voltar from '../components/Voltar.svelte'
+  import { getMoeda } from '../code/numero'
 
   let cadastros: DocumentSnapshot[] = []
   const buscador = new Buscador(
@@ -40,6 +41,7 @@
         <th>Número</th>
         <th>Data e hora</th>
         <th>Destinatário</th>
+        <th>Total</th>
       </tr>
     </thead>
     <tbody>
@@ -53,6 +55,7 @@
           <td>{n.get('infNFe.ide.nNF')}</td>
           <td>{n.get('dhEmi').toDate().toLocaleString()}</td>
           <td>{n.get('infNFe.dest.xNome')}</td>
+          <td>{getMoeda(n.get('infNFe.total.ICMSTot.vNF'))}</td>
         </tr>
       {/each}
     </tbody>

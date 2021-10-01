@@ -19,6 +19,8 @@
     } else raiz = { ...ed.dado }
   } else raiz = {}
 
+  if (!raiz.dest) raiz.dest = {}
+
   async function salvar() {
     if (!$permissaoEscrita) {
       $goto('./')
@@ -71,7 +73,7 @@
 {:else}
   <form on:submit|preventDefault={() => salvar()}>
     <h1><Voltar /> Destinatário</h1>
-    <Dest bind:raiz />
+    <Dest bind:dest={raiz.dest} />
     {#if permissaoEscrita}
       <input type="submit" class="button" />
     {/if}
