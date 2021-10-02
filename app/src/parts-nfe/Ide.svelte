@@ -188,7 +188,7 @@
           <td>
             <input
               bind:value={ide.NFref[i].refNFe}
-              pattern="[0-9]{44}"
+              pattern={'[0-9]{44}'}
               on:blur={analisar(i)}
               required
             />

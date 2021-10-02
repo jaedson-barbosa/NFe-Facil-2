@@ -10,7 +10,7 @@
   export let prod: any
 
   if (!prod) prod = {}
-  
+
   $: !prod['CEST'] && (prod['indEscala'] = prod['CNPJFab'] = '')
 
   const detsComplexos = ['veicProd', 'med', 'arma', 'comb']
@@ -107,7 +107,7 @@
       </small>
       <input
         required
-        pattern="[0-9]{14}"
+        pattern={'[0-9]{14}'}
         bind:value={prod.CNPJFab}
         on:blur={() => validaCNPJ(prod.CNPJFab) || (prod.CNPJFab = '')}
       />

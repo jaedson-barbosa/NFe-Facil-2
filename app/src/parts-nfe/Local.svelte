@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { aplicarMascara } from '../code/mascaracaoDoc'
   import Municipio from '../components/Municipio.svelte'
   import Doc from '../components/Doc.svelte'
+  import CEP from '../components/CEP.svelte'
 
   export let raiz: any
   export let name: 'retirada' | 'entrega'
@@ -72,10 +72,12 @@
     bind:xMun={raiz[name]['xMun']}
     bind:UF={raiz[name]['UF']}
   />
-  <label>
-    <i>CEP {aplicarMascara(raiz[name]['CEP'], 'zipcode')}</i>
-    <input pattern={'[0-9]{8}'} bind:value={raiz[name]['CEP']} />
-  </label>
+  <CEP
+    bind:CEP={raiz[name].CEP}
+    UF={raiz[name].UF}
+    Municipio={raiz[name].xMun}
+    Logradouro={raiz[name].xLgr}
+  />
   <label>
     <i>Telefone</i>
     <input pattern={'[0-9]{6,14}'} bind:value={raiz[name]['fone']} />

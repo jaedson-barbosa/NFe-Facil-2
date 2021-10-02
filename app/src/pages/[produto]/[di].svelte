@@ -91,7 +91,7 @@
     <i>CNPJ do adquirente ou do encomendante</i>
     <small>{aplicarMascara(raiz.CNPJ, 'cnpj')}</small>
     <input
-      pattern="[0-9]{14}"
+      pattern={'[0-9]{14}'}
       bind:value={raiz.CNPJ}
       on:blur={() => validaCNPJ(raiz.CNPJ) || (raiz.CNPJ = '')}
     />

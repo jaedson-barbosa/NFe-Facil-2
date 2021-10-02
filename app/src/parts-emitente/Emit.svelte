@@ -1,5 +1,6 @@
 <script lang="ts">
   import Municipio from '../components/Municipio.svelte'
+  import CEP from '../components/CEP.svelte'
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import { validaCNPJ } from '../code/validacaoDoc'
 
@@ -22,7 +23,7 @@
   <small>{aplicarMascara(emit['CNPJ'], 'cnpj')}</small>
   <input
     required
-    pattern="[0-9]{14}"
+    pattern={'[0-9]{14}'}
     bind:value={emit['CNPJ']}
     on:blur={() => validaCNPJ(emit['CNPJ']) || (emit['CNPJ'] = '')}
   />
@@ -92,10 +93,13 @@
   bind:xMun={ender['xMun']}
   bind:UF={ender['UF']}
 />
-<label>
-  CEP {aplicarMascara(ender['CEP'], 'zipcode')}
-  <input pattern={'[0-9]{8}'} bind:value={ender['CEP']} required />
-</label>
+<CEP
+  bind:CEP={ender.CEP}
+  required
+  UF={ender.UF}
+  Municipio={ender.xMun}
+  Logradouro={ender.xLgr}
+/>
 <label>
   <i>Telefone</i>
   <input pattern={'[0-9]{6,14}'} bind:value={ender['fone']} />

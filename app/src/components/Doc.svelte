@@ -25,7 +25,7 @@
   {#if apenasBR && simplificado}
     <input
       required
-      pattern="[0-9]{11}|[0-9]{14}"
+      pattern={'[0-9]{11}|[0-9]{14}'}
       minlength={11}
       maxlength={14}
       bind:value={br}
@@ -37,7 +37,7 @@
       <small>{aplicarMascara(br, br.length <= 11 ? 'cpf' : 'cnpj')}</small>
       <input
         required
-        pattern="[0-9]{11}|[0-9]{14}"
+        pattern={'[0-9]{11}|[0-9]{14}'}
         minlength={11}
         maxlength={14}
         bind:value={br}

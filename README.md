@@ -50,8 +50,9 @@ Preparação de lançamento inicial:
 REFINAMENTOS alpha:
 OK  Pôr auto ajuste de number para string na finalização
 OK  Testar ajuste de number para string na finalização
-    Testar CEP
-    Pôr controle de CEP em demais paginas
+OK  Corrigir erro do campo de documento (e demais patterns)
+OK  Testar CEP
+OK  Pôr controle de CEP em demais paginas
     Testar trasmissão
     Testar cancelamento
     Implementar importação de cancelamento
@@ -60,7 +61,7 @@ OK  Testar ajuste de number para string na finalização
     Adicionar patterns e validações restantes à interface
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
-    Liberar versão 0.2, fazer pull request pro main e planejar próximas etapas no GitHub
+    Liberar versão 0.2, fazer pull request pro main e planejar próximas etapas do alpha no GitHub
 
 REFINAMENTOS beta:
     Personalização de campos da NFe em templates personalizáveis

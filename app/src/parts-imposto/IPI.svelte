@@ -29,7 +29,7 @@
     somente em exportação
   </small>
   <input
-    pattern="[0-9]{14}"
+    pattern={'[0-9]{14}'}
     bind:value={raiz.CNPJProd}
     on:blur={() => validaCNPJ(raiz.CNPJProd) || (raiz.CNPJProd = '')}
   />
