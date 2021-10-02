@@ -104,5 +104,5 @@
   <AutXml bind:raiz />
   <hr />
   <button on:click={salvar}>Apenas salvar</button>
-  <button on:click={transmitir}>Salvar e transmitir</button>
+  <button on:click={transmitir}>Transmitir</button>
 {/if}

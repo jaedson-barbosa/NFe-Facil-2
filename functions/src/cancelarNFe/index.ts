@@ -22,7 +22,7 @@ export default async function (
   const CNPJ = req.idNota.substr(9, 14)
   validarPermissao(token, CNPJ)
   const { certificado, refEmpresa } = await carregarEmpresa(CNPJ)
-  const coluna = refEmpresa.collection('NFes')
+  const coluna = refEmpresa.collection('nfes')
   const nota = await carregarNota(coluna, req.idNota)
   const ambiente: Ambientes = nota.infNFe.ide.tpAmb
   const xml = gerarXML(nota, CNPJ, ambiente, req, certificado)

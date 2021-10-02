@@ -53,8 +53,8 @@ OK  Testar ajuste de number para string na finalização
 OK  Corrigir erro do campo de documento (e demais patterns)
 OK  Testar CEP
 OK  Pôr controle de CEP em demais paginas
-    Testar trasmissão
-    Testar cancelamento
+OK  Testar trasmissão
+OK  Testar cancelamento
     Implementar importação de cancelamento
     Pôr texto de imposto aproximado com diferenciação entre diferentes esferas
     Testar edição e clonagem de notas fiscais, com foco em analisar datas e números

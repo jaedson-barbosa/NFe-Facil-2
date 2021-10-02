@@ -92,14 +92,7 @@
     <label>
       Número do Documento Fiscal
       <small>usar 0 para cálculo automático do número inicial</small>
-      <input
-        type="number"
-        step="1"
-        min="0"
-        max="999999999"
-        bind:value={ide['nNF']}
-        required
-      />
+      <input bind:value={ide['nNF']} pattern={'[1-9]{1}[0-9]{0,8}'} required />
     </label>
     {#if ide['mod'] == 55}
       <label>

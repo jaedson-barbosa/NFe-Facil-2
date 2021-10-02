@@ -27,13 +27,13 @@ export default async function (
   const { certificado, refEmpresa } = await carregarEmpresa(CNPJ)
   const infos = getInfos(infNFe)
   corrigirDestinatario(infNFe, infos.ambiente)
-  const coluna = refEmpresa.collection('NFes')
+  const coluna = refEmpresa.collection('nfes')
   const numeroInicial =
     infos.numero > 0 //Devemos usar o preenchimento manual
       ? infos.numero //Então devemos usar o valor manual
       : await calcularNovoNumero(coluna, infos) //Se não, calculamos
   let adicionalNumero = 0
-  while (adicionalNumero < 3) {
+  while (adicionalNumero < 5) {
     const numero = numeroInicial + adicionalNumero++
     const xml = gerarXml(infNFe, certificado, numero)
     const numeroRecibo = await solicitar(infos, certificado, xml)
@@ -41,7 +41,7 @@ export default async function (
     if (resultado) return finalizar(coluna, infNFe, xml, resultado, req.oldId)
   }
   const mensagemLimiteAtingido =
-    'Foi tentado autorizar a nota fiscal com 3 números seguidos e todos já ' +
+    'Foi tentado autorizar a nota fiscal com 5 números seguidos e todos já ' +
     'foram emitidos. Caso você tenha emitido algumas notas em outro emissor, ' +
     'por favor, importe todas as novas notas emitidas ou então preencha ' +
     'manualmente o campo de número da nota fiscal.'
