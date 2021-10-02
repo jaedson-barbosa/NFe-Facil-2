@@ -2,13 +2,13 @@
   import { goto, url } from '@roxi/routify'
   import { get } from 'svelte/store'
   import { edicao } from '../../code/store'
-  import { Dados, INFeRoot } from '../../code/tipos'
+  import type { INFeRoot } from '../../code/tipos'
   import Adicionar from '../../components/Adicionar.svelte'
 
   export let index: string
 
   const ed = get(edicao)
-  const raizNFe: INFeRoot = ed?.tipo == Dados.NFes ? { ...ed.dado } : {}
+  const raizNFe: INFeRoot = ed.dado.infNFe ?? ed.dado
   const isAdd = index == '-1'
   let raiz = isAdd ? {} : raizNFe.transp.vol[+index]
 

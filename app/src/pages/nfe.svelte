@@ -41,6 +41,8 @@
   async function salvar() {
     loading = true
     try {
+      console.log(raiz)
+      alert('Hum')
       raiz.ide.nNF = '0'
       const coluna = collection($refEmpresa, Dados.NFes)
       if (raiz.Id) {
@@ -49,6 +51,7 @@
         if (docObj.exists) await deleteDoc(docRef)
       }
       const infNFe: any = preparateJSON(raiz, false)
+      raiz.ide.nNF = '1'
       const xml = generateXML(raiz)
       const dhEmi = new Date(infNFe.ide.dhEmi)
       const dado = { infNFe, dhEmi, xml }

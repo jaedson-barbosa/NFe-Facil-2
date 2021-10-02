@@ -4,14 +4,14 @@
   import { get } from 'svelte/store'
   import { atualizarImpostos } from '../../code/imposto/geral'
   import { edicao } from '../../code/store'
-  import { Dados, INFeRoot } from '../../code/tipos'
+  import type { INFeRoot } from '../../code/tipos'
   import Imposto from '../../parts-imposto/Imposto.svelte'
   import ProdutoDetalhes from '../../parts-produto/ProdutoDetalhes.svelte'
 
   const { produto } = get(params)
 
   const ed = get(edicao)
-  const raizNFe: INFeRoot = ed?.tipo == Dados.NFes ? { ...ed.dado } : {}
+  const raizNFe: INFeRoot = ed.dado.infNFe ?? ed.dado
 
   let regimeNormal = raizNFe.emit.CRT == '3'
   let consumidorFinal = raizNFe.ide.indFinal == '1'

@@ -17,7 +17,6 @@
 
   if (!prod.rastro) prod.rastro = []
   if (!prod.DI) prod.DI = []
-  if (!raiz.impostoDevol.IPI) raiz.impostoDevol.IPI = {}
 
   let pDevol = raiz.impostoDevol?.pDevol ?? 0
   $: raiz.impostoDevol = pDevol ? { pDevol, IPI: {} } : undefined

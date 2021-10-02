@@ -11,7 +11,8 @@
 
   $: {
     const detPag = pag.detPag as any[]
-    pag['vTroco'] = detPag.reduce((p, c) => p + c.vPag ?? 0, 0) - total || ''
+    const vTroco = detPag.reduce((p, c) => p + c.vPag ?? 0, 0) - total
+    pag['vTroco'] = vTroco <= 0 ? '' : vTroco
     detPag.forEach((v) => {
       v.card = v.tPag == '03' || v.tPag == '04' ? { tpIntegra: '2' } : undefined
     })

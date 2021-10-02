@@ -43,7 +43,7 @@ export function generateXML(infNFe: INFeRoot) {
 function prepararParaXML(obj: any, ref: any, result: any, addt: boolean) {
   const name = ref.name
   const cRoot = name ? obj[name] : obj
-  if (!cRoot) return
+  if (!cRoot && cRoot !== 0) return
   if (ref.maxOccurs > 1) {
     if (!cRoot.length) return
     const temp = []
@@ -85,14 +85,27 @@ function prepararParaXML(obj: any, ref: any, result: any, addt: boolean) {
   } else if (ref.element) {
     const iResult = name ? {} : result
     for (const el of ref.element as any[]) {
-      if (el.name && cRoot[el.name]) prepararParaXML(cRoot, el, iResult, addt)
-      else if (!el.name) prepararParaXML(cRoot, el, iResult, addt)
+      prepararParaXML(cRoot, el, iResult, addt)
     }
     if (name && Object.entries(iResult).length) result[name] = iResult
-  } else {
-    result[name] =
-      (!addt || ['nItem', 'dia'].includes(name)) ? cRoot : { $t: cRoot }
-  }
+  } else if (addt && !['nItem', 'dia'].includes(name)) {
+    let decimal = -1
+    if (ref.restriction?.decimal) decimal = ref.restriction?.decimal
+    else if (ref.type) {
+      const simple = refInfNFe.simpleType.find((v) => v.name == ref.type)
+      if (simple.restriction?.decimal) decimal = simple.restriction?.decimal
+    }
+    const valor = decimal > -1 ? format(+cRoot, decimal) : cRoot
+    result[name] = { $t: valor }
+  } else result[name] = cRoot
+}
+
+function format(n: number, decimal: number) {
+  const minimo = n.toFixed(2)
+  if (decimal <= 2) return minimo
+  const maximo = n.toFixed(decimal); // or any
+  const corrigido = maximo.replace(/\.?0+$/, '');
+  return corrigido.length < minimo.length ? minimo : corrigido
 }
 
 function calcularDV(chave: string) {

@@ -3,7 +3,7 @@
   import { params } from '@roxi/routify'
   import { get } from 'svelte/store'
   import { edicao } from '../../code/store'
-  import { Dados, INFeRoot } from '../../code/tipos'
+  import type { INFeRoot } from '../../code/tipos'
   import { Estados } from '../../code/IBGE'
   import { aplicarMascara } from '../../code/mascaracaoDoc'
   import { validaCNPJ } from '../../code/validacaoDoc'
@@ -12,7 +12,7 @@
   const { produto, di } = get(params)
 
   const ed = get(edicao)
-  const raizNFe: INFeRoot = ed?.tipo == Dados.NFes ? { ...ed.dado } : {}
+  const raizNFe: INFeRoot = ed.dado.infNFe ?? ed.dado
   const isAdd = di == '-1'
 
   let raizProd = raizNFe.det[+produto]
