@@ -36,7 +36,7 @@
   </p>
 {/if}
 
-{#if $empresa.emit.enderEmit}
+{#if $empresa.emit.enderEmit && $empresa.tokenIBPT}
   <h3>NF-es e NFC-es</h3>
   {#if permissaoEscrita}
     <a class="button" href={$url('./nfe')}>Adicionar</a>
@@ -88,6 +88,23 @@
     Guardando as placas de todos os veículos que passarem pela sua empresa é
     possível diminuir a chance de erros de digitação.
   </p>
+{:else if !$empresa.emit.enderEmit}
+  <p>
+    Cadastre as informações do emitente para ter acesso às funcionalidades do
+    app, comece clicando no botão 'Atualizar emitente'.
+  </p>
 {:else}
-  <strong>Cadastre as informações do emitente!</strong>
+  <p>
+    Cadastre o seu token do <abbr
+      title="Instituto Brasileiro de Planejamento e Tributação"
+    >
+      IBPT
+    </abbr>
+    para ter acesso às funcionalidades do app, ele é um dos últimos controles da
+    seção 'Configurações'. Caso ainda não tenha um token, acesse o site
+    <a href="https://deolhonoimposto.ibpt.org.br/">De Olho No Imposto</a>
+    , cadastre-se ou entre em sua conta, copie seu token e o insira no campo apropriado
+    aqui no app. Este passo é importante para que as informações de tributação aproximada
+    possam ser inseridas nas notas emitidas para consumidor final.
+  </p>
 {/if}

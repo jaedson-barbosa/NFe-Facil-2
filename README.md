@@ -62,10 +62,10 @@ OK  Simplificar arquivo estrutura.ts com base em sua nova função
 OK  Refatorar finalização para funcionar com a nota estrutura simplificada
 OK  Corrigir infNFe gerado a partir de XML (foco nos vetores)
 OK  Remover sistema de idAleatorio para produtos com codigo proprio, usar CFOP no lugar
-    Testar finalização simplificada
-    Testar correção de infNFe na importação
+OK  Testar finalização simplificada
+OK  Testar correção de infNFe na importação
     Adicionar patterns e validações restantes à interface
-    Testar todos os sistemas de importação
+OK  Testar todos os sistemas de importação
     Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
     Fazer pull request pro main, liberar versão e planejar próximas etapas direto no GitHub
 

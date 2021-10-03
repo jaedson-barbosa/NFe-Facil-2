@@ -62,13 +62,15 @@
     {chave}
   </p>
 
-  {#if linkDANFE}
-    <a class="button" href={linkDANFE} target="_blank">Abrir DANFE</a>
-    <a class="button" href={linkDANFE} download="{chave}-DANFE.pdf">
-      Baixar DANFE
-    </a>
-  {:else if linkDANFE === undefined}
-    <button on:click={gerarDANFE}>Carregar DANFE</button>
+  {#if !ed.dado.cancelada}
+    {#if linkDANFE}
+      <a class="button" href={linkDANFE} target="_blank">Abrir DANFE</a>
+      <a class="button" href={linkDANFE} download="{chave}-DANFE.pdf">
+        Baixar DANFE
+      </a>
+    {:else if linkDANFE === undefined}
+      <button on:click={gerarDANFE}>Carregar DANFE</button>
+    {/if}
   {/if}
 
   <a

@@ -85,7 +85,7 @@ function reorganizarJSON(
   if (Array.isArray(ref)) {
     const result = {}
     for (const item of ref) {
-      const res = reorganizarJSON(json[item.name], item, prefixar)
+      const res = reorganizarJSON(json, item, prefixar)
       if (presente(res)) result[item.name] = res
     }
     return Object.keys(result).length ? result : undefined
