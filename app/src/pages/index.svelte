@@ -45,8 +45,8 @@
   <a class="button" href={$url('./nfes')}>Gerenciar</a>
   <p>
     Emita notas fiscais em produção, aprenda emitindo em homologação, passe
-    orçamentos com notas sem valor fiscal e importe notas fiscais de saída
-    emitidas em qualquer emissor.
+    orçamentos com notas sem valor fiscal e importe notas fiscais emitidas em
+    qualquer emissor.
   </p>
 
   <h3>Clientes</h3>

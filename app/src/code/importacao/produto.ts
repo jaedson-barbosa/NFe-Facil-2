@@ -1,7 +1,6 @@
-import { collection, doc, DocumentReference } from 'firebase/firestore'
+import { collection, doc, DocumentReference, getDoc } from 'firebase/firestore'
 import { Dados, INotaDB } from '../tipos'
 import { getPossuiCadastros } from './commom'
-import idAleatorio from '../idAleatorio'
 
 export async function processarProdutos(
   refEmpresa: DocumentReference,
@@ -10,28 +9,29 @@ export async function processarProdutos(
 ) {
   const colecao = collection(refEmpresa, Dados.Produtos)
   const possuiCadastros = await getPossuiCadastros(colecao)
-  if (possuiCadastros) {
-    log(`Busca de produtos cancelada: já existem produtos registrados.`)
-    return undefined
-  }
-  const produtos = notas
-    .flatMap((v) => v.infNFe.det as any[])
-    .map((v) => ({ noid: v.prod.cProd.startsWith('CFOP') as boolean, v }))
-    .map((v) => ({ ...v, id: v.noid ? v.v.prod.xProd : v.v.prod.cProd }))
-    .map((v) => ({ ...v, idcfop: (v.id + v.v.prod.CFOP) as string }))
-    .filter((v, i, a) => a.findIndex((k) => k.idcfop == v.idcfop) == i)
-  const corrigidos = produtos.map((v, i) => {
-    const item = produtos[i]
-    if (item.noid || produtos.findIndex((k) => k.id == item.id) != i) {
-      const proibidos = produtos.map((v) => v.id)
-      const novoId = idAleatorio(6, proibidos)
-      item.id = item.v.prod.cProd = novoId
+  const produtos = notas.flatMap((v) => v.infNFe.det as any[])
+  const codigos = produtos
+    .map((v) => v.prod.cProd as string)
+    .filter((v) => !v.startsWith('CFOP'))
+    .filter((v, i, a) => a.indexOf(v) === i)
+  const corrigidos: { ref: DocumentReference; data: { det: any } }[] = []
+  for (const codigo of codigos) {
+    const prodsCodigo = produtos.filter((v) => v.prod.cProd === codigo)
+    const cfops = prodsCodigo
+      .map((v) => v.prod.CFOP as string)
+      .filter((v, i, a) => a.indexOf(v) === i)
+    for (const cfop of cfops) {
+      const det = prodsCodigo.find(v => v.prod.CFOP === cfop)
+      const ref = doc(colecao, codigo + cfop)
+      const novo = { ref, data: { det } }
+      if (!det.prod.cEAN) det.prod.cEAN = 'SEM GTIN'
+      if (!det.prod.cEANTrib) det.prod.cEANTrib = 'SEM GTIN'
+      if (possuiCadastros) {
+        const salva = await getDoc(ref)
+        if (!salva.exists()) corrigidos.push(novo)
+      } else corrigidos.push(novo)
     }
-    const det = item.v
-    if (!det.prod.cEAN) det.prod.cEAN = 'SEM GTIN'
-    if (!det.prod.cEANTrib) det.prod.cEANTrib = 'SEM GTIN'
-    return { ref: doc(colecao, item.id), data: { det } }
-  })
+  }
   if (corrigidos.length) {
     const listaAceitos = corrigidos.map((v) => v.data.det.prod.xProd).join(', ')
     log(`${corrigidos.length} produtos foram aceitos: ${listaAceitos}.`)

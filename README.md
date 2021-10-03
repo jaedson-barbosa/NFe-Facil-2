@@ -60,17 +60,18 @@ OK  Implementar importação de cancelamento
 OK  Pôr texto de imposto aproximado com diferenciação entre diferentes esferas
 OK  Simplificar arquivo estrutura.ts com base em sua nova função
 OK  Refatorar finalização para funcionar com a nota estrutura simplificada
-    Corrigir infNFe gerado a partir de XML (foco nos vetores)
+OK  Corrigir infNFe gerado a partir de XML (foco nos vetores)
+OK  Remover sistema de idAleatorio para produtos com codigo proprio, usar CFOP no lugar
     Testar finalização simplificada
     Testar correção de infNFe na importação
     Adicionar patterns e validações restantes à interface
-    Remover sistema de idAleatorio para produtos com codigo proprio, usar CFOP no lugar
     Testar todos os sistemas de importação
     Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
     Fazer pull request pro main, liberar versão e planejar próximas etapas direto no GitHub
 
 REFINAMENTOS 0.3:
     Mudanças relevantes a definir...
+    Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
 

@@ -24,11 +24,13 @@
   Importação
 </h1>
 <p>
-  XMLs de notas fiscais de saída já emitidas e de eventos de cancelamento podem
-  ser importados para que sejam guardados na segurança da Google Cloud e, a
-  partir de seus dados, sejam preenchidas corretamente as tabelas de notas
-  fiscais, clientes, produtos, tributos (apenas um perfil tributário para cada
-  par de produto/CFOP), transportadores e veículos.
+  XMLs de notas fiscais já emitidas e de eventos de cancelamento podem ser
+  importados para que sejam guardados na segurança da Google Cloud e, a partir
+  de seus dados, sejam preenchidas corretamente as tabelas de notas fiscais,
+  clientes, produtos (apenas aqueles com codificação própria, ou seja, aqueles
+  cujo código iniciar com 'CFOP' serão desconsiderados) e seus tributos (apenas
+  um perfil tributário para cada par de produto/CFOP), transportadores e
+  veículos.
 </p>
 
 {#if !arquivos?.length}

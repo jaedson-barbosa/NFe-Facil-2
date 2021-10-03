@@ -50,7 +50,7 @@
         const docObj = await getDoc(docRef)
         if (docObj.exists) await deleteDoc(docRef)
       }
-      const infNFe: any = preparateJSON(raiz, false)
+      const infNFe: any = preparateJSON(raiz)
       raiz.ide.nNF = '1'
       const xml = generateXML(raiz)
       const dhEmi = new Date(infNFe.ide.dhEmi)
@@ -70,7 +70,7 @@
     loading = true
     try {
       const oldId = raiz.Id
-      const infNFe = preparateJSON(raiz)
+      const infNFe = preparateJSON(raiz, true)
       const dadosTransmissao = { infNFe, oldId }
       const respTransmissao = await transmitirNFe(dadosTransmissao)
       const dado = respTransmissao.data

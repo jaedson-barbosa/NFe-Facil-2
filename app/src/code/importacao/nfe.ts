@@ -6,6 +6,7 @@ import {
   getDoc,
   Timestamp,
 } from 'firebase/firestore'
+import { preparateJSON } from '../nfe/finalizacao'
 import { Dados, INotaDB } from '../tipos'
 import type { IConteudo } from './arquivo'
 import type { ICancelamento } from './cancelamento'
@@ -83,7 +84,7 @@ async function getNFe(
     const nProt = nfeProc.protNFe.infProt.nProt
     const cancelamento = cancelamentos.find((v) => v.id === id)
     const nfeData: INotaDB = {
-      infNFe,
+      infNFe: preparateJSON(infNFe),
       dhEmi: Timestamp.fromDate(dhEmi),
       cancelada: !!cancelamento,
       nProt,

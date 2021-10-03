@@ -3,7 +3,7 @@ import type { INFeRoot } from '../tipos'
 import refInfNFe, { IElement } from './estrutura'
 import toXml from './json2xml'
 
-export function preparateJSON(infNFe: INFeRoot, addt = true) {
+export function preparateJSON(infNFe: INFeRoot, addt = false) {
   const { cDV, Id } = calcularId(infNFe)
   infNFe.ide.cDV = cDV
   infNFe.Id = Id
@@ -13,7 +13,7 @@ export function preparateJSON(infNFe: INFeRoot, addt = true) {
 }
 
 export function generateXML(infNFe: INFeRoot) {
-  const preparatedJSON = preparateJSON(infNFe)
+  const preparatedJSON = preparateJSON(infNFe, true)
   return toXml({
     NFe: {
       xmlns: 'http://www.portalfiscal.inf.br/nfe',
@@ -37,7 +37,7 @@ function calcularId(infNFe: INFeRoot) {
     //Aqui temos uma regrinha, se o resto da divisão for 0 ou 1 então o dv vai ser 0
     return resto == 0 || resto == 1 ? 0 : 11 - resto
   }
-  
+
   const cUF = IBGE.find(
     (v) => v.Sigla == (infNFe.emit.enderEmit.UF as string)
   )!.Codigo
@@ -94,7 +94,7 @@ function reorganizarJSON(
     if (!presente(campo)) {
       return undefined
     } else if (ref.maxOccurs) {
-      const lista = campo as any[]
+      const lista = Array.isArray(campo) ? (campo as any[]) : [campo]
       return ref.element
         ? lista.map((v) => reorganizarJSON(v, ref.element, prefixar))
         : lista.map((v) => ajustarValor(ref, v))

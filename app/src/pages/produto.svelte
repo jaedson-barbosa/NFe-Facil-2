@@ -70,11 +70,11 @@
     }
     loading = true
     try {
-      const id = det.prod.cProd
+      const id = det.prod.cProd + det.prod.CFOP
       const prodRef = doc($refEmpresa, Dados.Produtos, id)
       if (ed) {
         if (ed.id != id) {
-          alert('Não é permitido alterar o código (por enquanto).')
+          alert('Não é permitido alterar o código ou CFOP (por enquanto).')
           loading = false
           return
         }
