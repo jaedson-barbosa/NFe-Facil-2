@@ -41,8 +41,6 @@
   async function salvar() {
     loading = true
     try {
-      console.log(raiz)
-      alert('Hum')
       raiz.ide.nNF = '0'
       const coluna = collection($refEmpresa, Dados.NFes)
       if (raiz.Id) {

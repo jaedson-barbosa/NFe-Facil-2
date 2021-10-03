@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
+  import { pattern } from '../code/patterns'
 
   export let raiz: any
   if (!raiz.veicProd) raiz.veicProd = {}
@@ -22,31 +23,31 @@
 </label>
 <label>
   Código da cor da montadora
-  <input maxlength="4" bind:value={raiz.veicProd.cCor} required />
+  <input maxlength="4" bind:value={raiz.veicProd.cCor} required {pattern} />
 </label>
 <label>
   Descrição da cor da montadora
-  <input maxlength="40" bind:value={raiz.veicProd.xCor} required />
+  <input maxlength="40" bind:value={raiz.veicProd.xCor} required {pattern} />
 </label>
 <label>
   Potência máxima do motor do veículo em CV
-  <input maxlength="4" bind:value={raiz.veicProd.pot} required />
+  <input maxlength="4" bind:value={raiz.veicProd.pot} required {pattern} />
 </label>
 <label>
   Capacidade voluntária do motor expressa em CC
-  <input maxlength="4" bind:value={raiz.veicProd.cilin} required />
+  <input maxlength="4" bind:value={raiz.veicProd.cilin} required {pattern} />
 </label>
 <label>
   Peso líquido
-  <input maxlength="9" bind:value={raiz.veicProd.pesoL} required />
+  <input maxlength="9" bind:value={raiz.veicProd.pesoL} required {pattern} />
 </label>
 <label>
   Peso bruto
-  <input maxlength="9" bind:value={raiz.veicProd.pesoB} required />
+  <input maxlength="9" bind:value={raiz.veicProd.pesoB} required {pattern} />
 </label>
 <label>
   Série
-  <input maxlength="9" bind:value={raiz.veicProd.nSerie} required />
+  <input maxlength="9" bind:value={raiz.veicProd.nSerie} required {pattern} />
 </label>
 <label>
   Tipo de combustível
@@ -73,15 +74,15 @@
 </label>
 <label>
   Número do motor
-  <input maxlength="21" bind:value={raiz.veicProd.nMotor} required />
+  <input maxlength="21" bind:value={raiz.veicProd.nMotor} required {pattern} />
 </label>
 <label>
   CMT (Capacidade Máxima de Tração) em toneladas
-  <input maxlength="9" bind:value={raiz.veicProd.CMT} required />
+  <input maxlength="9" bind:value={raiz.veicProd.CMT} required {pattern} />
 </label>
 <label>
   Distância entre eixos
-  <input maxlength="4" bind:value={raiz.veicProd.dist} required />
+  <input maxlength="4" bind:value={raiz.veicProd.dist} required {pattern} />
 </label>
 <label>
   Ano do modelo
@@ -90,6 +91,7 @@
     maxlength="4"
     bind:value={raiz.veicProd.anoMod}
     required
+    {pattern}
   />
 </label>
 <label>
@@ -99,11 +101,17 @@
     maxlength="4"
     bind:value={raiz.veicProd.anoFab}
     required
+    {pattern}
   />
 </label>
 <label>
   Tipo de pintura
-  <input minlength="1" maxlength="1" bind:value={raiz.veicProd.tpPint} />
+  <input
+    minlength="1"
+    maxlength="1"
+    bind:value={raiz.veicProd.tpPint}
+    {pattern}
+  />
 </label>
 <label>
   Tipo de veículo

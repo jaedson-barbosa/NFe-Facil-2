@@ -6,6 +6,7 @@
   import Voltar from '../components/Voltar.svelte'
   import { get } from 'svelte/store'
   import { goto } from '@roxi/routify'
+  import { pattern } from '../code/patterns'
 
   let loading = false
   let raiz: IVeiculo = undefined
@@ -60,7 +61,7 @@
     </label>
     <label>
       <i>RNTC</i>
-      <input bind:value={raiz.RNTC} minlength="1" maxlength="20" />
+      <input bind:value={raiz.RNTC} minlength="1" maxlength="20" {pattern} />
     </label>
     {#if permissaoEscrita}
       <input type="submit" value="Salvar" />

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getMoeda } from '../code/numero'
+  import { pattern } from '../code/patterns'
 
   import type { IIBPT } from '../code/tipos'
 
@@ -57,13 +58,17 @@
   <div class="column">
     <label>
       <i>Informações de interesse do contribuinte</i>
-      <input maxlength="5000" bind:value={infCpl} />
+      <input maxlength="5000" bind:value={infCpl} {pattern} />
     </label>
   </div>
   <div class="column">
     <label>
       <i>Informações de interesse do fisco</i>
-      <input maxlength="2000" bind:value={raiz.infAdic['infAdFisco']} />
+      <input
+        maxlength="2000"
+        bind:value={raiz.infAdic['infAdFisco']}
+        {pattern}
+      />
     </label>
   </div>
 </div>

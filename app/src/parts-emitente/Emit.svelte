@@ -3,6 +3,7 @@
   import CEP from '../components/CEP.svelte'
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import { validaCNPJ } from '../code/validacaoDoc'
+  import { pattern } from '../code/patterns'
 
   export let raiz: any
 
@@ -30,11 +31,17 @@
 </label>
 <label>
   Razão social ou nome
-  <input minlength="2" maxlength="60" bind:value={emit['xNome']} required />
+  <input
+    minlength="2"
+    maxlength="60"
+    bind:value={emit['xNome']}
+    required
+    {pattern}
+  />
 </label>
 <label>
   Nome fantasia
-  <input maxlength="60" bind:value={emit['xFant']} required />
+  <input maxlength="60" bind:value={emit['xFant']} required {pattern} />
 </label>
 <label>
   Inscrição Estadual
@@ -52,7 +59,7 @@
 </label>
 <label>
   <i>Inscrição Municipal</i>
-  <input maxlength="15" bind:value={emit['IM']} />
+  <input maxlength="15" bind:value={emit['IM']} {pattern} />
 </label>
 {#if emit['IM']}
   <label>
@@ -74,19 +81,31 @@
 <h4>Endereço</h4>
 <label>
   Logradouro
-  <input minlength="2" maxlength="60" bind:value={ender['xLgr']} required />
+  <input
+    minlength="2"
+    maxlength="60"
+    bind:value={ender['xLgr']}
+    required
+    {pattern}
+  />
 </label>
 <label>
   Número
-  <input maxlength="60" bind:value={ender['nro']} required />
+  <input maxlength="60" bind:value={ender['nro']} required {pattern} />
 </label>
 <label>
   <i>Complemento</i>
-  <input maxlength="60" bind:value={ender['xCpl']} />
+  <input maxlength="60" bind:value={ender['xCpl']} {pattern} />
 </label>
 <label>
   Bairro
-  <input minlength="2" maxlength="60" bind:value={ender['xBairro']} required />
+  <input
+    minlength="2"
+    maxlength="60"
+    bind:value={ender['xBairro']}
+    required
+    {pattern}
+  />
 </label>
 <Municipio
   bind:cMun={ender['cMun']}

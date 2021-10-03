@@ -2,6 +2,7 @@
   import paises from '../code/paises'
   import Municipio from '../components/Municipio.svelte'
   import CEP from '../components/CEP.svelte'
+  import { pattern } from '../code/patterns'
 
   export let ender: any
   export let estrangeiro: boolean
@@ -26,27 +27,35 @@
 
 <h2>Endereço</h2>
 {#if !estrangeiro}
-  <Municipio
-    bind:cMun={ender.cMun}
-    bind:xMun={ender.xMun}
-    bind:UF={ender.UF}
-  />
+  <Municipio bind:cMun={ender.cMun} bind:xMun={ender.xMun} bind:UF={ender.UF} />
 {/if}
 <label>
   Logradouro
-  <input minlength="2" maxlength="60" bind:value={ender['xLgr']} required />
+  <input
+    minlength="2"
+    maxlength="60"
+    bind:value={ender['xLgr']}
+    required
+    {pattern}
+  />
 </label>
 <label>
   Número
-  <input maxlength="60" bind:value={ender['nro']} required />
+  <input maxlength="60" bind:value={ender['nro']} required {pattern} />
 </label>
 <label>
   <i>Complemento</i>
-  <input maxlength="60" bind:value={ender['xCpl']} />
+  <input maxlength="60" bind:value={ender['xCpl']} {pattern} />
 </label>
 <label>
   Bairro
-  <input minlength="2" maxlength="60" bind:value={ender['xBairro']} required />
+  <input
+    minlength="2"
+    maxlength="60"
+    bind:value={ender['xBairro']}
+    required
+    {pattern}
+  />
 </label>
 <CEP
   bind:CEP={ender.CEP}

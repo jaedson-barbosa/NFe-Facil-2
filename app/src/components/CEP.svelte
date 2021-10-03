@@ -35,7 +35,6 @@
       const url = `https://viacep.com.br/ws/${UF}/${Municipio}${logradouro}/json`
       const res = await fetch(url)
       const json: ICEP[] = await res.json()
-      console.log(JSON.stringify(json))
       ceps = json.map((v) => {
         let descricao = v.cep
         if (v.bairro) {

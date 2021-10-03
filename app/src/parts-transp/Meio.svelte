@@ -3,6 +3,7 @@
   import { DocumentSnapshot } from 'firebase/firestore'
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
+  import { pattern } from '../code/patterns'
 
   export let transp: any
 
@@ -67,12 +68,12 @@
 {#if meio == 'vagao'}
   <label>
     Identificação do vagão
-    <input maxlength="20" bind:value={transp.vagao} required />
+    <input maxlength="20" bind:value={transp.vagao} required {pattern} />
   </label>
 {:else if meio == 'balsa'}
   <label>
     Identificação da balsa
-    <input maxlength="20" bind:value={transp.balsa} required />
+    <input maxlength="20" bind:value={transp.balsa} required {pattern} />
   </label>
 {:else if meio == 'veicTransp'}
   <label>

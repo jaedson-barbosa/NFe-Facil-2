@@ -8,6 +8,7 @@
   import Voltar from '../components/Voltar.svelte'
   import Municipio from '../components/Municipio.svelte'
   import Doc from '../components/Doc.svelte'
+  import { pattern } from '../code/patterns'
 
   let loading = false
   let raiz = undefined
@@ -90,7 +91,7 @@
     </label>
     <label>
       <i>Endereço completo</i>
-      <input maxlength="60" bind:value={transporta['xEnder']} />
+      <input maxlength="60" bind:value={transporta['xEnder']} {pattern} />
     </label>
     <Municipio bind:xMun={transporta['xMun']} bind:UF={transporta['UF']} />
     {#if $permissaoEscrita}

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
+  import { pattern } from '../code/patterns'
 
   export let raiz: any
   if (!raiz.med) raiz.med = {}
@@ -25,7 +26,12 @@
       Para medicamento isento de registro na ANVISA, informar o número da
       decisão que o isenta
     </small>
-    <input maxlength="255" bind:value={raiz.med.xMotivoIsencao} required />
+    <input
+      maxlength="255"
+      bind:value={raiz.med.xMotivoIsencao}
+      required
+      {pattern}
+    />
   </label>
 {/if}
 <label>

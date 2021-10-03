@@ -8,6 +8,7 @@
   import { aplicarMascara } from '../../code/mascaracaoDoc'
   import { validaCNPJ } from '../../code/validacaoDoc'
   import Adicionar from '../../components/Adicionar.svelte'
+  import { pattern } from '../../code/patterns'
 
   const { produto, di } = get(params)
 
@@ -39,7 +40,7 @@
   <h3>Declaração de Importação</h3>
   <label>
     Numero do Documento de Importação (DI/DSI/DA/DRI-E)
-    <input maxlength="12" bind:value={raiz.nDI} required />
+    <input maxlength="12" bind:value={raiz.nDI} required {pattern} />
   </label>
   <label>
     Data de registro da DI/DSI/DA
@@ -47,7 +48,7 @@
   </label>
   <label>
     Local do desembaraço aduaneiro
-    <input maxlength="60" bind:value={raiz.xLocDesemb} required />
+    <input maxlength="60" bind:value={raiz.xLocDesemb} required {pattern} />
   </label>
   <label>
     UF onde ocorreu o desembaraço aduaneiro
@@ -106,7 +107,7 @@
   </label>
   <label>
     Código do exportador
-    <input maxlength="60" bind:value={raiz.cExportador} required />
+    <input maxlength="60" bind:value={raiz.cExportador} required {pattern} />
   </label>
   <h4>
     Adições
@@ -149,6 +150,7 @@
                 minlength="1"
                 maxlength="60"
                 required
+                {pattern}
               />
             </td>
             <td>

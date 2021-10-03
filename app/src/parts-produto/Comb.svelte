@@ -5,6 +5,7 @@
   import { EstadosEX } from '../code/IBGE'
   import ANP from '../code/ANP'
   import Encerrante from './Encerrante.svelte'
+  import { pattern } from '../code/patterns'
 
   export let raiz: any
   if (!raiz.comb) raiz.comb = {}
@@ -85,7 +86,7 @@
 {/if}
 <label>
   <i>Código de autorização / registro do CODIF</i>
-  <input maxlength="21" bind:value={raiz.comb.CODIF} />
+  <input maxlength="21" bind:value={raiz.comb.CODIF} {pattern} />
 </label>
 <label>
   UF de consumo

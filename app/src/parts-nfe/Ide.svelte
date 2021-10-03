@@ -6,6 +6,7 @@
   import { VERSAO } from '../code/app'
   import { toNFeString } from '../code/getDataString'
   import Adicionar from '../components/Adicionar.svelte'
+  import { pattern } from '../code/patterns'
 
   export let raiz: any
 
@@ -136,7 +137,7 @@
     {/if}
     <label>
       Natureza da Operação
-      <input maxlength="60" bind:value={ide['natOp']} required />
+      <input maxlength="60" bind:value={ide['natOp']} required {pattern} />
     </label>
     <Municipio bind:cMun={ide['cMunFG']} lab="Município de ocorrência" />
     <label>

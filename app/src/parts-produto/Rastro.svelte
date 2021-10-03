@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { pattern } from '../code/patterns'
+
   export let raiz: any
 </script>
 
 <tr>
   <td>
-    <input bind:value={raiz.nLote} min="1" max="20" />
+    <input bind:value={raiz.nLote} minlength="1" maxlength="20" {pattern} />
   </td>
   <td>
     <input type="number" step="0.001" bind:value={raiz.qLote} />

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto, url } from '@roxi/routify'
   import { get } from 'svelte/store'
+  import { pattern } from '../../code/patterns'
   import { edicao } from '../../code/store'
   import type { INFeRoot } from '../../code/tipos'
   import Adicionar from '../../components/Adicionar.svelte'
@@ -36,15 +37,15 @@
   </label>
   <label>
     <i>Espécie dos volumes transportados</i>
-    <input maxlength="60" bind:value={raiz.esp} />
+    <input maxlength="60" bind:value={raiz.esp} {pattern} />
   </label>
   <label>
     <i>Marca dos volumes transportados</i>
-    <input maxlength="60" bind:value={raiz.marca} />
+    <input maxlength="60" bind:value={raiz.marca} {pattern} />
   </label>
   <label>
     <i>Numeração dos volumes transportados</i>
-    <input maxlength="60" bind:value={raiz.nVol} />
+    <input maxlength="60" bind:value={raiz.nVol} {pattern} />
   </label>
   <label>
     <i>Peso líquido (em kg)</i>
@@ -73,9 +74,10 @@
               <input
                 bind:value={raiz.lacres[i].nLacre}
                 on:blur={analisar(i)}
-                min="1"
-                max="60"
+                minlength="1"
+                maxlength="60"
                 required
+                {pattern}
               />
             </td>
           </tr>

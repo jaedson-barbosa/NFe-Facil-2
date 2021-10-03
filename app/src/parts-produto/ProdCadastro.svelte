@@ -6,6 +6,7 @@
   import NRECOPI from '../parts-produto/NRECOPI.svelte'
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import { validaCNPJ } from '../code/validacaoDoc'
+  import { pattern } from '../code/patterns'
 
   export let prod: any
 
@@ -26,11 +27,11 @@
 
 <label>
   Código
-  <input maxlength="60" bind:value={prod['cProd']} required />
+  <input maxlength="60" bind:value={prod['cProd']} required {pattern} />
 </label>
 <label>
   Descrição
-  <input maxlength="120" bind:value={prod['xProd']} required />
+  <input maxlength="120" bind:value={prod['xProd']} required {pattern} />
 </label>
 <label>
   Código NCM
@@ -57,7 +58,7 @@
 </label>
 <label>
   Unidade comercial
-  <input maxlength="6" bind:value={prod['uCom']} required />
+  <input maxlength="6" bind:value={prod['uCom']} required {pattern} />
 </label>
 <label>
   Valor unitário de comercialização
@@ -76,7 +77,7 @@
 </label>
 <label>
   Unidade tributável
-  <input maxlength="6" bind:value={prod['uTrib']} required />
+  <input maxlength="6" bind:value={prod['uTrib']} required {pattern} />
 </label>
 <label>
   Valor unitário de tributação

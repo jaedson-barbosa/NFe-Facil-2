@@ -2,6 +2,7 @@
   import Municipio from '../components/Municipio.svelte'
   import Doc from '../components/Doc.svelte'
   import CEP from '../components/CEP.svelte'
+  import { pattern } from '../code/patterns'
 
   export let raiz: any
   export let name: 'retirada' | 'entrega'
@@ -24,7 +25,12 @@
   <Doc bind:raiz={raiz[name]} apenasBR />
   <label>
     <i>Razão social ou nome do {pessoa}</i>
-    <input minlength="2" maxlength="60" bind:value={raiz[name]['xNome']} />
+    <input
+      minlength="2"
+      maxlength="60"
+      bind:value={raiz[name]['xNome']}
+      {pattern}
+    />
   </label>
   {#if raiz[name]['CNPJ']}
     <label>
@@ -39,7 +45,7 @@
   {/if}
   <label>
     <i>E-mail</i>
-    <input maxlength="60" bind:value={raiz[name]['email']} />
+    <input type="email" maxlength="60" bind:value={raiz[name]['email']} />
   </label>
   <label>
     Logradouro
@@ -48,15 +54,16 @@
       maxlength="60"
       bind:value={raiz[name]['xLgr']}
       required
+      {pattern}
     />
   </label>
   <label>
     Número
-    <input maxlength="60" bind:value={raiz[name]['nro']} required />
+    <input maxlength="60" bind:value={raiz[name]['nro']} required {pattern} />
   </label>
   <label>
     <i>Complemento</i>
-    <input maxlength="60" bind:value={raiz[name]['xCpl']} />
+    <input maxlength="60" bind:value={raiz[name]['xCpl']} {pattern} />
   </label>
   <label>
     Bairro
@@ -65,6 +72,7 @@
       maxlength="60"
       bind:value={raiz[name]['xBairro']}
       required
+      {pattern}
     />
   </label>
   <Municipio

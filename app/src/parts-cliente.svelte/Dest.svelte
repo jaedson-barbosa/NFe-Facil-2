@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { pattern } from '../code/patterns'
+
   import Doc from '../components/Doc.svelte'
   import EnderDest from './EnderDest.svelte'
 
@@ -14,7 +16,13 @@
 <Doc bind:raiz={dest} />
 <label>
   Razão social ou nome
-  <input minlength="2" maxlength="60" bind:value={dest['xNome']} required />
+  <input
+    minlength="2"
+    maxlength="60"
+    bind:value={dest['xNome']}
+    required
+    {pattern}
+  />
 </label>
 {#if dest['CNPJ']}
   <label>
@@ -24,8 +32,8 @@
     </label>
     <label>
       <i>Inscrição Municipal</i>
-      <input maxlength="15" bind:value={dest['IM']} />
-    </label>    
+      <input maxlength="15" bind:value={dest['IM']} {pattern} />
+    </label>
     Indicador da IE do destinatário
     <select bind:value={dest.indIEDest} required>
       <option value="1">Contribuinte ICMS</option>
@@ -48,6 +56,6 @@
 {/if}
 <label>
   <i>E-mail</i>
-  <input maxlength="60" bind:value={dest['email']} />
+  <input type="email" maxlength="60" bind:value={dest['email']} />
 </label>
 <EnderDest bind:ender={dest.enderDest} estrangeiro={dest['idEstrangeiro']} />

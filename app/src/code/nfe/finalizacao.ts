@@ -8,7 +8,6 @@ export function preparateJSON(infNFe: INFeRoot, addt = false) {
   infNFe.ide.cDV = cDV
   infNFe.Id = Id
   const reorganizado = reorganizarJSON(infNFe, refInfNFe, addt)
-  console.log(reorganizado)
   return { Id, versao: '4.00', ...reorganizado }
 }
 

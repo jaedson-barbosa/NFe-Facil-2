@@ -64,9 +64,9 @@ OK  Corrigir infNFe gerado a partir de XML (foco nos vetores)
 OK  Remover sistema de idAleatorio para produtos com codigo proprio, usar CFOP no lugar
 OK  Testar finalização simplificada
 OK  Testar correção de infNFe na importação
-    Adicionar patterns e validações restantes à interface
+OK  Adicionar patterns e validações restantes à interface
 OK  Testar todos os sistemas de importação
-    Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
+OK  Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
     Fazer pull request pro main, liberar versão e planejar próximas etapas direto no GitHub
 
 REFINAMENTOS 0.3:
