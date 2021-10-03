@@ -40,10 +40,7 @@
   <h3>NF-es e NFC-es</h3>
   {#if permissaoEscrita}
     <a class="button" href={$url('./nfe')}>Adicionar</a>
-    <a class="button" href={$url('./importacao')}>Importar notas de saída</a>
-    <a class="button" href={$url('./importacao-cancelamento')}>
-      Importar cancelamentos de notas
-    </a>
+    <a class="button" href={$url('./importacao')}>Importar</a>
   {/if}
   <a class="button" href={$url('./nfes')}>Gerenciar</a>
   <p>

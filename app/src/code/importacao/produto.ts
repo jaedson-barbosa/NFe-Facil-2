@@ -32,7 +32,9 @@ export async function processarProdutos(
     if (!det.prod.cEANTrib) det.prod.cEANTrib = 'SEM GTIN'
     return { ref: doc(colecao, item.id), data: { det } }
   })
-  const listaAceitos = corrigidos.map((v) => v.data.det.prod.xProd).join(', ')
-  log(`${corrigidos.length} produtos foram aceitos: ${listaAceitos}.`)
+  if (corrigidos.length) {
+    const listaAceitos = corrigidos.map((v) => v.data.det.prod.xProd).join(', ')
+    log(`${corrigidos.length} produtos foram aceitos: ${listaAceitos}.`)
+  }
   return corrigidos
 }

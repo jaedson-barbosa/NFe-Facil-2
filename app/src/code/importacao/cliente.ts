@@ -22,7 +22,9 @@ export async function processarClientes(
       if (salva.exists()) clientes.splice(i, 1)
     }
   }
-  const listaAceitos = clientes.map(({ v }) => v.xNome).join(', ')
-  log(`${clientes.length} clientes foram aceitos: ${listaAceitos}.`)
+  if (clientes.length) {
+    const listaAceitos = clientes.map(({ v }) => v.xNome).join(', ')
+    log(`${clientes.length} clientes foram aceitos: ${listaAceitos}.`)
+  }
   return clientes.map((v) => ({ ref: doc(colecao, v.id), data: { dest: v.v } }))
 }

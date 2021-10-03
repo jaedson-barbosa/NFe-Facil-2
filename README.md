@@ -47,7 +47,7 @@ Preparação de lançamento inicial:
   Compilar pasta public como build
   Fazer deploy para o Firebase com a identificação da versão
 
-REFINAMENTOS alpha:
+REFINAMENTOS 0.2:
 OK  Pôr auto ajuste de number para string na finalização
 OK  Testar ajuste de number para string na finalização
 OK  Corrigir erro do campo de documento (e demais patterns)
@@ -55,15 +55,21 @@ OK  Testar CEP
 OK  Pôr controle de CEP em demais paginas
 OK  Testar trasmissão
 OK  Testar cancelamento
-    Implementar importação de cancelamento
+OK  Implementar importação de veículos
+OK  Implementar importação de cancelamento
     Pôr texto de imposto aproximado com diferenciação entre diferentes esferas
     Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
     Adicionar patterns e validações restantes à interface
+    Remover sistema de idAleatorio para produtos com codigo proprio, usar CFOP no lugar
+    Testar todos os sistemas de importação
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
-    Liberar versão 0.2, fazer pull request pro main e planejar próximas etapas do alpha no GitHub
+    Fazer pull request pro main, liberar versão e planejar próximas etapas do alpha no GitHub
 
-REFINAMENTOS beta:
+REFINAMENTOS 0.3:
+    A definir...
+
+REFINAMENTOS futuros:
     Personalização de campos da NFe em templates personalizáveis
     Criar sistema de compartilhamento de informações entre empresas, onde um usuário com permissão de acesso (mesmo que apenas leitura) deve poder transportar informações de um lugar pra outro
     Personalização com o https://jenil.github.io/bulmaswatch/

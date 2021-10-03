@@ -22,8 +22,10 @@ export async function processarTransportes(
       if (salva.exists()) transportes.splice(i, 1)
     }
   }
-  const listaAceitos = transportes.map(({ v }) => v.xNome).join(', ')
-  log(`${transportes.length} transportes foram aceitos: ${listaAceitos}.`)
+  if (transportes.length) {
+    const listaAceitos = transportes.map(({ v }) => v.xNome).join(', ')
+    log(`${transportes.length} transportes foram aceitos: ${listaAceitos}.`)
+  }
   return transportes.map((v) => ({
     ref: doc(colecao, v.id),
     data: { transporta: v.v },
