@@ -59,7 +59,10 @@ OK  Implementar importação de veículos
 OK  Implementar importação de cancelamento
 OK  Pôr texto de imposto aproximado com diferenciação entre diferentes esferas
 OK  Simplificar arquivo estrutura.ts com base em sua nova função
+OK  Refatorar finalização para funcionar com a nota estrutura simplificada
     Corrigir infNFe gerado a partir de XML (foco nos vetores)
+    Testar finalização simplificada
+    Testar correção de infNFe na importação
     Adicionar patterns e validações restantes à interface
     Remover sistema de idAleatorio para produtos com codigo proprio, usar CFOP no lugar
     Testar todos os sistemas de importação
