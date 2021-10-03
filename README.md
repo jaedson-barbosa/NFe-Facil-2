@@ -57,11 +57,13 @@ OK  Testar trasmissão
 OK  Testar cancelamento
 OK  Implementar importação de veículos
 OK  Implementar importação de cancelamento
-    Pôr texto de imposto aproximado com diferenciação entre diferentes esferas
-    Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
+OK  Pôr texto de imposto aproximado com diferenciação entre diferentes esferas
+    Simplificar arquivo estrutura.ts com base em sua nova função
+    Corrigir infNFe gerado a partir de XML (foco nos vetores)
     Adicionar patterns e validações restantes à interface
     Remover sistema de idAleatorio para produtos com codigo proprio, usar CFOP no lugar
     Testar todos os sistemas de importação
+    Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
     Fazer pull request pro main, liberar versão e planejar próximas etapas do alpha no GitHub

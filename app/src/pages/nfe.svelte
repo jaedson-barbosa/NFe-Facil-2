@@ -83,6 +83,8 @@
       loading = false
     }
   }
+
+  $: consumidorFinal= raiz.ide?.indFinal == '1'
 </script>
 
 {#if loading}
@@ -94,11 +96,11 @@
   <Produtos
     bind:det={raiz.det}
     bind:total={raiz.total}
-    consumidorFinal={raiz.ide?.indFinal == '1'}
+    {consumidorFinal}
   />
   <Transp bind:raiz />
   <Pag bind:raiz total={raiz.total?.ICMSTot?.vNF ?? 0} />
-  <InfAdic bind:raiz />
+  <InfAdic bind:raiz {consumidorFinal} />
   <Local bind:raiz name="retirada" />
   <Local bind:raiz name="entrega" />
   <AutXml bind:raiz />
