@@ -67,10 +67,11 @@ OK  Testar correção de infNFe na importação
 OK  Adicionar patterns e validações restantes à interface
 OK  Testar todos os sistemas de importação
 OK  Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
-    Fazer pull request pro main, liberar versão, fazer correções necessárias no server e planejar próximas etapas direto no GitHub
+OK  Fazer pull request pro main, liberar versão e fazer correções necessárias no server
 
 REFINAMENTOS 0.3:
     Mudanças relevantes a definir...
+    Para cancelar uma nota deve haver o famoso Carregando... e ao final deve voltar à tela inicial
     Mais itens exibidos nas páginas de gerenciamento
     Atualização tributária em múltiplos produtos em simultâneo
     Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
