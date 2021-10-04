@@ -33,7 +33,8 @@
     Dados.Produtos,
     'det.prod.xProd',
     'asc',
-    (v) => (produtos = v)
+    (v) => (produtos = v),
+    true
   )
 
   function ratear(titulo: string, campo: string) {

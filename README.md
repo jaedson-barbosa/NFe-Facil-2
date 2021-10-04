@@ -67,18 +67,26 @@ OK  Testar correção de infNFe na importação
 OK  Adicionar patterns e validações restantes à interface
 OK  Testar todos os sistemas de importação
 OK  Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
-    Fazer pull request pro main, liberar versão, fazer correções necessárias no server e planejar próximas etapas direto no GitHub
+OK  Fazer pull request pro main e liberar versão
+
+REFINAMENTOS 0.2.1:
+OK  Importação de clientes desconsiderar clientes com nome de homologação
+OK  Corrigir erro na abertura de cadastro de cliente
+OK  Para cancelar uma nota deve haver o famoso Carregando... e ao final deve voltar à tela inicial
+OK  Mais itens exibidos nas páginas de gerenciamento e corrigir problemas no buscador
+OK  Corrigir erro que acontece logo após cadastrar empresa
+OK  Fazer pull request pro main e liberar versão
+OK  Atualizar arquivos do projeto em relação ao server
 
 REFINAMENTOS 0.3:
-    Mudanças relevantes a definir...
-    Mais itens exibidos nas páginas de gerenciamento
-    Atualização tributária em múltiplos produtos em simultâneo
     Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
+    Impressão de NFC-e
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
 
 REFINAMENTOS futuros:
     Personalização de campos da NFe em templates personalizáveis
+    Atualização tributária em múltiplos produtos em simultâneo
     Criar sistema de compartilhamento de informações entre empresas, onde um usuário com permissão de acesso (mesmo que apenas leitura) deve poder transportar informações de um lugar pra outro
     Personalização com o https://jenil.github.io/bulmaswatch/
     Scanner de código de barras

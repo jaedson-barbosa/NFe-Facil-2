@@ -32,15 +32,19 @@ export class Buscador {
   readonly carregarMais = () => this.hasMore && this._buscar()
   readonly operadorBusca: '>=' | '<='
 
+  private readonly limite: number
+
   constructor(
     private readonly refEmpresa: DocumentReference,
     private readonly dados: Dados,
     public readonly campoPrincipal: string,
     private readonly direcao: OrderByDirection,
     private readonly onUpdateCadastros: (cadastros: DocumentSnapshot[]) => void,
+    simplificado: boolean,
     private readonly campoOrdenacao = campoPrincipal
   ) {
     this.operadorBusca = direcao == 'asc' ? '>=' : '<='
+    this.limite = simplificado ? 4 : 10
     this._buscar()
   }
 
@@ -48,7 +52,7 @@ export class Buscador {
     this.hasMore = false
     const coluna = collection(this.refEmpresa, this.dados)
     const limites: QueryConstraint[] = [
-      limit(4),
+      limit(this.limite),
       orderBy(this.campoOrdenacao, this.direcao),
     ]
     if (busca != this.lastBusca) {
@@ -60,7 +64,7 @@ export class Buscador {
     }
     const consulta = query(coluna, ...limites)
     const docs = await getDocs(consulta)
-    this.hasMore = docs.size == 10
+    this.hasMore = docs.size == this.limite
     const cadastros = [...this.cadastros, ...docs.docs]
     this.cadastros = cadastros
     this.onUpdateCadastros(cadastros)

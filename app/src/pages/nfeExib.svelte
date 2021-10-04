@@ -14,7 +14,10 @@
   }
   const chave = ed?.id.substring(3)
 
+  let carregando = false
+
   async function cancelar() {
+    carregando = true
     const justificativa = prompt('Motivação do cancelamento:')
     if (!justificativa) {
       alert('Operação cancelada pelo usuário')
@@ -25,7 +28,11 @@
       justificativa: justificativa.trim(),
       dhEvento: toNFeString(new Date()),
     })
-    if (res.data.cancelada) alert('Nota fiscal cancelada com sucesso.')
+    if (res.data.cancelada) {
+      alert('Nota fiscal cancelada com sucesso.')
+      $goto('./')
+    }
+    carregando = false
   }
 
   function gerarLinkXML(xml: string) {
@@ -33,7 +40,9 @@
     return window.URL.createObjectURL(blob)
   }
 
+  let linkDANFE = undefined
   async function gerarDANFE() {
+    carregando = true
     linkDANFE = ''
     const xml = ed.dado.xml
     const parametros = {
@@ -51,11 +60,13 @@
     const danfe = await fetch(enderecoAPI, corpoRequisicao)
     const pdf = await danfe.blob()
     linkDANFE = window.URL.createObjectURL(pdf)
+    carregando = false
   }
-  let linkDANFE = undefined
 </script>
 
-{#if ed}
+{#if carregando}
+  Carregando...
+{:else if ed}
   <h1><Voltar /> Detalhes da nota fiscal</h1>
   <p>
     <strong>Chave:</strong>

@@ -26,7 +26,7 @@
 
   async function requisitarCEPs(dados: IRequisicao, primeiraTentativa = true) {
     const { UF, Municipio, Logradouro } = dados
-    if (!UF || !Municipio) return
+    if (!UF || !Municipio || !Logradouro) return
     try {
       const logradouro =
         Logradouro?.length >= 3
@@ -55,7 +55,7 @@
     }
   }
 
-  const requisicaoIntervalada = debounce(requisitarCEPs, 1000)
+  const requisicaoIntervalada = debounce((e) => requisitarCEPs(e), 1000)
 
   $: {
     if (Municipio != 'EXTERIOR') {
@@ -70,18 +70,16 @@
     CEP {aplicarMascara(CEP, 'zipcode')}
     <input pattern={'[0-9]{8}'} bind:value={CEP} {required} />
   </label>
-{:else}
-  {#key ceps}
-    <label>
-      CEP
-      <select bind:value={CEP} {required}>
-        {#if !ceps.some((v) => v.cep == CEP)}
-          <option value={CEP}>{aplicarMascara(CEP, 'zipcode')}</option>
-        {/if}
-        {#each ceps as v}
-          <option value={v.cep}>{v.descricao}</option>
-        {/each}
-      </select>
-    </label>
-  {/key}
+{:else if CEP?.length === 8 || ceps.length}
+  <label>
+    CEP
+    <select bind:value={CEP} {required}>
+      {#if CEP?.length === 8 && !ceps.some((v) => v.cep == CEP)}
+        <option value={CEP}>{aplicarMascara(CEP, 'zipcode')}</option>
+      {/if}
+      {#each ceps as v}
+        <option value={v.cep}>{v.descricao}</option>
+      {/each}
+    </select>
+  </label>
 {/if}

@@ -13,7 +13,8 @@
     Dados.Transportes,
     'transporta.xNome',
     'asc',
-    (v) => (cadastros = v)
+    (v) => (cadastros = v),
+    false
   )
 
   $edicao = undefined

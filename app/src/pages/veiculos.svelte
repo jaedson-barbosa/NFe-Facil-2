@@ -12,7 +12,8 @@
     Dados.Veiculos,
     'placa',
     'asc',
-    (v) => (cadastros = v)
+    (v) => (cadastros = v),
+    false
   )
 
   $edicao = undefined

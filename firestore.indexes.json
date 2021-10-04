@@ -1,4 +1,27 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "nfes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "infNFe.ide.mod",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "infNFe.ide.serie",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "infNFe.ide.tpAmb",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "infNFe.ide.nNF",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

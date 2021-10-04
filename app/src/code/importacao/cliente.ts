@@ -9,11 +9,12 @@ export async function processarClientes(
 ) {
   const colecao = collection(refEmpresa, Dados.Clientes)
   const possuiCadastros = await getPossuiCadastros(colecao)
+  const homolog = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
   const clientes = notas
     .filter((v) => v.infNFe.dest)
     .map((v) => v.infNFe.dest)
     .map((v) => ({ id: v.CPF ?? v.CNPJ ?? v.idEstrangeiro, v }))
-    .filter((v) => v.id && v.v.xNome)
+    .filter((v) => v.id && v.v.xNome && v.v.xNome != homolog)
     .filter((v, i, a) => a.findIndex((k) => k.id == v.id) == i)
   if (possuiCadastros) {
     for (let i = clientes.length - 1; i >= 0; i--) {

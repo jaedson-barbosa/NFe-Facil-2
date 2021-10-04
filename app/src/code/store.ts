@@ -82,17 +82,24 @@ export const refEmpresa = derived<Writable<string>, DocumentReference>(
 
 export const empresa = writable<TEmpresa>(undefined)
 let terminarEmpesa = undefined
-user.subscribe(($user) =>
-  $user
-    ? refEmpresa.subscribe((ref) =>
-        ref
-          ? (terminarEmpesa = onSnapshot(ref, (v) =>
-              empresa.set(v.data() as TEmpresa)
-            ))
-          : terminarEmpesa?.() && empresa.set(undefined)
-      )
-    : terminarEmpesa?.() && empresa.set(undefined)
-)
+user.subscribe(($user) => {
+  if ($user) {
+    refEmpresa.subscribe((ref) => {
+      if (ref) {
+        terminarEmpesa = onSnapshot(ref, (v) => {
+          const data = v.data() as TEmpresa
+          empresa.set(data)
+        })
+      } else {
+        terminarEmpesa?.()
+        empresa.set(undefined)
+      }
+    })
+  } else {
+    terminarEmpesa?.()
+    empresa.set(undefined)
+  }
+})
 
 interface IEdicao {
   tipo: Dados

@@ -15,7 +15,8 @@
     Dados.Veiculos,
     'placa',
     'asc',
-    (v) => (veiculos = v)
+    (v) => (veiculos = v),
+    true
   )
 
   function adicionar(n: DocumentSnapshot) {
