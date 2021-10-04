@@ -1,0 +1,48 @@
+html {
+  scroll-behavior: smooth;
+}
+
+input[type='file'] {
+  display: none;
+}
+
+small {
+  font-weight: 300;
+}
+
+td > button {
+  margin-bottom: 0px;
+}
+
+td > .button {
+  margin-bottom: 0px;
+}
+
+tbody > tr.clicavel {
+  cursor: pointer;
+}
+
+tbody > tr.marcado {
+  background-color: hsl(0, 0%, 88%);
+}
+
+tbody > td:hover.remover {
+  cursor: pointer;
+  background-color: hsl(0, 75%, 75%);
+}
+
+td > input {
+  margin-bottom: 0;
+}
+
+td > select {
+  margin-bottom: 0;
+}
+
+p {
+  max-width: 600px;
+}
+
+.opt {
+  font-style: italic;
+}

@@ -14,12 +14,12 @@ function helloHttp(ServerRequestInterface $request): ResponseInterface
     // $logo = 'C:/Users/jaeds/Downloads/logo-nfce.png';
     $xml = $body['xml'];
     $orientacao = $body['orientacao'];
-    $papel = 'A4';//$body['papel'];
+    $papel = 'A4';
     $margSup = $body['margSup'];
     $margEsq = $body['margEsq'];
 
     $danfe = new Danfe($xml);
-    $danfe->debugMode(true); //seta modo debug, deve ser false em produção
+    $danfe->debugMode(false);
     $danfe->printParameters($orientacao, $papel, $margSup, $margEsq);
     $danfe->creditsIntegratorFooter('NFe Fácil - https://nfefacil.net');
     $pdf = $danfe->render();

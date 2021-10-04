@@ -1,0 +1,1 @@
+export const pattern = '[!-ÿ]{1}[ -ÿ]{0,}[!-ÿ]{1}|[!-ÿ]{1}' // Mais usado

@@ -1,82 +1,81 @@
 import { toXml } from 'xml2json'
-import { onCertifiedRequest } from '../onCertifiedRequest'
-import { TAmb } from '../TAmb'
-import { INotaDB } from '../INotaDB'
-import { criarXML } from './criarXML'
-import { recepcaoEvento } from './recepcaoEvento'
-import { assinarEvento } from '../assinatura/assinarEvento'
+import { recepcaoEvento, retEnvEvento } from './recepcaoEvento'
 import { https } from 'firebase-functions'
+import validarAutenticacao from '../commom/validarAutenticacao'
+import validarPermissao from '../commom/validarPermissao'
+import carregarEmpresa from '../commom/carregarEmpresa'
+import gerarXML from './gerarXML'
+import {
+  Ambientes,
+  INotaDB,
+  IReqCancelar,
+  IResCancelar,
+} from '../commom/tipos'
 
-export const cancelarNFe = onCertifiedRequest(
-  async ({ body, UF, empRef, cert }) => {
-    const idNota = body.idNota
-    const justificativa = body.justificativa?.trim()
-    const dhEvento = body.dhEvento
-    if (!justificativa) {
-      throw new https.HttpsError(
-        'failed-precondition',
-        'Campo "justificativa" (justificativa do cancelamento) ausente.'
-      )
-    }
-    if (!dhEvento) {
-      throw new https.HttpsError(
-        'failed-precondition',
-        'Campo "dhEvento" (data e hora do evento) ausente.'
-      )
-    }
-    if (!idNota) {
-      throw new https.HttpsError(
-        'failed-precondition',
-        'Campo "idNota" (identificação da nota fiscal) ausente.'
-      )
-    }
-    const nota = await empRef.collection('notasEmitidas').doc(idNota).get()
-    if (!nota.exists) {
-      throw new https.HttpsError(
-        'not-found',
-        'Nota fiscal não encontrada.'
-      )
-    }
-    const data = nota.data() as INotaDB
-    const cOrgao = data.infNFe.ide.cUF
-    const chaveNFe = data.infNFe.Id?.slice(3)
-    const numeroProtocolo = data.nProt!
-    const ambiente = +data.infNFe.ide.tpAmb as TAmb
-    const xml = criarXML(
-      empRef.id,
-      cOrgao,
-      chaveNFe,
-      numeroProtocolo,
-      justificativa,
-      dhEvento,
-      ambiente
+export default async function (
+  req: IReqCancelar,
+  context: https.CallableContext
+): Promise<IResCancelar> {
+  validarAutenticacao(context)
+  validarRequisicao(req)
+  const token = context.auth!.token
+  const CNPJ = req.idNota.substr(9, 14)
+  validarPermissao(token, CNPJ)
+  const { certificado, refEmpresa } = await carregarEmpresa(CNPJ)
+  const coluna = refEmpresa.collection('nfes')
+  const nota = await carregarNota(coluna, req.idNota)
+  const ambiente: Ambientes = nota.infNFe.ide.tpAmb
+  const xml = gerarXML(nota, CNPJ, ambiente, req, certificado)
+  const UF: string = nota.infNFe.emit.enderEmit.UF
+  const resp = await recepcaoEvento(UF, certificado, ambiente, xml)
+  await registrarCancelamento(coluna, xml, req.idNota, resp)
+  return { cancelada: true }
+}
+
+function validarRequisicao(req: IReqCancelar) {
+  if (!req.justificativa) {
+    throw new https.HttpsError(
+      'failed-precondition',
+      'Campo "justificativa" (justificativa do cancelamento) ausente.'
     )
-    const signedXml = assinarEvento(cert, xml)
-    const resp = await recepcaoEvento(UF, cert, ambiente, signedXml)
-    if (resp.cStat.$t != '128') {
-      throw new https.HttpsError(
-        'internal',
-        'Evento recusado.',
-        resp.xMotivo.$t
-      )
-    }
-    const cStat = resp.retEvento.infEvento.cStat.$t
-    if (cStat != '135' && cStat != '155') {
-      throw new https.HttpsError(
-        'invalid-argument',
-        'Cancelamento recusado.',
-        resp.retEvento.infEvento.xMotivo.$t
-      )
-    }
-    const procEventoNFe =
-      '<procEventoNFe versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">' +
-      signedXml +
-      toXml({ retEvento: resp.retEvento }) +
-      '</procEventoNFe>'
-    await empRef.collection('notasEmitidas').doc(idNota).update({
-      cancelada: true,
-      xmlCancelamento: procEventoNFe,
-    })
-    return true
-  }, true
-)
+  }
+  if (!req.dhEvento) {
+    throw new https.HttpsError(
+      'failed-precondition',
+      'Campo "dhEvento" (data e hora do evento) ausente.'
+    )
+  }
+  if (!req.idNota) {
+    throw new https.HttpsError(
+      'failed-precondition',
+      'Campo "idNota" (identificação da nota fiscal) ausente.'
+    )
+  }
+}
+
+async function carregarNota(
+  coluna: FirebaseFirestore.CollectionReference,
+  idNota: string
+) {
+  const nota = await coluna.doc(idNota).get()
+  if (!nota.exists) {
+    const motivo = 'Nota fiscal não encontrada.'
+    throw new https.HttpsError('not-found', motivo)
+  }
+  return nota.data() as INotaDB
+}
+
+async function registrarCancelamento(
+  coluna: FirebaseFirestore.CollectionReference,
+  xml: string,
+  idNota: string,
+  evento: retEnvEvento
+) {
+  const xmlCancelamento =
+    '<procEventoNFe versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">' +
+    xml +
+    toXml({ retEvento: evento.retEvento }) +
+    '</procEventoNFe>'
+  const atualizacao = { cancelada: true, xmlCancelamento }
+  await coluna.doc(idNota).update(atualizacao)
+}
