@@ -1,6 +1,6 @@
 import { toXml } from 'xml2json'
 import { https } from 'firebase-functions'
-import { firestore } from 'firebase-admin'
+import * as admin from 'firebase-admin'
 import gerarXml from './gerarXml'
 import solicitar from './autorizacao'
 import consultarResposta, { retConsReciNFe } from './retAutorizacao'
@@ -76,7 +76,7 @@ function corrigirDestinatario(infNFe: any, ambiente: Ambientes) {
 }
 
 async function calcularNovoNumero(
-  coluna: firestore.CollectionReference,
+  coluna: admin.firestore.CollectionReference,
   infos: IInfos
 ) {
   const maxNota = await coluna
@@ -101,7 +101,7 @@ function removePrefix(obj: any) {
 }
 
 async function finalizar(
-  coluna: firestore.CollectionReference,
+  coluna: admin.firestore.CollectionReference,
   infNFe: any,
   xmlAssinado: string,
   respostaAutorizacao: retConsReciNFe,

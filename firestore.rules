@@ -57,8 +57,7 @@ service cloud.firestore {
 
       match /veiculos/{nota} {
         allow read: if readEnabled();
-        allow create, update: if writeEnabled();
-        allow delete: if isAdmin();
+        allow write: if writeEnabled();
       }
     }
   }

@@ -1,7 +1,7 @@
-import { initializeApp } from 'firebase-admin'
+import * as admin from 'firebase-admin'
 import { region } from 'firebase-functions'
 
-initializeApp()
+admin.initializeApp()
 
 import _cadastrar from './cadastrar'
 import _transmitirNFe from './transmitirNFe'

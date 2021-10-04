@@ -5,3 +5,4 @@ functions/lib
 *.log
 app/public/build
 **/.save-data
+*.cache

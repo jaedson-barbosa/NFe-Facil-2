@@ -1,4 +1,4 @@
-import { firestore, auth } from 'firebase-admin'
+import * as admin from 'firebase-admin'
 import { consultarStatusServico } from './statusServico'
 import { https } from 'firebase-functions'
 import * as forge from 'node-forge'
@@ -11,6 +11,7 @@ import {
   NiveisAcesso,
 } from '../commom/tipos'
 
+const { firestore, auth } = admin
 const db = firestore()
 
 export default async function (
@@ -132,7 +133,7 @@ async function verificarRegistrarEmpresa(
   await empresaRef.set(empresaDoc)
 }
 
-async function registrarUsuario(CNPJ: string, token: auth.DecodedIdToken) {
+async function registrarUsuario(CNPJ: string, token: admin.auth.DecodedIdToken) {
   const niveis = [NiveisAcesso.R, NiveisAcesso.RW, NiveisAcesso.A]
   const liberacoes = { [CNPJ]: NiveisAcesso.A }
   Object.entries(token)

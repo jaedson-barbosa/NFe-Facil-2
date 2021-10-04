@@ -1,9 +1,9 @@
-import { auth } from 'firebase-admin'
+import * as admin from 'firebase-admin'
 import { https } from 'firebase-functions'
 import { NiveisAcesso } from './tipos'
 
 export default function (
-  token: auth.DecodedIdToken,
+  token: admin.auth.DecodedIdToken,
   CNPJ: string,
   necessarioAdmin = false
 ) {

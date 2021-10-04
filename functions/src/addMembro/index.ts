@@ -1,8 +1,10 @@
-import { auth } from 'firebase-admin'
+import * as admin from 'firebase-admin'
 import { https } from 'firebase-functions'
 import { IReqAddMembro, IResAddMembro, NiveisAcesso } from '../commom/tipos'
 import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
+
+const { auth } = admin
 
 export default async function (
   req: IReqAddMembro,
@@ -49,7 +51,7 @@ function validarRequisicao(req: IReqAddMembro) {
 async function registrarUsuario(
   CNPJ: string,
   escrita: boolean,
-  userRecord: auth.UserRecord
+  userRecord: admin.auth.UserRecord
 ) {
   const nivel = escrita ? NiveisAcesso.RW : NiveisAcesso.R
   const liberacoes = { ...userRecord.customClaims, [CNPJ]: nivel }

@@ -42,7 +42,7 @@ idEmpresa
 
 METAS:
 Preparação de lançamento inicial:
-  Ajustar info.ts para a versão desejada
+  Ajustar app.ts para a versão desejada
   Trocar true para false em firebase.ts
   Compilar pasta public como build
   Fazer deploy para o Firebase com a identificação da versão
@@ -67,10 +67,12 @@ OK  Testar correção de infNFe na importação
 OK  Adicionar patterns e validações restantes à interface
 OK  Testar todos os sistemas de importação
 OK  Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
-    Fazer pull request pro main, liberar versão e planejar próximas etapas direto no GitHub
+    Fazer pull request pro main, liberar versão, fazer correções necessárias no server e planejar próximas etapas direto no GitHub
 
 REFINAMENTOS 0.3:
     Mudanças relevantes a definir...
+    Mais itens exibidos nas páginas de gerenciamento
+    Atualização tributária em múltiplos produtos em simultâneo
     Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
