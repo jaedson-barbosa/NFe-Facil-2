@@ -1,6 +1,6 @@
 <script lang="ts">
   import { idEmpresa } from '../code/store'
-  import { cadastrar as _cadastrar, defaultCatch } from '../code/firebase'
+  import { auth, cadastrar as _cadastrar, defaultCatch } from '../code/firebase'
 
   let cadastrando = false
   let certificado = undefined as FileList
@@ -19,6 +19,8 @@
       const req = { cert: certificadoBase64, senha }
       const res = await _cadastrar(req)
       const { cnpj } = res.data as { cnpj: string }
+      // Necessario atualizar para ter acesso à empresa
+      await auth.currentUser.getIdTokenResult(true)
       $idEmpresa = cnpj
     } catch (error) {
       defaultCatch(error)
@@ -32,11 +34,6 @@
 {:else}
   <label class="button">
     Cadastrar nova empresa
-    <input
-      type="file"
-      bind:files={certificado}
-      accept=".pfx"
-      required
-    />
+    <input type="file" bind:files={certificado} accept=".pfx" required />
   </label>
 {/if}
