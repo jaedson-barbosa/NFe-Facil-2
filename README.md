@@ -67,7 +67,7 @@ OK  Testar correção de infNFe na importação
 OK  Adicionar patterns e validações restantes à interface
 OK  Testar todos os sistemas de importação
 OK  Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
-OK  Fazer pull request pro main, liberar versão e fazer correções necessárias no server
+OK  Fazer pull request pro main e liberar versão
 
 REFINAMENTOS 0.2.1:
 OK  Importação de clientes desconsiderar clientes com nome de homologação
@@ -75,6 +75,8 @@ OK  Corrigir erro na abertura de cadastro de cliente
 OK  Para cancelar uma nota deve haver o famoso Carregando... e ao final deve voltar à tela inicial
 OK  Mais itens exibidos nas páginas de gerenciamento e corrigir problemas no buscador
 OK  Corrigir erro que acontece logo após cadastrar empresa
+OK  Fazer pull request pro main e liberar versão
+OK  Atualizar arquivos do projeto em relação ao server
 
 REFINAMENTOS 0.3:
     Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
