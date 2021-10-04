@@ -69,17 +69,21 @@ OK  Testar todos os sistemas de importação
 OK  Testar edição e clonagem de notas fiscais, com foco em analisar datas e números
 OK  Fazer pull request pro main, liberar versão e fazer correções necessárias no server
 
-REFINAMENTOS 0.3:
-    Mudanças relevantes a definir...
-    Para cancelar uma nota deve haver o famoso Carregando... e ao final deve voltar à tela inicial
+REFINAMENTOS 0.2.1:
+OK  Importação de clientes desconsiderar clientes com nome de homologação
+OK  Corrigir erro na abertura de cadastro de cliente
+OK  Para cancelar uma nota deve haver o famoso Carregando... e ao final deve voltar à tela inicial
     Mais itens exibidos nas páginas de gerenciamento
-    Atualização tributária em múltiplos produtos em simultâneo
+
+REFINAMENTOS 0.3:
     Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
+    Impressão de NFC-e
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
 
 REFINAMENTOS futuros:
     Personalização de campos da NFe em templates personalizáveis
+    Atualização tributária em múltiplos produtos em simultâneo
     Criar sistema de compartilhamento de informações entre empresas, onde um usuário com permissão de acesso (mesmo que apenas leitura) deve poder transportar informações de um lugar pra outro
     Personalização com o https://jenil.github.io/bulmaswatch/
     Scanner de código de barras
