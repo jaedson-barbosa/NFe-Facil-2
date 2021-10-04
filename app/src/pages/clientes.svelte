@@ -13,7 +13,8 @@
     Dados.Clientes,
     'dest.xNome',
     'asc',
-    (v) => (cadastros = v)
+    (v) => (cadastros = v),
+    false
   )
 
   $edicao = undefined
@@ -50,7 +51,9 @@
       {/each}
     </tbody>
   </table>
-  {#if buscador.hasMore}
-    <button on:click={buscador.carregarMais}>Carregar mais</button>
-  {/if}
+  {#key cadastros}
+    {#if buscador.hasMore}
+      <button on:click={buscador.carregarMais}>Carregar mais</button>
+    {/if}
+  {/key}
 {/if}

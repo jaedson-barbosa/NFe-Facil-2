@@ -12,7 +12,8 @@
     Dados.Produtos,
     'det.prod.xProd',
     'asc',
-    (v) => (cadastros = v)
+    (v) => (cadastros = v),
+    false
   )
 
   $edicao = undefined

@@ -13,7 +13,8 @@
     Dados.Transportes,
     'transporta.xNome',
     'asc',
-    (v) => (transportadores = v)
+    (v) => (transportadores = v),
+    true
   )
 </script>
 

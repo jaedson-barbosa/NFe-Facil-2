@@ -14,6 +14,7 @@
     'infNFe.ide.nNF',
     'desc',
     (v) => (cadastros = v),
+    false,
     'dhEmi'
   )
 

@@ -20,7 +20,8 @@
     Dados.Clientes,
     'dest.xNome',
     'asc',
-    (v) => (clientes = v)
+    (v) => (clientes = v),
+    true
   )
 </script>
 
