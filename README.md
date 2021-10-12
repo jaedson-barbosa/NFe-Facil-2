@@ -79,10 +79,26 @@ OK  Fazer pull request pro main e liberar versão
 OK  Atualizar arquivos do projeto em relação ao server
 
 REFINAMENTOS 0.3:
+    Impressão de NFC-e:
+      Criar selecao de fonte e impressao geral para testar todas as fontes, deve usar optgroup para organizar por size
+      Adicionar demais validacoes e conexões em NFC-e printer
+      Adicionar dhRecbto ao bd como item de NFCe emitida
+      Adicionar xMsg ao armazenamento do banco de dados como opcional
+    Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar no codigo php da NF-e
+    Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
+    Geração do site usando o 11ty com união dos dois projetos neste aqui
+
+REFINAMENTOS 0.4:
     Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
-    Impressão de NFC-e
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
+
+METAS PRÓXIMA REFATORAÇÃO (após todas as novidades implementadas, antes da versão 1.0):
+    DOMINIO PROPRIO PRO APP (app.nfefacil.com.br)
+    TESTES (para cada componente)
+    LERNA (para o app e firebase functions)
+    STORYBOOK (mais separação de componentes)
+    SNOWPACK (bundling puro sem Rollup)
 
 REFINAMENTOS futuros:
     Personalização de campos da NFe em templates personalizáveis
@@ -104,3 +120,4 @@ Retirada e entrega limitados para endereço nacional. Se necessário, basta pedi
 Obedecida apenas regra geral de cálculo do total (pag. 122)
 Ainda não há importação de eventos, então ainda notas já canceladas serão importadas como se ainda não estivessem canceladas
 Continuar com analise de CNPJ: https://apiconsultacnpj.com.br/#
+No iOS aparentemente não haverá solução nativa para impressão da NFC-e via serial, motivo: preguiça da Apple ou porque ela ainda não vende impressora térmica rs.
