@@ -12,7 +12,7 @@
   let raiz = undefined
 
   const empresaCarregada = get(empresa)
-  const regimeNormal = empresaCarregada.emit.CRT == '3'
+  const regimeNormal = ['2', '3'].includes(empresaCarregada.emit.CRT)
 
   const ed = get(edicao)
   if (ed) {

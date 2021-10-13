@@ -2,41 +2,49 @@ const AMP = 'https://nfce.sefaz.am.gov.br/nfce-services/services/'
 const AMH = 'https://homnfce.sefaz.am.gov.br/nfce-services/services/'
 const AM = {
   autorizacao: {
-    producao: AMP + 'NfeAutorizacao4',
-    homologacao: AMH + 'NfeAutorizacao4.asmx?wsdl',
+    '1': AMP + 'NfeAutorizacao4',
+    '2': AMH + 'NfeAutorizacao4',
   },
   retAutorizacao: {
-    producao: AMP + 'NfeRetAutorizacao4',
-    homologacao: AMH + 'NfeRetAutorizacao4.asmx?wsdl',
+    '1': AMP + 'NfeRetAutorizacao4',
+    '2': AMH + 'NfeRetAutorizacao4',
   },
   consultarStatusServico: {
-    producao: AMP + 'NfeStatusServico4',
-    homologacao: AMH + 'NfeStatusServico4.asmx?wsdl',
+    '1': AMP + 'NfeStatusServico4',
+    '2': AMH + 'NfeStatusServico4',
   },
   inutilizacao: {
-    producao: AMP + 'NFeInutilizacao4',
-    homologacao: AMH + 'NFeInutilizacao4.asmx?wsdl',
+    '1': AMP + 'NFeInutilizacao4',
+    '2': AMH + 'NFeInutilizacao4',
+  },
+  recepcaoEvento: {
+    '1': AMP + 'RecepcaoEvento4',
+    '2': AMH + 'RecepcaoEvento4',
   },
 }
 
 const CEP = 'https://nfce.sefaz.ce.gov.br/nfce4/services/'
-const CEH = 'https://nfceh.sefaz.ce.gov.br/nfce4/services/'
+const CEH = 'https://nfceh.sefaz.ce.gov.br/nfce4/services/RecepcaoEvento4?WSDL'
 const CE = {
   autorizacao: {
-    producao: CEP + 'NFeAutorizacao4?WSDL',
-    homologacao: CEH + 'NFeAutorizacao4?WSDL',
+    '1': CEP + 'NFeAutorizacao4?WSDL',
+    '2': CEH + 'NFeAutorizacao4?WSDL',
   },
   retAutorizacao: {
-    producao: CEP + 'NFeRetAutorizacao4?WSDL',
-    homologacao: CEH + 'NFeRetAutorizacao4?WSDL',
+    '1': CEP + 'NFeRetAutorizacao4?WSDL',
+    '2': CEH + 'NFeRetAutorizacao4?WSDL',
   },
   consultarStatusServico: {
-    producao: CEP + 'NFeStatusServico4?WSDL',
-    homologacao: CEH + 'NFeStatusServico4?WSDL',
+    '1': CEP + 'NFeStatusServico4?WSDL',
+    '2': CEH + 'NFeStatusServico4?WSDL',
   },
   inutilizacao: {
-    producao: CEP + 'NFeInutilizacao4?WSDL',
-    homologacao: CEH + 'NFeInutilizacao4?WSDL',
+    '1': CEP + 'NFeInutilizacao4?WSDL',
+    '2': CEH + 'NFeInutilizacao4?WSDL',
+  },
+  recepcaoEvento: {
+    '1': CEP + 'RecepcaoEvento4?WSDL',
+    '2': CEH + 'RecepcaoEvento4?WSDL',
   },
 }
 
@@ -44,20 +52,24 @@ const GOP = 'https://nfe.sefaz.go.gov.br/nfe/services/'
 const GOH = 'https://homolog.sefaz.go.gov.br/nfe/services/'
 const GO = {
   autorizacao: {
-    producao: GOP + 'NFeAutorizacao4?wsdl',
-    homologacao: GOH + 'NFeAutorizacao4?wsdl',
+    '1': GOP + 'NFeAutorizacao4?wsdl',
+    '2': GOH + 'NFeAutorizacao4?wsdl',
   },
   retAutorizacao: {
-    producao: GOP + 'NFeRetAutorizacao4?wsdl',
-    homologacao: GOH + 'NFeRetAutorizacao4?wsdl',
+    '1': GOP + 'NFeRetAutorizacao4?wsdl',
+    '2': GOH + 'NFeRetAutorizacao4?wsdl',
   },
   consultarStatusServico: {
-    producao: GOP + 'NFeStatusServico4?wsdl',
-    homologacao: GOH + 'NFeStatusServico4?wsdl',
+    '1': GOP + 'NFeStatusServico4?wsdl',
+    '2': GOH + 'NFeStatusServico4?wsdl',
   },
   inutilizacao: {
-    producao: GOP + 'NFeInutilizacao4',
-    homologacao: GOH + 'Nfeinutilizacao4.asmx',
+    '1': GOP + 'NFeInutilizacao4',
+    '2': GOH + 'Nfeinutilizacao4.asmx',
+  },
+  recepcaoEvento: {
+    '1': GOP + 'NFeRecepcaoEvento4?wsdl',
+    '2': GOH + 'NFeRecepcaoEvento4?wsdl',
   },
 }
 
@@ -65,20 +77,24 @@ const MTP = 'https://nfce.sefaz.mt.gov.br/nfcews/services/'
 const MTH = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/'
 const MT = {
   autorizacao: {
-    producao: MTP + 'NfeAutorizacao4',
-    homologacao: MTH + 'NfeAutorizacao4',
+    '1': MTP + 'NfeAutorizacao4',
+    '2': MTH + 'NfeAutorizacao4',
   },
   retAutorizacao: {
-    producao: MTP + 'NfeRetAutorizacao4',
-    homologacao: MTH + 'NfeRetAutorizacao4',
+    '1': MTP + 'NfeRetAutorizacao4',
+    '2': MTH + 'NfeRetAutorizacao4',
   },
   consultarStatusServico: {
-    producao: MTP + 'NfeStatusServico4',
-    homologacao: MTH + 'NfeStatusServico4',
+    '1': MTP + 'NfeStatusServico4',
+    '2': MTH + 'NfeStatusServico4',
   },
   inutilizacao: {
-    producao: MTP + 'NfeInutilizacao4',
-    homologacao: MTH + 'Nfeinutilizacao4.asmx',
+    '1': MTP + 'NfeInutilizacao4',
+    '2': MTH + 'Nfeinutilizacao4',
+  },
+  recepcaoEvento: {
+    '1': MTP + 'RecepcaoEvento4',
+    '2': MTH + 'RecepcaoEvento4',
   },
 }
 
@@ -86,20 +102,24 @@ const MSP = 'https://nfce.sefaz.ms.gov.br/ws/'
 const MSH = 'https://hom.nfce.sefaz.ms.gov.br/ws/'
 const MS = {
   autorizacao: {
-    producao: MSP + 'NFeAutorizacao4',
-    homologacao: MSH + 'NFeAutorizacao4',
+    '1': MSP + 'NFeAutorizacao4',
+    '2': MSH + 'NFeAutorizacao4',
   },
   retAutorizacao: {
-    producao: MSP + 'NFeRetAutorizacao4',
-    homologacao: MSH + 'NFeRetAutorizacao4',
+    '1': MSP + 'NFeRetAutorizacao4',
+    '2': MSH + 'NFeRetAutorizacao4',
   },
   consultarStatusServico: {
-    producao: MSP + 'NFeStatusServico4',
-    homologacao: MSH + 'NFeStatusServico4',
+    '1': MSP + 'NFeStatusServico4',
+    '2': MSH + 'NFeStatusServico4',
   },
   inutilizacao: {
-    producao: MSP + 'NFeInutilizacao4',
-    homologacao: MSH + 'Nfeinutilizacao4.asmx',
+    '1': MSP + 'NFeInutilizacao4',
+    '2': MSH + 'Nfeinutilizacao4.asmx',
+  },
+  recepcaoEvento: {
+    '1': MSP + 'NFeRecepcaoEvento4',
+    '2': MSH + 'NFeRecepcaoEvento4',
   },
 }
 
@@ -107,20 +127,24 @@ const MGP = 'https://nfce.fazenda.mg.gov.br/nfce/services/'
 const MGH = 'https://hnfce.fazenda.mg.gov.br/nfce/services/'
 const MG = {
   autorizacao: {
-    producao: MGP + 'NFeAutorizacao4',
-    homologacao: MGH + 'NFeAutorizacao4',
+    '1': MGP + 'NFeAutorizacao4',
+    '2': MGH + 'NFeAutorizacao4',
   },
   retAutorizacao: {
-    producao: MGP + 'NFeRetAutorizacao4',
-    homologacao: MGH + 'NFeRetAutorizacao4',
+    '1': MGP + 'NFeRetAutorizacao4',
+    '2': MGH + 'NFeRetAutorizacao4',
   },
   consultarStatusServico: {
-    producao: MGP + 'NFeStatusServico4',
-    homologacao: MGH + 'NFeStatusServico4',
+    '1': MGP + 'NFeStatusServico4',
+    '2': MGH + 'NFeStatusServico4',
   },
   inutilizacao: {
-    producao: MGP + 'NFeInutilizacao4',
-    homologacao: MGH + 'Nfeinutilizacao4.asmx',
+    '1': MGP + 'NFeInutilizacao4',
+    '2': MGH + 'Nfeinutilizacao4',
+  },
+  recepcaoEvento: {
+    '1': MGP + 'NFeRecepcaoEvento4',
+    '2': MGH + 'NFeRecepcaoEvento4',
   },
 }
 
@@ -128,20 +152,24 @@ const PRP = 'https://nfce.sefa.pr.gov.br/nfce/'
 const PRH = 'https://homologacao.nfce.sefa.pr.gov.br/nfce/'
 const PR = {
   autorizacao: {
-    producao: PRP + 'NFeAutorizacao4',
-    homologacao: PRH + 'NFeAutorizacao4',
+    '1': PRP + 'NFeAutorizacao4',
+    '2': PRH + 'NFeAutorizacao4',
   },
   retAutorizacao: {
-    producao: PRP + 'NFeRetAutorizacao4',
-    homologacao: PRH + 'NFeRetAutorizacao4',
+    '1': PRP + 'NFeRetAutorizacao4',
+    '2': PRH + 'NFeRetAutorizacao4',
   },
   consultarStatusServico: {
-    producao: PRP + 'NFeStatusServico4',
-    homologacao: PRH + 'NFeStatusServico4',
+    '1': PRP + 'NFeStatusServico4',
+    '2': PRH + 'NFeStatusServico4',
   },
   inutilizacao: {
-    producao: PRP + 'NFeInutilizacao4',
-    homologacao: PRH + 'Nfeinutilizacao4.asmx',
+    '1': PRP + 'NFeInutilizacao4',
+    '2': PRH + 'Nfeinutilizacao4',
+  },
+  recepcaoEvento: {
+    '1': PRP + 'NFeRecepcaoEvento4',
+    '2': PRH + 'NFeRecepcaoEvento4',
   },
 }
 
@@ -149,20 +177,24 @@ const RSP = 'https://nfce.sefazrs.rs.gov.br/ws/'
 const RSH = 'https://nfce-homologacao.sefazrs.rs.gov.br/ws/'
 const RS = {
   autorizacao: {
-    producao: RSP + 'NfeAutorizacao/NFeAutorizacao4.asmx',
-    homologacao: RSH + '/NfeAutorizacao/NFeAutorizacao4.asmx?wsdl',
+    '1': RSP + 'NfeAutorizacao/NFeAutorizacao4.asmx',
+    '2': RSH + 'NfeAutorizacao/NFeAutorizacao4.asmx?wsdl',
   },
   retAutorizacao: {
-    producao: RSP + 'NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
-    homologacao: RSH + '/NfeRetAutorizacao/NFeRetAutorizacao4.asmx?wsdl',
+    '1': RSP + 'NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
+    '2': RSH + 'NfeRetAutorizacao/NFeRetAutorizacao4.asmx?wsdl',
   },
   consultarStatusServico: {
-    producao: RSP + 'NfeStatusServico/NfeStatusServico4.asmx',
-    homologacao: RSH + '/NfeStatusServico/NfeStatusServico4.asmx?wsdl',
+    '1': RSP + 'NfeStatusServico/NfeStatusServico4.asmx',
+    '2': RSH + 'NfeStatusServico/NfeStatusServico4.asmx?wsdl',
   },
   inutilizacao: {
-    producao: RSP + 'nfeinutilizacao/nfeinutilizacao4.asmx',
-    homologacao: RSH + '/nfeinutilizacao/nfeinutilizacao4.asmx',
+    '1': RSP + 'nfeinutilizacao/nfeinutilizacao4.asmx',
+    '2': RSH + 'nfeinutilizacao/nfeinutilizacao4.asmx',
+  },
+  recepcaoEvento: {
+    '1': RSP + 'recepcaoevento/recepcaoevento4.asmx',
+    '2': RSH + 'recepcaoevento/recepcaoevento4.asmx',
   },
 }
 
@@ -170,20 +202,24 @@ const SVRSP = 'https://nfce.svrs.rs.gov.br/ws/'
 const SVRSH = 'https://nfce-homologacao.svrs.rs.gov.br/ws/'
 const SVRS = {
   autorizacao: {
-    producao: SVRSP + 'NfeAutorizacao/NFeAutorizacao4.asmx',
-    homologacao: SVRSH + 'NfeAutorizacao/NFeAutorizacao4.asmx',
+    '1': SVRSP + 'NfeAutorizacao/NFeAutorizacao4.asmx',
+    '2': SVRSH + 'NfeAutorizacao/NFeAutorizacao4.asmx',
   },
   retAutorizacao: {
-    producao: SVRSP + 'NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
-    homologacao: SVRSH + 'NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
+    '1': SVRSP + 'NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
+    '2': SVRSH + 'NfeRetAutorizacao/NFeRetAutorizacao4.asmx',
   },
   consultarStatusServico: {
-    producao: SVRSP + 'NfeStatusServico/NfeStatusServico4.asmx',
-    homologacao: SVRSH + 'NfeStatusServico/NfeStatusServico4.asmx',
+    '1': SVRSP + 'NfeStatusServico/NfeStatusServico4.asmx',
+    '2': SVRSH + 'NfeStatusServico/NfeStatusServico4.asmx',
   },
   inutilizacao: {
-    producao: SVRSP + 'nfeinutilizacao/nfeinutilizacao4.asmx',
-    homologacao: SVRSH + 'nfeinutilizacao/nfeinutilizacao4.asmx',
+    '1': SVRSP + 'nfeinutilizacao/nfeinutilizacao4.asmx',
+    '2': SVRSH + 'nfeinutilizacao/nfeinutilizacao4.asmx',
+  },
+  recepcaoEvento: {
+    '1': SVRSP + 'recepcaoevento/recepcaoevento4.asmx',
+    '2': SVRSH + 'recepcaoevento/recepcaoevento4.asmx',
   },
 }
 
@@ -191,21 +227,75 @@ const SPP = 'https://nfce.fazenda.sp.gov.br/ws/'
 const SPH = 'https://homologacao.nfce.fazenda.sp.gov.br/ws/'
 const SP = {
   autorizacao: {
-    producao: SPP + 'NFeAutorizacao4.asmx',
-    homologacao: SPH + 'NFeAutorizacao4.asmx',
+    '1': SPP + 'NFeAutorizacao4.asmx',
+    '2': SPH + 'NFeAutorizacao4.asmx',
   },
   retAutorizacao: {
-    producao: SPP + 'NFeRetAutorizacao4.asmx',
-    homologacao: SPH + 'NFeRetAutorizacao4.asmx',
+    '1': SPP + 'NFeRetAutorizacao4.asmx',
+    '2': SPH + 'NFeRetAutorizacao4.asmx',
   },
   consultarStatusServico: {
-    producao: SPP + 'NFeStatusServico4.asmx',
-    homologacao: SPH + 'NFeStatusServico4.asmx',
+    '1': SPP + 'NFeStatusServico4.asmx',
+    '2': SPH + 'NFeStatusServico4.asmx',
   },
   inutilizacao: {
-    producao: SPP + 'NFeInutilizacao4.asmx',
-    homologacao: SPH + 'NFeInutilizacao4.asmx',
+    '1': SPP + 'NFeInutilizacao4.asmx',
+    '2': SPH + 'NFeInutilizacao4.asmx',
+  },
+  recepcaoEvento: {
+    '1': SPP + 'NFeRecepcaoEvento4.asmx',
+    '2': SPH + 'NFeRecepcaoEvento4.asmx',
   },
 }
 
-export default { AM, CE, GO, MT, MS, MG, PR, RS, SVRS, SP }
+export default {
+  AM: AM,
+  CE: CE,
+  GO: GO,
+  MT: MT,
+  MS: MS,
+  MG: MG,
+  PR: PR,
+  RS: RS,
+  SP: SP,
+  AC: SVRS,
+  AL: SVRS,
+  AP: SVRS,
+  BA: SVRS,
+  DF: SVRS,
+  ES: SVRS,
+  MA: SVRS,
+  PA: SVRS,
+  PB: SVRS,
+  PE: SVRS,
+  PI: SVRS,
+  RJ: SVRS,
+  RN: SVRS,
+  RO: SVRS,
+  RR: SVRS,
+  SE: SVRS,
+  TO: SVRS,
+} as {
+  [uf: string]: {
+    autorizacao: {
+      '1': string
+      '2': string
+    }
+    retAutorizacao: {
+      '1': string
+      '2': string
+    }
+    consultarStatusServico: {
+      '1': string
+      '2': string
+    }
+    inutilizacao: {
+      '1': string
+      '2': string
+    }
+    recepcaoEvento: {
+      '1': string
+      '2': string
+    }
+  }
+}

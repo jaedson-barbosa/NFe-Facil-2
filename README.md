@@ -79,6 +79,7 @@ OK  Fazer pull request pro main e liberar versão
 OK  Atualizar arquivos do projeto em relação ao server
 
 REFINAMENTOS 0.3:
+    Emissão de NFC-e
     Impressão de NFC-e:
       Criar selecao de fonte e impressao geral para testar todas as fontes, deve usar optgroup para organizar por size
       Adicionar demais validacoes e conexões em NFC-e printer
@@ -123,3 +124,4 @@ Obedecida apenas regra geral de cálculo do total (pag. 122)
 Ainda não há importação de eventos, então ainda notas já canceladas serão importadas como se ainda não estivessem canceladas
 Continuar com analise de CNPJ: https://apiconsultacnpj.com.br/#
 No iOS aparentemente não haverá solução nativa para impressão da NFC-e via serial, motivo: preguiça da Apple ou porque ela ainda não vende impressora térmica rs.
+Estamos tendo problemas nos webservices do ceará, é bom fazer criar testes autmáticos para validar os webservices, tanto analisando conexao quanto fazendo uma consulta de status

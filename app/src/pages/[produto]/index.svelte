@@ -13,7 +13,7 @@
   const ed = get(edicao)
   const raizNFe: INFeRoot = ed.dado.infNFe ?? ed.dado
 
-  let regimeNormal = raizNFe.emit.CRT == '3'
+  let regimeNormal = ['2', '3'].includes(raizNFe.emit.CRT)
   let consumidorFinal = raizNFe.ide.indFinal == '1'
   let raiz = raizNFe.det[+produto]
 
