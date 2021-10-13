@@ -86,33 +86,35 @@ REFINAMENTOS 0.3:
       Adicionar xMsg ao armazenamento do banco de dados como opcional
     Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar no codigo php da NF-e
     Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
-    Geração do site usando o 11ty com união dos dois projetos neste aqui
 
 REFINAMENTOS 0.4:
+    Adicionação sistema de revogação de acesso de usuários comuns
+    Adicionar sistema de revogação do próprio acesso (com mensagem de confirmação)
+    Refinar importação de produtos, para não armazenar informação não relacionada ao cadastro
+    Adicionar suporte a logotipo
+      NF-e
+      NFC-e
     Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
 
-METAS PRÓXIMA REFATORAÇÃO (após todas as novidades implementadas, antes da versão 1.0):
-    DOMINIO PROPRIO PRO APP (app.nfefacil.com.br)
-    TESTES (para cada componente)
+METAS PRÓXIMA GRANDE REFATORAÇÃO (algumas tecnologias interessantes que merecem atenção e análise):
+    11TY (para geração de um site único para todas as partes)
+    JEST (para alguns testes unitários em alguns componentes)
     LERNA (para o app e firebase functions)
     STORYBOOK (mais separação de componentes)
     SNOWPACK (bundling puro sem Rollup)
+    RXJS (conexao entre telas e classes sem usar funcoes de atualizacao customizadas)
 
-REFINAMENTOS futuros:
+REFINAMENTOS futuros implementados com base na arrecadacao:
+    Controle de estoque com histórico, onde cada mudança deve ter uma fonte (importação de nota de saída destinada à empresa ou emitida pela empresa ou alteração manual) que deve estar atrelada a um usuário (armazenando ID e nome)
+    Listagem de usuários com acesso à empresa
     Personalização de campos da NFe em templates personalizáveis
     Atualização tributária em múltiplos produtos em simultâneo
     Criar sistema de compartilhamento de informações entre empresas, onde um usuário com permissão de acesso (mesmo que apenas leitura) deve poder transportar informações de um lugar pra outro
-    Personalização com o https://jenil.github.io/bulmaswatch/
-    Scanner de código de barras
-      USB
-      Câmera de celular
-    Gerenciamento de estoque
-    NFC-e
-      Usar um parceiro para realizar testes de emissão
-      DANFE
-        Testar impressão de PDF, caso dê errado devem ser usados apps para isso, pro Android tem alguns
+    Scanner de código de barras usando a câmera de celular
+    Scanner de código de barras usando um scanner USB
+    Relatórios (tanto tradicionais quanto de informação adicional, como por exemplo saber quantos modelos de tributação estão em uso)
 
 Observações:  
 ISSQN completamente removido. Se necessário, basta pedir a implementação ao desenvolvedor.
