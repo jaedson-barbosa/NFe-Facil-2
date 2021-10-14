@@ -21,7 +21,13 @@ export interface IResCancelar {
 
 export interface IReqTransmitir {
   infNFe: any
+  infNFeSupl?: IInfNFeSupl
   oldId: string
+}
+
+export interface IInfNFeSupl {
+  qrCode: string
+  urlChave: string
 }
 
 export interface IResTransmitir {

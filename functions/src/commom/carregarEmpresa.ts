@@ -7,6 +7,7 @@ const { firestore } = admin
 export default async function (CNPJ: string) {
   const db = firestore()
   const refEmpresa = db.collection('empresas').doc(CNPJ)
+  const colunaNFes = refEmpresa.collection('nfes')
   const dataCertComplete = await db
     .collection('certificados')
     .doc(CNPJ)
@@ -18,5 +19,5 @@ export default async function (CNPJ: string) {
     )
   }
   const certificado = dataCertComplete.data() as ICertificado
-  return { refEmpresa, certificado }
+  return { colunaNFes, certificado }
 }

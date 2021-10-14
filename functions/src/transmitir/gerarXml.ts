@@ -1,7 +1,6 @@
 import { toXml } from 'xml2json'
 import assinar from '../commom/assinar'
-import { ICertificado } from '../commom/tipos'
-import { IInfNFeSupl } from './IInfNFeSupl'
+import { ICertificado, IInfNFeSupl } from '../commom/tipos'
 
 export function gerarXML(
   infNFe: any,

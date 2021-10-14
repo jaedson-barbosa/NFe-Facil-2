@@ -1,6 +1,6 @@
 import { https } from 'firebase-functions'
 
-export function validarRetAutorizacao(protNFe: any) {
+export function validarProtNFe(protNFe: any) {
   const cStat = protNFe.infProt.cStat.$t
   // Rejeição: Duplicidade de NF-e com diferença na Chave de Acesso (148)
   // Rejeição: NF-e já está inutilizada na Base de Dados da SEFAZ
