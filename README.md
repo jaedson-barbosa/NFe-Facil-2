@@ -79,6 +79,7 @@ OK  Fazer pull request pro main e liberar versão
 OK  Atualizar arquivos do projeto em relação ao server
 
 REFINAMENTOS 0.3:
+    Adicionar campo de CSC e IDCSC de homologação, caso não haja será usado o de produção mesmo
     Emissão de NFC-e
     Impressão de NFC-e:
       Criar selecao de fonte e impressao geral para testar todas as fontes, deve usar optgroup para organizar por size
@@ -106,6 +107,10 @@ METAS PRÓXIMA GRANDE REFATORAÇÃO (algumas tecnologias interessantes que merec
     STORYBOOK (mais separação de componentes)
     SNOWPACK (bundling puro sem Rollup)
     RXJS (conexao entre telas e classes sem usar funcoes de atualizacao customizadas)
+
+REFINAMENTOS 0.5:
+    Pôr tabela CFOP
+    Pôr tabela NCM
 
 REFINAMENTOS futuros implementados com base na arrecadacao:
     Controle de estoque com histórico, onde cada mudança deve ter uma fonte (importação de nota de saída destinada à empresa ou emitida pela empresa ou alteração manual) que deve estar atrelada a um usuário (armazenando ID e nome)

@@ -1,7 +1,7 @@
 import { toXml } from 'xml2json'
 import { https } from 'firebase-functions'
 import * as admin from 'firebase-admin'
-import gerarXml from './gerarXml'
+import gerarXml from '../transmitir/gerarXml'
 import solicitar from './autorizacao'
 import consultarResposta, { retConsReciNFe } from './retAutorizacao'
 import validarAutenticacao from '../commom/validarAutenticacao'
