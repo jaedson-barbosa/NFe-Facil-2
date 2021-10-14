@@ -1,12 +1,12 @@
 import { toXml } from 'xml2json'
 import assinar from '../commom/assinar'
-import { ICertificado, IInfNFeSupl } from '../commom/tipos'
+import { ICertificado } from '../commom/tipos'
 
 export function gerarXML(
   infNFe: any,
   certificado: ICertificado,
   numero: number,
-  infNFeSupl?: IInfNFeSupl
+  infNFeSupl?: { qrCode: string; urlChave: string }
 ) {
   const numeroStr = numero.toString()
   infNFe.ide.nNF.$t = numeroStr
