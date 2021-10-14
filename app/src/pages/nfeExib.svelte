@@ -52,7 +52,7 @@
       margEsq: 5,
     }
     const enderecoAPI =
-      'https://us-central1-nfe-facil-980bc.cloudfunctions.net/helloWorld'
+      'https://southamerica-east1-nfe-facil-980bc.cloudfunctions.net/gerarDANFE'
     const corpoRequisicao = {
       method: 'POST',
       body: JSON.stringify(parametros),

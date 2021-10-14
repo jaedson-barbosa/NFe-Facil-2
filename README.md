@@ -82,9 +82,11 @@ REFINAMENTOS 0.3:
 OK  Emissão de NFC-e
 OK  Cancelamento de NFC-e
 OK  Adicionar exibição de xMsg na resposta de transmissão de NF-e, pode ser simples mesmo, um alert já serve
-OK  Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo, necessario fazer as alterações em todos os locais que mechem com este campo
-    Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar no codigo php da NF-e
+OK  Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo
+OK  Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar no codigo php da NF-e
+OK  Criar projeto separado para o DANFE e atualizar endereço de conexão aqui
     Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
+    Testar impressão de NF-e no novo endereço
 
 REFINAMENTOS 0.4:
     Impressão de NFC-e:
@@ -96,7 +98,9 @@ REFINAMENTOS 0.4:
     Refinar importação de produtos, para não armazenar informação não relacionada ao cadastro
     Adicionar suporte a logotipo na NF-e
       Importação simples
-      Envio e processamento no servidor
+      Definição de alinhamento
+      Definição de preto e branco
+      Envio de informações e processamento no projeto do DANFE
     Adicionar suporte a logotipo na NFC-e
       Definição de tamanho
       Definição de forma de pixelização
@@ -125,6 +129,7 @@ REFINAMENTOS futuros implementados com base na arrecadacao:
     Scanner de código de barras usando a câmera de celular
     Scanner de código de barras usando um scanner USB
     Relatórios (tanto tradicionais quanto de informação adicional, como por exemplo saber quantos modelos de tributação estão em uso)
+    Avaliar uso de domínio próprio para o app (em paralelo, para poder testar a monetização)
 
 Observações:  
 ISSQN completamente removido. Se necessário, basta pedir a implementação ao desenvolvedor.
