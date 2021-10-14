@@ -79,7 +79,8 @@ async function enviarRequisicaoConsultarResultado(
     'retAutorizacao',
     ambiente,
     UF,
-    cert
+    cert,
+    false
   )
   const retConsReciNFe = (
     toJson(respRetAutorizacao, {

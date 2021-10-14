@@ -7,18 +7,19 @@ export async function requisitarAutorizacao(
   { UF, ambiente }: IInfos,
   cert: ICertificado,
   xml: string,
-  sinc: boolean
+  ehNFCe: boolean
 ) {
   const respAutorizacao = await enviarRequisicao(
     `<enviNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
       <idLote>${gerarNumero(1, 999999999999999)}</idLote>
-      <indSinc>${sinc ? 1 : 0}</indSinc>
+      <indSinc>${ehNFCe ? 1 : 0}</indSinc>
       ${xml}
     </enviNFe>`,
     'autorizacao',
     ambiente,
     UF,
-    cert
+    cert,
+    ehNFCe
   )
   const retEnviNFe: retEnviNFeBase = (
     toJson(respAutorizacao, {

@@ -1,6 +1,7 @@
 import { https } from 'firebase-functions'
 import { gerarXML } from '../transmitir/gerarXml'
 import { autorizar } from './autorizacao'
+import sha1 from 'js-sha1'
 import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
 import carregarEmpresa from '../commom/carregarEmpresa'
@@ -21,7 +22,9 @@ export default async function (
   const { certificado, colunaNFes: coluna } = await carregarEmpresa(CNPJ)
   const infos = await getInfos(coluna, infNFe)
   for (let tentativa = 0; tentativa < 5; tentativa++) {
-    const xml = gerarXML(infNFe, certificado, infos.numero + tentativa)
+    const numero = infos.numero + tentativa
+    const infNFeSupl = calcularInfSupl()
+    const xml = gerarXML(infNFe, certificado, numero)
     const protNFe = await autorizar(infos, certificado, xml)
     if (protNFe) return await salvar(coluna, infNFe, xml, protNFe, req.oldId)
   }
@@ -35,4 +38,8 @@ function validarRequisicao(req: IReqTransmitir) {
       'Campo informações da nota ausente.'
     );
   }
+}
+
+function calcularInfSupl() {
+  const codificado = sha1('').toUpperCase()
 }

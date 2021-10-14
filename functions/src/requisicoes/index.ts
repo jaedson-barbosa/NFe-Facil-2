@@ -3,6 +3,7 @@ import * as axios from 'axios'
 import servicos from './servicos'
 import webservicesNFe from './webservicesNFe'
 import { Ambientes, ICertificado } from '../commom/tipos'
+import webservicesNFCe from './webservicesNFCe'
 
 type nomesServicos = keyof typeof servicos & keyof typeof webservicesNFe.SVRS
 
@@ -11,9 +12,11 @@ export async function enviarRequisicao(
   servico: nomesServicos,
   ambiente: Ambientes,
   UF: string,
-  cert: ICertificado
+  cert: ICertificado,
+  ehNFCe: boolean
 ): Promise<string> {
-  const endereco = webservicesNFe[UF][servico][ambiente]
+  const webservices = ehNFCe ? webservicesNFCe : webservicesNFe
+  const endereco = webservices[UF][servico][ambiente]
   const metodo = servicos[servico].metodo
   corpo = corpo.replace(/>\s+</g, '><')
   const xml =

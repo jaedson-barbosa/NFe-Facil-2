@@ -84,7 +84,7 @@ REFINAMENTOS 0.3:
     Impressão de NFC-e:
       Criar selecao de fonte e impressao geral para testar todas as fontes, deve usar optgroup para organizar por size
       Adicionar demais validacoes e conexões em NFC-e printer
-      Adicionar dhRecbto ao bd como item de NFCe emitida
+      Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo, necessario fazer as alterações em todos os locais que mechem com este campo
     Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar no codigo php da NF-e
     Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
 

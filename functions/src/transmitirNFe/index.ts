@@ -21,7 +21,8 @@ export default async function (
   const { certificado, colunaNFes: coluna } = await carregarEmpresa(CNPJ)
   const infos = await getInfos(coluna, infNFe)
   for (let tentativa = 0; tentativa < 5; tentativa++) {
-    const xml = gerarXML(infNFe, certificado, infos.numero + tentativa)
+    const numero = infos.numero + tentativa
+    const xml = gerarXML(infNFe, certificado, numero)
     const protNFe = await autorizar(infos, certificado, xml)
     if (protNFe) return await salvar(coluna, infNFe, xml, protNFe, req.oldId)
   }
