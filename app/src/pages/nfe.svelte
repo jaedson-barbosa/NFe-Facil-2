@@ -73,8 +73,9 @@
       const respTransmissao = isNFCe
         ? await transmitirNFCe(dadosTransmissao)
         : await transmitirNFe(dadosTransmissao)
-      const dado = respTransmissao.data
-      $edicao = { dado, id: dado.infNFe.Id, tipo: Dados.NFes }
+      const data = respTransmissao.data
+      if (data.mensagem) alert('Mensagem da SEFAZ para você:\n' + data.mensagem)
+      $edicao = { dado: data, id: data.infNFe.Id, tipo: Dados.NFes }
       $goto('./nfeExib')
       loading = false
     } catch (error) {
