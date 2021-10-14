@@ -22,7 +22,7 @@ export async function salvar(
       if (!nProt) await oldDocRef.delete()
     }
   }
-  const dhEmi = new Date(infNFe.ide.dhEmi.$t)
+  const dhEmi = new Date(protNFe.infProt.dhRecbto.$t)
   const novoRegistro = {
     cancelada: false,
     infNFe: removePrefix(infNFe),

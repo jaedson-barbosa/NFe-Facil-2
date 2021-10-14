@@ -82,7 +82,7 @@ REFINAMENTOS 0.3:
 OK  Emissão de NFC-e
 OK  Cancelamento de NFC-e
 OK  Adicionar exibição de xMsg na resposta de transmissão de NF-e, pode ser simples mesmo, um alert já serve
-    Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo, necessario fazer as alterações em todos os locais que mechem com este campo
+OK  Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo, necessario fazer as alterações em todos os locais que mechem com este campo
     Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar no codigo php da NF-e
     Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
 
