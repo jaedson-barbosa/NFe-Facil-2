@@ -83,10 +83,11 @@ OK  Emissão de NFC-e
 OK  Cancelamento de NFC-e
 OK  Adicionar exibição de xMsg na resposta de transmissão de NF-e, pode ser simples mesmo, um alert já serve
 OK  Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo
-OK  Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar no codigo php da NF-e
+    Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar na pagina da NFe deletando o vTotTrib
 OK  Criar projeto separado para o DANFE e atualizar endereço de conexão aqui
-    Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
-    Testar impressão de NF-e no novo endereço
+OK  Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
+OK  Testar impressão de NF-e no novo endereço
+    Testar sistema de exibição do loading em diferentes telas usando o :target
 
 REFINAMENTOS 0.4:
     Impressão de NFC-e:
