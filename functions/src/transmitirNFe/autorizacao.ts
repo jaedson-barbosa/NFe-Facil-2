@@ -3,7 +3,7 @@ import { ICertificado, IInfos } from '../commom/tipos'
 import { requisitarAutorizacao, retEnviNFeBase } from '../transmitir/autorizacao'
 
 /** @returns Número do recibo */
-export default async function (
+export async function autorizar(
   infos: IInfos,
   cert: ICertificado,
   xml: string
@@ -37,8 +37,4 @@ export interface retEnviNFeAssinc extends retEnviNFeBase {
     nRec: string
     tMed: string
   }
-}
-
-export interface retEnviNFeSinc extends retEnviNFeBase {
-  protNFe: any
 }

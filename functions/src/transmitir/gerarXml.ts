@@ -3,7 +3,7 @@ import assinar from '../commom/assinar'
 import { ICertificado } from '../commom/tipos'
 import { IInfNFeSupl } from './IInfNFeSupl'
 
-export default function (
+export function gerarXML(
   infNFe: any,
   certificado: ICertificado,
   numero: number,

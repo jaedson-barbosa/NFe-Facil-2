@@ -2,6 +2,7 @@ import { https } from 'firebase-functions'
 import { toJson } from 'xml2json'
 import { Ambientes, ICertificado, IInfos } from '../commom/tipos'
 import { enviarRequisicao } from '../requisicoes'
+import { validarRetAutorizacao } from '../transmitir/validarRetAutorizacao'
 
 /** @returns Retorna undefined caso o número já esteja registrado */
 export default async function (
@@ -30,15 +31,7 @@ export default async function (
       respRet.xMotivo.$t
     )
   }
-  const cStat = respRet.protNFe.infProt.cStat.$t
-  // Rejeição: Duplicidade de NF-e com diferença na Chave de Acesso (148)
-  // Rejeição: NF-e já está inutilizada na Base de Dados da SEFAZ
-  if (cStat == '539' || cStat == '206') return undefined
-  if (cStat != '100') {
-    const motivoRecusa = respRet.protNFe.infProt.xMotivo.$t
-    throw new https.HttpsError('invalid-argument', motivoRecusa)
-  }
-  return respRet
+  return validarRetAutorizacao(respRet.protNFe) ? respRet : undefined
 }
 
 async function consultarResposta(

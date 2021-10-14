@@ -1,0 +1,1 @@
+// Implementar função de transmissão e aproveitar mais funções da transmissão da NF-e

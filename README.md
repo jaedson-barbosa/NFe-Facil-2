@@ -85,11 +85,11 @@ REFINAMENTOS 0.3:
       Criar selecao de fonte e impressao geral para testar todas as fontes, deve usar optgroup para organizar por size
       Adicionar demais validacoes e conexões em NFC-e printer
       Adicionar dhRecbto ao bd como item de NFCe emitida
-      Adicionar xMsg ao armazenamento do banco de dados como opcional
     Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar no codigo php da NF-e
     Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
 
 REFINAMENTOS 0.4:
+    Adicionar exibição de xMsg na resposta de transmissão de NF-e, pode ser simples mesmo, um alert já serve
     Adicionação sistema de revogação de acesso de usuários comuns
     Adicionar sistema de revogação do próprio acesso (com mensagem de confirmação)
     Refinar importação de produtos, para não armazenar informação não relacionada ao cadastro

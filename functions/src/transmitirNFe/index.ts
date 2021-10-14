@@ -1,8 +1,8 @@
 import { toXml } from 'xml2json'
 import { https } from 'firebase-functions'
 import * as admin from 'firebase-admin'
-import gerarXml from '../transmitir/gerarXml'
-import solicitar from './autorizacao'
+import { gerarXML } from '../transmitir/gerarXml'
+import { autorizar } from './autorizacao'
 import consultarResposta, { retConsReciNFe } from './retAutorizacao'
 import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
@@ -35,8 +35,8 @@ export default async function (
   let adicionalNumero = 0
   while (adicionalNumero < 5) {
     const numero = numeroInicial + adicionalNumero++
-    const xml = gerarXml(infNFe, certificado, numero)
-    const numeroRecibo = await solicitar(infos, certificado, xml)
+    const xml = gerarXML(infNFe, certificado, numero)
+    const numeroRecibo = await autorizar(infos, certificado, xml)
     const resultado = await consultarResposta(infos, certificado, numeroRecibo)
     if (resultado) return finalizar(coluna, infNFe, xml, resultado, req.oldId)
   }
