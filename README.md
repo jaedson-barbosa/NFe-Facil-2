@@ -79,23 +79,26 @@ OK  Fazer pull request pro main e liberar versão
 OK  Atualizar arquivos do projeto em relação ao server
 
 REFINAMENTOS 0.3:
-    Adicionar campo de CSC e IDCSC de homologação, caso não haja será usado o de produção mesmo
     Emissão de NFC-e
-    Impressão de NFC-e:
-      Criar selecao de fonte e impressao geral para testar todas as fontes, deve usar optgroup para organizar por size
-      Adicionar demais validacoes e conexões em NFC-e printer
-      Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo, necessario fazer as alterações em todos os locais que mechem com este campo
+    Adicionar exibição de xMsg na resposta de transmissão de NF-e, pode ser simples mesmo, um alert já serve
     Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar no codigo php da NF-e
     Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
 
 REFINAMENTOS 0.4:
-    Adicionar exibição de xMsg na resposta de transmissão de NF-e, pode ser simples mesmo, um alert já serve
-    Adicionação sistema de revogação de acesso de usuários comuns
-    Adicionar sistema de revogação do próprio acesso (com mensagem de confirmação)
+    Impressão de NFC-e:
+      Criar selecao de fonte e impressao geral para testar todas as fontes, deve usar optgroup para organizar por size
+      Adicionar demais validacoes e conexões em NFC-e printer
+      Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo, necessario fazer as alterações em todos os locais que mechem com este campo
+    Adicionar campo de CSC e IDCSC de homologação, caso não haja será usado o de produção mesmo
+    Testar emissão e impressão de NFC-e usando o ambiente de homologação
+    Adicionar revogação de acesso a usuários comuns e a si mesmo (com mensagem de confirmação)
     Refinar importação de produtos, para não armazenar informação não relacionada ao cadastro
-    Adicionar suporte a logotipo
-      NF-e
-      NFC-e
+    Adicionar suporte a logotipo na NF-e
+      Importação simples
+      Envio e processamento no servidor
+    Adicionar suporte a logotipo na NFC-e
+      Definição de tamanho
+      Definição de forma de pixelização
     Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
     Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe

@@ -19,5 +19,5 @@ export default async function (CNPJ: string) {
     )
   }
   const certificado = dataCertComplete.data() as ICertificado
-  return { colunaNFes, certificado }
+  return { refEmpresa, colunaNFes, certificado }
 }

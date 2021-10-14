@@ -24,7 +24,10 @@ export default async function (
     const numero = infos.numero + tentativa
     const xml = gerarXML(infNFe, certificado, numero)
     const protNFe = await autorizar(infos, certificado, xml)
-    if (protNFe) return await salvar(coluna, infNFe, xml, protNFe, req.oldId)
+    if (protNFe) {
+      const res = await salvar(coluna, infNFe, xml, protNFe, req.oldId)
+      return res
+    }
   }
   throw erroDesistencia
 }
