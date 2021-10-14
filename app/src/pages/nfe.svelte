@@ -10,7 +10,7 @@
     deleteDoc,
     setDoc,
   } from '@firebase/firestore'
-  import { transmitirNFe } from '../code/firebase'
+  import { transmitirNFCe, transmitirNFe } from '../code/firebase'
   import { Dados } from '../code/tipos'
   import type { INFeRoot } from '../code/tipos'
   import AutXml from '../parts-nfe/AutXML.svelte'
@@ -70,7 +70,9 @@
       const oldId = raiz.Id
       const infNFe = preparateJSON(raiz, true)
       const dadosTransmissao = { infNFe, oldId }
-      const respTransmissao = await transmitirNFe(dadosTransmissao)
+      const respTransmissao = isNFCe
+        ? await transmitirNFCe(dadosTransmissao)
+        : await transmitirNFe(dadosTransmissao)
       const dado = respTransmissao.data
       $edicao = { dado, id: dado.infNFe.Id, tipo: Dados.NFes }
       $goto('./nfeExib')
@@ -82,7 +84,8 @@
     }
   }
 
-  $: consumidorFinal= raiz.ide?.indFinal == '1'
+  $: consumidorFinal = raiz.ide?.indFinal == '1'
+  $: isNFCe = raiz.ide?.['mod'] === '65'
 </script>
 
 {#if loading}
@@ -90,12 +93,8 @@
 {:else}
   <h1><Voltar /> Nota fiscal</h1>
   <Ide bind:raiz />
-  <Destinatario bind:dest={raiz.dest} isNFCe={raiz.ide?.['mod'] === '65'} />
-  <Produtos
-    bind:det={raiz.det}
-    bind:total={raiz.total}
-    {consumidorFinal}
-  />
+  <Destinatario bind:dest={raiz.dest} {isNFCe} />
+  <Produtos bind:det={raiz.det} bind:total={raiz.total} {consumidorFinal} />
   <Transp bind:raiz />
   <Pag bind:raiz total={raiz.total?.ICMSTot?.vNF ?? 0} />
   <InfAdic bind:raiz {consumidorFinal} />

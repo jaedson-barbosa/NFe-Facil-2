@@ -64,9 +64,14 @@ export const transmitirNFe = httpsCallable<IReqTransmitir, IResTransmitir>(
   'transmitirNFe'
 )
 
-export const cancelarNFe = httpsCallable<IReqCancelar, IResCancelar>(
+export const transmitirNFCe = httpsCallable<IReqTransmitir, IResTransmitir>(
   functions,
-  'cancelarNFe'
+  'transmitirNFCe'
+)
+
+export const cancelarNF = httpsCallable<IReqCancelar, IResCancelar>(
+  functions,
+  'cancelarNF'
 )
 
 export const addMembro = httpsCallable<IReqAddMembro, IResAddMembro>(

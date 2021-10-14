@@ -5,12 +5,7 @@ import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
 import carregarEmpresa from '../commom/carregarEmpresa'
 import gerarXML from './gerarXML'
-import {
-  Ambientes,
-  INotaDB,
-  IReqCancelar,
-  IResCancelar,
-} from '../commom/tipos'
+import { Ambientes, INotaDB, IReqCancelar, IResCancelar } from '../commom/tipos'
 
 export default async function (
   req: IReqCancelar,
@@ -26,7 +21,8 @@ export default async function (
   const ambiente: Ambientes = nota.infNFe.ide.tpAmb
   const xml = gerarXML(nota, CNPJ, ambiente, req, certificado)
   const UF: string = nota.infNFe.emit.enderEmit.UF
-  const resp = await recepcaoEvento(UF, certificado, ambiente, xml)
+  const isNFCe = nota.infNFe.ide.mod === '65'
+  const resp = await recepcaoEvento(UF, certificado, ambiente, xml, isNFCe)
   await registrarCancelamento(colunaNFes, xml, req.idNota, resp)
   return { cancelada: true }
 }

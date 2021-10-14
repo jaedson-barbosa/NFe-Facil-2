@@ -79,8 +79,10 @@ OK  Fazer pull request pro main e liberar versão
 OK  Atualizar arquivos do projeto em relação ao server
 
 REFINAMENTOS 0.3:
-    Emissão de NFC-e
+OK  Emissão de NFC-e
+OK  Cancelamento de NFC-e
     Adicionar exibição de xMsg na resposta de transmissão de NF-e, pode ser simples mesmo, um alert já serve
+    Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo, necessario fazer as alterações em todos os locais que mechem com este campo
     Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar no codigo php da NF-e
     Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
 
@@ -88,7 +90,6 @@ REFINAMENTOS 0.4:
     Impressão de NFC-e:
       Criar selecao de fonte e impressao geral para testar todas as fontes, deve usar optgroup para organizar por size
       Adicionar demais validacoes e conexões em NFC-e printer
-      Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo, necessario fazer as alterações em todos os locais que mechem com este campo
     Adicionar campo de CSC e IDCSC de homologação, caso não haja será usado o de produção mesmo
     Testar emissão e impressão de NFC-e usando o ambiente de homologação
     Adicionar revogação de acesso a usuários comuns e a si mesmo (com mensagem de confirmação)
@@ -116,8 +117,8 @@ REFINAMENTOS 0.5:
     Pôr tabela NCM
 
 REFINAMENTOS futuros implementados com base na arrecadacao:
-    Controle de estoque com histórico, onde cada mudança deve ter uma fonte (importação de nota de saída destinada à empresa ou emitida pela empresa ou alteração manual) que deve estar atrelada a um usuário (armazenando ID e nome)
-    Listagem de usuários com acesso à empresa
+    Controle de estoque
+    Possibilidade de atrelar nota fiscal a um id de usuário e nome (opcional)
     Personalização de campos da NFe em templates personalizáveis
     Atualização tributária em múltiplos produtos em simultâneo
     Criar sistema de compartilhamento de informações entre empresas, onde um usuário com permissão de acesso (mesmo que apenas leitura) deve poder transportar informações de um lugar pra outro
