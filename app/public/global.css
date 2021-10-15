@@ -47,7 +47,8 @@ p {
   font-style: italic;
 }
 
-#imagemCarregamento {
+#carregando {
+  z-index: -1;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -57,7 +58,11 @@ p {
   margin: auto;
   max-width: 100vw;
   max-height: 100vh;
-  animation: carregamento 3s 2s alternate infinite ease-in;
+  animation: carregamento 3s 1s alternate infinite ease-in;
+}
+
+#carregando.desativado {
+  display: none;
 }
 
 @keyframes carregamento {

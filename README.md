@@ -88,10 +88,10 @@ OK  Criar projeto separado para o DANFE e atualizar endereço de conexão aqui
 OK  Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
 OK  Testar impressão de NF-e no novo endereço
 OK  Remover esquemas do projeto (eles estão no mesmo patamar dos manuais)
-    Testar sistema de exibição do loading em diferentes telas usando o :target
+OK  Testar sistema de exibição do loading em diferentes telas
 
 REFINAMENTOS 0.4:
-    Implementar sistema de exibição do loading em diferentes telas usando o :target
+    Implementar sistema de exibição do loading nas telas
     Impressão de NFC-e:
       Criar selecao de fonte e impressao geral para testar todas as fontes, deve usar optgroup para organizar por size
       Adicionar demais validacoes e conexões em NFC-e printer
