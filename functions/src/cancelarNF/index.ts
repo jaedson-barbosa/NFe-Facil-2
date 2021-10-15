@@ -5,12 +5,7 @@ import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
 import carregarEmpresa from '../commom/carregarEmpresa'
 import gerarXML from './gerarXML'
-import {
-  Ambientes,
-  INotaDB,
-  IReqCancelar,
-  IResCancelar,
-} from '../commom/tipos'
+import { Ambientes, INotaDB, IReqCancelar, IResCancelar } from '../commom/tipos'
 
 export default async function (
   req: IReqCancelar,
@@ -21,14 +16,14 @@ export default async function (
   const token = context.auth!.token
   const CNPJ = req.idNota.substr(9, 14)
   validarPermissao(token, CNPJ)
-  const { certificado, refEmpresa } = await carregarEmpresa(CNPJ)
-  const coluna = refEmpresa.collection('nfes')
-  const nota = await carregarNota(coluna, req.idNota)
+  const { certificado, colunaNFes } = await carregarEmpresa(CNPJ)
+  const nota = await carregarNota(colunaNFes, req.idNota)
   const ambiente: Ambientes = nota.infNFe.ide.tpAmb
   const xml = gerarXML(nota, CNPJ, ambiente, req, certificado)
   const UF: string = nota.infNFe.emit.enderEmit.UF
-  const resp = await recepcaoEvento(UF, certificado, ambiente, xml)
-  await registrarCancelamento(coluna, xml, req.idNota, resp)
+  const isNFCe = nota.infNFe.ide.mod === '65'
+  const resp = await recepcaoEvento(UF, certificado, ambiente, xml, isNFCe)
+  await registrarCancelamento(colunaNFes, xml, req.idNota, resp)
   return { cancelada: true }
 }
 

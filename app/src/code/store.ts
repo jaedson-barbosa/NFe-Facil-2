@@ -13,6 +13,10 @@ import { auth, db } from './firebase'
 
 const googleProvider = new GoogleAuthProvider()
 
+export const carregando = writable(false)
+const carregandoEl = document.getElementById('carregando')
+carregando.subscribe(v => carregandoEl.className = v ? '' :  'desativado')
+
 export const user = {
   subscribe: readable<User>(undefined, (set) =>
     auth.onAuthStateChanged((u) => set(u))

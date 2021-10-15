@@ -6,7 +6,8 @@ import { Ambientes, ICertificado } from '../commom/tipos'
 export async function consultarStatusServico(
   uf: string,
   ambiente: Ambientes,
-  cert: ICertificado
+  cert: ICertificado,
+  isNFCe = false
 ) {
   const cUF = estados.find((v) => v[0] === uf)?.[1]
   if (!cUF) throw new Error()
@@ -19,7 +20,8 @@ export async function consultarStatusServico(
     'consultarStatusServico',
     ambiente,
     uf,
-    cert
+    cert,
+    isNFCe
   )
   const resJson: any = toJson(res, {
     object: true,

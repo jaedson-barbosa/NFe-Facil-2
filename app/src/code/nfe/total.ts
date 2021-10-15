@@ -81,6 +81,8 @@ function addProd(p: TICMSTot, v: any): TICMSTot {
   return p
 }
 
-export function calcularICMSTot(det: any[]): TICMSTot {
-  return det.reduce(addProd, { ...zero })
+export function calcularICMSTot(det: any[], consumidorFinal: boolean): TICMSTot {
+  const res: TICMSTot = det.reduce(addProd, { ...zero })
+  if (!consumidorFinal) delete res.vTotTrib
+  return res
 }

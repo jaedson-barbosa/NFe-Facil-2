@@ -1,7 +1,7 @@
 <script lang="ts">
   import { edicao, permissaoEscrita } from '../code/store'
   import { goto, url } from '@roxi/routify'
-  import { cancelarNFe } from '../code/firebase'
+  import { cancelarNF } from '../code/firebase'
   import { toNFeString } from '../code/getDataString'
   import { Dados } from '../code/tipos'
   import { get } from 'svelte/store'
@@ -23,7 +23,7 @@
       alert('Operação cancelada pelo usuário')
       return
     }
-    const res = await cancelarNFe({
+    const res = await cancelarNF({
       idNota: ed.id,
       justificativa: justificativa.trim(),
       dhEvento: toNFeString(new Date()),
@@ -52,7 +52,7 @@
       margEsq: 5,
     }
     const enderecoAPI =
-      'https://us-central1-nfe-facil-980bc.cloudfunctions.net/helloWorld'
+      'https://southamerica-east1-nfe-facil-980bc.cloudfunctions.net/gerarDANFE'
     const corpoRequisicao = {
       method: 'POST',
       body: JSON.stringify(parametros),

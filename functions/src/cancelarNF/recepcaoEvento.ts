@@ -8,7 +8,8 @@ export async function recepcaoEvento(
   UF: string,
   cert: ICertificado,
   ambiente: Ambientes,
-  xml: string
+  xml: string,
+  isNFCe: boolean
 ) {
   const envio = `<envEvento versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">
     <idLote>${gerarNumero(1, 999999999999999)}</idLote>
@@ -19,7 +20,8 @@ export async function recepcaoEvento(
     'recepcaoEvento',
     ambiente,
     UF,
-    cert
+    cert,
+    isNFCe
   )
   const retEnvEvento: retEnvEvento = (
     toJson(respRecepcaoEvento, {

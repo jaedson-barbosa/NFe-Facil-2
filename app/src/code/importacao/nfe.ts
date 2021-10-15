@@ -78,7 +78,7 @@ function getNFe(
     const CNPJ = infNFe.emit.CNPJ
     if (CNPJ != cnpj) return undefined
     const nfeRef = doc(colecao, id)
-    const dhEmi = new Date(infNFe.ide.dhEmi)
+    const dhEmi = new Date(nfeProc.protNFe.infProt.dhRecbto)
     const nProt = nfeProc.protNFe.infProt.nProt
     const cancelamento = cancelamentos.find((v) => v.id === id)
     const nfeData: INotaDB = {

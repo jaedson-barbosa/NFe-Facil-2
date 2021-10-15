@@ -1,5 +1,4 @@
 **/node_modules
-DANFE/vendor
 functions/lib
 .routify
 *.log

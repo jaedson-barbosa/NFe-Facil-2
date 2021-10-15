@@ -132,7 +132,7 @@
     </button>
     <br />
     <br />
-    <Total bind:det bind:total />
+    <Total bind:det bind:total {consumidorFinal} />
   {/if}
   <br />
 {/if}

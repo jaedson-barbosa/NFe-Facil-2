@@ -32,6 +32,7 @@ export interface IResTransmitir {
   dhEmi: Date
   nProt: number
   xml: string
+  mensagem?: string
 }
 
 export enum NiveisAcesso {

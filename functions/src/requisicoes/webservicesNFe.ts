@@ -271,4 +271,51 @@ const SVRS = {
   },
 }
 
-export default { AM, BA, CE, GO, MG, MS, MT, PE, PR, RS, SP, SVAN, SVRS }
+export default {
+  AM: AM,
+  BA: BA,
+  CE: CE,
+  GO: GO,
+  MG: MG,
+  MS: MS,
+  MT: MT,
+  PE: PE,
+  PR: PR,
+  RS: RS,
+  SP: SP,
+  MA: SVAN,
+  AC: SVRS,
+  AL: SVRS,
+  AP: SVRS,
+  DF: SVRS,
+  ES: SVRS,
+  PA: SVRS,
+  PB: SVRS,
+  PI: SVRS,
+  RJ: SVRS,
+  RN: SVRS,
+  RO: SVRS,
+  RR: SVRS,
+  SC: SVRS,
+  SE: SVRS,
+  TO: SVRS,
+} as {
+  [uf: string]: {
+    autorizacao: {
+      '1': string
+      '2': string
+    }
+    retAutorizacao: {
+      '1': string
+      '2': string
+    }
+    consultarStatusServico: {
+      '1': string
+      '2': string
+    }
+    recepcaoEvento: {
+      '1': string
+      '2': string
+    }
+  }
+}
