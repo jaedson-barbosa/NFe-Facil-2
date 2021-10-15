@@ -99,6 +99,9 @@ REFINAMENTOS 0.4:
     Testar emissão e impressão de NFC-e usando o ambiente de homologação
     Adicionar revogação de acesso a usuários comuns e a si mesmo (com mensagem de confirmação)
     Refinar importação de produtos, para não armazenar informação não relacionada ao cadastro
+    Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
+
+REFINAMENTOS 0.5:
     Adicionar suporte a logotipo na NF-e
       Importação simples
       Definição de alinhamento
@@ -107,8 +110,6 @@ REFINAMENTOS 0.4:
     Adicionar suporte a logotipo na NFC-e
       Definição de tamanho
       Definição de forma de pixelização
-    Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
-    Analise geral da solução e limpeza completa
     Leitura completa dos arquivos de documentação da NFe
 
 METAS PRÓXIMA GRANDE REFATORAÇÃO (algumas tecnologias interessantes que merecem atenção e análise):
