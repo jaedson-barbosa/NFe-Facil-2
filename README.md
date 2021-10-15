@@ -83,13 +83,15 @@ OK  Emissão de NFC-e
 OK  Cancelamento de NFC-e
 OK  Adicionar exibição de xMsg na resposta de transmissão de NF-e, pode ser simples mesmo, um alert já serve
 OK  Salvar dhRecbto como o dhEmi a partir de agora, afinal ele é mais importante e isso evita criar um novo campo
-    Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar na pagina da NFe deletando o vTotTrib
+OK  Imposto aproximado não deve aparecer nas situações não obrigatorias, desabilitar na pagina da NFe deletando o vTotTrib
 OK  Criar projeto separado para o DANFE e atualizar endereço de conexão aqui
 OK  Pôr loading screen basica com animacao da logo no body antes do projeto carregar por completo
 OK  Testar impressão de NF-e no novo endereço
+OK  Remover esquemas do projeto (eles estão no mesmo patamar dos manuais)
     Testar sistema de exibição do loading em diferentes telas usando o :target
 
 REFINAMENTOS 0.4:
+    Implementar sistema de exibição do loading em diferentes telas usando o :target
     Impressão de NFC-e:
       Criar selecao de fonte e impressao geral para testar todas as fontes, deve usar optgroup para organizar por size
       Adicionar demais validacoes e conexões em NFC-e printer

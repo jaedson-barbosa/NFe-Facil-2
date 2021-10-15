@@ -4,11 +4,12 @@
 
   export let det: any
   export let total: any
+  export let consumidorFinal: boolean
 
   if (!total) total = {}
   if (!total.retTrib) total.retTrib = {}
 
-  $: total.ICMSTot = calcularICMSTot(det)
+  $: total.ICMSTot = calcularICMSTot(det, consumidorFinal)
   $: ICMSTot = total.ICMSTot
 </script>
 
