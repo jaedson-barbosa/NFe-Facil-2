@@ -16,9 +16,11 @@
   let carregado = false
 
   if (det?.length) {
-    const cods: string[] = det.map((v) => v.prod.cProd + v.prod.CFOP)
+    //verificar esse id de produto
+    const cods: string[] = det.map((v) => v.prod.cProd)
     const refs = cods.map((v) => doc(get(refEmpresa), Dados.Produtos, v))
     Promise.all(refs.map((v) => getDoc(v))).then((v) => {
+
       v.forEach((k, i) => (det[i].ibpt = k.get('ibpt')))
       carregado = true
     })

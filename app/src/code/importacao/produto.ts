@@ -10,31 +10,26 @@ export async function processarProdutos(
   const colecao = collection(refEmpresa, Dados.Produtos)
   const possuiCadastros = await getPossuiCadastros(colecao)
   const produtos = notas.flatMap((v) => v.infNFe.det as any[])
-  const codigos = produtos
+  const filtrados: { ref: DocumentReference; data: { det: any } }[] = produtos
     .map((v) => v.prod.cProd as string)
     .filter((v) => !v.startsWith('CFOP'))
     .filter((v, i, a) => a.indexOf(v) === i)
-  const corrigidos: { ref: DocumentReference; data: { det: any } }[] = []
-  for (const codigo of codigos) {
-    const prodsCodigo = produtos.filter((v) => v.prod.cProd === codigo)
-    const cfops = prodsCodigo
-      .map((v) => v.prod.CFOP as string)
-      .filter((v, i, a) => a.indexOf(v) === i)
-    for (const cfop of cfops) {
-      const det = prodsCodigo.find(v => v.prod.CFOP === cfop)
-      const ref = doc(colecao, codigo + cfop)
-      const novo = { ref, data: { det } }
+    .map((codigo) => {
+      const ref = doc(colecao, codigo)
+      const det = produtos.find((v) => v.prod.cProd === codigo)
       if (!det.prod.cEAN) det.prod.cEAN = 'SEM GTIN'
       if (!det.prod.cEANTrib) det.prod.cEANTrib = 'SEM GTIN'
-      if (possuiCadastros) {
-        const salva = await getDoc(ref)
-        if (!salva.exists()) corrigidos.push(novo)
-      } else corrigidos.push(novo)
+      return { ref, data: { det } }
+    })
+  if (possuiCadastros) {
+    for (let i = filtrados.length - 1; i >= 0; i--) {
+      const salva = await getDoc(filtrados[i].ref)
+      if (salva.exists()) filtrados.splice(i, 1)
     }
   }
-  if (corrigidos.length) {
-    const listaAceitos = corrigidos.map((v) => v.data.det.prod.xProd).join(', ')
-    log(`${corrigidos.length} produtos foram aceitos: ${listaAceitos}.`)
+  if (filtrados.length) {
+    const listaAceitos = filtrados.map((v) => v.data.det.prod.xProd).join(', ')
+    log(`${filtrados.length} produtos foram aceitos: ${listaAceitos}.`)
   }
-  return corrigidos
+  return filtrados
 }
