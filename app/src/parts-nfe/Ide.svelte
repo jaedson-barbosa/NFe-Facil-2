@@ -8,7 +8,7 @@
   import Adicionar from '../components/Adicionar.svelte'
   import { pattern } from '../code/patterns'
 
-  export let raiz: any
+  export let ide: any
 
   function getCodigoEstado(sigla: string) {
     return IBGE.find((v) => v.Sigla == sigla)?.Codigo
@@ -20,35 +20,57 @@
     return Math.floor(Math.random() * (maxm - minm + 1)) + minm
   }
 
-  if (!raiz['ide']) raiz['ide'] = {}
-  let ide = raiz['ide']
-  $: raiz['ide'] = ide
   const emp = get(empresa)
   const emit = emp.emit
+
+  if (!ide) {
+    ide = {
+      mod: '55',
+      serie: emp.serieNFe,
+      nNF: '0',
+      idDest: '1',
+      tpEmis: '1',
+      tpImp: '1',
+      procEmi: '0',
+    }
+  }
+  if (!ide['NFref']) {
+    ide['NFref'] = []
+  }
+
   ide['cUF'] = getCodigoEstado(emit.enderEmit.UF)
   ide['cNF'] = getRandomNumber().toString()
-  ide['serie'] = emp.serieNFe
-  $: ide['serie'] = ide['mod'] == '65' ? emp.serieNFCe : emp.serieNFe
-  ide['nNF'] = '0'
   ide['dhEmi'] = toNFeString(new Date())
-  ide['idDest'] = '1'
   ide['cMunFG'] = emit.enderEmit.cMun
-  ide['tpEmis'] = '1'
-  ide['tpImp'] = '1'
-  ide['procEmi'] = '0'
-  let isHomolog = ide['tpAmb'] == '2'
-  $: ide['tpAmb'] = isHomolog ? '2' : '1'
   ide['verProc'] = VERSAO
 
-  if (!ide['NFref']) ide['NFref'] = []
+  let oldMod = ide.mod
+  $: {
+    if (ide.mod != oldMod) {
+      if (ide['mod'] == '65') {
+        ide['serie'] = emp.serieNFCe
+        ide['tpNF'] = ide['idDest'] = ide['finNFe'] = ide['indFinal'] = '1'
+      } else {
+        ide['serie'] = emp.serieNFe
+      }
+      oldMod = ide.mod
+    }
+  }
 
-  $: ide['mod'] == '65' &&
-    (ide['tpNF'] = ide['idDest'] = ide['finNFe'] = ide['indFinal'] = '1')
+  let isHomolog = ide['tpAmb'] == '2'
+  $: ide['tpAmb'] = isHomolog ? '2' : '1'
 
   let informarSaidaEntrada = !!ide.dhSaiEnt
   $: ide.dhSaiEnt = informarSaidaEntrada ? toNFeString(new Date()) : ''
+
   let saidaEntrada = ide.dhSaiEnt?.slice(0, 16) || ''
   $: ide.dhSaiEnt = saidaEntrada ? toNFeString(new Date(saidaEntrada)) : ''
+
+  let indFinal = ide.indFinal == '1'
+  $: ide.indFinal = indFinal ? '1' : '0'
+
+  let indIntermed = ide.indIntermed == '1'
+  $: ide.indIntermed = indIntermed ? '1' : '0'
 
   function analisar(index: number) {
     return () => {
@@ -57,12 +79,6 @@
       ide = ide
     }
   }
-
-  let indFinal = ide.indFinal == '1'
-  $: ide.indFinal = indFinal ? '1' : '0'
-
-  let indIntermed = ide.indIntermed == '1'
-  $: ide.indIntermed = indIntermed ? '1' : '0'
 </script>
 
 <h2>Identificação</h2>

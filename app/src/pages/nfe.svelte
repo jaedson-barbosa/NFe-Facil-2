@@ -93,7 +93,7 @@
   Carregando...
 {:else}
   <h1><Voltar /> Nota fiscal</h1>
-  <Ide bind:raiz />
+  <Ide bind:ide={raiz.ide} />
   <Destinatario bind:dest={raiz.dest} {isNFCe} />
   <Produtos bind:det={raiz.det} bind:total={raiz.total} {consumidorFinal} />
   <Transp bind:raiz />

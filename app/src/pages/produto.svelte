@@ -70,7 +70,7 @@
     }
     loading = true
     try {
-      const id = det.prod.cProd + det.prod.CFOP
+      const id = det.prod.cProd
       const prodRef = doc($refEmpresa, Dados.Produtos, id)
       if (ed) {
         if (ed.id != id) {

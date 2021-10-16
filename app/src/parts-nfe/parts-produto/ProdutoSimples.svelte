@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import { atualizarImpostos as _atualizarImpostos } from '../../code/imposto/geral'
+  import { atualizarImpostos } from '../../code/imposto/geral'
 
   export let raiz: any
   export let consumidorFinal: boolean
@@ -17,13 +17,13 @@
     prod.vProd = vProd
     const vUnTrib = +prod.vUnTrib
     prod.qTrib = vProd / vUnTrib
+    raiz.imposto = atualizarImpostos(
+      prod,
+      raiz.imposto,
+      consumidorFinal,
+      raiz.ibpt
+    )
   }
-
-  function atualizarImpostos(prod: any) {
-    const retorno = _atualizarImpostos(prod, raiz.imposto, consumidorFinal, raiz.ibpt)
-    return retorno
-  }
-  $: raiz.imposto = atualizarImpostos(prod)
 </script>
 
 <tr class="clicavel" on:click title={prod.xProd}>

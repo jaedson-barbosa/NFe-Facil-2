@@ -62,6 +62,11 @@
     linkDANFE = window.URL.createObjectURL(pdf)
     carregando = false
   }
+
+  function clonar() {
+    ed.dado.ide.nNF = '0'
+    $goto('./nfe')
+  }
 </script>
 
 {#if carregando}
@@ -94,7 +99,7 @@
 
   {#if ed.dado.nProt}
     {#if permissaoEscrita}
-      <a class="button" href={$url('./nfe')}>Clonar</a>
+      <button on:click={clonar}>Clonar</button>
     {/if}
     {#if ed.dado.cancelada}
       <a

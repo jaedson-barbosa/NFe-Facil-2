@@ -90,6 +90,13 @@ OK  Testar impressão de NF-e no novo endereço
 OK  Remover esquemas do projeto (eles estão no mesmo patamar dos manuais)
 OK  Testar sistema de exibição do loading em diferentes telas
 
+CORREÇÕES 0.3.1:
+OK  Corrigir erro de transmissão (provavelmente relacionado ao numero)
+OK  Corrigir reset da seção de identificação
+OK  Trocar id de produto de volta pra apenas cProd
+OK  Testar correção de erro de transmissão
+OK  Publicar versão
+
 REFINAMENTOS 0.4:
     Implementar sistema de exibição do loading nas telas
     Impressão de NFC-e:
@@ -99,6 +106,9 @@ REFINAMENTOS 0.4:
     Testar emissão e impressão de NFC-e usando o ambiente de homologação
     Adicionar revogação de acesso a usuários comuns e a si mesmo (com mensagem de confirmação)
     Refinar importação de produtos, para não armazenar informação não relacionada ao cadastro
+    Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
+
+REFINAMENTOS 0.5:
     Adicionar suporte a logotipo na NF-e
       Importação simples
       Definição de alinhamento
@@ -107,9 +117,9 @@ REFINAMENTOS 0.4:
     Adicionar suporte a logotipo na NFC-e
       Definição de tamanho
       Definição de forma de pixelização
-    Liberar adição de dados durante criação de nota, basta não mudar a $edição pra undefined
-    Analise geral da solução e limpeza completa
-    Leitura completa dos arquivos de documentação da NFe
+
+REFINAMENTOS 0.6
+    Leitura completa dos arquivos de documentação da NFe e planejamento desta versão e das proximas
 
 METAS PRÓXIMA GRANDE REFATORAÇÃO (algumas tecnologias interessantes que merecem atenção e análise):
     11TY (para geração de um site único para todas as partes)

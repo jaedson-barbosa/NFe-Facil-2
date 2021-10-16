@@ -4,7 +4,12 @@ import { atualizarICMS } from './ICMS'
 import { atualizarIPI } from './IPI'
 import { atualizarPISCOFINS } from './PISCOFINS'
 
-export function atualizarImpostos(prod: any, imposto: any, consumidorFinal: boolean, ibpt: any) {
+export function atualizarImpostos(
+  prod: any,
+  imposto: any,
+  consumidorFinal: boolean,
+  ibpt: any
+) {
   if (!imposto) alert('HAHA')
   atualizarICMS(prod, imposto, consumidorFinal)
   atualizarIPI(prod, imposto)
