@@ -17,14 +17,12 @@
     prod.vProd = vProd
     const vUnTrib = +prod.vUnTrib
     prod.qTrib = vProd / vUnTrib
-    const imposto = atualizarImpostos(
+    raiz.imposto = atualizarImpostos(
       prod,
       raiz.imposto,
       consumidorFinal,
       raiz.ibpt
     )
-    console.log(imposto)
-    raiz.imposto = imposto
   }
 </script>
 

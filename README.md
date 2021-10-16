@@ -95,7 +95,7 @@ OK  Corrigir erro de transmissão (provavelmente relacionado ao numero)
 OK  Corrigir reset da seção de identificação
 OK  Trocar id de produto de volta pra apenas cProd
 OK  Testar correção de erro de transmissão
-    Corrigir nao exclusao de nota antiga apos transmissao
+OK  Publicar versão
 
 REFINAMENTOS 0.4:
     Implementar sistema de exibição do loading nas telas
