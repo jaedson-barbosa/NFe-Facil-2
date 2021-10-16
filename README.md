@@ -117,7 +117,9 @@ REFINAMENTOS 0.5:
     Adicionar suporte a logotipo na NFC-e
       Definição de tamanho
       Definição de forma de pixelização
-    Leitura completa dos arquivos de documentação da NFe
+
+REFINAMENTOS 0.6
+    Leitura completa dos arquivos de documentação da NFe e planejamento desta versão e das proximas
 
 METAS PRÓXIMA GRANDE REFATORAÇÃO (algumas tecnologias interessantes que merecem atenção e análise):
     11TY (para geração de um site único para todas as partes)
