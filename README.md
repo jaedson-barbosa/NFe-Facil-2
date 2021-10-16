@@ -97,6 +97,8 @@ OK  Trocar id de produto de volta pra apenas cProd
 OK  Testar correção de erro de transmissão
 OK  Publicar versão
 
+Organizar estar proximas metas em issues no projeto para poder usar branchs especificos no lugar de um dev generico
+
 REFINAMENTOS 0.4:
     Implementar sistema de exibição do loading nas telas
     Impressão de NFC-e:
@@ -129,9 +131,17 @@ METAS PRÓXIMA GRANDE REFATORAÇÃO (algumas tecnologias interessantes que merec
     SNOWPACK (bundling puro sem Rollup)
     RXJS (conexao entre telas e classes sem usar funcoes de atualizacao customizadas)
 
-REFINAMENTOS 0.5:
+REFINAMENTOS 0.7:
     Pôr tabela CFOP
     Pôr tabela NCM
+
+REFINAMENTO DE TRIBUTACAO:
+Usar perfis de tributação, onde o id é um número sequencial e os produtos podem se associar a um ou mais perfis, e caso não se associem o perfil pode ser escolhido na hora da adição do produto à nota.
+Na hora de escolher um perfil deve haver uma validação no caso da NFCe pra ver se ele é aplicável.
+Eles também podem ter uma descrição, assim fica mais fácil de organizar
+Assim teremos um sistema fácil de entender para atualizar impostos
+Durante a adição dos impostos é bom ver se dá pra automatizar um pouco mais, e colocar um valor de produto igual a 100 e a quantidade igual a 1, só pra auxiliar o visual.
+Na importação de produtos os impostos devem ser agrupados e os produtos limpos.
 
 REFINAMENTOS futuros implementados com base na arrecadacao:
     Controle de estoque
