@@ -13,7 +13,8 @@ export async function autorizar(
 ) {
   const res = await requisitarAutorizacao(infos, cert, xml, true)
   const retEnviNFe = res as retEnviNFeSinc
-  return validarProtNFe(retEnviNFe.protNFe) ? retEnviNFe : undefined
+  const protNFe = retEnviNFe.protNFe
+  return validarProtNFe(protNFe) && protNFe
 }
 
 export interface retEnviNFeSinc extends retEnviNFeBase {

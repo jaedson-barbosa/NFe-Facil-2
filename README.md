@@ -90,6 +90,9 @@ OK  Testar impressão de NF-e no novo endereço
 OK  Remover esquemas do projeto (eles estão no mesmo patamar dos manuais)
 OK  Testar sistema de exibição do loading em diferentes telas
 
+CORREÇÕES 0.3.1:
+    Corrigir erro de transmissão (provavelmente relacionado ao numero)
+
 REFINAMENTOS 0.4:
     Implementar sistema de exibição do loading nas telas
     Impressão de NFC-e:

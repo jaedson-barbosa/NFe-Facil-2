@@ -1,6 +1,9 @@
 import { https } from 'firebase-functions'
 import { Ambientes, ICertificado, IInfos } from '../commom/tipos'
-import { requisitarAutorizacao, retEnviNFeBase } from '../transmitir/autorizacao'
+import {
+  requisitarAutorizacao,
+  retEnviNFeBase,
+} from '../transmitir/autorizacao'
 import { toJson } from 'xml2json'
 import { enviarRequisicao } from '../requisicoes'
 import { validarProtNFe } from '../transmitir/validarProtNFe'
@@ -14,10 +17,10 @@ export async function autorizar(
   const resAutorizacao = await requisitarAutorizacao(infos, cert, xml, false)
   validarRespostaPedido(resAutorizacao)
   const retEnviNFe = resAutorizacao as retEnviNFeAssinc
-  await esperarProcessamento(retEnviNFe)
-  const numeroRecibo = retEnviNFe.infRec.nRec
-  const resRetorno = await consultarResultado(infos, cert, numeroRecibo)
-  return resRetorno?.protNFe
+  const { nRec, tMed } = retEnviNFe.infRec
+  await new Promise((res) => setTimeout(res, +tMed * 1000))
+  const protNFe = await consultarResultado(infos, cert, nRec)
+  return protNFe
 }
 
 function validarRespostaPedido(res: retEnviNFeBase) {
@@ -28,12 +31,6 @@ function validarRespostaPedido(res: retEnviNFeBase) {
       res.xMotivo
     )
   }
-}
-
-async function esperarProcessamento(res: retEnviNFeAssinc) {
-  const tempoMedioResposta = res.infRec.tMed
-  const intervalo = Number(tempoMedioResposta) * 1000
-  await new Promise((res) => setTimeout(res, intervalo))
 }
 
 async function consultarResultado(
@@ -62,7 +59,8 @@ async function consultarResultado(
       respRet.xMotivo.$t
     )
   }
-  return validarProtNFe(respRet.protNFe) ? respRet : undefined
+  const protNFe = respRet.protNFe
+  return validarProtNFe(protNFe) && protNFe
 }
 
 async function enviarRequisicaoConsultarResultado(

@@ -12,10 +12,7 @@ export async function getInfos(
   const UF: string = infNFe.emit.enderEmit.UF.$t
   corrigirDestinatario(infNFe, ambiente)
   const infos = { serie, numero, ambiente, modelo, UF }
-  infos.numero =
-    numero > 0 //Analisamos se devemos usar o preenchimento manual
-      ? numero //Se sim, usamos o valor manual
-      : await calcularNovoNumero(coluna, infos) //Se não, calculamos
+  if (!numero) infos.numero = await calcularNovoNumero(coluna, infos)
   return infos
 }
 
