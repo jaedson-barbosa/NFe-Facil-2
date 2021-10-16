@@ -91,7 +91,10 @@ OK  Remover esquemas do projeto (eles estão no mesmo patamar dos manuais)
 OK  Testar sistema de exibição do loading em diferentes telas
 
 CORREÇÕES 0.3.1:
-    Corrigir erro de transmissão (provavelmente relacionado ao numero)
+OK  Corrigir erro de transmissão (provavelmente relacionado ao numero)
+OK  Corrigir reset da seção de identificação
+    Corrigir imposto aproximado não calculado
+    Testar correção de erro de transmissão
 
 REFINAMENTOS 0.4:
     Implementar sistema de exibição do loading nas telas

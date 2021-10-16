@@ -20,7 +20,7 @@ export default async function (
   validarPermissao(context.auth!.token, CNPJ)
   const { certificado, colunaNFes: coluna } = await carregarEmpresa(CNPJ)
   const infos = await getInfos(coluna, infNFe)
-  for (let i = 0; i < 5; i++, infos.numero++) {
+  for (let i = 0; i < 10; i++, infos.numero++) {
     const xml = gerarXML(infNFe, certificado, infos.numero)
     const protNFe = await autorizar(infos, certificado, xml)
     if (protNFe) {

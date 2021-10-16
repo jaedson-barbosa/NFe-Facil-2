@@ -24,7 +24,7 @@ export default async function (
   const infos = await getInfos(colunaNFes, infNFe)
   const { CSC, IDCSC } = await getCSC(refEmpresa)
   const infNFeSupl = getInfSupl(infos.UF, infNFe.Id, infos.ambiente, IDCSC, CSC)
-  for (let i = 0; i < 5; i++, infos.numero++) {
+  for (let i = 0; i < 10; i++, infos.numero++) {
     const xml = gerarXML(infNFe, certificado, infos.numero, infNFeSupl)
     const protNFe = await autorizar(infos, certificado, xml)
     if (protNFe) {
