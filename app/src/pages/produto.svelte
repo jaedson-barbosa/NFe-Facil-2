@@ -17,7 +17,7 @@
   const ed = get(edicao)
   if (ed) {
     if (ed.tipo != Dados.Produtos) $edicao = undefined
-    else raiz = { ...ed.dado }
+    else raiz = ed.dado
   } else raiz = {}
 
   if (!raiz['det']) raiz['det'] = {}
@@ -92,6 +92,7 @@
       await setDoc(prodRef, raiz)
       $goto('./')
     } catch (error) {
+      console.error(error)
       alert(error.message)
       loading = false
     }

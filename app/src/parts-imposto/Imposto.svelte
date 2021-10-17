@@ -15,18 +15,33 @@
   if (!imposto) imposto = {}
 
   let informarIPI = !!imposto.IPI
-  $: imposto.IPI = informarIPI ? {} : undefined
+  $: {
+    if (informarIPI) {
+      imposto.IPI = {}
+    } else {
+      delete imposto.IPI
+      imposto = imposto
+    }
+  }
 
   let informarICMSUFDest = !!imposto.ICMSUFDest
-  $: imposto.ICMSUFDest = informarICMSUFDest ? {} : undefined
+  $: {
+    if (informarICMSUFDest) {
+      imposto.ICMSUFDest = {}
+    } else {
+      delete imposto.ICMSUFDest
+      imposto = imposto
+    }
+  }
 
   $: {
     const pisst = possuiST(imposto, 'PIS')
     if (pisst && !imposto.PISST) imposto.PISST = {}
-    if (!pisst && imposto.PISST) imposto.PISST = undefined
+    if (!pisst && imposto.PISST) delete imposto.PISST
     const cofinsst = possuiST(imposto, 'COFINS')
     if (cofinsst && !imposto.COFINSST) imposto.COFINSST = {}
-    if (!cofinsst && imposto.COFINSST) imposto.COFINSST = undefined
+    if (!cofinsst && imposto.COFINSST) delete imposto.COFINSST
+    imposto = imposto
   }
 </script>
 

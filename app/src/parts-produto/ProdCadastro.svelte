@@ -31,7 +31,7 @@
     }
   }
 </script>
-{@debug prod}
+
 <label>
   Código
   <input maxlength="60" bind:value={prod['cProd']} required {pattern} />
