@@ -2,13 +2,17 @@
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
   import { validaCNPJ, validaCPF } from '../code/validacaoDoc'
-  import { edicao, permissaoEscrita, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import { Dados } from '../code/tipos'
   import Dest from '../parts-cliente.svelte/Dest.svelte'
   import Voltar from '../components/Voltar.svelte'
+  import {
+    carregando,
+    edicao,
+    permissaoEscrita,
+    refEmpresa,
+  } from '../code/store'
 
-  let loading = false
   let raiz = undefined
 
   const ed = get(edicao)
@@ -26,16 +30,16 @@
       $goto('./')
       return
     }
-    loading = true
+    $carregando = true
     try {
       const dest = raiz.dest
       if (dest.CPF && !validaCPF(dest.CPF)) {
-        loading = false
+        $carregando = false
         alert('CPF inválido.')
         return
       }
       if (dest.CNPJ && !validaCNPJ(dest.CNPJ)) {
-        loading = false
+        $carregando = false
         alert('CNPJ inválido.')
         return
       }
@@ -47,14 +51,14 @@
       const docRef = doc($refEmpresa, Dados.Clientes, id)
       if (ed && ed.id != id) {
         alert('Não é permitido alterar o documento.')
-        loading = false
+        $carregando = false
         return
       } else if (
         !ed &&
         (await getDoc(docRef)).exists &&
         !confirm('Já existe um cliente com este documento. Substituir?')
       ) {
-        loading = false
+        $carregando = false
         return
       }
       await setDoc(docRef, raiz)
@@ -63,14 +67,12 @@
     } catch (error) {
       console.error(error)
       alert(error.message)
-      loading = false
+      $carregando = false
     }
   }
 </script>
 
-{#if loading}
-  Carregando...
-{:else}
+{#if !$carregando}
   <form on:submit|preventDefault={() => salvar()}>
     <h1><Voltar /> Destinatário</h1>
     <Dest bind:dest={raiz.dest} />

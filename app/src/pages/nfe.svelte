@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { edicao, refEmpresa, empresa } from '../code/store'
+  import { carregando, edicao, refEmpresa, empresa } from '../code/store'
   import { preparateJSON, generateXML } from '../code/nfe/finalizacao'
   import {
     collection,
@@ -23,8 +23,6 @@
   import Transp from '../parts-nfe/Transp.svelte'
   import Voltar from '../components/Voltar.svelte'
 
-  let loading = false
-
   const ed = get(edicao)
   let raiz: INFeRoot = {} as any
   if (ed?.tipo == Dados.NFes) raiz = ed.dado.infNFe ?? ed.dado
@@ -39,7 +37,7 @@
   }
 
   async function salvar() {
-    loading = true
+    $carregando = true
     try {
       raiz.ide.nNF = '0'
       const coluna = collection($refEmpresa, Dados.NFes)
@@ -60,12 +58,12 @@
     } catch (error) {
       console.error(error)
       alert(error.message)
-      loading = false
+      $carregando = false
     }
   }
 
   async function transmitir() {
-    loading = true
+    $carregando = true
     try {
       const oldId = raiz.Id
       const infNFe = preparateJSON(raiz, true)
@@ -77,11 +75,11 @@
       if (data.mensagem) alert('Mensagem da SEFAZ para você:\n' + data.mensagem)
       $edicao = { dado: data, id: data.infNFe.Id, tipo: Dados.NFes }
       $goto('./nfeExib')
-      loading = false
+      $carregando = false
     } catch (error) {
       console.error(error)
       alert(error.message)
-      loading = false
+      $carregando = false
     }
   }
 
@@ -89,9 +87,7 @@
   $: isNFCe = raiz.ide?.['mod'] === '65'
 </script>
 
-{#if loading}
-  Carregando...
-{:else}
+{#if !$carregando}
   <h1><Voltar /> Nota fiscal</h1>
   <Ide bind:ide={raiz.ide} />
   <Destinatario bind:dest={raiz.dest} {isNFCe} />
