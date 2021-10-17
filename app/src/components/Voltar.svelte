@@ -1,8 +1,10 @@
 <script>
   import { url } from '@roxi/routify'
+
+  export let href = './'
 </script>
 
-<a href={$url('./')} title="Voltar">&#129092;</a>
+<a href={$url(href)} title="Voltar">&#129092;</a>
 
 <style>
   a {

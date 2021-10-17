@@ -1,10 +1,12 @@
 <script lang="ts">
   import Doc from '../components/Doc.svelte'
+  import Adicionar from '../components/Adicionar.svelte'
   import { DocumentSnapshot } from 'firebase/firestore'
   import { refEmpresa } from '../code/store'
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { mascararDocData, mascararDocSnapshot } from '../code/mascaracaoDoc'
+  import { url } from '@roxi/routify'
 
   export let dest: any
   export let isNFCe: boolean
@@ -26,7 +28,10 @@
 </script>
 
 <!-- Botar de uma forma que caso digitado o documento corretamente no campo de busca, caso ele não seja encontrado então será usado apenas o documento caso seja uma NFC-e -->
-<h2>Destinatário</h2>
+<h2>
+  Destinatário
+  <Adicionar href={$url('./cliente')} />
+</h2>
 {#if isNFCe && destSemNome}
   <p>Numa NFC-e, caso queiras, podes informar apenas o documento do cliente.</p>
   <Doc bind:raiz={dest} />

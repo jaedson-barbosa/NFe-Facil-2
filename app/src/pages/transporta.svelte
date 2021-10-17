@@ -15,20 +15,16 @@
   import Doc from '../components/Doc.svelte'
   import { pattern } from '../code/patterns'
 
-  let raiz = undefined
-
   const ed = get(edicao)
-  if (ed) {
-    if (ed.tipo != Dados.Transportes) $edicao = undefined
-    else raiz = { ...ed.dado }
-  } else raiz = {}
+  const paginaAnterior = ed.tipo === Dados.NFes ? './nfe' : './'
+  let raiz = ed?.tipo === Dados.Transportes ? ed.dado : {}
 
   if (!raiz['transporta']) raiz['transporta'] = {}
   let transporta = raiz['transporta']
 
   async function salvar() {
     if (!$permissaoEscrita) {
-      $goto('./')
+      $goto(paginaAnterior)
       return
     }
     $carregando = true
@@ -44,7 +40,7 @@
       }
       const id = transporta.CPF ? transporta.CPF : transporta.CNPJ
       const docRef = doc($refEmpresa, Dados.Transportes, id)
-      if (ed) {
+      if (ed?.tipo === Dados.Transportes) {
         if (ed.id != id) {
           alert('Não é permitido alterar o documento.')
           $carregando = false
@@ -61,8 +57,7 @@
         }
       }
       await setDoc(docRef, raiz)
-      $edicao = undefined
-      $goto('./')
+      $goto(paginaAnterior)
     } catch (error) {
       alert(error.message)
       $carregando = false
@@ -72,7 +67,7 @@
 
 {#if !$carregando}
   <form on:submit|preventDefault={() => salvar()}>
-    <h1><Voltar /> Transportador</h1>
+    <h1><Voltar href={paginaAnterior} /> Transportador</h1>
     <Doc bind:raiz={transporta} apenasBR />
     <label>
       Razão Social ou nome do transportador

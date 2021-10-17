@@ -13,21 +13,15 @@
     refEmpresa,
   } from '../code/store'
 
-  let raiz = undefined
-
   const ed = get(edicao)
-  if (ed) {
-    if (ed.tipo != Dados.Clientes) {
-      $edicao = undefined
-      raiz = {}
-    } else raiz = { ...ed.dado }
-  } else raiz = {}
+  const paginaAnterior = ed.tipo === Dados.NFes ? './nfe' : './'
+  let raiz = ed?.tipo === Dados.Clientes ? ed.dado : {}
 
   if (!raiz.dest) raiz.dest = {}
 
   async function salvar() {
     if (!$permissaoEscrita) {
-      $goto('./')
+      $goto(paginaAnterior)
       return
     }
     $carregando = true
@@ -43,18 +37,14 @@
         alert('CNPJ inválido.')
         return
       }
-      const id = dest.CPF
-        ? dest.CPF
-        : dest.CNPJ
-        ? dest.CNPJ
-        : dest.idEstrangeiro
+      const id = dest.CPF || dest.CNPJ || dest.idEstrangeiro
       const docRef = doc($refEmpresa, Dados.Clientes, id)
-      if (ed && ed.id != id) {
+      if (ed?.tipo === Dados.Clientes && ed.id != id) {
         alert('Não é permitido alterar o documento.')
         $carregando = false
         return
       } else if (
-        !ed &&
+        ed?.tipo !== Dados.Clientes &&
         (await getDoc(docRef)).exists &&
         !confirm('Já existe um cliente com este documento. Substituir?')
       ) {
@@ -62,8 +52,7 @@
         return
       }
       await setDoc(docRef, raiz)
-      $edicao = undefined
-      $goto('./')
+      $goto(paginaAnterior)
     } catch (error) {
       console.error(error)
       alert(error.message)
@@ -74,7 +63,7 @@
 
 {#if !$carregando}
   <form on:submit|preventDefault={() => salvar()}>
-    <h1><Voltar /> Destinatário</h1>
+    <h1><Voltar href={paginaAnterior} /> Destinatário</h1>
     <Dest bind:dest={raiz.dest} />
     {#if permissaoEscrita}
       <input type="submit" class="button" />
