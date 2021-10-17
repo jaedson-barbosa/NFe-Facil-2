@@ -36,7 +36,7 @@ const db = getFirestore()
 const auth = getAuth()
 const functions = getFunctions(undefined, 'southamerica-east1')
 
-if (true) {
+if (false) {
   connectFirestoreEmulator(db, 'localhost', 8080)
   connectAuthEmulator(auth, 'http://localhost:9099')
   connectFunctionsEmulator(functions, 'localhost', 5001)
