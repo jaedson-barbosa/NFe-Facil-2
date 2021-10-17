@@ -75,6 +75,8 @@ type TEmpresa = {
   serieNFCe: string
   IDCSC: string
   CSC: string
+  IDCSCh: string
+  CSCh: string
   tokenIBPT?: string
 }
 

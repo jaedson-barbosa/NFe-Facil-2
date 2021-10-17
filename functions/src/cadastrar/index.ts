@@ -129,6 +129,8 @@ async function verificarRegistrarEmpresa(
     serieNFCe: '1',
     IDCSC: '',
     CSC: '',
+    IDCSCh: '',
+    CSCh: '',
   }
   await empresaRef.set(empresaDoc)
 }

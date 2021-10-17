@@ -22,7 +22,7 @@ export default async function (
   validarPermissao(context.auth!.token, CNPJ)
   const { certificado, colunaNFes, refEmpresa } = await carregarEmpresa(CNPJ)
   const infos = await getInfos(colunaNFes, infNFe)
-  const { CSC, IDCSC } = await getCSC(refEmpresa)
+  const { CSC, IDCSC } = await getCSC(refEmpresa, infos.ambiente)
   const infNFeSupl = getInfSupl(infos.UF, infNFe.Id, infos.ambiente, IDCSC, CSC)
   for (let i = 0; i < 10; i++, infos.numero++) {
     const xml = gerarXML(infNFe, certificado, infos.numero, infNFeSupl)
@@ -44,15 +44,23 @@ function validarRequisicao(req: IReqTransmitir) {
   }
 }
 
-async function getCSC(refEmpresa: FirebaseFirestore.DocumentReference) {
+async function getCSC(
+  refEmpresa: FirebaseFirestore.DocumentReference,
+  ambiente: Ambientes
+) {
   const docEmpresa = await refEmpresa.get()
-  const CSC = docEmpresa.get('CSC')
-  const IDCSC = docEmpresa.get('IDCSC')
+  const CSC: string = docEmpresa.get('CSC')
+  const IDCSC: string = docEmpresa.get('IDCSC')
   if (!CSC || !IDCSC) {
     throw new https.HttpsError(
       'failed-precondition',
-      'CSC não está cadastrado.'
+      'CSC de produção não está cadastrado.'
     )
+  }
+  if (ambiente === Ambientes.Homologacao) {
+    const CSCh: string = docEmpresa.get('CSCh')
+    const IDCSCh: string = docEmpresa.get('IDCSCh')
+    if (CSCh && IDCSCh) return { CSC: CSCh, IDCSC: IDCSCh }
   }
   return { CSC, IDCSC }
 }
