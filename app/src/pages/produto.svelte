@@ -55,10 +55,10 @@
   }
 
   async function analisarIBPT() {
-    const existeToken = empresaCarregada.tokenIBPT
-    const aindaVazio = !ibpt.validade
-    const jaVenceu = ibpt.validade.toDate() < new Date()
-    if (existeToken && (aindaVazio || jaVenceu)) {
+    if (
+      empresaCarregada.tokenIBPT &&
+      (!ibpt.validade || ibpt.validade.toDate() < new Date())
+    ) {
       await carregarImpostos()
     }
   }
