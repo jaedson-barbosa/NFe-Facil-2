@@ -19,7 +19,7 @@
   if (prod.indTot === undefined) prod.indTot = '1'
   let indTot = prod.indTot == '1'
   $: prod.indTot = indTot ? '1' : '0'
-//Corrigir esse undefined
+
   $: {
     if (!prod.CEST) {
       delete prod.indEscala
