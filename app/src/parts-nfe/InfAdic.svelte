@@ -11,7 +11,7 @@
 
   function removerAproximacao(infCpl: string) {
     return infCpl?.includes('Valor aproximado dos tributos: ')
-      ? infCpl.substr(infCpl.indexOf('\n'))
+      ? infCpl.substr(infCpl.indexOf('IBPT.') + 5)
       : ''
   }
 
@@ -41,7 +41,7 @@
       const f = getMoeda(aproximacao.federal) + ' federal'
       const e = getMoeda(aproximacao.estadual) + ' estadual'
       const m = `${getMoeda(aproximacao.municipal)} municipal`
-      return `Valor aproximado dos tributos: ${f}, ${e} e ${m}, fonte: IBPT.\n`
+      return `Valor aproximado dos tributos: ${f}, ${e} e ${m}, fonte: IBPT.`
     }
 
     if (!consumidorFinal || dets.some((v) => !v.ibpt)) return ''
@@ -50,7 +50,8 @@
     return getTextoAproximacao(aproximacao)
   }
 
-  $: raiz.infAdic.infCpl = getAproximacao(consumidorFinal, raiz.det) + infCpl
+  $: raiz.infAdic.infCpl =
+    getAproximacao(consumidorFinal, raiz.det) + (infCpl ? ' ' + infCpl : '')
 </script>
 
 <h2>Informações adicionais</h2>
