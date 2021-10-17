@@ -32,13 +32,25 @@
       <input bind:value={raiz.serieNFCe} pattern={'0|[1-9]{1}[0-9]{0,2}'} />
     </label>
     <label>
-      ID CSC <small>Identificador do CSC</small>
+      ID CSC <small>Id do CSC de produção</small>
       <input bind:value={raiz.IDCSC} />
     </label>
     <label>
-      CSC <small>Código de Segurança do Contribuinte</small>
+      CSC <small>CSC de produção</small>
       <input bind:value={raiz.CSC} />
     </label>
+    <label>
+      ID CSC <small>Id do CSC de homologação</small>
+      <input bind:value={raiz.IDCSCh} />
+    </label>
+    <label>
+      CSC <small>CSC de homologação</small>
+      <input bind:value={raiz.CSCh} />
+    </label>
+    <small>
+      Caso o Id e CSC de homologação não sejam preenchidos, será utilizado o Id
+      e CSC de produção mesmo nas requisições no ambiente de homologação.
+    </small>
 
     <h3>Acesso ao IBPT</h3>
     <label>

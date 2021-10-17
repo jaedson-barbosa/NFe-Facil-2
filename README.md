@@ -14,6 +14,8 @@ serieNFe
 serieNFCe
 IDCSC
 CSC
+IDCSCh
+CSCh
 tokenIBPT
 -clientes:
   dest: ...
