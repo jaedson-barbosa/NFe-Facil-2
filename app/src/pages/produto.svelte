@@ -1,14 +1,19 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { edicao, empresa, permissaoEscrita, refEmpresa } from '../code/store'
+  import {
+    carregando,
+    edicao,
+    empresa,
+    permissaoEscrita,
+    refEmpresa,
+  } from '../code/store'
   import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
   import ProdCadastro from '../parts-produto/ProdCadastro.svelte'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
   import Imposto from '../parts-imposto/Imposto.svelte'
 
-  let loading = false
   let raiz = undefined
 
   const empresaCarregada = get(empresa)
@@ -68,14 +73,14 @@
       $goto('./')
       return
     }
-    loading = true
+    $carregando = true
     try {
       const id = det.prod.cProd
       const prodRef = doc($refEmpresa, Dados.Produtos, id)
       if (ed) {
         if (ed.id != id) {
           alert('Não é permitido alterar o código ou CFOP (por enquanto).')
-          loading = false
+          $carregando = false
           return
         }
       } else {
@@ -84,7 +89,7 @@
           'Já existe um produto cadastrado com este código. ' +
           'Deseja substituí-lo?'
         if (doc.exists && !confirm(msg)) {
-          loading = false
+          $carregando = false
           return
         }
       }
@@ -94,14 +99,12 @@
     } catch (error) {
       console.error(error)
       alert(error.message)
-      loading = false
+      $carregando = false
     }
   }
 </script>
 
-{#if loading}
-  Carregando...
-{:else}
+{#if !$carregando}
   <form on:submit|preventDefault={() => salvar()}>
     <h1><Voltar /> Produto</h1>
     <ProdCadastro bind:prod={det.prod} />

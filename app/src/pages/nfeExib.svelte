@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { edicao, permissaoEscrita } from '../code/store'
+  import { carregando, edicao, permissaoEscrita } from '../code/store'
   import { goto, url } from '@roxi/routify'
   import { cancelarNF } from '../code/firebase'
   import { toNFeString } from '../code/getDataString'
@@ -14,10 +14,8 @@
   }
   const chave = ed?.id.substring(3)
 
-  let carregando = false
-
   async function cancelar() {
-    carregando = true
+    $carregando = true
     const justificativa = prompt('Motivação do cancelamento:')
     if (!justificativa) {
       alert('Operação cancelada pelo usuário')
@@ -32,7 +30,7 @@
       alert('Nota fiscal cancelada com sucesso.')
       $goto('./')
     }
-    carregando = false
+    $carregando = false
   }
 
   function gerarLinkXML(xml: string) {
@@ -42,7 +40,7 @@
 
   let linkDANFE = undefined
   async function gerarDANFE() {
-    carregando = true
+    $carregando = true
     linkDANFE = ''
     const xml = ed.dado.xml
     const parametros = {
@@ -60,7 +58,7 @@
     const danfe = await fetch(enderecoAPI, corpoRequisicao)
     const pdf = await danfe.blob()
     linkDANFE = window.URL.createObjectURL(pdf)
-    carregando = false
+    $carregando = false
   }
 
   function clonar() {
@@ -69,9 +67,7 @@
   }
 </script>
 
-{#if carregando}
-  Carregando...
-{:else if ed}
+{#if !$carregando && ed}
   <h1><Voltar /> Detalhes da nota fiscal</h1>
   <p>
     <strong>Chave:</strong>

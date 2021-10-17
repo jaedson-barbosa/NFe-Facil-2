@@ -2,7 +2,12 @@
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
   import { validaCPF, validaCNPJ } from '../code/validacaoDoc'
-  import { edicao, permissaoEscrita, refEmpresa } from '../code/store'
+  import {
+    carregando,
+    edicao,
+    permissaoEscrita,
+    refEmpresa,
+  } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
@@ -10,7 +15,6 @@
   import Doc from '../components/Doc.svelte'
   import { pattern } from '../code/patterns'
 
-  let loading = false
   let raiz = undefined
 
   const ed = get(edicao)
@@ -27,7 +31,7 @@
       $goto('./')
       return
     }
-    loading = true
+    $carregando = true
     try {
       const transporta = raiz.transporta
       if (transporta.CPF && !validaCPF(transporta.CPF)) {
@@ -43,7 +47,7 @@
       if (ed) {
         if (ed.id != id) {
           alert('Não é permitido alterar o documento.')
-          loading = false
+          $carregando = false
           return
         }
       } else {
@@ -52,7 +56,7 @@
           'Já existe um transportador cadastrado com este documento. ' +
           'Deseja substituí-lo?'
         if (doc.exists && !confirm(msg)) {
-          loading = false
+          $carregando = false
           return
         }
       }
@@ -61,14 +65,12 @@
       $goto('./')
     } catch (error) {
       alert(error.message)
-      loading = false
+      $carregando = false
     }
   }
 </script>
 
-{#if loading}
-  Carregando...
-{:else}
+{#if !$carregando}
   <form on:submit|preventDefault={() => salvar()}>
     <h1><Voltar /> Transportador</h1>
     <Doc bind:raiz={transporta} apenasBR />

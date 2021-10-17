@@ -1,6 +1,12 @@
 <script lang="ts">
   import { deleteDoc, doc, setDoc } from '@firebase/firestore'
-  import { edicao, empresa, permissaoEscrita, refEmpresa } from '../code/store'
+  import {
+    carregando,
+    edicao,
+    empresa,
+    permissaoEscrita,
+    refEmpresa,
+  } from '../code/store'
   import { Dados } from '../code/tipos'
   import { EstadosEX } from '../code/IBGE'
   import Voltar from '../components/Voltar.svelte'
@@ -8,7 +14,6 @@
   import { goto } from '@roxi/routify'
   import { pattern } from '../code/patterns'
 
-  let loading = false
   let raiz: IVeiculo = undefined
 
   const ed = get(edicao)
@@ -24,7 +29,7 @@
   }
 
   async function salvar() {
-    loading = true
+    $carregando = true
     if ($permissaoEscrita) {
       if (ed?.dado && ed.dado.placa != raiz.placa) {
         const ref = doc($refEmpresa, Dados.Veiculos, ed.dado.placa)
@@ -34,13 +39,11 @@
       await setDoc(ref, raiz)
     }
     $goto('./')
-    loading = false
+    $carregando = false
   }
 </script>
 
-{#if loading}
-  Carregando...
-{:else}
+{#if !$carregando}
   <form on:submit|preventDefault={salvar}>
     <h1><Voltar /> Veículo</h1>
     <label>
