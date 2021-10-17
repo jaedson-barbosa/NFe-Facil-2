@@ -8,10 +8,12 @@ import {
   IReqAddMembro,
   IReqCadastrar,
   IReqCancelar,
+  IReqRemMembro,
   IReqTransmitir,
   IResAddMembro,
   IResCadastrar,
   IResCancelar,
+  IResRemMembro,
   IResTransmitir,
 } from './tipos'
 import { initializeApp } from 'firebase/app'
@@ -77,6 +79,11 @@ export const cancelarNF = httpsCallable<IReqCancelar, IResCancelar>(
 export const addMembro = httpsCallable<IReqAddMembro, IResAddMembro>(
   functions,
   'addMembro'
+)
+
+export const remMembro = httpsCallable<IReqRemMembro, IResRemMembro>(
+  functions,
+  'remMembro'
 )
 
 export function defaultCatch(error: FunctionsError) {

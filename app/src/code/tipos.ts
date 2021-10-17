@@ -60,6 +60,15 @@ export interface IResAddMembro {
   sucesso: true
 }
 
+export interface IReqRemMembro {
+  CNPJ: string
+  idUsuario?: string
+}
+
+export interface IResRemMembro {
+  sucesso: true
+}
+
 //#endregion
 
 export enum Dados {

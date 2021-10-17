@@ -16,7 +16,10 @@ export default async function (
   validarPermissao(token, req.CNPJ, true)
   try {
     const novo = await auth().getUser(req.idNovo)
-    await registrarUsuario(req.CNPJ, req.escrita, novo)
+    const nivel = req.escrita ? NiveisAcesso.RW : NiveisAcesso.R
+    const liberacoes = novo.customClaims ?? {}
+    liberacoes[req.CNPJ] = nivel
+    await auth().setCustomUserClaims(novo.uid, liberacoes)
     return { sucesso: true }
   } catch (error: any) {
     throw new https.HttpsError(
@@ -46,14 +49,4 @@ function validarRequisicao(req: IReqAddMembro) {
       'Campo permissão de escrita ausente.'
     )
   }
-}
-
-async function registrarUsuario(
-  CNPJ: string,
-  escrita: boolean,
-  userRecord: admin.auth.UserRecord
-) {
-  const nivel = escrita ? NiveisAcesso.RW : NiveisAcesso.R
-  const liberacoes = { ...userRecord.customClaims, [CNPJ]: nivel }
-  await auth().setCustomUserClaims(userRecord.uid, liberacoes)
 }
