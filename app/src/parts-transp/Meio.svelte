@@ -57,6 +57,8 @@
   $: veicTransp = transp.veicTransp
   $: avisoAdd = veicTransp ? 'Adicionar reboque' : 'Definir veículo trator'
   $: reboque = transp.reboque as any[]
+  $: placasAdds = [veicTransp?.placa, ...reboque.map((v) => v.placa)]
+  $: veicsRest = veiculos.filter((n) => !placasAdds.includes(n.get('placa')))
 </script>
 
 <h3>Meio de transporte</h3>
@@ -113,7 +115,7 @@
             <td>{v.RNTC ?? ''}</td>
           </tr>
         {/each}
-        {#each veiculos as n}
+        {#each veicsRest as n}
           <tr class="clicavel" on:click={adicionar(n)} title={avisoAdd}>
             <td>{n.get('placa')}</td>
             <td>{n.get('UF')}</td>
