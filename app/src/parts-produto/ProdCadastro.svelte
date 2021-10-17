@@ -12,8 +12,6 @@
 
   if (!prod) prod = {}
 
-  $: !prod['CEST'] && (prod['indEscala'] = prod['CNPJFab'] = '')
-
   const detsComplexos = ['veicProd', 'med', 'arma', 'comb']
   const detsEspecificos = [...detsComplexos, 'nRECOPI']
   let detEspecifico = detsEspecificos.find((v) => prod[v]) ?? 'normal'
@@ -21,10 +19,19 @@
   if (prod.indTot === undefined) prod.indTot = '1'
   let indTot = prod.indTot == '1'
   $: prod.indTot = indTot ? '1' : '0'
-
-  $: prod.CNPJFab = prod.indEscala == 'N' ? '' : undefined
+//Corrigir esse undefined
+  $: {
+    if (!prod.CEST) {
+      delete prod.indEscala
+      delete prod.CNPJFab
+    } else if (prod.indEscala == 'S') {
+      delete prod.CNPJFab
+    } else {
+      prod.CNPJFab = ''
+    }
+  }
 </script>
-
+{@debug prod}
 <label>
   Código
   <input maxlength="60" bind:value={prod['cProd']} required {pattern} />
