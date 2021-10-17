@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { carregando, edicao, permissaoEscrita } from '../code/store'
+  import { carregando, edicao } from '../code/store'
   import { goto, url } from '@roxi/routify'
   import { cancelarNF } from '../code/firebase'
   import { toNFeString } from '../code/getDataString'
@@ -94,9 +94,7 @@
   </a>
 
   {#if ed.dado.nProt}
-    {#if permissaoEscrita}
-      <button on:click={clonar}>Clonar</button>
-    {/if}
+    <button on:click={clonar}>Clonar</button>
     {#if ed.dado.cancelada}
       <a
         class="button"
@@ -105,10 +103,10 @@
       >
         Baixar XML do cancelamento
       </a>
-    {:else if permissaoEscrita}
+    {:else}
       <button on:click={cancelar}>Solicitar cancelamento</button>
     {/if}
-  {:else if permissaoEscrita}
+  {:else}
     <a class="button" href={$url('./nfe')}>Editar</a>
   {/if}
 {/if}

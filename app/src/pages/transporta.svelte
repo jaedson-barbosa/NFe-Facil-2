@@ -2,12 +2,7 @@
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
   import { validaCPF, validaCNPJ } from '../code/validacaoDoc'
-  import {
-    carregando,
-    edicao,
-    permissaoEscrita,
-    refEmpresa,
-  } from '../code/store'
+  import { carregando, edicao, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
@@ -23,10 +18,6 @@
   let transporta = raiz['transporta']
 
   async function salvar() {
-    if (!$permissaoEscrita) {
-      $goto(paginaAnterior)
-      return
-    }
     $carregando = true
     try {
       const transporta = raiz.transporta
@@ -91,8 +82,6 @@
       <input maxlength="60" bind:value={transporta['xEnder']} {pattern} />
     </label>
     <Municipio bind:xMun={transporta['xMun']} bind:UF={transporta['UF']} />
-    {#if $permissaoEscrita}
-      <input type="submit" class="button" value="Salvar" />
-    {/if}
+    <input type="submit" class="button" value="Salvar" />
   </form>
 {/if}

@@ -15,10 +15,9 @@ export default async function (
   const token = context.auth!.token
   validarPermissao(token, req.CNPJ, true)
   try {
-    const novo = await auth().getUser(req.idNovo)
-    const nivel = req.escrita ? NiveisAcesso.RW : NiveisAcesso.R
+    const novo = await auth().getUser(req.id)
     const liberacoes = novo.customClaims ?? {}
-    liberacoes[req.CNPJ] = nivel
+    liberacoes[req.CNPJ] = NiveisAcesso.RW
     await auth().setCustomUserClaims(novo.uid, liberacoes)
     return { sucesso: true }
   } catch (error: any) {
@@ -37,16 +36,10 @@ function validarRequisicao(req: IReqAddMembro) {
       'Campo CNPJ da empresa ausente.'
     )
   }
-  if (!req.idNovo) {
+  if (!req.id) {
     throw new https.HttpsError(
       'failed-precondition',
       'Campo ID de usuário ausente.'
-    )
-  }
-  if (req.escrita) {
-    throw new https.HttpsError(
-      'failed-precondition',
-      'Campo permissão de escrita ausente.'
     )
   }
 }

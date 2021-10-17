@@ -7,9 +7,9 @@
   import { idEmpresa } from '../code/store'
   import Voltar from '../components/Voltar.svelte'
 
-  function addMembro(escrita: boolean) {
-    const idNovo = prompt('Id do novo membro:')
-    _addMembro({ CNPJ: $idEmpresa, escrita, idNovo })
+  function addMembro() {
+    const id = prompt('Id do novo membro:')
+    _addMembro({ CNPJ: $idEmpresa, id })
       .then(() => alert('Registrado com sucesso.'))
       .catch(defaultCatch)
   }
@@ -28,26 +28,22 @@
   }
 
   function bloquearOutro() {
-    const idUsuario = prompt('Id do usuário que desejas bloquear:')
-    if (!idUsuario) return
-    remMembro({ CNPJ: $idEmpresa, idUsuario })
+    const id = prompt('Id do usuário que desejas bloquear:')
+    if (!id) return
+    remMembro({ CNPJ: $idEmpresa, id })
       .then(() => alert('Usuário bloqueado com sucesso'))
       .catch(defaultCatch)
   }
 </script>
 
 <h1><Voltar /> Controle de acesso</h1>
-<h2>Adição</h2>
-<button on:click={() => addMembro(false)}>Somente leitura</button>
-<button on:click={() => addMembro(true)}>Leitura e escrita</button>
+<button on:click={addMembro}>Adicionar funcionário</button>
 <p>
-  Você pode liberar o acesso a outros usuários, para isso basta clicar em um dos
-  dois botões acima com base no que você deseja que eles sejam capazes de fazer
-  e preencher com o ID do novo usuário quando solicitado.
+  Você pode liberar o acesso a outros usuários para que eles possam fazer
+  operações nesta empresa, como por seus funcionários.
 </p>
-<h2>Remoção</h2>
-<button on:click={bloquearOutro}>Outro usuário</button>
-<button on:click={seBloquear}>Próprio acesso</button>
+<button on:click={bloquearOutro}>Remover funcionário</button>
+<button on:click={seBloquear}>Se remover</button>
 <p>
   Da mesma forma como é possível liberar o acesso a novos usuários, também é
   possível remover o acesso de usuários comuns (aqueles que não são

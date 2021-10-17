@@ -15,7 +15,7 @@ const googleProvider = new GoogleAuthProvider()
 
 export const carregando = writable(false)
 const carregandoEl = document.getElementById('carregando')
-carregando.subscribe(v => carregandoEl.className = v ? '' :  'desativado')
+carregando.subscribe((v) => (carregandoEl.className = v ? '' : 'desativado'))
 
 export const user = {
   subscribe: readable<User>(undefined, (set) =>
@@ -34,7 +34,7 @@ export const liberacoes = derived<
     if (ref) {
       getIdTokenResult(ref, true)
         .then(({ claims }) => {
-          const niveis = [NiveisAcesso.R, NiveisAcesso.RW, NiveisAcesso.A]
+          const niveis = [NiveisAcesso.RW, NiveisAcesso.A]
           const liberacoes = Object.entries(claims)
           const empresas = liberacoes
             .filter(([_, v]) => niveis.includes(v as NiveisAcesso))
@@ -58,15 +58,6 @@ export const liberacao = derived(
   [liberacoes, idEmpresa],
   ([$liberacoes, $idEmpresa]) =>
     $liberacoes?.find((v) => v.cnpj == $idEmpresa)?.nivel
-)
-
-const niveisEscrita = [NiveisAcesso.RW, NiveisAcesso.A]
-export const permissaoEscrita = derived(liberacao, ($liberacao) =>
-  niveisEscrita.includes($liberacao)
-)
-export const permissaoAdministracao = derived(
-  liberacao,
-  ($liberacao) => $liberacao == NiveisAcesso.A
 )
 
 type TEmpresa = {

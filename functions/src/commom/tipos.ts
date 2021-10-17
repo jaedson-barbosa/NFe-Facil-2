@@ -34,7 +34,6 @@ export interface IResTransmitir {
 }
 
 export enum NiveisAcesso {
-  R = 'R',
   RW = 'RW',
   A = 'A',
 }
@@ -50,8 +49,7 @@ export interface INotaDB {
 
 export interface IReqAddMembro {
   CNPJ: string
-  idNovo: string
-  escrita: boolean
+  id: string
 }
 
 export interface IResAddMembro {
@@ -60,7 +58,7 @@ export interface IResAddMembro {
 
 export interface IReqRemMembro {
   CNPJ: string
-  idUsuario?: string
+  id?: string
 }
 
 export interface IResRemMembro {
