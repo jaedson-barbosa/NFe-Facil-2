@@ -59,12 +59,12 @@
   $: reboque = transp.reboque as any[]
 </script>
 
-<h3>Meio</h3>
+<h3>Meio de transporte</h3>
 <select bind:value={meio}>
-  <option value="nenhum">Sem informação</option>
-  <option value="vagao">Vagão</option>
-  <option value="balsa">Balsa</option>
-  <option value="veicTransp">Veículo</option>
+  <option value="veicTransp">Rodoviário</option>
+  <option value="vagao">Ferroviário</option>
+  <option value="balsa">Aquático</option>
+  <option value="nenhum">Sem informação/Outros</option>
 </select>
 {#if meio == 'vagao'}
   <label>
