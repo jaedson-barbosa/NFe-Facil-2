@@ -27,7 +27,8 @@ function validarRespostaPedido(res: retEnviNFeBase) {
   if (res.cStat != '103') {
     throw new https.HttpsError(
       'internal',
-      'Falha durante envio de lote de notas fiscais.',
+      `Falha durante envio de lote de notas fiscais:
+      ${res.cStat}: ${res.xMotivo}`,
       res.xMotivo
     )
   }

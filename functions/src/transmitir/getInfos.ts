@@ -12,7 +12,10 @@ export async function getInfos(
   const UF: string = infNFe.emit.enderEmit.UF.$t
   corrigirDestinatario(infNFe, ambiente)
   const infos = { serie, numero, ambiente, modelo, UF }
-  if (!numero) infos.numero = await calcularNovoNumero(coluna, infos)
+  if (!numero) {
+    const numero = await calcularNovoNumero(coluna, infos)
+    infos.numero = numero
+  }
   return infos
 }
 
