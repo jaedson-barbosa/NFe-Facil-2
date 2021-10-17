@@ -1,13 +1,7 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import {
-    carregando,
-    edicao,
-    empresa,
-    permissaoEscrita,
-    refEmpresa,
-  } from '../code/store'
+  import { carregando, edicao, empresa, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
   import ProdCadastro from '../parts-produto/ProdCadastro.svelte'
   import { Dados } from '../code/tipos'
@@ -69,10 +63,6 @@
   }
 
   async function salvar() {
-    if (!$permissaoEscrita) {
-      $goto('./')
-      return
-    }
     $carregando = true
     try {
       const id = det.prod.cProd
@@ -115,8 +105,6 @@
         Usar tributação aproximada para produto nacional
       </label>
     {/if}
-    {#if permissaoEscrita}
-      <input type="submit" class="button" value="Salvar" />
-    {/if}
+    <input type="submit" class="button" value="Salvar" />
   </form>
 {/if}

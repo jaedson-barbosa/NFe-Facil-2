@@ -1,12 +1,6 @@
 <script lang="ts">
   import { deleteDoc, doc, setDoc } from '@firebase/firestore'
-  import {
-    carregando,
-    edicao,
-    empresa,
-    permissaoEscrita,
-    refEmpresa,
-  } from '../code/store'
+  import { carregando, edicao, empresa, refEmpresa } from '../code/store'
   import { Dados } from '../code/tipos'
   import { EstadosEX } from '../code/IBGE'
   import Voltar from '../components/Voltar.svelte'
@@ -29,18 +23,16 @@
 
   async function salvar() {
     $carregando = true
-    if ($permissaoEscrita) {
-      if (
-        ed?.tipo === Dados.Veiculos &&
-        ed?.dado &&
-        ed.dado.placa != raiz.placa
-      ) {
-        const ref = doc($refEmpresa, Dados.Veiculos, ed.dado.placa)
-        await deleteDoc(ref)
-      }
-      const ref = doc($refEmpresa, Dados.Veiculos, raiz.placa)
-      await setDoc(ref, raiz)
+    if (
+      ed?.tipo === Dados.Veiculos &&
+      ed?.dado &&
+      ed.dado.placa != raiz.placa
+    ) {
+      const ref = doc($refEmpresa, Dados.Veiculos, ed.dado.placa)
+      await deleteDoc(ref)
     }
+    const ref = doc($refEmpresa, Dados.Veiculos, raiz.placa)
+    await setDoc(ref, raiz)
     $goto(paginaAnterior)
     $carregando = false
   }
@@ -69,8 +61,6 @@
       <i>RNTC</i>
       <input bind:value={raiz.RNTC} minlength="1" maxlength="20" {pattern} />
     </label>
-    {#if permissaoEscrita}
-      <input type="submit" value="Salvar" />
-    {/if}
+    <input type="submit" value="Salvar" />
   </form>
 {/if}

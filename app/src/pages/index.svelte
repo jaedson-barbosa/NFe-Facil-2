@@ -1,17 +1,13 @@
 <script lang="ts">
   import { url } from '@roxi/routify'
-  import {
-    edicao,
-    permissaoAdministracao,
-    permissaoEscrita,
-    empresa,
-  } from '../code/store'
+  import { edicao, liberacao, empresa } from '../code/store'
+  import { NiveisAcesso } from '../code/tipos'
 
   $edicao = undefined
 </script>
 
 <h1>Início</h1>
-{#if permissaoAdministracao}
+{#if $liberacao == NiveisAcesso.A}
   <h3>Área do administrador</h3>
   <a class="button" href={$url('./emitente')}>Atualizar emitente</a>
   <a class="button" href={$url('./configuracoes')}>Configurações</a>
@@ -24,10 +20,8 @@
 
 {#if $empresa.emit.enderEmit && $empresa.tokenIBPT}
   <h3>NF-es e NFC-es</h3>
-  {#if permissaoEscrita}
-    <a class="button" href={$url('./nfe')}>Adicionar</a>
-    <a class="button" href={$url('./importacao')}>Importar</a>
-  {/if}
+  <a class="button" href={$url('./nfe')}>Adicionar</a>
+  <a class="button" href={$url('./importacao')}>Importar</a>
   <a class="button" href={$url('./nfes')}>Gerenciar</a>
   <p>
     Emita notas fiscais em produção, aprenda emitindo em homologação, passe
@@ -36,9 +30,7 @@
   </p>
 
   <h3>Clientes</h3>
-  {#if permissaoEscrita}
-    <a class="button" href={$url('./cliente')}>Adicionar</a>
-  {/if}
+  <a class="button" href={$url('./cliente')}>Adicionar</a>
   <a class="button" href={$url('./clientes')}>Gerenciar</a>
   <p>
     Para garantir boas práticas, para a emissão de NF-es só é possível inserir
@@ -46,9 +38,7 @@
   </p>
 
   <h3>Produtos</h3>
-  {#if permissaoEscrita}
-    <a class="button" href={$url('./produto')}>Adicionar</a>
-  {/if}
+  <a class="button" href={$url('./produto')}>Adicionar</a>
   <a class="button" href={$url('./produtos')}>Gerenciar</a>
   <p>
     Os produtos junto com os impostos são uma das partes mais complexas do
@@ -56,9 +46,7 @@
   </p>
 
   <h3>Transportadores</h3>
-  {#if permissaoEscrita}
-    <a class="button" href={$url('./transporta')}>Adicionar</a>
-  {/if}
+  <a class="button" href={$url('./transporta')}>Adicionar</a>
   <a class="button" href={$url('./transportes')}>Gerenciar</a>
   <p>
     Aqui também é seguida a boa prática somente permitir a inserção de
@@ -66,9 +54,7 @@
   </p>
 
   <h3>Veículos</h3>
-  {#if permissaoEscrita}
-    <a class="button" href={$url('./veiculo')}>Adicionar</a>
-  {/if}
+  <a class="button" href={$url('./veiculo')}>Adicionar</a>
   <a class="button" href={$url('./veiculos')}>Gerenciar</a>
   <p>
     Guardando as placas de todos os veículos que passarem pela sua empresa é

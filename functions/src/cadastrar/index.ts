@@ -136,7 +136,7 @@ async function verificarRegistrarEmpresa(
 }
 
 async function registrarUsuario(CNPJ: string, token: admin.auth.DecodedIdToken) {
-  const niveis = [NiveisAcesso.R, NiveisAcesso.RW, NiveisAcesso.A]
+  const niveis = [NiveisAcesso.RW, NiveisAcesso.A]
   const liberacoes = { [CNPJ]: NiveisAcesso.A }
   Object.entries(token)
     .filter(([_, v]) => niveis.includes(v))

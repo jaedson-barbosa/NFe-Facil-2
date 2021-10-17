@@ -6,12 +6,7 @@
   import { Dados } from '../code/tipos'
   import Dest from '../parts-cliente.svelte/Dest.svelte'
   import Voltar from '../components/Voltar.svelte'
-  import {
-    carregando,
-    edicao,
-    permissaoEscrita,
-    refEmpresa,
-  } from '../code/store'
+  import { carregando, edicao, refEmpresa } from '../code/store'
 
   const ed = get(edicao)
   const paginaAnterior = ed.tipo === Dados.NFes ? './nfe' : './'
@@ -20,10 +15,6 @@
   if (!raiz.dest) raiz.dest = {}
 
   async function salvar() {
-    if (!$permissaoEscrita) {
-      $goto(paginaAnterior)
-      return
-    }
     $carregando = true
     try {
       const dest = raiz.dest
@@ -65,8 +56,6 @@
   <form on:submit|preventDefault={() => salvar()}>
     <h1><Voltar href={paginaAnterior} /> Destinatário</h1>
     <Dest bind:dest={raiz.dest} />
-    {#if permissaoEscrita}
-      <input type="submit" class="button" />
-    {/if}
+    <input type="submit" class="button" />
   </form>
 {/if}

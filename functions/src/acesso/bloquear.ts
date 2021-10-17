@@ -14,11 +14,11 @@ export default async function (
   validarRequisicao(req)
   const token = context.auth!.token
   validarPermissao(token, req.CNPJ, true)
-  if (req.idUsuario) {
+  if (req.id) {
     // Estamos buscando bloquear um terceiro
     let otherUser: admin.auth.UserRecord
     try {
-      otherUser = await auth().getUser(req.idUsuario)
+      otherUser = await auth().getUser(req.id)
     } catch (error: any) {
       throw new https.HttpsError(
         'failed-precondition',
@@ -47,12 +47,12 @@ export default async function (
       )
     }
     delete customClaims[req.CNPJ]
-    await auth().setCustomUserClaims(req.idUsuario, customClaims)
+    await auth().setCustomUserClaims(req.id, customClaims)
   } else {
     // O usuário quer se bloquear, entao deletamos o CNPJ do registro
     delete token[req.CNPJ]
     const customClaims: { [cnpj: string]: NiveisAcesso } = {}
-    const niveis = [NiveisAcesso.R, NiveisAcesso.RW, NiveisAcesso.A]
+    const niveis = [NiveisAcesso.RW, NiveisAcesso.A]
     Object.entries(token)
       .filter(([_, v]) => niveis.includes(v))
       .forEach(([key, v]) => (customClaims[key] = v))
