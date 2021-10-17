@@ -1,9 +1,11 @@
 <script lang="ts">
+  import Adicionar from '../components/Adicionar.svelte'
   import { refEmpresa } from '../code/store'
   import { DocumentSnapshot } from 'firebase/firestore'
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { mascararDocData, mascararDocSnapshot } from '../code/mascaracaoDoc'
+  import { url } from '@roxi/routify'
 
   export let transporta: any
 
@@ -18,7 +20,10 @@
   )
 </script>
 
-<h3>Transportador</h3>
+<h3>
+  Transportador
+  <Adicionar href={$url('./transporta')} />
+</h3>
 <label>
   Buscar transportador pelo nome
   <input on:input={buscador.buscar} />
@@ -44,7 +49,10 @@
       {/if}
       {#each transportadores as t}
         {#if transporta?.xNome != t.get('transporta.xNome')}
-          <tr class="clicavel" on:click={() => (transporta = t.data().transporta)}>
+          <tr
+            class="clicavel"
+            on:click={() => (transporta = t.data().transporta)}
+          >
             <td>{t.get('transporta.xNome')}</td>
             <td>{mascararDocSnapshot(t, 'transporta')}</td>
           </tr>

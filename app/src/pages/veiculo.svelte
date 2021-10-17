@@ -14,13 +14,12 @@
   import { goto } from '@roxi/routify'
   import { pattern } from '../code/patterns'
 
-  let raiz: IVeiculo = undefined
-
   const ed = get(edicao)
-  if (ed) {
-    if (ed.tipo != Dados.Veiculos) $edicao = undefined
-    else raiz = { ...ed.dado }
-  } else raiz = { placa: '', UF: get(empresa).emit.enderEmit.UF }
+  const paginaAnterior = ed.tipo === Dados.NFes ? './nfe' : './'
+  let raiz: IVeiculo =
+    ed?.tipo === Dados.Veiculos
+      ? ed.dado
+      : { placa: '', UF: get(empresa).emit.enderEmit.UF }
 
   interface IVeiculo {
     placa: string
@@ -31,21 +30,25 @@
   async function salvar() {
     $carregando = true
     if ($permissaoEscrita) {
-      if (ed?.dado && ed.dado.placa != raiz.placa) {
+      if (
+        ed?.tipo === Dados.Veiculos &&
+        ed?.dado &&
+        ed.dado.placa != raiz.placa
+      ) {
         const ref = doc($refEmpresa, Dados.Veiculos, ed.dado.placa)
         await deleteDoc(ref)
       }
       const ref = doc($refEmpresa, Dados.Veiculos, raiz.placa)
       await setDoc(ref, raiz)
     }
-    $goto('./')
+    $goto(paginaAnterior)
     $carregando = false
   }
 </script>
 
 {#if !$carregando}
   <form on:submit|preventDefault={salvar}>
-    <h1><Voltar /> Veículo</h1>
+    <h1><Voltar href={paginaAnterior} /> Veículo</h1>
     <label>
       Placa
       <input

@@ -4,6 +4,8 @@
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { pattern } from '../code/patterns'
+  import Adicionar from '../components/Adicionar.svelte'
+  import { url } from '@roxi/routify'
 
   export let transp: any
 
@@ -61,7 +63,12 @@
   $: veicsRest = veiculos.filter((n) => !placasAdds.includes(n.get('placa')))
 </script>
 
-<h3>Meio de transporte</h3>
+<h3>
+  Meio de transporte
+  {#if meio === 'veicTransp'}
+    <Adicionar href={$url('./veiculo')} />
+  {/if}
+</h3>
 <select bind:value={meio}>
   <option value="veicTransp">Rodoviário</option>
   <option value="vagao">Ferroviário</option>
