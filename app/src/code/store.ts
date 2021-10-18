@@ -105,9 +105,3 @@ interface IEdicao {
 }
 
 export const edicao = writable<IEdicao>(undefined)
-
-//#region Impressao NFC-e
-
-
-
-//#endregion
