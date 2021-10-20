@@ -1,9 +1,10 @@
 import { FontPair, Fonts, Write } from 'bdf-fonts'
 import {
-  connectToPrinter,
   CutTypes,
   ImageModes,
 } from 'browser-thermal-printer-encoder'
+import { imprimirCanvas } from './impressao'
+import { Metodo } from './pixelizacao'
 
 interface IConfiguracoes {
   fonte: string
@@ -15,9 +16,18 @@ interface IConfiguracoes {
   pinoPulso: -1 | 0 | 1
   onPulso: number
   offPulso: number
+  tamanhoQR: Tamanho
+  tamanhoLogo: Tamanho
+  pixelizacao: Metodo
 }
 
-export class Impressao implements IConfiguracoes {
+export enum Tamanho {
+  P = 0.4,
+  M = 0.6,
+  G = 0.8,
+}
+
+export class Configuracoes implements IConfiguracoes {
   private salvo: IConfiguracoes
 
   get largura() {
@@ -101,12 +111,52 @@ export class Impressao implements IConfiguracoes {
     this.salvar()
   }
 
+  get tamanhoQR() {
+    return this.salvo.tamanhoQR
+  }
+
+  set tamanhoQR(value: Tamanho) {
+    this.salvo.tamanhoQR = value
+    this.salvar()
+  }
+
+  get tamanhoLogo() {
+    return this.salvo.tamanhoLogo
+  }
+
+  set tamanhoLogo(value: Tamanho) {
+    this.salvo.tamanhoLogo = value
+    this.salvar()
+  }
+
+  get pixelizacao() {
+    return this.salvo.pixelizacao
+  }
+
+  set pixelizacao(value: Metodo) {
+    this.salvo.pixelizacao = value
+    this.salvar()
+  }
+
   constructor() {
+    this.salvo = Configuracoes.getConfiguracoes()
+  }
+
+  static processarFonte(fonte: string) {
+    const partes = fonte.split('-')
+    const familia = partes[0]
+    const tamanhoFonte = +partes[1]
+    const parFontes = Fonts[familia][tamanhoFonte] as FontPair
+    const escala = +partes[2] as 1 | 2
+    return { parFontes, tamanhoFonte, escala }
+  }
+
+  static getConfiguracoes(): IConfiguracoes {
     const salvo = localStorage.getItem('configsImpressaoNFCe')
     if (salvo) {
-      this.salvo = JSON.parse(salvo)
+      return JSON.parse(salvo)
     } else {
-      this.salvo = {
+      return {
         corte: CutTypes.none,
         fonte: 'Terminus-18-1',
         formato: ImageModes.raster,
@@ -116,6 +166,9 @@ export class Impressao implements IConfiguracoes {
         offPulso: 100,
         onPulso: 100,
         pinoPulso: -1,
+        tamanhoQR: Tamanho.P,
+        tamanhoLogo: Tamanho.P,
+        pixelizacao: Metodo.threshold,
       }
     }
   }
@@ -126,46 +179,41 @@ export class Impressao implements IConfiguracoes {
   }
 
   async testarDefinicoes() {
-    const largura = this.largura
-    const partes = this.fonte.split('-')
-    const familia = partes[0]
-    const tamanho = +partes[1]
-    const escala = +partes[2] as 1 | 2
-    const { regular, bold } = Fonts[familia][tamanho] as FontPair
-
     const canvas = document.createElement('canvas')
-    canvas.width = largura
+    canvas.width = this.largura
     canvas.height = 10000
     const context = canvas.getContext('2d')!
-    const titulo = 'Lorem Ipsum'
     let y = 0
-    y = Write(bold, tamanho, escala, context, titulo, 0, y, largura, 'center')
-    const corpo =
-      'Neque porro quisquam est qui dolorem ipsum quia dolor ' +
-      'sit amet, consectetur, adipisci velit...'
-    y = Write(regular, tamanho, escala, context, corpo, 0, y, largura, 'left')
-
+    const fonte = Configuracoes.processarFonte(this.fonte)
+    y = Write(
+      fonte.parFontes.bold,
+      fonte.tamanhoFonte,
+      fonte.escala,
+      context,
+      'Lorem Ipsum',
+      0,
+      y,
+      this.largura,
+      'center'
+    )
+    y = Write(
+      fonte.parFontes.regular,
+      fonte.tamanhoFonte,
+      fonte.escala,
+      context,
+      'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, ' +
+        'consectetur, adipisci velit...',
+      0,
+      y,
+      this.largura,
+      'left'
+    )
     const altura = Math.ceil((y + 1) / 8) * 8
-    const data = context.getImageData(0, 0, largura, altura)
+    const data = context.getImageData(0, 0, this.largura, altura)
     canvas.height = altura
     context.putImageData(data, 0, 0)
 
-    const printCanvas = await connectToPrinter()
-    await printCanvas({
-      canvas,
-      imageMode: this.formato,
-      paddingTop: this.superior,
-      paddingBottom: this.inferior,
-      cut: this.corte,
-      pulse:
-        this.pinoPulso === -1
-          ? undefined
-          : {
-              devicePin: this.pinoPulso,
-              on: this.onPulso,
-              off: this.offPulso,
-            },
-    })
+    await imprimirCanvas(canvas)
     alert('Tarefa de impressão de testes enviada')
   }
 }

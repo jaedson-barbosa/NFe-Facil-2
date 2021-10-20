@@ -2,7 +2,7 @@
   import Voltar from '../components/Voltar.svelte'
   import { CutTypes, ImageModes } from 'browser-thermal-printer-encoder'
   import { Fonts } from 'bdf-fonts'
-  import { Impressao } from '../code/impressao-nfce'
+  import { Configuracoes } from '../code/impressao-nfce/configuracao'
 
   const fontes = Object.entries(Fonts)
     .flatMap(([familia, v]) =>
@@ -19,7 +19,7 @@
     )
     .sort((a, b) => a.tamanho - b.tamanho)
 
-  const impressao = new Impressao()
+  const impressao = new Configuracoes()
 </script>
 
 <h1><Voltar /> Definições de impressão</h1>
