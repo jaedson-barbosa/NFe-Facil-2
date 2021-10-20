@@ -10,7 +10,8 @@
 {#if $liberacao == NiveisAcesso.A}
   <h3>Área do administrador</h3>
   <a class="button" href={$url('./emitente')}>Atualizar emitente</a>
-  <a class="button" href={$url('./configuracoes')}>Configurações</a>
+  <a class="button" href={$url('./configuracoes')}>Definições do emitente</a>
+  <a class="button" href={$url('./impressao')}>Definições de impressão</a>
   <a class="button" href={$url('./acesso')}>Controlar acesso</a>
   <p>
     Mantenha todos os dados do emitente atualizados e personalize tudo de acordo

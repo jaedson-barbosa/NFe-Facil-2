@@ -31,8 +31,11 @@
     "dynamicImports": false
   },
   "dependencies": {
+    "bdf-fonts": "^2.1.1",
+    "browser-thermal-printer-encoder": "^2.1.1",
     "firebase": "^9.0.1",
     "lodash-es": "^4.17.21",
+    "minimal-qr-code": "^1.1.1",
     "xml2json-light-es6module": "^2.0.5"
   }
 }

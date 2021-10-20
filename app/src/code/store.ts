@@ -98,7 +98,7 @@ user.subscribe(($user) => {
   }
 })
 
-interface IEdicao {
+export interface IEdicao {
   tipo: Dados
   id: string
   dado: any
