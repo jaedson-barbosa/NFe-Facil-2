@@ -1,4 +1,4 @@
-import { Fonts, Writer } from 'bdf-fonts'
+import { FontPair, Fonts, Write } from 'bdf-fonts'
 import {
   connectToPrinter,
   CutTypes,
@@ -6,8 +6,7 @@ import {
 } from 'browser-thermal-printer-encoder'
 
 interface IConfiguracoes {
-  fonte: { familia: keyof typeof Fonts; tamanho: number }
-  aumentada: boolean
+  fonte: string
   largura: number
   formato: ImageModes
   superior: number
@@ -20,15 +19,6 @@ interface IConfiguracoes {
 
 export class Impressao implements IConfiguracoes {
   private salvo: IConfiguracoes
-
-  get aumentada() {
-    return this.salvo.aumentada
-  }
-
-  set aumentada(value: boolean) {
-    this.salvo.aumentada = value
-    this.salvar()
-  }
 
   get largura() {
     return this.salvo.largura
@@ -106,7 +96,7 @@ export class Impressao implements IConfiguracoes {
     return this.salvo.fonte
   }
 
-  set fonte(value: { familia: keyof typeof Fonts; tamanho: number }) {
+  set fonte(value: string) {
     this.salvo.fonte = value
     this.salvar()
   }
@@ -117,15 +107,14 @@ export class Impressao implements IConfiguracoes {
       this.salvo = JSON.parse(salvo)
     } else {
       this.salvo = {
-        aumentada: false,
         corte: CutTypes.none,
-        fonte: { familia: 'Terminus', tamanho: 18 },
+        fonte: 'Terminus-18-1',
         formato: ImageModes.raster,
         inferior: 2,
         superior: 0,
         largura: 384,
-        offPulso: 50,
-        onPulso: 50,
+        offPulso: 100,
+        onPulso: 100,
         pinoPulso: -1,
       }
     }
@@ -137,23 +126,29 @@ export class Impressao implements IConfiguracoes {
   }
 
   async testarDefinicoes() {
-    const { familia, tamanho } = this.fonte
-    const fontes = Fonts[familia]
-    const regular = fontes.find((v) => v.size === tamanho && !v.bold)
-    const negrito = fontes.find((v) => v.size === tamanho && v.bold)
+    const largura = this.largura
+    const partes = this.fonte.split('-')
+    const familia = partes[0]
+    const tamanho = +partes[1]
+    const escala = +partes[2] as 1 | 2
+    const { regular, bold } = Fonts[familia][tamanho] as FontPair
 
     const canvas = document.createElement('canvas')
-    canvas.width = this.largura
+    canvas.width = largura
     canvas.height = 10000
     const context = canvas.getContext('2d')!
-    const escala = this.aumentada ? 2 : 1
-    const escritor = new Writer(context, negrito.data, tamanho, escala)
-    const y = escritor.writeText('Lorem Ipsum', 0, 0, this.largura, 'center')
-    escritor.bdf = regular.data
+    const titulo = 'Lorem Ipsum'
+    let y = 0
+    y = Write(bold, tamanho, escala, context, titulo, 0, y, largura, 'center')
     const corpo =
       'Neque porro quisquam est qui dolorem ipsum quia dolor ' +
       'sit amet, consectetur, adipisci velit...'
-    escritor.writeText(corpo, 0, y, this.largura, 'left')
+    y = Write(regular, tamanho, escala, context, corpo, 0, y, largura, 'left')
+
+    const altura = Math.ceil((y + 1) / 8) * 8
+    const data = context.getImageData(0, 0, largura, altura)
+    canvas.height = altura
+    context.putImageData(data, 0, 0)
 
     const printCanvas = await connectToPrinter()
     await printCanvas({

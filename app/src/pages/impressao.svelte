@@ -1,19 +1,21 @@
 <script lang="ts">
   import Voltar from '../components/Voltar.svelte'
-  import {
-    connectToPrinter,
-    CutTypes,
-    ImageModes,
-  } from 'browser-thermal-printer-encoder'
-  import { Fonts, Writer } from 'bdf-fonts'
+  import { CutTypes, ImageModes } from 'browser-thermal-printer-encoder'
+  import { Fonts } from 'bdf-fonts'
   import { Impressao } from '../code/impressao-nfce'
 
-  const fontes = Object.keys(Fonts)
-    .flatMap((family) =>
-      Fonts[family as keyof typeof Fonts]
-        .map((k) => k.size)
+  const fontes = Object.entries(Fonts)
+    .flatMap(([familia, v]) =>
+      Object.keys(v)
+        .map((k) => +k)
         .filter((v, i, a) => a.indexOf(v) === i)
-        .map((size) => ({ familia: family, tamanho: size }))
+        .flatMap((size) =>
+          [1, 2].map((escala) => ({
+            id: familia + '-' + size + '-' + escala,
+            familia,
+            tamanho: size * escala,
+          }))
+        )
     )
     .sort((a, b) => a.tamanho - b.tamanho)
 
@@ -22,106 +24,117 @@
 
 <h1><Voltar /> Definições de impressão</h1>
 <h2>Impressão térmica de NFC-e</h2>
-<label>
-  Fonte
-  <select bind:value={impressao.fonte} size="4">
-    {#each fontes as fonte}
-      <option value={fonte}>{fonte.familia} ({fonte.tamanho})</option>
-    {/each}
-  </select>
-</label>
-<label>
-  <input type="checkbox" bind:checked={impressao.aumentada} />
-  Dobrar tamanho da fonte
-</label>
-<label>
-  Largura de impressão
-  <select bind:value={impressao.largura} size="4">
-    <option value={384}>58 mm (padrao)</option>
-    <option value={576}>58 mm (alta qualidade)</option>
-    <option value={576}>80 mm (padrao)</option>
-    <option value={864}>80 mm (alta qualidade)</option>
-  </select>
-</label>
 
-<label>
-  Codificação da impressora
-  <select bind:value={impressao.formato} size="2">
-    <option value={ImageModes.raster}>Raster (mais antigo)</option>
-    <option value={ImageModes.column}>Column (mais recente)</option>
-  </select>
-</label>
-<small>
-  Aviso: A maioria das impressoras só é compatível com apenas uma codificação!
-</small>
+<div class="row">
+  <div class="column">
+    <label>
+      Fonte
+      <select bind:value={impressao.fonte}>
+        {#each fontes as fonte (fonte.id)}
+          <option value={fonte.id}>
+            {fonte.familia} ({fonte.tamanho})
+          </option>
+        {/each}
+      </select>
+    </label>
 
-<label>
-  Corte
-  <select bind:value={impressao.corte} size="3">
-    <option value={CutTypes.none}>Sem corte</option>
-    <option value={CutTypes.partial}>Parcial</option>
-    <option value={CutTypes.full}>Completo</option>
-  </select>
-</label>
+    <label>
+      Largura de impressão
+      <select bind:value={impressao.largura}>
+        <option value={384}>58 mm (padrao)</option>
+        <option value={576}>58 mm (alta qualidade)</option>
+        <option value={576}>80 mm (padrao)</option>
+        <option value={864}>80 mm (alta qualidade)</option>
+      </select>
+    </label>
 
-<label>
-  Espaçamento superior
-  <input
-    type="range"
-    min="0"
-    max="3"
-    step="1"
-    bind:value={impressao.superior}
-  />
-</label>
+    <label>
+      Codificação da impressora
+      <select bind:value={impressao.formato}>
+        <option value={ImageModes.raster}>Raster (mais antigo)</option>
+        <option value={ImageModes.column}>Column (mais recente)</option>
+      </select>
+    </label>
 
-<label>
-  Espaçamento inferior
-  <input
-    type="range"
-    min="0"
-    max="3"
-    step="1"
-    bind:value={impressao.inferior}
-  />
-</label>
+    <label>
+      Corte
+      <select bind:value={impressao.corte}>
+        <option value={CutTypes.none}>Sem corte</option>
+        <option value={CutTypes.partial}>Parcial</option>
+        <option value={CutTypes.full}>Completo</option>
+      </select>
+    </label>
+  </div>
+  <div class="column">
+    <label>
+      Espaçamento superior
+      <select bind:value={impressao.superior}>
+        <option value={0}>Sem espaçamento</option>
+        <option value={1}>Uma linha</option>
+        <option value={2}>Duas linhas</option>
+        <option value={3}>Três linhas</option>
+      </select>
+    </label>
 
-<label>
-  Pulso
-  <select bind:value={impressao.pinoPulso} size="3">
-    <option value={-1}>Sem pulso</option>
-    <option value={0}>No pino 0</option>
-    <option value={1}>No pino 1</option>
-  </select>
-</label>
+    <label>
+      Espaçamento inferior
+      <select bind:value={impressao.inferior}>
+        <option value={0}>Sem espaçamento</option>
+        <option value={1}>Uma linha</option>
+        <option value={2}>Duas linhas</option>
+        <option value={3}>Três linhas</option>
+      </select>
+    </label>
 
-{#if impressao.pinoPulso !== -1}
-  <label>
-    Largura ligado/on (ms)
-    <input
-      type="range"
-      min="50"
-      max="500"
-      step="2"
-      bind:value={impressao.onPulso}
-    />
-  </label>
-  <label>
-    Largura desligado/off (ms)
-    <input
-      type="range"
-      min="50"
-      max="500"
-      step="2"
-      bind:value={impressao.offPulso}
-    />
-  </label>
-{/if}
+    <label>
+      Pulso
+      <select bind:value={impressao.pinoPulso}>
+        <option value={-1}>Sem pulso</option>
+        <option value={0}>No pino 0</option>
+        <option value={1}>No pino 1</option>
+      </select>
+    </label>
 
-<button on:click={impressao.testarDefinicoes}>Testar impressão</button>
+    {#if impressao.pinoPulso !== -1}
+      <div class="row">
+        <div class="column">
+          <label>
+            Nivel alto
+            <select bind:value={impressao.onPulso}>
+              <option value={100}>100 ms</option>
+              <option value={200}>200 ms</option>
+              <option value={300}>300 ms</option>
+              <option value={400}>400 ms</option>
+              <option value={500}>500 ms</option>
+            </select>
+          </label>
+        </div>
+        <div class="column">
+          <label>
+            Nivel baixo
+            <select bind:value={impressao.offPulso}>
+              <option value={100}>100 ms</option>
+              <option value={200}>200 ms</option>
+              <option value={300}>300 ms</option>
+              <option value={400}>400 ms</option>
+              <option value={500}>500 ms</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    {/if}
+  </div>
+</div>
+
+<div class="row">
+  <div class="column column-50">
+    <button on:click={() => impressao.testarDefinicoes()}>Testar impressão</button>
+  </div>
+</div>
 
 <hr />
 
+<h2>Ajuda</h2>
 <p>
   Para garantir máxima compatibildade com o maior número possível de impressoras
   térmicas, esta aplicação usa o mínimo possível de comandos de impressão e todo
