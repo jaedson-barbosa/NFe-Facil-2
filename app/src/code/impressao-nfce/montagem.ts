@@ -300,7 +300,7 @@ const formatter = new Intl.NumberFormat('pt-BR', {
 
 function getMoeda(v: string | number) {
   const n = +v
-  return formatter.format(n).replace('\xa0', ' ')
+  return formatter.format(n)
 }
 
 function getNumeroStr(v: number, decimalOpcional: boolean = false) {

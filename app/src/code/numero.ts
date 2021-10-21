@@ -5,5 +5,5 @@ var formatter = new Intl.NumberFormat('pt-BR', {
 
 export function getMoeda(v: string | number) {
   const n = +v
-  return formatter.format(n).replace('\xa0', ' ')
+  return formatter.format(n)
 }
