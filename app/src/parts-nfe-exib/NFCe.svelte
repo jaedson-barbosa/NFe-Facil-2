@@ -3,7 +3,7 @@
   import { goto, url } from '@roxi/routify'
   import { onMount } from 'svelte'
   import { montar } from '../code/impressao-nfce/montagem'
-import { imprimirCanvas } from '../code/impressao-nfce/impressao';
+  import { imprimirCanvas } from '../code/impressao-nfce/impressao'
 
   export let ed: IEdicao
 
@@ -19,7 +19,7 @@ import { imprimirCanvas } from '../code/impressao-nfce/impressao';
   let exibCanvas: HTMLCanvasElement = undefined
 
   function clonar() {
-    ed.dado.ide.nNF = '0'
+    ed.dado.infNFe.ide.nNF = '0'
     $goto('./nfe')
   }
 

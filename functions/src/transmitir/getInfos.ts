@@ -4,7 +4,7 @@ import { Ambientes, IInfos } from '../commom/tipos'
 export async function getInfos(
   coluna: FirebaseFirestore.CollectionReference,
   infNFe: any
-) {
+): Promise<IInfos> {
   const serie: string = infNFe.ide.serie.$t
   const numero: number = +infNFe.ide.nNF.$t
   const ambiente: Ambientes = infNFe.ide.tpAmb.$t

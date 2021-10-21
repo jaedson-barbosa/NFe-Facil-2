@@ -22,6 +22,7 @@
   import Produtos from '../parts-nfe/Produtos.svelte'
   import Transp from '../parts-nfe/Transp.svelte'
   import Voltar from '../components/Voltar.svelte'
+  import { toNFeString } from '../code/getDataString'
 
   const ed = get(edicao)
   let raiz: INFeRoot = {} as any
@@ -55,6 +56,7 @@
       await setDoc(docRef, dado)
       $edicao = { dado, id: infNFe.Id, tipo: Dados.NFes }
       $goto('./nfeExib')
+      $carregando = false
     } catch (error) {
       console.error(error)
       alert(error.message)
@@ -65,6 +67,7 @@
   async function transmitir() {
     $carregando = true
     try {
+      raiz.ide['dhEmi'] = toNFeString(new Date())
       const oldId = raiz.Id
       const infNFe = preparateJSON(raiz, true)
       const dadosTransmissao = { infNFe, oldId }

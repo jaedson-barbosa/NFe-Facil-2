@@ -25,6 +25,15 @@
 
 <h2>Detalhes adicionais de {prod['xProd']}</h2>
 <label>
+  CFOP
+  <input
+    bind:value={prod['CFOP']}
+    pattern={'[1,2,3,5,6,7]{1}[0-9]{3}'}
+    required
+  />
+</label>
+
+<label>
   <i>Número da FCI (Ficha de Conteúdo de Importação)</i>
   <input
     pattern={'[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}'}

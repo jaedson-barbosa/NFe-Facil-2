@@ -1,11 +1,11 @@
 import { connectToPrinter, TPrintCanvas } from 'browser-thermal-printer-encoder'
-import { Configuracoes } from './configuracao'
+import { getConfiguracoes } from './configuracao'
 
 let printCanvas: TPrintCanvas
 
 export async function imprimirCanvas(canvas: HTMLCanvasElement) {
   if (!printCanvas) printCanvas = await connectToPrinter()
-  const configs = Configuracoes.getConfiguracoes()
+  const configs = getConfiguracoes()
   const pulse =
     configs.pinoPulso === -1
       ? undefined

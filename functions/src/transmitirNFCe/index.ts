@@ -1,7 +1,7 @@
 import { https } from 'firebase-functions'
-import { gerarXML } from '../transmitir/gerarXml'
+import { atualizarId, gerarXML } from '../transmitir/gerarXml'
 import { autorizar } from './autorizacao'
-import sha1 from 'js-sha1'
+import sha1 from 'sha1'
 import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
 import carregarEmpresa from '../commom/carregarEmpresa'
@@ -22,10 +22,14 @@ export default async function (
   validarPermissao(context.auth!.token, CNPJ)
   const { certificado, colunaNFes, refEmpresa } = await carregarEmpresa(CNPJ)
   const infos = await getInfos(colunaNFes, infNFe)
-  const { CSC, IDCSC } = await getCSC(refEmpresa, infos.ambiente)
-  const infNFeSupl = getInfSupl(infos.UF, infNFe.Id, infos.ambiente, IDCSC, CSC)
-  for (let i = 0; i < 10; i++, infos.numero++) {
-    const xml = gerarXML(infNFe, certificado, infos.numero, infNFeSupl)
+  const { ambiente } = infos
+  corrigirProduto(infNFe, ambiente)
+  const { CSC, IDCSC } = await getCSC(refEmpresa, ambiente)
+  // for (let i = 0; i < 10; i++, infos.numero++)
+  {
+    atualizarId(infNFe, infos.numero)
+    const infNFeSupl = getInfSupl(infos.UF, infNFe.Id, ambiente, IDCSC, CSC)
+    const xml = gerarXML(infNFe, certificado, infNFeSupl)
     const protNFe = await autorizar(infos, certificado, xml)
     if (protNFe) {
       const res = await salvar(colunaNFes, infNFe, xml, protNFe, req.oldId)
@@ -33,6 +37,14 @@ export default async function (
     }
   }
   throw erroDesistencia
+}
+
+function corrigirProduto(infNFe: any, ambiente: Ambientes) {
+  if (infNFe.ide.mod.$t === '65' && ambiente == Ambientes.Homologacao) {
+    const produtoHomologacao =
+      'NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+    infNFe.det[0].prod.xProd.$t = produtoHomologacao
+  }
 }
 
 function validarRequisicao(req: IReqTransmitir) {

@@ -1,7 +1,8 @@
 import * as parser from 'xml2json-light-es6module'
 import { Write } from 'bdf-fonts'
 import { makeQR, QRErrorCorrectLevel } from 'minimal-qr-code'
-import { Configuracoes } from './configuracao'
+import { getConfiguracoes, processarFonte } from './configuracao'
+import { preparateJSON } from '../nfe/finalizacao'
 
 type Align = 'left' | 'center' | 'right'
 
@@ -10,14 +11,17 @@ export function montar(
   xml: string,
   logotipo: ImageData | undefined = undefined
 ) {
-  const { nfeProc } = parser.xml2json(xml)
-  const infNFe = nfeProc.NFe.infNFe
-  const infNFeSupl = nfeProc.NFe.infNFeSupl
-  const infProt = nfeProc.protNFe.infProt
+  const json = parser.xml2json(xml)
+  const nfeProc = json.nfeProc
+  const NFe = nfeProc?.NFe ?? json.NFe
+  const infNFe = preparateJSON(NFe.infNFe)
+  console.log(infNFe)
+  const infNFeSupl = NFe.infNFeSupl
+  const infProt = nfeProc?.protNFe?.infProt
 
-  const configuracoes = Configuracoes.getConfiguracoes()
+  const configuracoes = getConfiguracoes()
   const { largura, tamanhoQR } = configuracoes
-  const fonte = Configuracoes.processarFonte(configuracoes.fonte)
+  const fonte = processarFonte(configuracoes.fonte)
 
   let posicao = 0
 
@@ -97,7 +101,8 @@ export function montar(
     const emit = infNFe.emit
     escrever(emit.xNome, 'center', true)
     escrever('CNPJ: ' + emit.CNPJ, 'center')
-    const endereco = [emit.xLgr, emit.nro, emit.xBairro, emit.xMun, emit.UF]
+    const end = emit.enderEmit
+    const endereco = [end.xLgr, end.nro, end.xBairro, end.xMun, end.UF]
     escrever(endereco.join(', '), 'center')
     espaco()
     const tipo = 'Documento Auxiliar da Nota Fiscal de Consumidor Eletrônica'
@@ -120,17 +125,16 @@ export function montar(
       'right',
       'right',
     ]
-    const props: (keyof typeof infNFe.det[0])[] = [
-      'cProd',
-      'xProd',
-      'qCom',
-      'uCom',
-      'vUnCom',
-      'vProd',
-    ]
     const data = [
       ['Cód', 'Descrição', 'Qtde', 'Un med', 'Vl un', 'Total'],
-      ...infNFe.det.map((v) => props.map((prop) => v[prop])),
+      ...infNFe.det.map(({ prod }) => [
+        prod.cProd,
+        prod.xProd,
+        getNumeroStr(+prod.qCom, true),
+        prod.uCom,
+        getNumeroStr(+prod.vUnCom),
+        getNumeroStr(+prod.vProd),
+      ]),
     ]
     let y = posicao
     let negrito = true
@@ -158,7 +162,13 @@ export function montar(
     // parteIII
     escrever('Totais', 'center', true)
     escritaDupla('Qtde. total de itens', infNFe.det.length.toString())
-    const { vFrete, vSeg, vOutro, vProd, vDesc, vNF } = infNFe.total.ICMSTot
+    const ICMSTot = infNFe.total.ICMSTot
+    const vFrete = +ICMSTot.vFrete
+    const vSeg = +ICMSTot.vSeg
+    const vOutro = +ICMSTot.vOutro
+    const vProd = +ICMSTot.vProd
+    const vDesc = +ICMSTot.vDesc
+    const vNF = +ICMSTot.vNF
     escritaDupla('Valor total', getMoeda(vProd))
     if (vFrete) escritaDupla('Frete total', getMoeda(vFrete))
     if (vSeg) escritaDupla('Seguro total', getMoeda(vSeg))
@@ -167,12 +177,17 @@ export function montar(
     escritaDupla('Valor a pagar', getMoeda(vNF))
     escritaDupla('Forma de pagamento', 'Valor pago', 0.6, true, true)
     const pag = infNFe.pag
-    pag.detPag.forEach((v) => escritaDupla(v.tPag, getMoeda(v.vPag)))
+    pag.detPag.forEach((v: any) =>
+      escritaDupla(
+        formasPagamento[v.tPag] ?? 'Não identificado',
+        getMoeda(v.vPag)
+      )
+    )
     escritaDupla('Valor do troco', getMoeda(pag.vTroco || 0))
     espaco()
   }
 
-  {
+  if (infNFeSupl) {
     // parteIV
     escrever('Consulte pela chave de acesso em', 'center', true)
     escrever(infNFeSupl.urlChave, 'center')
@@ -187,15 +202,15 @@ export function montar(
     escrever('Consumidor', 'center', true)
     if (dest) {
       if (dest.xNome) escrever(dest.xNome, 'center')
-      const d = dest as any
-      if (d.CPF) {
-        escrever('CPF: ' + d.CPF, 'center')
+      if (dest.CPF) {
+        escrever('CPF: ' + dest.CPF, 'center')
       } else if (dest.CNPJ) {
         escrever('CNPJ: ' + dest.CNPJ, 'center')
-      } else if (d.idEstrangeiro) {
-        escrever('Id. estrangeiro: ' + d.idEstrangeiro, 'center')
+      } else if (dest.idEstrangeiro) {
+        escrever('Id. estrangeiro: ' + dest.idEstrangeiro, 'center')
       }
-      const endereco = [dest.xLgr, dest.nro, dest.xBairro, dest.xMun, dest.UF]
+      const end = dest.enderDest
+      const endereco = [end.xLgr, end.nro, end.xBairro, end.xMun, end.UF]
       escrever(endereco.join(', '), 'center')
     } else {
       escrever('CONSUMIDOR NÃO IDENTIFICADO', 'center')
@@ -203,10 +218,10 @@ export function montar(
     espaco()
   }
 
-  {
+  if (infProt) {
     // parteVII
-    const nNF = getInteiroStr(infNFe.ide.nNF, 9)
-    const serie = getInteiroStr(infNFe.ide.serie, 3)
+    const nNF = getInteiroStr(+infNFe.ide.nNF, 9)
+    const serie = getInteiroStr(+infNFe.ide.serie, 3)
     const dhEmi = getData(infNFe.ide.dhEmi)
     escrever('Identificação e autorização', 'center', true)
     escritaDupla('Número:', nNF, 0.5)
@@ -218,7 +233,7 @@ export function montar(
     escritaDupla('Data de autorização:', dhRecbto, 0.5)
   }
 
-  {
+  if (infNFeSupl) {
     // parteV
     const url = infNFeSupl.qrCode
 
@@ -248,15 +263,19 @@ export function montar(
 
   {
     // partes VIII e IX
-    const infAdic = (infNFe as any).infAdic
+    const infAdic = infNFe.infAdic
     const infAdFisco = infAdic?.infAdFisco
     const infCpl = infAdic?.infCpl
-    const xMsg = infProt.xMsg
-    const homolog = infNFe.ide.tpAmb === 2
-    if (infAdFisco || xMsg || homolog) {
+    const xMsg = infProt?.xMsg
+    const homolog = infNFe.ide.tpAmb === '2'
+    const naoHomologado = !infProt
+    if (infAdFisco || xMsg || homolog || naoHomologado) {
       if (infAdFisco) escrever(infAdFisco, 'left')
       if (xMsg) escrever(xMsg, 'left')
-      if (homolog) {
+      if (naoHomologado) {
+        const aviso = 'NFC-e NÃO PROTOCOLADA - SEM VALOR FISCAL'
+        escrever(aviso, 'center')
+      } else if (homolog) {
         const aviso = 'EMITIDA EM AMBIENTE DE HOMOLOGAÇÃO - SEM VALOR FISCAL'
         escrever(aviso, 'center')
       }
@@ -284,10 +303,34 @@ function getMoeda(v: string | number) {
   return formatter.format(n).replace('\xa0', ' ')
 }
 
+function getNumeroStr(v: number, decimalOpcional: boolean = false) {
+  if (decimalOpcional && Math.round(v) === v) return v.toLocaleString('pt-BR')
+  return v.toLocaleString('pt-BR', { minimumFractionDigits: 2 })
+}
+
 function getInteiroStr(v: number, l: number) {
   return v.toLocaleString('pt-BR', { minimumIntegerDigits: l })
 }
 
 function getData(v: string) {
   return new Date(v).toLocaleString('pt-BR')
+}
+
+const formasPagamento = {
+  '01': 'Dinheiro',
+  '02': 'Cheque',
+  '03': 'Cartão de crédito',
+  '04': 'Cartão de débito',
+  '05': 'Crédito Loja',
+  '10': 'Vale Alimentação',
+  '11': 'Vale Refeição',
+  '12': 'Vale Presente',
+  '13': 'Vale Combustível',
+  '14': 'Duplicata Mercantil',
+  '15': 'Boleto Bancario',
+  '16': 'Depósito Bancário',
+  '17': 'Pagamento Instantâneo (PIX)',
+  '18': 'Transferência bancária, Carteira Digital',
+  '19': 'Programa de fidelidade, Cashback, Crédito Virtual',
+  '90': 'Sem Pagamento',
 }

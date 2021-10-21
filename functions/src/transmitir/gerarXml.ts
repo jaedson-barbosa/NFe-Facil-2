@@ -2,12 +2,7 @@ import { toXml } from 'xml2json'
 import assinar from '../commom/assinar'
 import { ICertificado } from '../commom/tipos'
 
-export function gerarXML(
-  infNFe: any,
-  certificado: ICertificado,
-  numero: number,
-  infNFeSupl?: { qrCode: string; urlChave: string }
-) {
+export function atualizarId(infNFe: any, numero: number) {
   const numeroStr = numero.toString()
   infNFe.ide.nNF.$t = numeroStr
   const oldChave = infNFe.Id.substr(3, 43)
@@ -16,8 +11,18 @@ export function gerarXML(
   const cDV = calcularDV(novaChave).toString()
   infNFe.ide.cDV.$t = cDV
   infNFe.Id = `NFe${novaChave}${cDV}`
-  const xmlns = 'http://www.portalfiscal.inf.br/nfe'
-  const NFe = infNFeSupl ? { xmlns, infNFe, infNFeSupl } : { xmlns, infNFe }
+}
+
+export function gerarXML(
+  infNFe: any,
+  certificado: ICertificado,
+  infNFeSupl?: { qrCode: string; urlChave: string }
+) {  
+  const NFe: any = { xmlns: 'http://www.portalfiscal.inf.br/nfe', infNFe }
+  if (infNFeSupl) {
+    const { qrCode, urlChave } = infNFeSupl
+    NFe.infNFeSupl = { qrCode: { $t: qrCode }, urlChave: { $t: urlChave } }
+  }
   const xml = toXml({ NFe })
   const xmlAssinado = assinar(certificado, xml, 'infNFe')
   return xmlAssinado

@@ -9,21 +9,21 @@ export async function requisitarAutorizacao(
   xml: string,
   ehNFCe: boolean
 ) {
+  const envio = '<enviNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">' +
+  `<idLote>${gerarNumero(1, 999999999999999)}</idLote>` +
+  `<indSinc>${ehNFCe ? 1 : 0}</indSinc>${xml}</enviNFe>`
   const respAutorizacao = await enviarRequisicao(
-    `<enviNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
-      <idLote>${gerarNumero(1, 999999999999999)}</idLote>
-      <indSinc>${ehNFCe ? 1 : 0}</indSinc>
-      ${xml}
-    </enviNFe>`,
+    envio,
     'autorizacao',
     ambiente,
     UF,
     cert,
     ehNFCe
   )
-  const retEnviNFe: retEnviNFeBase = (
+  const retEnviNFe = (
     toJson(respAutorizacao, {
       object: true,
+      reversible: ehNFCe,
     }) as any
   )['soap:Envelope']['soap:Body'].nfeResultMsg.retEnviNFe
   return retEnviNFe

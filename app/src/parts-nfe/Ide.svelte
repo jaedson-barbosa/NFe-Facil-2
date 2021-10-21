@@ -50,7 +50,9 @@
       if (ide['mod'] == '65') {
         ide['serie'] = emp.serieNFCe
         ide['tpNF'] = ide['idDest'] = ide['finNFe'] = ide['indFinal'] = '1'
+        ide['tpImp'] = '4'
       } else {
+        ide['tpImp'] = '1'
         ide['serie'] = emp.serieNFe
       }
       oldMod = ide.mod

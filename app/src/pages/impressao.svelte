@@ -2,7 +2,7 @@
   import Voltar from '../components/Voltar.svelte'
   import { CutTypes, ImageModes } from 'browser-thermal-printer-encoder'
   import { Fonts } from 'bdf-fonts'
-  import { Configuracoes } from '../code/impressao-nfce/configuracao'
+  import { Configuracoes } from '../code/impressao-nfce/configuracao-dinamica'
 
   const fontes = Object.entries(Fonts)
     .flatMap(([familia, v]) =>
