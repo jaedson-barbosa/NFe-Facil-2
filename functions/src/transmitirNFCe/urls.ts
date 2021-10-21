@@ -174,7 +174,7 @@ export const urlsHomologacao = {
   },
   PB: {
     urlChave: 'www.receita.pb.gov.br/nfcehom',
-    urlQRCode: 'http://www.receita.pb.gov.br/nfcehom',
+    urlQRCode: 'http://www.sefaz.pb.gov.br/nfcehom',
   },
   PE: {
     urlChave: 'nfce.sefaz.pe.gov.br/nfce/consulta',

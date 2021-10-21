@@ -61,43 +61,45 @@
   }
 </script>
 
-<p>
-  <strong>Chave:</strong>
-  {chave}
-</p>
+{#if !$carregando}
+  <p>
+    <strong>Chave:</strong>
+    {chave}
+  </p>
 
-{#if !ed.dado.cancelada}
-  {#if linkDANFE}
-    <a class="button" href={linkDANFE} target="_blank">Abrir DANFE</a>
-    <a class="button" href={linkDANFE} download="{chave}-DANFE.pdf">
-      Baixar DANFE
-    </a>
-  {:else if linkDANFE === undefined}
-    <button on:click={gerarDANFE}>Carregar DANFE</button>
+  {#if !ed.dado.cancelada}
+    {#if linkDANFE}
+      <a class="button" href={linkDANFE} target="_blank">Abrir DANFE</a>
+      <a class="button" href={linkDANFE} download="{chave}-DANFE.pdf">
+        Baixar DANFE
+      </a>
+    {:else if linkDANFE === undefined}
+      <button on:click={gerarDANFE}>Carregar DANFE</button>
+    {/if}
   {/if}
-{/if}
 
-<a
-  class="button"
-  href={gerarLinkXML(ed.dado.xml)}
-  download="{chave}-procNFe.xml"
->
-  Baixar XML da NFe
-</a>
+  <a
+    class="button"
+    href={gerarLinkXML(ed.dado.xml)}
+    download="{chave}-procNFe.xml"
+  >
+    Baixar XML da NFe
+  </a>
 
-{#if ed.dado.nProt}
-  <button on:click={clonar}>Clonar</button>
-  {#if ed.dado.cancelada}
-    <a
-      class="button"
-      href={gerarLinkXML(ed.dado.xmlCancelamento)}
-      download="{chave}-procEventoNFe.xml"
-    >
-      Baixar XML do cancelamento
-    </a>
+  {#if ed.dado.nProt}
+    <button on:click={clonar}>Clonar</button>
+    {#if ed.dado.cancelada}
+      <a
+        class="button"
+        href={gerarLinkXML(ed.dado.xmlCancelamento)}
+        download="{chave}-procEventoNFe.xml"
+      >
+        Baixar XML do cancelamento
+      </a>
+    {:else}
+      <button on:click={cancelar}>Solicitar cancelamento</button>
+    {/if}
   {:else}
-    <button on:click={cancelar}>Solicitar cancelamento</button>
+    <a class="button" href={$url('./nfe')}>Editar</a>
   {/if}
-{:else}
-  <a class="button" href={$url('./nfe')}>Editar</a>
 {/if}

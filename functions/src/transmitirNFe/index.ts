@@ -1,5 +1,5 @@
 import { https } from 'firebase-functions'
-import { gerarXML } from '../transmitir/gerarXml'
+import { atualizarId, gerarXML } from '../transmitir/gerarXml'
 import { autorizar } from './autorizacao'
 import validarAutenticacao from '../commom/validarAutenticacao'
 import validarPermissao from '../commom/validarPermissao'
@@ -21,7 +21,8 @@ export default async function (
   const { certificado, colunaNFes: coluna } = await carregarEmpresa(CNPJ)
   const infos = await getInfos(coluna, infNFe)
   for (let i = 0; i < 10; i++, infos.numero++) {
-    const xml = gerarXML(infNFe, certificado, infos.numero)
+    atualizarId(infNFe, infos.numero)
+    const xml = gerarXML(infNFe, certificado)
     const protNFe = await autorizar(infos, certificado, xml)
     if (protNFe) {
       const res = await salvar(coluna, infNFe, xml, protNFe, req.oldId)
@@ -36,6 +37,6 @@ function validarRequisicao(req: IReqTransmitir) {
     throw new https.HttpsError(
       'failed-precondition',
       'Campo informações da nota ausente.'
-    );
+    )
   }
 }
