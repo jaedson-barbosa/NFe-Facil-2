@@ -177,7 +177,12 @@ export function montar(
     escritaDupla('Valor a pagar', getMoeda(vNF))
     escritaDupla('Forma de pagamento', 'Valor pago', 0.6, true, true)
     const pag = infNFe.pag
-    pag.detPag.forEach((v) => escritaDupla(v.tPag, getMoeda(v.vPag)))
+    pag.detPag.forEach((v: any) =>
+      escritaDupla(
+        formasPagamento[v.tPag] ?? 'Não identificado',
+        getMoeda(v.vPag)
+      )
+    )
     escritaDupla('Valor do troco', getMoeda(pag.vTroco || 0))
     espaco()
   }
@@ -309,4 +314,23 @@ function getInteiroStr(v: number, l: number) {
 
 function getData(v: string) {
   return new Date(v).toLocaleString('pt-BR')
+}
+
+const formasPagamento = {
+  '01': 'Dinheiro',
+  '02': 'Cheque',
+  '03': 'Cartão de crédito',
+  '04': 'Cartão de débito',
+  '05': 'Crédito Loja',
+  '10': 'Vale Alimentação',
+  '11': 'Vale Refeição',
+  '12': 'Vale Presente',
+  '13': 'Vale Combustível',
+  '14': 'Duplicata Mercantil',
+  '15': 'Boleto Bancario',
+  '16': 'Depósito Bancário',
+  '17': 'Pagamento Instantâneo (PIX)',
+  '18': 'Transferência bancária, Carteira Digital',
+  '19': 'Programa de fidelidade, Cashback, Crédito Virtual',
+  '90': 'Sem Pagamento',
 }

@@ -56,7 +56,7 @@
   }
 
   function clonar() {
-    ed.dado.ide.nNF = '0'
+    ed.dado.infNFe.ide.nNF = '0'
     $goto('./nfe')
   }
 </script>

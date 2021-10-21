@@ -12,7 +12,6 @@ export async function requisitarAutorizacao(
   const envio = '<enviNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">' +
   `<idLote>${gerarNumero(1, 999999999999999)}</idLote>` +
   `<indSinc>${ehNFCe ? 1 : 0}</indSinc>${xml}</enviNFe>`
-  console.log(envio)
   const respAutorizacao = await enviarRequisicao(
     envio,
     'autorizacao',
