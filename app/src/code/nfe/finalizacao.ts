@@ -62,8 +62,9 @@ function reorganizarJSON(
   prefixar: boolean
 ) {
   function presente(campo: any) {
+    // Input number usa null quando vazio
     return typeof campo === 'object'
-      ? Object.keys(campo).length > 0
+      ? campo && Object.keys(campo).length > 0
       : !!campo || campo === 0
   }
 
