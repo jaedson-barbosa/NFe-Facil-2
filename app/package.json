@@ -31,7 +31,7 @@
     "dynamicImports": false
   },
   "dependencies": {
-    "bdf-fonts": "^2.1.1",
+    "bdf-fonts": "^2.2.0",
     "browser-thermal-printer-encoder": "^2.1.1",
     "firebase": "^9.0.1",
     "lodash-es": "^4.17.21",
