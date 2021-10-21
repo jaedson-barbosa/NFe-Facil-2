@@ -88,7 +88,9 @@ function getInfSupl(
   const hashUriQR = sha1(paramsUriQR + CSC).toUpperCase()
   const ehProducao = ambiente == Ambientes.Producao
   const enderecos = ehProducao ? urlsProducao[uf] : urlsHomologacao[uf]
-  const qrCode = `${enderecos.urlQRCode}?p=${paramsUriQR}|${hashUriQR}`
-  const urlChave = enderecos.urlChave
+  const qrCode =
+    `http${enderecos.https ? 's' : ''}://${enderecos.url}?p=` +
+    `${paramsUriQR}|${hashUriQR}`
+  const urlChave = enderecos.url
   return { qrCode, urlChave }
 }
