@@ -17,8 +17,7 @@ export const urlsProducao = {
   },
   BA: {
     urlChave: 'www.sefaz.ba.gov.br/nfce/consulta',
-    urlQRCode:
-      'http://nfe.sefaz.ba.gov.br/servicos/nfce/modulos/geral/NFCEC_consulta_chave_acesso.aspx',
+    urlQRCode: 'http://nfe.sefaz.ba.gov.br/servicos/nfce/qrcode.aspx',
   },
   CE: {
     urlChave: 'www.sefaz.ce.gov.br/nfce/consulta',
@@ -26,11 +25,11 @@ export const urlsProducao = {
   },
   DF: {
     urlChave: 'www.fazenda.df.gov.br/nfce/consulta',
-    urlQRCode: 'http://dec.fazenda.df.gov.br/ConsultarNFCe.aspx',
+    urlQRCode: 'http://www.fazenda.df.gov.br/nfce/qrcode',
   },
   ES: {
     urlChave: 'www.sefaz.es.gov.br/nfce/consulta',
-    urlQRCode: 'http://app.sefaz.es.gov.br/ConsultaNFCe/qrcode.aspx',
+    urlQRCode: 'http://app.sefaz.es.gov.br/ConsultaNFCe/',
   },
   GO: {
     urlChave: 'www.sefaz.go.gov.br/nfce/consulta',
@@ -38,7 +37,7 @@ export const urlsProducao = {
   },
   MA: {
     urlChave: 'www.sefaz.ma.gov.br/nfce/consulta',
-    urlQRCode: 'http://www.nfce.sefaz.ma.gov.br/portal/consultarNFCe.jsp',
+    urlQRCode: 'http://nfce.sefaz.ma.gov.br/portal/consultarnfce.jsp',
   },
   MG: {
     urlChave: 'http://nfce.fazenda.mg.gov.br/portalnfce',
@@ -63,7 +62,7 @@ export const urlsProducao = {
   },
   PE: {
     urlChave: 'nfce.sefaz.pe.gov.br/nfce/consulta',
-    urlQRCode: 'http://nfce.sefaz.pe.gov.br/nfce-web/consultarNFCe',
+    urlQRCode: 'http://nfce.sefaz.pe.gov.br/nfce/consulta',
   },
   PI: {
     urlChave: 'www.sefaz.pi.gov.br/nfce/consulta',
@@ -71,7 +70,7 @@ export const urlsProducao = {
   },
   PR: {
     urlChave: 'http://www.fazenda.pr.gov.br/nfce/consulta',
-    urlQRCode: 'http://www.fazenda.pr.gov.br/nfce/qrcode/',
+    urlQRCode: 'http://www.fazenda.pr.gov.br/nfce/qrcode',
   },
   RJ: {
     urlChave: 'www.fazenda.rj.gov.br/nfce/consulta',
@@ -93,9 +92,13 @@ export const urlsProducao = {
     urlChave: 'www.sefaz.rr.gov.br/nfce/consulta',
     urlQRCode: 'https://www.sefaz.rr.gov.br/nfce/servlet/qrcode',
   },
+  SC: {
+    urlChave: '',
+    urlQRCode: 'https://sat.sef.sc.gov.br/nfce/consulta'
+  },
   SE: {
     urlChave: 'http://www.nfce.se.gov.br/nfce/consulta',
-    urlQRCode: 'http://www.nfce.se.gov.br/portal/consultarNFCe.jsp',
+    urlQRCode: 'http://www.nfce.se.gov.br/nfce/qrcode',
   },
   SP: {
     urlChave: 'https://www.nfce.fazenda.sp.gov.br/consulta',
