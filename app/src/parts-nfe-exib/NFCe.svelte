@@ -4,6 +4,7 @@
   import { onMount } from 'svelte'
   import { montar } from '../code/impressao-nfce/montagem'
   import { imprimirCanvas } from '../code/impressao-nfce/impressao'
+  import { getLogotipo } from '../code/impressao-nfce/pixelizacao'
 
   export let ed: IEdicao
 
@@ -28,8 +29,9 @@
     alert('Tarefa de impressão da NFC-e enviada')
   }
 
-  onMount(() => {
-    montar(exibCanvas, ed.dado.xml)
+  onMount(async () => {
+    const logotipo = await getLogotipo()
+    montar(exibCanvas, ed.dado.xml, logotipo)
     exibCanvas.toBlob((blob) => (linkDANFE = URL.createObjectURL(blob)))
   })
 </script>
