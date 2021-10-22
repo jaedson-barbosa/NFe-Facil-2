@@ -3,6 +3,57 @@
   import { CutTypes, ImageModes } from 'browser-thermal-printer-encoder'
   import { Fonts } from 'bdf-fonts'
   import { Configuracoes } from '../code/impressao-nfce/configuracao-dinamica'
+  import { empresa, refEmpresa } from '../code/store'
+  import { Tamanho } from '../code/impressao-nfce/configuracao'
+  import { Metodo, pixelizarImagem } from '../code/impressao-nfce/pixelizacao'
+  import { deleteField, updateDoc } from 'firebase/firestore'
+  import { defaultCatch } from '../code/firebase'
+
+  let imagemOriginal: HTMLElement
+
+  $: {
+    if ($empresa.logotipo && imagemOriginal) {
+      const imagem = imagemOriginal as HTMLImageElement
+      const metodo = $empresa.logotipo.pixelizacao
+      pixelizarImagem(imagem, exibLogotipo, metodo)
+    }
+  }
+
+  let novoLogotipo: FileList
+
+  $: {
+    if (novoLogotipo?.length) {
+      const arquivo = novoLogotipo.item(0)
+      const tamanhoKB = arquivo.size / 1024
+      if (tamanhoKB > 100) {
+        alert('Imagem recusada pois o arquivo tem mais de 100 KB.')
+      } else {
+        getBase64(arquivo)
+          .then(
+            (data) =>
+              ($empresa.logotipo = {
+                imagem: data,
+                alinhamento: 'L',
+                monocromatico: false,
+                pixelizacao: Metodo.atkinson,
+                tamanho: Tamanho.P,
+              })
+          )
+          .catch(defaultCatch)
+      }
+    }
+  }
+
+  function getBase64(file: File) {
+    return new Promise<string>((res, rej) => {
+      var reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => res(reader.result as string)
+      reader.onerror = (e) => rej(e)
+    })
+  }
+
+  let exibLogotipo: HTMLCanvasElement
 
   const fontes = Object.entries(Fonts)
     .flatMap(([familia, v]) =>
@@ -20,9 +71,111 @@
     .sort((a, b) => a.tamanho - b.tamanho)
 
   const impressao = new Configuracoes()
+
+  async function salvarLogotipo() {
+    await updateDoc($refEmpresa, $empresa)
+    alert('Alterações de logotipo salvas com sucesso.')
+  }
+
+  async function removerLogotipo() {
+    const msg = 'Você tem certeza de que deseja remover o logotipo?'
+    const certeza = confirm(msg)
+    if (!certeza) return
+    novoLogotipo = undefined
+    $empresa.logotipo = undefined
+    await updateDoc($refEmpresa, { logotipo: deleteField() })
+    alert('Logotipo removido com sucesso.')
+  }
 </script>
 
 <h1><Voltar /> Definições de impressão</h1>
+
+<h2>Logotipo</h2>
+
+{#if $empresa.logotipo}
+  <div class="row">
+    <div class="column">
+      <figure>
+        <img
+          class="previa"
+          src={$empresa.logotipo.imagem}
+          alt="Logotipo da empresa"
+          on:load={(e) => (imagemOriginal = e.currentTarget)}
+        />
+        <figcaption>Logotipo selecionado</figcaption>
+      </figure>
+    </div>
+    <div class="column">
+      <figure>
+        <canvas class="previa" bind:this={exibLogotipo} />
+        <figcaption>Pré-visualização para o DANFE NFC-e</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="column">
+      <label>
+        Alinhamento no DANFE NF-e
+        <select bind:value={$empresa.logotipo.alinhamento}>
+          <option value="L">Esquerda</option>
+          <option value="C">Centro</option>
+          <option value="R">Direita</option>
+        </select>
+      </label>
+    </div>
+    <div class="column">
+      <label>
+        Cor do logotipo no DANFE NF-e
+        <select bind:value={$empresa.logotipo.monocromatico}>
+          <option value={true}>Colorido</option>
+          <option value={false}>Preto e branco</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="column">
+      <label>
+        Tamanho do logotipo no DANFE NFC-e
+        <select bind:value={$empresa.logotipo.tamanho}>
+          <option value={Tamanho.P}>Pequeno</option>
+          <option value={Tamanho.M}>Médio</option>
+          <option value={Tamanho.G}>Grande</option>
+        </select>
+      </label>
+    </div>
+    <div class="column">
+      <label>
+        Método de renderização no DANFE NFC-e
+        <select bind:value={$empresa.logotipo.pixelizacao}>
+          <option value={Metodo.threshold}>Preto e branco simples</option>
+          <option value={Metodo.bayer}>Bayer</option>
+          <option value={Metodo.floydsteinberg}>Floyd–Steinberg</option>
+          <option value={Metodo.atkinson}>Atkinson</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="column">
+      <button on:click={salvarLogotipo}>Salvar definições de logotipo</button>
+    </div>
+    <div class="column">
+      <button on:click={removerLogotipo}>Remover logotipo</button>
+    </div>
+  </div>
+{:else}
+  <label class="button">
+    Selecionar logotipo
+    <input type="file" accept="image/*" bind:files={novoLogotipo} />
+  </label>
+{/if}
+
+<br />
+
 <h2>Impressão térmica de NFC-e</h2>
 
 <div class="row">
@@ -62,6 +215,15 @@
         <option value={CutTypes.none}>Sem corte</option>
         <option value={CutTypes.partial}>Parcial</option>
         <option value={CutTypes.full}>Completo</option>
+      </select>
+    </label>
+
+    <label>
+      Tamanho do QR Code
+      <select bind:value={impressao.tamanhoQR}>
+        <option value={Tamanho.P}>Pequeno</option>
+        <option value={Tamanho.M}>Médio</option>
+        <option value={Tamanho.G}>Grande</option>
       </select>
     </label>
   </div>
@@ -127,9 +289,12 @@
 </div>
 
 <div class="row">
-  <div class="column column-50">
-    <button on:click={() => impressao.testarDefinicoes()}>Testar impressão</button>
+  <div class="column">
+    <button on:click={() => impressao.testarDefinicoes()}>
+      Testar impressão de texto
+    </button>
   </div>
+  <div class="column" />
 </div>
 
 <hr />
@@ -161,3 +326,16 @@
   enquanto "alta qualidade" se refere a impressoras de 304 dpi, que fornecem
   melhor qualidade de impressão mas a um custo mais elevado.
 </p>
+
+<style>
+  figure {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .previa {
+    max-width: 100%;
+    max-height: 400px;
+  }
+</style>

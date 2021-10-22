@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { carregando, IEdicao } from '../code/store'
+  import { carregando, empresa, IEdicao } from '../code/store'
   import { goto, url } from '@roxi/routify'
   import { cancelarNF } from '../code/firebase'
   import { toNFeString } from '../code/getDataString'
@@ -37,11 +37,18 @@
     $carregando = true
     linkDANFE = ''
     const xml = ed.dado.xml
-    const parametros = {
+    const parametros: any = {
       xml: xml.replace(/>\s+</g, '><'),
       orientacao: 'P',
       margSup: 5,
       margEsq: 5,
+    }
+    if ($empresa.logotipo) {
+      let { imagem, alinhamento, monocromatico } = $empresa.logotipo
+      const partes = imagem.split(';')
+      partes[0] = 'data://text/plain'
+      imagem = partes.join(';')
+      parametros.logotipo = { imagem, alinhamento, monocromatico }
     }
     const enderecoAPI =
       'https://southamerica-east1-nfe-facil-980bc.cloudfunctions.net/gerarDANFE'

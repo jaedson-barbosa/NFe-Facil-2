@@ -48,7 +48,13 @@ td > select {
 }
 
 p {
-  max-width: 600px;
+  max-width: 100%;
+}
+
+@media (min-width: 40.0rem) { 
+  p {
+    max-width: 50%;
+  }
 }
 
 .opt {

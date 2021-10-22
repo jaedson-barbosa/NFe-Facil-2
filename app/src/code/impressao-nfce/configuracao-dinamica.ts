@@ -102,24 +102,6 @@ export class Configuracoes implements IConfiguracoes {
     this.salvar()
   }
 
-  get tamanhoLogo() {
-    return this.salvo.tamanhoLogo
-  }
-
-  set tamanhoLogo(value: Tamanho) {
-    this.salvo.tamanhoLogo = value
-    this.salvar()
-  }
-
-  get pixelizacao() {
-    return this.salvo.pixelizacao
-  }
-
-  set pixelizacao(value: Metodo) {
-    this.salvo.pixelizacao = value
-    this.salvar()
-  }
-
   constructor() {
     this.salvo = getConfiguracoes()
   }

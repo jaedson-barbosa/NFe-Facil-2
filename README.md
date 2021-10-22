@@ -16,6 +16,13 @@ IDCSC
 CSC
 IDCSCh
 CSCh
+logotipo {
+  imagem
+  alinhamento
+  monocromatico
+  tamanho
+  pixelizacao
+}
 tokenIBPT
 -clientes:
   dest: ...

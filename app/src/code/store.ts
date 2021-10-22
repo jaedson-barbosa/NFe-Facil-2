@@ -10,6 +10,8 @@ import {
 } from 'firebase/auth'
 import { Dados, NiveisAcesso } from './tipos'
 import { auth, db } from './firebase'
+import { Tamanho } from './impressao-nfce/configuracao'
+import { Metodo } from './impressao-nfce/pixelizacao'
 
 const googleProvider = new GoogleAuthProvider()
 
@@ -68,7 +70,14 @@ type TEmpresa = {
   CSC: string
   IDCSCh: string
   CSCh: string
-  tokenIBPT?: string
+  tokenIBPT?: string,
+  logotipo?: {
+    imagem: string
+    alinhamento: 'L' | 'C' | 'R' | 'F'
+    monocromatico: boolean
+    tamanho: Tamanho
+    pixelizacao: Metodo
+  }
 }
 
 export const refEmpresa = derived<Writable<string>, DocumentReference>(

@@ -16,8 +16,6 @@ export interface IConfiguracoes {
   onPulso: number
   offPulso: number
   tamanhoQR: Tamanho
-  tamanhoLogo: Tamanho
-  pixelizacao: Metodo
 }
 
 export enum Tamanho {
@@ -50,9 +48,7 @@ export function getConfiguracoes(): IConfiguracoes {
       offPulso: 100,
       onPulso: 100,
       pinoPulso: -1,
-      tamanhoQR: Tamanho.P,
-      tamanhoLogo: Tamanho.P,
-      pixelizacao: Metodo.threshold,
+      tamanhoQR: Tamanho.P
     }
   }
 }
