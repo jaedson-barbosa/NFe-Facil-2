@@ -9,14 +9,14 @@
 
   const chave = ed?.id.substring(3)
 
-  let linkDANFE = undefined
+  let linkDANFE: string
 
   function gerarLinkXML(xml: string) {
     const blob = new Blob([xml], { type: 'application/xml' })
     return window.URL.createObjectURL(blob)
   }
 
-  let exibCanvas: HTMLCanvasElement = undefined
+  let exibCanvas: HTMLCanvasElement
 
   function clonar() {
     ed.dado.infNFe.ide.nNF = '0'
