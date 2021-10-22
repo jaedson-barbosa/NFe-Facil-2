@@ -1,4 +1,6 @@
-import { Tamanho } from './configuracao'
+import { get } from 'svelte/store'
+import { empresa } from '../store'
+import { getConfiguracoes, Tamanho } from './configuracao'
 
 export enum Metodo {
   /** Change the image to blank and white using a simple threshold */
@@ -11,12 +13,23 @@ export enum Metodo {
   atkinson,
 }
 
+export async function getLogotipo() {
+  const logotipo = get(empresa).logotipo
+  if (!logotipo) return undefined
+  const imageUrl = logotipo.imagem
+  const maxWidth = getConfiguracoes().largura
+  const tamanho = logotipo.tamanho
+  const metodo = logotipo.pixelizacao
+  return await pixelizarImageUrl(imageUrl, maxWidth, tamanho, metodo)
+}
+
 export async function pixelizarImageUrl(
   imageUrl: string,
   maxWidth: number,
   tamanho: Tamanho,
   metodo: Metodo,
-  canvas?: HTMLCanvasElement) {
+  canvas?: HTMLCanvasElement
+) {
   if (!canvas) canvas = document.createElement('canvas')
 
   const image = new Image()
@@ -90,7 +103,9 @@ export async function pixelizarImagem(
     }
     case Metodo.floydsteinberg: {
       const width = imageData.width
-      const luminance = new Uint8ClampedArray(imageData.width * imageData.height)
+      const luminance = new Uint8ClampedArray(
+        imageData.width * imageData.height
+      )
 
       for (let l = 0, i = 0; i < imageData.data.length; l++, i += 4) {
         luminance[l] =
@@ -115,7 +130,9 @@ export async function pixelizarImagem(
     }
     case Metodo.atkinson: {
       const width = imageData.width
-      const luminance = new Uint8ClampedArray(imageData.width * imageData.height)
+      const luminance = new Uint8ClampedArray(
+        imageData.width * imageData.height
+      )
 
       for (let l = 0, i = 0; i < imageData.data.length; l++, i += 4) {
         luminance[l] =
