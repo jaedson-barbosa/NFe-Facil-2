@@ -6,33 +6,41 @@
   import { empresa, refEmpresa } from '../code/store'
   import { Tamanho } from '../code/impressao-nfce/configuracao'
   import { Metodo, pixelizarImagem } from '../code/impressao-nfce/pixelizacao'
-  import { updateDoc } from 'firebase/firestore'
+  import { deleteField, updateDoc } from 'firebase/firestore'
   import { defaultCatch } from '../code/firebase'
 
-  let imagemOriginal: HTMLImageElement
+  let imagemOriginal: HTMLElement
+
   $: {
-    if (imagemOriginal) {
+    if ($empresa.logotipo && imagemOriginal) {
+      const imagem = imagemOriginal as HTMLImageElement
       const metodo = $empresa.logotipo.pixelizacao
-      pixelizarImagem(imagemOriginal, exibLogotipo, metodo)
+      pixelizarImagem(imagem, exibLogotipo, metodo)
     }
   }
 
   let novoLogotipo: FileList
 
   $: {
-    if (novoLogotipo.length) {
-      getBase64(novoLogotipo.item(0))
-        .then(
-          (data) =>
-            ($empresa.logotipo = {
-              imagem: data,
-              alinhamento: 'L',
-              monocromatico: false,
-              pixelizacao: Metodo.atkinson,
-              tamanho: Tamanho.P,
-            })
-        )
-        .catch(defaultCatch)
+    if (novoLogotipo?.length) {
+      const arquivo = novoLogotipo.item(0)
+      const tamanhoKB = arquivo.size / 1024
+      if (tamanhoKB > 100) {
+        alert('Imagem recusada pois o arquivo tem mais de 100 KB.')
+      } else {
+        getBase64(arquivo)
+          .then(
+            (data) =>
+              ($empresa.logotipo = {
+                imagem: data,
+                alinhamento: 'L',
+                monocromatico: false,
+                pixelizacao: Metodo.atkinson,
+                tamanho: Tamanho.P,
+              })
+          )
+          .catch(defaultCatch)
+      }
     }
   }
 
@@ -70,9 +78,13 @@
   }
 
   async function removerLogotipo() {
+    const msg = 'Você tem certeza de que deseja remover o logotipo?'
+    const certeza = confirm(msg)
+    if (!certeza) return
     novoLogotipo = undefined
-    delete $empresa.logotipo
-    await salvarLogotipo()
+    $empresa.logotipo = undefined
+    await updateDoc($refEmpresa, { logotipo: deleteField() })
+    alert('Logotipo removido com sucesso.')
   }
 </script>
 
@@ -81,41 +93,52 @@
 <h2>Logotipo</h2>
 
 {#if $empresa.logotipo}
-  <figure>
-    <img
-      src={$empresa.logotipo.imagem}
-      alt="Logotipo da empresa"
-      bind:this={imagemOriginal}
-    />
-    <figcaption>Logotipo selecionado</figcaption>
-  </figure>
+  <div class="row">
+    <div class="column">
+      <figure>
+        <img
+          class="previa"
+          src={$empresa.logotipo.imagem}
+          alt="Logotipo da empresa"
+          on:load={(e) => (imagemOriginal = e.currentTarget)}
+        />
+        <figcaption>Logotipo selecionado</figcaption>
+      </figure>
+    </div>
+    <div class="column">
+      <figure>
+        <canvas class="previa" bind:this={exibLogotipo} />
+        <figcaption>Pré-visualização para o DANFE NFC-e</figcaption>
+      </figure>
+    </div>
+  </div>
 
-  <h3>Inserção no DANFE NF-e</h3>
   <div class="row">
     <div class="column">
       <label>
-        Alinhamento
+        Alinhamento no DANFE NF-e
         <select bind:value={$empresa.logotipo.alinhamento}>
           <option value="L">Esquerda</option>
           <option value="C">Centro</option>
           <option value="R">Direita</option>
-          <option value="F">Completo</option>
         </select>
       </label>
     </div>
     <div class="column">
       <label>
-        <input type="checkbox" bind:checked={$empresa.logotipo.monocromatico} />
-        Logotipo monocromático
+        Cor do logotipo no DANFE NF-e
+        <select bind:value={$empresa.logotipo.monocromatico}>
+          <option value={true}>Colorido</option>
+          <option value={false}>Preto e branco</option>
+        </select>
       </label>
     </div>
   </div>
 
-  <h3>Inserção no DANFE NFC-e</h3>
   <div class="row">
     <div class="column">
       <label>
-        Tamanho do logotipo
+        Tamanho do logotipo no DANFE NFC-e
         <select bind:value={$empresa.logotipo.tamanho}>
           <option value={Tamanho.P}>Pequeno</option>
           <option value={Tamanho.M}>Médio</option>
@@ -125,22 +148,16 @@
     </div>
     <div class="column">
       <label>
-        Método de renderização
+        Método de renderização no DANFE NFC-e
         <select bind:value={$empresa.logotipo.pixelizacao}>
           <option value={Metodo.threshold}>Preto e branco simples</option>
-          <option value={Metodo.bayer}>Método de Bayer</option>
-          <option value={Metodo.floydsteinberg}>
-            Método de Floyd–Steinberg
-          </option>
-          <option value={Metodo.atkinson}>Método de Atkinson</option>
+          <option value={Metodo.bayer}>Bayer</option>
+          <option value={Metodo.floydsteinberg}>Floyd–Steinberg</option>
+          <option value={Metodo.atkinson}>Atkinson</option>
         </select>
       </label>
     </div>
   </div>
-  <figure>
-    <canvas bind:this={exibLogotipo} style="max-width: 100%;" />
-    <figcaption>Pré-visualização para o DANFE NFC-e</figcaption>
-  </figure>
 
   <div class="row">
     <div class="column">
@@ -272,11 +289,12 @@
 </div>
 
 <div class="row">
-  <div class="column column-50">
+  <div class="column">
     <button on:click={() => impressao.testarDefinicoes()}>
       Testar impressão de texto
     </button>
   </div>
+  <div class="column" />
 </div>
 
 <hr />
@@ -308,3 +326,16 @@
   enquanto "alta qualidade" se refere a impressoras de 304 dpi, que fornecem
   melhor qualidade de impressão mas a um custo mais elevado.
 </p>
+
+<style>
+  figure {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .previa {
+    max-width: 100%;
+    max-height: 400px;
+  }
+</style>
