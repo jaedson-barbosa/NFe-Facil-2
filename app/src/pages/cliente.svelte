@@ -44,6 +44,7 @@
       }
       await setDoc(docRef, raiz)
       $goto(paginaAnterior)
+      $carregando = false
     } catch (error) {
       console.error(error)
       alert(error.message)

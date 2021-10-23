@@ -86,6 +86,7 @@
       await analisarIBPT()
       await setDoc(prodRef, raiz)
       $goto('./')
+      $carregando = false
     } catch (error) {
       console.error(error)
       alert(error.message)
