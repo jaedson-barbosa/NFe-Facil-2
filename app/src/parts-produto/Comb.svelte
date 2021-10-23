@@ -3,7 +3,13 @@
   import { onDestroy } from 'svelte'
   import { getMoeda } from '../code/numero'
   import { EstadosEX } from '../code/IBGE'
-  import ANP from '../code/ANP'
+  import {
+    familias,
+    buscarFamilia,
+    buscarGrupo,
+    buscarSubsubgrupo,
+    buscarProduto,
+  } from '../code/ANP'
   import Encerrante from './Encerrante.svelte'
   import { pattern } from '../code/patterns'
 
@@ -16,57 +22,61 @@
 
   onDestroy(() => (raiz.comb = undefined))
 
-  function escolher(v: typeof ANP[0]) {
-    return () => {
+  let cProdANP = raiz.comb.cProdANP
+  let familia = buscarFamilia(cProdANP)
+  let grupo = buscarGrupo(familia, cProdANP)
+  let subsubgrupo = buscarSubsubgrupo(grupo, cProdANP)
+  let produto = buscarProduto(subsubgrupo, cProdANP)
+  $: {
+    if (produto) {
       const comb = raiz.comb
-      comb.cProdANP = v.codigo
-      comb.descANP = v.produto
+      comb.cProdANP = produto.codigo
+      comb.descANP = produto.produto
     }
   }
-
-  let filtro = raiz.comb.cProdANP || ''
-  $: anpFiltrado = filtro
-    ? ANP.filter((v) => v.codigo.includes(filtro) || v.produto.includes(filtro))
-    : ANP
 </script>
 
 <h3>Combustível</h3>
 <label>
-  Filtrar pelo código / descrição
-  <input bind:value={filtro} />
-</label>
-<table>
-  <thead>
-    <tr>
-      <th>Código</th>
-      <th>Produto</th>
-      <th>Unidade</th>
-      <th>Família</th>
-      <th>Grupo</th>
-      <th>Sub-grupo</th>
-      <th>Sub-subgrupo</th>
-    </tr>
-  </thead>
-  <tbody style="height: 300px; overflow-y: scroll;">
-    {#each anpFiltrado as v}
-      <tr
-        class="clicavel"
-        class:marcado={raiz.comb.cProdANP == v.codigo}
-        on:click={escolher(v)}
-      >
-        <td>{v.codigo}</td>
-        <td>{v.produto}</td>
-        <td>{v.unidadeSIMP}</td>
-        <td>{v.familia}</td>
-        <td>{v.grupo}</td>
-        <td>{v.subgrupo}</td>
-        <td>{v.subsubgrupo}</td>
-      </tr>
+  Família
+  <select bind:value={familia} required>
+    {#each familias as familia}
+      <option value={familia}>{familia.familia}</option>
     {/each}
-  </tbody>
-</table>
+  </select>
+</label>
+{#if familia}
+  <label>
+    Grupo
+    <select bind:value={grupo} required>
+      {#each familia.grupos as grupo}
+        <option value={grupo}>{grupo.grupo} - {grupo.subgrupo}</option>
+      {/each}
+    </select>
+  </label>
+{/if}
+{#if grupo}
+  <label>
+    Subgrupo
+    <select bind:value={subsubgrupo} required>
+      {#each grupo.subsubgrupos as subsubgrupo}
+        <option value={subsubgrupo}>{subsubgrupo.subsubgrupo}</option>
+      {/each}
+    </select>
+  </label>
+{/if}
+{#if subsubgrupo}
+  <label>
+    Produto
+    <select bind:value={produto} required>
+      {#each subsubgrupo.produtos as produto}
+        <option value={produto}>{produto.codigo} - {produto.produto}</option>
+      {/each}
+    </select>
+  </label>
+{/if}
 
-{#if raiz.comb['cProdANP'] == 210203001}
+{#if raiz.comb['cProdANP'] == '210203001'}
   <label>
     <i>Percentual do GLP derivado do petróleo</i>
     <input type="number" step="0.0001" bind:value={raiz.comb.pGLP} />

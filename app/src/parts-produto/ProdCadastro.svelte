@@ -7,7 +7,7 @@
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import { validaCNPJ } from '../code/validacaoDoc'
   import { pattern } from '../code/patterns'
-import unidades from '../code/nfe/unidades'
+  import unidades from '../code/nfe/unidades'
 
   export let prod: any
 
@@ -70,7 +70,7 @@ import unidades from '../code/nfe/unidades'
     {#each unidades as un}
       <option value={un.Unidade}>{un.Unidade} - {un.Descricao}</option>
     {/each}
-    {#if !unidades.some(v => v.Unidade === prod['uCom'])}
+    {#if !unidades.some((v) => v.Unidade === prod['uCom'])}
       <option value={prod['uCom']}>Não padronizado: {prod['uCom']}</option>
     {/if}
   </select>
@@ -96,7 +96,7 @@ import unidades from '../code/nfe/unidades'
     {#each unidades as un}
       <option value={un.Unidade}>{un.Unidade} - {un.Descricao}</option>
     {/each}
-    {#if !unidades.some(v => v.Unidade === prod['uTrib'])}
+    {#if !unidades.some((v) => v.Unidade === prod['uTrib'])}
       <option value={prod['uTrib']}>Não padronizado: {prod['uTrib']}</option>
     {/if}
   </select>
