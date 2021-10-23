@@ -28,10 +28,10 @@
       ed?.dado &&
       ed.dado.placa != raiz.placa
     ) {
-      const ref = doc($refEmpresa, Dados.Veiculos, ed.dado.placa)
+      const ref = doc(refEmpresa, Dados.Veiculos, ed.dado.placa)
       await deleteDoc(ref)
     }
-    const ref = doc($refEmpresa, Dados.Veiculos, raiz.placa)
+    const ref = doc(refEmpresa, Dados.Veiculos, raiz.placa)
     await setDoc(ref, raiz)
     $goto(paginaAnterior)
     $carregando = false

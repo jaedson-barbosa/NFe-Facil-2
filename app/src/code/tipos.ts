@@ -72,6 +72,7 @@ export interface IResRemMembro {
 export enum Dados {
   Clientes = 'clientes',
   Produtos = 'produtos',
+  Impostos = 'impostos',
   Transportes = 'transportes',
   NFes = 'nfes',
   Veiculos = 'veiculos'

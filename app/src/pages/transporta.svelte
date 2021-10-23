@@ -30,7 +30,7 @@
         return
       }
       const id = transporta.CPF ? transporta.CPF : transporta.CNPJ
-      const docRef = doc($refEmpresa, Dados.Transportes, id)
+      const docRef = doc(refEmpresa, Dados.Transportes, id)
       if (ed?.tipo === Dados.Transportes) {
         if (ed.id != id) {
           alert('Não é permitido alterar o documento.')

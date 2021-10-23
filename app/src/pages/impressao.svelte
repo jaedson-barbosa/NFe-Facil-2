@@ -73,7 +73,7 @@
   const impressao = new Configuracoes()
 
   async function salvarLogotipo() {
-    await updateDoc($refEmpresa, $empresa)
+    await updateDoc(refEmpresa, { ...$empresa })
     alert('Alterações de logotipo salvas com sucesso.')
   }
 
@@ -83,7 +83,7 @@
     if (!certeza) return
     novoLogotipo = undefined
     $empresa.logotipo = undefined
-    await updateDoc($refEmpresa, { logotipo: deleteField() })
+    await updateDoc(refEmpresa, { logotipo: deleteField() })
     alert('Logotipo removido com sucesso.')
   }
 </script>

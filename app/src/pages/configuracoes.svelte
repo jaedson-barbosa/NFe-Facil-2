@@ -8,7 +8,7 @@
   $: $empresa && !raiz && (raiz = { ...$empresa })
 
   async function salvar() {
-    await updateDoc($refEmpresa, raiz)
+    await updateDoc(refEmpresa, raiz)
     $goto('./')
   }
 </script>

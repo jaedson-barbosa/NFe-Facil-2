@@ -11,7 +11,7 @@
 
   let transportadores = [] as DocumentSnapshot[]
   const buscador = new Buscador(
-    $refEmpresa,
+    refEmpresa,
     Dados.Transportes,
     'transporta.xNome',
     'asc',

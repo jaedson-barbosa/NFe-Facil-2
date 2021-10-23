@@ -5,7 +5,6 @@
   import { refEmpresa } from '../code/store'
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
-  import { get } from 'svelte/store'
   import { getMoeda } from '../code/numero'
   import { goto } from '@roxi/routify'
 
@@ -18,7 +17,7 @@
   if (det?.length) {
     //verificar esse id de produto
     const cods: string[] = det.map((v) => v.prod.cProd)
-    const refs = cods.map((v) => doc(get(refEmpresa), Dados.Produtos, v))
+    const refs = cods.map((v) => doc(refEmpresa, Dados.Produtos, v))
     Promise.all(refs.map((v) => getDoc(v))).then((v) => {
       v.forEach((k, i) => (det[i].ibpt = k.get('ibpt')))
       carregado = true
@@ -30,7 +29,7 @@
 
   let produtos = [] as DocumentSnapshot[]
   const buscadorProduto = new Buscador(
-    $refEmpresa,
+    refEmpresa,
     Dados.Produtos,
     'det.prod.xProd',
     'asc',

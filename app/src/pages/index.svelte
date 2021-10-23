@@ -1,13 +1,13 @@
 <script lang="ts">
   import { url } from '@roxi/routify'
-  import { edicao, liberacao, empresa } from '../code/store'
+  import { edicao, liberacoes, idEmpresa, empresa } from '../code/store'
   import { NiveisAcesso } from '../code/tipos'
 
   $edicao = undefined
 </script>
 
 <h1>Início</h1>
-{#if $liberacao == NiveisAcesso.A}
+{#if $liberacoes?.find((v) => v.cnpj == idEmpresa)?.nivel === NiveisAcesso.A}
   <h3>Área do administrador</h3>
   <a class="button" href={$url('./emitente')}>Atualizar emitente</a>
   <a class="button" href={$url('./configuracoes')}>Definições do emitente</a>

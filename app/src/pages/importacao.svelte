@@ -13,8 +13,7 @@
 
   async function importar(arquivos: FileList) {
     if (!arquivos?.length) return
-    const ref = $refEmpresa
-    await processarArquivos(ref, arquivos, (v) => (logs = [v, ...logs]))
+    await processarArquivos(refEmpresa, arquivos, (v) => (logs = [v, ...logs]))
     finalizar = true
   }
 </script>
