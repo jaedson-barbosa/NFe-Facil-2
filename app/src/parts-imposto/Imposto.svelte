@@ -67,7 +67,7 @@
 />
 {#if regimeNormal}
   <label>
-    <input type="checkbox" bind:checked={informarIPI} />
+    <input type="checkbox" bind:checked={informarICMSUFDest} />
     Produto com incidência de ICMS Interestadual
   </label>
   {#if imposto.ICMSUFDest}
