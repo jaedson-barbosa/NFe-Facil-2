@@ -7,6 +7,7 @@
   import { aplicarMascara } from '../code/mascaracaoDoc'
   import { validaCNPJ } from '../code/validacaoDoc'
   import { pattern } from '../code/patterns'
+import unidades from '../code/nfe/unidades'
 
   export let prod: any
 
@@ -65,7 +66,14 @@
 </label>
 <label>
   Unidade comercial
-  <input maxlength="6" bind:value={prod['uCom']} required {pattern} />
+  <select bind:value={prod['uCom']} required>
+    {#each unidades as un}
+      <option value={un.Unidade}>{un.Unidade} - {un.Descricao}</option>
+    {/each}
+    {#if !unidades.some(v => v.Unidade === prod['uCom'])}
+      <option value={prod['uCom']}>Não padronizado: {prod['uCom']}</option>
+    {/if}
+  </select>
 </label>
 <label>
   Valor unitário de comercialização
@@ -84,7 +92,14 @@
 </label>
 <label>
   Unidade tributável
-  <input maxlength="6" bind:value={prod['uTrib']} required {pattern} />
+  <select bind:value={prod['uTrib']} required>
+    {#each unidades as un}
+      <option value={un.Unidade}>{un.Unidade} - {un.Descricao}</option>
+    {/each}
+    {#if !unidades.some(v => v.Unidade === prod['uTrib'])}
+      <option value={prod['uTrib']}>Não padronizado: {prod['uTrib']}</option>
+    {/if}
+  </select>
 </label>
 <label>
   Valor unitário de tributação
