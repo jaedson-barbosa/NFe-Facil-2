@@ -3,7 +3,6 @@ import {
   CutTypes,
   ImageModes,
 } from 'browser-thermal-printer-encoder'
-import { Metodo } from './pixelizacao'
 
 export interface IConfiguracoes {
   fonte: string

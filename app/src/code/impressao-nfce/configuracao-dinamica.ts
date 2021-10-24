@@ -7,7 +7,6 @@ import {
   Tamanho,
 } from './configuracao'
 import { imprimirCanvas } from './impressao'
-import { Metodo } from './pixelizacao'
 
 export class Configuracoes implements IConfiguracoes {
   private salvo: IConfiguracoes

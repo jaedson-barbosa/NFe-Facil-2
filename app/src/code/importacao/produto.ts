@@ -44,7 +44,7 @@ export async function processarProdutos(
     await Promise.all(
       filtrados
         .map((v) => limparImpostos(v.det.imposto))
-        .map((v, i, a) => a.find((k) => deepEqual(v, k)))
+        .map((v, _, a) => a.find((k) => deepEqual(v, k)))
         .map(async (imposto, i) => {
           const id = await calcularIdImposto(imposto)
           prods[i].data.perfilTributario = id
@@ -114,7 +114,7 @@ function limparImpostos(imposto: any) {
 // https://stackoverflow.com/questions/25456013/javascript-deepequal-comparison
 function deepEqual(obj1: any, obj2: any) {
   //check if value is primitive
-  function isPrimitive(obj) {
+  function isPrimitive(obj: any) {
     return obj !== Object(obj)
   }
 

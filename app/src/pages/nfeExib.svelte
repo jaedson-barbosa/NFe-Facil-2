@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { carregando, edicao } from '../code/store'
+  import { edicao } from '../code/store'
   import { goto } from '@roxi/routify'
   import { Dados } from '../code/tipos'
   import { get } from 'svelte/store'

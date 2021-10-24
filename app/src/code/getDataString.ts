@@ -1,10 +1,7 @@
 export function toNFeString(data: Date) {
-  var tzo = -data.getTimezoneOffset(),
-    dif = tzo >= 0 ? '+' : '-',
-    pad = function (num) {
-      var norm = Math.floor(Math.abs(num))
-      return (norm < 10 ? '0' : '') + norm
-    }
+  const tzo = -data.getTimezoneOffset()
+  const dif = tzo >= 0 ? '+' : '-'
+
   return (
     data.getFullYear() +
     '-' +
@@ -22,4 +19,9 @@ export function toNFeString(data: Date) {
     ':' +
     pad(tzo % 60)
   )
+}
+
+function pad(num: number) {
+  var norm = Math.floor(Math.abs(num))
+  return (norm < 10 ? '0' : '') + norm
 }
