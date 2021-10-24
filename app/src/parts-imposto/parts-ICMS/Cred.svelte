@@ -20,12 +20,12 @@
   {:else}
     <i>Valor do crédito que pode ser aproveitado</i>
   {/if}
-  <small>Aproveitado nos termos do art. 23 da LC 123</small>
   <input
     type="number"
     step="0.0001"
     bind:value={ICMS['vCredICMSSN']}
     {required}
+    title="Aproveitado nos termos do art. 23 da LC 123"
   />
 </label>
 <br />

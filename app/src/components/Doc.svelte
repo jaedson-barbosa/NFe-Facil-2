@@ -34,7 +34,6 @@
   {:else}
     <label>
       CPF/CNPJ
-      <small>{aplicarMascara(br, br.length <= 11 ? 'cpf' : 'cnpj')}</small>
       <input
         required
         pattern={'[0-9]{11}|[0-9]{14}'}
@@ -42,6 +41,7 @@
         maxlength={14}
         bind:value={br}
         on:blur={() => validaDoc(br) || onInvalido()}
+        title={aplicarMascara(br, br.length <= 11 ? 'cpf' : 'cnpj')}
       />
     </label>
   {/if}

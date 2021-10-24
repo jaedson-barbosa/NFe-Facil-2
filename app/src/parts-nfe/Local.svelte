@@ -38,11 +38,11 @@
   {#if raiz[name]['CNPJ']}
     <label>
       <i>Inscrição estadual</i>
-      <small>Usar literal 'ISENTO' se necessário</small>
       <input
         maxlength="14"
         pattern={'[0-9]{(2, 14)}|ISENTO'}
         bind:value={raiz[name]['IE']}
+        title="Se necessário, usar 'ISENTO'"
       />
     </label>
   {/if}

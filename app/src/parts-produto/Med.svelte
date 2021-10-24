@@ -7,19 +7,23 @@
 <h3>Medicamento</h3>
 <label>
   Registro ANVISA
-  <small>
-    Usar literal ISENTO no caso de medicamento isento de registro na ANVISA
-  </small>
-  <input pattern={'[0-9]{13}|ISENTO'} bind:value={med.cProdANVISA} required />
+  <input
+    pattern={'[0-9]{13}|ISENTO'}
+    bind:value={med.cProdANVISA}
+    required
+    title="Usar 'ISENTO' no caso de medicamento isento de registro na ANVISA"
+  />
 </label>
 {#if med['cProdANVISA'] == 'ISENTO'}
   <label>
     Motivo da isenção
-    <small>
-      Para medicamento isento de registro na ANVISA, informar o número da
-      decisão que o isenta
-    </small>
-    <input maxlength="255" bind:value={med.xMotivoIsencao} required {pattern} />
+    <input
+      maxlength="255"
+      bind:value={med.xMotivoIsencao}
+      required
+      {pattern}
+      title="Número da decisão que isenta registro"
+    />
   </label>
 {/if}
 <label>

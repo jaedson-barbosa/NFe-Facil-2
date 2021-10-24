@@ -65,13 +65,11 @@
 </label>
 <label>
   GTIN
-  <small>
-    antigo código EAN ou código de barras, usar literal 'SEM GTIN' caso não haja
-  </small>
   <input
     bind:value={prod['cEAN']}
     pattern={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
     required
+    title="Antigo código EAN ou código de barras, usar literal 'SEM GTIN' caso não haja"
   />
 </label>
 <label>
@@ -91,13 +89,11 @@
 </label>
 <label>
   GTIN da unidade tributável
-  <small>
-    antigo código EAN ou código de barras, usar literal 'SEM GTIN' caso não haja
-  </small>
   <input
     bind:value={prod['cEANTrib']}
     pattern={'SEM GTIN|[0-9]{0}|[0-9]{8}|[0-9]{12,14}'}
     required
+    title="Antigo código EAN ou código de barras, usar literal 'SEM GTIN' caso não haja"
   />
 </label>
 <label>
@@ -134,28 +130,22 @@
   {#if prod.indEscala == 'N'}
     <label>
       CNPJ do Fabricante da Mercadoria
-      <small>
-        {aplicarMascara(prod.CNPJFab, 'cnpj')} - obrigatório para produto em escala
-        NÃO relevante
-      </small>
       <input
         required
         pattern={'[0-9]{14}'}
         bind:value={prod.CNPJFab}
         on:blur={() => validaCNPJ(prod.CNPJFab) || (prod.CNPJFab = '')}
+        title="{aplicarMascara(prod.CNPJFab, 'cnpj')} - Obrigatório para produto em escala NÃO relevante"
       />
     </label>
   {/if}
 {/if}
 <label>
   <i>Código de benefício fiscal</i>
-  <small>
-    Caso seja necessário preencher este campo e não haja um código, usar literal
-    'SEM CBENEF'
-  </small>
   <input
     pattern={'([!-ÿ]{8}|[!-ÿ]{10}|SEM CBENEF)?'}
     bind:value={prod['cBenef']}
+    title="Se necessário, usar 'SEM CBENEF'"
   />
 </label>
 <label>
