@@ -10,11 +10,11 @@
 
   async function salvar() {
     try {
-      if (raiz.emit.CNPJ != $idEmpresa) {
+      if (raiz.emit.CNPJ != idEmpresa) {
         alert('Não é permitida a alteração do CNPJ do emitente.')
         return
       }
-      await updateDoc($refEmpresa, raiz)
+      await updateDoc(refEmpresa, raiz)
       $goto('./')
     } catch (error) {
       alert(error.message)

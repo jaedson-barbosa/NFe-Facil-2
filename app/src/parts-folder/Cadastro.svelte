@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { idEmpresa } from '../code/store'
   import { auth, cadastrar as _cadastrar, defaultCatch } from '../code/firebase'
 
   let cadastrando = false
@@ -21,7 +20,8 @@
       const { cnpj } = res.data as { cnpj: string }
       // Necessario atualizar para ter acesso à empresa
       await auth.currentUser.getIdTokenResult(true)
-      $idEmpresa = cnpj
+      localStorage.setItem('idEmpresa', cnpj)
+      location.reload()
     } catch (error) {
       defaultCatch(error)
     }

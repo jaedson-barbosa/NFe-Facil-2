@@ -41,7 +41,7 @@
     $carregando = true
     try {
       raiz.ide.nNF = '0'
-      const coluna = collection($refEmpresa, Dados.NFes)
+      const coluna = collection(refEmpresa, Dados.NFes)
       if (raiz.Id) {
         const docRef = doc(coluna, raiz.Id)
         const docObj = await getDoc(docRef)

@@ -29,7 +29,7 @@
         return
       }
       const id = dest.CPF || dest.CNPJ || dest.idEstrangeiro
-      const docRef = doc($refEmpresa, Dados.Clientes, id)
+      const docRef = doc(refEmpresa, Dados.Clientes, id)
       if (ed?.tipo === Dados.Clientes && ed.id != id) {
         alert('Não é permitido alterar o documento.')
         $carregando = false

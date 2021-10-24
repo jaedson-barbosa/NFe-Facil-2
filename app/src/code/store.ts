@@ -1,6 +1,5 @@
-import { derived, Readable, readable, Writable, writable } from 'svelte/store'
-import { doc, onSnapshot } from 'firebase/firestore'
-import type { DocumentReference } from 'firebase/firestore'
+import { derived, Readable, readable, writable } from 'svelte/store'
+import { collection, doc, limit, onSnapshot, query } from 'firebase/firestore'
 import {
   GoogleAuthProvider,
   User,
@@ -23,8 +22,14 @@ export const user = {
   subscribe: readable<User>(undefined, (set) =>
     auth.onAuthStateChanged((u) => set(u))
   ).subscribe,
-  signIn: () => signInWithPopup(auth, googleProvider),
-  signOut: () => signOut(auth),
+  signIn: () => {
+    localStorage.removeItem('idEmpresa')
+    signInWithPopup(auth, googleProvider)
+  },
+  signOut: () => {
+    localStorage.removeItem('idEmpresa')
+    signOut(auth).then(location.reload)
+  },
 }
 
 export const liberacoes = derived<
@@ -35,34 +40,20 @@ export const liberacoes = derived<
   (ref, set) => {
     if (ref) {
       getIdTokenResult(ref, true)
-        .then(({ claims }) => {
-          const niveis = [NiveisAcesso.RW, NiveisAcesso.A]
-          const liberacoes = Object.entries(claims)
-          const empresas = liberacoes
-            .filter(([_, v]) => niveis.includes(v as NiveisAcesso))
-            .map(([cnpj, v]) => ({ cnpj, nivel: v as NiveisAcesso }))
-          set(empresas)
-        })
+        .then((token) =>
+          set(
+            Object.entries(token.claims)
+              .filter(([_, v]) => v === NiveisAcesso.RW || v === NiveisAcesso.A)
+              .map(([cnpj, v]) => ({ cnpj, nivel: v as NiveisAcesso }))
+          )
+        )
         .catch(() => set([]))
     } else set([])
   },
   []
 )
 
-export const idEmpresa = writable(localStorage.getItem('idEmpresa'))
-idEmpresa.subscribe((v) =>
-  v
-    ? localStorage.setItem('idEmpresa', v)
-    : localStorage.removeItem('idEmpresa')
-)
-
-export const liberacao = derived(
-  [liberacoes, idEmpresa],
-  ([$liberacoes, $idEmpresa]) =>
-    $liberacoes?.find((v) => v.cnpj == $idEmpresa)?.nivel
-)
-
-type TEmpresa = {
+interface IEmpresa {
   emit: any
   serieNFe: string
   serieNFCe: string
@@ -70,7 +61,7 @@ type TEmpresa = {
   CSC: string
   IDCSCh: string
   CSCh: string
-  tokenIBPT?: string,
+  tokenIBPT?: string
   logotipo?: {
     imagem: string
     alinhamento: 'L' | 'C' | 'R' | 'F'
@@ -80,32 +71,34 @@ type TEmpresa = {
   }
 }
 
-export const refEmpresa = derived<Writable<string>, DocumentReference>(
-  idEmpresa,
-  (id) => (id ? doc(db, 'empresas', id) : undefined),
-  undefined
-)
+export interface IPerfilTributario {
+  id: string
+  descricao: string
+  imposto: any
+}
 
-export const empresa = writable<TEmpresa>(undefined)
-let terminarEmpesa = undefined
-user.subscribe(($user) => {
-  if ($user) {
-    refEmpresa.subscribe((ref) => {
-      if (ref) {
-        terminarEmpesa = onSnapshot(ref, (v) => {
-          const data = v.data() as TEmpresa
-          empresa.set(data)
-        })
-      } else {
-        terminarEmpesa?.()
-        empresa.set(undefined)
-      }
-    })
-  } else {
-    terminarEmpesa?.()
-    empresa.set(undefined)
-  }
-})
+export const idEmpresa = localStorage.getItem('idEmpresa')
+export const refEmpresa = idEmpresa && doc(db, 'empresas', idEmpresa)
+
+export const empresa = writable<IEmpresa>(undefined)
+if (refEmpresa) onSnapshot(refEmpresa, (v) => empresa.set(v.data() as IEmpresa))
+
+export const perfisTributarios = writable<IPerfilTributario[]>([])
+if (refEmpresa) {
+  const colecao = collection(refEmpresa, Dados.Impostos)
+  onSnapshot(query(colecao, limit(50)), (v) =>
+    perfisTributarios.set(
+      v.docs.map(
+        (k) =>
+          ({
+            id: k.id,
+            descricao: k.get('descricao'),
+            imposto: k.get('imposto'),
+          } as IPerfilTributario)
+      )
+    )
+  )
+}
 
 export interface IEdicao {
   tipo: Dados

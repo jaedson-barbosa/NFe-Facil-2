@@ -1,13 +1,13 @@
 <script lang="ts">
   import { url } from '@roxi/routify'
-  import { edicao, liberacao, empresa } from '../code/store'
+  import { edicao, liberacoes, idEmpresa, empresa } from '../code/store'
   import { NiveisAcesso } from '../code/tipos'
 
   $edicao = undefined
 </script>
 
 <h1>Início</h1>
-{#if $liberacao == NiveisAcesso.A}
+{#if $liberacoes?.find((v) => v.cnpj == idEmpresa)?.nivel === NiveisAcesso.A}
   <h3>Área do administrador</h3>
   <a class="button" href={$url('./emitente')}>Atualizar emitente</a>
   <a class="button" href={$url('./configuracoes')}>Definições do emitente</a>
@@ -33,34 +33,22 @@
   <h3>Clientes</h3>
   <a class="button" href={$url('./cliente')}>Adicionar</a>
   <a class="button" href={$url('./clientes')}>Gerenciar</a>
-  <p>
-    Para garantir boas práticas, para a emissão de NF-es só é possível inserir
-    clientes previamente cadastrados.
-  </p>
 
   <h3>Produtos</h3>
   <a class="button" href={$url('./produto')}>Adicionar</a>
   <a class="button" href={$url('./produtos')}>Gerenciar</a>
-  <p>
-    Os produtos junto com os impostos são uma das partes mais complexas do
-    emissor, então crie quantas cópias forem necessárias.
-  </p>
+
+  <h3>Perfis de tributação</h3>
+  <a class="button" href={$url('./imposto')}>Adicionar</a>
+  <a class="button" href={$url('./impostos')}>Gerenciar</a>
 
   <h3>Transportadores</h3>
   <a class="button" href={$url('./transporta')}>Adicionar</a>
   <a class="button" href={$url('./transportes')}>Gerenciar</a>
-  <p>
-    Aqui também é seguida a boa prática somente permitir a inserção de
-    transportadores previamente cadastrados.
-  </p>
 
   <h3>Veículos</h3>
   <a class="button" href={$url('./veiculo')}>Adicionar</a>
   <a class="button" href={$url('./veiculos')}>Gerenciar</a>
-  <p>
-    Guardando as placas de todos os veículos que passarem pela sua empresa é
-    possível diminuir a chance de erros de digitação.
-  </p>
 {:else if !$empresa.emit.enderEmit}
   <p>
     Cadastre as informações do emitente para ter acesso às funcionalidades do

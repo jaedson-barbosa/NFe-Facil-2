@@ -9,7 +9,7 @@
 
   let cadastros: DocumentSnapshot[] = []
   const buscador = new Buscador(
-    $refEmpresa,
+    refEmpresa,
     Dados.NFes,
     'infNFe.ide.nNF',
     'desc',

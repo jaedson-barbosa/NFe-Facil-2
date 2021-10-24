@@ -18,7 +18,7 @@
 
   let clientes = [] as DocumentSnapshot[]
   const buscadorCliente = new Buscador(
-    $refEmpresa,
+    refEmpresa,
     Dados.Clientes,
     'dest.xNome',
     'asc',

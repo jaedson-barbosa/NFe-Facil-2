@@ -13,7 +13,7 @@
 
   let veiculos = [] as DocumentSnapshot[]
   const buscador = new Buscador(
-    $refEmpresa,
+    refEmpresa,
     Dados.Veiculos,
     'placa',
     'asc',

@@ -1,11 +1,19 @@
 <script lang="ts">
-  import { idEmpresa, liberacoes } from '../code/store'
+  import { liberacoes } from '../code/store'
+
+  let cnpj = undefined
+  $: {
+    if (cnpj) {
+      localStorage.setItem('idEmpresa', cnpj)
+      location.reload()
+    }
+  }
 </script>
 
 {#if $liberacoes?.length}
   <label>
     Escolher empresa
-    <select bind:value={$idEmpresa}>
+    <select bind:value={cnpj}>
       {#each $liberacoes as liberacao}
         <option>{liberacao.cnpj}</option>
       {/each}

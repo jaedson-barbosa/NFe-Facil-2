@@ -8,9 +8,9 @@
 
   let cadastros: DocumentSnapshot[] = []
   const buscador = new Buscador(
-    $refEmpresa,
+    refEmpresa,
     Dados.Produtos,
-    'det.prod.xProd',
+    'prod.xProd',
     'asc',
     (v) => (cadastros = v),
     false
@@ -44,8 +44,8 @@
     <tbody>
       {#each cadastros as n}
         <tr class="clicavel" on:click={() => editar(n)}>
-          <td>{n.get('det.prod.cProd')}</td>
-          <td>{n.get('det.prod.xProd')}</td>
+          <td>{n.get('prod.cProd')}</td>
+          <td>{n.get('prod.xProd')}</td>
         </tr>
       {/each}
     </tbody>

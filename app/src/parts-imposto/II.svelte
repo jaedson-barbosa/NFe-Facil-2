@@ -2,7 +2,10 @@
   export let II: any
 
   let informar = !!II
-  $: II = informar ? {} : undefined
+  $: {
+    if (informar && !II) II = {}
+    else if (!informar && II) II = undefined
+  }
 </script>
 
 <label>

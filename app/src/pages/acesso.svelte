@@ -9,7 +9,7 @@
 
   function addMembro() {
     const id = prompt('Id do novo membro:')
-    _addMembro({ CNPJ: $idEmpresa, id })
+    _addMembro({ CNPJ: idEmpresa, id })
       .then(() => alert('Registrado com sucesso.'))
       .catch(defaultCatch)
   }
@@ -18,7 +18,7 @@
     const msg = 'Tens certeza de que desejas revogar teu acesso a esta empresa?'
     const certeza = confirm(msg)
     if (certeza) {
-      remMembro({ CNPJ: $idEmpresa })
+      remMembro({ CNPJ: idEmpresa })
         .then(() => {
           alert('Acesso revogado com sucesso.')
           window.close()
@@ -30,7 +30,7 @@
   function bloquearOutro() {
     const id = prompt('Id do usuário que desejas bloquear:')
     if (!id) return
-    remMembro({ CNPJ: $idEmpresa, id })
+    remMembro({ CNPJ: idEmpresa, id })
       .then(() => alert('Usuário bloqueado com sucesso'))
       .catch(defaultCatch)
   }
