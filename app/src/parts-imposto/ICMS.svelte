@@ -25,30 +25,32 @@
       ? (raiz['ICMS']['ICMS00'] = { CST: '00' })
       : (raiz['ICMS']['ICMSSN101'] = { CSOSN: '101' }))
 
-  let tipoICMS = ICMS[regimeNormal ? 'CST' : 'CSOSN']
+  let tipoICMS: string = ICMS[regimeNormal ? 'CST' : 'CSOSN']
   if (regimeNormal && raiz['ICMSPart']) tipoICMS = 'Part' + tipoICMS
   if (regimeNormal && raiz['ICMSST']) tipoICMS = 'ST' + tipoICMS
 
   $: {
-    raiz['ICMS'] = {}
-    let t = tipoICMS as string
-    let c: string
-    if (t === '41' || t === '50') {
-      c = 'ICMS40'
-    } else if (t === 'Part10' || t === 'Part90') {
-      c = 'ICMSPart'
-      t = t === 'Part10' ? '10' : '90'
-    } else if (t === 'ST41' || t === 'ST60') {
-      c = 'ICMSST'
-      t = t === 'ST41' ? '41' : '60'
-    } else if (regimeNormal) {
-      c = 'ICMS' + t
-    } else if (['102', '103', '300', '400'].includes(t)) {
-      c = 'ICMSSN102'
-    } else {
-      c = 'ICMSSN' + t
+    if (tipoICMS != ICMS[regimeNormal ? 'CST' : 'CSOSN']) {
+      raiz['ICMS'] = {}
+      let t = tipoICMS as string
+      let c: string
+      if (t === '41' || t === '50') {
+        c = 'ICMS40'
+      } else if (t === 'Part10' || t === 'Part90') {
+        c = 'ICMSPart'
+        t = t === 'Part10' ? '10' : '90'
+      } else if (t === 'ST41' || t === 'ST60') {
+        c = 'ICMSST'
+        t = t === 'ST41' ? '41' : '60'
+      } else if (regimeNormal) {
+        c = 'ICMS' + t
+      } else if (['102', '103', '300', '400'].includes(t)) {
+        c = 'ICMSSN102'
+      } else {
+        c = 'ICMSSN' + t
+      }
+      ICMS = raiz['ICMS'][c] = regimeNormal ? { CST: t } : { CSOSN: t }
     }
-    ICMS = raiz['ICMS'][c] = regimeNormal ? { CST: t } : { CSOSN: t }
   }
 </script>
 
