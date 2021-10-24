@@ -1,4 +1,5 @@
 import { collection, doc, DocumentReference, getDoc } from 'firebase/firestore'
+import { carregarAproximacao } from '../imposto/aproximado'
 import { limparComb } from '../imposto/CIDE'
 import { limparICMS } from '../imposto/ICMS'
 import { limparIPI } from '../imposto/IPI'
@@ -35,6 +36,9 @@ export async function processarProdutos(
     ref: v.ref,
     data: { prod: limparProduto(v.det.prod) } as any,
   }))
+  for (const prod of prods) {
+    prod.data.ibpt = await carregarAproximacao(prod.data.prod, true)
+  }
   const colecaoImpostos = collection(refEmpresa, Dados.Impostos)
   const impostos = (
     await Promise.all(

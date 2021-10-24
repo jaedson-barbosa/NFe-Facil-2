@@ -1,11 +1,18 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { carregando, edicao, empresa, perfisTributarios, refEmpresa } from '../code/store'
-  import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
+  import {
+    carregando,
+    edicao,
+    empresa,
+    perfisTributarios,
+    refEmpresa,
+  } from '../code/store'
+  import { doc, getDoc, setDoc } from 'firebase/firestore'
   import ProdCadastro from '../parts-produto/ProdCadastro.svelte'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
+  import { carregarAproximacao } from '../code/imposto/aproximado'
 
   const ed = get(edicao)
   let raiz = ed?.tipo === Dados.Produtos ? ed.dado : {}
@@ -15,40 +22,12 @@
   if (!raiz['ibpt']) raiz['ibpt'] = { isNacional: true }
   let ibpt = raiz['ibpt']
 
-  async function carregarImpostos() {
-    const baseUrl = 'https://apidoni.ibpt.org.br/api/v1/produtos?'
-    const parametros = new URLSearchParams()
-    parametros.append('token', empresaCarregada.tokenIBPT)
-    parametros.append('cnpj', empresaCarregada.emit.CNPJ)
-    parametros.append('codigo', raiz.prod.NCM)
-    parametros.append('uf', empresaCarregada.emit.enderEmit.UF)
-    parametros.append('ex', raiz.prod.EXTIPI || 0)
-    parametros.append('descricao', raiz.prod.xProd)
-    parametros.append('unidadeMedida', raiz.prod.uTrib)
-    parametros.append('valor', raiz.prod.vUnTrib)
-    parametros.append('gtin', raiz.prod.cEANTrib)
-    const url = baseUrl + parametros.toString()
-    try {
-      const res = await fetch(url)
-      const json = await res.json()
-      ibpt.federal = ibpt.isNacional ? json.Nacional : json.Importado
-      ibpt.estadual = json.Estadual
-      ibpt.municipal = json.Municipal
-      const [dia, mes, ano] = json.VigenciaFim.split('/')
-      const validade = new Date(ano, mes - 1, dia)
-      ibpt.validade = Timestamp.fromDate(validade)
-    } catch (error) {
-      const baseMsg = 'Erro ao tentar consultar os impostos aproximados: '
-      alert(baseMsg + error.message)
-    }
-  }
-
   async function analisarIBPT() {
     if (
       empresaCarregada.tokenIBPT &&
       (!ibpt.validade || ibpt.validade.toDate() < new Date())
     ) {
-      await carregarImpostos()
+      raiz['ibpt'] = await carregarAproximacao(raiz.prod, ibpt.isNacional)
     }
   }
 

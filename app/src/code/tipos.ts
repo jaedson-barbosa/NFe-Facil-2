@@ -124,7 +124,8 @@ export interface INFeRoot {
 
 export interface IIBPT {
   isNacional: boolean
-  federal: number
+  nacional: number
+  importado: number
   estadual: number
   municipal: number
   validade: Timestamp

@@ -31,9 +31,11 @@
   function getAproximacao(consumidorFinal: boolean, dets: IDet[]) {
     function agregarImposto(p: IAproximacao, det: IDet) {
       const vProd = +det.prod.vProd || 0
-      p.federal += (vProd * det.ibpt.federal) / 100
-      p.estadual += (vProd * det.ibpt.estadual) / 100
-      p.municipal += (vProd * det.ibpt.municipal) / 100
+      const ibpt = det.ibpt
+      const federal = ibpt.isNacional ? ibpt.nacional : ibpt.importado
+      p.federal += (vProd * federal) / 100
+      p.estadual += (vProd * ibpt.estadual) / 100
+      p.municipal += (vProd * ibpt.municipal) / 100
       return p
     }
 

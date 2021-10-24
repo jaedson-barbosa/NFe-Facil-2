@@ -32,7 +32,8 @@ tokenIBPT
   det: ...
   ibpt:
     isNacional
-    federal
+    nacional
+    importado
     estadual
     municipal
     validade
