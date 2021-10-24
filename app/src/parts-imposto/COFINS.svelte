@@ -4,19 +4,21 @@
 
   export let raiz: any
 
-  if (!raiz['COFINS']) raiz['COFINS'] = { CST: '01' }
+  if (!raiz['COFINS']) raiz['COFINS'] = { COFINSAliq: { CST: '01' } }
   let COFINS = Object.values(raiz['COFINS'])[0]
   let tipoCOFINS = COFINS['CST']
   $: {
-    let c = ['01', '02'].includes(tipoCOFINS)
-      ? 'COFINSAliq'
-      : tipoCOFINS == '03'
-      ? 'COFINSQtde'
-      : ['04', '05', '06', '07', '08', '09'].includes(tipoCOFINS)
-      ? 'COFINSNT'
-      : 'COFINSOutr'
-    raiz['COFINS'] = {}
-    COFINS = raiz['COFINS'][c] = { CST: tipoCOFINS }
+    if (tipoCOFINS != COFINS['CST']) {
+      let c = ['01', '02'].includes(tipoCOFINS)
+        ? 'COFINSAliq'
+        : tipoCOFINS == '03'
+        ? 'COFINSQtde'
+        : ['04', '05', '06', '07', '08', '09'].includes(tipoCOFINS)
+        ? 'COFINSNT'
+        : 'COFINSOutr'
+      raiz['COFINS'] = {}
+      COFINS = raiz['COFINS'][c] = { CST: tipoCOFINS }
+    }
   }
 
   $: comAliquota = !['04', '05', '06', '07', '08', '09'].includes(tipoCOFINS)
@@ -38,13 +40,23 @@
   {#if aliquotaEmPercentual}
     <label>
       Alíquota em percentual
-      <input type="number" step="0.0001" bind:value={COFINS['pCOFINS']} required />
+      <input
+        type="number"
+        step="0.0001"
+        bind:value={COFINS['pCOFINS']}
+        required
+      />
     </label>
   {/if}
   {#if aliquotaEmReais}
     <label>
       Alíquota em reais
-      <input type="number" step="0.0001" bind:value={COFINS['vAliqProd']} required />
+      <input
+        type="number"
+        step="0.0001"
+        bind:value={COFINS['vAliqProd']}
+        required
+      />
     </label>
   {/if}
   {#if COFINS['vCOFINS']}
