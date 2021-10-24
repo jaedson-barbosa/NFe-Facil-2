@@ -16,6 +16,10 @@
   let prod = raiz.prod
   $: raiz.prod = prod
 
+  if (prod.indTot === undefined) prod.indTot = '1'
+  let indTot = prod.indTot == '1'
+  $: prod.indTot = indTot ? '1' : '0'
+
   if (!prod.rastro) prod.rastro = []
   if (!prod.DI) prod.DI = []
 
@@ -25,12 +29,17 @@
 
 <h2>Detalhes adicionais de {prod['xProd']}</h2>
 <label>
-  CFOP
+  CFOP usado
   <input
     bind:value={prod['CFOP']}
     pattern={'[1,2,3,5,6,7]{1}[0-9]{3}'}
     required
   />
+</label>
+
+<label>
+  <input type="checkbox" bind:checked={indTot} />
+  O valor do item compõe o valor total da NF-e
 </label>
 
 <label>
@@ -90,10 +99,10 @@
 {#if ['veicProd', 'med', 'arma', 'comb', 'nRECOPI'].some((v) => !!v[prod])}
   <h2>Detalhamento específico</h2>
   {#if prod['veicProd']}
-    <VeicProd bind:raiz={prod['veicProd']} />
+    <VeicProd bind:veicProd={prod['veicProd']} />
   {/if}
   {#if prod['med']}
-    <Med bind:raiz={prod['med']} />
+    <Med bind:med={prod['med']} />
     <h3>
       Rastreabilidade
       <Adicionar on:click={() => (prod.rastro = [{}, ...prod.rastro])} />
@@ -118,12 +127,12 @@
     {/if}
   {/if}
   {#if prod['arma']}
-    <Arma bind:raiz={prod['arma']} />
+    <Arma bind:arma={prod['arma']} />
   {/if}
   {#if prod['comb']}
     <Comb bind:raiz={prod} />
   {/if}
   {#if prod['nRECOPI']}
-    <NRECOPI bind:raiz={prod} />
+    <NRECOPI bind:nRECOPI={prod['nRECOPI']} />
   {/if}
 {/if}

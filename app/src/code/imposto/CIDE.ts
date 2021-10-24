@@ -1,3 +1,11 @@
+export function limparComb(comb: any) {
+  const CIDE = comb?.CIDE
+  if (CIDE) {
+    delete CIDE.qBCProd
+    delete CIDE.vCIDE
+  }
+}
+
 export function calcularCIDE(prod: any) {
   const comb = prod.comb
   if (!comb) return prod

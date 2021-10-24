@@ -57,8 +57,7 @@ service cloud.firestore {
 
       match /impostos/{imposto} {
         allow read: if readEnabled();
-        allow create, update: if writeEnabled();
-        allow delete: if isAdmin();
+        allow write: if writeEnabled();
       }
 
       match /veiculos/{nota} {

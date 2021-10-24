@@ -1,3 +1,27 @@
+export function limparPISCOFINS({ PIS, COFINS, PISST, COFINSST }: any) {
+  PIS = Object.values(PIS)[0]
+  delete PIS.vBC
+  delete PIS.qBCProd
+  delete PIS.vPIS
+
+  COFINS = Object.values(COFINS)[0]
+  delete COFINS.vBC
+  delete COFINS.qBCProd
+  delete COFINS.vCOFINS
+
+  if (PISST) {
+    delete PISST.vBC
+    delete PISST.qBCProd
+    delete PISST.vPIS
+  }
+
+  if (COFINSST) {
+    delete COFINSST.vBC
+    delete COFINSST.qBCProd
+    delete COFINSST.vCOFINS
+  }
+}
+
 export function atualizarPISCOFINS(
   prod: any,
   { PIS, COFINS, PISST, COFINSST }: any

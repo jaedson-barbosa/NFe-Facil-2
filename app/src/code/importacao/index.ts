@@ -35,8 +35,9 @@ export async function processarArquivos(
       const veiculos = await processarVeiculos(ref, dataNotas, log)
       veiculos.forEach((v) => lote.set(v.ref, v.data))
 
-      const produtos = await processarProdutos(ref, dataNotas, log)
-      produtos.forEach((v) => lote.set(v.ref, v.data))
+      const dets = await processarProdutos(ref, dataNotas, log)
+      dets.produtos.forEach((v) => lote.set(v.ref, v.data))
+      dets.impostos.forEach((v) => lote.set(v.ref, v.data))
     }
     if (notas.updatesNotas.length) {
       notas.updatesNotas.forEach((v) => lote.update(v.nfeRef, v.nfeData))
