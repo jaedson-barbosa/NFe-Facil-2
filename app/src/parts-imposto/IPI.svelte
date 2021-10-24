@@ -24,14 +24,11 @@
 <h3>Imposto sobre produtos industrializados</h3>
 <label>
   <i>CNPJ do produtor da mercadoria</i>
-  <small>
-    {aplicarMascara(raiz.CNPJProd, 'cnpj')} - Informar se diferente do emitente e
-    somente em exportação
-  </small>
   <input
     pattern={'[0-9]{14}'}
     bind:value={raiz.CNPJProd}
     on:blur={() => validaCNPJ(raiz.CNPJProd) || (raiz.CNPJProd = '')}
+    title="{aplicarMascara(raiz.CNPJProd, 'cnpj')} - Informar se diferente do emitente e somente em exportação."
   />
 </label>
 <label>

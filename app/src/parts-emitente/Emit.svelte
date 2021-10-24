@@ -21,12 +21,12 @@
 
 <label>
   CNPJ
-  <small>{aplicarMascara(emit['CNPJ'], 'cnpj')}</small>
   <input
     required
     pattern={'[0-9]{14}'}
     bind:value={emit['CNPJ']}
     on:blur={() => validaCNPJ(emit['CNPJ']) || (emit['CNPJ'] = '')}
+    title={aplicarMascara(emit['CNPJ'], 'cnpj')}
   />
 </label>
 <label>
@@ -45,12 +45,12 @@
 </label>
 <label>
   Inscrição Estadual
-  <small>Usar literal 'ISENTO' se necessário</small>
   <input
     maxlength="14"
     pattern={'[0-9]{(2, 14)}|ISENTO'}
     bind:value={emit['IE']}
     required
+    title="Se necessário, usar 'ISENTO'"
   />
 </label>
 <label>

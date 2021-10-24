@@ -91,8 +91,12 @@
 
 <label>
   <i>Informações adicionais do produto</i>
-  <small>Norma referenciada, informações complementares, etc</small>
-  <input maxlength="500" bind:value={raiz['infAdProd']} {pattern} />
+  <input
+    maxlength="500"
+    bind:value={raiz['infAdProd']}
+    {pattern}
+    title="Norma referenciada, informações complementares, etc"
+  />
 </label>
 
 {#if ['veicProd', 'med', 'arma', 'comb', 'nRECOPI'].some((v) => !!v[prod])}

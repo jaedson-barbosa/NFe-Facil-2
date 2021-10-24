@@ -105,12 +105,12 @@
 </label>
 <label>
   <i>Alíquota do CIDE</i>
-  {#if raiz.comb.CIDE.vCIDE}
-    <small>
-      Valor calculado:
-      <i>{getMoeda(raiz.comb.CIDE.vCIDE)}</i>
-    </small>
-  {/if}
   <input type="number" step="0.0001" bind:value={raiz.comb.CIDE.vAliqProd} />
 </label>
+{#if raiz.comb.CIDE.vCIDE}
+  <p>
+    Valor calculado:
+    <i>{getMoeda(raiz.comb.CIDE.vCIDE)}</i>
+  </p>
+{/if}
 <Encerrante bind:encerrante={raiz.comb.encerrante} />

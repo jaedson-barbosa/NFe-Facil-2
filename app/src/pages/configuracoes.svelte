@@ -18,35 +18,31 @@
   <form on:submit|preventDefault={() => salvar()}>
     <h3>Emissão de NF-e</h3>
     <label>
-      Série da NF-e <small>Série atual de emissão das NF-es</small>
+      Série NF-e
       <input bind:value={raiz.serieNFe} pattern={'0|[1-9]{1}[0-9]{0,2}'} required />
     </label>
 
     <h3>Emissão de NFC-e</h3>
     <label>
-      Série da NFC-e <small>Série atual de emissão das NFC-es</small>
+      Série NFC-e
       <input bind:value={raiz.serieNFCe} pattern={'0|[1-9]{1}[0-9]{0,2}'} required />
     </label>
     <label>
-      ID CSC <small>Id do CSC de produção</small>
+      ID CSC produção
       <input bind:value={raiz.IDCSC} />
     </label>
     <label>
-      CSC <small>CSC de produção</small>
+      CSC produção
       <input bind:value={raiz.CSC} />
     </label>
     <label>
-      ID CSC <small>Id do CSC de homologação</small>
+      <i>ID CSC homologação</i>
       <input bind:value={raiz.IDCSCh} />
     </label>
     <label>
-      CSC <small>CSC de homologação</small>
+      <i>CSC homologação</i>
       <input bind:value={raiz.CSCh} />
     </label>
-    <small>
-      Caso o Id e CSC de homologação não sejam preenchidos, será utilizado o Id
-      e CSC de produção mesmo nas requisições no ambiente de homologação.
-    </small>
 
     <h3>Acesso ao IBPT</h3>
     <label>

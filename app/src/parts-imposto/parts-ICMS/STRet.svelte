@@ -23,15 +23,12 @@
     {:else}
       <i>Aliquota suportada pelo consumidor final</i>
     {/if}
-    <small>
-      Alíquota do cálculo do ICMS-ST já incluso o FCP caso incida sobre a
-      mercadoria
-    </small>
     <input
       type="number"
       step="0.0001"
       bind:value={ICMS['pST']}
       required={pSTRequired}
+      title="Alíquota do cálculo do ICMS-ST já incluso o FCP caso incida sobre a mercadoria"
     />
   </label>
   <label>

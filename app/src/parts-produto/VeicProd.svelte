@@ -162,8 +162,7 @@
   </select>
 </label>
 <label>
-  Código Marca Modelo
-  <small>utilizar tabela RENAVAM</small>
+  Código do modelo (RENAVAM)
   <input pattern={'[0-9]{1,6}'} bind:value={veicProd.cMod} required />
 </label>
 <label>
@@ -189,13 +188,13 @@
 </label>
 <label>
   Lotação máxima
-  <small>passageiros sentados, inclusive motorista</small>
   <input
     type="number"
     step="1"
     max="999"
     bind:value={veicProd.lota}
     required
+    title="Passageiros sentados, inclusive motorista"
   />
 </label>
 <label>

@@ -45,12 +45,12 @@
 {#if dest['indIEDest'] == '1'}
   <label>
     Inscrição Estadual
-    <small>Usar literal 'ISENTO' se necessário</small>
     <input
       maxlength="14"
       pattern={'[0-9]{(2, 14)}|ISENTO'}
       bind:value={dest['IE']}
       required
+      title="Se necessário, usar ISENTO"
     />
   </label>
 {/if}

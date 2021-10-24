@@ -22,9 +22,11 @@
 </label>
 <label>
   Descrição completa da arma
-  <small>
-    Compreendendo: calibre, marca, capacidade, tipo de funcionamento,
-    comprimento e demais elementos que permitam a sua perfeita identificação
-  </small>
-  <input maxlength="256" bind:value={arma.descr} required {pattern} />
+  <input
+    maxlength="256"
+    bind:value={arma.descr}
+    required
+    {pattern}
+    title="Calibre, marca, capacidade, tipo de funcionamento, comprimento..."
+  />
 </label>
