@@ -1,16 +1,13 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte'
   import { pattern } from '../code/patterns'
 
-  export let raiz: any
-  if (!raiz.veicProd) raiz.veicProd = {}
-  onDestroy(() => (raiz.veicProd = undefined))
+  export let veicProd: any
 </script>
 
 <h3>Veículo novo</h3>
 <label>
   Tipo de operação
-  <select bind:value={raiz.veicProd.tpOp} required>
+  <select bind:value={veicProd.tpOp} required>
     <option value="0">Venda concessionária</option>
     <option value="1">Faturamento direto</option>
     <option value="2">Venda direta</option>
@@ -19,39 +16,39 @@
 </label>
 <label>
   Chassi do veículo (VIN)
-  <input pattern={'[A-Z0-9]+'} bind:value={raiz.veicProd.chassi} required />
+  <input pattern={'[A-Z0-9]+'} bind:value={veicProd.chassi} required />
 </label>
 <label>
   Código da cor da montadora
-  <input maxlength="4" bind:value={raiz.veicProd.cCor} required {pattern} />
+  <input maxlength="4" bind:value={veicProd.cCor} required {pattern} />
 </label>
 <label>
   Descrição da cor da montadora
-  <input maxlength="40" bind:value={raiz.veicProd.xCor} required {pattern} />
+  <input maxlength="40" bind:value={veicProd.xCor} required {pattern} />
 </label>
 <label>
   Potência máxima do motor do veículo em CV
-  <input maxlength="4" bind:value={raiz.veicProd.pot} required {pattern} />
+  <input maxlength="4" bind:value={veicProd.pot} required {pattern} />
 </label>
 <label>
   Capacidade voluntária do motor expressa em CC
-  <input maxlength="4" bind:value={raiz.veicProd.cilin} required {pattern} />
+  <input maxlength="4" bind:value={veicProd.cilin} required {pattern} />
 </label>
 <label>
   Peso líquido
-  <input maxlength="9" bind:value={raiz.veicProd.pesoL} required {pattern} />
+  <input maxlength="9" bind:value={veicProd.pesoL} required {pattern} />
 </label>
 <label>
   Peso bruto
-  <input maxlength="9" bind:value={raiz.veicProd.pesoB} required {pattern} />
+  <input maxlength="9" bind:value={veicProd.pesoB} required {pattern} />
 </label>
 <label>
   Série
-  <input maxlength="9" bind:value={raiz.veicProd.nSerie} required {pattern} />
+  <input maxlength="9" bind:value={veicProd.nSerie} required {pattern} />
 </label>
 <label>
   Tipo de combustível
-  <select bind:value={raiz.veicProd.tpComb} required>
+  <select bind:value={veicProd.tpComb} required>
     <option value="01">Álcool</option>
     <option value="02">Gasolina</option>
     <option value="03">Diesel</option>
@@ -74,22 +71,22 @@
 </label>
 <label>
   Número do motor
-  <input maxlength="21" bind:value={raiz.veicProd.nMotor} required {pattern} />
+  <input maxlength="21" bind:value={veicProd.nMotor} required {pattern} />
 </label>
 <label>
   CMT (Capacidade Máxima de Tração) em toneladas
-  <input maxlength="9" bind:value={raiz.veicProd.CMT} required {pattern} />
+  <input maxlength="9" bind:value={veicProd.CMT} required {pattern} />
 </label>
 <label>
   Distância entre eixos
-  <input maxlength="4" bind:value={raiz.veicProd.dist} required {pattern} />
+  <input maxlength="4" bind:value={veicProd.dist} required {pattern} />
 </label>
 <label>
   Ano do modelo
   <input
     minlength="4"
     maxlength="4"
-    bind:value={raiz.veicProd.anoMod}
+    bind:value={veicProd.anoMod}
     required
     {pattern}
   />
@@ -99,7 +96,7 @@
   <input
     minlength="4"
     maxlength="4"
-    bind:value={raiz.veicProd.anoFab}
+    bind:value={veicProd.anoFab}
     required
     {pattern}
   />
@@ -109,13 +106,13 @@
   <input
     minlength="1"
     maxlength="1"
-    bind:value={raiz.veicProd.tpPint}
+    bind:value={veicProd.tpPint}
     {pattern}
   />
 </label>
 <label>
   Tipo de veículo
-  <select bind:value={raiz.veicProd.tpVeic} required>
+  <select bind:value={veicProd.tpVeic} required>
     <option value="02">Ciclomotor</option>
     <option value="03">Motoneta</option>
     <option value="04">Motocicleta</option>
@@ -140,7 +137,7 @@
 </label>
 <label>
   Espécie de veículo
-  <select bind:value={raiz.veicProd.espVeic} required>
+  <select bind:value={veicProd.espVeic} required>
     <option value="1">Passageiro</option>
     <option value="2">Carga</option>
     <option value="3">Misto</option>
@@ -151,14 +148,14 @@
 </label>
 <label>
   Chassi remarcado
-  <select bind:value={raiz.veicProd.VIN} required>
+  <select bind:value={veicProd.VIN} required>
     <option value="R">Sim</option>
     <option value="N">Não</option>
   </select>
 </label>
 <label>
   Condição do veículo
-  <select bind:value={raiz.veicProd.condVeic} required>
+  <select bind:value={veicProd.condVeic} required>
     <option value="1">Acabado</option>
     <option value="2">Inacabado</option>
     <option value="3">Semi-acabado</option>
@@ -167,11 +164,11 @@
 <label>
   Código Marca Modelo
   <small>utilizar tabela RENAVAM</small>
-  <input pattern={'[0-9]{1,6}'} bind:value={raiz.veicProd.cMod} required />
+  <input pattern={'[0-9]{1,6}'} bind:value={veicProd.cMod} required />
 </label>
 <label>
   Cor
-  <select bind:value={raiz.veicProd.cCorDENATRAN} required>
+  <select bind:value={veicProd.cCorDENATRAN} required>
     <option value="01">Amarelo</option>
     <option value="02">Azul</option>
     <option value="03">Bege</option>
@@ -197,13 +194,13 @@
     type="number"
     step="1"
     max="999"
-    bind:value={raiz.veicProd.lota}
+    bind:value={veicProd.lota}
     required
   />
 </label>
 <label>
   Restrição
-  <select bind:value={raiz.veicProd.tpRest} required>
+  <select bind:value={veicProd.tpRest} required>
     <option value="0">Não há</option>
     <option value="1">Alienação Fiduciária</option>
     <option value="2">Arrendamento Mercantil</option>
