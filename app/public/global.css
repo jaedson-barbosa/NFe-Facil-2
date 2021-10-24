@@ -47,20 +47,6 @@ td > select {
   margin-bottom: 0;
 }
 
-p {
-  max-width: 100%;
-}
-
-@media (min-width: 40.0rem) { 
-  p {
-    max-width: 50%;
-  }
-}
-
-.opt {
-  font-style: italic;
-}
-
 #carregando {
   z-index: -1;
   position: absolute;

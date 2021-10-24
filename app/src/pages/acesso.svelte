@@ -6,6 +6,7 @@
   } from '../code/firebase'
   import { idEmpresa } from '../code/store'
   import Voltar from '../components/Voltar.svelte'
+  import Ajuda from '../components/Ajuda.svelte'
 
   function addMembro() {
     const id = prompt('Id do novo membro:')
@@ -38,14 +39,13 @@
 
 <h1><Voltar /> Controle de acesso</h1>
 <button on:click={addMembro}>Adicionar funcionário</button>
-<p>
-  Você pode liberar o acesso a outros usuários para que eles possam fazer
-  operações nesta empresa, como por seus funcionários.
-</p>
 <button on:click={bloquearOutro}>Remover funcionário</button>
 <button on:click={seBloquear}>Se remover</button>
-<p>
-  Da mesma forma como é possível liberar o acesso a novos usuários, também é
-  possível remover o acesso de usuários comuns (aqueles que não são
-  administradores) e também o de você próprio (cuidado com essa função).
-</p>
+<Ajuda>
+  <p>
+    Você pode liberar o acesso a outros usuários para que eles possam fazer
+    operações nesta empresa, como por seus funcionários, e da mesma forma também
+    é possível remover o acesso de usuários comuns (aqueles que não são
+    administradores) e também o de você próprio (cuidado com essa função).
+  </p>
+</Ajuda>

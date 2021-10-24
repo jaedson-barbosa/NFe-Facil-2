@@ -1,5 +1,6 @@
 <script lang="ts">
   import Voltar from '../components/Voltar.svelte'
+  import Ajuda from '../components/Ajuda.svelte'
   import { CutTypes, ImageModes } from 'browser-thermal-printer-encoder'
   import { Fonts } from 'bdf-fonts'
   import { Configuracoes } from '../code/impressao-nfce/configuracao-dinamica'
@@ -297,35 +298,34 @@
   <div class="column" />
 </div>
 
-<hr />
-
-<h2>Ajuda</h2>
-<p>
-  Para garantir máxima compatibildade com o maior número possível de impressoras
-  térmicas, esta aplicação usa o mínimo possível de comandos de impressão e todo
-  o layout de impressão é gerado pela própria aplicação e codificado usando o
-  formato de codificação selecionado por você, para saber qual formato é usado
-  por sua impressora a forma mais fácil é testar com um deles e, caso nada seja
-  impresso, trocar para o outro.
-</p>
-<p>
-  Como a aplicação é responsável por montar o layout de impressão, temos aqui a
-  possibilidade de escolher qual a fonte será utilizada. Sinta-se livre pra
-  escolher qual a mais te agrada, sempre tomando cuidado para que a fonte
-  selecionada não seja muito pequena, afinal o cliente deve poder ler o DANFE.
-</p>
-<p>
-  Caso você tenha gostado de alguma fonte cuja impressão está muito pequena, é
-  possível marcar a caixa "Dobrar tamanho da fonte" para que a fonte seja
-  aumentada em 2 vezes e assim se torne mais legível.
-</p>
-<p>
-  Em relação à largura de impressão, saber a largura da folha é fácil, afinal
-  basta analisar a largura da bobina. Já em relação à qualidade, "padrão" se
-  refere a impressoras de 203 dpi, que geralmente são aquelas mais baratas,
-  enquanto "alta qualidade" se refere a impressoras de 304 dpi, que fornecem
-  melhor qualidade de impressão mas a um custo mais elevado.
-</p>
+<Ajuda>
+  <p>
+    Para garantir máxima compatibildade com o maior número possível de
+    impressoras térmicas, esta aplicação usa o mínimo possível de comandos de
+    impressão e todo o layout de impressão é gerado pela própria aplicação e
+    codificado usando o formato de codificação selecionado por você, para saber
+    qual formato é usado por sua impressora a forma mais fácil é testar com um
+    deles e, caso nada seja impresso, trocar para o outro.
+  </p>
+  <p>
+    Como a aplicação é responsável por montar o layout de impressão, temos aqui
+    a possibilidade de escolher qual a fonte será utilizada. Sinta-se livre pra
+    escolher qual a mais te agrada, sempre tomando cuidado para que a fonte
+    selecionada não seja muito pequena, afinal o cliente deve poder ler o DANFE.
+  </p>
+  <p>
+    Caso você tenha gostado de alguma fonte cuja impressão está muito pequena, é
+    possível marcar a caixa "Dobrar tamanho da fonte" para que a fonte seja
+    aumentada em 2 vezes e assim se torne mais legível.
+  </p>
+  <p>
+    Em relação à largura de impressão, saber a largura da folha é fácil, afinal
+    basta analisar a largura da bobina. Já em relação à qualidade, "padrão" se
+    refere a impressoras de 203 dpi, que geralmente são aquelas mais baratas,
+    enquanto "alta qualidade" se refere a impressoras de 304 dpi, que fornecem
+    melhor qualidade de impressão mas a um custo mais elevado.
+  </p>
+</Ajuda>
 
 <style>
   figure {
