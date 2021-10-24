@@ -1,3 +1,12 @@
+export function limparIPI({ IPI }: any) {
+  const IPITrib = IPI?.IPITrib
+  if (IPITrib) {
+    delete IPITrib.vBC
+    delete IPITrib.qUnid
+    delete IPITrib.vIPI
+  }
+}
+
 export function atualizarIPI(prod: any, { IPI }: any) {
   if (IPI) calcular(prod, IPI['IPITrib'] ?? IPI['IPINT'])
 }

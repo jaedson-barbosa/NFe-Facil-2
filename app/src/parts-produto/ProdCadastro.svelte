@@ -31,10 +31,6 @@
     
   }
 
-  if (prod.indTot === undefined) prod.indTot = '1'
-  let indTot = prod.indTot == '1'
-  $: prod.indTot = indTot ? '1' : '0'
-
   $: {
     if (!prod.CEST) {
       delete prod.indEscala
@@ -60,7 +56,7 @@
   <input bind:value={prod['NCM']} pattern={'[0-9]{2}|[0-9]{8}'} required />
 </label>
 <label>
-  CFOP
+  CFOP padrão
   <input
     bind:value={prod['CFOP']}
     pattern={'[1,2,3,5,6,7]{1}[0-9]{3}'}
@@ -165,10 +161,6 @@
 <label>
   <i>Código EX da TIPI</i>
   <input type="number" max="999" bind:value={prod['EXTIPI']} />
-</label>
-<label>
-  <input type="checkbox" bind:checked={indTot} />
-  O valor do item compõe o valor total da NF-e
 </label>
 <label>
   Detalhamento específico

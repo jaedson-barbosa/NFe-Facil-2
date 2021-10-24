@@ -4,8 +4,19 @@
   import { carregando, edicao, empresa, refEmpresa } from '../code/store'
   import Voltar from '../components/Voltar.svelte'
   import Imposto from '../parts-imposto/Imposto.svelte'
-  import { addDoc, collection, doc, updateDoc } from '@firebase/firestore'
+  import {
+    collection,
+    deleteDoc,
+    doc,
+    getDocs,
+    updateDoc,
+    where,
+    writeBatch,
+  } from '@firebase/firestore'
   import { goto } from '@roxi/routify'
+  import { calcularIdImposto } from '../code/imposto/registro'
+  import { query, setDoc } from 'firebase/firestore'
+  import { db } from '../code/firebase'
 
   const empresaCarregada = get(empresa)
   const regimeNormal = ['2', '3'].includes(empresaCarregada.emit.CRT)
@@ -16,8 +27,29 @@
   async function salvar() {
     $carregando = true
     const colecao = collection(refEmpresa, Dados.Impostos)
-    if (ed) await updateDoc(doc(colecao, ed.id), raiz)
-    else await addDoc(colecao, raiz)
+    const id = await calcularIdImposto(raiz.imposto)
+    const ref = doc(colecao, id)
+    if (ed && ed.id === id) {
+      await updateDoc(ref, raiz)
+    } else {
+      if (ed) {
+        const oldRef = doc(colecao, ed.id)
+        await deleteDoc(oldRef)
+        const oldProds = await getDocs(
+          query(
+            collection(refEmpresa, Dados.Produtos),
+            where('perfilTributario', '==', ed.id)
+          )
+        )
+        if (!oldProds.empty) {
+          // Atualizamos a referencia a todos os produtos
+          await oldProds.docs.reduce((p,v) =>
+            p.update(v.ref, 'perfilTributario', id)
+          , writeBatch(db)).commit()
+        }
+      }
+      await setDoc(ref, raiz)
+    }
     $goto('./')
     $carregando = false
   }

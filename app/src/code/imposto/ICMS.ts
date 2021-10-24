@@ -1,3 +1,44 @@
+export function limparICMS({ ICMS }: any) {
+  ICMS = Object.values(ICMS)[0]
+
+  // Calculados
+  delete ICMS.vICMSOp
+  delete ICMS.vICMSDif
+  delete ICMS.vBCST
+  delete ICMS.vICMSST
+  delete ICMS.vBCFCP
+  delete ICMS.vFCP
+  delete ICMS.vBC
+  delete ICMS.vICMS
+  delete ICMS.vBCFCPST
+  delete ICMS.vFCPST
+
+  // Nao automatizados
+  // STRet
+  delete ICMS.vBCSTRet
+  delete ICMS.pST
+  delete ICMS.vICMSSubstituto
+  delete ICMS.vICMSSTRet
+  // FCPSTRet
+  delete ICMS.vBCFCPSTRet
+  delete ICMS.pFCPSTRet
+  delete ICMS.vFCPSTRet
+  // STDest
+  delete ICMS.vBCSTDest
+  delete ICMS.vICMSSTDest
+  // Efet
+  delete ICMS.pRedBCEfet
+  delete ICMS.vBCEfet
+  delete ICMS.pICMSEfet
+  delete ICMS.vICMSEfet
+  // Deson
+  delete ICMS.vICMSDeson
+  delete ICMS.motDesICMS
+  // Cred
+  delete ICMS.pCredSN
+  delete ICMS.vCredICMSSN
+}
+
 export function atualizarICMS(
   prod: any,
   { ICMS, IPI }: any,
