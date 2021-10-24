@@ -20,6 +20,17 @@
   const detsEspecificos = [...detsComplexos, 'nRECOPI']
   let detEspecifico = detsEspecificos.find((v) => prod[v]) ?? 'normal'
 
+  $: {
+    detsComplexos.forEach(v => {
+      if (detEspecifico === v && !prod[v]) {
+        prod[v] = v === 'nRECOPI' ? '' : {}
+      } else if (detEspecifico !== v && prod[v]) {
+        prod[v] = undefined
+      }
+    })
+    
+  }
+
   if (prod.indTot === undefined) prod.indTot = '1'
   let indTot = prod.indTot == '1'
   $: prod.indTot = indTot ? '1' : '0'
@@ -170,15 +181,15 @@
     <option value="nRECOPI">Papel imune</option>
   </select>
 </label>
-{#if detEspecifico == 'veicProd'}
-  <VeicProd bind:raiz={prod} />
-{:else if detEspecifico == 'med'}
-  <Med bind:raiz={prod} />
-{:else if detEspecifico == 'arma'}
-  <Arma bind:raiz={prod} />
-{:else if detEspecifico == 'comb'}
+{#if prod.veicProd}
+  <VeicProd bind:veicProd={prod.veicProd} />
+{:else if prod.med}
+  <Med bind:med={prod.med} />
+{:else if prod.arma}
+  <Arma bind:arma={prod.arma} />
+{:else if prod.comb}
   <Comb bind:raiz={prod} />
-{:else if detEspecifico == 'nRECOPI'}
-  <NRECOPI bind:raiz={prod} />
+{:else if prod.nRECOPI !== undefined}
+  <NRECOPI bind:nRECOPI={prod.nRECOPI} />
 {/if}
 <br />

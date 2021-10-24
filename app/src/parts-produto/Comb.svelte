@@ -1,6 +1,5 @@
 <script lang="ts">
   import { calcularCIDE } from '../code/imposto/CIDE'
-  import { onDestroy } from 'svelte'
   import { getMoeda } from '../code/numero'
   import { EstadosEX } from '../code/IBGE'
   import {
@@ -14,13 +13,11 @@
   import { pattern } from '../code/patterns'
 
   export let raiz: any
-  if (!raiz.comb) raiz.comb = {}
+
   if (!raiz.comb.CIDE) raiz.comb.CIDE = {}
   if (!raiz.comb.encerrante) raiz.comb.encerrante = {}
 
   $: raiz = calcularCIDE(raiz)
-
-  onDestroy(() => (raiz.comb = undefined))
 
   let cProdANP = raiz.comb.cProdANP
   let familia = buscarFamilia(cProdANP)
