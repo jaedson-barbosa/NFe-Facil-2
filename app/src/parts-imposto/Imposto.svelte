@@ -64,13 +64,11 @@
 {#if imposto.COFINSST}
   <COFINSST bind:raiz={imposto.COFINSST} />
 {/if}
-<ICMS
-  bind:raiz={imposto}
-  {regimeNormal}
-/>
+<ICMS bind:raiz={imposto} {regimeNormal} />
 {#if regimeNormal}
   <label>
-    Informar ICMS Interestadual<sup>1</sup>
+    Informar ICMS interestadual
+    <sup>1</sup>
     <select bind:value={informarICMSUFDest}>
       <option value={false}>Não</option>
       <option value={true}>Sim</option>

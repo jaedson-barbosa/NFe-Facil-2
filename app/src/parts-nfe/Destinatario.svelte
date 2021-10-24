@@ -33,7 +33,6 @@
   <Adicionar href={$url('./cliente')} />
 </h2>
 {#if isNFCe && destSemNome}
-  <p>Numa NFC-e, caso queiras, podes informar apenas o documento do cliente.</p>
   <Doc bind:raiz={dest} />
 {/if}
 {#if !(destComDoc && destSemNome)}
