@@ -5,6 +5,10 @@
 </div>
 
 <style>
+  .col2 {
+    text-align: justify
+  }
+  
   @media (min-width: 40rem) {
     .col2 {
       column-count: 2;
