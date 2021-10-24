@@ -4,19 +4,21 @@
 
   export let raiz: any
 
-  if (!raiz['PIS']) raiz['PIS'] = { CST: '01' }
+  if (!raiz['PIS']) raiz['PIS'] = { PISAliq: { CST: '01' } }
   let PIS = Object.values(raiz['PIS'])[0]
   let tipoPIS = PIS['CST']
   $: {
-    let c = ['01', '02'].includes(tipoPIS)
-      ? 'PISAliq'
-      : tipoPIS == '03'
-      ? 'PISQtde'
-      : ['04', '05', '06', '07', '08', '09'].includes(tipoPIS)
-      ? 'PISNT'
-      : 'PISOutr'
-    raiz['PIS'] = {}
-    PIS = raiz['PIS'][c] = { CST: tipoPIS }
+    if (tipoPIS != PIS['CST']) {
+      let c = ['01', '02'].includes(tipoPIS)
+        ? 'PISAliq'
+        : tipoPIS == '03'
+        ? 'PISQtde'
+        : ['04', '05', '06', '07', '08', '09'].includes(tipoPIS)
+        ? 'PISNT'
+        : 'PISOutr'
+      raiz['PIS'] = {}
+      PIS = raiz['PIS'][c] = { CST: tipoPIS }
+    }
   }
 
   $: comAliquota = !['04', '05', '06', '07', '08', '09'].includes(tipoPIS)
@@ -43,7 +45,12 @@
   {#if aliquotaEmReais}
     <label>
       Alíquota em reais
-      <input type="number" step="0.0001" bind:value={PIS['vAliqProd']} required />
+      <input
+        type="number"
+        step="0.0001"
+        bind:value={PIS['vAliqProd']}
+        required
+      />
     </label>
   {/if}
   {#if PIS['vPIS']}
