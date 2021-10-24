@@ -17,6 +17,7 @@
   import { calcularIdImposto } from '../code/imposto/registro'
   import { query, setDoc } from 'firebase/firestore'
   import { db } from '../code/firebase'
+import Ajuda from '../components/Ajuda.svelte';
 
   const empresaCarregada = get(empresa)
   const regimeNormal = ['2', '3'].includes(empresaCarregada.emit.CRT)
@@ -71,4 +72,12 @@
     <Imposto bind:imposto={raiz.imposto} {regimeNormal} />
     <input type="submit" class="button" value="Salvar" />
   </form>
+  <Ajuda>
+    <p>
+      1. Este ICMS interestadual deve ser preenchido apenas nas vendas
+      interestaduais para consumidor final não contribuinte do ICMS (exceto em
+      vendas de veículos novos e demais exceções detalhadas na página 115 do Anexo
+      I do MOC).
+    </p>
+  </Ajuda>
 {/if}

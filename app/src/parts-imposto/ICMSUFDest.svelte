@@ -6,10 +6,6 @@
 </script>
 
 <h3>ICMS Interestadual</h3>
-<p>
-  Deve ser preenchido apenas nas vendas interestaduais para consumidor final não
-  contribuinte do ICMS.
-</p>
 <label>
   Base de Cálculo do ICMS na UF do destinatário
   <input type="number" step="0.01" bind:value={raiz.vBCUFDest} required />
