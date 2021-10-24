@@ -2,15 +2,15 @@
   import { pattern } from '../code/patterns'
 
   export let arma: any
-
-  let usoRestrito = arma.tpArma == '1'
-  $: arma.tpArma = usoRestrito ? '1' : '0'
 </script>
 
 <h3>Armamento</h3>
 <label>
-  <input type="checkbox" bind:checked={usoRestrito} />
   Armamento de uso restrito
+  <select bind:value={arma.tpArma}>
+    <option value="0">Não</option>
+    <option value="1">Sim</option>
+  </select>
 </label>
 <label>
   Número de série da arma

@@ -17,8 +17,11 @@
 </script>
 
 <label>
-  <input type="checkbox" bind:checked={informar} />
   {texto}
+  <select bind:value={informar}>
+    <option value={false}>Não</option>
+    <option value={true}>Sim</option>
+  </select>
 </label>
 {#if raiz[name]}
   <h2>Local de {name}</h2>

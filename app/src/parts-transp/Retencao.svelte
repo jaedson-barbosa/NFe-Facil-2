@@ -8,8 +8,11 @@
 </script>
 
 <label>
-  <input type="checkbox" bind:checked={informar} />
   Informar dados de Retenção do ICMS no Transporte
+  <select bind:value={informar}>
+    <option value={false}>Não</option>
+    <option value={true}>Sim</option>
+  </select>
 </label>
 {#if retTransp}
   <label>

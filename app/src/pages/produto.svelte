@@ -4,7 +4,6 @@
   import {
     carregando,
     edicao,
-    empresa,
     perfisTributarios,
     refEmpresa,
   } from '../code/store'
@@ -17,18 +16,12 @@
   const ed = get(edicao)
   let raiz = ed?.tipo === Dados.Produtos ? ed.dado : {}
 
-  const empresaCarregada = get(empresa)
-
   if (!raiz['ibpt']) raiz['ibpt'] = { isNacional: true }
   let ibpt = raiz['ibpt']
 
   async function analisarIBPT() {
-    if (
-      empresaCarregada.tokenIBPT &&
-      (!ibpt.validade || ibpt.validade.toDate() < new Date())
-    ) {
-      raiz['ibpt'] = await carregarAproximacao(raiz.prod, ibpt.isNacional)
-    }
+    if (ibpt.validade && ibpt.validade.toDate() > new Date()) return
+    raiz['ibpt'] = await carregarAproximacao(raiz.prod, ibpt.isNacional)
   }
 
   async function salvar() {
@@ -76,12 +69,13 @@
         {/each}
       </select>
     </label>
-    {#if empresaCarregada.tokenIBPT}
-      <label>
-        <input type="checkbox" bind:checked={ibpt.isNacional} />
-        Usar tributação aproximada para produto nacional
-      </label>
-    {/if}
+    <label>
+      Usar tributação aproximada para produto
+      <select bind:value={ibpt.isNacional} required>
+        <option value={true}>Nacional</option>
+        <option value={false}>Importado</option>
+      </select>
+    </label>
     <input type="submit" class="button" value="Salvar" />
   </form>
 {/if}

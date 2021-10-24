@@ -59,20 +59,11 @@
     }
   }
 
-  let isHomolog = ide['tpAmb'] == '2'
-  $: ide['tpAmb'] = isHomolog ? '2' : '1'
-
   let informarSaidaEntrada = !!ide.dhSaiEnt
   $: ide.dhSaiEnt = informarSaidaEntrada ? toNFeString(new Date()) : ''
 
   let saidaEntrada = ide.dhSaiEnt?.slice(0, 16) || ''
   $: ide.dhSaiEnt = saidaEntrada ? toNFeString(new Date(saidaEntrada)) : ''
-
-  let indFinal = ide.indFinal == '1'
-  $: ide.indFinal = indFinal ? '1' : '0'
-
-  let indIntermed = ide.indIntermed == '1'
-  $: ide.indIntermed = indIntermed ? '1' : '0'
 
   function analisar(index: number) {
     return () => {
@@ -87,8 +78,11 @@
 <div class="row">
   <div class="column">
     <label>
-      <input type="checkbox" bind:checked={isHomolog} />
-      Usar ambiente de homologação
+      Ambiente
+      <select bind:value={ide['tpAmb']}>
+        <option value="1">Produção</option>
+        <option value="2">Homologação</option>
+      </select>
     </label>
     <label>
       Modelo
@@ -131,21 +125,30 @@
         </select>
       </label>
       <label>
-        <input type="checkbox" bind:checked={indFinal} />
-        Consumidor final
+        Operação com consumidor final
+        <select bind:value={ide.indFinal}>
+          <option value="0">Não</option>
+          <option value="1">Sim</option>
+        </select>
       </label>
     {/if}
     {#if ['2', '3', '4', '9'].includes(ide['indPres'])}
       <label>
-        <input type="checkbox" bind:checked={indIntermed} />
         Operação executada em site ou plataforma de terceiros
+        <select bind:value={ide.indIntermed}>
+          <option value="0">Não</option>
+          <option value="1">Sim</option>
+        </select>
       </label>
     {/if}
   </div>
   <div class="column">
     <label>
-      <input type="checkbox" bind:checked={informarSaidaEntrada} />
-      Informar data e hora de saída/entrada
+      Data de saída/entrada diferente de agora
+      <select bind:value={informarSaidaEntrada}>
+        <option value={false}>Não</option>
+        <option value={true}>Sim</option>
+      </select>
     </label>
     {#if informarSaidaEntrada}
       <label>
