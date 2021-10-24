@@ -2,7 +2,7 @@
   import Total from './parts-produto/Total.svelte'
   import ProdutoSimples from './parts-produto/ProdutoSimples.svelte'
   import { doc, DocumentSnapshot, getDoc } from 'firebase/firestore'
-  import { refEmpresa } from '../code/store'
+  import { perfisTributarios, refEmpresa } from '../code/store'
   import { Dados } from '../code/tipos'
   import { Buscador } from '../code/buscador'
   import { getMoeda } from '../code/numero'
@@ -31,7 +31,7 @@
   const buscadorProduto = new Buscador(
     refEmpresa,
     Dados.Produtos,
-    'det.prod.xProd',
+    'prod.xProd',
     'asc',
     (v) => (produtos = v),
     true
@@ -52,10 +52,11 @@
 
   function addProd(p: DocumentSnapshot) {
     return () => {
-      const data = p.data()
-      const v = data.det
-      v.ibpt = data.ibpt
-      det = [v, ...det]
+      const { perfilTributario, prod, ibpt } = p.data()
+      const { imposto } = $perfisTributarios.find(
+        (v) => v.id === perfilTributario
+      )
+      det = [{ prod, imposto, ibpt, perfilTributario }, ...det]
     }
   }
 
@@ -88,9 +89,9 @@
     <tbody>
       {#each produtos as p}
         <tr class="clicavel" on:click={addProd(p)}>
-          <td>{p.get('det.prod.cProd')}</td>
-          <td>{p.get('det.prod.xProd')}</td>
-          <td>{getMoeda(p.get('det.prod.vUnCom'))}</td>
+          <td>{p.get('prod.cProd')}</td>
+          <td>{p.get('prod.xProd')}</td>
+          <td>{getMoeda(p.get('prod.vUnCom'))}</td>
         </tr>
       {/each}
     </tbody>

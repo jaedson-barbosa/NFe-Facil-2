@@ -1,14 +1,14 @@
 <script lang="ts">
   import { goto } from '@roxi/routify'
   import { get } from 'svelte/store'
-  import { carregando, edicao, empresa, refEmpresa } from '../code/store'
+  import { carregando, edicao, empresa, perfisTributarios, refEmpresa } from '../code/store'
   import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
   import ProdCadastro from '../parts-produto/ProdCadastro.svelte'
   import { Dados } from '../code/tipos'
   import Voltar from '../components/Voltar.svelte'
 
   const ed = get(edicao)
-  let raiz = ed.tipo === Dados.Produtos ? ed.dado : {}
+  let raiz = ed?.tipo === Dados.Produtos ? ed.dado : {}
 
   const empresaCarregada = get(empresa)
 
@@ -89,6 +89,14 @@
   <form on:submit|preventDefault={salvar}>
     <h1><Voltar /> Produto</h1>
     <ProdCadastro bind:prod={raiz.prod} />
+    <label>
+      Perfil de tributação padrão
+      <select bind:value={raiz.perfilTributario} required>
+        {#each $perfisTributarios as n}
+          <option value={n.id}>{n.descricao}</option>
+        {/each}
+      </select>
+    </label>
     {#if empresaCarregada.tokenIBPT}
       <label>
         <input type="checkbox" bind:checked={ibpt.isNacional} />

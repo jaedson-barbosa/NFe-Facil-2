@@ -11,7 +11,10 @@
 
   export let prod: any
 
-  if (!prod) prod = {}
+  if (!prod) prod = {
+    cEAN: 'SEM GTIN',
+    cEANTrib: 'SEM GTIN'
+  }
 
   const detsComplexos = ['veicProd', 'med', 'arma', 'comb']
   const detsEspecificos = [...detsComplexos, 'nRECOPI']
@@ -70,7 +73,7 @@
     {#each unidades as un}
       <option value={un.Unidade}>{un.Unidade} - {un.Descricao}</option>
     {/each}
-    {#if !unidades.some((v) => v.Unidade === prod['uCom'])}
+    {#if prod['uCom'] && !unidades.some((v) => v.Unidade === prod['uCom'])}
       <option value={prod['uCom']}>Não padronizado: {prod['uCom']}</option>
     {/if}
   </select>
@@ -96,7 +99,7 @@
     {#each unidades as un}
       <option value={un.Unidade}>{un.Unidade} - {un.Descricao}</option>
     {/each}
-    {#if !unidades.some((v) => v.Unidade === prod['uTrib'])}
+    {#if prod['uTrib'] && !unidades.some((v) => v.Unidade === prod['uTrib'])}
       <option value={prod['uTrib']}>Não padronizado: {prod['uTrib']}</option>
     {/if}
   </select>

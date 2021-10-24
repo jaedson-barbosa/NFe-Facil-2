@@ -11,7 +11,7 @@
   const regimeNormal = ['2', '3'].includes(empresaCarregada.emit.CRT)
 
   const ed = get(edicao)
-  let raiz = ed.tipo === Dados.Impostos ? ed.dado : {}
+  let raiz = ed?.tipo === Dados.Impostos ? ed.dado : {}
 
   async function salvar() {
     $carregando = true
@@ -28,7 +28,12 @@
     <h1><Voltar /> Perfil tributário</h1>
     <label>
       Descrição
-      <input bind:value={raiz.descricao} minlength="4" required />
+      <input
+        bind:value={raiz.descricao}
+        minlength="2"
+        maxlength="32"
+        required
+      />
     </label>
     <hr />
     <Imposto bind:imposto={raiz.imposto} {regimeNormal} />

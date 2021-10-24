@@ -31,25 +31,31 @@ service cloud.firestore {
         return isSignedIn() && getStatus() == 'A';
       }
 
-      match /clientes/{nota} {
+      match /clientes/{cliente} {
         allow read: if readEnabled();
         allow create, update: if writeEnabled();
         allow delete: if isAdmin();
       }
 
-      match /transportes/{nota} {
+      match /transportes/{transporte} {
         allow read: if readEnabled();
         allow create, update: if writeEnabled();
         allow delete: if isAdmin();
       }
 
-      match /produtos/{nota} {
+      match /produtos/{produto} {
         allow read: if readEnabled();
         allow create, update: if writeEnabled();
         allow delete: if isAdmin();
       }
 
       match /nfes/{nota} {
+        allow read: if readEnabled();
+        allow create, update: if writeEnabled();
+        allow delete: if isAdmin();
+      }
+
+      match /impostos/{imposto} {
         allow read: if readEnabled();
         allow create, update: if writeEnabled();
         allow delete: if isAdmin();
