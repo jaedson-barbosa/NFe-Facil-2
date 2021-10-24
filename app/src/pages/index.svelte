@@ -12,56 +12,70 @@
 </script>
 
 <h1>Início</h1>
+<h2>Adição e gerenciamento</h2>
 {#if pronto}
   <div class="row">
     <div class="column">
-      <h3>Produtos</h3>
-      <a class="button" href={$url('./produto')}>Adicionar</a>
-      <a class="button" href={$url('./produtos')}>Gerenciar</a>
+      <a class="button" href={$url('./produto')}>Adicionar produto</a>
     </div>
     <div class="column">
-      <h3>Perfis de tributação</h3>
-      <a class="button" href={$url('./imposto')}>Adicionar</a>
-      <a class="button" href={$url('./impostos')}>Gerenciar</a>
+      <a class="button" href={$url('./produtos')}>Gerenciar produtos</a>
     </div>
   </div>
   <div class="row">
     <div class="column">
-      <h3>Transportadores</h3>
-      <a class="button" href={$url('./transporta')}>Adicionar</a>
-      <a class="button" href={$url('./transportes')}>Gerenciar</a>
+      <a class="button" href={$url('./imposto')}>Adicionar imposto</a>
     </div>
     <div class="column">
-      <h3>Veículos</h3>
-      <a class="button" href={$url('./veiculo')}>Adicionar</a>
-      <a class="button" href={$url('./veiculos')}>Gerenciar</a>
+      <a class="button" href={$url('./impostos')}>Gerenciar impostos</a>
     </div>
   </div>
   <div class="row">
     <div class="column">
-      <h3>NF-es e NFC-es</h3>
-      <a class="button" href={$url('./nfe')}>Adicionar</a>
-      <a class="button" href={$url('./importacao')}>Importar</a>
-      <a class="button" href={$url('./nfes')}>Gerenciar</a>
+      <a class="button" href={$url('./transporta')}>Adicionar transportador</a>
     </div>
     <div class="column">
-      <h3>Clientes</h3>
-      <a class="button" href={$url('./cliente')}>Adicionar</a>
-      <a class="button" href={$url('./clientes')}>Gerenciar</a>
+      <a class="button" href={$url('./transportes')}>
+        Gerenciar transportadores
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="column">
+      <a class="button" href={$url('./veiculo')}>Adicionar veículo</a>
+    </div>
+    <div class="column">
+      <a class="button" href={$url('./veiculos')}>Gerenciar veículos</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="column">
+      <a class="button" href={$url('./cliente')}>Adicionar cliente</a>
+    </div>
+    <div class="column">
+      <a class="button" href={$url('./clientes')}>Gerenciar clientes</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="column">
+      <a class="button" href={$url('./nfe')}>Adicionar NF(C)-e</a>
+      <a class="button" href={$url('./importacao')}>Importar XMLs</a>
+    </div>
+    <div class="column">
+      <a class="button" href={$url('./nfes')}>Gerenciar NF(C)-es</a>
     </div>
   </div>
 {/if}
+
 {#if liberacao === NiveisAcesso.A}
-  <h3>Área do administrador</h3>
+  <h2>Área do administrador</h2>
   <div class="row">
     <div class="column">
-      <a class="button" href={$url('./emitente')}>Atualizar emitente</a>
-      <a class="button" href={$url('./configuracoes')}>
-        Definições do emitente
-      </a>
+      <a class="button" href={$url('./emitente')}>Atualizar dados empresa</a>
+      <a class="button" href={$url('./configuracoes')}>Configurar emissão</a>
     </div>
     <div class="column">
-      <a class="button" href={$url('./impressao')}>Definições de impressão</a>
+      <a class="button" href={$url('./impressao')}>Configurar impressão</a>
       <a class="button" href={$url('./acesso')}>Controlar acesso</a>
     </div>
   </div>
