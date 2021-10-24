@@ -17,8 +17,11 @@
 </script>
 
 <label>
-  <input type="checkbox" bind:checked={informar} />
   Informar campos de valores do ICMS próprio
+  <select bind:value={informar}>
+    <option value={false}>Não</option>
+    <option value={true}>Sim</option>
+  </select>
 </label>
 {#if informar}
   <h4>ICMS próprio</h4>

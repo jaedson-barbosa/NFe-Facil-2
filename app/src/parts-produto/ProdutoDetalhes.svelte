@@ -16,10 +16,6 @@
   let prod = raiz.prod
   $: raiz.prod = prod
 
-  if (prod.indTot === undefined) prod.indTot = '1'
-  let indTot = prod.indTot == '1'
-  $: prod.indTot = indTot ? '1' : '0'
-
   if (!prod.rastro) prod.rastro = []
   if (!prod.DI) prod.DI = []
 
@@ -38,8 +34,11 @@
 </label>
 
 <label>
-  <input type="checkbox" bind:checked={indTot} />
   O valor do item compõe o valor total da NF-e
+  <select bind:value={prod.indTot}>
+    <option value="1">Sim</option>
+    <option value="0">Não</option>
+  </select>
 </label>
 
 <label>

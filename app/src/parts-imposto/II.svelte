@@ -9,8 +9,11 @@
 </script>
 
 <label>
-  <input type="checkbox" bind:checked={informar} />
-  Produto com incidência de imposto de importação
+  Informar imposto de importação
+  <select bind:value={informar}>
+    <option value={true}>Sim</option>
+    <option value={false}>Não</option>
+  </select>
 </label>
 {#if II}
   <label>

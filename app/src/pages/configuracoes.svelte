@@ -19,13 +19,13 @@
     <h3>Emissão de NF-e</h3>
     <label>
       Série da NF-e <small>Série atual de emissão das NF-es</small>
-      <input bind:value={raiz.serieNFe} pattern={'0|[1-9]{1}[0-9]{0,2}'} />
+      <input bind:value={raiz.serieNFe} pattern={'0|[1-9]{1}[0-9]{0,2}'} required />
     </label>
 
     <h3>Emissão de NFC-e</h3>
     <label>
       Série da NFC-e <small>Série atual de emissão das NFC-es</small>
-      <input bind:value={raiz.serieNFCe} pattern={'0|[1-9]{1}[0-9]{0,2}'} />
+      <input bind:value={raiz.serieNFCe} pattern={'0|[1-9]{1}[0-9]{0,2}'} required />
     </label>
     <label>
       ID CSC <small>Id do CSC de produção</small>
@@ -51,7 +51,7 @@
     <h3>Acesso ao IBPT</h3>
     <label>
       Token de acesso
-      <input bind:value={raiz.tokenIBPT} />
+      <input bind:value={raiz.tokenIBPT} required />
     </label>
     <input type="submit" class="button" value="Salvar" />
   </form>

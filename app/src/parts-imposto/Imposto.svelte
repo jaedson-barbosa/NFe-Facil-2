@@ -47,8 +47,11 @@
 
 <h2>Impostos</h2>
 <label>
-  <input type="checkbox" bind:checked={informarIPI} />
-  Produto com incidência de IPI
+  Informar IPI
+  <select bind:value={informarIPI}>
+    <option value={false}>Não</option>
+    <option value={true}>Sim</option>
+  </select>
 </label>
 {#if imposto.IPI}
   <IPI bind:raiz={imposto.IPI} />
@@ -67,8 +70,11 @@
 />
 {#if regimeNormal}
   <label>
-    <input type="checkbox" bind:checked={informarICMSUFDest} />
-    Produto com incidência de ICMS Interestadual
+    Informar ICMS Interestadual<sup>1</sup>
+    <select bind:value={informarICMSUFDest}>
+      <option value={false}>Não</option>
+      <option value={true}>Sim</option>
+    </select>
   </label>
   {#if imposto.ICMSUFDest}
     <ICMSUFDest raiz={imposto.ICMSUFDest} />

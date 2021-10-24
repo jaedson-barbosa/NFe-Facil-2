@@ -6,8 +6,11 @@
 </script>
 
 <label>
-  <input type="checkbox" bind:checked={informar} />
   Adicionar informações do encerrante
+  <select bind:value={informar}>
+    <option value={false}>Não</option>
+    <option value={true}>Sim</option>
+  </select>
 </label>
 <label>
   Numero do bico utilizado no abastecimento
