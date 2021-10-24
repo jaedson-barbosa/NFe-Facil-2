@@ -48,7 +48,7 @@ export class Buscador {
     this._buscar()
   }
 
-  private async _buscar(busca: string = this.lastBusca) {
+  private async _buscar(busca = this.lastBusca) {
     this.hasMore = false
     const coluna = collection(this.refEmpresa, this.dados)
     const limites: QueryConstraint[] = [
@@ -60,7 +60,8 @@ export class Buscador {
       limites.push(where(this.campoPrincipal, this.operadorBusca, busca))
     } else if (this.cadastros.length) {
       const ultimo = this.cadastros[this.cadastros.length - 1]
-      limites.push(startAfter(ultimo.get(this.campoPrincipal)))
+      const campoUltimo = ultimo.get(this.campoOrdenacao)
+      limites.push(startAfter(campoUltimo))
     }
     const consulta = query(coluna, ...limites)
     const docs = await getDocs(consulta)
