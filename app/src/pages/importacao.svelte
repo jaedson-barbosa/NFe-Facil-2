@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { refEmpresa } from '../code/store'
+  import { carregando, refEmpresa } from '../code/store'
   import { processarArquivos } from '../code/importacao'
   import { url } from '@roxi/routify'
   import Voltar from '../components/Voltar.svelte'
@@ -10,12 +10,12 @@
   $: importar(arquivos)
 
   let logs: string[] = []
-  let finalizar: boolean = false
 
   async function importar(arquivos: FileList) {
     if (!arquivos?.length) return
+    $carregando = true
     await processarArquivos(refEmpresa, arquivos, (v) => (logs = [v, ...logs]))
-    finalizar = true
+    $carregando = false
   }
 </script>
 
@@ -37,19 +37,10 @@
     />
   </label>
 {:else}
-  {#if finalizar}
+  {#if !$carregando}
     <a class="button" href={$url('./index')}>Continuar</a>
-  {:else}
-    <p>
-      Analisando arquivos e salvando...
-      <br />
-      Não saia nem feche esta janela! Aguarde aqui até que o botão de continuar apareça.
-    </p>
   {/if}
-  <hr />
-  {#each logs as log (log)}
-    <p>{log}</p>
-  {/each}
+  {#each logs as log (log)}<p>{log}</p>{/each}
 {/if}
 <Ajuda>
   <p>
