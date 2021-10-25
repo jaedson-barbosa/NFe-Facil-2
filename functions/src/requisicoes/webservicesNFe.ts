@@ -44,20 +44,20 @@ const CEP = 'https://nfe.sefaz.ce.gov.br/nfe4/services/'
 const CEH = 'https://nfeh.sefaz.ce.gov.br/nfe4/services/'
 const CE = {
   autorizacao: {
-    '1': CEP + 'NFeAutorizacao4?wsdl',
-    '2': CEH + 'NFeAutorizacao4?WSDL',
+    '1': CEP + 'NFeAutorizacao4',
+    '2': CEH + 'NFeAutorizacao4',
   },
   retAutorizacao: {
-    '1': CEP + 'NFeRetAutorizacao4?wsdl',
-    '2': CEH + 'NFeRetAutorizacao4?WSDL',
+    '1': CEP + 'NFeRetAutorizacao4',
+    '2': CEH + 'NFeRetAutorizacao4',
   },
   consultarStatusServico: {
-    '1': CEP + 'NFeStatusServico4?wsdl',
-    '2': CEH + 'NFeStatusServico4?WSDL',
+    '1': CEP + 'NFeStatusServico4',
+    '2': CEH + 'NFeStatusServico4',
   },
   recepcaoEvento: {
-    '1': CEP + 'NFeRecepcaoEvento4?wsdl',
-    '2': CEH + 'NFeRecepcaoEvento4?WSDL',
+    '1': CEP + 'NFeRecepcaoEvento4',
+    '2': CEH + 'NFeRecepcaoEvento4',
   },
 }
 
@@ -65,20 +65,20 @@ const GOP = 'https://nfe.sefaz.go.gov.br/nfe/services/'
 const GOH = 'https://homolog.sefaz.go.gov.br/nfe/services/'
 const GO = {
   autorizacao: {
-    '1': GOP + 'NFeAutorizacao4?wsdl',
-    '2': GOH + 'NFeAutorizacao4?wsdl',
+    '1': GOP + 'NFeAutorizacao4',
+    '2': GOH + 'NFeAutorizacao4',
   },
   retAutorizacao: {
-    '1': GOP + 'NFeRetAutorizacao4?wsdl',
-    '2': GOH + 'NFeRetAutorizacao4?wsdl',
+    '1': GOP + 'NFeRetAutorizacao4',
+    '2': GOH + 'NFeRetAutorizacao4',
   },
   consultarStatusServico: {
-    '1': GOP + 'NFeStatusServico4?wsdl',
-    '2': GOH + 'NFeStatusServico4?wsdl',
+    '1': GOP + 'NFeStatusServico4',
+    '2': GOH + 'NFeStatusServico4',
   },
   recepcaoEvento: {
-    '1': GOP + 'NFeRecepcaoEvento4?wsdl',
-    '2': GOH + 'NFeRecepcaoEvento4?wsdl',
+    '1': GOP + 'NFeRecepcaoEvento4',
+    '2': GOH + 'NFeRecepcaoEvento4',
   },
 }
 
@@ -128,20 +128,20 @@ const MTP = 'https://nfe.sefaz.mt.gov.br/nfews/v2/services/'
 const MTH = 'https://homologacao.sefaz.mt.gov.br/nfews/v2/services/'
 const MT = {
   autorizacao: {
-    '1': MTP + 'NfeAutorizacao4?wsdl',
-    '2': MTH + 'NfeAutorizacao4?wsdl',
+    '1': MTP + 'NfeAutorizacao4',
+    '2': MTH + 'NfeAutorizacao4',
   },
   retAutorizacao: {
-    '1': MTP + 'NfeRetAutorizacao4?wsdl',
-    '2': MTH + 'NfeRetAutorizacao4?wsdl',
+    '1': MTP + 'NfeRetAutorizacao4',
+    '2': MTH + 'NfeRetAutorizacao4',
   },
   consultarStatusServico: {
-    '1': MTP + 'NfeStatusServico4?wsdl',
-    '2': MTH + 'NfeStatusServico4?wsdl',
+    '1': MTP + 'NfeStatusServico4',
+    '2': MTH + 'NfeStatusServico4',
   },
   recepcaoEvento: {
-    '1': MTP + 'RecepcaoEvento4?wsdl',
-    '2': MTH + 'RecepcaoEvento4?wsdl',
+    '1': MTP + 'RecepcaoEvento4',
+    '2': MTH + 'RecepcaoEvento4',
   },
 }
 
@@ -170,20 +170,20 @@ const PRP = 'https://nfe.sefa.pr.gov.br/nfe/'
 const PRH = 'https://homologacao.nfe.sefa.pr.gov.br/nfe/'
 const PR = {
   autorizacao: {
-    '1': PRP + 'NFeAutorizacao4?wsdl',
-    '2': PRH + 'NFeAutorizacao4?wsdl',
+    '1': PRP + 'NFeAutorizacao4',
+    '2': PRH + 'NFeAutorizacao4',
   },
   retAutorizacao: {
-    '1': PRP + 'NFeRetAutorizacao4?wsdl',
-    '2': PRH + 'NFeRetAutorizacao4?wsdl',
+    '1': PRP + 'NFeRetAutorizacao4',
+    '2': PRH + 'NFeRetAutorizacao4',
   },
   consultarStatusServico: {
-    '1': PRP + 'NFeStatusServico4?wsdl',
-    '2': PRH + 'NFeStatusServico4?wsdl',
+    '1': PRP + 'NFeStatusServico4',
+    '2': PRH + 'NFeStatusServico4',
   },
   recepcaoEvento: {
-    '1': PRP + 'NFeRecepcaoEvento4?wsdl',
-    '2': PRH + 'NFeRecepcaoEvento4?wsdl',
+    '1': PRP + 'NFeRecepcaoEvento4',
+    '2': PRH + 'NFeRecepcaoEvento4',
   },
 }
 
