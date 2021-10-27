@@ -16,7 +16,7 @@
 
 {#if ed}
   <h1><Voltar /> Detalhes da nota fiscal</h1>
-  {#if ++ed.dado.infNFe.ide.mod === 55}
+  {#if +ed.dado.infNFe.ide.mod === 55}
     <NFe {ed} />
   {:else}
     <NFCe {ed} />
