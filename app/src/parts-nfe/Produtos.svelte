@@ -56,6 +56,8 @@
       const { imposto } = $perfisTributarios.find(
         (v) => v.id === perfilTributario
       )
+      prod.indTot = '1'
+      prod.qCom = 1
       det = [{ prod, imposto, ibpt, perfilTributario }, ...det]
     }
   }
