@@ -14,11 +14,11 @@
 
   if (cMun) {
     const cUF = cMun.substr(0, 2)
-    uf = IBGE.find(v => v.Codigo == cUF)
-    value = uf.Municipios.find(v => v.Codigo == cMun)
+    uf = IBGE.find((v) => v.Codigo == cUF)
+    value = uf.Municipios.find((v) => v.Codigo == cMun)
   } else if (xMun && UF) {
-    uf = IBGE.find(v => v.Sigla == UF)
-    value = uf.Municipios.find(v => v.Nome == xMun)
+    uf = IBGE.find((v) => v.Sigla == UF)
+    value = uf.Municipios.find((v) => v.Nome == xMun)
   } else {
     uf = IBGE[0]
     value = uf.Municipios[0]
@@ -29,27 +29,32 @@
       xMun = value.Nome
       cMun = value.Codigo
       cUF = value.Codigo.substr(0, 2)
-      UF = IBGE.find(v => v.Codigo == cUF).Sigla
+      UF = IBGE.find((v) => v.Codigo == cUF).Sigla
     } else {
       xMun = cMun = cUF = UF = ''
     }
   }
 </script>
 
-<label>
-  Estado
-  <select bind:value={uf} required={!opt}>
-    {#each IBGE as uf}
-      <option value={uf}>{uf.Nome}</option>
-    {/each}
-  </select>
-</label>
-
-<label>
-  {lab}
-  <select bind:value required={!opt}>
-    {#each uf.Municipios as mun}
-      <option value={mun}>{mun.Nome}</option>
-    {/each}
-  </select>
-</label>
+<div class="row">
+  <div class="column">
+    <label>
+      Estado
+      <select bind:value={uf} required={!opt}>
+        {#each IBGE as uf}
+          <option value={uf}>{uf.Nome}</option>
+        {/each}
+      </select>
+    </label>
+  </div>
+  <div class="column">
+    <label>
+      {lab}
+      <select bind:value required={!opt}>
+        {#each uf.Municipios as mun}
+          <option value={mun}>{mun.Nome}</option>
+        {/each}
+      </select>
+    </label>
+  </div>
+</div>

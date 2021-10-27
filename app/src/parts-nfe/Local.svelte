@@ -8,7 +8,10 @@
   export let name: 'retirada' | 'entrega'
 
   let informar = raiz[name]
-  $: raiz[name] = informar ? {} : undefined
+  $: {
+    if (informar && !raiz[name]) raiz[name] = {}
+    if (!informar && raiz[name]) raiz[name] = undefined
+  }
   $: texto =
     name == 'entrega'
       ? 'Endereço de entrega diferente do endereço do destinatário'

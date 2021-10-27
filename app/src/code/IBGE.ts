@@ -22470,11 +22470,13 @@ export const IBGE = [
   },
 ]
 
+IBGE.sort((a, b) => a.Nome.localeCompare(b.Nome))
+
 export const Estados = IBGE.map((v) => ({
   Nome: v.Nome,
   Codigo: v.Codigo,
   Sigla: v.Sigla,
-})).sort((a, b) => a.Nome.localeCompare(b.Nome))
+}))
 
 export const EstadosEX = [
   ...Estados,

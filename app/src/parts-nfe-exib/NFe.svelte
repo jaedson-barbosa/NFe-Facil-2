@@ -99,7 +99,7 @@
       <a
         class="button"
         href={gerarLinkXML(ed.dado.xmlCancelamento)}
-        download="{chave}-procEventoNFe.xml"
+        download="{chave}_110111-procEventoNFe.xml"
       >
         Baixar XML do cancelamento
       </a>

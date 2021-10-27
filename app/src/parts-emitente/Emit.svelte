@@ -15,8 +15,6 @@
 
   ender.cPais = '1058'
   ender.xPais = 'BRASIL'
-
-  $: !emit.RM && delete emit.CNAE
 </script>
 
 <label>
@@ -57,16 +55,6 @@
   <i>Inscrição estadual ST</i>
   <input maxlength="14" pattern={'[0-9]{(2, 14)}'} bind:value={emit['IEST']} />
 </label>
-<label>
-  <i>Inscrição Municipal</i>
-  <input maxlength="15" bind:value={emit['IM']} {pattern} />
-</label>
-{#if emit['IM']}
-  <label>
-    CNAE Fiscal
-    <input pattern={'[0-9]{7}'} bind:value={emit['CNAE']} />
-  </label>
-{/if}
 <label>
   Regime Tributário
   <select bind:value={emit.CRT} required>

@@ -14,7 +14,9 @@
   import { Dados } from '../code/tipos'
   import type { INFeRoot } from '../code/tipos'
   import AutXml from '../parts-nfe/AutXML.svelte'
+  import Compra from '../parts-nfe/Compra.svelte'
   import Destinatario from '../parts-nfe/Destinatario.svelte'
+  import Exporta from '../parts-nfe/Exporta.svelte'
   import Ide from '../parts-nfe/Ide.svelte'
   import InfAdic from '../parts-nfe/InfAdic.svelte'
   import Local from '../parts-nfe/Local.svelte'
@@ -23,6 +25,8 @@
   import Transp from '../parts-nfe/Transp.svelte'
   import Voltar from '../components/Voltar.svelte'
   import { toNFeString } from '../code/getDataString'
+import Cobranca from '../parts-nfe/Cobranca.svelte'
+import Cana from '../parts-nfe/Cana.svelte';
 
   const ed = get(edicao)
   let raiz: INFeRoot = {} as any
@@ -92,7 +96,7 @@
 
 {#if !$carregando}
   <h1><Voltar /> Nota fiscal</h1>
-  <Ide bind:ide={raiz.ide} />
+  <Ide bind:raiz />
   <Destinatario bind:dest={raiz.dest} {isNFCe} />
   <Produtos bind:det={raiz.det} bind:total={raiz.total} {consumidorFinal} />
   <Transp bind:raiz />
@@ -100,6 +104,18 @@
   <InfAdic bind:raiz {consumidorFinal} />
   <Local bind:raiz name="retirada" />
   <Local bind:raiz name="entrega" />
+  {#if raiz.exporta}
+    <Exporta bind:exporta={raiz.exporta} />
+  {/if}
+  {#if raiz.compra}
+    <Compra bind:compra={raiz.compra} />
+  {/if}
+  {#if raiz.cobr}
+    <Cobranca bind:cobr={raiz.cobr} />
+  {/if}
+  {#if raiz.cana}
+    <Cana bind:cana={raiz.cana} />
+  {/if}
   <AutXml bind:raiz />
   <hr />
   <button on:click={salvar}>Apenas salvar</button>

@@ -4,7 +4,10 @@
   export let retTransp: any
 
   let informar = !!retTransp
-  $: retTransp = informar ? {} : undefined
+  $: {
+    if (informar && !retTransp) retTransp = {}
+    if (!informar && retTransp) retTransp = undefined
+  }
 </script>
 
 <label>
