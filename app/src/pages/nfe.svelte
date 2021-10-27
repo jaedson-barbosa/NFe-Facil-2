@@ -25,6 +25,8 @@
   import Transp from '../parts-nfe/Transp.svelte'
   import Voltar from '../components/Voltar.svelte'
   import { toNFeString } from '../code/getDataString'
+import Cobranca from '../parts-nfe/Cobranca.svelte'
+import Cana from '../parts-nfe/Cana.svelte';
 
   const ed = get(edicao)
   let raiz: INFeRoot = {} as any
@@ -107,6 +109,12 @@
   {/if}
   {#if raiz.compra}
     <Compra bind:compra={raiz.compra} />
+  {/if}
+  {#if raiz.cobr}
+    <Cobranca bind:cobr={raiz.cobr} />
+  {/if}
+  {#if raiz.cana}
+    <Cana bind:cana={raiz.cana} />
   {/if}
   <AutXml bind:raiz />
   <hr />

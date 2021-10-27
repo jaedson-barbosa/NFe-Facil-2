@@ -3,6 +3,7 @@ import { Write } from 'bdf-fonts'
 import { makeQR, QRErrorCorrectLevel } from 'minimal-qr-code'
 import { getConfiguracoes, processarFonte } from './configuracao'
 import { preparateJSON } from '../nfe/finalizacao'
+import { getInteiroStr } from '../numero'
 
 type Align = 'left' | 'center' | 'right'
 
@@ -306,10 +307,6 @@ function getMoeda(v: string | number) {
 function getNumeroStr(v: number, decimalOpcional: boolean = false) {
   if (decimalOpcional && Math.round(v) === v) return v.toLocaleString('pt-BR')
   return v.toLocaleString('pt-BR', { minimumFractionDigits: 2 })
-}
-
-function getInteiroStr(v: number, l: number) {
-  return v.toLocaleString('pt-BR', { minimumIntegerDigits: l })
 }
 
 function getData(v: string) {

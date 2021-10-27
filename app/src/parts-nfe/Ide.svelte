@@ -94,6 +94,18 @@
     if (informarCompra && !raiz.compra) raiz.compra = {}
     if (!informarCompra && raiz.compra) raiz.compra = undefined
   }
+
+  let informarCobr = !!raiz.cobr
+  $: {
+    if (informarCobr && !raiz.cobr) raiz.cobr = {}
+    if (!informarCobr && raiz.cobr) raiz.cobr = undefined
+  }
+
+  let informarCana = !!raiz.cana
+  $: {
+    if (informarCana && !raiz.cana) raiz.cana = {}
+    if (!informarCana && raiz.cana) raiz.cana = undefined
+  }
 </script>
 
 <h2>Identificação</h2>
@@ -247,6 +259,26 @@
     <label>
       Venda/Compra pública?
       <select bind:value={informarCompra} required>
+        <option value={false}>Não</option>
+        <option value={true}>Sim</option>
+      </select>
+    </label>
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <label>
+      Detalhar cobrança?
+      <select bind:value={informarCobr} required>
+        <option value={false}>Não</option>
+        <option value={true}>Sim</option>
+      </select>
+    </label>
+  </div>
+  <div class="column">
+    <label>
+      Aquisição de cana?
+      <select bind:value={informarCana} required>
         <option value={false}>Não</option>
         <option value={true}>Sim</option>
       </select>
