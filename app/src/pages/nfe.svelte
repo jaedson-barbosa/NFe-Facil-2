@@ -14,7 +14,9 @@
   import { Dados } from '../code/tipos'
   import type { INFeRoot } from '../code/tipos'
   import AutXml from '../parts-nfe/AutXML.svelte'
+  import Compra from '../parts-nfe/Compra.svelte'
   import Destinatario from '../parts-nfe/Destinatario.svelte'
+  import Exporta from '../parts-nfe/Exporta.svelte'
   import Ide from '../parts-nfe/Ide.svelte'
   import InfAdic from '../parts-nfe/InfAdic.svelte'
   import Local from '../parts-nfe/Local.svelte'
@@ -92,7 +94,7 @@
 
 {#if !$carregando}
   <h1><Voltar /> Nota fiscal</h1>
-  <Ide bind:ide={raiz.ide} />
+  <Ide bind:raiz />
   <Destinatario bind:dest={raiz.dest} {isNFCe} />
   <Produtos bind:det={raiz.det} bind:total={raiz.total} {consumidorFinal} />
   <Transp bind:raiz />
@@ -100,6 +102,12 @@
   <InfAdic bind:raiz {consumidorFinal} />
   <Local bind:raiz name="retirada" />
   <Local bind:raiz name="entrega" />
+  {#if raiz.exporta}
+    <Exporta bind:exporta={raiz.exporta} />
+  {/if}
+  {#if raiz.compra}
+    <Compra bind:compra={raiz.compra} />
+  {/if}
   <AutXml bind:raiz />
   <hr />
   <button on:click={salvar}>Apenas salvar</button>

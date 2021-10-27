@@ -4,7 +4,7 @@
   let informar = !!II
   $: {
     if (informar && !II) II = {}
-    else if (!informar && II) II = undefined
+    if (!informar && II) II = undefined
   }
 </script>
 

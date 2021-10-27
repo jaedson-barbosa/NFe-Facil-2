@@ -10,8 +10,9 @@
   import { validaCNPJ } from '../code/validacaoDoc'
   import { aplicarMascara } from '../code/mascaracaoDoc'
 
-  export let ide: any
-  export let infIntermed: any
+  export let raiz: any
+  let ide = raiz.ide
+  $: raiz.ide = ide
 
   function getCodigoEstado(sigla: string) {
     return IBGE.find((v) => v.Sigla == sigla)?.Codigo
@@ -49,8 +50,8 @@
 
   $: {
     const indIntermed = +ide.indIntermed
-    if (indIntermed === 1 && !infIntermed) infIntermed = {}
-    else if (indIntermed === 0 && infIntermed) infIntermed = undefined
+    if (indIntermed === 1 && !raiz.infIntermed) raiz.infIntermed = {}
+    else if (indIntermed === 0 && raiz.infIntermed) raiz.infIntermed = undefined
   }
 
   let oldMod = ide.mod
@@ -80,6 +81,18 @@
       ide.NFref.splice(index, 1)
       ide = ide
     }
+  }
+
+  let informarExporta = !!raiz.exporta
+  $: {
+    if (informarExporta && !raiz.exporta) raiz.exporta = {}
+    if (!informarExporta && raiz.exporta) raiz.exporta = undefined
+  }
+
+  let informarCompra = !!raiz.compra
+  $: {
+    if (informarCompra && !raiz.compra) raiz.compra = {}
+    if (!informarCompra && raiz.compra) raiz.compra = undefined
   }
 </script>
 
@@ -193,17 +206,17 @@
     {/if}
   </div>
 </div>
-{#if infIntermed}
+{#if raiz.infIntermed}
   <div class="row">
     <div class="column">
       <label>
         CNPJ do Intermediador da Transação
         <input
           pattern={'[0-9]{14}'}
-          bind:value={infIntermed.CNPJ}
+          bind:value={raiz.infIntermed.CNPJ}
           on:blur={() =>
-            validaCNPJ(infIntermed.CNPJ) || (infIntermed.CNPJ = '')}
-          title={aplicarMascara(infIntermed.CNPJ, 'cnpj')}
+            validaCNPJ(raiz.infIntermed.CNPJ) || (raiz.infIntermed.CNPJ = '')}
+          title={aplicarMascara(raiz.infIntermed.CNPJ, 'cnpj')}
         />
       </label>
     </div>
@@ -211,7 +224,7 @@
       <label>
         Identificador cadastrado no intermediador
         <input
-          bind:value={infIntermed.idCadIntTran}
+          bind:value={raiz.infIntermed.idCadIntTran}
           maxlength="60"
           {pattern}
           required
@@ -220,6 +233,26 @@
     </div>
   </div>
 {/if}
+<div class="row">
+  <div class="column">
+    <label>
+      Exportação?
+      <select bind:value={informarExporta} required>
+        <option value={false}>Não</option>
+        <option value={true}>Sim</option>
+      </select>
+    </label>
+  </div>
+  <div class="column">
+    <label>
+      Venda/Compra pública?
+      <select bind:value={informarCompra} required>
+        <option value={false}>Não</option>
+        <option value={true}>Sim</option>
+      </select>
+    </label>
+  </div>
+</div>
 
 <h3>
   NF-es referenciadas
