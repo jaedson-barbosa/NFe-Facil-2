@@ -59,7 +59,7 @@ import { getInteiroStr } from '../code/numero';
     <tbody>
       {#each dup as v, i}
         <tr>
-          <td>v.nDup</td>
+          <td>{v.nDup}</td>
           <td>
             <input
               type="number"

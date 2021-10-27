@@ -31,7 +31,6 @@
     ide = {
       mod: '55',
       serie: emp.serieNFe,
-      nNF: '0',
       idDest: '1',
       tpEmis: '1',
       tpImp: '1',
@@ -42,6 +41,7 @@
     ide['NFref'] = []
   }
 
+  ide.nNF = '0'
   ide['cUF'] = getCodigoEstado(emit.enderEmit.UF)
   ide['cNF'] = getRandomNumber().toString()
   ide['dhEmi'] = toNFeString(new Date())
@@ -49,9 +49,14 @@
   ide['verProc'] = VERSAO
 
   $: {
-    const indIntermed = +ide.indIntermed
-    if (indIntermed === 1 && !raiz.infIntermed) raiz.infIntermed = {}
-    else if (indIntermed === 0 && raiz.infIntermed) raiz.infIntermed = undefined
+    if (['2', '3', '4', '9'].includes(ide['indPres'])) {
+      const indIntermed = +ide.indIntermed
+      if (indIntermed === 1 && !raiz.infIntermed) raiz.infIntermed = {}
+      if (indIntermed === 0 && raiz.infIntermed) raiz.infIntermed = undefined
+    } else {
+      ide.indIntermed = '0'
+      raiz.infIntermed = undefined
+    }
   }
 
   let oldMod = ide.mod
@@ -118,6 +123,8 @@
         <option value="2">Homologação</option>
       </select>
     </label>
+  </div>
+  <div class="column">
     <label>
       Modelo
       <select bind:value={ide['mod']} required>
@@ -125,22 +132,52 @@
         <option value="65">NFC-e</option>
       </select>
     </label>
+  </div>
+</div>
+<div class="row">
+  {#if ide['mod'] == 55}
+    <div class="column">
+      <label>
+        Tipo de operação
+        <select bind:value={ide['tpNF']} required>
+          <option value="1">Saída</option>
+          <option value="0">Entrada</option>
+        </select>
+      </label>
+    </div>
+  {/if}
+  <div class="column">
     <label>
-      Série do documento fiscal
-      <input
-        type="number"
-        step="1"
-        min="0"
-        max="889"
-        bind:value={ide['serie']}
-        required
-      />
+      Natureza da Operação
+      <input maxlength="60" bind:value={ide['natOp']} required {pattern} />
     </label>
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <Municipio bind:cMun={ide['cMunFG']} lab="Município de ocorrência" />
+  </div>
+  <div class="column">
     <label>
-      Número (0 = automático)
-      <input bind:value={ide['nNF']} pattern={'[1-9]{1}[0-9]{0,8}'} required />
+      Presença do comprador
+      <select bind:value={ide['indPres']} required>
+        <option value="1">Presencial</option>
+        {#if ide['mod'] == 55}
+          <option value="5">Presencial, fora do estabelecimento</option>
+          <option value="2">Não presencial, internet</option>
+          <option value="3">Não presencial, teleatendimento</option>
+          <option value="9">Não presencial, outros</option>
+          <option value="0">Não se aplica (complementar ou ajuste)</option>
+        {:else}
+          <option value="4">NFC-e entrega em domicílio</option>
+        {/if}
+      </select>
     </label>
-    {#if ide['mod'] == 55}
+  </div>
+</div>
+{#if ide['mod'] == 55}
+  <div class="row">
+    <div class="column">
       <label>
         Finalidade da emissão
         <select bind:value={ide['finNFe']} required>
@@ -150,167 +187,153 @@
           <option value="4">Devolução/Retorno</option>
         </select>
       </label>
+    </div>
+    <div class="column">
       <label>
-        Tipo do documento fiscal
-        <select bind:value={ide['tpNF']} required>
-          <option value="1">Saída</option>
-          <option value="0">Entrada</option>
-        </select>
-      </label>
-      <label>
-        Operação com consumidor final
+        Consumidor final?
         <select bind:value={ide.indFinal}>
           <option value="0">Não</option>
           <option value="1">Sim</option>
         </select>
       </label>
-    {/if}
-    {#if ['2', '3', '4', '9'].includes(ide['indPres'])}
+    </div>
+  </div>
+  <div class="row">
+    <div class="column">
       <label>
-        Operação executada em site ou plataforma de terceiros
+        Exportação?
+        <select bind:value={informarExporta} required>
+          <option value={false}>Não</option>
+          <option value={true}>Sim</option>
+        </select>
+      </label>
+    </div>
+    <div class="column">
+      <label>
+        Venda/Compra pública?
+        <select bind:value={informarCompra} required>
+          <option value={false}>Não</option>
+          <option value={true}>Sim</option>
+        </select>
+      </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="column">
+      <label>
+        Detalhar cobrança?
+        <select bind:value={informarCobr} required>
+          <option value={false}>Não</option>
+          <option value={true}>Sim</option>
+        </select>
+      </label>
+    </div>
+    <div class="column">
+      <label>
+        Aquisição de cana?
+        <select bind:value={informarCana} required>
+          <option value={false}>Não</option>
+          <option value={true}>Sim</option>
+        </select>
+      </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="column">
+      <label>
+        Informar data de {#if ide['tpNF'] === '1'}saída{:else}entrada{/if}?
+        <select bind:value={informarSaidaEntrada}>
+          <option value={false}>Não</option>
+          <option value={true}>Sim</option>
+        </select>
+      </label>
+    </div>
+    {#if informarSaidaEntrada}
+      <div class="column">
+        <label>
+          Data e hora
+          <input type="datetime-local" bind:value={saidaEntrada} required />
+        </label>
+      </div>
+    {/if}
+    <div class="column">
+      <label>
+        Tipo de destino
+        <select bind:value={ide['idDest']} required>
+          <option value="1">Outro município - interna</option>
+          <option value="2">Outro estado - interestadual</option>
+          <option value="3">Outro país - exterior</option>
+        </select>
+      </label>
+    </div>
+  </div>
+{/if}
+{#if ['2', '3', '4', '9'].includes(ide['indPres'])}
+  <div class="row">
+    <div class="column">
+      <label>
+        Operação em plataforma de terceiros
         <select bind:value={ide.indIntermed}>
           <option value="0">Não</option>
           <option value="1">Sim</option>
         </select>
       </label>
-    {/if}
-  </div>
-  <div class="column">
-    <label>
-      Data de saída/entrada diferente de agora
-      <select bind:value={informarSaidaEntrada}>
-        <option value={false}>Não</option>
-        <option value={true}>Sim</option>
-      </select>
-    </label>
-    {#if informarSaidaEntrada}
-      <label>
-        Data e Hora de saída/entrada
-        <input type="datetime-local" bind:value={saidaEntrada} required />
-      </label>
-    {/if}
-    <label>
-      Natureza da Operação
-      <input maxlength="60" bind:value={ide['natOp']} required {pattern} />
-    </label>
-    <Municipio bind:cMun={ide['cMunFG']} lab="Município de ocorrência" />
-    <label>
-      Presença do comprador
-      <select bind:value={ide['indPres']} required>
-        <option value="1">Operação presencial</option>
-        <option value="0">Não se aplica (complementar ou ajuste)</option>
-        <option value="2">Não presencial, internet</option>
-        <option value="3">Não presencial, teleatendimento</option>
-        <option value="4">NFC-e entrega em domicílio</option>
-        <option value="5">Operação presencial, fora do estabelecimento</option>
-        <option value="9">Não presencial, outros</option>
-      </select>
-    </label>
-    {#if ide['mod'] == 55}
-      <label>
-        Identificador de local de destino
-        <select bind:value={ide['idDest']} required>
-          <option value="1">Operação interna</option>
-          <option value="2">Operação interestadual</option>
-          <option value="3">Operação exterior</option>
-        </select>
-      </label>
-    {/if}
-  </div>
-</div>
-{#if raiz.infIntermed}
-  <div class="row">
-    <div class="column">
-      <label>
-        CNPJ do Intermediador da Transação
-        <input
-          pattern={'[0-9]{14}'}
-          bind:value={raiz.infIntermed.CNPJ}
-          on:blur={() =>
-            validaCNPJ(raiz.infIntermed.CNPJ) || (raiz.infIntermed.CNPJ = '')}
-          title={aplicarMascara(raiz.infIntermed.CNPJ, 'cnpj')}
-        />
-      </label>
     </div>
-    <div class="column">
-      <label>
-        Identificador cadastrado no intermediador
-        <input
-          bind:value={raiz.infIntermed.idCadIntTran}
-          maxlength="60"
-          {pattern}
-          required
-        />
-      </label>
-    </div>
+    {#if raiz.infIntermed}
+      <div class="column">
+        <label>
+          CNPJ do intermediador
+          <input
+            pattern={'[0-9]{14}'}
+            bind:value={raiz.infIntermed.CNPJ}
+            on:blur={() =>
+              validaCNPJ(raiz.infIntermed.CNPJ) || (raiz.infIntermed.CNPJ = '')}
+            title={aplicarMascara(raiz.infIntermed.CNPJ, 'cnpj')}
+          />
+        </label>
+      </div>
+      <div class="column">
+        <label>
+          Id no intermediador
+          <input
+            bind:value={raiz.infIntermed.idCadIntTran}
+            maxlength="60"
+            {pattern}
+            required
+          />
+        </label>
+      </div>
+    {/if}
   </div>
 {/if}
-<div class="row">
-  <div class="column">
-    <label>
-      Exportação?
-      <select bind:value={informarExporta} required>
-        <option value={false}>Não</option>
-        <option value={true}>Sim</option>
-      </select>
-    </label>
-  </div>
-  <div class="column">
-    <label>
-      Venda/Compra pública?
-      <select bind:value={informarCompra} required>
-        <option value={false}>Não</option>
-        <option value={true}>Sim</option>
-      </select>
-    </label>
-  </div>
-</div>
-<div class="row">
-  <div class="column">
-    <label>
-      Detalhar cobrança?
-      <select bind:value={informarCobr} required>
-        <option value={false}>Não</option>
-        <option value={true}>Sim</option>
-      </select>
-    </label>
-  </div>
-  <div class="column">
-    <label>
-      Aquisição de cana?
-      <select bind:value={informarCana} required>
-        <option value={false}>Não</option>
-        <option value={true}>Sim</option>
-      </select>
-    </label>
-  </div>
-</div>
 
-<h3>
-  NF-es referenciadas
-  <Adicionar on:click={() => (ide.NFref = [{}, ...ide.NFref])} />
-</h3>
-{#if ide.NFref.length}
-  <table>
-    <thead>
-      <tr>
-        <td>Chave de acesso da NF-e</td>
-      </tr>
-    </thead>
-    <tbody>
-      {#each ide.NFref as _, i}
+{#if ide['mod'] == 55}
+  <h3>
+    NF-es referenciadas
+    <Adicionar on:click={() => (ide.NFref = [{}, ...ide.NFref])} />
+  </h3>
+  {#if ide.NFref.length}
+    <table>
+      <thead>
         <tr>
-          <td>
-            <input
-              bind:value={ide.NFref[i].refNFe}
-              pattern={'[0-9]{44}'}
-              on:blur={analisar(i)}
-              required
-            />
-          </td>
+          <td>Chave de acesso da NF-e</td>
         </tr>
-      {/each}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {#each ide.NFref as _, i}
+          <tr>
+            <td>
+              <input
+                bind:value={ide.NFref[i].refNFe}
+                pattern={'[0-9]{44}'}
+                on:blur={analisar(i)}
+                required
+              />
+            </td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  {/if}
 {/if}
 <br />

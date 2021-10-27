@@ -112,7 +112,7 @@
     </label>
   </div>
 </div>
-<h3>Deduções <Adicionar /></h3>
+<h3>Deduções <Adicionar on:click={() => (deduc = [...deduc, {}])} /></h3>
 {#if deduc.length}
   <table>
     <thead>
