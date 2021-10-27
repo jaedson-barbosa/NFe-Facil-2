@@ -7,8 +7,11 @@
   import { toNFeString } from '../code/getDataString'
   import Adicionar from '../components/Adicionar.svelte'
   import { pattern } from '../code/patterns'
+  import { validaCNPJ } from '../code/validacaoDoc'
+  import { aplicarMascara } from '../code/mascaracaoDoc'
 
   export let ide: any
+  export let infIntermed: any
 
   function getCodigoEstado(sigla: string) {
     return IBGE.find((v) => v.Sigla == sigla)?.Codigo
@@ -43,6 +46,12 @@
   ide['dhEmi'] = toNFeString(new Date())
   ide['cMunFG'] = emit.enderEmit.cMun
   ide['verProc'] = VERSAO
+
+  $: {
+    const indIntermed = +ide.indIntermed
+    if (indIntermed === 1 && !infIntermed) infIntermed = {}
+    else if (indIntermed === 0 && infIntermed) infIntermed = undefined
+  }
 
   let oldMod = ide.mod
   $: {
@@ -184,6 +193,33 @@
     {/if}
   </div>
 </div>
+{#if infIntermed}
+  <div class="row">
+    <div class="column">
+      <label>
+        CNPJ do Intermediador da Transação
+        <input
+          pattern={'[0-9]{14}'}
+          bind:value={infIntermed.CNPJ}
+          on:blur={() =>
+            validaCNPJ(infIntermed.CNPJ) || (infIntermed.CNPJ = '')}
+          title={aplicarMascara(infIntermed.CNPJ, 'cnpj')}
+        />
+      </label>
+    </div>
+    <div class="column">
+      <label>
+        Identificador cadastrado no intermediador
+        <input
+          bind:value={infIntermed.idCadIntTran}
+          maxlength="60"
+          {pattern}
+          required
+        />
+      </label>
+    </div>
+  </div>
+{/if}
 
 <h3>
   NF-es referenciadas
