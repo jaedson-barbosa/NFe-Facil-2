@@ -2,7 +2,10 @@
   export let encerrante: any
 
   let informar = !!encerrante
-  $: encerrante = informar ? {} : undefined
+  $: {
+    if (informar && !encerrante) encerrante = {}
+    if (!informar && encerrante) encerrante = undefined
+  }
 </script>
 
 <label>
