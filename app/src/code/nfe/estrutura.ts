@@ -184,6 +184,7 @@ const elements: IElement[] = [
         element: [
           { name: 'cProd' },
           { name: 'cEAN' },
+          { name: 'cBarra' },
           { name: 'xProd' },
           { name: 'NCM' },
           { name: 'NVE', maxOccurs: 8 },
@@ -198,6 +199,7 @@ const elements: IElement[] = [
           { name: 'vUnCom', decimal: 10 },
           { name: 'vProd' },
           { name: 'cEANTrib' },
+          { name: 'cBarraTrib' },
           { name: 'uTrib' },
           { name: 'qTrib', decimal: 4 },
           { name: 'vUnTrib', decimal: 10 },
@@ -386,6 +388,8 @@ const elements: IElement[] = [
                   { name: 'vBCFCPST', decimal: 2 },
                   { name: 'pFCPST', decimal: 4 },
                   { name: 'vFCPST', decimal: 2 },
+                  { name: 'vICMSSTDeson', decimal: 2 },
+                  { name: 'motDesICMSST' }
                 ],
               },
               {
@@ -448,6 +452,9 @@ const elements: IElement[] = [
                   { name: 'vBCFCP', decimal: 2 },
                   { name: 'pFCP', decimal: 4 },
                   { name: 'vFCP', decimal: 2 },
+                  { name: 'pFCPDif', decimal: 4 },
+                  { name: 'vFCPDif', decimal: 2 },
+                  { name: 'vFCPEfet', decimal: 2 }
                 ],
               },
               {
@@ -492,6 +499,8 @@ const elements: IElement[] = [
                   { name: 'vFCPST', decimal: 2 },
                   { name: 'vICMSDeson', decimal: 2 },
                   { name: 'motDesICMS' },
+                  { name: 'vICMSSTDeson', decimal: 2 },
+                  { name: 'motDesICMSST' }
                 ],
               },
               {
@@ -518,6 +527,8 @@ const elements: IElement[] = [
                   { name: 'vFCPST', decimal: 2 },
                   { name: 'vICMSDeson', decimal: 2 },
                   { name: 'motDesICMS' },
+                  { name: 'vICMSSTDeson', decimal: 2 },
+                  { name: 'motDesICMSST' }
                 ],
               },
               {
@@ -737,6 +748,7 @@ const elements: IElement[] = [
               { name: 'qBCProd', decimal: 4 },
               { name: 'vAliqProd', decimal: 4 },
               { name: 'vPIS', decimal: 2 },
+              { name: 'indSomaPISST' }
             ],
           },
           {
@@ -782,6 +794,7 @@ const elements: IElement[] = [
               { name: 'qBCProd', decimal: 4 },
               { name: 'vAliqProd', decimal: 4 },
               { name: 'vCOFINS', decimal: 2 },
+              { name: 'indSomaCOFINSST' }
             ],
           },
           {
