@@ -65,7 +65,7 @@
     <tbody>
       {#if dest.xNome}
         <tr
-          class="marcado clicavel"
+          class="destacado clicavel"
           on:click={() => (dest = {})}
           title="Trocar cliente"
         >

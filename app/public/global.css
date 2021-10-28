@@ -14,11 +14,11 @@ input[type='file'] {
   display: none;
 }
 
-tbody > tr.clicavel {
+.clicavel {
   cursor: pointer;
 }
 
-tbody > tr.marcado {
+.destacado {
   background-color: hsl(0, 0%, 88%);
 }
 

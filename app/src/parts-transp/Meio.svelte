@@ -102,7 +102,7 @@
       <tbody>
         {#if veicTransp}
           <tr
-            class="clicavel marcado"
+            class="clicavel destacado"
             on:click={removerVeicTransp}
             title="Clique para remover identificação de veículo trator"
           >
@@ -113,7 +113,7 @@
         {/if}
         {#each reboque as v, i}
           <tr
-            class="clicavel marcado"
+            class="clicavel destacado"
             on:click={removerReboque(i)}
             title="Clique para remover reboque"
           >

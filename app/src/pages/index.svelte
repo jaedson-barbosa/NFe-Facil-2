@@ -58,11 +58,11 @@
   </div>
   <div class="row">
     <div class="column">
-      <a class="button" href={$url('./nfe')}>Adicionar NF(C)-e</a>
-      <a class="button" href={$url('./importacao')}>Importar XMLs</a>
+      <a class="button" href={$url('./nfe')}>Adicionar nota</a>
+      <a class="button" href={$url('./importacao')}>Importar notas</a>
     </div>
     <div class="column">
-      <a class="button" href={$url('./nfes')}>Gerenciar NF(C)-es</a>
+      <a class="button" href={$url('./nfes')}>Gerenciar notas</a>
     </div>
   </div>
 {/if}
