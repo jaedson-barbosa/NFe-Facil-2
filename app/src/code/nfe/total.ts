@@ -62,9 +62,15 @@ function addProd(p: TICMSTot, v: any): TICMSTot {
     const pis = Object.values<any>(v.imposto.PIS)[0]
     p.vPIS += +pis.vPIS || 0
   }
+  if (v.imposto.PISST?.indSomaPISST === "1") {
+    p.vNF += v.imposto.PISST.vPIS
+  }
   if (v.imposto.COFINS) {
     const cofins = Object.values<any>(v.imposto.COFINS)[0]
     p.vCOFINS += +cofins.vCOFINS || 0
+  }
+  if (v.imposto.COFINSST?.indSomaCOFINSST === "1") {
+    p.vNF += v.imposto.COFINSST.vCOFINS
   }
   const vProd = +v.prod.indTot == 1 ? +v.prod.vProd : 0
   p.vProd += vProd

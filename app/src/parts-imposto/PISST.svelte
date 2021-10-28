@@ -28,3 +28,10 @@
     {getMoeda(raiz['vPIS'])}
   </p>
 {/if}
+<label>
+  Valor do PISST compõe o valor total da nota
+  <select bind:value={raiz.indSomaPISST} required>
+    <option value="0">Não</option>
+    <option value="1">Sim</option>
+  </select>
+</label>

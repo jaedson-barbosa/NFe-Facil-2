@@ -38,7 +38,7 @@
     <thead>
       <tr>
         <th>Placa</th>
-        <th>Estado</th>
+        <th><i>Estado</i></th>
         <th><i>RNTC</i></th>
       </tr>
     </thead>

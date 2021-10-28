@@ -3,6 +3,7 @@
   import { getMoeda } from '../../code/numero'
 
   export let ICMS: any
+  export let tipoICMS: string
 </script>
 
 <h4>ICMS - Substituição tributária</h4>
@@ -12,6 +13,9 @@
     {#each modBCST as e}
       <option value={e[0]}>{e[0]} - {e[1]}</option>
     {/each}
+    {#if tipoICMS === '70' || tipoICMS === '90'}
+      <option value="6">6 - Valor da operação</option>
+    {/if}
   </select>
 </label>
 <label>

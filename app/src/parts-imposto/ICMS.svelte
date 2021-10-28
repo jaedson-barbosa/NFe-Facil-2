@@ -12,6 +12,7 @@
   import STDest from './parts-ICMS/STDest.svelte'
   import Cred from './parts-ICMS/Cred.svelte'
   import Desonerado from './parts-ICMS/Desonerado.svelte'
+  import STDesonerado from './parts-ICMS/STDesonerado.svelte'
 
   export let raiz: any
   export let regimeNormal: boolean
@@ -82,11 +83,11 @@
     />
   {/if}
   {#if !['Part10', 'Part90', '900'].includes(tipoICMS)}
-    <FCP bind:ICMS />
+    <FCP bind:ICMS dif={tipoICMS === '51'} />
   {/if}
 {/if}
 {#if ['10', '30', '70', '90', 'Part10', 'Part90', '201', '202', '203', '900'].includes(tipoICMS)}
-  <ST bind:ICMS />
+  <ST bind:ICMS {tipoICMS} />
   {#if ['Part10', 'Part90'].includes(tipoICMS)}
     <STPart bind:ICMS />
   {/if}
@@ -104,6 +105,9 @@
 {/if}
 {#if ['20', '30', '40', '41', '50', '70', '90'].includes(tipoICMS)}
   <Desonerado bind:ICMS {tipoICMS} />
+{/if}
+{#if ['10', '70', '90'].includes(tipoICMS)}
+  <STDesonerado bind:ICMS />
 {/if}
 {#if ['101', '201', '900'].includes(tipoICMS)}
   <Cred bind:ICMS opcional={tipoICMS == '900'} />

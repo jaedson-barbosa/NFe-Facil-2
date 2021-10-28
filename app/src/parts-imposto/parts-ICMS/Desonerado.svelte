@@ -3,6 +3,10 @@
 
   export let ICMS: any
   export let tipoICMS: string
+
+  $: {
+    if (!ICMS['vICMSDeson'] && ICMS['motDesICMS']) ICMS['motDesICMS'] = ''
+  }
 </script>
 
 <h4>ICMS desonerado</h4>

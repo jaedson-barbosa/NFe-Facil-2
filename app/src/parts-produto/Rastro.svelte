@@ -18,6 +18,6 @@
     <input type="date" bind:value={raiz.dVal} />
   </td>
   <td>
-    <input bind:value={raiz.cAgreg} pattern={'[0-9]{1,20}'} />
+    <input bind:value={raiz.cAgreg} maxlength="20" {pattern} />
   </td>
 </tr>

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { pattern } from '../code/patterns'
+
   export let raiz: any
   if (!raiz.detExport) raiz.detExport = []
 
@@ -54,7 +56,8 @@
             <td>
               <input
                 bind:value={raiz.detExport[i].nDraw}
-                pattern={'[0-9]{0,11}'}
+                maxlength="20"
+                {pattern}
               />
             </td>
             <td>

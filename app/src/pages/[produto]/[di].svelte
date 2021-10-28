@@ -24,7 +24,7 @@
   function analisar(index: number) {
     return () => {
       const v = raiz.adi[index]
-      if (v.nAdicao || v.nSeqAdic || v.cFabricante) return
+      if (v.nSeqAdic || v.cFabricante) return
       raiz.lacres.splice(index, 1)
       raiz.lacres = raiz.lacres
     }
@@ -40,7 +40,7 @@
   <h3>Declaração de Importação</h3>
   <label>
     Numero do Documento de Importação (DI/DSI/DA/DRI-E)
-    <input maxlength="12" bind:value={raiz.nDI} required {pattern} />
+    <input maxlength="15" bind:value={raiz.nDI} required {pattern} />
   </label>
   <label>
     Data de registro da DI/DSI/DA
@@ -72,9 +72,12 @@
       <option value="5">Postal</option>
       <option value="6">Ferroviária</option>
       <option value="7">Rodoviária</option>
-      <option value="8">Conduto</option>
+      <option value="8">Conduto/Rede transmissão</option>
       <option value="9">Meios próprios</option>
       <option value="10">Entrada ou saída ficta</option>
+      <option value="11">Courier</option>
+      <option value="12">Em mãoes</option>
+      <option value="13">Por reboque</option>
     </select>
   </label>
   <label>
@@ -110,36 +113,28 @@
     <input maxlength="60" bind:value={raiz.cExportador} required {pattern} />
   </label>
   <h4>
-    Adições
+    Adições ou itens
     <Adicionar on:click={() => (raiz.adi = [{}, ...raiz.adi])} />
   </h4>
   {#if raiz.adi}
     <table>
       <thead>
         <tr>
-          <th>Nº da adição</th>
-          <th>Nº do item na adição</th>
+          <th>Nº sequencial do item</th>
           <th>Cód. fabricante estrangeiro</th>
-          <th><i>Valor descondo do item da DI</i></th>
-          <th><i>Nº ato concessório</i></th>
+          <th><i>Nº da adição</i></th>
+          <th><i>Valor descondo do item</i></th>
+          <th><i>Nº ato concessório de Drawback</i></th>
         </tr>
       </thead>
       <tbody>
-        {#each raiz.adi as _, i}
+        {#each raiz.adi as v, i}
           <tr>
             <td>
               <input
-                bind:value={raiz.adi[i].nAdicao}
-                on:blur={analisar(i)}
-                pattern={'[1-9]{1}[0-9]{0,2}'}
-                required
-              />
-            </td>
-            <td>
-              <input
+                type="number"
                 bind:value={raiz.adi[i].nSeqAdic}
                 on:blur={analisar(i)}
-                pattern={'[1-9]{1}[0-9]{0,2}'}
                 required
               />
             </td>
@@ -151,6 +146,12 @@
                 maxlength="60"
                 required
                 {pattern}
+              />
+            </td>
+            <td>
+              <input
+                bind:value={raiz.adi[i].nAdicao}
+                pattern={'[1-9]{1}[0-9]{0,2}'}
               />
             </td>
             <td>
