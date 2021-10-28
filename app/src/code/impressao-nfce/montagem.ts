@@ -10,6 +10,7 @@ type Align = 'left' | 'center' | 'right'
 export function montar(
   canvas: HTMLCanvasElement,
   xml: string,
+  cancelada: boolean,
   logotipo: ImageData | undefined = undefined
 ) {
   const json = parser.xml2json(xml)
@@ -270,10 +271,16 @@ export function montar(
     const xMsg = infProt?.xMsg
     const homolog = infNFe.ide.tpAmb === '2'
     const naoHomologado = !infProt
-    if (infAdFisco || xMsg || homolog || naoHomologado) {
+    if (infAdFisco || xMsg || homolog || naoHomologado || cancelada) {
       if (infAdFisco) escrever(infAdFisco, 'left')
       if (xMsg) escrever(xMsg, 'left')
-      if (naoHomologado) {
+      if (cancelada) {
+        const aviso =
+          'NFC-e CANCELADA ' +
+          (homolog ? '' : 'E EMITIDA EM AMBIENTE DE HOMOLOGAÇÃO ') +
+          '- SEM VALOR FISCAL'
+        escrever(aviso, 'center')
+      } else if (naoHomologado) {
         const aviso = 'NFC-e NÃO PROTOCOLADA - SEM VALOR FISCAL'
         escrever(aviso, 'center')
       } else if (homolog) {

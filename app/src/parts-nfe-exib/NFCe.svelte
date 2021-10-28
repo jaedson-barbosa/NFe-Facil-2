@@ -55,7 +55,7 @@
 
   onMount(async () => {
     const logotipo = await getLogotipo()
-    montar(exibCanvas, ed.dado.xml, logotipo)
+    montar(exibCanvas, ed.dado.xml, ed.dado.cancelada, logotipo)
     exibCanvas.toBlob((blob) => (linkDANFE = URL.createObjectURL(blob)))
   })
 </script>
