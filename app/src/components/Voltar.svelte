@@ -4,7 +4,9 @@
   export let href = './'
 </script>
 
-<a href={$url(href)} title="Voltar">&#129092;</a>
+<a href={$url(href)} title="Voltar">
+  <img src="icons/iconmonstr-arrow-20.svg" alt="Seta para esquerda" />
+</a>
 
 <style>
   a {
@@ -12,5 +14,10 @@
     margin-right: 1rem;
     display: inline-block;
     text-align: center;
+  }
+
+  img {
+    height: 0.8em;
+    transform: scaleX(-1);
   }
 </style>

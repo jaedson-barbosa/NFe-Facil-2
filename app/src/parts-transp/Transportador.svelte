@@ -39,7 +39,7 @@
     <tbody>
       {#if transporta}
         <tr
-          class="clicavel marcado"
+          class="clicavel destacado"
           on:click={() => (transporta = undefined)}
           title="Clique para remover transportador"
         >
