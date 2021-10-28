@@ -50,11 +50,12 @@
 
   $: {
     if (['2', '3', '4', '9'].includes(ide['indPres'])) {
+      if (ide.indIntermed === undefined) ide.indIntermed = "0"
       const indIntermed = +ide.indIntermed
       if (indIntermed === 1 && !raiz.infIntermed) raiz.infIntermed = {}
       if (indIntermed === 0 && raiz.infIntermed) raiz.infIntermed = undefined
     } else {
-      ide.indIntermed = '0'
+      ide.indIntermed = undefined
       raiz.infIntermed = undefined
     }
   }
