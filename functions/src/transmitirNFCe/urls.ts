@@ -130,12 +130,11 @@ export const urlsHomologacao = {
   },
   AM: {
     urlChave: 'www.sefaz.am.gov.br/nfce/consulta',
-    urlQRCode: 'https://sistemas.sefaz.am.gov.br/nfceweb-hom/consultarNFCe.jsp',
+    urlQRCode: 'https://homnfce.sefaz.am.gov.br/nfceweb/consultarNFCe.jsp',
   },
   BA: {
     urlChave: 'http://hinternet.sefaz.ba.gov.br/nfce/consulta',
-    urlQRCode:
-      'http://hnfe.sefaz.ba.gov.br/servicos/nfce/modulos/geral/NFCEC_consulta_chave_acesso.aspx',
+    urlQRCode: 'http://hnfe.sefaz.ba.gov.br/servicos/nfce/qrcode.aspx',
   },
   CE: {
     urlChave: 'www.sefaz.ce.gov.br/nfce/consulta',
@@ -143,11 +142,11 @@ export const urlsHomologacao = {
   },
   DF: {
     urlChave: 'www.fazenda.df.gov.br/nfce/consulta',
-    urlQRCode: 'http://dec.fazenda.df.gov.br/ConsultarNFCe.aspx',
+    urlQRCode: 'http://www.fazenda.df.gov.br/nfce/qrcode',
   },
   ES: {
     urlChave: 'www.sefaz.es.gov.br/nfce/consulta',
-    urlQRCode: 'http://homologacao.sefaz.es.gov.br/ConsultaNFCe/qrcode.aspx',
+    urlQRCode: 'http://homologacao.sefaz.es.gov.br/ConsultaNFCe',
   },
   GO: {
     urlChave: 'www.sefaz.go.gov.br/nfce/consulta',
@@ -155,7 +154,7 @@ export const urlsHomologacao = {
   },
   MA: {
     urlChave: 'www.sefaz.ma.gov.br/nfce/consulta',
-    urlQRCode: 'http://www.hom.nfce.sefaz.ma.gov.br/portal/consultarNFCe.jsp',
+    urlQRCode: 'http://homologacao.sefaz.ma.gov.br/portal/consultarNFCe.jsp',
   },
   MG: {
     urlChave: 'http://hnfce.fazenda.mg.gov.br/portalnfce',
@@ -180,7 +179,7 @@ export const urlsHomologacao = {
   },
   PE: {
     urlChave: 'nfce.sefaz.pe.gov.br/nfce/consulta',
-    urlQRCode: 'http://nfcehomolog.sefaz.pe.gov.br/nfce-web/consultarNFCe',
+    urlQRCode: 'http://nfcehomolog.sefaz.pe.gov.br/nfce/consulta',
   },
   PI: {
     urlChave: 'www.sefaz.pi.gov.br/nfce/consulta',
@@ -212,11 +211,11 @@ export const urlsHomologacao = {
   },
   SC: {
     urlChave: 'https://hom.sat.sef.sc.gov.br/nfce/consulta',
-    urlQRCode: '',
+    urlQRCode: 'https://hom.sat.sef.sc.gov.br/nfce/consulta',
   },
   SE: {
     urlChave: 'http://www.hom.nfe.se.gov.br/nfce/consulta',
-    urlQRCode: 'http://www.hom.nfe.se.gov.br/portal/consultarNFCe.jsp',
+    urlQRCode: 'http://www.hom.nfe.se.gov.br/nfce/qrcode',
   },
   SP: {
     urlChave: 'https://www.homologacao.nfce.fazenda.sp.gov.br/consulta',
