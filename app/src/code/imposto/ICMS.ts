@@ -8,6 +8,8 @@ export function limparICMS({ ICMS }: any) {
   delete ICMS.vICMSST
   delete ICMS.vBCFCP
   delete ICMS.vFCP
+  delete ICMS.vFCPDif
+  delete ICMS.vFCPEfet
   delete ICMS.vBC
   delete ICMS.vICMS
   delete ICMS.vBCFCPST
@@ -34,6 +36,9 @@ export function limparICMS({ ICMS }: any) {
   // Deson
   delete ICMS.vICMSDeson
   delete ICMS.motDesICMS
+  // ST Deson
+  delete ICMS.vICMSSTDeson
+  delete ICMS.motDesICMSST
   // Cred
   delete ICMS.pCredSN
   delete ICMS.vCredICMSSN
@@ -54,16 +59,18 @@ export function calcular(
   consumidorFinal: boolean
 ) {
   const res = _calcular(prod, ICMS, ipi, consumidorFinal)
-  ICMS.vICMSOp = res.vICMSOp ? res.vICMSOp : ''
-  ICMS.vICMSDif = res.vICMSDif ? res.vICMSDif : ''
-  ICMS.vBCST = res.vBCST ? res.vBCST : ''
-  ICMS.vICMSST = res.vICMSST ? res.vICMSST : ''
-  ICMS.vBCFCP = res.vBCFCP ? res.vBCFCP : ''
-  ICMS.vFCP = res.vFCP ? res.vFCP : ''
-  ICMS.vBC = res.vBC ? res.vBC : ''
-  ICMS.vICMS = res.vICMS ? res.vICMS : ''
-  ICMS.vBCFCPST = res.vBCFCPST ? res.vBCFCPST : ''
-  ICMS.vFCPST = res.vFCPST ? res.vFCPST : ''
+  ICMS.vICMSOp = res.vICMSOp != undefined ? res.vICMSOp : ''
+  ICMS.vICMSDif = res.vICMSDif != undefined ? res.vICMSDif : ''
+  ICMS.vBCST = res.vBCST != undefined ? res.vBCST : ''
+  ICMS.vICMSST = res.vICMSST != undefined ? res.vICMSST : ''
+  ICMS.vBCFCP = res.vBCFCP != undefined ? res.vBCFCP : ''
+  ICMS.vFCP = res.vFCP != undefined ? res.vFCP : ''
+  ICMS.vFCPDif = res.vFCPDif != undefined ? res.vFCPDif : ''
+  ICMS.vFCPEfet = res.vFCPEfet != undefined ? res.vFCPEfet : ''
+  ICMS.vBC = res.vBC != undefined ? res.vBC : ''
+  ICMS.vICMS = res.vICMS != undefined ? res.vICMS : ''
+  ICMS.vBCFCPST = res.vBCFCPST != undefined ? res.vBCFCPST : ''
+  ICMS.vFCPST = res.vFCPST != undefined ? res.vFCPST : ''
   return ICMS
 }
 
@@ -99,8 +106,17 @@ function _calcular(
   if (imposto.pFCP) {
     if (imposto.CST != '00') retorno['vBCFCP'] = vBC
     const pFCP = +imposto.pFCP || 0
-    const vFCP = vBC * (pFCP / 100)
-    retorno = { ...retorno, vFCP }
+    if (imposto.pFCPDif) {
+      const pFCPDif = +imposto.pFCPDif || 0
+      const vFCPOp = vBC * (pFCP / 100)
+      const vFCPDif = vFCPOp * (pFCPDif / 100)
+      const vFCPEfet = vFCPOp - vFCPDif
+      const vFCP = vFCPEfet
+      retorno = { ...retorno, vFCP, vFCPDif, vFCPEfet }
+    } else {
+      const vFCP = vBC * (pFCP / 100)
+      retorno = { ...retorno, vFCP }
+    }
   }
   if (imposto.pICMSST) {
     const pMVAST = +imposto.pMVAST || 0

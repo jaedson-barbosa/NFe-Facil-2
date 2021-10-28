@@ -2,6 +2,7 @@
   import { getMoeda } from '../../code/numero'
 
   export let ICMS: any
+  export let dif: boolean
 </script>
 
 <h4>Fundo de Combate à Pobreza</h4>
@@ -15,6 +16,12 @@
   Percentual
   <input type="number" step="0.0001" bind:value={ICMS['pFCP']} />
 </label>
+{#if dif}
+  <label>
+    Percentual do diferemento
+    <input type="number" step="0.0001" bind:value={ICMS['pFCPDif']} />
+  </label>
+{/if}
 {#if ICMS['vFCP']}
   <p>
     <strong>Valor:</strong>

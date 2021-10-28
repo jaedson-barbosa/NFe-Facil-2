@@ -52,6 +52,7 @@
     <label>
       Estado
       <select bind:value={raiz.UF} required>
+        <option value="">Não informar</option>
         {#each EstadosEX as uf}
           <option value={uf.Sigla}>{uf.Nome}</option>
         {/each}
