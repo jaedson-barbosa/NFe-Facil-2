@@ -25,8 +25,8 @@
   import Transp from '../parts-nfe/Transp.svelte'
   import Voltar from '../components/Voltar.svelte'
   import { toNFeString } from '../code/getDataString'
-import Cobranca from '../parts-nfe/Cobranca.svelte'
-import Cana from '../parts-nfe/Cana.svelte';
+  import Cobranca from '../parts-nfe/Cobranca.svelte'
+  import Cana from '../parts-nfe/Cana.svelte'
 
   const ed = get(edicao)
   let raiz: INFeRoot = {} as any
@@ -98,7 +98,13 @@ import Cana from '../parts-nfe/Cana.svelte';
   <h1><Voltar /> Nota fiscal</h1>
   <Ide bind:raiz />
   <Destinatario bind:dest={raiz.dest} {isNFCe} />
-  <Produtos bind:det={raiz.det} bind:total={raiz.total} {consumidorFinal} />
+  <Produtos
+    bind:det={raiz.det}
+    bind:total={raiz.total}
+    {consumidorFinal}
+    ufOrigem={raiz.emit.enderEmit.UF}
+    ufDestino={raiz.dest?.enderDest?.UF}
+  />
   <Transp bind:raiz />
   <Pag bind:raiz total={raiz.total?.ICMSTot?.vNF ?? 0} />
   <InfAdic bind:raiz {consumidorFinal} />

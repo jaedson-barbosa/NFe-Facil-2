@@ -4,6 +4,7 @@
 
   export let raiz: any
   export let consumidorFinal: boolean
+  export let ufOrigem: string, ufDestino: string
 
   let prod = raiz.prod
   $: raiz.prod = prod
@@ -21,7 +22,9 @@
       prod,
       raiz.imposto,
       consumidorFinal,
-      raiz.ibpt
+      raiz.ibpt,
+      ufOrigem,
+      ufDestino
     )
   }
 </script>

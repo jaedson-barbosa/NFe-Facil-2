@@ -2,6 +2,7 @@ import { collection, doc, DocumentReference, getDoc } from 'firebase/firestore'
 import { carregarAproximacao } from '../imposto/aproximado'
 import { limparComb } from '../imposto/CIDE'
 import { limparICMS } from '../imposto/ICMS'
+import { limparICMSUFDest } from '../imposto/ICMSUFDest'
 import { limparIPI } from '../imposto/IPI'
 import { limparPISCOFINS } from '../imposto/PISCOFINS'
 import { calcularIdImposto } from '../imposto/registro'
@@ -106,8 +107,8 @@ function limparImpostos(imposto: any) {
   limparICMS(imposto)
   limparIPI(imposto)
   limparPISCOFINS(imposto)
+  limparICMSUFDest(imposto)
   delete imposto.II
-  delete imposto.ICMSUFDest
   return imposto
 }
 

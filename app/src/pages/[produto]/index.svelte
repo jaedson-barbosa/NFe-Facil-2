@@ -30,7 +30,9 @@
       raiz.prod,
       raiz.imposto,
       consumidorFinal,
-      raiz.ibpt
+      raiz.ibpt,
+      raizNFe.emit.enderEmit.UF,
+      raizNFe.dest?.enderDest?.UF
     )
   }
 </script>

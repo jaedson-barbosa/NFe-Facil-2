@@ -11,6 +11,7 @@
   export let det: any[]
   export let total: any
   export let consumidorFinal: boolean
+  export let ufOrigem: string, ufDestino: string
 
   let carregado = false
 
@@ -117,6 +118,8 @@
             {consumidorFinal}
             on:invalido={removerProd(i)}
             on:click={() => $goto('/:produto', { produto: i.toString() })}
+            {ufOrigem}
+            {ufDestino}
           />
         {/each}
       </tbody>

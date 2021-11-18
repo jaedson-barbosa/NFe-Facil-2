@@ -62,17 +62,16 @@
     podem ser calculados de milhões de formas diferentes), falta de informação
     disponível (nem sempre achar as fórmulas de cálculo é fácil) ou simplesmente
     por não poderem ser automatizados (dependem de valores externos ao emissor),
-    são eles: imposto de importação, ICMS Interestadual para consumidor final
-    não contribuinte do ICMS e campos do ICMS: ST retido anteriormente, FCP do
-    ST retido anteriomente, ST da UF de destino, efetivo, desonerado e crédito.
-    Por sorte, a imensa maioria das empresas não preenchem estes campos, que
-    geralmente são usados apenas em situações específicas por poucas empresas ou
-    em raras ocasiões, então podes ficar tranquilo pois é quase certo que teus
-    impostos possam ser calculados automaticamente pela aplicação desde que tudo
-    esteja parametrizado corretamente. Também cabe ressaltar que, mesmo que
-    alguns perfis tributários sejam modificados ou não sejam importados, o
-    cadastro manual não tem quaisquer limitação e podes inserir os tributos
-    conforme a necessidade de tua empresa. Por fim, caso queiras mais detalhes,
-    eles podem ser encontrados na tela de gerenciamento de tributação.
+    são eles: imposto de importação e campos do ICMS: ST retido anteriormente,
+    FCP do ST retido anteriomente, ST da UF de destino, efetivo, desonerado e
+    crédito. Por sorte, a imensa maioria das empresas não preenchem estes
+    campos, que geralmente são usados apenas em situações específicas por poucas
+    empresas ou em raras ocasiões, então podes ficar tranquilo pois é quase
+    certo que teus impostos possam ser calculados automaticamente pela aplicação
+    desde que tudo esteja parametrizado corretamente. Também cabe ressaltar que,
+    mesmo que alguns perfis tributários sejam modificados ou não sejam
+    importados, o cadastro manual não tem quaisquer limitação e podes inserir os
+    tributos conforme a necessidade de tua empresa. Por fim, caso queiras mais
+    detalhes, eles podem ser encontrados na tela de gerenciamento de tributação.
   </p>
 </Ajuda>
