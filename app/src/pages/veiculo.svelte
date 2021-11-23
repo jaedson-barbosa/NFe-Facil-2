@@ -9,7 +9,7 @@
   import { pattern } from '../code/patterns'
 
   const ed = get(edicao)
-  const paginaAnterior = ed.tipo === Dados.NFes ? './nfe' : './'
+  const paginaAnterior = ed?.tipo === Dados.NFes ? './nfe' : './'
   let raiz: IVeiculo =
     ed?.tipo === Dados.Veiculos
       ? ed.dado

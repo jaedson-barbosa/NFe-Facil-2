@@ -11,7 +11,7 @@
   import { pattern } from '../code/patterns'
 
   const ed = get(edicao)
-  const paginaAnterior = ed.tipo === Dados.NFes ? './nfe' : './'
+  const paginaAnterior = ed?.tipo === Dados.NFes ? './nfe' : './'
   let raiz = ed?.tipo === Dados.Transportes ? ed.dado : {}
 
   if (!raiz['transporta']) raiz['transporta'] = {}

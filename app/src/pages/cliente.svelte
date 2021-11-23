@@ -9,7 +9,7 @@
   import { carregando, edicao, refEmpresa } from '../code/store'
 
   const ed = get(edicao)
-  const paginaAnterior = ed.tipo === Dados.NFes ? './nfe' : './'
+  const paginaAnterior = ed?.tipo === Dados.NFes ? './nfe' : './'
   let raiz = ed?.tipo === Dados.Clientes ? ed.dado : {}
 
   if (!raiz.dest) raiz.dest = {}
