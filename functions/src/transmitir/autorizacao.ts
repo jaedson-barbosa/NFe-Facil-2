@@ -23,7 +23,7 @@ export async function requisitarAutorizacao(
   const retEnviNFe = (
     toJson(respAutorizacao, {
       object: true,
-      reversible: ehNFCe,
+      reversible: true,
     }) as any
   )['soap:Envelope']['soap:Body'].nfeResultMsg.retEnviNFe
   return retEnviNFe

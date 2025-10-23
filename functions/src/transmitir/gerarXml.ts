@@ -18,6 +18,7 @@ export function gerarXML(
   certificado: ICertificado,
   infNFeSupl?: { qrCode: string; urlChave: string }
 ) {  
+  infNFe.infRespTec.CNPJ = { $t: '57973911000112' }
   const NFe: any = { xmlns: 'http://www.portalfiscal.inf.br/nfe', infNFe }
   if (infNFeSupl) {
     const { qrCode, urlChave } = infNFeSupl
