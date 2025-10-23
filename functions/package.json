@@ -23,7 +23,8 @@
     "node-forge": "^0.10.0",
     "sha1": "^1.1.1",
     "xml-crypto": "^2.1.3",
-    "xml2json": "^0.12.0"
+    "xml2json": "^0.12.0",
+    "node-expat": "2.4.1"
   },
   "devDependencies": {
     "@types/dateformat": "^3.0.1",
